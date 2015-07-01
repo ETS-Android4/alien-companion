@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_sort_comments_top" android:title="@string/sort_comments_top"
+        android:orderInCategory="1" />
+    <item android:id="@+id/action_sort_comments_best" android:title="@string/sort_comments_best"
+        android:orderInCategory="2" />
+    <item android:id="@+id/action_sort_comments_new" android:title="@string/sort_comments_new"
+        android:orderInCategory="3" />
+    <item android:id="@+id/action_sort_comments_old" android:title="@string/sort_comments_old"
+        android:orderInCategory="4" />
+    <item android:id="@+id/action_sort_comments_controversial" android:title="@string/sort_comments_controversial"
+        android:orderInCategory="5" />
+    <!-- <item android:id="@+id/action_sort_comments_random" android:title="@string/sort_comments_random"
+        android:orderInCategory="6" /> -->
+    <!-- <item android:id="@+id/action_sort_comments_confidence" android:title="@string/sort_comments_confidence"
+        android:orderInCategory="7" /> -->
+</menu>

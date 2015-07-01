@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="drawer_default_subreddits">
+        <item>@string/reddit_all</item>
+        <item>@string/reddit_pics</item>
+        <item>@string/reddit_videos</item>
+        <item>@string/reddit_worldnews</item>
+        <item>@string/reddit_technology</item>
+        <item>@string/reddit_games</item>
+        <item>@string/reddit_movies</item>
+        <item>@string/reddit_TIL</item>
+        <item>@string/reddit_IAMA</item>
+    </array>
+<!--  Main Options Menu Titles -->
+    <array name="main_options_titles">
+        <item>@string/options_general</item>
+        <item>@string/options_appearance</item>
+        <item>@string/options_navigation</item>
+        <item>@string/options_posts</item>
+        <item>@string/options_comments</item>
+        <item>@string/options_other</item>
+    </array>
+<!-- Main Options Menu Subtitles -->
+    <array name="main_options_subtitles">
+        <item>@string/options_general_sub</item>
+        <item>@string/options_appearance_sub</item>
+        <item>@string/options_navigation_sub</item>
+        <item>@string/options_posts_sub</item>
+        <item>@string/options_comments_sub</item>
+        <item>@string/options_other_sub</item>
+    </array>
+
+    <string name="cached_posts">Cached posts</string>
+    <string name="reddit_games">games</string>
+    <string name="reddit_movies">movies</string>
+    <string name="reddit_TIL">todayilearned</string>
+    <string name="reddit_IAMA">iama</string>
+</resources>

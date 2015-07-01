@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_sort_new" android:title="@string/sort_user_new"
+        android:orderInCategory="1" />
+    <item android:id="@+id/action_sort_hot" android:title="@string/sort_user_hot"
+        android:orderInCategory="2" />
+    <item android:id="@+id/action_sort_top" android:title="@string/sort_user_top"
+        android:orderInCategory="3" />
+    <item android:id="@+id/action_sort_controversial" android:title="@string/sort_user_controversial"
+        android:orderInCategory="4" />
+</menu>

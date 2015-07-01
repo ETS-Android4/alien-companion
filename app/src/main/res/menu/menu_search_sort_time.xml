@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_sort_hour" android:title="@string/sort_hour"
+        android:orderInCategory="2" />
+    <item android:id="@+id/action_sort_day" android:title="@string/sort_day"
+        android:orderInCategory="3" />
+    <item android:id="@+id/action_sort_week" android:title="@string/sort_week"
+        android:orderInCategory="4" />
+    <item android:id="@+id/action_sort_month" android:title="@string/sort_month"
+        android:orderInCategory="5" />
+    <item android:id="@+id/action_sort_year" android:title="@string/sort_year"
+        android:orderInCategory="6" />
+    <item android:id="@+id/action_sort_all" android:title="@string/sort_all"
+        android:orderInCategory="1" />
+</menu>

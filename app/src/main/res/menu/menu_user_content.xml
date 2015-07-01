@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_user_overview" android:title="@string/user_overview"
+        android:orderInCategory="1" />
+    <item android:id="@+id/action_user_comments" android:title="@string/user_comments"
+        android:orderInCategory="2" />
+    <item android:id="@+id/action_user_submitted" android:title="@string/user_submitted"
+        android:orderInCategory="3" />
+</menu>

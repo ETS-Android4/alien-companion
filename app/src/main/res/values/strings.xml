@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">RedditReader</string>
+
+    <string name="hello_world">Hello world!</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+<!-- Activity Title -->
+    <string name="title_activity_post">PostActivity</string>
+    <string name="title_activity_options">SettingsActivity</string>
+<!-- Navigation Drawer -->
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="drawer_profile">Profile</string>
+    <string name="drawer_messages">Messages</string>
+    <string name="drawer_user">User</string>
+    <string name="drawer_subreddit">Subreddit</string>
+    <string name="drawer_settings">Settings</string>
+
+    <string name="reddit_frontpage">Frontpage</string>
+    <string name="reddit_all">all</string>
+    <string name="reddit_pics">pics</string>
+    <string name="reddit_videos">videos</string>
+    <string name="reddit_worldnews">worldnews</string>
+    <string name="reddit_technology">technology</string>
+<!-- Acton Bar -->
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_sort">sort</string>
+    <string name="action_refresh">Refresh</string>
+<!-- Action Bar Sort -->
+    <string name="sort_hot">What\'s Hot</string>
+    <string name="sort_new">New</string>
+    <string name="sort_rising">Rising</string>
+    <string name="sort_top">Top</string>
+    <string name="sort_controversial">Controversial</string>
+<!-- Action Bar Sort Time -->
+    <string name="sort_hour">Hour</string>
+    <string name="sort_day">Day</string>
+    <string name="sort_week">Week</string>
+    <string name="sort_month">Month</string>
+    <string name="sort_year">Year</string>
+    <string name="sort_all">All</string>
+<!-- Action Bar Sort Comments -->
+    <string name="sort_comments_top">Top</string>
+    <string name="sort_comments_best">Best</string>
+    <string name="sort_comments_new">New</string>
+    <string name="sort_comments_old">Old</string>
+    <string name="sort_comments_controversial">Controversial</string>
+    <string name="sort_comments_random">Random</string>
+    <string name="sort_comments_confidence">Confidence</string>
+<!-- Main Options Title Strings -->
+    <string name="options_general">General</string>
+    <string name="options_appearance">Appearance</string>
+    <string name="options_navigation">Navigation</string>
+    <string name="options_posts">Posts</string>
+    <string name="options_comments">Comments</string>
+    <string name="options_other">Other</string>
+<!-- Main Options Subtitle -->
+    <string name="options_general_sub">General reader settings</string>
+    <string name="options_appearance_sub">Change fonts, colors, themes and more</string>
+    <string name="options_navigation_sub">Change the way you interact with the reader</string>
+    <string name="options_posts_sub">Post specific options</string>
+    <string name="options_comments_sub">Comment specific options</string>
+    <string name="options_other_sub">Options that didn\'t fit anywhere else</string>
+<!-- Other Strings -->
+    <string name="enter_subreddit">Enter subreddit</string>
+    <string name="enter_user">Enter user</string>
+    <string name="frontpage_title">Frontpage</string>
+    <string name="title_activity_browser">BrowserActivity</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="user_overview">Overview</string>
+    <string name="user_comments">Comments</string>
+    <string name="user_submitted">Submitted</string>
+    <string name="sort_user_controversial">Controversial</string>
+    <string name="sort_user_top">Top</string>
+    <string name="sort_user_hot">Hot</string>
+    <string name="sort_user_new">New</string>
+    <string name="sort_relevance">Relevance</string>
+    <string name="sort_comments">Comments</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="action_new_search">New Search</string>
+    <string name="enter_search_term">enter search term</string>
+    <string name="action_comments">Comments</string>
+
+</resources>
