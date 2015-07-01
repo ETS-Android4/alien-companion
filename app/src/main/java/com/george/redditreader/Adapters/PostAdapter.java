@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.PostActivity;
+import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
@@ -48,7 +49,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
      */
     private final int mPaddingDP = 5;
 
-    public ContentViewHolder contentVH;
+    //private ContentViewHolder contentVH;
 
     public PostAdapter (Activity activity, View.OnClickListener listener) {
         super();
@@ -113,18 +114,20 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 break;
             case VIEW_TYPE_CONTENT:
-                contentVH = (ContentViewHolder) viewHolder;
+                ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
                 contentVH.postTitle.setText(post.getTitle());
 
+                contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments");
+
                 if(post.isSelf()) {
-                    contentVH.postDets1.setText(Long.toString(post.getCommentCount()) + " comments");
+                    contentVH.postDets1.setVisibility(View.GONE);
                     contentVH.selfText.setText(post.getSelftext());
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 }
                 else {
-                    contentVH.postDets1.setText(post.getDomain() + " - " + Long.toString(post.getCommentCount()) + " comments");
+                    contentVH.postDets1.setText(post.getDomain() + " - ");
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     Thumbnail thumbnail = post.getThumbnailObject();
@@ -151,6 +154,16 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
+        }
+    }
+
+    private void updatePostDetails(ContentViewHolder viewHolder, Submission post) {
+        viewHolder.comments.setText(Long.toString(post.getCommentCount()) + " comments");
+        if(post.getScore() > 0) {
+            viewHolder.postDets2.setText("+ " + post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
+        }
+        else {
+            viewHolder.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
         }
     }
 
@@ -193,6 +206,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     public static class ContentViewHolder extends RecyclerView.ViewHolder {
         public TextView postTitle;
         public TextView postDets1;
+        public TextView comments;
         public TextView author;
         public TextView postDets2;
         public TextView subreddit;
@@ -210,6 +224,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             selfText = (TextView) itemView.findViewById(R.id.selfText);
             postImage = (ImageView) itemView.findViewById(R.id.postImage);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);
+            comments = (TextView) itemView.findViewById(R.id.txtView_comments);
         }
     }
 

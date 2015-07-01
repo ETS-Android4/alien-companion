@@ -159,6 +159,37 @@ public class Comments implements ActorDriven {
         return comments;
 	        
     }
+
+	public List<Comment> parseDepth(String url, Submission post) throws RetrievalFailedException, RedditError {
+
+		// Determine cookie
+		String cookie = (user == null) ? null : user.getCookie();
+
+		// List of submissions
+		List<Comment> comments = new LinkedList<Comment>();
+
+		// Send request to reddit server via REST client
+		Object response = restClient.get(url, cookie).getResponseObject();
+
+		if (response instanceof JSONArray) {
+
+			//Retrieve post
+			JSONObject postObject = (JSONObject) ((JSONArray) response).get(0);
+			JSONArray children = (JSONArray) ((JSONObject) postObject.get("data")).get("children");
+			JSONObject child = (JSONObject) ((JSONArray) children).get(0);
+			post = new Submission((JSONObject) child.get("data"));
+
+			//Retrieve comments
+			JSONObject commentsObject =  (JSONObject) ((JSONArray) response).get(1);
+			parseRecursive(comments, commentsObject);
+
+		} else {
+			throw new IllegalArgumentException("Parsing failed because JSON input is not from a submission.");
+		}
+
+		return comments;
+
+	}
     
     /**
      * Parse a JSON object consisting of comments and add them
@@ -319,7 +350,7 @@ public class Comments implements ActorDriven {
      * Get the comment tree from a given submission.
      * In this variant all parameters are Strings.
      *
-     * @param submissionId 		Submission ID36 identifier
+     * @param submission 		Submission ID36 identifier
      * @param commentId    		(Optional, set null if not used) ID of a comment. If specified, this comment will be the focal point of the returned view.
      * @param parentsShown 		(Optional, set null is not used) An integer between 0 and 8 representing the number of parents shown for the comment identified by <code>commentId</code>
      * @param depth        		(Optional, set null if not used) Integer representing the maximum depth of subtrees in the thread
@@ -327,72 +358,44 @@ public class Comments implements ActorDriven {
      * @param sort  			(Optional, set null if not used) CommentSort enum indicating the type of sorting to be applied (e.g. HOT, NEW, TOP, etc)
      * @return Comments for an article.
      */
-    public List<Comment> ofSubmission(String submissionId, String commentId, String parentsShown, String depth, String limit, String sort) {
-    	
+    public List<Comment> ofSubmission(Submission submission, String commentId, int parentsShown, int depth, int limit, CommentSort sort) {
+
+		if (submission == null) {
+			throw new IllegalArgumentException("The submission must be defined.");
+		}
+
     	// Format parameters
     	String params = "";
     	params = ParamFormatter.addParameter(params, "comment", commentId);
-    	params = ParamFormatter.addParameter(params, "context", parentsShown);
-    	params = ParamFormatter.addParameter(params, "depth", depth);
-    	params = ParamFormatter.addParameter(params, "limit", limit);
-    	params = ParamFormatter.addParameter(params, "sort", sort);
+    	params = ParamFormatter.addParameter(params, "context", Integer.toString(parentsShown));
+    	params = ParamFormatter.addParameter(params, "depth", Integer.toString(depth));
+    	params = ParamFormatter.addParameter(params, "limit", Integer.toString(limit));
+    	params = ParamFormatter.addParameter(params, "sort", sort.value());
     	
         // Retrieve submissions from the given URL
-        return parseDepth(String.format(ApiEndpointUtils.SUBMISSION_COMMENTS, submissionId, params));
+        return parseDepth(String.format(ApiEndpointUtils.SUBMISSION_COMMENTS, submission.getIdentifier(), params), submission);
         
     }
-    
-    /**
-     * Get the comment tree from a given submission (ID36)
-     *
-     * @param submissionId 		Submission ID36 identifier
-     * @param commentId    		(Optional, set null if not used) ID of a comment. If specified, this comment will be the focal point of the returned view.
-     * @param parentsShown 		(Optional, set -1 is not used) An integer between 0 and 8 representing the number of parents shown for the comment identified by <code>commentId</code>
-     * @param depth        		(Optional, set -1 if not used) Integer representing the maximum depth of subtrees in the thread
-     * @param limit        		(Optional, set -1 if not used) Integer representing the maximum number of comments to return
-     * @param sort  			(Optional, set null if not used) CommentSort enum indicating the type of sorting to be applied (e.g. HOT, NEW, TOP, etc)
-     * @return Comments for an article.
-     */
-    public List<Comment> ofSubmission(String submissionId, String commentId, int parentsShown, int depth, int limit, CommentSort sort) throws RetrievalFailedException, IllegalArgumentException {
-       
-    	if (submissionId == null || submissionId.isEmpty()) { 
-    		throw new IllegalArgumentException("The identifier of the submission must be set.");
-    	}
-    	
-    	if (depth < -1 || depth > 8) {
-    		throw new IllegalArgumentException("The depth must be between 1 and 8 (or for default -1).");
-    	}
-        
-    	return ofSubmission(
-				submissionId,
-				commentId,
-				String.valueOf(parentsShown),
-				String.valueOf(depth),
-				String.valueOf(limit),
-				sort.value()
-		);
-    	
-    }
-    
-    /**
-     * Get the comment tree from a given submission (object).
-     *
-     * @param submission 		Submission object
-     * @param commentId    		(Optional, set null if not used) ID of a comment. If specified, this comment will be the focal point of the returned view.
-     * @param parentsShown 		(Optional, set -1 is not used) An integer between 0 and 8 representing the number of parents shown for the comment identified by <code>commentId</code>
-     * @param depth        		(Optional, set -1 if not used) Integer representing the maximum depth of subtrees in the thread
-     * @param limit        		(Optional, set -1 if not used) Integer representing the maximum number of comments to return
-     * @param sort  			(Optional, set null if not used) CommentSort enum indicating the type of sorting to be applied (e.g. HOT, NEW, TOP, etc)
-     * @return Comments for an article.
-     */
-    public List<Comment> ofSubmission(Submission submission, String commentId, int parentsShown, int depth, int limit, CommentSort sort) throws RetrievalFailedException, RedditError {
-        
-    	if (submission == null) {
-    		throw new IllegalArgumentException("The submission must be defined.");
-    	}
-    	
-    	return ofSubmission(submission.getIdentifier(), commentId, parentsShown, depth, limit, sort);
-    }
+
+    ///**
+    // * Get the comment tree from a given submission (object).
+    // *
+    // * @param submission 		Submission object
+    // * @param commentId    		(Optional, set null if not used) ID of a comment. If specified, this comment will be the focal point of the returned view.
+    // * @param parentsShown 		(Optional, set -1 is not used) An integer between 0 and 8 representing the number of parents shown for the comment identified by <code>commentId</code>
+    // * @param depth        		(Optional, set -1 if not used) Integer representing the maximum depth of subtrees in the thread
+    // * @param limit        		(Optional, set -1 if not used) Integer representing the maximum number of comments to return
+    // * @param sort  			(Optional, set null if not used) CommentSort enum indicating the type of sorting to be applied (e.g. HOT, NEW, TOP, etc)
+    // * @return Comments for an article.
+    // */
+    //public List<Comment> ofSubmission(Submission submission, String commentId, int parentsShown, int depth, int limit, CommentSort sort) throws RetrievalFailedException, RedditError {
+    //
+    //	if (submission == null) {
+    //		throw new IllegalArgumentException("The submission must be defined.");
+    //	}
+    //
+    //	return ofSubmission(submission, commentId, parentsShown, depth, limit, sort);
+    //}
     
 	/**
 	 * Flatten the comment tree.

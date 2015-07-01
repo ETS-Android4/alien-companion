@@ -43,6 +43,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     private Submission post;
     private RestClient restClient;
     private CommentSort commentSort;
+    private boolean loadFromList;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -52,6 +53,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
 
         restClient = new HttpRestClient();
         post = (Submission) activity.getIntent().getSerializableExtra("post");
+        loadFromList = (post != null);
     }
 
     @Override
@@ -213,7 +215,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             try {
                 Comments cmnts = new Comments(restClient);
 
-                List<Comment> comments = cmnts.ofSubmission(post.getIdentifier(), null, -1, 4, 100, commentSort);
+                List<Comment> comments = cmnts.ofSubmission(post, null, -1, 4, 100, commentSort);
                 Comments.indentCommentTree(comments);
 
                 return comments;
@@ -232,6 +234,8 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             }
             else {
                 PostActivity.contentLoaded = true;
+                postAdapter.clear();
+                postAdapter.add(post);
                 postAdapter.addAll(comments);
                 postAdapter.notifyDataSetChanged();
             }

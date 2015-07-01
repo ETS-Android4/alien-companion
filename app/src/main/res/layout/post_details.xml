@@ -35,11 +35,23 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="(displayURL) - (postTag) - #### comments"
-                    android:id="@+id/postDets1" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(displayURL) - (postTag) - "
+                        android:id="@+id/postDets1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="##### comments"
+                        android:id="@+id/txtView_comments" />
+                </LinearLayout>
 
             </LinearLayout>
 
