@@ -30,7 +30,7 @@ import java.text.ParseException;
  */
 public class HttpRestClient implements RestClient {
 
-    private String userAgent;
+    private String userAgent = "android:com.george.redditreader:v0.1 (by /u/ubercharge_ready)";
 
     public Response get(String urlPath, String cookie) throws RetrievalFailedException {
 
@@ -41,6 +41,7 @@ public class HttpRestClient implements RestClient {
             URL url = new URL(ApiEndpointUtils.REDDIT_BASE_URL + urlPath);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", userAgent);
             connection.setDoInput(true);
             //connection.setConnectTimeout(5000);
             //connection.setReadTimeout(5000);

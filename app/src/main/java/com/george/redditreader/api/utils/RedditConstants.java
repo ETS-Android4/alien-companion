@@ -4,7 +4,9 @@ public class RedditConstants {
 
 	public static final int MAX_LIMIT_LISTING = 100;
 	public static final int DEFAULT_LIMIT = 25;
-	public static final int MAX_LIMIT_COMMENTS = 500;
+	public static final int MAX_LIMIT_COMMENTS = 100;
+
+	public static final int MAX_COMMENT_DEPTH = 4;
 	
 	/**
 	 * Approximately the maximum listing size, including pagination until

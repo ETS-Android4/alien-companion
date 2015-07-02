@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.george.redditreader.Activities.BrowserActivity;
+import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.api.entity.Submission;
+import com.george.redditreader.api.utils.RedditConstants;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
 import java.net.MalformedURLException;
@@ -32,11 +34,31 @@ public class LinkHandler {
         String domain = post.getDomain();
         Intent intent;
 
+        Log.d("Link Full URL", url);
+
         if(domain.equals("youtube.com") || domain.equals("youtu.be")) {
             String videoId = getYoutubeVideoId(url);
             int time = getYoutubeVideoTime(url);
             //Log.d("youtube video id", videoId);
             intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+        }
+        else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) {
+            String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
+                    "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
+
+            int httpType = (url.charAt(4) == 's') ? 0 : -1;
+
+            String postUrl = null;
+            if(domain.equals("reddit.com")) {
+                postUrl = url.substring(22+httpType) + endpoint;
+            }
+            else if(domain.substring(3).equals("reddit.com")) {
+                postUrl = url.substring(21+httpType) + endpoint;
+            }
+            else if(domain.equals("redd.it")) postUrl = "/comments/" + url.substring(15) + endpoint;
+
+            intent = new Intent(activity, PostActivity.class);
+            intent.putExtra("postUrl", postUrl);
         }
         else {
             intent = new Intent(activity, BrowserActivity.class);

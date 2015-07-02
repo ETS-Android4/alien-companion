@@ -1,5 +1,9 @@
 package com.george.redditreader.api.entity;
 
+import org.json.simple.JSONObject;
+
+import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+
 /**
  * This class represents a reddit "thing"
  *
@@ -20,6 +24,16 @@ public abstract class Thing implements Comparable<Thing>, java.io.Serializable {
 		this.kind = split[0];
 		this.identifier = split[1];
 	}
+
+    public Thing() {
+        this.fullName = null;
+        this.kind = null;
+        this.identifier = null;
+    }
+
+    public void setName(JSONObject obj) {
+        safeJsonToString(obj.get("name"));
+    }
 	
     /**
      * The kind of this thing.

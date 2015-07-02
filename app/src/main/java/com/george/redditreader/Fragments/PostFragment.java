@@ -13,9 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Adapters.PostAdapter;
+import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.Utils.DisplayToast;
 import com.george.redditreader.LinkHandler;
 import com.george.redditreader.R;
@@ -25,6 +27,7 @@ import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.retrieval.Comments;
 import com.george.redditreader.api.retrieval.params.CommentSort;
+import com.george.redditreader.api.utils.RedditConstants;
 import com.george.redditreader.api.utils.restClient.HttpRestClient;
 import com.george.redditreader.api.utils.restClient.RestClient;
 
@@ -43,6 +46,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     private Submission post;
     private RestClient restClient;
     private CommentSort commentSort;
+    private ProgressBar progressBar;
     private boolean loadFromList;
 
     @Override
@@ -135,8 +139,10 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar_fullLoad);
+        progressBar.setVisibility(View.GONE);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.content_recyclerview);
 
         mRecyclerView.setHasFixedSize(true);
@@ -148,16 +154,25 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             setCommentSort(CommentSort.TOP);
             postAdapter = new PostAdapter(activity, this);
 
-            mRecyclerView.setAdapter(postAdapter);
-            postAdapter.add(post);
-            postAdapter.notifyDataSetChanged();
+            if(loadFromList) {
+                progressBar.setVisibility(View.GONE);
+                postAdapter.add(post);
+            }
+            else {
+                progressBar.setVisibility(View.VISIBLE);
+                post = new Submission();
+            }
+            //postAdapter.notifyDataSetChanged();
 
+            mRecyclerView.setAdapter(postAdapter);
+//
             LoadCommentsTask task = new LoadCommentsTask();
             task.execute();
         }
         else {
             mRecyclerView.setAdapter(postAdapter);
         }
+        //mRecyclerView.setAdapter(postAdapter);
 
         if (savedInstanceState != null) {
             List<Integer> groups = savedInstanceState.getIntegerArrayList(GROUPS_KEY);
@@ -214,14 +229,22 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         protected List<Comment> doInBackground(Void... unused) {
             try {
                 Comments cmnts = new Comments(restClient);
+                List<Comment> comments;
+                if(loadFromList) {
+                    comments = cmnts.ofSubmission(post, null, -1, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
+                }
+                else {
+                    String postUrl = activity.getIntent().getStringExtra("postUrl");
+                    postUrl = postUrl + "&sort="  + commentSort.value();
 
-                List<Comment> comments = cmnts.ofSubmission(post, null, -1, 4, 100, commentSort);
+                    comments = cmnts.parseDepth(postUrl, post);
+                    post.setThumbnailObject(new Thumbnail(post.getThumbnail()));
+                }
                 Comments.indentCommentTree(comments);
 
                 return comments;
-            } catch (RetrievalFailedException e) {
-                exception = e;
-            } catch (RedditError e) {
+            } catch (RetrievalFailedException | RedditError e) {
+                e.printStackTrace();
                 exception = e;
             }
             return null;
@@ -229,11 +252,13 @@ public class PostFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(List<Comment> comments) {
+            progressBar.setVisibility(View.GONE);
             if(exception != null) {
                 DisplayToast.commentsLoadError(activity);
             }
             else {
                 PostActivity.contentLoaded = true;
+                setActionBarTitle();
                 postAdapter.clear();
                 postAdapter.add(post);
                 postAdapter.addAll(comments);

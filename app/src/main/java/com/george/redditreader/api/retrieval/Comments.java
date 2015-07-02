@@ -177,7 +177,9 @@ public class Comments implements ActorDriven {
 			JSONObject postObject = (JSONObject) ((JSONArray) response).get(0);
 			JSONArray children = (JSONArray) ((JSONObject) postObject.get("data")).get("children");
 			JSONObject child = (JSONObject) ((JSONArray) children).get(0);
-			post = new Submission((JSONObject) child.get("data"));
+			JSONObject postData = (JSONObject) child.get("data");
+			if(post.getFullName() == null) post.setName(postData);
+			post.updateSubmission(postData);
 
 			//Retrieve comments
 			JSONObject commentsObject =  (JSONObject) ((JSONArray) response).get(1);

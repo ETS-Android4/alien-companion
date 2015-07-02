@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
 
+    private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<NavDrawerItem> getSubredditItems() {
-        String[] defaultSubredditStrings = getResources().getStringArray(R.array.drawer_default_subreddits);
+        //String[] defaultSubredditStrings = getResources().getStringArray(R.array.drawer_default_subreddits);
 
         List<NavDrawerItem> subredditItems = new ArrayList<>();
         subredditItems.add(new NavDrawerSubredditItem());
