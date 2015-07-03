@@ -155,16 +155,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         }
     }
 
-    private void updatePostDetails(ContentViewHolder viewHolder, Submission post) {
-        viewHolder.comments.setText(Long.toString(post.getCommentCount()) + " comments");
-        if(post.getScore() > 0) {
-            viewHolder.postDets2.setText("+ " + post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-        }
-        else {
-            viewHolder.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-        }
-    }
-
     @Override
     public int getItemViewType(int position) {
         if (position == 0)
