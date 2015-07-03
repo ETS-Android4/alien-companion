@@ -10,7 +10,7 @@ import com.george.redditreader.R;
 
 public class PostActivity extends SwipeActivity {
 
-    public static boolean contentLoaded;
+    public static boolean commentsLoaded;
     //public static boolean loadFromList;
 
     @Override
@@ -47,12 +47,12 @@ public class PostActivity extends SwipeActivity {
 
     @Override
     public void onBackPressed () {
-        contentLoaded = false;
+        commentsLoaded = false;
         super.onBackPressed();
     }
 
     //public void next() {
-    //    contentLoaded = false;
+    //    commentsLoaded = false;
     //    finish();
     //    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     //}

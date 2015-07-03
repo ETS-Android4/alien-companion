@@ -34,6 +34,7 @@ public class LinkHandler {
         String domain = post.getDomain();
         Intent intent;
 
+        Log.d("Link Domain", domain);
         Log.d("Link Full URL", url);
 
         if(domain.equals("youtube.com") || domain.equals("youtu.be")) {
@@ -43,28 +44,32 @@ public class LinkHandler {
             intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
         }
         else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) {
-            String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
-                    "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
-
-            int httpType = (url.charAt(4) == 's') ? 0 : -1;
-
-            String postUrl = null;
-            if(domain.equals("reddit.com")) {
-                postUrl = url.substring(22+httpType) + endpoint;
-            }
-            else if(domain.substring(3).equals("reddit.com")) {
-                postUrl = url.substring(21+httpType) + endpoint;
-            }
-            else if(domain.equals("redd.it")) postUrl = "/comments/" + url.substring(15) + endpoint;
-
             intent = new Intent(activity, PostActivity.class);
-            intent.putExtra("postUrl", postUrl);
+            intent.putExtra("postUrl", getRedditPostUrl(url, domain));
         }
         else {
             intent = new Intent(activity, BrowserActivity.class);
             intent.putExtra("post", post);
         }
         activity.startActivity(intent);
+    }
+
+    public String getRedditPostUrl(String url, String domain) {
+        String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
+                "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
+
+        int httpType = (url.charAt(4) == 's') ? 0 : -1;
+
+        String postUrl = null;
+        if(domain.equals("reddit.com")) {
+            postUrl = url.substring(22+httpType) + endpoint;
+        }
+        else if(domain.substring(3).equals("reddit.com")) {
+            postUrl = url.substring(21+httpType) + endpoint;
+        }
+        else if(domain.equals("redd.it")) postUrl = "/comments/" + url.substring(15) + endpoint;
+
+        return postUrl;
     }
 
     private String getYoutubeVideoId(String youtubeURL) {

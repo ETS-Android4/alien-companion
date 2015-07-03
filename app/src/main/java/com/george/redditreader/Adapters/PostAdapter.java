@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.PostActivity;
-import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
@@ -116,40 +115,39 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             case VIEW_TYPE_CONTENT:
                 ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
+
                 contentVH.postTitle.setText(post.getTitle());
 
                 contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments");
 
-                if(post.isSelf()) {
+                if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
                     contentVH.selfText.setText(post.getSelftext());
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                }
-                else {
+                } else {
                     contentVH.postDets1.setText(post.getDomain() + " - ");
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     Thumbnail thumbnail = post.getThumbnailObject();
-                    if(thumbnail.hasThumbnail()) {
+                    if (thumbnail.hasThumbnail()) {
                         try {
                             //Get Post Thumbnail
                             Picasso.with(activity).load(thumbnail.getUrl()).placeholder(R.drawable.noimage).into(contentVH.postImage);
-                        } catch (IllegalArgumentException e) {}
-                    }
-                    else {
+                        } catch (IllegalArgumentException e) {
+                        }
+                    } else {
                         contentVH.postImage.setVisibility(View.GONE);
                     }
                 }
                 contentVH.author.setText(post.getAuthor());
-                if(post.getScore() > 0) {
+                if (post.getScore() > 0) {
                     contentVH.postDets2.setText("+ " + post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-                }
-                else {
+                } else {
                     contentVH.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 }
                 contentVH.subreddit.setText(post.getSubreddit());
-                if(PostActivity.contentLoaded) contentVH.progressBar.setVisibility(View.GONE);
+                if (PostActivity.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
                 else contentVH.progressBar.setVisibility(View.VISIBLE);
                 break;
             default:

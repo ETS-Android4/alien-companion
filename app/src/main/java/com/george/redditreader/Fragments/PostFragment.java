@@ -48,6 +48,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     private CommentSort commentSort;
     private ProgressBar progressBar;
     private boolean loadFromList;
+    private boolean noResponseObject;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -155,7 +156,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             postAdapter = new PostAdapter(activity, this);
 
             if(loadFromList) {
-                progressBar.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.GONE);
                 postAdapter.add(post);
             }
             else {
@@ -195,16 +196,24 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             postAdapter.toggleGroup(position);
         }
         else if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_CONTENT) {
-            LinkHandler linkHandler = new LinkHandler(activity, post);
-            linkHandler.handleIt();
+            if(!post.isSelf()) {
+                LinkHandler linkHandler = new LinkHandler(activity, post);
+                linkHandler.handleIt();
+            }
         }
     }
 
     public void refreshComments() {
-        postAdapter = new PostAdapter(activity,this);
-        postAdapter.add(post);
-        mRecyclerView.setAdapter(postAdapter);
-        PostActivity.contentLoaded = false;
+        if(!noResponseObject) {
+            postAdapter.clear();
+            postAdapter.add(post);
+            postAdapter.notifyDataSetChanged();
+            PostActivity.commentsLoaded = false;
+        }
+        else {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         LoadCommentsTask task = new LoadCommentsTask();
         task.execute();
     }
@@ -232,8 +241,10 @@ public class PostFragment extends Fragment implements View.OnClickListener {
                 List<Comment> comments;
                 if(loadFromList) {
                     comments = cmnts.ofSubmission(post, null, -1, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
+                    //Log.d("comments load", "doing load from list");
                 }
                 else {
+                    //Log.d("comments load", "doing load from link");
                     String postUrl = activity.getIntent().getStringExtra("postUrl");
                     postUrl = postUrl + "&sort="  + commentSort.value();
 
@@ -254,15 +265,17 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(List<Comment> comments) {
             progressBar.setVisibility(View.GONE);
             if(exception != null) {
+                noResponseObject = true;
                 DisplayToast.commentsLoadError(activity);
             }
             else {
-                PostActivity.contentLoaded = true;
-                setActionBarTitle();
+                noResponseObject = false;
+                PostActivity.commentsLoaded = true;
                 postAdapter.clear();
                 postAdapter.add(post);
                 postAdapter.addAll(comments);
                 postAdapter.notifyDataSetChanged();
+                setActionBarTitle();
             }
         }
     }
