@@ -43,7 +43,7 @@ public class LinkHandler {
             //Log.d("youtube video id", videoId);
             intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
         }
-        else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) { //TODO: use REGEX to retrieve link parameters
+        else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) {
             intent = new Intent(activity, PostActivity.class);
             intent.putExtra("postUrl", getRedditPostUrl(url, domain));
         }
