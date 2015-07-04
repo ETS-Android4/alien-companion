@@ -43,7 +43,7 @@ public class LinkHandler {
             //Log.d("youtube video id", videoId);
             intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
         }
-        else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) {
+        else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) { //TODO: use REGEX to retrieve link parameters
             intent = new Intent(activity, PostActivity.class);
             intent.putExtra("postUrl", getRedditPostUrl(url, domain));
         }
@@ -58,16 +58,19 @@ public class LinkHandler {
         String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
                 "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
 
-        int httpType = (url.charAt(4) == 's') ? 0 : -1;
-
         String postUrl = null;
-        if(domain.equals("reddit.com")) {
-            postUrl = url.substring(22+httpType) + endpoint;
+        if(domain.equals("redd.it")) postUrl = "/comments/" + url.substring(15) + endpoint;
+        else {
+            String pattern = "context=\\w+";
+            Pattern compiledPattern = Pattern.compile(pattern);
+            Matcher matcher = compiledPattern.matcher(url);
+            if (matcher.find()) endpoint = endpoint + "&" + matcher.group();
+
+            pattern = "/r/[\\w/]*";
+            compiledPattern = Pattern.compile(pattern);
+            matcher = compiledPattern.matcher(url);
+            if(matcher.find()) postUrl = matcher.group() + endpoint;
         }
-        else if(domain.substring(3).equals("reddit.com")) {
-            postUrl = url.substring(21+httpType) + endpoint;
-        }
-        else if(domain.equals("redd.it")) postUrl = "/comments/" + url.substring(15) + endpoint;
 
         return postUrl;
     }

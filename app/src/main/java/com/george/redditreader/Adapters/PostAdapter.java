@@ -116,8 +116,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
 
-                contentVH.postTitle.setText(post.getTitle());
+                contentVH.fullLoad.setVisibility(View.GONE);
 
+                contentVH.postTitle.setText(post.getTitle());
                 contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments");
 
                 if (post.isSelf()) {
@@ -201,6 +202,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView selfText;
         public ImageView postImage;
         public ProgressBar progressBar;
+        public LinearLayout fullLoad;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
@@ -213,6 +215,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             postImage = (ImageView) itemView.findViewById(R.id.postImage);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);
             comments = (TextView) itemView.findViewById(R.id.txtView_comments);
+            fullLoad = (LinearLayout) itemView.findViewById(R.id.fullLoad);
         }
     }
 
