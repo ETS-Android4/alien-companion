@@ -37,7 +37,7 @@ public class LinkHandler {
         Log.d("Link Domain", domain);
         Log.d("Link Full URL", url);
 
-        if(domain.equals("youtube.com") || domain.equals("youtu.be")) {
+        if(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com")) {
             String videoId = getYoutubeVideoId(url);
             int time = getYoutubeVideoTime(url);
             //Log.d("youtube video id", videoId);
@@ -66,6 +66,7 @@ public class LinkHandler {
             Matcher matcher = compiledPattern.matcher(url);
             if (matcher.find()) endpoint = endpoint + "&" + matcher.group();
 
+            // altPattern = "(/r/\\w+/\\w+/\\w+/\\w+/(\\w+)?)";
             pattern = "/r/[\\w/]*";
             compiledPattern = Pattern.compile(pattern);
             matcher = compiledPattern.matcher(url);

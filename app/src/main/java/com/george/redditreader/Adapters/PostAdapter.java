@@ -3,6 +3,8 @@ package com.george.redditreader.Adapters;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,9 @@ import com.george.redditreader.api.entity.Submission;
 import com.oissela.software.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.oissela.software.multilevelexpindlistview.Utils;
 import com.squareup.picasso.Picasso;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by George on 5/17/2015.
@@ -91,7 +96,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 final Comment comment = (Comment) getItemAt(position);
 
                 cvh.authorTextView.setText(comment.getAuthor());
-                cvh.commentTextView.setText(comment.getBody());
+                cvh.commentTextView.setText(Html.fromHtml(comment.getBodyHTML()));
 
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);
@@ -123,7 +128,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
-                    contentVH.selfText.setText(post.getSelftext());
+                    contentVH.selfText.setText(Html.fromHtml(post.getSelftextHTML()));
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
