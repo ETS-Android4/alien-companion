@@ -19,8 +19,8 @@ import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
-import com.oissela.software.multilevelexpindlistview.MultiLevelExpIndListAdapter;
-import com.oissela.software.multilevelexpindlistview.Utils;
+import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
+import com.george.redditreader.multilevelexpindlistview.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.regex.Matcher;
