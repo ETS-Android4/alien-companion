@@ -1,6 +1,6 @@
 package com.george.redditreader.api.entity;
 
-import com.oissela.software.multilevelexpindlistview.MultiLevelExpIndListAdapter;
+import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToInteger;
 import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;

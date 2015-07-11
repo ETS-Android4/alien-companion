@@ -275,7 +275,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
                 postAdapter.add(post);
                 postAdapter.addAll(comments);
                 postAdapter.notifyDataSetChanged();
-                setActionBarTitle();
+                //setActionBarTitle(); //TODO: fix nullpointerexception
             }
         }
     }

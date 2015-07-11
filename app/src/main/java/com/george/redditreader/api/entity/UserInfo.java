@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.george.redditreader.api.retrieval.Trophies;
 import com.george.redditreader.api.utils.restClient.RestClient;
-import com.oissela.software.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;

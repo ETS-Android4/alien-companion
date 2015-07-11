@@ -10,7 +10,7 @@ import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToS
 import org.json.simple.JSONObject;
 
 import com.george.redditreader.Models.Thumbnail;
-import com.oissela.software.multilevelexpindlistview.MultiLevelExpIndListAdapter;
+import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
 import java.util.List;

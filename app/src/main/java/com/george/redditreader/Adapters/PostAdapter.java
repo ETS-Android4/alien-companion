@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +97,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 final Comment comment = (Comment) getItemAt(position);
 
                 cvh.authorTextView.setText(comment.getAuthor());
-                cvh.commentTextView.setText(Html.fromHtml(comment.getBodyHTML()));
+                //Log.e("comment HTML", comment.getBodyHTML());
+                //String htmlString = (comment.getBodyHTML()).replaceAll("\\sclass=\"md\"", "");
+                //Log.e("comment HTML", htmlString);
+                //htmlString = htmlString.replaceAll("&lt;", "<");
+                //htmlString = htmlString.replaceAll("&gt;", ">");
+                cvh.commentTextView.setText(comment.getBody());
 
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);
@@ -128,7 +134,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
-                    contentVH.selfText.setText(Html.fromHtml(post.getSelftextHTML()));
+                    contentVH.selfText.setText(post.getSelftext());
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
