@@ -354,9 +354,9 @@ public class Comments implements ActorDriven {
      *
      * @param submission 		Submission ID36 identifier
      * @param commentId    		(Optional, set null if not used) ID of a comment. If specified, this comment will be the focal point of the returned view.
-     * @param parentsShown 		(Optional, set null is not used) An integer between 0 and 8 representing the number of parents shown for the comment identified by <code>commentId</code>
-     * @param depth        		(Optional, set null if not used) Integer representing the maximum depth of subtrees in the thread
-     * @param limit        		(Optional, set null if not used) Integer representing the maximum number of comments to return
+     * @param parentsShown 		(Optional, set -1 is not used) An integer between 0 and 8 representing the number of parents shown for the comment identified by <code>commentId</code>
+     * @param depth        		(Optional, set -1 if not used) Integer representing the maximum depth of subtrees in the thread
+     * @param limit        		(Optional, set -1 if not used) Integer representing the maximum number of comments to return
      * @param sort  			(Optional, set null if not used) CommentSort enum indicating the type of sorting to be applied (e.g. HOT, NEW, TOP, etc)
      * @return Comments for an article.
      */

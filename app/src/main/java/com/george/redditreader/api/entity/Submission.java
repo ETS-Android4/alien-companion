@@ -115,6 +115,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 		this.clicked = clicked;
 	}
 
+	public Submission(String id) {
+		super("t3_"+id);
+	}
+
 	public Submission() {
 		super();
 	}

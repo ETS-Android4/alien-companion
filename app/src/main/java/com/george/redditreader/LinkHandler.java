@@ -43,9 +43,13 @@ public class LinkHandler {
             //Log.d("youtube video id", videoId);
             intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
         }
-        else if(domain.equals("reddit.com") || domain.equals("redd.it") || domain.substring(3).equals("reddit.com")) {
+        else if(domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
             intent = new Intent(activity, PostActivity.class);
-            intent.putExtra("postUrl", getRedditPostUrl(url, domain));
+            intent.putExtra("postInfo", getRedditPostUrl(url, domain));
+        }
+        else if(domain.equals("redd.it")) {
+            intent = new Intent(activity, PostActivity.class);
+            intent.putExtra("postId", url.substring(15));
         }
         else {
             intent = new Intent(activity, BrowserActivity.class);
@@ -54,26 +58,39 @@ public class LinkHandler {
         activity.startActivity(intent);
     }
 
-    public String getRedditPostUrl(String url, String domain) {
-        String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
-                "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
+    public String[] getRedditPostUrl(String url, String domain) {
+        //String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
+        //        "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
 
-        String postUrl = null;
-        if(domain.equals("redd.it")) postUrl = "/comments/" + url.substring(15) + endpoint;
-        else {
-            String pattern = "context=\\w+";
-            Pattern compiledPattern = Pattern.compile(pattern);
-            Matcher matcher = compiledPattern.matcher(url);
-            if (matcher.find()) endpoint = endpoint + "&" + matcher.group();
+        String[] postInfo = new String[4];
+        //String postUrl = null;
+        //if(domain.equals("redd.it")) postInfo[1] = url.substring(15);//postUrl = "/comments/" + url.substring(15) + endpoint;
+        //else {
+            //String pattern = "context=\\w+";
+            //Pattern compiledPattern = Pattern.compile(pattern);
+            //Matcher matcher = compiledPattern.matcher(url);
+            //if (matcher.find()) endpoint = endpoint + "&" + matcher.group();
+//
+            //// altPattern = "(/r/\\w+/\\w+/\\w+/\\w+/(\\w+)?)";
+            //pattern = "/r/[\\w/]*";
+            //compiledPattern = Pattern.compile(pattern);
+            //matcher = compiledPattern.matcher(url);
+            //if(matcher.find()) postUrl = matcher.group() + endpoint;
 
-            // altPattern = "(/r/\\w+/\\w+/\\w+/\\w+/(\\w+)?)";
-            pattern = "/r/[\\w/]*";
-            compiledPattern = Pattern.compile(pattern);
-            matcher = compiledPattern.matcher(url);
-            if(matcher.find()) postUrl = matcher.group() + endpoint;
+
+        String pattern = "/r/(\\w+)/comments/(\\w+)/\\w+/(\\w+)(?:.*context=(\\d+))?";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(url);
+        if(matcher.find()) {
+            postInfo[0] = matcher.group(1);
+            postInfo[1] = matcher.group(2);
+            postInfo[2] = matcher.group(3);
+            postInfo[3] = matcher.group(4);
         }
+        //}
 
-        return postUrl;
+        //for(String info : postInfo) Log.e("reddit post info", info);
+        return postInfo;
     }
 
     private String getYoutubeVideoId(String youtubeURL) {

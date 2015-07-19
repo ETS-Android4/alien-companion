@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.Utils.DisplayToast;
 import com.george.redditreader.LinkHandler;
 import com.george.redditreader.R;
+import com.george.redditreader.Utils.ImageLoader;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.exception.RedditError;
@@ -30,6 +32,7 @@ import com.george.redditreader.api.retrieval.params.CommentSort;
 import com.george.redditreader.api.utils.RedditConstants;
 import com.george.redditreader.api.utils.restClient.HttpRestClient;
 import com.george.redditreader.api.utils.restClient.RestClient;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,6 +52,8 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     private ProgressBar progressBar;
     private boolean loadFromList;
     private boolean noResponseObject;
+    private String commentLinkId;
+    private int parentsShown = -1;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -59,6 +64,18 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         restClient = new HttpRestClient();
         post = (Submission) activity.getIntent().getSerializableExtra("post");
         loadFromList = (post != null);
+        if(!loadFromList) {
+            if(activity.getIntent().getStringArrayExtra("postInfo")!=null) {
+                String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
+                post = new Submission(postInfo[1]);
+                post.setSubreddit(postInfo[0]);
+                commentLinkId = postInfo[2];
+                if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
+            }
+            else {
+                post = new Submission(activity.getIntent().getStringExtra("postId"));
+            }
+        }
     }
 
     @Override
@@ -161,7 +178,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             }
             else {
                 progressBar.setVisibility(View.VISIBLE);
-                post = new Submission();
+                //post = new Submission();
             }
             //postAdapter.notifyDataSetChanged();
 
@@ -239,17 +256,10 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             try {
                 Comments cmnts = new Comments(restClient);
                 List<Comment> comments;
-                if(loadFromList) {
-                    comments = cmnts.ofSubmission(post, null, -1, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
-                    //Log.d("comments load", "doing load from list");
-                }
-                else {
-                    //Log.d("comments load", "doing load from link");
-                    String postUrl = activity.getIntent().getStringExtra("postUrl");
-                    postUrl = postUrl + "&sort="  + commentSort.value();
+                comments = cmnts.ofSubmission(post, commentLinkId, parentsShown, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
 
-                    comments = cmnts.parseDepth(postUrl, post);
-                    post.setThumbnailObject(new Thumbnail(post.getThumbnail()));
+                if(post.getThumbnailObject() == null) {
+                    ImageLoader.preloadThumbnail(post, activity);
                 }
                 Comments.indentCommentTree(comments);
 

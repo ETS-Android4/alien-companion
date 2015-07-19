@@ -97,11 +97,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 final Comment comment = (Comment) getItemAt(position);
 
                 cvh.authorTextView.setText(comment.getAuthor());
-                //Log.e("comment HTML", comment.getBodyHTML());
-                //String htmlString = (comment.getBodyHTML()).replaceAll("\\sclass=\"md\"", "");
-                //Log.e("comment HTML", htmlString);
-                //htmlString = htmlString.replaceAll("&lt;", "<");
-                //htmlString = htmlString.replaceAll("&gt;", ">");
+
                 cvh.commentTextView.setText(comment.getBody());
 
                 if (comment.getIndentation() == 0) {

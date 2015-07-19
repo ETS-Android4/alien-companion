@@ -69,4 +69,15 @@ public class ImageLoader {
                 submission.setThumbnailObject(thumbnail);
         }
     }
+
+    public static void preloadThumbnail(Submission submission, Context context) {
+        Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
+        try {
+            Picasso.with(context).load(thumbnail.getUrl()).fetch();
+            thumbnail.setHasThumbnail(true);
+        } catch (IllegalArgumentException e) {
+            thumbnail.setHasThumbnail(false);
+        }
+        submission.setThumbnailObject(thumbnail);
+    }
 }
