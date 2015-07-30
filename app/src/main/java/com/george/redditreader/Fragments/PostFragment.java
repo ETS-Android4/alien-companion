@@ -54,6 +54,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     private boolean noResponseObject;
     private String commentLinkId;
     private int parentsShown = -1;
+    private boolean titleUpdated = true;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -73,6 +74,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
                 if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
             }
             else {
+                titleUpdated = false;
                 post = new Submission(activity.getIntent().getStringExtra("postId"));
             }
         }
@@ -173,24 +175,22 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             postAdapter = new PostAdapter(activity, this);
 
             if(loadFromList) {
-                //progressBar.setVisibility(View.GONE);
                 postAdapter.add(post);
             }
             else {
                 progressBar.setVisibility(View.VISIBLE);
-                //post = new Submission();
             }
-            //postAdapter.notifyDataSetChanged();
 
             mRecyclerView.setAdapter(postAdapter);
-//
+
             LoadCommentsTask task = new LoadCommentsTask();
             task.execute();
+
+            if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
         }
         else {
             mRecyclerView.setAdapter(postAdapter);
         }
-        //mRecyclerView.setAdapter(postAdapter);
 
         if (savedInstanceState != null) {
             List<Integer> groups = savedInstanceState.getIntegerArrayList(GROUPS_KEY);
@@ -285,7 +285,6 @@ public class PostFragment extends Fragment implements View.OnClickListener {
                 postAdapter.add(post);
                 postAdapter.addAll(comments);
                 postAdapter.notifyDataSetChanged();
-                //setActionBarTitle(); //TODO: fix nullpointerexception
             }
         }
     }

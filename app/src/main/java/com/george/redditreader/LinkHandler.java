@@ -45,7 +45,7 @@ public class LinkHandler {
         }
         else if(domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
             intent = new Intent(activity, PostActivity.class);
-            intent.putExtra("postInfo", getRedditPostUrl(url, domain));
+            intent.putExtra("postInfo", getRedditPostUrl(url));
         }
         else if(domain.equals("redd.it")) {
             intent = new Intent(activity, PostActivity.class);
@@ -58,25 +58,9 @@ public class LinkHandler {
         activity.startActivity(intent);
     }
 
-    public String[] getRedditPostUrl(String url, String domain) {
-        //String endpoint = ".json?depth=" + RedditConstants.MAX_COMMENT_DEPTH +
-        //        "&limit=" + RedditConstants.MAX_LIMIT_COMMENTS;
+    public String[] getRedditPostUrl(String url) {
 
         String[] postInfo = new String[4];
-        //String postUrl = null;
-        //if(domain.equals("redd.it")) postInfo[1] = url.substring(15);//postUrl = "/comments/" + url.substring(15) + endpoint;
-        //else {
-            //String pattern = "context=\\w+";
-            //Pattern compiledPattern = Pattern.compile(pattern);
-            //Matcher matcher = compiledPattern.matcher(url);
-            //if (matcher.find()) endpoint = endpoint + "&" + matcher.group();
-//
-            //// altPattern = "(/r/\\w+/\\w+/\\w+/\\w+/(\\w+)?)";
-            //pattern = "/r/[\\w/]*";
-            //compiledPattern = Pattern.compile(pattern);
-            //matcher = compiledPattern.matcher(url);
-            //if(matcher.find()) postUrl = matcher.group() + endpoint;
-
 
         String pattern = "/r/(\\w+)/comments/(\\w+)/\\w+/(\\w+)(?:.*context=(\\d+))?";
         Pattern compiledPattern = Pattern.compile(pattern);
@@ -87,18 +71,16 @@ public class LinkHandler {
             postInfo[2] = matcher.group(3);
             postInfo[3] = matcher.group(4);
         }
-        //}
 
-        //for(String info : postInfo) Log.e("reddit post info", info);
         return postInfo;
     }
 
     private String getYoutubeVideoId(String youtubeURL) {
         String pattern = "(?<=v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*";
-//
+
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = compiledPattern.matcher(youtubeURL);
-//
+
         if(matcher.find()){
             return matcher.group();
         }
@@ -113,7 +95,7 @@ public class LinkHandler {
 
         Pattern timePattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = timePattern.matcher(youtubeURL);
-//
+
         if(matcher.find()){
             String time = matcher.group();
             if(time.contains("h") || time.contains("m") || time.contains("s")) {
