@@ -15,27 +15,37 @@ public class DisplayToast {
     public static final String SUBREDDIT_NOT_FOUND = "Could not find subreddit";
 
     public static void postsLoadError(Context context) {
-        Toast toast = Toast.makeText(context, LOADING_POSTS_ERROR, Toast.LENGTH_SHORT);
-        toast.show();
+        try {
+            Toast toast = Toast.makeText(context, LOADING_POSTS_ERROR, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NullPointerException e) {}
     }
 
     public static void commentsLoadError(Context context) {
-        Toast toast = Toast.makeText(context, LOADING_COMMENTS_ERROR, Toast.LENGTH_SHORT);
-        toast.show();
+        try {
+            Toast toast = Toast.makeText(context, LOADING_COMMENTS_ERROR, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NullPointerException e) {}
     }
 
     public static void userLoadError(Context context) {
-        Toast toast = Toast.makeText(context, LOADING_USER_ERROR, Toast.LENGTH_SHORT);
-        toast.show();
+        try {
+            Toast toast = Toast.makeText(context, LOADING_USER_ERROR, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NullPointerException e) {}
     }
 
     public static void subredditNotFound(Context context) {
-        Toast toast = Toast.makeText(context, SUBREDDIT_NOT_FOUND, Toast.LENGTH_SHORT);
-        toast.show();
+        try {
+            Toast toast = Toast.makeText(context, SUBREDDIT_NOT_FOUND, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NullPointerException e) {}
     }
 
     public static void noResults(Context context, String query) {
-        Toast toast = Toast.makeText(context, NO_RESULTS_FOUND + query, Toast.LENGTH_SHORT);
-        toast.show();
+        try {
+            Toast toast = Toast.makeText(context, NO_RESULTS_FOUND + query, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NullPointerException e) {}
     }
 }

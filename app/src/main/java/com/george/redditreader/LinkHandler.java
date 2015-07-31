@@ -7,11 +7,8 @@ import android.util.Log;
 import com.george.redditreader.Activities.BrowserActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.api.entity.Submission;
-import com.george.redditreader.api.utils.RedditConstants;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +42,7 @@ public class LinkHandler {
         }
         else if(domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
             intent = new Intent(activity, PostActivity.class);
-            intent.putExtra("postInfo", getRedditPostUrl(url));
+            intent.putExtra("postInfo", getRedditPostInfo(url));
         }
         else if(domain.equals("redd.it")) {
             intent = new Intent(activity, PostActivity.class);
@@ -58,7 +55,7 @@ public class LinkHandler {
         activity.startActivity(intent);
     }
 
-    public String[] getRedditPostUrl(String url) {
+    public String[] getRedditPostInfo(String url) {
 
         String[] postInfo = new String[4];
 

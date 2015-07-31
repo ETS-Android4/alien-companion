@@ -11,6 +11,7 @@ import com.george.redditreader.R;
 public class PostActivity extends SwipeActivity {
 
     public static boolean commentsLoaded;
+    public static boolean showFullComments;
     //public static boolean loadFromList;
 
     @Override
@@ -48,6 +49,7 @@ public class PostActivity extends SwipeActivity {
     @Override
     public void onBackPressed () {
         commentsLoaded = false;
+        showFullComments = false;
         super.onBackPressed();
     }
 

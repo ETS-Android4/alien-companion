@@ -10,6 +10,7 @@ import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToD
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 /**
@@ -78,6 +79,8 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             this.setScoreHidden(safeJsonToBoolean(obj.get("score_hidden")));
 
             this.setLinkTitle(safeJsonToString(obj.get("link_title")));
+
+            bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
 
             setIndentation(0);
             mChildren = new LinkedList<>();

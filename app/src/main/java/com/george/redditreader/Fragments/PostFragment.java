@@ -52,7 +52,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     private ProgressBar progressBar;
     private boolean loadFromList;
     private boolean noResponseObject;
-    private String commentLinkId;
+    public static String commentLinkId;
     private int parentsShown = -1;
     private boolean titleUpdated = true;
 
@@ -71,6 +71,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
                 post = new Submission(postInfo[1]);
                 post.setSubreddit(postInfo[0]);
                 commentLinkId = postInfo[2];
+                if(commentLinkId != null) PostActivity.showFullComments = true;
                 if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
             }
             else {
@@ -220,6 +221,11 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void loadFullComments() {
+        commentLinkId = null;
+        refreshComments();
+    }
+
     public void refreshComments() {
         if(!noResponseObject) {
             postAdapter.clear();
@@ -227,9 +233,9 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             postAdapter.notifyDataSetChanged();
             PostActivity.commentsLoaded = false;
         }
-        else {
-            progressBar.setVisibility(View.VISIBLE);
-        }
+        //else {
+        //    progressBar.setVisibility(View.VISIBLE);
+        //}
 
         LoadCommentsTask task = new LoadCommentsTask();
         task.execute();

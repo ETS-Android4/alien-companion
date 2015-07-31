@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.PostActivity;
+import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
@@ -23,9 +25,6 @@ import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.george.redditreader.multilevelexpindlistview.Utils;
 import com.squareup.picasso.Picasso;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by George on 5/17/2015.
@@ -96,9 +95,16 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 CommentViewHolder cvh = (CommentViewHolder) viewHolder;
                 final Comment comment = (Comment) getItemAt(position);
 
+                if(comment.getIdentifier().equals(PostFragment.commentLinkId))
+                    cvh.commentLayout.setBackgroundColor(Color.parseColor("#e8ff95"));
+                else cvh.commentLayout.setBackgroundColor(Color.WHITE);
+
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                cvh.commentTextView.setText(comment.getBody());
+                cvh.commentTextView.setText(Html.fromHtml(comment.getBodyHTML()));
+                cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
+                //cvh.commentTextView.setText(comment.getBody());
+                //Linkify.addLinks(cvh.commentTextView, Linkify.WEB_URLS);
 
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);
@@ -123,14 +129,29 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
 
-                contentVH.fullLoad.setVisibility(View.GONE);
+                if(PostActivity.showFullComments) {
+                    contentVH.fullComments.setVisibility(View.VISIBLE);
+                    contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PostActivity.showFullComments = false;
+                            PostFragment postFragment = (PostFragment) activity.getFragmentManager()
+                                    .findFragmentById(R.id.fragment2);
+                            postFragment.loadFullComments();
+                        }
+                    });
+                }
+                else contentVH.fullComments.setVisibility(View.GONE);
 
                 contentVH.postTitle.setText(post.getTitle());
                 contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments");
 
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
-                    contentVH.selfText.setText(post.getSelftext());
+                    contentVH.selfText.setText(Html.fromHtml(post.getSelftextHTML()));
+                    contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
+                    //contentVH.selfText.setText(post.getSelftext());
+                    //Linkify.addLinks(contentVH.selfText, Linkify.WEB_URLS);
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
@@ -176,6 +197,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView commentTextView;
         public TextView hiddenCommentsCountTextView;
         private View view;
+        public LinearLayout commentLayout;
 
         private static final String[] indColors = {"#000000", "#3366FF", "#E65CE6",
                 "#E68A5C", "#00E68A", "#CCCC33"};
@@ -187,6 +209,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);
             colorBand = itemView.findViewById(R.id.color_band);
             hiddenCommentsCountTextView = (TextView) itemView.findViewById(R.id.hidden_comments_count_textview);
+            commentLayout = (LinearLayout) itemView.findViewById(R.id.commentLayout);
         }
 
         public void setColorBandColor(int indentation) {
@@ -209,7 +232,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView selfText;
         public ImageView postImage;
         public ProgressBar progressBar;
-        public LinearLayout fullLoad;
+        public LinearLayout fullComments;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
@@ -222,7 +245,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             postImage = (ImageView) itemView.findViewById(R.id.postImage);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);
             comments = (TextView) itemView.findViewById(R.id.txtView_comments);
-            fullLoad = (LinearLayout) itemView.findViewById(R.id.fullLoad);
+            fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
         }
     }
 

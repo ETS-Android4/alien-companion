@@ -103,7 +103,10 @@
             android:background="#ffe3e3e3" />
     </LinearLayout>
 
-    <include layout="@layout/load_full_comments"/>
+    <include layout="@layout/load_full_comments"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <ProgressBar
         android:layout_width="wrap_content"

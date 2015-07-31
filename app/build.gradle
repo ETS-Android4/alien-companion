@@ -4,6 +4,11 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
     defaultConfig {
         applicationId "com.george.redditreader"
         minSdkVersion 16
@@ -20,7 +25,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'org.apache.commons:commons-io:1.3.2'
     compile files('libs/json-simple-1.1.1.jar')
@@ -30,5 +35,6 @@ dependencies {
     //compile files('libes/nineoldandroids-2.4.0.jar')
     //compile 'me.imid.swipebacklayout.lib:library:1.0.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
-    //compile group: 'in.uncod.android.bypass', name: 'bypass', version: '1.1'
+    //compile group: 'org.apache.commons', name: 'commons-lang2', version: '2.6'
+    compile files('libs/commons-lang-2.1.jar')
 }

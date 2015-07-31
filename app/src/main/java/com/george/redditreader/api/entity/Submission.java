@@ -7,6 +7,7 @@ import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToD
 import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToLong;
 import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import com.george.redditreader.Models.Thumbnail;
@@ -171,6 +172,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setNSFW(safeJsonToBoolean(obj.get("over_18")));
 			setHidden(safeJsonToBoolean(obj.get("hidden")));
 			setClicked(safeJsonToBoolean(obj.get("clicked")));
+
+			selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
 
 		} catch (Exception e) {
 			Log.e("Api error", "Error creating Submission");
