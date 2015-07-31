@@ -38,4 +38,12 @@ public class ConvertUtils {
             return Long.toString(diffYears) + years + " ago";
         }
     }
+
+    public static CharSequence noTrailingwhiteLines(CharSequence text) {
+
+        while (text.charAt(text.length() - 1) == '\n') {
+            text = text.subSequence(0, text.length() - 1);
+        }
+        return text;
+    }
 }

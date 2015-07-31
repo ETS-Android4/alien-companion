@@ -24,6 +24,9 @@ public class CommentLinkListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(activity, PostActivity.class);
+        String postInfo[] = {comment.getSubreddit(), comment.getLinkId().substring(3), comment.getIdentifier(), null};
+        intent.putExtra("postInfo", postInfo);
+        activity.startActivity(intent);
     }
 
 }

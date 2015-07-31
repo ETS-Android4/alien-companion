@@ -101,7 +101,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                cvh.commentTextView.setText(Html.fromHtml(comment.getBodyHTML()));
+                //CharSequence trimmedHtml = ConvertUtils.trim(Html.fromHtml(comment.getBodyHTML()), 0,
+                //        comment.getBodyHTML().length()-1);
+                cvh.commentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
                 cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
                 //cvh.commentTextView.setText(comment.getBody());
                 //Linkify.addLinks(cvh.commentTextView, Linkify.WEB_URLS);
@@ -118,8 +120,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if (comment.isGroup()) {
                     cvh.hiddenCommentsCountTextView.setVisibility(View.VISIBLE);
-                    cvh.hiddenCommentsCountTextView.setText(Integer.toString(comment.getGroupSize()));
-                    //cvh.commentTextView.setVisibility(View.GONE);
+                    cvh.hiddenCommentsCountTextView.setText(Integer.toString(comment.getGroupSize() + 1));
+                    cvh.commentTextView.setVisibility(View.GONE);
                 } else {
                     cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
                     cvh.commentTextView.setVisibility(View.VISIBLE);
@@ -148,8 +150,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
-                    contentVH.selfText.setText(Html.fromHtml(post.getSelftextHTML()));
-                    contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
+
+                    if(post.getSelftextHTML() == null) contentVH.selfText.setVisibility(View.GONE);
+                    else {
+                        //contentVH.selfText.setVisibility(View.VISIBLE);
+                        contentVH.selfText.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())));
+                        contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
+                    }
                     //contentVH.selfText.setText(post.getSelftext());
                     //Linkify.addLinks(contentVH.selfText, Linkify.WEB_URLS);
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));

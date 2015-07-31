@@ -46,7 +46,8 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:layout_below="@id/author_textview"
-            android:text="comment" />
+            android:text="comment"
+            android:paddingBottom="16dp" />
 
         <View
             android:layout_width="match_parent"

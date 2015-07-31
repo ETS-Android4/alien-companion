@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.R;
 
 
@@ -50,6 +51,7 @@ public class PostActivity extends SwipeActivity {
     public void onBackPressed () {
         commentsLoaded = false;
         showFullComments = false;
+        PostFragment.commentLinkId = null;
         super.onBackPressed();
     }
 

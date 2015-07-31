@@ -226,8 +226,8 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
     public void collapseGroup(int position) {
         ExpIndData firstItem = getItemAt(position);
 
-        if (firstItem.getChildren() == null || firstItem.getChildren().isEmpty())
-            return;
+        //if (firstItem.getChildren() == null || firstItem.getChildren().isEmpty())
+        //    return;
 
         // group containing all the descendants of firstItem
         List<ExpIndData> group = new ArrayList<ExpIndData>();

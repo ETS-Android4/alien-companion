@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
 
-    private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays"};
+    private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays", "games",
+    "gaming", "technology", "worldnews", "showerthoughts"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

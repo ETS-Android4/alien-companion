@@ -1,6 +1,7 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,8 +125,10 @@ public class UserAdapter extends BaseAdapter {
 
                Comment comment = (Comment) getItem(position);
                commentViewHolder.postTitle.setText(comment.getLinkTitle());
-               commentViewHolder.commentDets.setText(comment.getAuthor() + " - " + comment.getScore() + " points - " + ConvertUtils.getSubmissionAge(comment.getCreatedUTC()));
-               commentViewHolder.commentBody.setText(comment.getBody());
+               commentViewHolder.commentDets.setText(comment.getAuthor() + " - " + comment.getScore() + " points - " +
+                       ConvertUtils.getSubmissionAge(comment.getCreatedUTC()));
+               commentViewHolder.commentBody.setText(ConvertUtils.noTrailingwhiteLines
+                       (Html.fromHtml(comment.getBodyHTML())));
                commentViewHolder.commentLayout.setOnClickListener(new CommentLinkListener(mActivity, comment));
                break;
            case VIEW_TYPE_POST:
