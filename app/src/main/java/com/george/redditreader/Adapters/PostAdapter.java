@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.Utils.ConvertUtils;
@@ -101,12 +100,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                //CharSequence trimmedHtml = ConvertUtils.trim(Html.fromHtml(comment.getBodyHTML()), 0,
-                //        comment.getBodyHTML().length()-1);
                 cvh.commentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
                 cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
-                //cvh.commentTextView.setText(comment.getBody());
-                //Linkify.addLinks(cvh.commentTextView, Linkify.WEB_URLS);
 
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);
@@ -131,12 +126,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
 
-                if(PostActivity.showFullComments) {
+                if(MainActivity.showFullComments) {
                     contentVH.fullComments.setVisibility(View.VISIBLE);
                     contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            PostActivity.showFullComments = false;
+                            MainActivity.showFullComments = false;
                             PostFragment postFragment = (PostFragment) activity.getFragmentManager()
                                     .findFragmentById(R.id.fragment2);
                             postFragment.loadFullComments();
@@ -153,12 +148,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                     if(post.getSelftextHTML() == null) contentVH.selfText.setVisibility(View.GONE);
                     else {
-                        //contentVH.selfText.setVisibility(View.VISIBLE);
                         contentVH.selfText.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())));
                         contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
                     }
-                    //contentVH.selfText.setText(post.getSelftext());
-                    //Linkify.addLinks(contentVH.selfText, Linkify.WEB_URLS);
+
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
@@ -183,7 +176,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     contentVH.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 }
                 contentVH.subreddit.setText(post.getSubreddit());
-                if (PostActivity.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
+                if (MainActivity.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
                 else contentVH.progressBar.setVisibility(View.VISIBLE);
                 break;
             default:

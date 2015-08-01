@@ -46,14 +46,6 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         this.activity = activity;
     }
 
-    //public void setThumbnails(List<Thumbnail> thumbnails) {
-    //    this.thumbnails = thumbnails;
-    //}
-//
-    //public void addThumbnails(List<Thumbnail> moreThumbnails) {
-    //    thumbnails.addAll(moreThumbnails);
-    //}
-
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
 
@@ -119,45 +111,6 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
 
         return row;
     }
-
-    //public static String getSubmissionAge(Double createdUTC) {
-    //    Date createdDate = new Date((long) (createdUTC*1000));
-    //    Date currentDate = new Date();
-    //    long createdTime = createdDate.getTime();
-    //    long currentTime = currentDate.getTime();
-    //    long diffTime = currentTime - createdTime;
-    //    long diffHours = diffTime / (1000 * 60 * 60);
-    //    if(diffHours < 25 && diffHours >= 1) return Long.toString(diffHours) + " h";
-    //    else if(diffHours < 1) {
-    //        long diffMins = diffTime / (1000 * 60);
-    //        return Long.toString(diffMins) + " m";
-    //    }
-    //    else {
-    //        long diffDays = diffTime / (1000 * 60 * 60 * 24);
-    //        return Long.toString(diffDays) + " d";
-    //    }
-    //}
-
-    //@Override
-    //public void onClick(View v) {
-    //    Submission post = posts.get((Integer) v.getTag());
-//
-    //    if(v.getId() == R.id.commentsButton || post.isSelf()) {
-    //        Intent intent = new Intent(activity, PostActivity.class);
-    //        intent.putExtra("post", post);
-    //        if(!post.isSelf() && thumbnails.get((Integer) v.getTag()).hasThumbnail()) {
-    //            String thumbUrl = thumbnails.get((Integer) v.getTag()).getUrl();
-    //            intent.putExtra("thumbUrl", thumbUrl);
-    //        }
-    //        Log.d("Clicks", "Post number " + v.getTag() + " ,taking you to post page...");
-    //        activity.startActivity(intent);
-    //    }
-    //    else {
-    //        Log.d("Clicks", "Post number " + v.getTag() + " ,loading post content...");
-    //        LinkHandler linkHandler = new LinkHandler(activity, post);
-    //        linkHandler.handleIt();
-    //    }
-    //}
 
     public Submission getLastPost() {
         return posts.get(posts.size()-1);

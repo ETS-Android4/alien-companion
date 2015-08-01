@@ -2,7 +2,6 @@ package com.george.redditreader.Activities;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,17 +12,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.PostListFragment;
 import com.george.redditreader.Fragments.SearchRedditDialogFragment;
-import com.george.redditreader.MenuType;
+import com.george.redditreader.enums.MenuType;
 import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
 import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
@@ -43,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private PostListFragment listFragment;
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
+    public static boolean commentsLoaded;
+    public static boolean showFullComments;
 
     private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays", "games",
     "gaming", "technology", "worldnews", "showerthoughts"};

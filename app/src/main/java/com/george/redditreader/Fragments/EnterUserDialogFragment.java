@@ -29,7 +29,6 @@ public class EnterUserDialogFragment extends DialogFragment implements View.OnCl
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        //setRetainInstance(true);
 
         activity = (MainActivity) getActivity();
     }

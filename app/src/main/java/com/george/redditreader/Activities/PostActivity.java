@@ -11,10 +11,6 @@ import com.george.redditreader.R;
 
 public class PostActivity extends SwipeActivity {
 
-    public static boolean commentsLoaded;
-    public static boolean showFullComments;
-    //public static boolean loadFromList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +18,6 @@ public class PostActivity extends SwipeActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //loadFromList = (getIntent().getSerializableExtra("postUrl") == null);
     }
 
     @Override
@@ -49,8 +43,8 @@ public class PostActivity extends SwipeActivity {
 
     @Override
     public void onBackPressed () {
-        commentsLoaded = false;
-        showFullComments = false;
+        MainActivity.commentsLoaded = false;
+        MainActivity.showFullComments = false;
         PostFragment.commentLinkId = null;
         super.onBackPressed();
     }

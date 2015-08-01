@@ -32,7 +32,6 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        //setRetainInstance(true);
 
         activity = (AppCompatActivity) getActivity();
         searchFragment = null;
@@ -43,18 +42,6 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
             subreddit = searchFragment.getSubreddit();
         }
     }
-
-    //@Override
-    //public void onAttach(Activity activity) {
-    //    super.onAttach(activity);
-    //    this.activity = (AppCompatActivity) activity;
-    //}
-//
-    //@Override
-    //public void onDetach() {
-    //    super.onDetach();
-    //    this.activity = null;
-    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

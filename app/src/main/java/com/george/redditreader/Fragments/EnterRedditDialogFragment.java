@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -29,7 +28,6 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        //setRetainInstance(true);
 
         activity = (MainActivity) getActivity();
     }

@@ -1,4 +1,4 @@
-package com.george.redditreader;
+package com.george.redditreader.enums;
 
 /**
  * Created by George on 6/22/2015.

@@ -3,7 +3,7 @@ package com.george.redditreader.Models.NavDrawer;
 import android.graphics.drawable.Drawable;
 
 import com.george.redditreader.Adapters.NavDrawerAdapter;
-import com.george.redditreader.MenuType;
+import com.george.redditreader.enums.MenuType;
 
 /**
  * Created by George on 6/26/2015.

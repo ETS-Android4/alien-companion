@@ -58,15 +58,6 @@ public class UserAdapter extends BaseAdapter {
         return mData.get(mData.size()-1);
     }
 
-    //@Override
-    //public int getItemViewType(int position) {
-    //    if(position == 0) return VIEW_TYPE_INFO;
-    //    else {
-    //        if(mData.get(position) instanceof Submission) return VIEW_TYPE_POST;
-    //        else return VIEW_TYPE_COMMENT;
-    //    }
-    //}
-
     @Override
     public int getItemViewType(int position) {
         Object object = mData.get(position);

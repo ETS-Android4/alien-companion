@@ -1,18 +1,13 @@
 package com.george.redditreader.ClickListeners.NavDrawerListeners;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Handler;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.EnterRedditDialogFragment;
 import com.george.redditreader.Fragments.EnterUserDialogFragment;
-import com.george.redditreader.MenuType;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
 
 /**

@@ -16,8 +16,10 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Adapters.PostAdapter;
+import com.george.redditreader.LoadTasks.LoadCommentsTask;
 import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.Utils.DisplayToast;
 import com.george.redditreader.LinkHandler;
@@ -42,19 +44,19 @@ import java.util.List;
 public class PostFragment extends Fragment implements View.OnClickListener {
     private static final String GROUPS_KEY = "groups_key";
 
-    private PostAdapter postAdapter;
+    public PostAdapter postAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private PostActivity activity;
-    private Submission post;
-    private RestClient restClient;
-    private CommentSort commentSort;
-    private ProgressBar progressBar;
+    public Submission post;
+    public CommentSort commentSort;
+    public ProgressBar progressBar;
     private boolean loadFromList;
-    private boolean noResponseObject;
+    public boolean noResponseObject;
     public static String commentLinkId;
-    private int parentsShown = -1;
+    public int parentsShown = -1;
     private boolean titleUpdated = true;
+    private List<Integer> groups;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -62,7 +64,6 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        restClient = new HttpRestClient();
         post = (Submission) activity.getIntent().getSerializableExtra("post");
         loadFromList = (post != null);
         if(!loadFromList) {
@@ -71,7 +72,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
                 post = new Submission(postInfo[1]);
                 post.setSubreddit(postInfo[0]);
                 commentLinkId = postInfo[2];
-                if(commentLinkId != null) PostActivity.showFullComments = true;
+                if(commentLinkId != null) MainActivity.showFullComments = true;
                 if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
             }
             else {
@@ -91,6 +92,12 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
         this.activity = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        activity = null;
     }
 
     @Override
@@ -184,7 +191,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
 
             mRecyclerView.setAdapter(postAdapter);
 
-            LoadCommentsTask task = new LoadCommentsTask();
+            LoadCommentsTask task = new LoadCommentsTask(activity, this);
             task.execute();
 
             if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
@@ -193,18 +200,31 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             mRecyclerView.setAdapter(postAdapter);
         }
 
-        if (savedInstanceState != null) {
-            List<Integer> groups = savedInstanceState.getIntegerArrayList(GROUPS_KEY);
-            postAdapter.restoreGroups(groups);
-        }
+        //if (savedInstanceState != null) {
+        //    List<Integer> groups = savedInstanceState.getIntegerArrayList(GROUPS_KEY);
+        //    postAdapter.restoreGroups(groups);
+        //}
 
         return rootView;
     }
 
+    //@Override
+    //public void onSaveInstanceState(Bundle outState) {
+    //    //Log.e("geo debug", "onsaveinstancestate called");
+    //    outState.putIntegerArrayList(GROUPS_KEY, postAdapter.saveGroups());
+    //    super.onSaveInstanceState(outState);
+    //}
+
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putIntegerArrayList(GROUPS_KEY, postAdapter.saveGroups());
-        super.onSaveInstanceState(outState);
+    public void onPause() {
+        super.onPause();
+        groups = postAdapter.saveGroups();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        postAdapter.restoreGroups(groups);
     }
 
     @Override
@@ -231,14 +251,15 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             postAdapter.clear();
             postAdapter.add(post);
             postAdapter.notifyDataSetChanged();
-            PostActivity.commentsLoaded = false;
+            MainActivity.commentsLoaded = false;
         }
         //else {
         //    progressBar.setVisibility(View.VISIBLE);
         //}
 
-        LoadCommentsTask task = new LoadCommentsTask();
+        LoadCommentsTask task = new LoadCommentsTask(activity, this);
         task.execute();
+        //progressBar.setVisibility(View.GONE);
     }
 
     public void setCommentSort(CommentSort sort) {
@@ -253,46 +274,46 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         activity.getSupportActionBar().setSubtitle(commentSort.value());
     }
 
-    class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
-
-        private Exception exception;
-
-        @Override
-        protected List<Comment> doInBackground(Void... unused) {
-            try {
-                Comments cmnts = new Comments(restClient);
-                List<Comment> comments;
-                comments = cmnts.ofSubmission(post, commentLinkId, parentsShown, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
-
-                if(post.getThumbnailObject() == null) {
-                    ImageLoader.preloadThumbnail(post, activity);
-                }
-                Comments.indentCommentTree(comments);
-
-                return comments;
-            } catch (RetrievalFailedException | RedditError e) {
-                e.printStackTrace();
-                exception = e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Comment> comments) {
-            progressBar.setVisibility(View.GONE);
-            if(exception != null) {
-                noResponseObject = true;
-                DisplayToast.commentsLoadError(activity);
-            }
-            else {
-                noResponseObject = false;
-                PostActivity.commentsLoaded = true;
-                postAdapter.clear();
-                postAdapter.add(post);
-                postAdapter.addAll(comments);
-                postAdapter.notifyDataSetChanged();
-            }
-        }
-    }
+    //class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
+//
+    //    private Exception exception;
+//
+    //    @Override
+    //    protected List<Comment> doInBackground(Void... unused) {
+    //        try {
+    //            Comments cmnts = new Comments(restClient);
+    //            List<Comment> comments;
+    //            comments = cmnts.ofSubmission(post, commentLinkId, parentsShown, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
+//
+    //            if(post.getThumbnailObject() == null) {
+    //                ImageLoader.preloadThumbnail(post, activity);
+    //            }
+    //            Comments.indentCommentTree(comments);
+//
+    //            return comments;
+    //        } catch (RetrievalFailedException | RedditError e) {
+    //            e.printStackTrace();
+    //            exception = e;
+    //        }
+    //        return null;
+    //    }
+//
+    //    @Override
+    //    protected void onPostExecute(List<Comment> comments) {
+    //        progressBar.setVisibility(View.GONE);
+    //        if(exception != null) {
+    //            noResponseObject = true;
+    //            DisplayToast.commentsLoadError(activity);
+    //        }
+    //        else {
+    //            noResponseObject = false;
+    //            MainActivity.commentsLoaded = true;
+    //            postAdapter.clear();
+    //            postAdapter.add(post);
+    //            postAdapter.addAll(comments);
+    //            postAdapter.notifyDataSetChanged();
+    //        }
+    //    }
+    //}
 
 }
