@@ -2,7 +2,9 @@ package com.george.redditreader.Activities;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private NavDrawerAdapter adapter;
     public static boolean commentsLoaded;
     public static boolean showFullComments;
+    public static SharedPreferences prefs;
 
     private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays", "games",
     "gaming", "technology", "worldnews", "showerthoughts"};
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -69,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
             fm.beginTransaction().add(R.id.fragmentHolder, listFragment).commit();
         }
     }
+
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    //    //Log.e("shared prefs", "show nsfw: "+prefs.getBoolean("showNSFWthumb", false));
+    //}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

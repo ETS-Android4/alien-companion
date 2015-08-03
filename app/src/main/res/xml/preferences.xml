@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="general"
+        android:title="@string/options_general">
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="appearance"
+        android:title="@string/options_appearance">
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="navigation"
+        android:title="@string/options_navigation">
+
+        <CheckBoxPreference
+            android:key="swipeBack"
+            android:title="Swipe to go back"
+            android:summary="Enable/disable horizontal swiping for back navigation"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="posts"
+        android:title="@string/options_posts">
+
+        <CheckBoxPreference
+            android:key="showNSFWthumb"
+            android:title="Show NSFW thumbnails"
+            android:summary="Toggle preview of NSFW posts"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="comments"
+        android:title="@string/options_comments">
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="other"
+        android:title="@string/options_other">
+
+    </PreferenceCategory>
+</PreferenceScreen>

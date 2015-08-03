@@ -215,17 +215,17 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     //    super.onSaveInstanceState(outState);
     //}
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        groups = postAdapter.saveGroups();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        postAdapter.restoreGroups(groups);
-    }
+    //@Override
+    //public void onPause() {
+    //    super.onPause();
+    //    groups = postAdapter.saveGroups();
+    //}
+//
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    postAdapter.restoreGroups(groups);
+    //}
 
     @Override
     public void onClick(View v) {

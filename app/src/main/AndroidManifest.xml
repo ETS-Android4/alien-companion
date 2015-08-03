@@ -12,9 +12,10 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/MainActivityTheme"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:theme="@style/MainActivityTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,11 +24,8 @@
         </activity>
         <activity
             android:name=".Activities.PostActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post" >
-        </activity>
-        <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/title_activity_options" >
         </activity>
         <activity
             android:name=".Activities.BrowserActivity"
@@ -36,11 +34,18 @@
         </activity>
         <activity
             android:name=".Activities.UserActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_user" >
         </activity>
         <activity
             android:name=".Activities.SearchActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name=".Activities.EditPrefsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_edit_prefs" >
         </activity>
     </application>
 

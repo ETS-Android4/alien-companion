@@ -59,4 +59,8 @@ public class Thumbnail implements Serializable {
     public boolean isNSFW() {
         return isNSFW;
     }
+
+    //public void setNSFW(boolean setting) {
+    //    isNSFW = setting;
+    //}
 }

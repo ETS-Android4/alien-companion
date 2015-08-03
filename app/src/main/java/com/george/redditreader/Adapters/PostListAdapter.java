@@ -1,6 +1,8 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.george.redditreader.Activities.EditPrefsActivity;
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.ClickListeners.PostItemListener;
 import com.george.redditreader.R;
@@ -27,6 +31,8 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
     private LayoutInflater inflater;
     private List<Submission> posts;
 
+    private boolean showNSFW;
+
     static class ViewHolder {
         TextView title;
         TextView score;
@@ -44,6 +50,7 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         inflater = activity.getWindow().getLayoutInflater();
         this.posts = posts;
         this.activity = activity;
+        showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -90,7 +97,7 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
             holder.image.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
             if (postThumbnail.isSelf()) {
                 holder.image.setImageResource(R.drawable.self_default2);
-            } else if (postThumbnail.isNSFW()) {
+            } else if (posts.get(position).isNSFW() && !showNSFW) {
                 holder.image.setImageResource(R.drawable.nsfw2);
             } else {
                 try {

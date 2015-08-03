@@ -62,7 +62,7 @@
     <string name="options_navigation_sub">Change the way you interact with the reader</string>
     <string name="options_posts_sub">Post specific options</string>
     <string name="options_comments_sub">Comment specific options</string>
-    <string name="options_other_sub">Options that didn\'t fit anywhere else</string>
+    <string name="options_other_sub">Everything else</string>
 <!-- Other Strings -->
     <string name="enter_subreddit">Enter subreddit</string>
     <string name="enter_user">Enter user</string>
@@ -82,5 +82,6 @@
     <string name="action_new_search">New Search</string>
     <string name="enter_search_term">enter search term</string>
     <string name="action_comments">Comments</string>
+    <string name="title_activity_edit_prefs">EditPrefsActivity</string>
 
 </resources>

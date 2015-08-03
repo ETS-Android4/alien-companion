@@ -2,9 +2,11 @@ package com.george.redditreader.ClickListeners.NavDrawerListeners;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
+import com.george.redditreader.Activities.EditPrefsActivity;
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Fragments.EnterRedditDialogFragment;
 import com.george.redditreader.Fragments.EnterUserDialogFragment;
@@ -46,6 +48,13 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
                 }, 200);
                 break;
             case settings:
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getActivity(), EditPrefsActivity.class);
+                        getActivity().startActivity(intent);
+                    }
+                }, 200);
                 break;
             case cached:
                 break;
