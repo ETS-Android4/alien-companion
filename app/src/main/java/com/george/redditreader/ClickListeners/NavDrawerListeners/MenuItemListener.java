@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
-import com.george.redditreader.Activities.EditPrefsActivity;
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.Activities.SettingsActivity;
 import com.george.redditreader.Fragments.EnterRedditDialogFragment;
 import com.george.redditreader.Fragments.EnterUserDialogFragment;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
@@ -51,7 +51,7 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(getActivity(), EditPrefsActivity.class);
+                        Intent intent = new Intent(getActivity(), SettingsActivity.class);
                         getActivity().startActivity(intent);
                     }
                 }, 200);

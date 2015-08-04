@@ -40,11 +40,16 @@ public class HttpRestClient implements RestClient {
         try {
             URL url = new URL(ApiEndpointUtils.REDDIT_BASE_URL + urlPath);
             connection = (HttpURLConnection) url.openConnection();
+            connection.setUseCaches(false);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", userAgent);
             connection.setDoInput(true);
+            //connection.setDoOutput(true);
             //connection.setConnectTimeout(5000);
             //connection.setReadTimeout(5000);
+
+            //printRequestProperties(connection);
+
             inputStream = connection.getInputStream();
 
             String content = IOUtils.toString(inputStream, "UTF-8");
@@ -52,6 +57,8 @@ public class HttpRestClient implements RestClient {
             //Log.d("inputstream object: ", content);
             Object responseObject = new JSONParser().parse(content);
             Response result = new RestResponse(content, responseObject, connection);
+
+            //printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + urlPath);
@@ -81,5 +88,25 @@ public class HttpRestClient implements RestClient {
 
     public void setUserAgent(String agent) {
         this.userAgent = agent;
+    }
+
+    private void printRequestProperties(HttpURLConnection connection) {
+        for (String header : connection.getRequestProperties().keySet()) {
+            if (header != null) {
+                for (String value : connection.getRequestProperties().get(header)) {
+                    Log.d("Request properties", header + ":" + value);
+                }
+            }
+        }
+    }
+
+    private void printHeaderFields(HttpURLConnection connection) {
+        for (String header : connection.getHeaderFields().keySet()) {
+            if (header != null) {
+                for (String value : connection.getHeaderFields().get(header)) {
+                    Log.d("Header fields", header + ":" + value);
+                }
+            }
+        }
     }
 }

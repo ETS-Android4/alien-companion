@@ -1,5 +1,7 @@
 package com.george.redditreader.Utils;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 
 /**
@@ -45,5 +47,11 @@ public class ConvertUtils {
             text = text.subSequence(0, text.length() - 1);
         }
         return text;
+    }
+
+    public static String getDomainName(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        String domain = uri.getHost();
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
     }
 }

@@ -1,14 +1,17 @@
 package com.george.redditreader;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.george.redditreader.Activities.BrowserActivity;
 import com.george.redditreader.Activities.PostActivity;
+import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,44 +21,70 @@ import java.util.regex.Pattern;
 public class LinkHandler {
 
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
-    private Activity activity;
+    //private Activity activity;
+    private Context context;
     private Submission post;
+    private String url;
+    private String domain;
 
-    public LinkHandler(Activity activity, Submission post) {
-        this.activity = activity;
+    public LinkHandler(Context context, Submission post) {
+        //this.activity = activity;
+        this.context = context;
         this.post = post;
+        url = post.getUrl();
+        domain = post.getDomain();
     }
 
-    //public LinkHandler(Activity activity) {
-    //    this.activity = activity;
-    //}
+    public LinkHandler(Context context, String url, String domain) {
+        //this.activity = activity;
+        this.context = context;
+        this.url = url;
+        this.domain = domain;
+    }
+
+    public LinkHandler(Context context, String url) {
+        //this.activity = activity;
+        this.context = context;
+        this.url = url;
+        try {
+            domain = ConvertUtils.getDomainName(url);
+        } catch (URISyntaxException | NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void handleIt() {
-        String url = post.getURL();
-        String domain = post.getDomain();
-        Intent intent;
+        Intent intent = null;
+        Activity activity = (Activity) context;
 
-        Log.d("Link Domain", domain);
-        Log.d("Link Full URL", url);
-
-        if(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com")) {
-            String videoId = getYoutubeVideoId(url);
-            int time = getYoutubeVideoTime(url);
-            //Log.d("youtube video id", videoId);
-            intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
-        }
-        else if(domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
+        //Log.d("Link Full URL", url);
+        if(domain == null) {
             intent = new Intent(activity, PostActivity.class);
-            intent.putExtra("postInfo", getRedditPostInfo(url));
-        }
-        else if(domain.equals("redd.it")) {
-            intent = new Intent(activity, PostActivity.class);
-            intent.putExtra("postId", url.substring(15));
         }
         else {
-            intent = new Intent(activity, BrowserActivity.class);
-            intent.putExtra("post", post);
+            //Log.d("Link Domain", domain);
+            if (domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com")) {
+                String videoId = getYoutubeVideoId(url);
+                int time = getYoutubeVideoTime(url);
+                //Log.d("youtube video id", videoId);
+                intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+            } else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
+                intent = new Intent(activity, PostActivity.class);
+                intent.putExtra("postInfo", getRedditPostInfo(url));
+            } else if (domain.equals("redd.it")) {
+                intent = new Intent(activity, PostActivity.class);
+                intent.putExtra("postId", url.substring(15));
+            } else {
+                intent = new Intent(activity, BrowserActivity.class);
+                if (post != null) {
+                    intent.putExtra("post", post);
+                } else {
+                    intent.putExtra("url", url);
+                    intent.putExtra("domain", domain);
+                }
+            }
         }
+
         activity.startActivity(intent);
     }
 

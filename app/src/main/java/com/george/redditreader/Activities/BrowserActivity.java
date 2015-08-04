@@ -23,6 +23,8 @@ public class BrowserActivity extends BackNavActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_browser, menu);
+        if(getIntent().getSerializableExtra("post") == null)
+            menu.findItem(R.id.action_comments).setVisible(false);
         return true;
     }
 

@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Fragments.PostFragment;
+import com.george.redditreader.LinkHandler;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
@@ -52,12 +56,18 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
      */
     private final int mPaddingDP = 5;
 
+    private boolean showNSFW;
+    private boolean handleLinks;
+
     //private ContentViewHolder contentVH;
 
     public PostAdapter (Activity activity, View.OnClickListener listener) {
         super();
         this.activity = activity;
         mListener = listener;
+
+        showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
+        handleLinks = MainActivity.prefs.getBoolean("handleLinks", true);
     }
 
     @Override
@@ -86,6 +96,31 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return viewHolder;
     }
 
+    private SpannableStringBuilder modifyURLSpan(CharSequence sequence) {
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+
+        // Get an array of URLSpan from SpannableStringBuilder object
+        URLSpan[] urlSpans = strBuilder.getSpans(0, strBuilder.length(), URLSpan.class);
+
+        // Add onClick listener for each of URLSpan object
+        for (final URLSpan span : urlSpans) {
+            int start = strBuilder.getSpanStart(span);
+            int end = strBuilder.getSpanEnd(span);
+            // The original URLSpan needs to be removed to block the behavior of browser opening
+            strBuilder.removeSpan(span);
+
+            strBuilder.setSpan(new ClickableSpan()
+            {
+                @Override
+                public void onClick(View widget) {
+                    LinkHandler linkHandler = new LinkHandler(activity, span.getURL());
+                    linkHandler.handleIt();
+                }
+            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return strBuilder;
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         int viewType = getItemViewType(position);
@@ -98,9 +133,14 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentLayout.setBackgroundColor(Color.parseColor("#e8ff95"));
                 else cvh.commentLayout.setBackgroundColor(Color.WHITE);
 
+                //Author textview
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                cvh.commentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
+                //Comment textview
+                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
+                        Html.fromHtml(comment.getBodyHTML()));
+                if(handleLinks) strBuilder = modifyURLSpan(strBuilder);
+                cvh.commentTextView.setText(strBuilder);
                 cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
                 if (comment.getIndentation() == 0) {
@@ -148,7 +188,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                     if(post.getSelftextHTML() == null) contentVH.selfText.setVisibility(View.GONE);
                     else {
-                        contentVH.selfText.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())));
+                        //Self text textview
+                        strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
+                                Html.fromHtml(post.getSelftextHTML()));
+                        if(handleLinks) strBuilder = modifyURLSpan(strBuilder);
+                        contentVH.selfText.setText(strBuilder);
                         contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
                     }
 
@@ -160,10 +204,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     Thumbnail thumbnail = post.getThumbnailObject();
                     if (thumbnail.hasThumbnail()) {
-                        try {
-                            //Get Post Thumbnail
-                            Picasso.with(activity).load(thumbnail.getUrl()).placeholder(R.drawable.noimage).into(contentVH.postImage);
-                        } catch (IllegalArgumentException e) {
+                        if(post.isNSFW() && !showNSFW) {
+                            contentVH.postImage.setImageResource(R.drawable.nsfw2);
+                        }
+                        else {
+                            try {
+                                //Get Post Thumbnail
+                                Picasso.with(activity).load(thumbnail.getUrl()).placeholder(R.drawable.noimage).into(contentVH.postImage);
+                            } catch (IllegalArgumentException e) {
+                            }
                         }
                     } else {
                         contentVH.postImage.setVisibility(View.GONE);

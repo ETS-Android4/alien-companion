@@ -3,9 +3,11 @@ package com.george.redditreader.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,8 @@ public class BrowserFragment extends Fragment {
     private Submission post;
     private BackNavActivity activity;
     private Bundle webViewBundle;
+    private String url;
+    private String domain;
 
     private class MyWebViewClient extends WebViewClient {
         @Override
@@ -65,6 +69,14 @@ public class BrowserFragment extends Fragment {
         setHasOptionsMenu(true);
 
         post = (Submission) activity.getIntent().getSerializableExtra("post");
+        if(post != null) {
+            url = post.getUrl();
+            domain = post.getDomain();
+        }
+        else {
+            url = activity.getIntent().getStringExtra("url");
+            domain = activity.getIntent().getStringExtra("domain");
+        }
     }
 
     @Override
@@ -82,8 +94,8 @@ public class BrowserFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
-        activity.getSupportActionBar().setTitle(post.getDomain());
-        activity.getSupportActionBar().setSubtitle(post.getCommentCount() + " comments");
+        activity.getSupportActionBar().setTitle(domain);
+        if(post != null) activity.getSupportActionBar().setSubtitle(post.getCommentCount() + " comments");
     }
 
     @Override
@@ -104,7 +116,7 @@ public class BrowserFragment extends Fragment {
         if(webViewBundle == null) {
             webView.setWebChromeClient(new MyWebChromeClient());
             webView.clearCache(true);
-            webView.loadUrl(post.getURL());
+            webView.loadUrl(url);
         }
         else {
             webView.restoreState(webViewBundle);
@@ -121,12 +133,13 @@ public class BrowserFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_open_browser:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 return true;
             case R.id.action_refresh:
                 webView.setWebChromeClient(new MyWebChromeClient());
                 webView.clearCache(true);
-                webView.loadUrl(post.getURL());
+                webView.loadUrl(url);
                 return true;
             case R.id.action_comments:
                 Intent intent = new Intent(activity, PostActivity.class);

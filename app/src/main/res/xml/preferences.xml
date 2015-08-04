@@ -5,6 +5,12 @@
         android:key="general"
         android:title="@string/options_general">
 
+        <CheckBoxPreference
+            android:key="handleLinks"
+            android:title="Allow in-app link handling"
+            android:summary="Choose whether links in comments/self-text should be handled by the app"
+            android:defaultValue="true"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="appearance"

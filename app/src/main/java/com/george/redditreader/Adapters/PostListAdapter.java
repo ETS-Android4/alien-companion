@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.george.redditreader.Activities.EditPrefsActivity;
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.ClickListeners.PostItemListener;

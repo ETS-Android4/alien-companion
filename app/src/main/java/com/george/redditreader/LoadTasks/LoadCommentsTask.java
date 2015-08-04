@@ -48,7 +48,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             Comments.indentCommentTree(comments);
 
             return comments;
-        } catch (RetrievalFailedException | RedditError e) {
+        } catch (RetrievalFailedException | RedditError | NullPointerException e) {
             e.printStackTrace();
             exception = e;
         }
