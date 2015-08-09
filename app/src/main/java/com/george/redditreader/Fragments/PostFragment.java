@@ -43,7 +43,6 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     public static String commentLinkId;
     public int parentsShown = -1;
     private boolean titleUpdated = true;
-    //private List<Integer> groups;
     public boolean commentsLoaded;
 
     @Override
@@ -196,25 +195,6 @@ public class PostFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
-    //@Override
-    //public void onSaveInstanceState(Bundle outState) {
-    //    //Log.e("geo debug", "onsaveinstancestate called");
-    //    outState.putIntegerArrayList(GROUPS_KEY, postAdapter.saveGroups());
-    //    super.onSaveInstanceState(outState);
-    //}
-
-    //@Override
-    //public void onPause() {
-    //    super.onPause();
-    //    groups = postAdapter.saveGroups();
-    //}
-//
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    postAdapter.restoreGroups(groups);
-    //}
-
     @Override
     public void onClick(View v) {
         int position = mRecyclerView.getChildPosition(v);
@@ -261,47 +241,5 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     public void setActionBarSubtitle() {
         activity.getSupportActionBar().setSubtitle(commentSort.value());
     }
-
-    //class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
-//
-    //    private Exception exception;
-//
-    //    @Override
-    //    protected List<Comment> doInBackground(Void... unused) {
-    //        try {
-    //            Comments cmnts = new Comments(restClient);
-    //            List<Comment> comments;
-    //            comments = cmnts.ofSubmission(post, commentLinkId, parentsShown, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, commentSort);
-//
-    //            if(post.getThumbnailObject() == null) {
-    //                ImageLoader.preloadThumbnail(post, activity);
-    //            }
-    //            Comments.indentCommentTree(comments);
-//
-    //            return comments;
-    //        } catch (RetrievalFailedException | RedditError e) {
-    //            e.printStackTrace();
-    //            exception = e;
-    //        }
-    //        return null;
-    //    }
-//
-    //    @Override
-    //    protected void onPostExecute(List<Comment> comments) {
-    //        progressBar.setVisibility(View.GONE);
-    //        if(exception != null) {
-    //            noResponseObject = true;
-    //            ToastUtils.commentsLoadError(activity);
-    //        }
-    //        else {
-    //            noResponseObject = false;
-    //            MainActivity.commentsLoaded = true;
-    //            postAdapter.clear();
-    //            postAdapter.add(post);
-    //            postAdapter.addAll(comments);
-    //            postAdapter.notifyDataSetChanged();
-    //        }
-    //    }
-    //}
 
 }

@@ -10,7 +10,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.george.redditreader.Fragments.UserFragment"
-        android:id="@+id/fragment3"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/fragment3" />
 </LinearLayout>

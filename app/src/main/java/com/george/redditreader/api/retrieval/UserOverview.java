@@ -14,16 +14,15 @@ import com.george.redditreader.api.retrieval.params.UserOverviewSort;
 import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.api.utils.ParamFormatter;
 import com.george.redditreader.api.utils.RedditConstants;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 /**
  * Created by George on 6/16/2015.
@@ -33,27 +32,27 @@ public class UserOverview implements ActorDriven {
     /**
      * Handle to REST client instance.
      */
-    private final RestClient restClient;
+    private final HttpClient httpClient;
     private User user;
 
     /**
      * Constructor.
      * Default general actor will be used.
-     * @param restClient REST client handle
+     * @param httpClient REST client handle
      */
-    public UserOverview(RestClient restClient) {
-        this.restClient = restClient;
+    public UserOverview(HttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     /**
      * Constructor. The actor is the user who will
      * be used to perform the retrieval.
      *
-     * @param restClient REST Client instance
+     * @param httpClient REST Client instance
      * @param actor User instance
      */
-    public UserOverview(RestClient restClient, User actor) {
-        this.restClient = restClient;
+    public UserOverview(HttpClient httpClient, User actor) {
+        this.httpClient = httpClient;
         this.user = actor;
     }
 
@@ -74,7 +73,7 @@ public class UserOverview implements ActorDriven {
         List<Object> submissions = new ArrayList<>();
 
         // Send request to reddit server via REST client
-        Object response = restClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(url, cookie).getResponseObject();
 
         if (response instanceof JSONObject) {
 

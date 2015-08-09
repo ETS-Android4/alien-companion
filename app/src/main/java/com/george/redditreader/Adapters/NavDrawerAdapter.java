@@ -1,6 +1,7 @@
 package com.george.redditreader.Adapters;
 
 import android.graphics.Color;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
 import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerSubredditItem;
-import com.george.redditreader.Models.NavDrawer.NavDrawerSubreddits;
 import com.george.redditreader.R;
 
 import java.util.ArrayList;
@@ -48,16 +48,18 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private final MainActivity activity;
 
-    //private View.OnClickListener listener;
-
     private List<NavDrawerItem> items;
 
     private TypedValue selectableBackground;
 
+    private boolean subredditItemsVisible;
+
+    private List<NavDrawerSubredditItem> subredditItems;
+
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
         this.activity = activity;
-        //this.listener = listener;
+        subredditItemsVisible = true;
 
         selectableBackground = new TypedValue();
         activity.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, selectableBackground, true);
@@ -73,6 +75,27 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public NavDrawerItem getItemAt(int position) {
         return items.get(position);
+    }
+
+    public void toggleSubredditItems() {
+        if(subredditItemsVisible) collapseSubredditItems();
+        else expandSubredditItems();
+    }
+
+    private void collapseSubredditItems() {
+        subredditItems = new ArrayList<>();
+        for(NavDrawerItem item : items) {
+            if(item instanceof NavDrawerSubredditItem) subredditItems.add((NavDrawerSubredditItem) item);
+        }
+        items.removeAll(subredditItems);
+        subredditItemsVisible = false;
+        notifyDataSetChanged();
+    }
+
+    private void expandSubredditItems() {
+        items.addAll(subredditItems);
+        subredditItemsVisible = true;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -98,7 +121,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 resource = R.layout.drawer_subreddits;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                v.setOnClickListener(new SubredditsListener(activity));
+                //v.setOnClickListener(new SubredditsListener(activity));
                 viewHolder = new SubredditsViewHolder(v);
                 break;
             case VIEW_TYPE_SUBREDDIT_ITEM:
@@ -137,7 +160,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                NavDrawerSubreddits subreddits = (NavDrawerSubreddits) getItemAt(position);
+                //NavDrawerSubreddits subreddits = (NavDrawerSubreddits) getItemAt(position);
+                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expanded);
+                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapsed);
+                SubredditsListener listener = new SubredditsListener(activity);
+                subredditsViewHolder.layoutToggle.setOnClickListener(listener);
+                subredditsViewHolder.layoutEdit.setOnClickListener(listener);
                 break;
             case VIEW_TYPE_SUBREDDIT_ITEM:
                 SubredditRowViewHolder subredditRowViewHolder = (SubredditRowViewHolder) viewHolder;
@@ -199,13 +227,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public static class SubredditsViewHolder extends RecyclerView.ViewHolder {
-        public TextView subreddits;
-        public TextView edit;
+        public LinearLayout layoutToggle;
+        public LinearLayout layoutEdit;
+        public ImageView imgToggle;
 
         public SubredditsViewHolder(View row) {
             super(row);
-            subreddits = (TextView) row.findViewById(R.id.txtView_subreddits);
-            edit = (TextView) row.findViewById(R.id.txtView_edit);
+            layoutToggle = (LinearLayout) row.findViewById(R.id.layoutToggle);
+            layoutEdit = (LinearLayout) row.findViewById(R.id.layoutEdit);
+            imgToggle = (ImageView) row.findViewById(R.id.imgView_toggle);
         }
     }
 

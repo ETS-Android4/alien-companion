@@ -2,10 +2,10 @@ package com.george.redditreader.api.entity;
 
 import android.util.Log;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToBoolean;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToDouble;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToLong;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToDouble;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToLong;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class Submission extends Thing implements Serializable, MultiLevelExpIndListAdapter.ExpIndData {
 
-    //private RestClient restClient;
+    //private HttpClient restClient;
 
     /** This is the user that will vote on a submission. */
     private User user;
@@ -134,7 +134,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 		updateSubmission(obj);
 
-        //restClient = new HttpRestClient();
+        //restClient = new RedditHttpClient();
     }
 
 	public void updateSubmission(JSONObject obj) {
@@ -211,7 +211,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	}
 
     // this is very stinky..
-    //public void setRestClient(RestClient restClient) {
+    //public void setRestClient(HttpClient restClient) {
     //    this.restClient = restClient;
     //}
 
@@ -271,7 +271,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
         this.permalink = permalink;
     }
 
-    //public RestClient getRestClient() {
+    //public HttpClient getRestClient() {
     //    return restClient;
     //}
 

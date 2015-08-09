@@ -1,9 +1,9 @@
 package com.george.redditreader.api.entity;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToBoolean;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToDouble;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToLong;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToDouble;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToLong;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import org.json.simple.JSONObject;
 

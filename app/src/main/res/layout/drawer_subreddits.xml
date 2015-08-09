@@ -2,26 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:baselineAligned="false">
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:id="@+id/txtView_subreddits"
-        android:textColor="#7a7a7a"
-        android:textSize="20sp"
-        android:text="Subreddits"
+        android:id="@+id/layoutToggle"
         android:layout_weight="5"
-        android:gravity="center_vertical" />
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="20dp">
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/txtView_toggle"
+            android:textColor="#7a7a7a"
+            android:textSize="20sp"
+            android:text="Subreddits" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgView_toggle"
+            android:layout_marginLeft="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:id="@+id/txtView_edit"
-        android:textColor="#7a7a7a"
-        android:textSize="20sp"
-        android:text="edit"
-        android:gravity="center"
-        android:layout_weight="1" />
+        android:id="@+id/layoutEdit"
+        android:layout_weight="2"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/txtView_edit"
+            android:textColor="#7a7a7a"
+            android:textSize="20sp"
+            android:text="edit" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -1,6 +1,6 @@
-package com.george.redditreader.api.utils.restClient;
+package com.george.redditreader.api.utils.httpClient;
 
-public interface RestClient {
+public interface HttpClient {
 
     /**
      * Perform a get request to the Url specified using the cookie specified

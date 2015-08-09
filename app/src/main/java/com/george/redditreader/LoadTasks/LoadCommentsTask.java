@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
-import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.Utils.ImageLoader;
@@ -13,7 +12,8 @@ import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.retrieval.Comments;
 import com.george.redditreader.api.utils.RedditConstants;
-import com.george.redditreader.api.utils.restClient.HttpRestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
+import com.george.redditreader.api.utils.httpClient.RedditHttpClient;
 
 import java.util.List;
 
@@ -25,18 +25,18 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     private Exception exception;
     private Context context;
     private PostFragment postFragment;
-    private HttpRestClient restClient;
+    private HttpClient httpClient;
 
     public LoadCommentsTask(Context context, PostFragment postFragment) {
         this.context = context;
         this.postFragment = postFragment;
-        this.restClient = new HttpRestClient();
+        this.httpClient = new RedditHttpClient();
     }
 
     @Override
     protected List<Comment> doInBackground(Void... unused) {
         try {
-            Comments cmnts = new Comments(restClient);
+            Comments cmnts = new Comments(httpClient);
             List<Comment> comments;
             comments = cmnts.ofSubmission(postFragment.post, PostFragment.commentLinkId, postFragment.parentsShown, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, postFragment.commentSort);
 

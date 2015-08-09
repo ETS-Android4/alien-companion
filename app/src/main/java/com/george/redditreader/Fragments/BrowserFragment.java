@@ -133,13 +133,17 @@ public class BrowserFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_back:
+                webView.goBack();
+                return true;
+            case R.id.action_forward:
+                webView.goForward();
+                return true;
             case R.id.action_open_browser:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 return true;
             case R.id.action_refresh:
-                webView.setWebChromeClient(new MyWebChromeClient());
-                webView.clearCache(true);
-                webView.loadUrl(url);
+                webView.reload();
                 return true;
             case R.id.action_comments:
                 Intent intent = new Intent(activity, PostActivity.class);
@@ -151,16 +155,4 @@ public class BrowserFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    //Back Navigation inside WebView
-    //@Override
-    //public boolean onKeyDown(int keyCode, KeyEvent event) {
-    //    // Check if the key event was the Back button and if there's history
-    //    if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
-    //        webView.goBack();
-    //        return true;
-    //    }
-    //    // If it wasn't the Back key or there's no web page history, bubble up to the default
-    //    // system behavior (probably exit the activity)
-    //    return super.onKeyDown(keyCode, event);
-    //}
 }

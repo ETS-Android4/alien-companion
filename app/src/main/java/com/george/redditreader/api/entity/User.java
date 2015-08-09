@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import com.george.redditreader.api.utils.ApiEndpointUtils;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.george.redditreader.api.retrieval.Subreddits;
 
 /**
@@ -30,17 +30,17 @@ import com.george.redditreader.api.retrieval.Subreddits;
 public class User {
 
     private final String username;
-    private final RestClient restClient;
+    private final HttpClient httpClient;
     private String modhash, cookie, password;
 
     /**
      * Create a user.
-     * @param restClient REST Client handle
+     * @param httpClient REST Client handle
      * @param username User name
      * @param password Password
      */
-    public User(RestClient restClient, String username, String password) {
-        this.restClient = restClient;
+    public User(HttpClient httpClient, String username, String password) {
+        this.httpClient = httpClient;
         this.username = username;
         this.password = password;
     }
@@ -103,7 +103,7 @@ public class User {
      */
     private ArrayList<String> hashCookiePair(String username, String password) throws IOException, ParseException {
         ArrayList<String> values = new ArrayList<String>();
-        JSONObject jsonObject = (JSONObject) restClient.post("api_type=json&user=" + username + "&passwd=" + password, String.format(ApiEndpointUtils.USER_LOGIN, username), getCookie()).getResponseObject();
+        JSONObject jsonObject = (JSONObject) httpClient.post("api_type=json&user=" + username + "&passwd=" + password, String.format(ApiEndpointUtils.USER_LOGIN, username), getCookie()).getResponseObject();
         JSONObject valuePair = (JSONObject) ((JSONObject) jsonObject.get("json")).get("data");
 
         values.add(valuePair.get("modhash").toString());
@@ -125,7 +125,7 @@ public class User {
             System.err.printf("Please invoke the connect method in order to login the user");
             return null;
         }
-        Subreddits sub = new Subreddits(restClient, this);
+        Subreddits sub = new Subreddits(httpClient, this);
 
         return sub.parse(ApiEndpointUtils.USER_GET_SUBSCRIBED + (limit == 0 ? "?&limit=100" : "?&limit=" + limit));
     }
@@ -142,7 +142,7 @@ public class User {
             System.err.printf("Please invoke the connect method in order to login the user");
             return null;
         }
-        Subreddits sub = new Subreddits(restClient, this);
+        Subreddits sub = new Subreddits(httpClient, this);
 
         return sub.parse(ApiEndpointUtils.USER_GET_CONTRIBUTED_TO + (limit == 0 ? "?&limit=100" : "?&limit=" + limit));
     }
@@ -159,7 +159,7 @@ public class User {
             System.err.printf("Please invoke the connect method in order to login the user");
             return null;
         }
-        Subreddits sub = new Subreddits(restClient, this);
+        Subreddits sub = new Subreddits(httpClient, this);
 
         return sub.parse(ApiEndpointUtils.USER_GET_MODERATOR_OF + (limit == 0 ? "?&limit=100" : "?&limit=" + limit));
     }

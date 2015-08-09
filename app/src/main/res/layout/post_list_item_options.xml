@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible">
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_upvote"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_upvote" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_downvote"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_downvote" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_save"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_save" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_hide"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_hide" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_view_user"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_user" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_open_browser"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_open_browser" />
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_more"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_more" />
+</LinearLayout>

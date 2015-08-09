@@ -1,7 +1,7 @@
 package com.george.redditreader.api.retrieval;
 
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -19,7 +19,7 @@ import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.retrieval.params.SubredditsView;
 import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.api.utils.ParamFormatter;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 
 /**
  * This class offers the following functionality:
@@ -37,25 +37,25 @@ public class Subreddits implements ActorDriven {
 	/**
 	 * Handle to the REST client instance.
 	 */
-    private final RestClient restClient;
+    private final HttpClient httpClient;
     private User user;
 
     /**
      * Constructor.
      * 
-     * @param restClient REST client instance
+     * @param httpClient REST client instance
      */
-    public Subreddits(RestClient restClient) {
-        this.restClient = restClient;
+    public Subreddits(HttpClient httpClient) {
+        this.httpClient = httpClient;
     }
     
     /**
      * Constructor.
-     * @param restClient REST Client instance
+     * @param httpClient REST Client instance
      * @param actor User instance
      */
-    public Subreddits(RestClient restClient, User actor) {
-    	this.restClient = restClient;
+    public Subreddits(HttpClient httpClient, User actor) {
+    	this.httpClient = httpClient;
         this.user = actor;
     }
     
@@ -84,7 +84,7 @@ public class Subreddits implements ActorDriven {
         List<Subreddit> subreddits = new LinkedList<Subreddit>();
         
         // Send request to reddit server via REST client
-        Object response = restClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(url, cookie).getResponseObject();
         
         if (response instanceof JSONObject) {
         	

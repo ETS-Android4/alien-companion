@@ -84,5 +84,8 @@
     <string name="action_comments">Comments</string>
     <string name="title_activity_edit_prefs">EditPrefsActivity</string>
     <string name="title_activity_subreddit">SubredditActivity</string>
+    <string name="action_open_browser">Open in browser</string>
+    <string name="action_browser_back">Back</string>
+    <string name="action_browser_forward">Forward</string>
 
 </resources>

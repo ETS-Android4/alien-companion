@@ -1,11 +1,9 @@
 package com.george.redditreader.api.entity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.george.redditreader.api.retrieval.Trophies;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;
@@ -86,8 +84,8 @@ public class UserInfo {
         setName((String) info.get("name"));
     }
 
-    public void retrieveTrophies(Context context, RestClient restClient) {
-        Trophies trophies = new Trophies(restClient);
+    public void retrieveTrophies(Context context, HttpClient httpClient) {
+        Trophies trophies = new Trophies(httpClient);
         trophyList = trophies.ofUser(name);
         for(Trophy trophy : trophyList) {
             Picasso.with(context).load(trophy.getIcon70url()).fetch();

@@ -4,11 +4,18 @@
     tools:context="com.george.redditreader.Activities.BrowserActivity">
 
     <item android:id="@+id/action_comments" android:title="@string/action_comments"
-        android:icon="@mipmap/ic_action_comments_white" app:showAsAction="always"/>
+        android:icon="@mipmap/ic_action_comments_white" app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_back" android:title="@string/action_browser_back"
+        android:icon="@mipmap/ic_action_back" app:showAsAction="always"/>
+
+    <item android:id="@+id/action_forward" android:title="@string/action_browser_forward"
+        android:icon="@mipmap/ic_action_forward" app:showAsAction="always"/>
 
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_action_refresh" app:showAsAction="ifRoom" />
+        android:icon="@mipmap/ic_action_refresh" android:orderInCategory="99"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/action_open_browser" android:title="Open in browser"
+    <item android:id="@+id/action_open_browser" android:title="@string/action_open_browser"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

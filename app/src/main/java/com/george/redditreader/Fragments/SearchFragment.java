@@ -31,7 +31,7 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
 public class SearchFragment extends Fragment {
 
     private AppCompatActivity activity;
-    //private RestClient restClient;
+    //private HttpClient restClient;
     public ProgressBar mainProgressBar;
     public ProgressBar footerProgressBar;
     public ListView contentView;
@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        //restClient = new HttpRestClient();
+        //restClient = new RedditHttpClient();
         searchQuery = activity.getIntent().getStringExtra("query");
         subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
@@ -236,92 +236,12 @@ public class SearchFragment extends Fragment {
         this.timeSpan = timeSpan;
     }
 
-    //Set Action Bar Title
     public void setActionBarTitle() {
         activity.getSupportActionBar().setTitle(searchQuery);
     }
 
-    //Set Action Bar Subtitle
     public void setActionBarSubtitle() {
         activity.getSupportActionBar().setSubtitle(searchSort.value()+": "+timeSpan.value());
     }
-
-    //class SearchTask extends AsyncTask<Void, Void, List<Submission>> {
-//
-    //    private LoadType loadType;
-    //    private Exception exception;
-//
-    //    public SearchTask(LoadType loadType) {
-    //        this.loadType = loadType;
-    //    }
-//
-    //    @Override
-    //    protected List<Submission> doInBackground(Void... unused) {
-    //        try {
-    //            Submissions subms = new Submissions(restClient);
-    //            List<Submission> submissions = null;
-//
-    //            if(loadType == LoadType.extend) {
-    //                submissions = subms.search(subreddit, searchQuery, QuerySyntax.PLAIN, searchSort, timeSpan, -1, RedditConstants.DEFAULT_LIMIT, postListAdapter.getLastPost(), null, true);
-    //            }
-    //            else {
-    //                submissions = subms.search(subreddit, searchQuery, QuerySyntax.PLAIN, searchSort, timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-    //                postListAdapter = new PostListAdapter(activity, submissions);
-    //            }
-    //            ImageLoader.preloadImages(submissions, activity);
-    //            return submissions;
-    //        } catch (RetrievalFailedException e) {
-    //            exception = e;
-    //        } catch (RedditError e) {
-    //            exception = e;
-    //        }
-    //        return null;
-    //    }
-//
-    //    @Override
-    //    protected void onPostExecute(List<Submission> submissions) {
-    //        if(exception != null) {
-    //            ToastUtils.postsLoadError(activity);
-    //            if(loadType == LoadType.extend) {
-    //                footerProgressBar.setVisibility(View.GONE);
-    //                showMore.setVisibility(View.VISIBLE);
-    //            }
-    //        }
-    //        else {
-    //            switch (loadType) {
-    //                case init:
-    //                    mainProgressBar.setVisibility(View.GONE);
-    //                    if(submissions.size() != 0) {
-    //                        contentView.setAdapter(postListAdapter);
-    //                        showMore.setVisibility(View.VISIBLE);
-    //                        hasPosts = true;
-    //                    }
-    //                    else {
-    //                        hasPosts = false;
-    //                        ToastUtils.noResults(activity, searchQuery);
-    //                    }
-    //                    break;
-    //                case refresh:
-    //                    mainProgressBar.setVisibility(View.GONE);
-    //                    if(submissions.size() != 0) {
-    //                        contentView.setAdapter(postListAdapter);
-    //                        contentView.setVisibility(View.VISIBLE);
-    //                        showMore.setVisibility(View.VISIBLE);
-    //                        hasPosts = true;
-    //                    }
-    //                    else {
-    //                        hasPosts = false;
-    //                        ToastUtils.noResults(activity, searchQuery);
-    //                    }
-    //                    break;
-    //                case extend:
-    //                    footerProgressBar.setVisibility(View.GONE);
-    //                    postListAdapter.addAll(submissions);
-    //                    showMore.setVisibility(View.VISIBLE);
-    //                    break;
-    //            }
-    //        }
-    //    }
-    //}
 
 }

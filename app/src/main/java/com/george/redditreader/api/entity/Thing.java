@@ -2,7 +2,7 @@ package com.george.redditreader.api.entity;
 
 import org.json.simple.JSONObject;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 /**
  * This class represents a reddit "thing"

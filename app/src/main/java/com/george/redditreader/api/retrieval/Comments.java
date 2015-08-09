@@ -1,8 +1,6 @@
 package com.george.redditreader.api.retrieval;
 
-import android.util.Log;
-
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +20,7 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
 import com.george.redditreader.api.retrieval.params.UserOverviewSort;
 import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.api.utils.ParamFormatter;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 
 /**
  * This class offers the following functionality:
@@ -35,25 +33,25 @@ import com.george.redditreader.api.utils.restClient.RestClient;
  */
 public class Comments implements ActorDriven {
 
-    private RestClient restClient;
+    private HttpClient httpClient;
     private User user;
 
     /**
      * Constructor. Global default user (null) is used.
-     * @param restClient REST Client instance
+     * @param httpClient REST Client instance
      */
-    public Comments(RestClient restClient) {
-        this.restClient = restClient;
+    public Comments(HttpClient httpClient) {
+        this.httpClient = httpClient;
         this.user = null;
     }
     
     /**
      * Constructor.
-     * @param restClient REST Client instance
+     * @param httpClient REST Client instance
      * @param actor User instance
      */
-    public Comments(RestClient restClient, User actor) {
-    	this.restClient = restClient;
+    public Comments(HttpClient httpClient, User actor) {
+    	this.httpClient = httpClient;
         this.user = actor;
     }
     
@@ -85,7 +83,7 @@ public class Comments implements ActorDriven {
         List<Comment> comments = new LinkedList<Comment>();
         
         // Send request to reddit server via REST client
-        Object response = restClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(url, cookie).getResponseObject();
 
         if (response instanceof JSONObject) {
         	
@@ -145,7 +143,7 @@ public class Comments implements ActorDriven {
         List<Comment> comments = new LinkedList<Comment>();
         
         // Send request to reddit server via REST client
-        Object response = restClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(url, cookie).getResponseObject();
         
         if (response instanceof JSONArray) {
         	
@@ -169,7 +167,7 @@ public class Comments implements ActorDriven {
 		List<Comment> comments = new LinkedList<Comment>();
 
 		// Send request to reddit server via REST client
-		Object response = restClient.get(url, cookie).getResponseObject();
+		Object response = httpClient.get(url, cookie).getResponseObject();
 
 		if (response instanceof JSONArray) {
 

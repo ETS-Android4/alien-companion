@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.george.redditreader.Adapters.PostListAdapter;
 import com.george.redditreader.Fragments.SearchFragment;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.Utils.ImageLoader;
@@ -15,7 +16,7 @@ import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.retrieval.Submissions;
 import com.george.redditreader.api.retrieval.params.QuerySyntax;
 import com.george.redditreader.api.utils.RedditConstants;
-import com.george.redditreader.api.utils.restClient.HttpRestClient;
+import com.george.redditreader.api.utils.httpClient.RedditHttpClient;
 
 import java.util.List;
 
@@ -27,20 +28,20 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
     private Exception exception;
     private Activity activity;
     private SearchFragment sf;
-    private HttpRestClient restClient;
+    private HttpClient httpClient;
     private LoadType loadType;
 
     public LoadSearchTask(Activity activity, SearchFragment searchFragment, LoadType loadType) {
         this.activity = activity;
         this.sf = searchFragment;
         this.loadType = loadType;
-        restClient = new HttpRestClient();
+        httpClient = new RedditHttpClient();
     }
 
     @Override
     protected List<Submission> doInBackground(Void... unused) {
         try {
-            Submissions subms = new Submissions(restClient);
+            Submissions subms = new Submissions(httpClient);
             List<Submission> submissions = null;
 
             if(loadType == LoadType.extend) {

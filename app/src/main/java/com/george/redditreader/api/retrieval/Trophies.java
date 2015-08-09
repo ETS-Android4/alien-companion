@@ -3,17 +3,16 @@ package com.george.redditreader.api.retrieval;
 import android.util.Log;
 
 import com.george.redditreader.api.entity.Kind;
-import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.entity.Trophy;
 import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.utils.ApiEndpointUtils;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +22,17 @@ import java.util.List;
  */
 public class Trophies {
 
-    private RestClient restClient;
+    private HttpClient httpClient;
 
-    public Trophies(RestClient restClient) {
-        this.restClient = restClient;
+    public Trophies(HttpClient httpClient) {
+        this.httpClient = httpClient;
     }
 
     public List<Trophy> parse(String url) throws RetrievalFailedException, RedditError {
 
         List<Trophy> trophies = new ArrayList<>();
 
-        Object response = restClient.get(url, null).getResponseObject();
+        Object response = httpClient.get(url, null).getResponseObject();
 
         if(response instanceof JSONObject) {
 

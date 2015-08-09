@@ -43,7 +43,6 @@ public class UserFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        //restClient = new HttpRestClient();
         username = activity.getIntent().getStringExtra("username");
     }
 
@@ -201,116 +200,5 @@ public class UserFragment extends Fragment {
         });
         popupMenu.show();
     }
-
-    //class LoadUserTask extends AsyncTask<Void, Void, List<Object>> {
-//
-    //    private Exception mException;
-    //    private LoadType mLoadType;
-    //    private LoadContent mLoadContent;
-//
-    //    public LoadUserTask(LoadType loadType, LoadContent userContent) {
-    //        mLoadContent = userContent;
-    //        mLoadType = loadType;
-    //    }
-//
-    //    @Override
-    //    protected List<Object> doInBackground(Void... unused) {
-    //        try {
-    //            List<Object> userContent = null;
-    //            switch (mLoadContent) {
-    //                case overview:
-    //                    UserOverview userOverview = new UserOverview(restClient);
-    //                    if(mLoadType == LoadType.extend) {
-    //                        Object lastObject = userAdapter.getLastObject();
-    //                        userContent = userOverview.ofUser(username, userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastObject, null, true);
-//
-    //                        userAdapter.addAll(userContent);
-    //                    }
-    //                    else {
-    //                        UserDetails userDetails = new UserDetails(restClient);
-    //                        UserInfo userInfo = userDetails.ofUser(username);
-    //                        userInfo.retrieveTrophies(activity, restClient);
-//
-    //                        userContent = userOverview.ofUser(username, userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-//
-    //                        userAdapter = new UserAdapter(activity);
-    //                        userAdapter.add(userInfo);
-    //                        userAdapter.addAll(userContent);
-    //                    }
-    //                    ImageLoader.preloadUserImages(userContent, activity);
-    //                    break;
-    //                case comments:
-    //                    Comments comments = new Comments(restClient);
-    //                    if(mLoadType == LoadType.extend) {
-    //                        Comment lastComment = (Comment) userAdapter.getLastObject();
-    //                        userContent = (List<Object>) (List<?>) comments.ofUser(username, userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
-//
-    //                        userAdapter.addAll(userContent);
-    //                    }
-    //                    else {
-    //                        userContent = (List<Object>) (List<?>) comments.ofUser(username, userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-//
-    //                        userAdapter = new UserAdapter(activity);
-    //                        userAdapter.addAll(userContent);
-    //                    }
-    //                    break;
-    //                case submitted:
-    //                    Submissions submissions = new Submissions(restClient);
-    //                    if(mLoadType == LoadType.extend) {
-    //                        Submission lastPost = (Submission) userAdapter.getLastObject();
-    //                        userContent = (List<Object>) (List<?>) submissions.ofUser(username, UserSubmissionsCategory.SUBMITTED, userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, true);
-//
-    //                        userAdapter.addAll(userContent);
-    //                    }
-    //                    else {
-    //                        userContent = (List<Object>) (List<?>) submissions.ofUser(username, UserSubmissionsCategory.SUBMITTED, userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-//
-    //                        userAdapter = new UserAdapter(activity);
-    //                        userAdapter.addAll(userContent);
-    //                    }
-    //                    ImageLoader.preloadUserImages(userContent, activity);
-    //                    break;
-    //            }
-    //            return userContent;
-    //        } catch (RetrievalFailedException e) {
-    //            mException = e;
-    //        } catch (RedditError e) {
-    //            mException = e;
-    //        } catch (NullPointerException e) {
-    //            mException = e;
-    //        }
-    //        return null;
-    //    }
-//
-    //    @Override
-    //    protected void onPostExecute(List<Object> things) {
-    //        if(mException != null) {
-    //            ToastUtils.userLoadError(activity);
-    //            if(mLoadType == LoadType.extend) {
-    //                footerProgressBar.setVisibility(View.GONE);
-    //                showMore.setVisibility(View.VISIBLE);
-    //            }
-    //        }
-    //        else {
-    //            switch (mLoadType) {
-    //                case init:
-    //                    progressBar.setVisibility(View.GONE);
-    //                    contentView.setAdapter(userAdapter);
-    //                    break;
-    //                case refresh:
-    //                    if(things.size() != 0) {
-    //                        progressBar.setVisibility(View.GONE);
-    //                        contentView.setAdapter(userAdapter);
-    //                        contentView.setVisibility(View.VISIBLE);
-    //                    }
-    //                    break;
-    //                case extend:
-    //                    footerProgressBar.setVisibility(View.GONE);
-    //                    showMore.setVisibility(View.VISIBLE);
-    //                    break;
-    //            }
-    //        }
-    //    }
-    //}
 
 }

@@ -1,17 +1,18 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.ClickListeners.PostItemOptionsListener;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.ClickListeners.PostItemListener;
 import com.george.redditreader.R;
@@ -32,6 +33,8 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
 
     private boolean showNSFW;
 
+    private int selectedPosition = -1;
+
     static class ViewHolder {
         TextView title;
         TextView score;
@@ -40,8 +43,12 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         TextView dets;
         TextView comments;
         ImageView image;
+        LinearLayout layoutRoot;
         LinearLayout commentsButton;
         LinearLayout linkButton;
+        LinearLayout layoutPostOptions;
+        ImageButton viewUser;
+        ImageButton openBrowser;
     }
 
     public PostListAdapter(Activity activity, List<Submission> posts) {
@@ -52,8 +59,9 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
+        final Submission post = posts.get(position);
 
         ViewHolder holder = null;
         if(row == null) {
@@ -67,36 +75,40 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
             holder.dets = (TextView) row.findViewById(R.id.postDets2);
             holder.comments = (TextView) row.findViewById(R.id.numberOfComments);
             holder.image = (ImageView) row.findViewById(R.id.postImage);
+            holder.layoutRoot = (LinearLayout) row.findViewById(R.id.layout_root);
             holder.commentsButton = (LinearLayout) row.findViewById(R.id.commentsButton);
             holder.linkButton = (LinearLayout) row.findViewById(R.id.linkButton);
+            holder.layoutPostOptions = (LinearLayout) row.findViewById(R.id.layout_post_options);
+            holder.viewUser = (ImageButton) row.findViewById(R.id.btn_view_user);
+            holder.openBrowser = (ImageButton) row.findViewById(R.id.btn_open_browser);
 
             row.setTag(holder);
         }
         else {
             holder = (ViewHolder) row.getTag();
         }
-        holder.title.setText(posts.get(position).getTitle());
-        holder.score.setText(Long.toString(posts.get(position).getScore()));
-        holder.age.setText(" - " + ConvertUtils.getSubmissionAge(posts.get(position).getCreatedUTC()));
-        holder.author.setText(" - " + posts.get(position).getAuthor());
-        holder.comments.setText(Long.toString(posts.get(position).getCommentCount()));
+        holder.title.setText(post.getTitle());
+        holder.score.setText(Long.toString(post.getScore()));
+        holder.age.setText(" - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
+        holder.author.setText(" - " + post.getAuthor());
+        holder.comments.setText(Long.toString(post.getCommentCount()));
 
-        String postSubreddit = posts.get(position).getSubreddit();
-        String postDomain = posts.get(position).getDomain();
+        String postSubreddit = post.getSubreddit();
+        String postDomain = post.getDomain();
 
-        if(posts.get(position).isSelf()) {
+        if(post.isSelf()) {
             holder.dets.setText(postDomain);
         }
         else {
             holder.dets.setText(postSubreddit + " - " + postDomain);
         }
         //Set the thumbnail
-        Thumbnail postThumbnail = posts.get(position).getThumbnailObject();
+        Thumbnail postThumbnail = post.getThumbnailObject();
         if (postThumbnail.hasThumbnail()){
             holder.image.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
             if (postThumbnail.isSelf()) {
                 holder.image.setImageResource(R.drawable.self_default2);
-            } else if (posts.get(position).isNSFW() && !showNSFW) {
+            } else if (post.isNSFW() && !showNSFW) {
                 holder.image.setImageResource(R.drawable.nsfw2);
             } else {
                 try {
@@ -109,11 +121,31 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
             holder.image.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
         }
 
-        PostItemListener listener = new PostItemListener(activity, posts.get(position));
-        //holder.commentsButton.setTag(position);
+        //item selected from posts list
+        if(selectedPosition == position) {
+            holder.layoutPostOptions.setVisibility(View.VISIBLE);
+            holder.layoutRoot.setBackgroundColor(Color.parseColor("#FFFFDE"));
+            PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post);
+            holder.viewUser.setOnClickListener(optionsListener);
+            holder.openBrowser.setOnClickListener(optionsListener);
+        }
+        else {
+            holder.layoutPostOptions.setVisibility(View.GONE);
+            holder.layoutRoot.setBackgroundColor(Color.WHITE);
+        }
+
+        PostItemListener listener = new PostItemListener(activity, post);
         holder.commentsButton.setOnClickListener(listener);
-        //holder.linkButton.setTag(position);
         holder.linkButton.setOnClickListener(listener);
+        holder.linkButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (position == selectedPosition) selectedPosition = -1;
+                else selectedPosition = position;
+                notifyDataSetChanged();
+                return false;
+            }
+        });
 
         return row;
     }

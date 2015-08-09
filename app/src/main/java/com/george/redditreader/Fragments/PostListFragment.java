@@ -36,7 +36,6 @@ public class PostListFragment extends Fragment {
     public ProgressBar mainProgressBar;
     public ListView contentView;
     public String subreddit;
-    //private MainActivity activity;
     private AppCompatActivity activity;
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
@@ -237,13 +236,11 @@ public class PostListFragment extends Fragment {
         setActionBarSubtitle();
     }
 
-    //Set Action Bar Title
     public void setActionBarTitle() {
         String title = (subreddit == null) ? "Frontpage" : subreddit;
         activity.getSupportActionBar().setTitle(title);
     }
 
-    //Set Action Bar Subtitle
     public void setActionBarSubtitle() {
         if(timeSpan == null) {
             activity.getSupportActionBar().setSubtitle(submissionSort.value());
@@ -252,113 +249,5 @@ public class PostListFragment extends Fragment {
             activity.getSupportActionBar().setSubtitle(submissionSort.value()+": "+timeSpan.value());
         }
     }
-
-    //private void postsError() {
-    //    Toast toast = Toast.makeText(activity, "Error loading posts", Toast.LENGTH_SHORT);
-    //    toast.show();
-    //}
-
-    //public static List<Thumbnail> preloadImages(List<Submission> posts, Context context) {
-    //    //if (BuildConfig.DEBUG) {
-    //    //    Picasso.with(activity).setIndicatorsEnabled(true);
-    //    //    Picasso.with(activity).setLoggingEnabled(true);
-    //    //}
-    //    List<Thumbnail> thumbnails = new ArrayList<>();
-    //    for(Submission post : posts) {
-    //        Thumbnail thumbnail = new Thumbnail(post.getThumbnail());
-    //        try {
-    //            Picasso.with(context).load(post.getThumbnail()).fetch();
-    //            thumbnail.setHasThumbnail(true);
-    //        } catch (IllegalArgumentException e) {
-    //            thumbnail.setHasThumbnail(false);
-    //        }
-    //        thumbnails.add(thumbnail);
-    //    }
-    //    return  thumbnails;
-    //}
-
-    //Main Load Task
-    //class LoadTask extends AsyncTask<Void, Void, List<Submission>> {
-//
-    //    private Exception exception;
-    //    private LoadType loadType;
-//
-    //    public LoadTask(LoadType loadType) {
-    //        this.loadType = loadType;
-    //    }
-//
-    //    @Override
-    //    protected List<Submission> doInBackground(Void... unused) {
-    //        try {
-    //            Submissions subms = new Submissions(restClient);
-    //            List<Submission> submissions = null;
-//
-    //            if(loadType == LoadType.extend) {
-    //                if(subreddit == null) {
-    //                    submissions = subms.frontpage(submissionSort, timeSpan, -1, RedditConstants.DEFAULT_LIMIT, postListAdapter.getLastPost(), null, true);
-    //                }
-    //                else {
-    //                    submissions = subms.ofSubreddit(subreddit, submissionSort, timeSpan, -1, RedditConstants.DEFAULT_LIMIT, postListAdapter.getLastPost(), null, true);
-    //                }
-    //            }
-    //            else {
-    //                if(subreddit == null) {
-    //                    submissions = subms.frontpage(submissionSort, timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-    //                }
-    //                else {
-    //                    submissions = subms.ofSubreddit(subreddit, submissionSort, timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-    //                }
-    //                postListAdapter = new PostListAdapter(activity, submissions);
-    //            }
-    //            ImageLoader.preloadImages(submissions, activity);
-    //            return submissions;
-    //        } catch (RetrievalFailedException e) {
-    //            exception = e;
-    //        } catch (RedditError e) {
-    //            exception = e;
-    //        }
-    //        return null;
-    //    }
-//
-    //    @Override
-    //    protected void onPostExecute(List<Submission> submissions) {
-    //        if(exception != null) {
-    //            ToastUtils.postsLoadError(activity);
-    //            if(loadType == LoadType.extend) {
-    //                footerProgressBar.setVisibility(View.GONE);
-    //                showMore.setVisibility(View.VISIBLE);
-    //            }
-    //        }
-    //        else {
-    //            switch (loadType) {
-    //                case init:
-    //                    mainProgressBar.setVisibility(View.GONE);
-    //                    contentView.setAdapter(postListAdapter);
-    //                    showMore.setVisibility(View.VISIBLE);
-    //                    hasPosts = true;
-    //                    break;
-    //                case refresh:
-    //                    mainProgressBar.setVisibility(View.GONE);
-    //                    if(submissions.size() != 0) {
-    //                        contentView.setAdapter(postListAdapter);
-    //                        contentView.setVisibility(View.VISIBLE);
-    //                        hasPosts = true;
-    //                        showMore.setVisibility(View.VISIBLE);
-    //                    }
-    //                    else {
-    //                        hasPosts = false;
-    //                        ToastUtils.subredditNotFound(activity);
-    //                    }
-    //                    break;
-    //                case extend:
-    //                    footerProgressBar.setVisibility(View.GONE);
-    //                    postListAdapter.addAll(submissions);
-    //                    showMore.setVisibility(View.VISIBLE);
-    //                    break;
-    //            }
-    //        }
-    //    }
-//
-    //}
 
 }

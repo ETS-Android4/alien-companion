@@ -1,4 +1,4 @@
-package com.george.redditreader.api.utils.restClient;
+package com.george.redditreader.api.utils.httpClient;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -6,12 +6,12 @@ import java.net.HttpURLConnection;
 /**
  * Created by George on 5/28/2015.
  */
-public class RestResponse implements Response {
+public class HttpResponse implements Response {
     private final String responseText;
     private final Object responseObject;
     private final HttpURLConnection connection;
 
-    public RestResponse(String responseText, Object responseObject, HttpURLConnection connection) {
+    public HttpResponse(String responseText, Object responseObject, HttpURLConnection connection) {
         this.responseText = responseText;
         this.responseObject = responseObject;
         this.connection = connection;

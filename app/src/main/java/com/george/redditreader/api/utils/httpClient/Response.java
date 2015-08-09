@@ -1,4 +1,4 @@
-package com.george.redditreader.api.utils.restClient;
+package com.george.redditreader.api.utils.httpClient;
 
 import java.io.IOException;
 

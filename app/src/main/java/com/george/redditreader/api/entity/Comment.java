@@ -2,10 +2,10 @@ package com.george.redditreader.api.entity;
 
 import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToInteger;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToBoolean;
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToDouble;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToInteger;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToDouble;
 
 import java.util.LinkedList;
 import java.util.List;

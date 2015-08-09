@@ -2,11 +2,10 @@ package com.george.redditreader.api.retrieval;
 
 import android.util.Log;
 
-import static com.george.redditreader.api.utils.restClient.JsonUtils.safeJsonToString;
+import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.Time;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
 import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.api.utils.ParamFormatter;
 import com.george.redditreader.api.utils.RedditConstants;
-import com.george.redditreader.api.utils.restClient.RestClient;
+import com.george.redditreader.api.utils.httpClient.HttpClient;
 
 
 /**
@@ -45,27 +44,27 @@ public class Submissions implements ActorDriven {
 	/**
 	 * Handle to REST client instance.
 	 */
-    private final RestClient restClient;
+    private final HttpClient httpClient;
     private User user;
 
     /**
      * Constructor.
      * Default general actor will be used.
-     * @param restClient REST client handle
+     * @param httpClient REST client handle
      */
-    public Submissions(RestClient restClient) {
-        this.restClient = restClient;
+    public Submissions(HttpClient httpClient) {
+        this.httpClient = httpClient;
     }
     
     /**
      * Constructor. The actor is the user who will
      * be used to perform the retrieval.
      * 
-     * @param restClient REST Client instance
+     * @param httpClient REST Client instance
      * @param actor User instance
      */
-    public Submissions(RestClient restClient, User actor) {
-    	this.restClient = restClient;
+    public Submissions(HttpClient httpClient, User actor) {
+    	this.httpClient = httpClient;
         this.user = actor;
     }
     
@@ -94,7 +93,7 @@ public class Submissions implements ActorDriven {
         List<Submission> submissions = new LinkedList<Submission>();
         
         // Send request to reddit server via REST client
-        Object response = restClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(url, cookie).getResponseObject();
         
         if (response instanceof JSONObject) {
         	
