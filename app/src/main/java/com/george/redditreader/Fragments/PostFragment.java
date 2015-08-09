@@ -2,13 +2,11 @@ package com.george.redditreader.Fragments;
 
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,21 +18,10 @@ import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Adapters.PostAdapter;
 import com.george.redditreader.LoadTasks.LoadCommentsTask;
-import com.george.redditreader.Models.Thumbnail;
-import com.george.redditreader.Utils.DisplayToast;
 import com.george.redditreader.LinkHandler;
 import com.george.redditreader.R;
-import com.george.redditreader.Utils.ImageLoader;
-import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
-import com.george.redditreader.api.exception.RedditError;
-import com.george.redditreader.api.exception.RetrievalFailedException;
-import com.george.redditreader.api.retrieval.Comments;
 import com.george.redditreader.api.retrieval.params.CommentSort;
-import com.george.redditreader.api.utils.RedditConstants;
-import com.george.redditreader.api.utils.restClient.HttpRestClient;
-import com.george.redditreader.api.utils.restClient.RestClient;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -56,7 +43,8 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     public static String commentLinkId;
     public int parentsShown = -1;
     private boolean titleUpdated = true;
-    private List<Integer> groups;
+    //private List<Integer> groups;
+    public boolean commentsLoaded;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -251,7 +239,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
             postAdapter.clear();
             postAdapter.add(post);
             postAdapter.notifyDataSetChanged();
-            MainActivity.commentsLoaded = false;
+            commentsLoaded = false;
         }
         //else {
         //    progressBar.setVisibility(View.VISIBLE);
@@ -303,7 +291,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     //        progressBar.setVisibility(View.GONE);
     //        if(exception != null) {
     //            noResponseObject = true;
-    //            DisplayToast.commentsLoadError(activity);
+    //            ToastUtils.commentsLoadError(activity);
     //        }
     //        else {
     //            noResponseObject = false;

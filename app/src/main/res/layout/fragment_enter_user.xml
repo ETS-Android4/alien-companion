@@ -21,7 +21,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
         android:hint="user"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:singleLine="true"
+        android:imeOptions="actionGo" />
 
     <LinearLayout
         android:orientation="horizontal"

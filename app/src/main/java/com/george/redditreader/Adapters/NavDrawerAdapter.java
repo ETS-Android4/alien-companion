@@ -1,7 +1,8 @@
 package com.george.redditreader.Adapters;
 
-import android.app.Activity;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public static final int VIEW_TYPE_ACCOUNT = 4;
 
-    public static final int VIEW_TYPE_SEPARATOR = 5;
+    //public static final int VIEW_TYPE_SEPARATOR = 5;
 
     private final MainActivity activity;
 
@@ -51,10 +52,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private List<NavDrawerItem> items;
 
+    private TypedValue selectableBackground;
+
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
         this.activity = activity;
         //this.listener = listener;
+
+        selectableBackground = new TypedValue();
+        activity.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, selectableBackground, true);
     }
 
     public void add(NavDrawerItem item) {
@@ -138,6 +144,17 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 NavDrawerSubredditItem subredditItem = (NavDrawerSubredditItem) getItemAt(position);
                 String subreddit = (subredditItem.getName() != null) ? subredditItem.getName() : "Frontpage";
                 subredditRowViewHolder.name.setText(subreddit);
+                //Highlight current subreddit
+                String currentSubreddit = activity.getListFragment().subreddit;
+                if(subreddit.equals(currentSubreddit) ||
+                        (subredditItem.getName() == null && currentSubreddit == null)) {
+                    subredditRowViewHolder.name.setTextColor(Color.BLUE);
+                    subredditRowViewHolder.layout.setBackgroundColor(Color.parseColor("#E7E7E8"));
+                }
+                else {
+                    subredditRowViewHolder.name.setTextColor(Color.BLACK);
+                    subredditRowViewHolder.layout.setBackgroundResource(selectableBackground.resourceId);
+                }
                 break;
             case VIEW_TYPE_ACCOUNT:
                 SubredditRowViewHolder accountViewHolder = (SubredditRowViewHolder) viewHolder;
@@ -171,12 +188,14 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public static class SubredditRowViewHolder extends RecyclerView.ViewHolder {
-            public TextView name;
+        public TextView name;
+        public LinearLayout layout;
 
-            public SubredditRowViewHolder(View row) {
-                super(row);
-                name = (TextView) row.findViewById(R.id.txtView_subreddit);
-            }
+        public SubredditRowViewHolder(View row) {
+            super(row);
+            name = (TextView) row.findViewById(R.id.txtView_subreddit);
+            layout = (LinearLayout) row.findViewById(R.id.subredditRowLayout);
+        }
     }
 
     public static class SubredditsViewHolder extends RecyclerView.ViewHolder {

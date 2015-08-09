@@ -8,7 +8,7 @@ import com.george.redditreader.Adapters.UserAdapter;
 import com.george.redditreader.Fragments.UserFragment;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.enums.UserContent;
-import com.george.redditreader.Utils.DisplayToast;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.Utils.ImageLoader;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
@@ -119,7 +119,7 @@ public class LoadUserTask extends AsyncTask<Void, Void, List<Object>> {
     @Override
     protected void onPostExecute(List<Object> things) {
         if(mException != null) {
-            DisplayToast.userLoadError(activity);
+            ToastUtils.userLoadError(activity);
             if(mLoadType == LoadType.extend) {
                 uf.footerProgressBar.setVisibility(View.GONE);
                 uf.showMore.setVisibility(View.VISIBLE);

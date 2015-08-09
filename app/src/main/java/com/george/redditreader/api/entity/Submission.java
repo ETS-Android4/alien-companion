@@ -173,7 +173,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setHidden(safeJsonToBoolean(obj.get("hidden")));
 			setClicked(safeJsonToBoolean(obj.get("clicked")));
 
+			title = StringEscapeUtils.unescapeHtml(title);
 			selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
+
+			//Log.e("self text html", selftextHTML);
 
 		} catch (Exception e) {
 			Log.e("Api error", "Error creating Submission");

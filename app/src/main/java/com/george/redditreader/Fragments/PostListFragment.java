@@ -4,6 +4,7 @@ package com.george.redditreader.Fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,16 +31,13 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
 public class PostListFragment extends Fragment {
 
     public PostListAdapter postListAdapter;
-   // private RestClient restClient;
     public Button showMore;
     public ProgressBar footerProgressBar;
     public ProgressBar mainProgressBar;
     public ListView contentView;
     public String subreddit;
-    private MainActivity activity;
-    //private enum LoadType {
-    //    init, refresh, extend
-    //}
+    //private MainActivity activity;
+    private AppCompatActivity activity;
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
@@ -50,7 +48,8 @@ public class PostListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        //restClient = new HttpRestClient();
+
+        subreddit = activity.getIntent().getStringExtra("subreddit");
     }
 
     @Override
@@ -60,7 +59,7 @@ public class PostListFragment extends Fragment {
         contentView = (ListView) view.findViewById(R.id.listView);
 
         if(postListAdapter == null) {
-            Log.d("PostListFragment", "Loading posts...");
+            //Log.d("PostListFragment", "Loading posts...");
             setSubmissionSort(SubmissionSort.HOT);
             LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
             task.execute();
@@ -81,6 +80,13 @@ public class PostListFragment extends Fragment {
                 return true;
             case R.id.action_sort:
                 showSortPopup(activity.findViewById(R.id.action_sort));
+                return true;
+            case R.id.action_search:
+                SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("subreddit", subreddit);
+                searchDialog.setArguments(args);
+                searchDialog.show(activity.getFragmentManager(), "dialog");
                 return true;
         }
 
@@ -168,7 +174,7 @@ public class PostListFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (MainActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override
@@ -203,17 +209,6 @@ public class PostListFragment extends Fragment {
         footerProgressBar.setVisibility(View.GONE);
         showMore = (Button) view.findViewById(R.id.showMore);
         showMore.setOnClickListener(new SubredditFooterListener(activity, this));
-        //showMore.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        showMore.setVisibility(View.GONE);
-        //        footerProgressBar.setVisibility(View.VISIBLE);
-        //        PostListFragment plf = (PostListFragment)
-        //                activity.getFragmentManager().findFragmentById(R.id.fragmentHolder);
-        //        LoadPostsTask task = new LoadPostsTask(activity, plf, LoadType.extend);
-        //        task.execute();
-        //    }
-        //});
     }
 
     //Reload Posts List
@@ -223,10 +218,6 @@ public class PostListFragment extends Fragment {
         mainProgressBar.setVisibility(View.VISIBLE);
         LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh);
         task.execute();
-    }
-
-    public String getSubreddit() {
-        return subreddit;
     }
 
     public void setSubreddit(String subreddit) {
@@ -332,7 +323,7 @@ public class PostListFragment extends Fragment {
     //    @Override
     //    protected void onPostExecute(List<Submission> submissions) {
     //        if(exception != null) {
-    //            DisplayToast.postsLoadError(activity);
+    //            ToastUtils.postsLoadError(activity);
     //            if(loadType == LoadType.extend) {
     //                footerProgressBar.setVisibility(View.GONE);
     //                showMore.setVisibility(View.VISIBLE);
@@ -356,7 +347,7 @@ public class PostListFragment extends Fragment {
     //                    }
     //                    else {
     //                        hasPosts = false;
-    //                        DisplayToast.subredditNotFound(activity);
+    //                        ToastUtils.subredditNotFound(activity);
     //                    }
     //                    break;
     //                case extend:

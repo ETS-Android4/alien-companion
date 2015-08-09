@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.LinkHandler;
+import com.george.redditreader.MyHtmlTagHandler;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
@@ -58,6 +59,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
     private boolean showNSFW;
     private boolean handleLinks;
+    private String author;
 
     //private ContentViewHolder contentVH;
 
@@ -129,16 +131,19 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 CommentViewHolder cvh = (CommentViewHolder) viewHolder;
                 final Comment comment = (Comment) getItemAt(position);
 
+                //Comment permalink case
                 if(comment.getIdentifier().equals(PostFragment.commentLinkId))
-                    cvh.commentLayout.setBackgroundColor(Color.parseColor("#e8ff95"));
+                    cvh.commentLayout.setBackgroundColor(Color.parseColor("#FFFFD1"));
                 else cvh.commentLayout.setBackgroundColor(Color.WHITE);
 
                 //Author textview
+                if(author.equals(comment.getAuthor())) cvh.authorTextView.setTextColor(Color.parseColor("#3399FF"));
+                else cvh.authorTextView.setTextColor(Color.parseColor("#ff0000"));
                 cvh.authorTextView.setText(comment.getAuthor());
 
                 //Comment textview
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
-                        Html.fromHtml(comment.getBodyHTML()));
+                        Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
                 if(handleLinks) strBuilder = modifyURLSpan(strBuilder);
                 cvh.commentTextView.setText(strBuilder);
                 cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -165,15 +170,18 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             case VIEW_TYPE_CONTENT:
                 ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
+                author = post.getAuthor();
 
+                final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
+                        .findFragmentById(R.id.fragment2);
                 if(MainActivity.showFullComments) {
                     contentVH.fullComments.setVisibility(View.VISIBLE);
                     contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             MainActivity.showFullComments = false;
-                            PostFragment postFragment = (PostFragment) activity.getFragmentManager()
-                                    .findFragmentById(R.id.fragment2);
+                            //PostFragment postFragment = (PostFragment) activity.getFragmentManager()
+                            //        .findFragmentById(R.id.fragment2);
                             postFragment.loadFullComments();
                         }
                     });
@@ -190,7 +198,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     else {
                         //Self text textview
                         strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
-                                Html.fromHtml(post.getSelftextHTML()));
+                                Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         if(handleLinks) strBuilder = modifyURLSpan(strBuilder);
                         contentVH.selfText.setText(strBuilder);
                         contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -225,7 +233,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     contentVH.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 }
                 contentVH.subreddit.setText(post.getSubreddit());
-                if (MainActivity.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
+                if (postFragment.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
                 else contentVH.progressBar.setVisibility(View.VISIBLE);
                 break;
             default:

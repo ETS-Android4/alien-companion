@@ -7,7 +7,10 @@ import android.util.Log;
 
 import com.george.redditreader.Activities.BrowserActivity;
 import com.george.redditreader.Activities.PostActivity;
+import com.george.redditreader.Activities.SubredditActivity;
+import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.Utils.ConvertUtils;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
@@ -21,14 +24,13 @@ import java.util.regex.Pattern;
 public class LinkHandler {
 
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
-    //private Activity activity;
+
     private Context context;
     private Submission post;
     private String url;
     private String domain;
 
     public LinkHandler(Context context, Submission post) {
-        //this.activity = activity;
         this.context = context;
         this.post = post;
         url = post.getUrl();
@@ -36,14 +38,12 @@ public class LinkHandler {
     }
 
     public LinkHandler(Context context, String url, String domain) {
-        //this.activity = activity;
         this.context = context;
         this.url = url;
         this.domain = domain;
     }
 
     public LinkHandler(Context context, String url) {
-        //this.activity = activity;
         this.context = context;
         this.url = url;
         try {
@@ -59,7 +59,7 @@ public class LinkHandler {
 
         //Log.d("Link Full URL", url);
         if(domain == null) {
-            intent = new Intent(activity, PostActivity.class);
+            intent = getNoDomainIntent(activity, url);
         }
         else {
             //Log.d("Link Domain", domain);
@@ -69,8 +69,16 @@ public class LinkHandler {
                 //Log.d("youtube video id", videoId);
                 intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
             } else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
-                intent = new Intent(activity, PostActivity.class);
-                intent.putExtra("postInfo", getRedditPostInfo(url));
+                String postInfo[] = getRedditPostInfo(url);
+                if(postInfo != null) { //case url of reddit post
+                    intent = new Intent(activity, PostActivity.class);
+                    intent.putExtra("postInfo", postInfo);
+                }
+                else { //case url of subreddit/user
+                    Pattern pattern = Pattern.compile("/(r|u|user)/[\\w\\.]+", Pattern.CASE_INSENSITIVE);
+                    Matcher matcher = pattern.matcher(url);
+                    if(matcher.find()) intent = getNoDomainIntent(activity, matcher.group());
+                }
             } else if (domain.equals("redd.it")) {
                 intent = new Intent(activity, PostActivity.class);
                 intent.putExtra("postId", url.substring(15));
@@ -85,14 +93,33 @@ public class LinkHandler {
             }
         }
 
-        activity.startActivity(intent);
+        if(intent != null) activity.startActivity(intent);
+        else ToastUtils.displayShortToast(context, "Could not resolve hyperlink");
+    }
+
+    //Get an intent for links like '/r/movies' or '/u/someuser' //TODO: maybe use regex here
+    private Intent getNoDomainIntent(Activity activity, String link) {
+        Intent intent = null;
+        link = link.toLowerCase();
+        if(link.charAt(1) == 'r') {
+            intent = new Intent(activity, SubredditActivity.class);
+            intent.putExtra("subreddit", link.substring(3));
+        }
+        else if(link.charAt(1) == 'u') {
+            intent = new Intent(activity, UserActivity.class);
+            String username;
+            if(link.charAt(2) == 's') username = link.substring(6);
+            else username = link.substring(3);
+            intent.putExtra("username", username);
+        }
+        return intent;
     }
 
     public String[] getRedditPostInfo(String url) {
 
         String[] postInfo = new String[4];
 
-        String pattern = "/r/(.*)/comments/(\\w+)/\\w+/(\\w+)(?:.*context=(\\d+))?";
+        String pattern = "/r/(.*)/comments/(\\w+)/\\w+(/\\w+)?(?:.*context=(\\d+))?";
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(url);
         if(matcher.find()) {
@@ -101,6 +128,11 @@ public class LinkHandler {
             postInfo[2] = matcher.group(3);
             postInfo[3] = matcher.group(4);
         }
+        else return null;
+
+        //for(String info : postInfo) {
+        //    Log.e("reddit post info", info);
+        //}
 
         return postInfo;
     }

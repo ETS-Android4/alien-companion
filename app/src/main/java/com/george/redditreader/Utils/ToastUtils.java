@@ -6,7 +6,7 @@ import android.widget.Toast;
 /**
  * Created by George on 6/19/2015.
  */
-public class DisplayToast {
+public class ToastUtils {
 
     public static final String LOADING_POSTS_ERROR = "Error Loading Posts";
     public static final String LOADING_COMMENTS_ERROR = "Error Loading Comments";
@@ -45,6 +45,13 @@ public class DisplayToast {
     public static void noResults(Context context, String query) {
         try {
             Toast toast = Toast.makeText(context, NO_RESULTS_FOUND + query, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NullPointerException e) {}
+    }
+
+    public static void displayShortToast(Context context, String message) {
+        try {
+            Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
             toast.show();
         } catch (NullPointerException e) {}
     }

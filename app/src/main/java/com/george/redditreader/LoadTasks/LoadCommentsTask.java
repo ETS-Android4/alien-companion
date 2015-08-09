@@ -1,16 +1,14 @@
 package com.george.redditreader.LoadTasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Fragments.PostFragment;
-import com.george.redditreader.Utils.DisplayToast;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.Utils.ImageLoader;
 import com.george.redditreader.api.entity.Comment;
-import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.retrieval.Comments;
@@ -60,11 +58,11 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         postFragment.progressBar.setVisibility(View.GONE);
         if(exception != null) {
             postFragment.noResponseObject = true;
-            DisplayToast.commentsLoadError(context);
+            ToastUtils.commentsLoadError(context);
         }
         else {
             postFragment.noResponseObject = false;
-            MainActivity.commentsLoaded = true;
+            postFragment.commentsLoaded = true;
             postFragment.postAdapter.clear();
             postFragment.postAdapter.add(postFragment.post);
             postFragment.postAdapter.addAll(comments);

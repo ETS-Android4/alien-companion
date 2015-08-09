@@ -86,15 +86,6 @@ public class SearchFragment extends Fragment {
         footerProgressBar.setVisibility(View.GONE);
         showMore = (Button) view.findViewById(R.id.showMore);
         showMore.setOnClickListener(new SearchFooterListener(activity, this));
-        //showMore.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        showMore.setVisibility(View.GONE);
-        //        footerProgressBar.setVisibility(View.VISIBLE);
-        //        LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.extend);
-        //        task.execute();
-        //    }
-        //});
     }
 
     @Override
@@ -290,7 +281,7 @@ public class SearchFragment extends Fragment {
     //    @Override
     //    protected void onPostExecute(List<Submission> submissions) {
     //        if(exception != null) {
-    //            DisplayToast.postsLoadError(activity);
+    //            ToastUtils.postsLoadError(activity);
     //            if(loadType == LoadType.extend) {
     //                footerProgressBar.setVisibility(View.GONE);
     //                showMore.setVisibility(View.VISIBLE);
@@ -307,7 +298,7 @@ public class SearchFragment extends Fragment {
     //                    }
     //                    else {
     //                        hasPosts = false;
-    //                        DisplayToast.noResults(activity, searchQuery);
+    //                        ToastUtils.noResults(activity, searchQuery);
     //                    }
     //                    break;
     //                case refresh:
@@ -320,7 +311,7 @@ public class SearchFragment extends Fragment {
     //                    }
     //                    else {
     //                        hasPosts = false;
-    //                        DisplayToast.noResults(activity, searchQuery);
+    //                        ToastUtils.noResults(activity, searchQuery);
     //                    }
     //                    break;
     //                case extend:

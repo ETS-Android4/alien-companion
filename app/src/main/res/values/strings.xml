@@ -83,5 +83,6 @@
     <string name="enter_search_term">enter search term</string>
     <string name="action_comments">Comments</string>
     <string name="title_activity_edit_prefs">EditPrefsActivity</string>
+    <string name="title_activity_subreddit">SubredditActivity</string>
 
 </resources>

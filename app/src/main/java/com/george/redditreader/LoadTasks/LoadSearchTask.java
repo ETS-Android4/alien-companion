@@ -7,7 +7,7 @@ import android.view.View;
 import com.george.redditreader.Adapters.PostListAdapter;
 import com.george.redditreader.Fragments.SearchFragment;
 import com.george.redditreader.enums.LoadType;
-import com.george.redditreader.Utils.DisplayToast;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.Utils.ImageLoader;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.exception.RedditError;
@@ -63,7 +63,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
     @Override
     protected void onPostExecute(List<Submission> submissions) {
         if(exception != null) {
-            DisplayToast.postsLoadError(activity);
+            ToastUtils.postsLoadError(activity);
             if(loadType == LoadType.extend) {
                 sf.footerProgressBar.setVisibility(View.GONE);
                 sf.showMore.setVisibility(View.VISIBLE);
@@ -80,7 +80,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
                     }
                     else {
                         sf.hasPosts = false;
-                        DisplayToast.noResults(activity, sf.searchQuery);
+                        ToastUtils.noResults(activity, sf.searchQuery);
                     }
                     break;
                 case refresh:
@@ -93,7 +93,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
                     }
                     else {
                         sf.hasPosts = false;
-                        DisplayToast.noResults(activity, sf.searchQuery);
+                        ToastUtils.noResults(activity, sf.searchQuery);
                     }
                     break;
                 case extend:

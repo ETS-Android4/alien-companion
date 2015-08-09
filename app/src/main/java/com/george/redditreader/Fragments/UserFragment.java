@@ -285,7 +285,7 @@ public class UserFragment extends Fragment {
     //    @Override
     //    protected void onPostExecute(List<Object> things) {
     //        if(mException != null) {
-    //            DisplayToast.userLoadError(activity);
+    //            ToastUtils.userLoadError(activity);
     //            if(mLoadType == LoadType.extend) {
     //                footerProgressBar.setVisibility(View.GONE);
     //                showMore.setVisibility(View.VISIBLE);

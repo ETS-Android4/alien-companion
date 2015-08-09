@@ -21,6 +21,7 @@ public class SubredditItemListener extends NavDrawerListener implements View.OnC
     public void onClick(View v) {
         int position = getRecyclerView().getChildPosition(v);
         NavDrawerSubredditItem subreddit = (NavDrawerSubredditItem) getAdapter().getItemAt(position);
+        getAdapter().notifyDataSetChanged();
         getDrawerLayout().closeDrawers();
 
         PostListFragment listFragment = getActivity().getListFragment();

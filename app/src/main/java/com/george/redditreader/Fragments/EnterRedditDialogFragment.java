@@ -2,8 +2,10 @@ package com.george.redditreader.Fragments;
 
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.R;
@@ -43,6 +46,13 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
 
         cancelButton.setOnClickListener(this);
         viewButton.setOnClickListener(this);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                onClick(v);
+                return true;
+            }
+        });
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         getDialog().setCanceledOnTouchOutside(true);
@@ -65,7 +75,10 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.button_view) {
+        if(view.getId() == R.id.button_cancel) {
+            dismiss();
+        }
+        else {
             String subreddit = editText.getText().toString();
             if(!subreddit.equals("")) {
                 dismiss();
@@ -73,15 +86,13 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
                 PostListFragment listFragment = activity.getListFragment();
                 listFragment.setSubreddit(subreddit.toLowerCase());
                 listFragment.setSubmissionSort(SubmissionSort.HOT);
+                activity.getNavDrawerAdapter().notifyDataSetChanged();
                 listFragment.refreshList();
             }
             else {
                 editText.setHint(R.string.enter_subreddit);
                 editText.setHintTextColor(getResources().getColor(R.color.red));
             }
-        }
-        else {
-            dismiss();
         }
     }
 

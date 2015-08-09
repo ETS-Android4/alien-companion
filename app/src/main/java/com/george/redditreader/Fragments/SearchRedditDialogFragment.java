@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.george.redditreader.Activities.SearchActivity;
 import com.george.redditreader.R;
@@ -60,6 +62,13 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
 
         cancelButton.setOnClickListener(this);
         viewButton.setOnClickListener(this);
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                onClick(v);
+                return true;
+            }
+        });
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         getDialog().setCanceledOnTouchOutside(true);
@@ -82,7 +91,10 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.button_view) {
+        if(view.getId() == R.id.button_cancel) {
+            dismiss();
+        }
+        else {
             String query = editText.getText().toString();
             if(!query.equals("")) {
                 dismiss();
@@ -106,9 +118,6 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
                 editText.setHint(R.string.enter_search_term);
                 editText.setHintTextColor(getResources().getColor(R.color.red));
             }
-        }
-        else {
-            dismiss();
         }
     }
 

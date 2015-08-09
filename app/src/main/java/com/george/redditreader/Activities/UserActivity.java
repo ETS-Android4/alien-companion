@@ -28,12 +28,16 @@ public class UserActivity extends SwipeActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-            //NavUtils.navigateUpFromSameTask(this);
-            onBackPressed();
-            return true;
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return false;
         }
-        return super.onOptionsItemSelected(item);
+
+        //return super.onOptionsItemSelected(item);
     }
 
     public void previous() {

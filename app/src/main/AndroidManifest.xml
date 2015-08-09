@@ -47,6 +47,11 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_prefs" >
         </activity>
+        <activity
+            android:name=".Activities.SubredditActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_subreddit" >
+        </activity>
     </application>
 
 </manifest>

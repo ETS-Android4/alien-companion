@@ -6,8 +6,8 @@ import android.view.View;
 
 import com.george.redditreader.Adapters.PostListAdapter;
 import com.george.redditreader.Fragments.PostListFragment;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.enums.LoadType;
-import com.george.redditreader.Utils.DisplayToast;
 import com.george.redditreader.Utils.ImageLoader;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.exception.RedditError;
@@ -72,7 +72,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<Submission>> {
     @Override
     protected void onPostExecute(List<Submission> submissions) {
         if(exception != null) {
-            DisplayToast.postsLoadError(activity);
+            ToastUtils.postsLoadError(activity);
             if(loadType == LoadType.extend) {
                 plf.footerProgressBar.setVisibility(View.GONE);
                 plf.showMore.setVisibility(View.VISIBLE);
@@ -96,7 +96,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<Submission>> {
                     }
                     else {
                         plf.hasPosts = false;
-                        DisplayToast.subredditNotFound(activity);
+                        ToastUtils.subredditNotFound(activity);
                     }
                     break;
                 case extend:

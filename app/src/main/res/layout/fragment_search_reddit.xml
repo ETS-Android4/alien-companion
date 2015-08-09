@@ -22,7 +22,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
         android:hint="search term"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:singleLine="true"
+        android:imeOptions="actionSearch" />
 
     <CheckBox
         android:layout_width="match_parent"

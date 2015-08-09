@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private PostListFragment listFragment;
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
-    public static boolean commentsLoaded;
+    //public static boolean commentsLoaded;
     public static boolean showFullComments;
     public static SharedPreferences prefs;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupMainFragment() {
         listFragment = (PostListFragment) fm.findFragmentById(R.id.fragmentHolder);
         if(listFragment == null) {
-            Log.d("MainActivity", "Creating new fragment...");
+            //Log.d("MainActivity", "Creating new fragment...");
             listFragment = new PostListFragment();
             fm.beginTransaction().add(R.id.fragmentHolder, listFragment).commit();
         }
@@ -96,14 +96,14 @@ public class MainActivity extends AppCompatActivity {
             return(true);
         }
 
-        if(item.getItemId() == R.id.action_search) {
-            SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
-            Bundle args = new Bundle();
-            args.putString("subreddit", listFragment.getSubreddit());
-            searchDialog.setArguments(args);
-            showDialogFragment(searchDialog);
-            return true;
-        }
+        //if(item.getItemId() == R.id.action_search) {
+        //    SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
+        //    Bundle args = new Bundle();
+        //    args.putString("subreddit", listFragment.subreddit);
+        //    searchDialog.setArguments(args);
+        //    showDialogFragment(searchDialog);
+        //    return true;
+        //}
 
         return false;
     }
@@ -198,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialogFragment(DialogFragment fragment) {
-        fragment.show(fm, "dialog");
-    }
+    //private void showDialogFragment(DialogFragment fragment) {
+    //    fragment.show(fm, "dialog");
+    //}
 
 }

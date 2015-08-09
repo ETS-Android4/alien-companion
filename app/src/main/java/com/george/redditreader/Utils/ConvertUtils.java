@@ -42,10 +42,11 @@ public class ConvertUtils {
     }
 
     public static CharSequence noTrailingwhiteLines(CharSequence text) {
-
-        while (text.charAt(text.length() - 1) == '\n') {
-            text = text.subSequence(0, text.length() - 1);
-        }
+        try {
+            while (text.charAt(text.length() - 1) == '\n') {
+                text = text.subSequence(0, text.length() - 1);
+            }
+        } catch (IndexOutOfBoundsException e) {}
         return text;
     }
 
