@@ -20,7 +20,7 @@ public class ProfileActions implements ActorDriven {
 
     /**
      * Constructor. Global default user (null) is used.
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      */
     public ProfileActions(HttpClient httpClient) {
         this.httpClient = httpClient;
@@ -29,7 +29,7 @@ public class ProfileActions implements ActorDriven {
 
     /**
      * Constructor.
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      * @param actor User instance
      */
     public ProfileActions(HttpClient httpClient, User actor) {

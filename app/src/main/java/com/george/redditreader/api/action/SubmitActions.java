@@ -18,7 +18,7 @@ public class SubmitActions implements ActorDriven {
 
     /**
      * Constructor. Global default user (null) is used.
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      */
     public SubmitActions(HttpClient httpClient) {
         this.httpClient = httpClient;
@@ -27,7 +27,7 @@ public class SubmitActions implements ActorDriven {
 
     /**
      * Constructor.
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      * @param actor User instance
      */
     public SubmitActions(HttpClient httpClient, User actor) {

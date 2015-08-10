@@ -16,7 +16,7 @@ public class FlairActions {
     /**
      * Constructor. Global default user (null) is used.
      *
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      */
     public FlairActions(HttpClient httpClient) {
         this.httpClient = httpClient;
@@ -25,7 +25,7 @@ public class FlairActions {
     /**
      * Constructor.
      *
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      * @param user      User instance
      */
     public FlairActions(HttpClient httpClient, User user) {
