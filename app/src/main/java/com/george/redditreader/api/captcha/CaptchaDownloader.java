@@ -16,6 +16,7 @@ public class CaptchaDownloader {
      * @return Captcha rendered image
      * @throws IOException 	Thrown if the image retrieval failed
      */
+    
     //public RenderedImage getCaptchaImage(String iden) throws IOException {
     //    URL url = new URL(ApiEndpointUtils.REDDIT_BASE_URL + "/captcha/" + iden + ".png");
     //    RenderedImage captcha = ImageIO.read(url);
