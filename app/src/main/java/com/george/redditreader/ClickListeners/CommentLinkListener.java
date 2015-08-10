@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.george.redditreader.Activities.PostActivity;
+import com.george.redditreader.R;
 import com.george.redditreader.api.entity.Comment;
 
 /**

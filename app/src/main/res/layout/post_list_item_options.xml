@@ -2,54 +2,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:background="#414141"
+    android:padding="5dp">
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_upvote"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_upvote" />
+        android:src="@mipmap/ic_action_upvote"
+        android:padding="5dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_downvote"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_downvote" />
+        android:src="@mipmap/ic_action_downvote"
+        android:padding="5dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_save"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_save" />
+        android:src="@mipmap/ic_action_save"
+        android:padding="5dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_hide"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_hide" />
+        android:src="@mipmap/ic_action_hide"
+        android:padding="5dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_view_user"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_user" />
+        android:src="@mipmap/ic_action_user"
+        android:padding="5dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_open_browser"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_open_browser" />
+        android:src="@mipmap/ic_action_open_browser"
+        android:padding="5dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_more"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_more" />
+        android:src="@mipmap/ic_action_more"
+        android:padding="5dp" />
 </LinearLayout>

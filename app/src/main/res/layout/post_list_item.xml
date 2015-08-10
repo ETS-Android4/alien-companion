@@ -8,27 +8,28 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:divider="@drawable/mydivider"
+        android:showDividers="middle">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
             android:clickable="false"
             android:focusable="false"
             android:id="@+id/linkButton"
-            android:background="?android:attr/selectableItemBackground"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:background="@drawable/touch_selector">
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/postImage"
                 android:src="@mipmap/ic_launcher"
-                android:layout_gravity="center"
                 android:layout_weight="1" />
 
             <LinearLayout
@@ -36,7 +37,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="6"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:paddingRight="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -93,7 +95,7 @@
             android:gravity="center"
             android:clickable="false"
             android:id="@+id/commentsButton"
-            android:background="?android:attr/selectableItemBackground">
+            android:background="@drawable/touch_selector">
 
             <TextView
                 android:layout_width="match_parent"

@@ -9,7 +9,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tap here to view the rest of the comments."
+        android:text="You are viewing a single comment&apos;s thread. Tap here to view the rest of the comments."
         android:id="@+id/textView2"
-        android:textSize="20sp" />
+        android:textSize="15sp"
+        android:padding="5dp" />
 </LinearLayout>

@@ -50,8 +50,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private List<NavDrawerItem> items;
 
-    private TypedValue selectableBackground;
-
     private boolean subredditItemsVisible;
 
     private List<NavDrawerSubredditItem> subredditItems;
@@ -60,9 +58,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         items = new ArrayList<>();
         this.activity = activity;
         subredditItemsVisible = true;
-
-        selectableBackground = new TypedValue();
-        activity.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, selectableBackground, true);
     }
 
     public void add(NavDrawerItem item) {
@@ -181,7 +176,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(Color.BLACK);
-                    subredditRowViewHolder.layout.setBackgroundResource(selectableBackground.resourceId);
+                    subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                 }
                 break;
             case VIEW_TYPE_ACCOUNT:

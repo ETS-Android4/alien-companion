@@ -24,7 +24,6 @@ public class PostItemListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         if(v.getId() == R.id.commentsButton || post.isSelf()) {
             Intent intent = new Intent(activity, PostActivity.class);
             intent.putExtra("post", post);

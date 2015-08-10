@@ -57,7 +57,7 @@ public class LinkHandler {
         Intent intent = null;
         Activity activity = (Activity) context;
 
-        //Log.d("Link Full URL", url);
+        Log.d("Link Full URL", url);
         if(domain == null) {
             intent = getNoDomainIntent(activity, url);
         }
@@ -119,7 +119,7 @@ public class LinkHandler {
 
         String[] postInfo = new String[4];
 
-        String pattern = "/r/(.*)/comments/(\\w+)/\\w+(/\\w+)?(?:.*context=(\\d+))?";
+        String pattern = "/r/(.*)/comments/(\\w+)/?(?:\\w+)?/?(\\w+)?(?:.*context=(\\d+))?";
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(url);
         if(matcher.find()) {

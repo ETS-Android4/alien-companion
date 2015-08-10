@@ -2,6 +2,7 @@ package com.george.redditreader.Adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,8 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         LinearLayout commentsButton;
         LinearLayout linkButton;
         LinearLayout layoutPostOptions;
-        ImageButton viewUser;
-        ImageButton openBrowser;
+        ImageView viewUser;
+        ImageView openBrowser;
     }
 
     public PostListAdapter(Activity activity, List<Submission> posts) {
@@ -79,8 +80,8 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
             holder.commentsButton = (LinearLayout) row.findViewById(R.id.commentsButton);
             holder.linkButton = (LinearLayout) row.findViewById(R.id.linkButton);
             holder.layoutPostOptions = (LinearLayout) row.findViewById(R.id.layout_post_options);
-            holder.viewUser = (ImageButton) row.findViewById(R.id.btn_view_user);
-            holder.openBrowser = (ImageButton) row.findViewById(R.id.btn_open_browser);
+            holder.viewUser = (ImageView) row.findViewById(R.id.btn_view_user);
+            holder.openBrowser = (ImageView) row.findViewById(R.id.btn_open_browser);
 
             row.setTag(holder);
         }
@@ -106,6 +107,7 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         Thumbnail postThumbnail = post.getThumbnailObject();
         if (postThumbnail.hasThumbnail()){
             holder.image.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+            //holder.image.setVisibility(View.VISIBLE);
             if (postThumbnail.isSelf()) {
                 holder.image.setImageResource(R.drawable.self_default2);
             } else if (post.isNSFW() && !showNSFW) {
@@ -119,19 +121,20 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         }
         else {
             holder.image.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+            //holder.image.setVisibility(View.GONE);
         }
 
         //item selected from posts list
         if(selectedPosition == position) {
             holder.layoutPostOptions.setVisibility(View.VISIBLE);
-            holder.layoutRoot.setBackgroundColor(Color.parseColor("#FFFFDE"));
+            //holder.layoutRoot.setBackgroundColor(Color.parseColor("#FFFFDE"));
             PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post);
             holder.viewUser.setOnClickListener(optionsListener);
             holder.openBrowser.setOnClickListener(optionsListener);
         }
         else {
             holder.layoutPostOptions.setVisibility(View.GONE);
-            holder.layoutRoot.setBackgroundColor(Color.WHITE);
+            //holder.layoutRoot.setBackgroundColor(Color.WHITE);
         }
 
         PostItemListener listener = new PostItemListener(activity, post);
