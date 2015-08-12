@@ -82,6 +82,7 @@ public class EnterUserDialogFragment extends DialogFragment implements View.OnCl
             String user = editText.getText().toString();
             if(!user.equals("")) {
                 dismiss();
+                user = user.replaceAll("\\s","");
                 Intent intent = new Intent(activity, UserActivity.class);
                 intent.putExtra("username", user.toLowerCase());
                 startActivity(intent);

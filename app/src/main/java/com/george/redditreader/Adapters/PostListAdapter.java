@@ -48,8 +48,13 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         LinearLayout commentsButton;
         LinearLayout linkButton;
         LinearLayout layoutPostOptions;
+        ImageView upvote;
+        ImageView downvote;
+        ImageView save;
+        ImageView hide;
         ImageView viewUser;
         ImageView openBrowser;
+        ImageView moreOptions;
     }
 
     public PostListAdapter(Activity activity, List<Submission> posts) {
@@ -80,8 +85,13 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
             holder.commentsButton = (LinearLayout) row.findViewById(R.id.commentsButton);
             holder.linkButton = (LinearLayout) row.findViewById(R.id.linkButton);
             holder.layoutPostOptions = (LinearLayout) row.findViewById(R.id.layout_post_options);
+            holder.upvote =  (ImageView) row.findViewById(R.id.btn_upvote);
+            holder.downvote =  (ImageView) row.findViewById(R.id.btn_downvote);
+            holder.save =  (ImageView) row.findViewById(R.id.btn_save);
+            holder.hide =  (ImageView) row.findViewById(R.id.btn_hide);
             holder.viewUser = (ImageView) row.findViewById(R.id.btn_view_user);
             holder.openBrowser = (ImageView) row.findViewById(R.id.btn_open_browser);
+            holder.moreOptions =  (ImageView) row.findViewById(R.id.btn_more);
 
             row.setTag(holder);
         }
@@ -127,20 +137,23 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         //item selected from posts list
         if(selectedPosition == position) {
             holder.layoutPostOptions.setVisibility(View.VISIBLE);
-            //holder.layoutRoot.setBackgroundColor(Color.parseColor("#FFFFDE"));
             PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post);
+            holder.upvote.setOnClickListener(optionsListener);
+            holder.downvote.setOnClickListener(optionsListener);
+            holder.save.setOnClickListener(optionsListener);
+            holder.hide.setOnClickListener(optionsListener);
             holder.viewUser.setOnClickListener(optionsListener);
             holder.openBrowser.setOnClickListener(optionsListener);
+            holder.moreOptions.setOnClickListener(optionsListener);
         }
         else {
             holder.layoutPostOptions.setVisibility(View.GONE);
-            //holder.layoutRoot.setBackgroundColor(Color.WHITE);
         }
 
         PostItemListener listener = new PostItemListener(activity, post);
         holder.commentsButton.setOnClickListener(listener);
         holder.linkButton.setOnClickListener(listener);
-        holder.linkButton.setOnLongClickListener(new View.OnLongClickListener() {
+        View.OnLongClickListener longListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (position == selectedPosition) selectedPosition = -1;
@@ -148,7 +161,9 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
                 notifyDataSetChanged();
                 return false;
             }
-        });
+        };
+        holder.commentsButton.setOnLongClickListener(longListener);
+        holder.linkButton.setOnLongClickListener(longListener);
 
         return row;
     }

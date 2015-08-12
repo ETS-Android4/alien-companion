@@ -3,8 +3,11 @@ package com.george.redditreader.ClickListeners;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
+import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.R;
 import com.george.redditreader.Utils.ToastUtils;
@@ -44,7 +47,36 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 activity.startActivity(intent);
                 break;
             case R.id.btn_more:
+                showMoreOptionsPopup(v);
                 break;
         }
+    }
+
+    private void showMoreOptionsPopup(View v) {
+        PopupMenu popupMenu = new PopupMenu(activity, v);
+        popupMenu.inflate(R.menu.menu_post_more_options);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_copy_link:
+                        return true;
+                    case R.id.action_share:
+                        return true;
+                    case R.id.action_view_subreddit:
+                        Intent intent = new Intent(activity, SubredditActivity.class);
+                        intent.putExtra("subreddit", post.getSubreddit());
+                        activity.startActivity(intent);
+                        return true;
+                    case R.id.action_download_comments:
+                        return true;
+                    case R.id.action_report:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.show();
     }
 }

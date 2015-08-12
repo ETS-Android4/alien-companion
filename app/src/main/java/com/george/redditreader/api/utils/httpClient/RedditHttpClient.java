@@ -1,5 +1,6 @@
 package com.george.redditreader.api.utils.httpClient;
 
+import android.content.ContentValues;
 import android.util.Log;
 
 import com.george.redditreader.api.exception.ActionFailedException;
@@ -131,20 +132,23 @@ public class RedditHttpClient implements HttpClient {
      * @param apiParams Input string, for example 'a=2894&b=194'
      * @return List of name value pairs to pass with the POST request
      */
-    private List<NameValuePair> convertRequestStringToList(String apiParams) {
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+    private ContentValues convertRequestStringToList(String apiParams) {
+        //List<NameValuePair> params = new ArrayList<NameValuePair>();
+        ContentValues values = new ContentValues();
         if (apiParams != null && !apiParams.isEmpty()) {
             String[] valuePairs = apiParams.split("&");
             for (String valuePair : valuePairs) {
                 String[] nameValue = valuePair.split("=");
                 if (nameValue.length == 1) { //there is no cookie if we are not signed in
-                    params.add(new BasicNameValuePair(nameValue[0], ""));
+                    //params.add(new BasicNameValuePair(nameValue[0], ""));
+                    values.put(nameValue[0], "");
                 } else {
-                    params.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
+                    //params.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
+                    values.put(nameValue[0], nameValue[1]);
                 }
             }
         }
-        return params;
+        return values;
     }
 
     private void printRequestProperties(HttpURLConnection connection) {

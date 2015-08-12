@@ -82,6 +82,7 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
             String subreddit = editText.getText().toString();
             if(!subreddit.equals("")) {
                 dismiss();
+                subreddit = subreddit.replaceAll("\\s","");
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
                 PostListFragment listFragment = activity.getListFragment();
                 listFragment.setSubreddit(subreddit.toLowerCase());
