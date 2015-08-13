@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Point;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,12 +15,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ActionMenuView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.PostListFragment;
 import com.george.redditreader.Fragments.SearchRedditDialogFragment;
+import com.george.redditreader.Utils.ScrimInsetsFrameLayout;
 import com.george.redditreader.enums.MenuType;
 import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
 import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
@@ -34,13 +42,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final float drawerSizeModifier = 0.55f;
+
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private PostListFragment listFragment;
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
-    //public static boolean commentsLoaded;
+    private DrawerLayout.LayoutParams drawerParams;
+    private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     public static boolean showFullComments;
     public static SharedPreferences prefs;
 
@@ -75,12 +86,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    //    //Log.e("shared prefs", "show nsfw: "+prefs.getBoolean("showNSFWthumb", false));
-    //}
+    @Override
+    public void onResume() {
+        super.onResume();
+        final int gravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
+        if(gravity != drawerParams.gravity) {
+            drawerParams.gravity = gravity;
+            scrimInsetsFrameLayout.setLayoutParams(drawerParams);
+            drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+                @Override
+                public boolean onOptionsItemSelected(MenuItem item) {
+                    if (item != null && item.getItemId() == android.R.id.home) {
+                        if (drawerLayout.isDrawerOpen(gravity)) {
+                            drawerLayout.closeDrawer(gravity);
+                        } else {
+                            drawerLayout.openDrawer(gravity);
+                        }
+                    }
+                    return false;
+                }
+            };
+            drawerLayout.setDrawerListener(drawerToggle);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,21 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return(true);
-        }
-
-        //if(item.getItemId() == R.id.action_search) {
-        //    SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
-        //    Bundle args = new Bundle();
-        //    args.putString("subreddit", listFragment.subreddit);
-        //    searchDialog.setArguments(args);
-        //    showDialogFragment(searchDialog);
-        //    return true;
-        //}
-
-        return false;
+        return drawerToggle.onOptionsItemSelected(item);
     }
 
     @Override
@@ -123,8 +137,28 @@ public class MainActivity extends AppCompatActivity {
     private void initNavDrawer() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        scrimInsetsFrameLayout = (ScrimInsetsFrameLayout) findViewById(R.id.scrimInsetsFrameLayout);
         drawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.black));
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+
+        int drawerWidth = calculateDrawerWidth();
+        drawerParams = new DrawerLayout.LayoutParams(drawerWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+        final int gravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
+        drawerParams.gravity = gravity;
+        scrimInsetsFrameLayout.setLayoutParams(drawerParams);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public boolean onOptionsItemSelected(MenuItem item) {
+                if (item != null && item.getItemId() == android.R.id.home) {
+                    if (drawerLayout.isDrawerOpen(gravity)) {
+                        drawerLayout.closeDrawer(gravity);
+                    } else {
+                        drawerLayout.openDrawer(gravity);
+                    }
+                }
+                return false;
+            }
+        };
         drawerLayout.setDrawerListener(drawerToggle);
 
         initNavDrawerContent();
@@ -134,10 +168,6 @@ public class MainActivity extends AppCompatActivity {
         drawerContent = (RecyclerView) findViewById((R.id.drawer_content));
         drawerContent.setLayoutManager(new LinearLayoutManager(this));
         drawerContent.setHasFixedSize(true);
-        //int width = getResources().getDisplayMetrics().widthPixels/2;
-        //DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) drawerContent.getLayoutParams();
-        //params.width = width;
-        //drawerContent.setLayoutParams(params);
 
         adapter = new NavDrawerAdapter(this);
         adapter.add(new NavDrawerHeader());
@@ -172,6 +202,19 @@ public class MainActivity extends AppCompatActivity {
         return subredditItems;
     }
 
+    private int calculateDrawerWidth() {
+        int drawerWidth;
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        drawerWidth = (width < height) ? Math.round(drawerSizeModifier*width) : Math.round(drawerSizeModifier*height);
+
+        return drawerWidth;
+    }
+
     public PostListFragment getListFragment() {
         return listFragment;
     }
@@ -197,9 +240,5 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
-    //private void showDialogFragment(DialogFragment fragment) {
-    //    fragment.show(fm, "dialog");
-    //}
 
 }

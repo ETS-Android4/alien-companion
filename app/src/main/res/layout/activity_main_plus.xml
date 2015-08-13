@@ -20,17 +20,16 @@
         android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="320dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="left"
         android:background="@color/white"
         android:fitsSystemWindows="true"
         app:insetForeground="#4000">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/drawer_content"
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:choiceMode="singleChoice"
-            android:layout_gravity="start"
             android:background="@color/white"/>
         <!-- Your drawer content -->
 

@@ -1,6 +1,7 @@
 package com.george.redditreader.Activities;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 
 import com.george.redditreader.Fragments.SettingsFragment;
@@ -25,4 +26,5 @@ public class SettingsActivity extends BackNavActivity {
                 .replace(R.id.optionsHolder, new SettingsFragment())
                 .commit();
     }
+
 }

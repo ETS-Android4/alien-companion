@@ -30,9 +30,16 @@
         <item>@string/options_other_sub</item>
     </array>
 
+    <array name="navDrawerSides">
+        <item>@string/left</item>
+        <item>@string/right</item>
+    </array>
+
     <string name="cached_posts">Cached posts</string>
     <string name="reddit_games">games</string>
     <string name="reddit_movies">movies</string>
     <string name="reddit_TIL">todayilearned</string>
     <string name="reddit_IAMA">iama</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
 </resources>

@@ -27,6 +27,14 @@
             android:summary="Enable/disable horizontal swiping for back navigation"
             android:defaultValue="true"/>
 
+        <ListPreference
+            android:key="navDrawerSide"
+            android:title="Navigation drawer side"
+            android:summary="Change the side from which the navigation drawer opens"
+            android:entries="@array/navDrawerSides"
+            android:entryValues="@array/navDrawerSides"
+            android:defaultValue="@string/left"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="posts"
