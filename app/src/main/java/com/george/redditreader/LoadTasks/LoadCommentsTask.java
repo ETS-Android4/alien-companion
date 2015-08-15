@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.Utils.ImageLoader;
@@ -38,7 +39,8 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         try {
             Comments cmnts = new Comments(httpClient);
             List<Comment> comments;
-            comments = cmnts.ofSubmission(postFragment.post, PostFragment.commentLinkId, postFragment.parentsShown, RedditConstants.MAX_COMMENT_DEPTH, RedditConstants.MAX_LIMIT_COMMENTS, postFragment.commentSort);
+            comments = cmnts.ofSubmission(postFragment.post, PostFragment.commentLinkId, postFragment.parentsShown, RedditConstants.MAX_COMMENT_DEPTH,
+                    Integer.parseInt(MainActivity.prefs.getString("initialComments", "100")), postFragment.commentSort);
 
             if(postFragment.post.getThumbnailObject() == null) {
                 ImageLoader.preloadThumbnail(postFragment.post, context);

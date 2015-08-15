@@ -35,6 +35,13 @@
         <item>@string/right</item>
     </array>
 
+    <string-array name="commentCount">
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>400</item>
+    </string-array>
+
     <string name="cached_posts">Cached posts</string>
     <string name="reddit_games">games</string>
     <string name="reddit_movies">movies</string>

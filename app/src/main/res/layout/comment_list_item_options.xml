@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    android:background="#414141"
+    android:padding="5dp">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_upvote"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_upvote"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_downvote"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_downvote"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_reply"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_reply"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_view_user"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_user"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_more"
+        android:layout_weight="1"
+        android:src="@mipmap/ic_action_more"
+        android:padding="5dp" />
+</LinearLayout>

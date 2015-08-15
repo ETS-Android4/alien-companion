@@ -94,6 +94,17 @@
                 android:gravity="right" />
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layout_post_options"
+            android:visibility="gone">
+
+            <include layout="@layout/post_list_item_options"/>
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

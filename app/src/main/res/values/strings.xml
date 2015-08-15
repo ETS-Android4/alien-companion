@@ -87,5 +87,6 @@
     <string name="action_open_browser">Open in browser</string>
     <string name="action_browser_back">Back</string>
     <string name="action_browser_forward">Forward</string>
+    <string name="linkHandling">Link handling</string>
 
 </resources>

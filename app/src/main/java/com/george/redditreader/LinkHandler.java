@@ -3,9 +3,11 @@ package com.george.redditreader;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import com.george.redditreader.Activities.BrowserActivity;
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.Activities.UserActivity;
@@ -14,7 +16,14 @@ import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,11 +72,13 @@ public class LinkHandler {
         }
         else {
             //Log.d("Link Domain", domain);
-            if (domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com")) {
-                String videoId = getYoutubeVideoId(url);
-                int time = getYoutubeVideoTime(url);
-                //Log.d("youtube video id", videoId);
-                intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+            if ((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
+                if(MainActivity.prefs.getBoolean("handleYoutube", true)) {
+                    String videoId = getYoutubeVideoId(url);
+                    int time = getYoutubeVideoTime(url);
+                    //Log.d("youtube video id", videoId);
+                    intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+                }
             } else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
                 String postInfo[] = getRedditPostInfo(url);
                 if(postInfo != null) { //case url of reddit post
@@ -82,7 +93,7 @@ public class LinkHandler {
             } else if (domain.equals("redd.it")) {
                 intent = new Intent(activity, PostActivity.class);
                 intent.putExtra("postId", url.substring(15));
-            } else {
+            } else if(MainActivity.prefs.getBoolean("handleOther", true) && !domain.equals("play.google.com")){
                 intent = new Intent(activity, BrowserActivity.class);
                 if (post != null) {
                     intent.putExtra("post", post);
@@ -93,8 +104,10 @@ public class LinkHandler {
             }
         }
 
-        if(intent != null) activity.startActivity(intent);
-        else ToastUtils.displayShortToast(context, "Could not resolve hyperlink");
+        //if(intent != null) activity.startActivity(intent);
+        //else ToastUtils.displayShortToast(context, "Could not resolve hyperlink");
+        if(intent == null) intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        activity.startActivity(intent);
     }
 
     //Get an intent for links like '/r/movies' or '/u/someuser' //TODO: maybe use regex here
@@ -138,16 +151,26 @@ public class LinkHandler {
     }
 
     private String getYoutubeVideoId(String youtubeURL) {
-        String pattern = "(?<=v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*";
+        String pattern = "(youtu(?:\\.be|be\\.com)\\/(?:.*v(?:\\/|=)|(?:.*\\/)?)([\\w'-]+))";
 
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = compiledPattern.matcher(youtubeURL);
+        Matcher matcher = compiledPattern.matcher((decodeURL(youtubeURL)));
 
         if(matcher.find()){
-            return matcher.group();
+            return matcher.group(2);
         }
         return "";
+    }
 
+    private String decodeURL(String url) {
+        try {
+            String decodedurl = URLDecoder.decode(url, "UTF-8");
+            //Log.d("url decoder", decodedurl);
+            return decodedurl;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 
     private int getYoutubeVideoTime(String youtubeURL) {

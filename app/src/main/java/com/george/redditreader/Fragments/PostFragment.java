@@ -20,6 +20,7 @@ import com.george.redditreader.Adapters.PostAdapter;
 import com.george.redditreader.LoadTasks.LoadCommentsTask;
 import com.george.redditreader.LinkHandler;
 import com.george.redditreader.R;
+import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.retrieval.params.CommentSort;
 
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostFragment extends Fragment implements View.OnClickListener {
+public class PostFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final String GROUPS_KEY = "groups_key";
 
     public PostAdapter postAdapter;
@@ -167,7 +168,7 @@ public class PostFragment extends Fragment implements View.OnClickListener {
 
         if(postAdapter == null) {
             setCommentSort(CommentSort.TOP);
-            postAdapter = new PostAdapter(activity, this);
+            postAdapter = new PostAdapter(activity, this, this);
 
             if(loadFromList) {
                 postAdapter.add(post);
@@ -198,15 +199,28 @@ public class PostFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int position = mRecyclerView.getChildPosition(v);
-        if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_ITEM) {
+        if(position == postAdapter.selectedComment) postAdapter.selectedComment = -1;
+        //if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_ITEM) {
             postAdapter.toggleGroup(position);
+        //}
+        //else if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_CONTENT) {
+        //    if(!post.isSelf()) {
+        //        LinkHandler linkHandler = new LinkHandler(activity, post);
+        //        linkHandler.handleIt();
+        //    }
+        //}
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        int position = mRecyclerView.getChildPosition(v);
+        if(!postAdapter.getItemAt(position).isGroup()) {
+            if (position == postAdapter.selectedComment) postAdapter.selectedComment = -1;
+            else postAdapter.selectedComment = position;
+            postAdapter.notifyDataSetChanged();
+            return true;
         }
-        else if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_CONTENT) {
-            if(!post.isSelf()) {
-                LinkHandler linkHandler = new LinkHandler(activity, post);
-                linkHandler.handleIt();
-            }
-        }
+        else return false;
     }
 
     public void loadFullComments() {

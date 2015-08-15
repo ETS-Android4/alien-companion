@@ -3,6 +3,7 @@ package com.george.redditreader.Fragments;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.KeyEvent;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.SubmissionSort;
 
@@ -83,12 +85,20 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
             if(!subreddit.equals("")) {
                 dismiss();
                 subreddit = subreddit.replaceAll("\\s","");
+                subreddit = subreddit.toLowerCase();
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
-                PostListFragment listFragment = activity.getListFragment();
-                listFragment.setSubreddit(subreddit.toLowerCase());
-                listFragment.setSubmissionSort(SubmissionSort.HOT);
-                activity.getNavDrawerAdapter().notifyDataSetChanged();
-                listFragment.refreshList();
+                if(MainActivity.prefs.getBoolean("newSubredditWindow", false)) {
+                    Intent intent = new Intent(activity, SubredditActivity.class);
+                    intent.putExtra("subreddit", subreddit);
+                    startActivity(intent);
+                }
+                else {
+                    PostListFragment listFragment = activity.getListFragment();
+                    listFragment.setSubreddit(subreddit);
+                    listFragment.setSubmissionSort(SubmissionSort.HOT);
+                    activity.getNavDrawerAdapter().notifyDataSetChanged();
+                    listFragment.refreshList();
+                }
             }
             else {
                 editText.setHint(R.string.enter_subreddit);

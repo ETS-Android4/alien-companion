@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.ClickListeners.PostItemOptionsListener;
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.LinkHandler;
 import com.george.redditreader.MyHtmlTagHandler;
@@ -49,6 +50,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
      * This is called when the user click on an item or group.
      */
     private final View.OnClickListener mListener;
+    private final View.OnLongClickListener mLongListener;
 
     private final Activity activity;
 
@@ -58,18 +60,18 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     private final int mPaddingDP = 5;
 
     private boolean showNSFW;
-    private boolean handleLinks;
     private String author;
+    public int selectedComment = -1;
 
     //private ContentViewHolder contentVH;
 
-    public PostAdapter (Activity activity, View.OnClickListener listener) {
+    public PostAdapter (Activity activity, View.OnClickListener listener, View.OnLongClickListener longListener) {
         super();
         this.activity = activity;
         mListener = listener;
+        mLongListener = longListener;
 
         showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
-        handleLinks = MainActivity.prefs.getBoolean("handleLinks", true);
     }
 
     @Override
@@ -82,6 +84,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 viewHolder = new CommentViewHolder(v);
+                v.setOnClickListener(mListener);
+                v.setOnLongClickListener(mLongListener);
                 break;
             case VIEW_TYPE_CONTENT:
                 resource = R.layout.post_details;
@@ -93,7 +97,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 throw new IllegalStateException("unknown viewType");
         }
 
-        v.setOnClickListener(mListener);
+        //v.setOnClickListener(mListener);
 
         return viewHolder;
     }
@@ -124,7 +128,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         int viewType = getItemViewType(position);
         switch (viewType) {
             case VIEW_TYPE_ITEM:
@@ -144,7 +148,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 //Comment textview
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                         Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-                if(handleLinks) strBuilder = modifyURLSpan(strBuilder);
+                strBuilder = modifyURLSpan(strBuilder);
                 cvh.commentTextView.setText(strBuilder);
                 cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -166,10 +170,33 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
                     cvh.commentTextView.setVisibility(View.VISIBLE);
                 }
+
+                if(selectedComment == position) {
+                    cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
+                    //make a listener instance and set it to options buttons
+                    cvh.upvote.setOnClickListener(null);
+                    cvh.downvote.setOnClickListener(null);
+                    cvh.reply.setOnClickListener(null);
+                    cvh.viewUser.setOnClickListener(null);
+                    cvh.more.setOnClickListener(null);
+                }
+                else {
+                    cvh.commentOptionsLayout.setVisibility(View.GONE);
+                }
+
+                //cvh.commentLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                //    @Override
+                //    public boolean onLongClick(View v) {
+                //        if (position == selectedComment) selectedComment = -1;
+                //        else selectedComment = position;
+                //        notifyDataSetChanged();
+                //        return true;
+                //    }
+                //});
                 break;
             case VIEW_TYPE_CONTENT:
-                ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
-                Submission post = (Submission) getItemAt(position);
+                final ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
+                final Submission post = (Submission) getItemAt(position);
                 author = post.getAuthor();
 
                 final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
@@ -199,7 +226,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         //Self text textview
                         strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                                 Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
-                        if(handleLinks) strBuilder = modifyURLSpan(strBuilder);
+                        strBuilder = modifyURLSpan(strBuilder);
                         contentVH.selfText.setText(strBuilder);
                         contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
                     }
@@ -219,8 +246,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                             try {
                                 //Get Post Thumbnail
                                 Picasso.with(activity).load(thumbnail.getUrl()).placeholder(R.drawable.noimage).into(contentVH.postImage);
-                            } catch (IllegalArgumentException e) {
-                            }
+                            } catch (IllegalArgumentException e) { e.printStackTrace(); }
                         }
                     } else {
                         contentVH.postImage.setVisibility(View.GONE);
@@ -235,6 +261,32 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 contentVH.subreddit.setText(post.getSubreddit());
                 if (postFragment.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
                 else contentVH.progressBar.setVisibility(View.VISIBLE);
+
+                contentVH.postDetails.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!post.isSelf()) {
+                            LinkHandler linkHandler = new LinkHandler(activity, post);
+                            linkHandler.handleIt();
+                        }
+                    }
+                });
+                contentVH.postDetails.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if(contentVH.postOptions.getVisibility() == View.VISIBLE) contentVH.postOptions.setVisibility(View.GONE);
+                        else contentVH.postOptions.setVisibility(View.VISIBLE);
+                        return true;
+                    }
+                });
+                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post);
+                contentVH.upvote.setOnClickListener(optionsListener);
+                contentVH.downvote.setOnClickListener(optionsListener);
+                contentVH.save.setOnClickListener(optionsListener);
+                contentVH.hide.setOnClickListener(optionsListener);
+                contentVH.viewUser.setOnClickListener(optionsListener);
+                contentVH.openBrowser.setOnClickListener(optionsListener);
+                contentVH.moreOptions.setOnClickListener(optionsListener);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -255,6 +307,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView hiddenCommentsCountTextView;
         private View view;
         public LinearLayout commentLayout;
+        public LinearLayout commentOptionsLayout;
+        public ImageView upvote;
+        public ImageView downvote;
+        public ImageView reply;
+        public ImageView viewUser;
+        public ImageView more;
 
         private static final String[] indColors = {"#000000", "#3366FF", "#E65CE6",
                 "#E68A5C", "#00E68A", "#CCCC33"};
@@ -267,6 +325,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             colorBand = itemView.findViewById(R.id.color_band);
             hiddenCommentsCountTextView = (TextView) itemView.findViewById(R.id.hidden_comments_count_textview);
             commentLayout = (LinearLayout) itemView.findViewById(R.id.commentLayout);
+            commentOptionsLayout = (LinearLayout) itemView.findViewById(R.id.commentOptionsLayout);
+            upvote = (ImageView) itemView.findViewById(R.id.btn_upvote);
+            downvote = (ImageView) itemView.findViewById(R.id.btn_downvote);
+            reply = (ImageView) itemView.findViewById(R.id.btn_reply);
+            viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+            more = (ImageView) itemView.findViewById(R.id.btn_more);
         }
 
         public void setColorBandColor(int indentation) {
@@ -290,6 +354,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public ImageView postImage;
         public ProgressBar progressBar;
         public LinearLayout fullComments;
+        public LinearLayout postDetails;
+        public LinearLayout postOptions;
+        public ImageView upvote;
+        public ImageView downvote;
+        public ImageView save;
+        public ImageView hide;
+        public ImageView viewUser;
+        public ImageView openBrowser;
+        public ImageView moreOptions;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
@@ -303,6 +376,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);
             comments = (TextView) itemView.findViewById(R.id.txtView_comments);
             fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
+            postDetails = (LinearLayout) itemView.findViewById(R.id.layout_post_details);
+            postOptions = (LinearLayout) itemView.findViewById(R.id.layout_post_options);
+            upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+            downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+            save =  (ImageView) itemView.findViewById(R.id.btn_save);
+            hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+            viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+            openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
+            moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
         }
     }
 

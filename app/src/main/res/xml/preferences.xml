@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <!--<PreferenceCategory
         android:key="general"
         android:title="@string/options_general">
 
@@ -11,7 +11,7 @@
             android:summary="Choose whether links in comments/self-text should be handled by the app"
             android:defaultValue="true"/>
 
-    </PreferenceCategory>
+    </PreferenceCategory>-->
     <PreferenceCategory
         android:key="appearance"
         android:title="@string/options_appearance">
@@ -26,6 +26,12 @@
             android:title="Swipe to go back"
             android:summary="Enable/disable horizontal swiping for back navigation"
             android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="newSubredditWindow"
+            android:title="View new subreddits in a new window"
+            android:summary="Subreddits you view via the 'Subreddit' option open in a new window"
+            android:defaultValue="false"/>
 
         <ListPreference
             android:key="navDrawerSide"
@@ -50,6 +56,34 @@
     <PreferenceCategory
         android:key="comments"
         android:title="@string/options_comments">
+
+        <ListPreference
+            android:key="initialComments"
+            android:title="Initial comment count"
+            android:summary="Choose the number of comments that load initially"
+            android:entries="@array/commentCount"
+            android:entryValues="@array/commentCount"
+            android:defaultValue="100"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="linkHandling"
+        android:title="@string/linkHandling">
+
+        <!--<CheckBoxPreference
+            android:key="handleImgur"
+            android:title="Imgur"
+            android:defaultValue="true"/>-->
+
+        <CheckBoxPreference
+            android:key="handleYoutube"
+            android:title="YouTube"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="handleOther"
+            android:title="All other links"
+            android:defaultValue="true"/>
 
     </PreferenceCategory>
     <PreferenceCategory
