@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -26,6 +27,7 @@ import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.ClickListeners.CommentItemOptionsListener;
 import com.george.redditreader.ClickListeners.PostItemOptionsListener;
 import com.george.redditreader.Fragments.PostFragment;
+import com.george.redditreader.Fragments.UrlOptionsDialogFragment;
 import com.george.redditreader.LinkHandler;
 import com.george.redditreader.MyClickableSpan;
 import com.george.redditreader.MyHtmlTagHandler;
@@ -72,8 +74,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     private String author;
     public int selectedComment = -1;
 
-    //private ContentViewHolder contentVH;
-
     public PostAdapter (Activity activity, View.OnClickListener listener, View.OnLongClickListener longListener) {
         super();
         this.activity = activity;
@@ -106,8 +106,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 throw new IllegalStateException("unknown viewType");
         }
 
-        //v.setOnClickListener(mListener);
-
         return viewHolder;
     }
 
@@ -134,32 +132,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 //
                 @Override
                 public boolean onLongClick(View v) {
-                    PopupMenu popupMenu = new PopupMenu(activity, v);
-                    popupMenu.inflate(R.menu.menu_urlspan_long_click);
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
-                                case R.id.action_copy_link:
-                                    return true;
-                                case R.id.action_open_browser:
-                                    Intent intent;
-                                    try {
-                                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(span.getURL()));
-                                        activity.startActivity(intent);
-                                    } catch (ActivityNotFoundException e) {
-                                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiEndpointUtils.REDDIT_BASE_URL + span.getURL()));
-                                        activity.startActivity(intent);
-                                    }
-                                    return true;
-                                case R.id.action_share:
-                                    return true;
-                                default:
-                                    return false;
-                            }
-                        }
-                    });
-                    popupMenu.show();
+                    Bundle args = new Bundle();
+                    args.putString("url", span.getURL());
+                    UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
+                    dialogFragment.setArguments(args);
+                    dialogFragment.show(activity.getFragmentManager(), "dialog");
                     return true;
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

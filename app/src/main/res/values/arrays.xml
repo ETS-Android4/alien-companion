@@ -42,6 +42,11 @@
         <item>400</item>
     </string-array>
 
+    <array name="urlOptions">
+        <item>@string/action_copy_link</item>
+        <item>@string/action_open_browser</item>
+        <item>@string/action_share</item>
+    </array>
     <string name="cached_posts">Cached posts</string>
     <string name="reddit_games">games</string>
     <string name="reddit_movies">movies</string>
@@ -49,4 +54,6 @@
     <string name="reddit_IAMA">iama</string>
     <string name="left">Left</string>
     <string name="right">Right</string>
+    <string name="action_share">Share</string>
+    <string name="action_copy_link">Copy link</string>
 </resources>
