@@ -1,32 +1,41 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.ClickListeners.CommentItemOptionsListener;
 import com.george.redditreader.ClickListeners.PostItemOptionsListener;
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.LinkHandler;
+import com.george.redditreader.MyClickableSpan;
 import com.george.redditreader.MyHtmlTagHandler;
+import com.george.redditreader.MyLinkMovementMethod;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
+import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.george.redditreader.multilevelexpindlistview.Utils;
 import com.squareup.picasso.Picasso;
@@ -115,12 +124,43 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             // The original URLSpan needs to be removed to block the behavior of browser opening
             strBuilder.removeSpan(span);
 
-            strBuilder.setSpan(new ClickableSpan()
+            strBuilder.setSpan(new MyClickableSpan()
             {
                 @Override
                 public void onClick(View widget) {
                     LinkHandler linkHandler = new LinkHandler(activity, span.getURL());
                     linkHandler.handleIt();
+                }
+//
+                @Override
+                public boolean onLongClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(activity, v);
+                    popupMenu.inflate(R.menu.menu_urlspan_long_click);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.action_copy_link:
+                                    return true;
+                                case R.id.action_open_browser:
+                                    Intent intent;
+                                    try {
+                                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(span.getURL()));
+                                        activity.startActivity(intent);
+                                    } catch (ActivityNotFoundException e) {
+                                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ApiEndpointUtils.REDDIT_BASE_URL + span.getURL()));
+                                        activity.startActivity(intent);
+                                    }
+                                    return true;
+                                case R.id.action_share:
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        }
+                    });
+                    popupMenu.show();
+                    return true;
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -150,7 +190,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
                 strBuilder = modifyURLSpan(strBuilder);
                 cvh.commentTextView.setText(strBuilder);
-                cvh.commentTextView.setMovementMethod(LinkMovementMethod.getInstance());
+                cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
 
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);
@@ -173,12 +213,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if(selectedComment == position) {
                     cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
-                    //make a listener instance and set it to options buttons
-                    cvh.upvote.setOnClickListener(null);
-                    cvh.downvote.setOnClickListener(null);
-                    cvh.reply.setOnClickListener(null);
-                    cvh.viewUser.setOnClickListener(null);
-                    cvh.more.setOnClickListener(null);
+                    CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment);
+                    cvh.upvote.setOnClickListener(listener);
+                    cvh.downvote.setOnClickListener(listener);
+                    cvh.reply.setOnClickListener(listener);
+                    cvh.viewUser.setOnClickListener(listener);
+                    cvh.more.setOnClickListener(listener);
                 }
                 else {
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
@@ -228,7 +268,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                                 Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         strBuilder = modifyURLSpan(strBuilder);
                         contentVH.selfText.setText(strBuilder);
-                        contentVH.selfText.setMovementMethod(LinkMovementMethod.getInstance());
+                        contentVH.selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
                     }
 
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));

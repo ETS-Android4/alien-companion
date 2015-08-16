@@ -199,7 +199,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onClick(View v) {
         int position = mRecyclerView.getChildPosition(v);
-        if(position == postAdapter.selectedComment) postAdapter.selectedComment = -1;
+        postAdapter.selectedComment = -1;
         //if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_ITEM) {
             postAdapter.toggleGroup(position);
         //}

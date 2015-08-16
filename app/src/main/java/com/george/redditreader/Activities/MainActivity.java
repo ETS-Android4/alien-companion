@@ -42,7 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final float drawerSizeModifier = 0.55f;
+    //private static final float drawerSizeModifier = 0.8f;
 
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
@@ -140,8 +140,7 @@ public class MainActivity extends AppCompatActivity {
         scrimInsetsFrameLayout = (ScrimInsetsFrameLayout) findViewById(R.id.scrimInsetsFrameLayout);
         drawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.black));
 
-        int drawerWidth = calculateDrawerWidth();
-        drawerParams = new DrawerLayout.LayoutParams(drawerWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+        drawerParams = new DrawerLayout.LayoutParams(calculateDrawerWidth(), ViewGroup.LayoutParams.MATCH_PARENT);
         final int gravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         drawerParams.gravity = gravity;
         scrimInsetsFrameLayout.setLayoutParams(drawerParams);
@@ -203,14 +202,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int calculateDrawerWidth() {
-        int drawerWidth;
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-
-        drawerWidth = (width < height) ? Math.round(drawerSizeModifier*width) : Math.round(drawerSizeModifier*height);
+        final float scale = getResources().getDisplayMetrics().density;
+        int drawerWidth = (int) (320 * scale + 0.5f);
+        //Display display = getWindowManager().getDefaultDisplay();
+        //Point size = new Point();
+        //display.getSize(size);
+        //int width = size.x;
+        //int height = size.y;
+//
+        //drawerWidth = (width < height) ? Math.round(drawerSizeModifier*width) : Math.round(drawerSizeModifier*height);
 
         return drawerWidth;
     }

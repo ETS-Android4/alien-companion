@@ -2,10 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.george.redditreader.temp.PostDetailsFragment"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingTop="5dp">
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -17,81 +14,91 @@
         android:background="@drawable/touch_selector">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="(Post Title Here)"
-                    android:id="@+id/postTitle"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="(displayURL) - (postTag) - "
-                        android:id="@+id/postDets1" />
+                        android:text="(Post Title Here)"
+                        android:id="@+id/postTitle"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="##### comments"
-                        android:id="@+id/txtView_comments" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="(displayURL) - (postTag) - "
+                            android:id="@+id/postDets1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="##### comments"
+                            android:id="@+id/txtView_comments" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postImage"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
-            <ImageView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/postImage"
-                android:src="@mipmap/ic_launcher"
-                android:layout_weight="1" />
-        </LinearLayout>
+                android:layout_marginBottom="10dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="(author here)"
+                    android:id="@+id/author"
+                    android:layout_weight="1"
+                    android:gravity="left" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="(author here)"
-                android:id="@+id/author"
-                android:layout_weight="1"
-                android:gravity="left" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="+##### - ## h"
+                    android:id="@+id/postDets2"
+                    android:layout_weight="1"
+                    android:gravity="center" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="+##### - ## h"
-                android:id="@+id/postDets2"
-                android:layout_weight="1"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="(subreddit)"
-                android:id="@+id/subreddit"
-                android:layout_weight="1"
-                android:gravity="right" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="(subreddit)"
+                    android:id="@+id/subreddit"
+                    android:layout_weight="1"
+                    android:gravity="right" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -111,7 +118,9 @@
             android:id="@+id/selfText"
             android:textSize="15sp"
             android:text="(Self Text Here)"
-            android:background="#ffe3e3e3" />
+            android:background="#ffe3e3e3"
+            android:padding="5dp" />
+
     </LinearLayout>
 
     <include layout="@layout/load_full_comments"

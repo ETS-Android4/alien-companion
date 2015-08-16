@@ -3,11 +3,11 @@
 
     <item android:id="@+id/action_copy_link" android:title="Copy link"
         android:orderInCategory="96" />
-    <item android:id="@+id/action_share" android:title="Share"
+    <item android:id="@+id/action_copy_text" android:title="Copy text"
         android:orderInCategory="97" />
-    <item android:id="@+id/action_view_subreddit" android:title="View subreddit"
+    <item android:id="@+id/action_open_browser" android:title="Open in browser"
         android:orderInCategory="98" />
-    <item android:id="@+id/action_download_comments" android:title="Download comments"
+    <item android:id="@+id/action_save" android:title="Save"
         android:orderInCategory="99" />
     <item android:id="@+id/action_report" android:title="Report"
         android:orderInCategory="100" />
