@@ -64,8 +64,8 @@
     <string name="options_comments_sub">Comment specific options</string>
     <string name="options_other_sub">Everything else</string>
 <!-- Other Strings -->
-    <string name="enter_subreddit">Enter subreddit</string>
-    <string name="enter_user">Enter user</string>
+    <string name="enter_subreddit">enter subreddit</string>
+    <string name="enter_user">enter user</string>
     <string name="frontpage_title">Frontpage</string>
     <string name="title_activity_browser">BrowserActivity</string>
     <string name="title_activity_user">UserActivity</string>
@@ -88,5 +88,10 @@
     <string name="action_browser_back">Back</string>
     <string name="action_browser_forward">Forward</string>
     <string name="linkHandling">Link handling</string>
+    <string name="user_gilded">gilded</string>
+    <string name="user_upvoted">upvoted</string>
+    <string name="user_downvoted">downvoted</string>
+    <string name="user_hidden">hidden</string>
+    <string name="user_saved">saved</string>
 
 </resources>

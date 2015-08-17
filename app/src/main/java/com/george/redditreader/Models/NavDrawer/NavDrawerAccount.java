@@ -28,16 +28,20 @@ public class NavDrawerAccount implements NavDrawerItem {
         this.type = type;
         switch (type) {
             case 0:
-                name = "ADD ACCOUNT";
+                name = "Add account";
                 break;
             case 1:
-                name = "LOGGED OUT";
+                name = "Logged out";
                 break;
         }
     }
 
     public String getName() {
         return name;
+    }
+
+    public int getAccountType() {
+        return type;
     }
 
     public void setAccountName(String accountName) {

@@ -9,4 +9,9 @@
         android:orderInCategory="95" />
     <item android:id="@+id/action_user_gilded" android:title="@string/user_gilded"
         android:orderInCategory="96" />
+    <item android:id="@+id/action_user_upvoted" android:title="@string/user_upvoted"
+        android:orderInCategory="97" />
+    <item android:id="@+id/action_user_downvoted" android:title="@string/user_downvoted"
+        android:orderInCategory="98" />
+
 </menu>

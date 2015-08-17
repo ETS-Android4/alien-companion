@@ -80,14 +80,15 @@ public class EnterUserDialogFragment extends DialogFragment implements View.OnCl
         }
         else {
             String user = editText.getText().toString();
+            user = user.replaceAll("\\s","");
             if(!user.equals("")) {
                 dismiss();
-                user = user.replaceAll("\\s","");
                 Intent intent = new Intent(activity, UserActivity.class);
                 intent.putExtra("username", user.toLowerCase());
                 startActivity(intent);
             }
             else {
+                editText.setText("");
                 editText.setHint(R.string.enter_user);
                 editText.setHintTextColor(getResources().getColor(R.color.red));
             }

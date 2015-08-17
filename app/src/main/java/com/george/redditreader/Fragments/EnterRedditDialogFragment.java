@@ -82,9 +82,9 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
         }
         else {
             String subreddit = editText.getText().toString();
+            subreddit = subreddit.replaceAll("\\s","");
             if(!subreddit.equals("")) {
                 dismiss();
-                subreddit = subreddit.replaceAll("\\s","");
                 subreddit = subreddit.toLowerCase();
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
                 if(MainActivity.prefs.getBoolean("newSubredditWindow", false)) {
@@ -101,6 +101,7 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
                 }
             }
             else {
+                editText.setText("");
                 editText.setHint(R.string.enter_subreddit);
                 editText.setHintTextColor(getResources().getColor(R.color.red));
             }

@@ -1,9 +1,7 @@
 package com.george.redditreader.Adapters;
 
 import android.graphics.Color;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import com.george.redditreader.ClickListeners.NavDrawerListeners.MenuItemListene
 import com.george.redditreader.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.george.redditreader.ClickListeners.NavDrawerListeners.SubredditsListener;
 import com.george.redditreader.Models.NavDrawer.NavDrawerAccount;
-import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
 import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerSubredditItem;
@@ -50,14 +47,20 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private List<NavDrawerItem> items;
 
+    private boolean accountItemsVisible;
     private boolean subredditItemsVisible;
 
     private List<NavDrawerSubredditItem> subredditItems;
+    private List<NavDrawerAccount> accountItems;
+
+    private NavDrawerAccount currentAccount;
 
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
         this.activity = activity;
         subredditItemsVisible = true;
+        accountItemsVisible = false;
+        currentAccount = new NavDrawerAccount(1); //TODO: set proper account item
     }
 
     public void add(NavDrawerItem item) {
@@ -70,6 +73,34 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public NavDrawerItem getItemAt(int position) {
         return items.get(position);
+    }
+
+    public void toggleAccountItems() {
+        if(accountItemsVisible) collapseAccountItems();
+        else expandAccountItems();
+    }
+
+    private void collapseAccountItems() {
+        accountItems = new ArrayList<>();
+        for(NavDrawerItem item : items) {
+            if(item instanceof NavDrawerAccount) accountItems.add((NavDrawerAccount) item);
+        }
+        items.removeAll(accountItems);
+        accountItemsVisible = false;
+        notifyDataSetChanged();
+
+    }
+
+    private void expandAccountItems() {
+        int i = 1;
+        if(currentAccount.getAccountType() != 1) {
+            items.add(i, new NavDrawerAccount(1));
+            i++;
+        }
+        items.add(i, new NavDrawerAccount(0));
+        accountItemsVisible = true;
+        notifyDataSetChanged();
+        //TODO: initialize and expand account items properly
     }
 
     public void toggleSubredditItems() {
@@ -146,18 +177,41 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
-                NavDrawerHeader header = (NavDrawerHeader) getItemAt(position);
+                //NavDrawerHeader header = (NavDrawerHeader) getItemAt(position);
+                headerViewHolder.currentAccount.setText(currentAccount.getName());
+                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse);
+                else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand);
                 break;
             case VIEW_TYPE_MENU_ITEM:
                 MenuRowViewHolder menuRowViewHolder= (MenuRowViewHolder) viewHolder;
                 NavDrawerMenuItem menuItem = (NavDrawerMenuItem) getItemAt(position);
                 menuRowViewHolder.name.setText(menuItem.getMenuType().value());
+                switch (menuItem.getMenuType()) {
+                    case profile:
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
+                        break;
+                    case messages:
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_grey);
+                        break;
+                    case user:
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_grey);
+                        break;
+                    case subreddit:
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_subreddit);
+                        break;
+                    case settings:
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_grey);
+                        break;
+                    case cached:
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
+                        break;
+                }
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
                 //NavDrawerSubreddits subreddits = (NavDrawerSubreddits) getItemAt(position);
-                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expanded);
-                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapsed);
+                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse);
+                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand);
                 SubredditsListener listener = new SubredditsListener(activity);
                 subredditsViewHolder.layoutToggle.setOnClickListener(listener);
                 subredditsViewHolder.layoutEdit.setOnClickListener(listener);
@@ -238,12 +292,14 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         public TextView currentAccount;
         public CircleImageView circleImageView;
         public LinearLayout accountLayout;
+        public ImageView toggle;
 
         public HeaderViewHolder(View row) {
             super(row);
             currentAccount = (TextView) row.findViewById(R.id.txtView_currentAccount);
             circleImageView = (CircleImageView) row.findViewById(R.id.circleView);
             accountLayout = (LinearLayout) row.findViewById(R.id.layout_account);
+            toggle = (ImageView) row.findViewById(R.id.imgView_toggle);
         }
     }
 }

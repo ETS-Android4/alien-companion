@@ -42,7 +42,7 @@ public class PostActivity extends SwipeActivity {
     @Override
     public void onBackPressed () {
         //MainActivity.commentsLoaded = false;
-        MainActivity.showFullComments = false;
+        MainActivity.showFullCommentsButton = false;
         PostFragment.commentLinkId = null;
         super.onBackPressed();
     }

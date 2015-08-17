@@ -169,5 +169,6 @@ public class RedditHttpClient implements HttpClient {
                 }
             }
         }
+        Log.d("Header fields", "--------------------------------------------------------------------------------------------");
     }
 }

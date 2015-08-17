@@ -49,7 +49,7 @@ public class Thumbnail implements Serializable {
     }
 
     public void setHasThumbnail(boolean hasUrl) {
-        this.hasThumbnail = hasUrl;
+        this.hasThumbnail = (!isSelf) && hasUrl;
     }
 
     public boolean isSelf() {

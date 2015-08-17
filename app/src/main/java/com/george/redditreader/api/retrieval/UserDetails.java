@@ -17,7 +17,7 @@ import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToS
 public class UserDetails implements ActorDriven {
 
     /**
-     * Handle to REST client instance.
+     * Handle to HTTP client instance.
      */
     private final HttpClient httpClient;
     private User user;
@@ -25,7 +25,7 @@ public class UserDetails implements ActorDriven {
     /**
      * Constructor.
      * Default general actor will be used.
-     * @param httpClient REST client handle
+     * @param httpClient HTTP client handle
      */
     public UserDetails(HttpClient httpClient) {
         this.httpClient = httpClient;
@@ -35,7 +35,7 @@ public class UserDetails implements ActorDriven {
      * Constructor. The actor is the user who will
      * be used to perform the retrieval.
      *
-     * @param httpClient REST Client instance
+     * @param httpClient HTTP Client instance
      * @param actor User instance
      */
     public UserDetails(HttpClient httpClient, User actor) {

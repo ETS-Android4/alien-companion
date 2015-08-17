@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private NavDrawerAdapter adapter;
     private DrawerLayout.LayoutParams drawerParams;
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
-    public static boolean showFullComments;
+    public static boolean showFullCommentsButton;
     public static SharedPreferences prefs;
 
     private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays", "games",
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerLayout.isDrawerOpen(Gravity.LEFT) || drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawers();
         }
         else {

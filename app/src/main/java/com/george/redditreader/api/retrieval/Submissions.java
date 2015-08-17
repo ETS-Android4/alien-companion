@@ -85,6 +85,7 @@ public class Submissions implements ActorDriven {
      * @return 		Listing of submissions
      */
     public List<Submission> parse(String url) throws RetrievalFailedException, RedditError {
+		Log.d("parse url", url);
     	
     	// Determine cookie
     	String cookie = (user == null) ? null : user.getCookie();

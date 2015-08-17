@@ -1,10 +1,13 @@
 package com.george.redditreader.api.retrieval.params;
 
 public enum UserSubmissionsCategory {
-	
-    SUBMITTED("submitted"), 
-    LIKED("liked"), 
-    DISLIKED("disliked"), 
+
+    OVERVIEW("overview"),
+    SUBMITTED("submitted"),
+    COMMENTS("comments"),
+    GILDED("gilded"),
+    LIKED("upvoted"),
+    DISLIKED("downvoted"),
     HIDDEN("hidden"),
     SAVED("saved");
 

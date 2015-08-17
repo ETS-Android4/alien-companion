@@ -96,6 +96,7 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
         }
         else {
             String query = editText.getText().toString();
+            query = query.replaceAll("\\s","");
             if(!query.equals("")) {
                 dismiss();
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
@@ -115,6 +116,7 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
                 }
             }
             else {
+                editText.setText("");
                 editText.setHint(R.string.enter_search_term);
                 editText.setHintTextColor(getResources().getColor(R.color.red));
             }

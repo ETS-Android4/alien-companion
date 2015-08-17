@@ -1,6 +1,5 @@
 package com.george.redditreader.ClickListeners.NavDrawerListeners;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
@@ -16,6 +15,6 @@ public class HeaderListener extends NavDrawerListener implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-
+        getAdapter().toggleAccountItems();
     }
 }

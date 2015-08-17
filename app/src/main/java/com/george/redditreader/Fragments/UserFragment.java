@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import com.george.redditreader.Adapters.UserAdapter;
 import com.george.redditreader.ClickListeners.FooterListeners.UserFooterListener;
 import com.george.redditreader.LoadTasks.LoadUserTask;
-import com.george.redditreader.enums.UserContent;
+import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.UserOverviewSort;
@@ -34,7 +34,7 @@ public class UserFragment extends Fragment {
     private AppCompatActivity activity;
     public String username;
     public UserOverviewSort userOverviewSort;
-    public UserContent userContent;
+    public UserSubmissionsCategory userContent;
     public Button showMore;
 
     @Override
@@ -85,8 +85,10 @@ public class UserFragment extends Fragment {
         contentView = (ListView) view.findViewById(R.id.listView2);
 
         if(userAdapter == null) {
-            setUserContent(UserContent.overview);
-            setUserOverviewSort(UserOverviewSort.NEW);
+            //setUserContent(UserContent.overview);
+            userContent = UserSubmissionsCategory.OVERVIEW;
+            //setUserOverviewSort(UserOverviewSort.NEW);
+            userOverviewSort = UserOverviewSort.NEW;
             LoadUserTask task = new LoadUserTask(activity, this, LoadType.init, userContent);
             task.execute();
         }
@@ -110,16 +112,17 @@ public class UserFragment extends Fragment {
         activity.getSupportActionBar().setTitle(username);
     }
 
-    public void setUserContent(UserContent userContent) {
-        this.userContent = userContent;
-    }
+    //public void setUserContent(UserContent userContent) {
+    //    this.userContent = userContent;
+    //}
 
-    public void setUserOverviewSort (UserOverviewSort sort) {
-        this.userOverviewSort = sort;
-    }
+    //public void setUserOverviewSort (UserOverviewSort sort) {
+    //    this.userOverviewSort = sort;
+    //}
 
     public void setActionBarSubtitle() {
-        String subtitle = userContent.value() + ": " + userOverviewSort.value();
+        String subtitle = userContent.value();
+        if(userOverviewSort != null) subtitle = subtitle.concat(": " + userOverviewSort.value());
         activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
@@ -142,21 +145,52 @@ public class UserFragment extends Fragment {
     private void showContentPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(activity, view);
         popupMenu.inflate(R.menu.menu_user_content);
+        //popupMenu.inflate(R.menu.menu_user_content_public);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_user_overview:
-                        setUserContent(UserContent.overview);
+                        userContent = UserSubmissionsCategory.OVERVIEW;
                         showSortPopup();
                         return true;
                     case R.id.action_user_comments:
-                        setUserContent(UserContent.comments);
+                        userContent = UserSubmissionsCategory.COMMENTS;
                         showSortPopup();
                         return true;
                     case R.id.action_user_submitted:
-                        setUserContent(UserContent.submitted);
+                        userContent = UserSubmissionsCategory.SUBMITTED;
                         showSortPopup();
+                        return true;
+                    case R.id.action_user_gilded:
+                        userOverviewSort = null;
+                        userContent = UserSubmissionsCategory.GILDED;
+                        setActionBarSubtitle();
+                        refreshUser();
+                        return true;
+                    case R.id.action_user_upvoted:
+                        userOverviewSort = null;
+                        userContent = UserSubmissionsCategory.LIKED;
+                        setActionBarSubtitle();
+                        refreshUser();
+                        return true;
+                    case R.id.action_user_downvoted:
+                        userOverviewSort = null;
+                        userContent = UserSubmissionsCategory.DISLIKED;
+                        setActionBarSubtitle();
+                        refreshUser();
+                        return true;
+                    case R.id.action_user_hidden:
+                        userOverviewSort = null;
+                        userContent = UserSubmissionsCategory.HIDDEN;
+                        setActionBarSubtitle();
+                        refreshUser();
+                        return true;
+                    case R.id.action_user_saved:
+                        userOverviewSort = null;
+                        userContent = UserSubmissionsCategory.SAVED;
+                        setActionBarSubtitle();
+                        refreshUser();
                         return true;
                     default:
                         return false;
@@ -178,19 +212,23 @@ public class UserFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sort_new:
-                        setUserOverviewSort(UserOverviewSort.NEW);
+                        userOverviewSort = UserOverviewSort.NEW;
+                        setActionBarSubtitle();
                         refreshUser();
                         return true;
                     case R.id.action_sort_hot:
-                        setUserOverviewSort(UserOverviewSort.HOT);
+                        userOverviewSort = UserOverviewSort.HOT;
+                        setActionBarSubtitle();
                         refreshUser();
                         return true;
                     case R.id.action_sort_top:
-                        setUserOverviewSort(UserOverviewSort.TOP);
+                        userOverviewSort = UserOverviewSort.TOP;
+                        setActionBarSubtitle();
                         refreshUser();
                         return true;
                     case R.id.action_sort_controversial:
-                        setUserOverviewSort(UserOverviewSort.COMMENTS);
+                        userOverviewSort = UserOverviewSort.COMMENTS;
+                        setActionBarSubtitle();
                         refreshUser();
                         return true;
                     default:

@@ -18,13 +18,9 @@ import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Adapters.PostAdapter;
 import com.george.redditreader.LoadTasks.LoadCommentsTask;
-import com.george.redditreader.LinkHandler;
 import com.george.redditreader.R;
-import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.retrieval.params.CommentSort;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,7 +56,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 post = new Submission(postInfo[1]);
                 post.setSubreddit(postInfo[0]);
                 commentLinkId = postInfo[2];
-                if(commentLinkId != null) MainActivity.showFullComments = true;
+                if(commentLinkId != null) MainActivity.showFullCommentsButton = true;
                 if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
             }
             else {

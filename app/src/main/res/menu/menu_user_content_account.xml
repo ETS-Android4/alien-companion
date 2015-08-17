@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <item android:id="@+id/action_user_overview" android:title="@string/user_overview"
         android:orderInCategory="93" />
     <item android:id="@+id/action_user_comments" android:title="@string/user_comments"
@@ -9,4 +10,12 @@
         android:orderInCategory="95" />
     <item android:id="@+id/action_user_gilded" android:title="@string/user_gilded"
         android:orderInCategory="96" />
+    <item android:id="@+id/action_user_upvoted" android:title="@string/user_upvoted"
+        android:orderInCategory="97" />
+    <item android:id="@+id/action_user_downvoted" android:title="@string/user_downvoted"
+        android:orderInCategory="98" />
+    <item android:id="@+id/action_user_hidden" android:title="@string/user_hidden"
+        android:orderInCategory="99" />
+    <item android:id="@+id/action_user_saved" android:title="@string/user_saved"
+        android:orderInCategory="100" />
 </menu>

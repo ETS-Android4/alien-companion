@@ -94,7 +94,11 @@ public class ApiEndpointUtils {
 
     public static final String USER_TROPHIES = "/user/%s/trophies.json";
 
-    public static final String USER_OVERVIEW = "/user/%s/overview.json?%s";
+    //public static final String USER_OVERVIEW = "/user/%s/overview.json?%s";
+    //
+    //public static final String USER_GILDED = "/user/%s/gilded.json?%s";
+
+    public static final String USER_MIXED = "/user/%s/%s.json?%s";
 
     public static final String USER_COMMENTS = "/user/%s/comments.json?%s";
 

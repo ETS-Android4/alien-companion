@@ -1,25 +1,18 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,7 +30,6 @@ import com.george.redditreader.R;
 import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
-import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.george.redditreader.multilevelexpindlistview.Utils;
 import com.squareup.picasso.Picasso;
@@ -218,12 +210,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
                         .findFragmentById(R.id.fragment2);
-                if(MainActivity.showFullComments) {
+                if(MainActivity.showFullCommentsButton) {
                     contentVH.fullComments.setVisibility(View.VISIBLE);
                     contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MainActivity.showFullComments = false;
+                            MainActivity.showFullCommentsButton = false;
                             //PostFragment postFragment = (PostFragment) activity.getFragmentManager()
                             //        .findFragmentById(R.id.fragment2);
                             postFragment.loadFullComments();
@@ -238,9 +230,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
 
-                    if(post.getSelftextHTML() == null) contentVH.selfText.setVisibility(View.GONE);
+                    if(post.getSelftextHTML() == null || MainActivity.showFullCommentsButton) contentVH.selfText.setVisibility(View.GONE);
                     else {
                         //Self text textview
+                        contentVH.selfText.setVisibility(View.VISIBLE);
                         strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                                 Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         strBuilder = modifyURLSpan(strBuilder);

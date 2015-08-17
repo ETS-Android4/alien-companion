@@ -11,6 +11,7 @@ import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.retrieval.params.TimeSpan;
 import com.george.redditreader.api.retrieval.params.UserOverviewSort;
+import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
 import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.api.utils.ParamFormatter;
 import com.george.redditreader.api.utils.RedditConstants;
@@ -27,7 +28,7 @@ import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToS
 /**
  * Created by George on 6/16/2015.
  */
-public class UserOverview implements ActorDriven {
+public class UserMixed implements ActorDriven {
 
     /**
      * Handle to REST client instance.
@@ -40,7 +41,7 @@ public class UserOverview implements ActorDriven {
      * Default general actor will be used.
      * @param httpClient REST client handle
      */
-    public UserOverview(HttpClient httpClient) {
+    public UserMixed(HttpClient httpClient) {
         this.httpClient = httpClient;
     }
 
@@ -51,7 +52,7 @@ public class UserOverview implements ActorDriven {
      * @param httpClient REST Client instance
      * @param actor User instance
      */
-    public UserOverview(HttpClient httpClient, User actor) {
+    public UserMixed(HttpClient httpClient, User actor) {
         this.httpClient = httpClient;
         this.user = actor;
     }
@@ -67,6 +68,8 @@ public class UserOverview implements ActorDriven {
     }
 
     public List<Object> parse(String url) throws RetrievalFailedException, RedditError {
+        Log.d("parse url", url);
+
         String cookie = (user == null) ? null : user.getCookie();
 
         // List of submissions
@@ -114,7 +117,7 @@ public class UserOverview implements ActorDriven {
         return submissions;
     }
 
-    protected List<Object> ofUser(String username, String sort, String time, String count, String limit, String after, String before, String show) {
+    protected List<Object> ofUser(String username, String userContent, String sort, String time, String count, String limit, String after, String before, String show) {
 
         // Format parameters
         String params = "";
@@ -127,10 +130,10 @@ public class UserOverview implements ActorDriven {
         params = ParamFormatter.addParameter(params, "show", show);
 
         // Retrieve submissions from the given URL
-        return parse(String.format(ApiEndpointUtils.USER_OVERVIEW, username, params));
+        return parse(String.format(ApiEndpointUtils.USER_MIXED, username, userContent, params));
     }
 
-    public List<Object> ofUser(String username, UserOverviewSort sort, TimeSpan timeSpan, int count, int limit, Thing after, Thing before, boolean show_given) {
+    public List<Object> ofUser(String username, UserSubmissionsCategory userContent, UserOverviewSort sort, TimeSpan timeSpan, int count, int limit, Thing after, Thing before, boolean show_given) {
 
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("The username must be defined.");
@@ -142,6 +145,7 @@ public class UserOverview implements ActorDriven {
 
         return ofUser(
                 username,
+                (userContent != null) ? userContent.value() : "",
                 (sort != null) ? sort.value() : "",
                 (timeSpan != null) ? timeSpan.value() : "",
                 String.valueOf(count),
