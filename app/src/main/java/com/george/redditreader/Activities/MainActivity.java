@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.PostListFragment;
 import com.george.redditreader.Fragments.SearchRedditDialogFragment;
+import com.george.redditreader.Utils.AppConstants;
 import com.george.redditreader.Utils.ScrimInsetsFrameLayout;
 import com.george.redditreader.enums.MenuType;
 import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
@@ -54,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     public static boolean showFullCommentsButton;
     public static SharedPreferences prefs;
-
-    private static final String[] defaultSubredditStrings = {"all", "pics", "videos", "shitredditsays", "games",
-    "gaming", "technology", "worldnews", "showerthoughts"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<NavDrawerItem> subredditItems = new ArrayList<>();
         subredditItems.add(new NavDrawerSubredditItem());
-        for(String subreddit : defaultSubredditStrings) {
+        for(String subreddit : AppConstants.defaultSubredditStrings) {
             subredditItems.add(new NavDrawerSubredditItem(subreddit));
         }
 

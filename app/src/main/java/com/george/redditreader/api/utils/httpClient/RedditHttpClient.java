@@ -126,30 +126,30 @@ public class RedditHttpClient implements HttpClient {
         this.userAgent = agent;
     }
 
-    /**
-     * Convert a API parameters to a appropriate list.
-     *
-     * @param apiParams Input string, for example 'a=2894&b=194'
-     * @return List of name value pairs to pass with the POST request
-     */
-    private ContentValues convertRequestStringToList(String apiParams) {
-        //List<NameValuePair> params = new ArrayList<NameValuePair>();
-        ContentValues values = new ContentValues();
-        if (apiParams != null && !apiParams.isEmpty()) {
-            String[] valuePairs = apiParams.split("&");
-            for (String valuePair : valuePairs) {
-                String[] nameValue = valuePair.split("=");
-                if (nameValue.length == 1) { //there is no cookie if we are not signed in
-                    //params.add(new BasicNameValuePair(nameValue[0], ""));
-                    values.put(nameValue[0], "");
-                } else {
-                    //params.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
-                    values.put(nameValue[0], nameValue[1]);
-                }
-            }
-        }
-        return values;
-    }
+    ///**
+    // * Convert a API parameters to a appropriate list.
+    // *
+    // * @param apiParams Input string, for example 'a=2894&b=194'
+    // * @return List of name value pairs to pass with the POST request
+    // */
+    //private ContentValues convertRequestStringToList(String apiParams) {
+    //    //List<NameValuePair> params = new ArrayList<NameValuePair>();
+    //    ContentValues values = new ContentValues();
+    //    if (apiParams != null && !apiParams.isEmpty()) {
+    //        String[] valuePairs = apiParams.split("&");
+    //        for (String valuePair : valuePairs) {
+    //            String[] nameValue = valuePair.split("=");
+    //            if (nameValue.length == 1) { //there is no cookie if we are not signed in
+    //                //params.add(new BasicNameValuePair(nameValue[0], ""));
+    //                values.put(nameValue[0], "");
+    //            } else {
+    //                //params.add(new BasicNameValuePair(nameValue[0], nameValue[1]));
+    //                values.put(nameValue[0], nameValue[1]);
+    //            }
+    //        }
+    //    }
+    //    return values;
+    //}
 
     private void printRequestProperties(HttpURLConnection connection) {
         for (String header : connection.getRequestProperties().keySet()) {

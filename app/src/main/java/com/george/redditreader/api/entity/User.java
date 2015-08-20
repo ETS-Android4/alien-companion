@@ -35,7 +35,7 @@ public class User {
 
     /**
      * Create a user.
-     * @param httpClient REST Client handle
+     * @param httpClient HTTP Client handle
      * @param username User name
      * @param password Password
      */

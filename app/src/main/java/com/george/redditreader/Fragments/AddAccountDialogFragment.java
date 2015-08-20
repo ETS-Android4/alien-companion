@@ -88,7 +88,9 @@ public class AddAccountDialogFragment extends DialogFragment implements View.OnC
                 }
             }
             else {
-                //attempt login here
+                //dismiss();
+                //VerifyAccountDialogFragment verifyFragment = new VerifyAccountDialogFragment();
+                //verifyFragment.show(activity.getFragmentManager(), "dialog");
             }
         }
     }
