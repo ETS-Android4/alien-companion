@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.george.redditreader.Fragments.UserFragment;
-import com.george.redditreader.LoadTasks.LoadUserTask;
+import com.george.redditreader.LoadTasks.LoadUserInfoTask;
 import com.george.redditreader.enums.LoadType;
 
 /**
@@ -24,7 +24,7 @@ public class UserFooterListener implements View.OnClickListener {
     public void onClick(View v) {
         userFragment.showMore.setVisibility(View.GONE);
         userFragment.footerProgressBar.setVisibility(View.VISIBLE);
-        LoadUserTask task = new LoadUserTask(activity, userFragment, LoadType.extend, userFragment.userContent);
+        LoadUserInfoTask task = new LoadUserInfoTask(activity, userFragment, LoadType.extend, userFragment.userContent);
         task.execute();
     }
 }

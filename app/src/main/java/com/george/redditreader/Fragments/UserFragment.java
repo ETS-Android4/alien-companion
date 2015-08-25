@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 
 import com.george.redditreader.Adapters.UserAdapter;
 import com.george.redditreader.ClickListeners.FooterListeners.UserFooterListener;
-import com.george.redditreader.LoadTasks.LoadUserTask;
+import com.george.redditreader.LoadTasks.LoadUserInfoTask;
 import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
@@ -89,7 +89,7 @@ public class UserFragment extends Fragment {
             userContent = UserSubmissionsCategory.OVERVIEW;
             //setUserOverviewSort(UserOverviewSort.NEW);
             userOverviewSort = UserOverviewSort.NEW;
-            LoadUserTask task = new LoadUserTask(activity, this, LoadType.init, userContent);
+            LoadUserInfoTask task = new LoadUserInfoTask(activity, this, LoadType.init, userContent);
             task.execute();
         }
         else {
@@ -104,7 +104,7 @@ public class UserFragment extends Fragment {
     private void refreshUser() {
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        LoadUserTask task = new LoadUserTask(activity, this, LoadType.refresh, userContent);
+        LoadUserInfoTask task = new LoadUserInfoTask(activity, this, LoadType.refresh, userContent);
         task.execute();
     }
 

@@ -37,7 +37,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     @Override
     protected List<Comment> doInBackground(Void... unused) {
         try {
-            Comments cmnts = new Comments(httpClient);
+            Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
             List<Comment> comments;
             comments = cmnts.ofSubmission(postFragment.post, PostFragment.commentLinkId, postFragment.parentsShown, RedditConstants.MAX_COMMENT_DEPTH,
                     Integer.parseInt(MainActivity.prefs.getString("initialComments", "100")), postFragment.commentSort);

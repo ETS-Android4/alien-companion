@@ -19,8 +19,12 @@ import com.george.redditreader.Models.NavDrawer.NavDrawerAccount;
 import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerSubredditItem;
+import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.R;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,17 +54,58 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     private boolean accountItemsVisible;
     private boolean subredditItemsVisible;
 
-    private List<NavDrawerSubredditItem> subredditItems;
-    private List<NavDrawerAccount> accountItems;
+    private List<NavDrawerItem> subredditItems;
+    public List<NavDrawerAccount> accountItems;
 
-    private NavDrawerAccount currentAccount;
+    public static int currentAccountIndex;
 
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
         this.activity = activity;
         subredditItemsVisible = true;
         accountItemsVisible = false;
-        currentAccount = new NavDrawerAccount(1); //TODO: set proper account item
+        importAccounts();
+    }
+
+    public void updateSubredditItems(List<String> subredditNames) {
+        subredditItems = new ArrayList<>();
+        for(NavDrawerItem item : items) {
+            if(item instanceof NavDrawerSubredditItem) subredditItems.add(item);
+        }
+        items.removeAll(subredditItems);
+        subredditItems.clear();
+        subredditItems.add(new NavDrawerSubredditItem());
+        for(String name : subredditNames) {
+            subredditItems.add(new NavDrawerSubredditItem(name));
+        }
+        items.addAll(subredditItems);
+        notifyDataSetChanged();
+    }
+
+    private void importAccounts() {
+        currentAccountIndex = MainActivity.prefs.getInt("currentAccountIndex", 0);
+        List<SavedAccount> savedAccounts = null;
+        try {
+            FileInputStream fis = activity.openFileInput(MainActivity.SAVED_ACCOUNTS_FILENAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            savedAccounts = (List<SavedAccount>) is.readObject();
+            is.close();
+            fis.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        accountItems = new ArrayList<>();
+        accountItems.add(new NavDrawerAccount(1));
+        accountItems.add(new NavDrawerAccount(0));
+        if(savedAccounts != null) {
+            for(SavedAccount account : savedAccounts) {
+                accountItems.add(new NavDrawerAccount(account));
+            }
+            SavedAccount currentAccount = accountItems.get(currentAccountIndex).savedAccount;
+            MainActivity.currentAccount = currentAccount;
+        }
+
     }
 
     public void add(NavDrawerItem item) {
@@ -81,10 +126,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     private void collapseAccountItems() {
-        accountItems = new ArrayList<>();
-        for(NavDrawerItem item : items) {
-            if(item instanceof NavDrawerAccount) accountItems.add((NavDrawerAccount) item);
-        }
         items.removeAll(accountItems);
         accountItemsVisible = false;
         notifyDataSetChanged();
@@ -93,14 +134,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private void expandAccountItems() {
         int i = 1;
-        if(currentAccount.getAccountType() != 1) {
-            items.add(i, new NavDrawerAccount(1));
+        for(NavDrawerAccount accountItem : accountItems) {
+            items.add(i, accountItem);
             i++;
         }
-        items.add(i, new NavDrawerAccount(0));
         accountItemsVisible = true;
         notifyDataSetChanged();
-        //TODO: initialize and expand account items properly
     }
 
     public void toggleSubredditItems() {
@@ -111,7 +150,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     private void collapseSubredditItems() {
         subredditItems = new ArrayList<>();
         for(NavDrawerItem item : items) {
-            if(item instanceof NavDrawerSubredditItem) subredditItems.add((NavDrawerSubredditItem) item);
+            if(item instanceof NavDrawerSubredditItem) subredditItems.add(item);
         }
         items.removeAll(subredditItems);
         subredditItemsVisible = false;
@@ -158,7 +197,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_ACCOUNT:
-                resource = R.layout.drawer_subreddit_row;
+                resource = R.layout.drawer_account_row;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 v.setOnClickListener(new AccountListener(activity));
@@ -178,7 +217,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 //NavDrawerHeader header = (NavDrawerHeader) getItemAt(position);
-                headerViewHolder.currentAccount.setText(currentAccount.getName());
+                headerViewHolder.currentAccount.setText(accountItems.get(currentAccountIndex).getName());
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand);
                 break;
@@ -237,6 +276,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 SubredditRowViewHolder accountViewHolder = (SubredditRowViewHolder) viewHolder;
                 NavDrawerAccount account = (NavDrawerAccount) getItemAt(position);
                 accountViewHolder.name.setText(account.getName());
+                if(account == accountItems.get(currentAccountIndex)) accountViewHolder.name.setTextColor(Color.BLUE);
+                else accountViewHolder.name.setTextColor(Color.WHITE);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");

@@ -1,12 +1,9 @@
 package com.george.redditreader.Activities;
 
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Point;
 import android.preference.PreferenceManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,21 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ActionMenuView;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.PostListFragment;
-import com.george.redditreader.Fragments.SearchRedditDialogFragment;
-import com.george.redditreader.Utils.AppConstants;
+import com.george.redditreader.LoadTasks.LoadUserTask;
+import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.Utils.ScrimInsetsFrameLayout;
+import com.george.redditreader.api.entity.User;
+import com.george.redditreader.api.utils.httpClient.RedditHttpClient;
 import com.george.redditreader.enums.MenuType;
 import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
 import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
@@ -43,7 +37,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private static final float drawerSizeModifier = 0.8f;
+    public static final String[] defaultSubredditStrings = {"all", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "showerthoughts"};
+
+    public static final int NAV_DRAWER_CLOSE_TIME = 200;
+
+    public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
 
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
@@ -54,7 +52,11 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout.LayoutParams drawerParams;
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     public static boolean showFullCommentsButton;
+
     public static SharedPreferences prefs;
+
+    public static SavedAccount currentAccount;
+    public static User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
             listFragment = new PostListFragment();
             fm.beginTransaction().add(R.id.fragmentHolder, listFragment).commit();
         }
+    }
+
+    public void changeCurrentUser(SavedAccount account) {
+        currentAccount = account;
+        currentUser = (account!=null) ? new User(new RedditHttpClient(), account.getUsername(), account.getPassword()) : null;
+        initNavDrawerContent();
+        listFragment.setSubreddit(null);
+        listFragment.refreshList();
     }
 
     @Override
@@ -170,9 +180,14 @@ public class MainActivity extends AppCompatActivity {
         adapter.add(new NavDrawerHeader());
         adapter.addAll(getMenuItems());
         adapter.add(new NavDrawerSubreddits());
-        adapter.addAll(getSubredditItems());
+        adapter.addAll(getDefaultSubredditItems());
 
         drawerContent.setAdapter(adapter);
+
+        if(currentAccount != null) {
+            LoadUserTask task = new LoadUserTask(this, adapter);
+            task.execute();
+        }
     }
 
     private List<NavDrawerItem> getMenuItems() {
@@ -187,12 +202,10 @@ public class MainActivity extends AppCompatActivity {
         return menuItems;
     }
 
-    private List<NavDrawerItem> getSubredditItems() {
-        //String[] defaultSubredditStrings = getResources().getStringArray(R.array.drawer_default_subreddits);
-
+    private List<NavDrawerItem> getDefaultSubredditItems() {
         List<NavDrawerItem> subredditItems = new ArrayList<>();
         subredditItems.add(new NavDrawerSubredditItem());
-        for(String subreddit : AppConstants.defaultSubredditStrings) {
+        for (String subreddit : defaultSubredditStrings) {
             subredditItems.add(new NavDrawerSubredditItem(subreddit));
         }
 

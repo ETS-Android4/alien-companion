@@ -12,6 +12,9 @@ import android.view.Window;
 import com.george.redditreader.LoadTasks.AddAccountTask;
 import com.george.redditreader.R;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -22,7 +25,10 @@ public class VerifyAccountDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        AddAccountTask task = new AddAccountTask(this);
+        String username = getArguments().getString("username");
+        String password = getArguments().getString("password");
+
+        AddAccountTask task = new AddAccountTask(this, username, password);
         task.execute();
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);

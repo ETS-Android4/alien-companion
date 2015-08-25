@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.view.View;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Adapters.PostListAdapter;
 import com.george.redditreader.Fragments.SearchFragment;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
@@ -41,7 +42,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
     @Override
     protected List<Submission> doInBackground(Void... unused) {
         try {
-            Submissions subms = new Submissions(httpClient);
+            Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
             List<Submission> submissions = null;
 
             if(loadType == LoadType.extend) {

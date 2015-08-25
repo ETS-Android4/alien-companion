@@ -11,7 +11,6 @@ import com.george.redditreader.Activities.SettingsActivity;
 import com.george.redditreader.Fragments.EnterRedditDialogFragment;
 import com.george.redditreader.Fragments.EnterUserDialogFragment;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
-import com.george.redditreader.Utils.AppConstants;
 
 /**
  * Created by George on 6/26/2015.
@@ -38,7 +37,7 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
                     public void run() {
                         showDialogFragment(new EnterUserDialogFragment());
                     }
-                }, AppConstants.NAV_DRAWER_CLOSE_TIME);
+                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
             case subreddit:
                 new Handler().postDelayed(new Runnable() {
@@ -46,7 +45,7 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
                     public void run() {
                         showDialogFragment(new EnterRedditDialogFragment());
                     }
-                }, AppConstants.NAV_DRAWER_CLOSE_TIME);
+                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
             case settings:
                 new Handler().postDelayed(new Runnable() {
@@ -55,7 +54,7 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
                         Intent intent = new Intent(getActivity(), SettingsActivity.class);
                         getActivity().startActivity(intent);
                     }
-                }, AppConstants.NAV_DRAWER_CLOSE_TIME);
+                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
             case cached:
                 break;

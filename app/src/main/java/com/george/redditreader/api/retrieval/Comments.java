@@ -143,7 +143,7 @@ public class Comments implements ActorDriven {
         List<Comment> comments = new LinkedList<Comment>();
         
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(url, cookie).getResponseObject(); //TODO: set modhash
         
         if (response instanceof JSONArray) {
         	
@@ -167,7 +167,7 @@ public class Comments implements ActorDriven {
 		List<Comment> comments = new LinkedList<Comment>();
 
 		// Send request to reddit server via REST client
-		Object response = httpClient.get(url, cookie).getResponseObject();
+		Object response = httpClient.get(url, cookie).getResponseObject(); //TODO: set modhash
 
 		if (response instanceof JSONArray) {
 

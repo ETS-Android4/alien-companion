@@ -1,9 +1,11 @@
 package com.george.redditreader.api.entity;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import org.json.simple.JSONObject;
@@ -27,7 +29,7 @@ import com.george.redditreader.api.retrieval.Subreddits;
  * @author Simon Kassing
  * @author Marc Leef
  */
-public class User {
+public class User implements Serializable {
 
     private final String username;
     private final HttpClient httpClient;
@@ -86,7 +88,7 @@ public class User {
      * @throws ParseException If parsing JSON fails.
      */
     public void connect() throws IOException, ParseException {
-        ArrayList<String> hashCookiePair = hashCookiePair(username, password);
+        ArrayList<String> hashCookiePair = hashCookiePair(ConvertUtils.URLEncodeString(username), ConvertUtils.URLEncodeString(password));
         this.modhash = hashCookiePair.get(0);
         this.cookie = hashCookiePair.get(1);
     }

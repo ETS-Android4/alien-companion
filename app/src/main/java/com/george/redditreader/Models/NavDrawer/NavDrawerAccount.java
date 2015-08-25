@@ -1,6 +1,7 @@
 package com.george.redditreader.Models.NavDrawer;
 
 import com.george.redditreader.Adapters.NavDrawerAdapter;
+import com.george.redditreader.Models.SavedAccount;
 
 /**
  * Created by George on 6/26/2015.
@@ -19,10 +20,12 @@ public class NavDrawerAccount implements NavDrawerItem {
     public static final int TYPE_LOGGED_OUT = 1;
     public static final int TYPE_ACCOUNT = 2;
 
-    public NavDrawerAccount(String accountName) {
-        this.name = accountName;
-        this.type = TYPE_ACCOUNT;
-    }
+    public SavedAccount savedAccount;
+
+    //public NavDrawerAccount(String accountName) {
+    //    this.name = accountName;
+    //    this.type = TYPE_ACCOUNT;
+    //}
 
     public NavDrawerAccount(int type) {
         this.type = type;
@@ -36,6 +39,12 @@ public class NavDrawerAccount implements NavDrawerItem {
         }
     }
 
+    public NavDrawerAccount(SavedAccount account) {
+        this.type = TYPE_ACCOUNT;
+        this.savedAccount = account;
+        name = account.getUsername();
+    }
+
     public String getName() {
         return name;
     }
@@ -44,8 +53,8 @@ public class NavDrawerAccount implements NavDrawerItem {
         return type;
     }
 
-    public void setAccountName(String accountName) {
-        this.name = accountName;
-    }
+    //public void setAccountName(String accountName) {
+    //    this.name = accountName;
+    //}
 
 }

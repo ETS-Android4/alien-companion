@@ -1,7 +1,9 @@
 package com.george.redditreader.Utils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 /**
@@ -54,5 +56,14 @@ public class ConvertUtils {
         URI uri = new URI(url);
         String domain = uri.getHost();
         return domain.startsWith("www.") ? domain.substring(4) : domain;
+    }
+
+    public static String URLEncodeString(String string) {
+        try {
+            return URLEncoder.encode(string, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return string;
     }
 }
