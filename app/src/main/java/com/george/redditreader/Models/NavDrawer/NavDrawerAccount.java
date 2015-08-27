@@ -30,10 +30,10 @@ public class NavDrawerAccount implements NavDrawerItem {
     public NavDrawerAccount(int type) {
         this.type = type;
         switch (type) {
-            case 0:
+            case TYPE_ADD:
                 name = "Add account";
                 break;
-            case 1:
+            case TYPE_LOGGED_OUT:
                 name = "Logged out";
                 break;
         }

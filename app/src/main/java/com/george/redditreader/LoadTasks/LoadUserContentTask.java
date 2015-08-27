@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Created by George on 8/1/2015.
  */
-public class LoadUserInfoTask extends AsyncTask<Void, Void, List<Object>> {
+public class LoadUserContentTask extends AsyncTask<Void, Void, List<Object>> {
 
     private Exception mException;
     private LoadType mLoadType;
@@ -40,7 +40,7 @@ public class LoadUserInfoTask extends AsyncTask<Void, Void, List<Object>> {
     private UserFragment uf;
     private HttpClient httpClient;
 
-    public LoadUserInfoTask(Activity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory userContent) {
+    public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory userContent) {
         this.activity = activity;
         this.uf = userFragment;
         this.userContent = userContent;

@@ -1,6 +1,7 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -13,7 +14,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.ClickListeners.CommentItemOptionsListener;
 import com.george.redditreader.ClickListeners.CommentLinkListener;
+import com.george.redditreader.ClickListeners.PostItemOptionsListener;
 import com.george.redditreader.Utils.ConvertUtils;
 import com.george.redditreader.ClickListeners.PostItemListener;
 import com.george.redditreader.R;
@@ -22,6 +26,7 @@ import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.entity.Trophy;
 import com.george.redditreader.api.entity.UserInfo;
+import com.george.redditreader.Views.viewholders.PostItemListViewholderTemp;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,6 +44,8 @@ public class UserAdapter extends BaseAdapter {
     private List<Object> mData;
     private LayoutInflater mInflater;
     private Activity mActivity;
+
+    public int selectedPosition;
 
     public UserAdapter(Activity activity) {
         mActivity = activity;
@@ -87,9 +94,20 @@ public class UserAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         int type = getItemViewType(position);
+
+        View.OnLongClickListener longListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (position == selectedPosition) selectedPosition = -1;
+                else selectedPosition = position;
+                notifyDataSetChanged();
+                return false;
+            }
+        };
+
        switch (type) {
            case VIEW_TYPE_INFO:
                InfoViewHolder infoViewHolder;
@@ -116,23 +134,54 @@ public class UserAdapter extends BaseAdapter {
 
                Comment comment = (Comment) getItem(position);
                commentViewHolder.postTitle.setText(comment.getLinkTitle());
-               commentViewHolder.commentDets.setText(comment.getAuthor() + " - " + comment.getScore() + " points - " +
+               commentViewHolder.commentDets.setText(comment.getSubreddit() + " - " + comment.getScore() + " points - " +
                        ConvertUtils.getSubmissionAge(comment.getCreatedUTC()));
                commentViewHolder.commentBody.setText(ConvertUtils.noTrailingwhiteLines
                        (Html.fromHtml(comment.getBodyHTML())));
                commentViewHolder.commentLayout.setOnClickListener(new CommentLinkListener(mActivity, comment));
+               commentViewHolder.commentLayout.setOnLongClickListener(longListener);
+               //comment selected from items list
+               if(selectedPosition == position) {
+                   commentViewHolder.commentOptionsLayout.setVisibility(View.VISIBLE);
+                   CommentItemOptionsListener optionsListener = new CommentItemOptionsListener(mActivity, comment, this);
+                   commentViewHolder.upvote.setOnClickListener(optionsListener);
+                   commentViewHolder.downvote.setOnClickListener(optionsListener);
+                   commentViewHolder.reply.setOnClickListener(optionsListener);
+                   commentViewHolder.viewUser.setOnClickListener(optionsListener);
+                   commentViewHolder.more.setOnClickListener(optionsListener);
+               }
+               else {
+                   commentViewHolder.commentOptionsLayout.setVisibility(View.GONE);
+               }
                break;
            case VIEW_TYPE_POST:
-               PostViewHolder postViewHolder;
+               PostItemListViewholderTemp postViewHolder;
                if(row == null) {
                    row = mInflater.inflate(R.layout.post_list_item, parent, false);
-                   postViewHolder = new PostViewHolder(row);
+                   postViewHolder = new PostItemListViewholderTemp(row);
                    row.setTag(postViewHolder);
                }
-               else postViewHolder = (PostViewHolder) row.getTag();
+               else postViewHolder = (PostItemListViewholderTemp) row.getTag();
 
                Submission submission = (Submission) mData.get(position);
                setupPostView(postViewHolder, submission, position);
+               postViewHolder.linkButton.setOnLongClickListener(longListener);
+               postViewHolder.commentsButton.setOnLongClickListener(longListener);
+               //post selected from items list
+               if(selectedPosition == position) {
+                   postViewHolder.layoutPostOptions.setVisibility(View.VISIBLE);
+                   PostItemOptionsListener optionsListener = new PostItemOptionsListener(mActivity, submission, this);
+                   postViewHolder.upvote.setOnClickListener(optionsListener);
+                   postViewHolder.downvote.setOnClickListener(optionsListener);
+                   postViewHolder.save.setOnClickListener(optionsListener);
+                   postViewHolder.hide.setOnClickListener(optionsListener);
+                   postViewHolder.viewUser.setOnClickListener(optionsListener);
+                   postViewHolder.openBrowser.setOnClickListener(optionsListener);
+                   postViewHolder.moreOptions.setOnClickListener(optionsListener);
+               }
+               else {
+                   postViewHolder.layoutPostOptions.setVisibility(View.GONE);
+               }
                break;
        }
         return row;
@@ -185,7 +234,7 @@ public class UserAdapter extends BaseAdapter {
         }
     }
 
-    private void setupPostView(PostViewHolder holder, Submission submission, int position) {
+    private void setupPostView(PostItemListViewholderTemp holder, Submission submission, int position) {
         holder.title.setText(submission.getTitle());
         holder.score.setText(Long.toString(submission.getScore()));
         holder.age.setText(" - " + ConvertUtils.getSubmissionAge(submission.getCreatedUTC()));
@@ -220,9 +269,34 @@ public class UserAdapter extends BaseAdapter {
             holder.image.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
         }
 
+        //user logged in
+        if(MainActivity.currentUser != null) {
+            //check user vote
+            if (submission.getLikes().equals("true")) {
+                holder.score.setTextColor(Color.parseColor("#FF6600"));
+                holder.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                holder.downvote.setImageResource(R.mipmap.ic_action_downvote);
+            } else if (submission.getLikes().equals("false")) {
+                holder.score.setTextColor(Color.BLUE);
+                holder.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                holder.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+            } else {
+                holder.score.setTextColor(Color.BLACK);
+                holder.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                holder.downvote.setImageResource(R.mipmap.ic_action_downvote);
+            }
+            //check saved post
+            if(submission.isSaved()) holder.save.setImageResource(R.mipmap.ic_action_save_yellow);
+            else holder.save.setImageResource(R.mipmap.ic_action_save);
+            //check hidden post
+            if(submission.isHidden()) holder.hide.setImageResource(R.mipmap.ic_action_hide_red);
+            else holder.hide.setImageResource(R.mipmap.ic_action_hide);
+        }
+
         PostItemListener listener = new PostItemListener(mActivity, submission);
         //holder.commentsButton.setTag(position);
         holder.commentsButton.setOnClickListener(listener);
+
         //holder.linkButton.setTag(position);
         holder.linkButton.setOnClickListener(listener);
     }
@@ -239,44 +313,72 @@ public class UserAdapter extends BaseAdapter {
         }
     }
 
-    public static class PostViewHolder {
-        TextView title;
-        TextView score;
-        TextView age;
-        TextView author;
-        TextView dets;
-        TextView comments;
-        ImageView image;
-        //Drawable noImage;
-        //Drawable nsfw;
-        //Drawable self;
-        LinearLayout commentsButton;
-        LinearLayout linkButton;
-
-        public PostViewHolder(View itemView) {
-            title = (TextView) itemView.findViewById(R.id.postTitle);
-            score = (TextView) itemView.findViewById(R.id.score);
-            age = (TextView) itemView.findViewById(R.id.age);
-            author = (TextView) itemView.findViewById(R.id.author);
-            dets = (TextView) itemView.findViewById(R.id.postDets2);
-            comments = (TextView) itemView.findViewById(R.id.numberOfComments);
-            image = (ImageView) itemView.findViewById(R.id.postImage);
-            commentsButton = (LinearLayout) itemView.findViewById(R.id.commentsButton);
-            linkButton = (LinearLayout) itemView.findViewById(R.id.linkButton);
-        }
-    }
+    //public static class PostViewHolder {
+    //    TextView title;
+    //    TextView score;
+    //    TextView age;
+    //    TextView author;
+    //    TextView dets;
+    //    TextView comments;
+    //    ImageView image;
+    //    //Drawable noImage;
+    //    //Drawable nsfw;
+    //    //Drawable self;
+    //    LinearLayout commentsButton;
+    //    LinearLayout linkButton;
+    //    LinearLayout layoutPostOptions;
+    //    ImageView upvote;
+    //    ImageView downvote;
+    //    ImageView save;
+    //    ImageView hide;
+    //    ImageView viewUser;
+    //    ImageView openBrowser;
+    //    ImageView moreOptions;
+//
+    //    public PostViewHolder(View itemView) {
+    //        title = (TextView) itemView.findViewById(R.id.postTitle);
+    //        score = (TextView) itemView.findViewById(R.id.score);
+    //        age = (TextView) itemView.findViewById(R.id.age);
+    //        author = (TextView) itemView.findViewById(R.id.author);
+    //        dets = (TextView) itemView.findViewById(R.id.postDets2);
+    //        comments = (TextView) itemView.findViewById(R.id.numberOfComments);
+    //        image = (ImageView) itemView.findViewById(R.id.postImage);
+    //        commentsButton = (LinearLayout) itemView.findViewById(R.id.commentsButton);
+    //        linkButton = (LinearLayout) itemView.findViewById(R.id.linkButton);
+    //        upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+    //        layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_post_options);
+    //        downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+    //        save =  (ImageView) itemView.findViewById(R.id.btn_save);
+    //        hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+    //        viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+    //        openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
+    //        moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+    //    }
+    //}
 
     public static class CommentViewHolder {
         public TextView postTitle;
         public TextView commentDets;
         public TextView commentBody;
         public LinearLayout commentLayout;
+        public LinearLayout commentOptionsLayout;
+        public ImageView upvote;
+        public ImageView downvote;
+        public ImageView reply;
+        public ImageView viewUser;
+        public ImageView more;
 
         public CommentViewHolder(View itemView) {
             postTitle = (TextView) itemView.findViewById(R.id.txtView_postTitle);
             commentDets = (TextView) itemView.findViewById(R.id.txtView_commentDets);
             commentBody = (TextView) itemView.findViewById(R.id.txtView_commentBody);
             commentLayout = (LinearLayout) itemView.findViewById(R.id.layout_comment);
+            commentOptionsLayout = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);
+            upvote = (ImageView) itemView.findViewById(R.id.btn_upvote);
+            downvote = (ImageView) itemView.findViewById(R.id.btn_downvote);
+            reply = (ImageView) itemView.findViewById(R.id.btn_reply);
+            viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+            more = (ImageView) itemView.findViewById(R.id.btn_more);
         }
     }
 }

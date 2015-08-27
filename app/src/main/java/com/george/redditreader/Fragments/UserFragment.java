@@ -14,9 +14,10 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Adapters.UserAdapter;
 import com.george.redditreader.ClickListeners.FooterListeners.UserFooterListener;
-import com.george.redditreader.LoadTasks.LoadUserInfoTask;
+import com.george.redditreader.LoadTasks.LoadUserContentTask;
 import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
@@ -89,7 +90,7 @@ public class UserFragment extends Fragment {
             userContent = UserSubmissionsCategory.OVERVIEW;
             //setUserOverviewSort(UserOverviewSort.NEW);
             userOverviewSort = UserOverviewSort.NEW;
-            LoadUserInfoTask task = new LoadUserInfoTask(activity, this, LoadType.init, userContent);
+            LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
             task.execute();
         }
         else {
@@ -104,7 +105,7 @@ public class UserFragment extends Fragment {
     private void refreshUser() {
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        LoadUserInfoTask task = new LoadUserInfoTask(activity, this, LoadType.refresh, userContent);
+        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh, userContent);
         task.execute();
     }
 
@@ -144,7 +145,8 @@ public class UserFragment extends Fragment {
 
     private void showContentPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(activity, view);
-        popupMenu.inflate(R.menu.menu_user_content);
+        if(username.equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
+        else popupMenu.inflate(R.menu.menu_user_content);
         //popupMenu.inflate(R.menu.menu_user_content_public);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override

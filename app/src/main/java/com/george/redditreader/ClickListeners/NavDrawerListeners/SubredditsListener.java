@@ -10,7 +10,7 @@ import com.george.redditreader.R;
 /**
  * Created by George on 6/26/2015.
  */
-public class SubredditsListener extends NavDrawerListener implements View.OnClickListener {
+public class SubredditsListener extends NavDrawerListener {
 
     public SubredditsListener(MainActivity activity) {
         super(activity);
@@ -23,5 +23,10 @@ public class SubredditsListener extends NavDrawerListener implements View.OnClic
         }
         else if(v.getId() == R.id.layoutEdit){
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
     }
 }

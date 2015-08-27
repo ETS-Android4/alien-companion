@@ -48,7 +48,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
     
     // Possible fields to add as well:
 //    private String bannedBy;
-//    String likes;
+    String likes;
 //    private String approvedBy;
 //    private String authorFlairCSSClass;
 //    private String authorFlairText;
@@ -79,6 +79,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             this.setScoreHidden(safeJsonToBoolean(obj.get("score_hidden")));
 
             this.setLinkTitle(safeJsonToString(obj.get("link_title")));
+            setLikes(safeJsonToString(obj.get("likes")));
 
             bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
 
@@ -137,6 +138,14 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     public String getLinkTitle() {
         return linkTitle;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = (likes==null) ? "null" : likes;
+    }
+
+    public String getLikes() {
+        return likes;
     }
 
     /**

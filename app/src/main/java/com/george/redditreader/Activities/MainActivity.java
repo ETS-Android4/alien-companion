@@ -22,6 +22,7 @@ import com.george.redditreader.LoadTasks.LoadUserTask;
 import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.Utils.ScrimInsetsFrameLayout;
 import com.george.redditreader.api.entity.User;
+import com.george.redditreader.api.retrieval.params.SubmissionSort;
 import com.george.redditreader.api.utils.httpClient.RedditHttpClient;
 import com.george.redditreader.enums.MenuType;
 import com.george.redditreader.Models.NavDrawer.NavDrawerHeader;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
 
+    public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -52,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout.LayoutParams drawerParams;
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     public static boolean showFullCommentsButton;
+
+    public static boolean showHiddenPosts;
+    //public static MenuItem toggleHiddenMenuItem;
 
     public static SharedPreferences prefs;
 
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
+        showHiddenPosts = false;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -91,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         currentUser = (account!=null) ? new User(new RedditHttpClient(), account.getUsername(), account.getPassword()) : null;
         initNavDrawerContent();
         listFragment.setSubreddit(null);
+        listFragment.setSubmissionSort(SubmissionSort.HOT);
         listFragment.refreshList();
     }
 
@@ -122,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        //toggleHiddenMenuItem = (MenuItem) findViewById(R.id.action_toggle_hidden);
         return true;
     }
 
@@ -171,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         initNavDrawerContent();
     }
 
-    private void initNavDrawerContent() {
+    public void initNavDrawerContent() {
         drawerContent = (RecyclerView) findViewById((R.id.drawer_content));
         drawerContent.setLayoutManager(new LinearLayoutManager(this));
         drawerContent.setHasFixedSize(true);
@@ -192,12 +201,14 @@ public class MainActivity extends AppCompatActivity {
 
     private List<NavDrawerItem> getMenuItems() {
         List<NavDrawerItem> menuItems = new ArrayList<>();
-        menuItems.add(new NavDrawerMenuItem(MenuType.profile));
-        menuItems.add(new NavDrawerMenuItem(MenuType.messages));
+        //if(currentUser != null) {
+            //menuItems.add(new NavDrawerMenuItem(MenuType.profile));
+            //menuItems.add(new NavDrawerMenuItem(MenuType.messages));
+        //}
         menuItems.add(new NavDrawerMenuItem(MenuType.user));
         menuItems.add(new NavDrawerMenuItem(MenuType.subreddit));
         menuItems.add(new NavDrawerMenuItem(MenuType.settings));
-        menuItems.add(new NavDrawerMenuItem(MenuType.cached));
+        //menuItems.add(new NavDrawerMenuItem(MenuType.cached));
 
         return menuItems;
     }
@@ -248,8 +259,21 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
         }
         else {
+            MainActivity.currentUser = null; //user connects every time main activity is started
             super.onBackPressed();
         }
     }
+
+    //@Override
+    //public void onStop() {
+    //    super.onStop();
+    //    Log.d("geo test", "on stop called");
+    //}
+//
+    //@Override
+    //public void onDestroy() {
+    //    super.onDestroy();
+    //    Log.d("geo test", "on destroy called");
+    //}
 
 }

@@ -93,5 +93,6 @@
     <string name="user_downvoted">downvoted</string>
     <string name="user_hidden">hidden</string>
     <string name="user_saved">saved</string>
+    <string name="action_show_hidden">Show hidden posts </string>
 
 </resources>

@@ -12,7 +12,7 @@ import com.george.redditreader.Models.NavDrawer.NavDrawerItem;
 /**
  * Created by George on 6/26/2015.
  */
-public abstract class NavDrawerListener {
+public abstract class NavDrawerListener implements View.OnClickListener, View.OnLongClickListener{
 
     private MainActivity activity;
     private RecyclerView recyclerView;

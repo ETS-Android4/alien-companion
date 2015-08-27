@@ -87,6 +87,12 @@ public class PostListFragment extends Fragment {
                 searchDialog.setArguments(args);
                 searchDialog.show(activity.getFragmentManager(), "dialog");
                 return true;
+            case R.id.action_toggle_hidden:
+                MainActivity.showHiddenPosts = !MainActivity.showHiddenPosts;
+                if(MainActivity.showHiddenPosts) item.setChecked(true);
+                else item.setChecked(false);
+                refreshList();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -237,7 +243,7 @@ public class PostListFragment extends Fragment {
     }
 
     public void setActionBarTitle() {
-        String title = (subreddit == null) ? "Frontpage" : subreddit;
+        String title = (subreddit == null) ? "frontpage" : subreddit;
         activity.getSupportActionBar().setTitle(title);
     }
 

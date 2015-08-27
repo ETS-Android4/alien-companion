@@ -47,6 +47,15 @@
         <item>@string/action_open_browser</item>
         <item>@string/action_share</item>
     </array>
+
+    <array name="accountOptions">
+        <item>@string/remove</item>
+        <item>@string/revalidate</item>
+        <item>@string/change_password</item>
+        <item>@string/move_up</item>
+        <item>@string/move_down</item>
+    </array>
+
     <string name="cached_posts">Cached posts</string>
     <string name="reddit_games">games</string>
     <string name="reddit_movies">movies</string>
@@ -56,4 +65,9 @@
     <string name="right">Right</string>
     <string name="action_share">Share</string>
     <string name="action_copy_link">Copy link</string>
+    <string name="remove">Remove</string>
+    <string name="change_password">Change password</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="revalidate">Revalidate</string>
 </resources>

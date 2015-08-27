@@ -3,9 +3,19 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">@color/black</item>
+        <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
+        <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
     </style>
 
     <style name="MainActivityTheme" parent="AppTheme">
+    </style>
+
+    <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
+
+    <style name="OverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@mipmap/ic_more_vert_white_24dp</item>
     </style>
 
     <style  name = "CustomProgressBarHorizontal"  parent = "android:Widget.ProgressBar.Horizontal" >
@@ -35,7 +45,7 @@
         <item name="actionMenuTextColor">@color/black</item>
         <!-- android:textColorSecondary is the color of the menu
              overflow icon (three vertical dots) -->
-        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorSecondary">@color/dark_gray</item>
 
         <!-- This would set the toolbar's background color,
               but setting this also changes the popup menu's background,

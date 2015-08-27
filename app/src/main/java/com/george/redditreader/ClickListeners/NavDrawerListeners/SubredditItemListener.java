@@ -11,7 +11,7 @@ import com.george.redditreader.api.retrieval.params.SubmissionSort;
 /**
  * Created by George on 6/26/2015.
  */
-public class SubredditItemListener extends NavDrawerListener implements View.OnClickListener {
+public class SubredditItemListener extends NavDrawerListener {
 
     public SubredditItemListener(MainActivity activity) {
         super(activity);
@@ -26,7 +26,13 @@ public class SubredditItemListener extends NavDrawerListener implements View.OnC
 
         PostListFragment listFragment = getActivity().getListFragment();
         listFragment.setSubmissionSort(SubmissionSort.HOT);
-        listFragment.setSubreddit(subreddit.getName());
+        String subredditName = (subreddit.getName()!=null) ? subreddit.getName().toLowerCase() : null;
+        listFragment.setSubreddit(subredditName);
         listFragment.refreshList();
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
     }
 }

@@ -182,7 +182,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if(selectedComment == position) {
                     cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
-                    CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment);
+                    CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
                     cvh.upvote.setOnClickListener(listener);
                     cvh.downvote.setOnClickListener(listener);
                     cvh.reply.setOnClickListener(listener);
@@ -202,6 +202,24 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 //        return true;
                 //    }
                 //});
+                //user logged in
+                if(MainActivity.currentUser != null) {
+                    //check user vote
+                    if (comment.getLikes().equals("true")) {
+                        //cvh.score.setTextColor(Color.parseColor("#FF6600"));
+                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                    } else if (comment.getLikes().equals("false")) {
+                        //cvh.score.setTextColor(Color.BLUE);
+                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+                    } else {
+                        //cvh.score.setTextColor(Color.BLACK);
+                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                    }
+                }
+
                 break;
             case VIEW_TYPE_CONTENT:
                 final ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
@@ -263,12 +281,40 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     }
                 }
                 contentVH.author.setText(post.getAuthor());
-                if (post.getScore() > 0) {
-                    contentVH.postDets2.setText("+ " + post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-                } else {
-                    contentVH.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-                }
+                //if (post.getScore() > 0) {
+                //    //contentVH.postDets2.setText("+ " + post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
+                //    contentVH.score.setText("+ " + post.getScore());
+                //} else {
+                //    //contentVH.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
+                //}
+                contentVH.score.setText(Long.toString(post.getScore()));
+                contentVH.age.setText(" - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 contentVH.subreddit.setText(post.getSubreddit());
+
+                //user logged in
+                if(MainActivity.currentUser != null) {
+                    //check user vote
+                    if (post.getLikes().equals("true")) {
+                        contentVH.score.setTextColor(Color.parseColor("#FF6600"));
+                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                    } else if (post.getLikes().equals("false")) {
+                        contentVH.score.setTextColor(Color.BLUE);
+                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+                    } else {
+                        contentVH.score.setTextColor(Color.BLACK);
+                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                    }
+                    //check saved post
+                    if(post.isSaved()) contentVH.save.setImageResource(R.mipmap.ic_action_save_yellow);
+                    else contentVH.save.setImageResource(R.mipmap.ic_action_save);
+                    //check hidden post
+                    if(post.isHidden()) contentVH.hide.setImageResource(R.mipmap.ic_action_hide_red);
+                    else contentVH.hide.setImageResource(R.mipmap.ic_action_hide);
+                }
+
                 if (postFragment.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
                 else contentVH.progressBar.setVisibility(View.VISIBLE);
 
@@ -289,7 +335,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         return true;
                     }
                 });
-                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post);
+                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
                 contentVH.upvote.setOnClickListener(optionsListener);
                 contentVH.downvote.setOnClickListener(optionsListener);
                 contentVH.save.setOnClickListener(optionsListener);
@@ -358,7 +404,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView postDets1;
         public TextView comments;
         public TextView author;
-        public TextView postDets2;
+        public TextView score;
+        public TextView age;
         public TextView subreddit;
         public TextView selfText;
         public ImageView postImage;
@@ -379,7 +426,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             postTitle = (TextView) itemView.findViewById(R.id.postTitle);
             postDets1 = (TextView) itemView.findViewById(R.id.postDets1);
             author = (TextView) itemView.findViewById(R.id.author);
-            postDets2 = (TextView) itemView.findViewById(R.id.postDets2);
+            score = (TextView) itemView.findViewById(R.id.postScore);
+            age = (TextView) itemView.findViewById(R.id.postAge);
             subreddit = (TextView) itemView.findViewById(R.id.subreddit);
             selfText = (TextView) itemView.findViewById(R.id.selfText);
             postImage = (ImageView) itemView.findViewById(R.id.postImage);

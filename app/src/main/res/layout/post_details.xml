@@ -83,13 +83,25 @@
                     android:layout_weight="1"
                     android:gravity="left" />
 
-                <TextView
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="+##### - ## h"
-                    android:id="@+id/postDets2"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="#####"
+                        android:id="@+id/postScore" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - #### h"
+                        android:id="@+id/postAge" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="0dp"

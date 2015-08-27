@@ -34,7 +34,7 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
 
     private boolean showNSFW;
 
-    private int selectedPosition = -1;
+    public int selectedPosition = -1;
 
     static class ViewHolder {
         TextView title;
@@ -137,7 +137,7 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         //item selected from posts list
         if(selectedPosition == position) {
             holder.layoutPostOptions.setVisibility(View.VISIBLE);
-            PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post);
+            PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
             holder.upvote.setOnClickListener(optionsListener);
             holder.downvote.setOnClickListener(optionsListener);
             holder.save.setOnClickListener(optionsListener);
@@ -148,6 +148,30 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         }
         else {
             holder.layoutPostOptions.setVisibility(View.GONE);
+        }
+
+        //user logged in
+        if(MainActivity.currentUser != null) {
+            //check user vote
+            if (post.getLikes().equals("true")) {
+                holder.score.setTextColor(Color.parseColor("#FF6600"));
+                holder.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                holder.downvote.setImageResource(R.mipmap.ic_action_downvote);
+            } else if (post.getLikes().equals("false")) {
+                holder.score.setTextColor(Color.BLUE);
+                holder.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                holder.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+            } else {
+                holder.score.setTextColor(Color.BLACK);
+                holder.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                holder.downvote.setImageResource(R.mipmap.ic_action_downvote);
+            }
+            //check saved post
+            if(post.isSaved()) holder.save.setImageResource(R.mipmap.ic_action_save_yellow);
+            else holder.save.setImageResource(R.mipmap.ic_action_save);
+            //check hidden post
+            if(post.isHidden()) holder.hide.setImageResource(R.mipmap.ic_action_hide_red);
+            else holder.hide.setImageResource(R.mipmap.ic_action_hide);
         }
 
         PostItemListener listener = new PostItemListener(activity, post);

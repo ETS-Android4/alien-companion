@@ -18,6 +18,7 @@ public class SettingsActivity extends BackNavActivity {
         setContentView(R.layout.activity_settings);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Settings");

@@ -16,6 +16,7 @@ public class PostActivity extends SwipeActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

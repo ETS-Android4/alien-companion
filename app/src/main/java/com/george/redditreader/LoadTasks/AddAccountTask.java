@@ -119,7 +119,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             //dialogFragment.dismiss();
         }
         else {
-            ToastUtils.displayShortToast(context, "Logged in as " + username);
+            //ToastUtils.displayShortToast(context, "Logged in as " + username);
 
             MainActivity mainActivity = (MainActivity) context;
             mainActivity.changeCurrentUser(account);

@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.SettingsActivity;
+import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.Fragments.EnterRedditDialogFragment;
 import com.george.redditreader.Fragments.EnterUserDialogFragment;
 import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
@@ -15,7 +16,7 @@ import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
 /**
  * Created by George on 6/26/2015.
  */
-public class MenuItemListener extends NavDrawerListener implements View.OnClickListener {
+public class MenuItemListener extends NavDrawerListener {
 
     public MenuItemListener(MainActivity activity) {
         super(activity);
@@ -28,6 +29,14 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
         getDrawerLayout().closeDrawers();
         switch (menuItem.getMenuType()) {
             case profile:
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getActivity(), UserActivity.class);
+                        intent.putExtra("username", MainActivity.currentUser.getUsername());
+                        getActivity().startActivity(intent);
+                    }
+                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
             case messages:
                 break;
@@ -59,6 +68,11 @@ public class MenuItemListener extends NavDrawerListener implements View.OnClickL
             case cached:
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
     }
 
     private void showDialogFragment(DialogFragment dialog) {

@@ -46,18 +46,18 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<Submission>> {
 
             if(loadType == LoadType.extend) {
                 if(plf.subreddit == null) {
-                    submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, plf.postListAdapter.getLastPost(), null, true);
+                    submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, plf.postListAdapter.getLastPost(), null, MainActivity.showHiddenPosts);
                 }
                 else {
-                    submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, plf.postListAdapter.getLastPost(), null, true);
+                    submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, plf.postListAdapter.getLastPost(), null, MainActivity.showHiddenPosts);
                 }
             }
             else {
                 if(plf.subreddit == null) {
-                    submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
+                    submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
                 }
                 else {
-                    submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
+                    submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
                 }
                 plf.postListAdapter = new PostListAdapter(activity, submissions);
             }

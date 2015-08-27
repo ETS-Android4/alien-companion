@@ -4,10 +4,10 @@
     tools:context="com.george.redditreader.Activities.SearchActivity">
 
     <item android:id="@+id/action_sort" android:title="@string/action_sort"
-        android:icon="@mipmap/ic_action_sort_by_size" app:showAsAction="always"/>
+        android:icon="@mipmap/ic_sort_white_24dp" app:showAsAction="always"/>
 
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_action_refresh" app:showAsAction="ifRoom"/>
+        android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_search" android:title="@string/action_new_search"
         android:orderInCategory="100" app:showAsAction="never" />

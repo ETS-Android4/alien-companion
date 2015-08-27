@@ -1,7 +1,10 @@
 package com.george.redditreader.Adapters;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.ClickListeners.NavDrawerListeners.AccountListener;
 import com.george.redditreader.ClickListeners.NavDrawerListeners.HeaderListener;
 import com.george.redditreader.ClickListeners.NavDrawerListeners.MenuItemListener;
+import com.george.redditreader.ClickListeners.NavDrawerListeners.NavDrawerListener;
 import com.george.redditreader.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.george.redditreader.ClickListeners.NavDrawerListeners.SubredditsListener;
 import com.george.redditreader.Models.NavDrawer.NavDrawerAccount;
@@ -23,8 +27,10 @@ import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.R;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +71,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         subredditItemsVisible = true;
         accountItemsVisible = false;
         importAccounts();
+        //Log.d("current account index", "at init : " + currentAccountIndex);
     }
 
     public void updateSubredditItems(List<String> subredditNames) {
@@ -84,16 +91,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private void importAccounts() {
         currentAccountIndex = MainActivity.prefs.getInt("currentAccountIndex", 0);
-        List<SavedAccount> savedAccounts = null;
-        try {
-            FileInputStream fis = activity.openFileInput(MainActivity.SAVED_ACCOUNTS_FILENAME);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            savedAccounts = (List<SavedAccount>) is.readObject();
-            is.close();
-            fis.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        List<SavedAccount> savedAccounts = readAccounts();
 
         accountItems = new ArrayList<>();
         accountItems.add(new NavDrawerAccount(1));
@@ -108,8 +106,70 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     }
 
+    private List<SavedAccount> readAccounts() {
+        try {
+            FileInputStream fis = activity.openFileInput(MainActivity.SAVED_ACCOUNTS_FILENAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
+            is.close();
+            fis.close();
+            return savedAccounts;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void saveAccounts(List<SavedAccount> updatedAccounts) {
+        try {
+            FileOutputStream fos = activity.openFileOutput(MainActivity.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(updatedAccounts);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteAccount(String accountToDelete) {
+        //Log.d("current account index", "before delete : " + currentAccountIndex);
+        List<SavedAccount> accounts = readAccounts();
+        for(SavedAccount account : accounts) {
+            if(account.getUsername().equals(accountToDelete)) {
+                accounts.remove(account);
+                break;
+            }
+        }
+        saveAccounts(accounts);
+        int i=0;
+        for(NavDrawerAccount account : accountItems) {
+            if(account.getName().equals(accountToDelete)) {
+                accountItems.remove(account);
+                items.remove(account);
+                if(currentAccountIndex == i) currentAccountIndex = 0;
+                else if(currentAccountIndex > i) currentAccountIndex -=1;
+                break;
+            }
+            i++;
+        }
+        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+        editor.putInt("currentAccountIndex", currentAccountIndex);
+        editor.apply();
+        if(currentAccountIndex==0) {
+            activity.getDrawerLayout().closeDrawers();
+            activity.changeCurrentUser(null);
+        }
+        else notifyDataSetChanged();
+        //Log.d("current account index", "after delete : " + currentAccountIndex);
+    }
+
     public void add(NavDrawerItem item) {
         items.add(item);
+    }
+
+    public void add(int location, NavDrawerItem item) {
+        items.add(location, item);
     }
 
     public void addAll(List<NavDrawerItem> items) {
@@ -170,37 +230,45 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 int resource = R.layout.drawer_header;
+                NavDrawerListener listener = new HeaderListener(activity);
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                v.setOnClickListener(new HeaderListener(activity));
+                v.setOnClickListener(listener);
+                //v.setOnClickListener(new HeaderListener(activity));
                 viewHolder = new HeaderViewHolder(v);
                 break;
             case VIEW_TYPE_MENU_ITEM:
                 resource = R.layout.drawer_menu_row;
+                listener = new MenuItemListener(activity);
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                v.setOnClickListener(new MenuItemListener(activity));
+                v.setOnClickListener(listener);
+                //v.setOnClickListener(new MenuItemListener(activity));
                 viewHolder = new MenuRowViewHolder(v);
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 resource = R.layout.drawer_subreddits;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                //v.setOnClickListener(new SubredditsListener(activity));
                 viewHolder = new SubredditsViewHolder(v);
                 break;
             case VIEW_TYPE_SUBREDDIT_ITEM:
                 resource = R.layout.drawer_subreddit_row;
+                listener = new SubredditItemListener(activity);
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                v.setOnClickListener(new SubredditItemListener(activity));
+                v.setOnClickListener(listener);
+                //v.setOnClickListener(new SubredditItemListener(activity));
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_ACCOUNT:
                 resource = R.layout.drawer_account_row;
+                listener = new AccountListener(activity);
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                v.setOnClickListener(new AccountListener(activity));
+                v.setOnClickListener(listener);
+                v.setOnLongClickListener(listener);
+                //v.setOnClickListener(new AccountListener(activity));
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             default:
@@ -276,7 +344,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 SubredditRowViewHolder accountViewHolder = (SubredditRowViewHolder) viewHolder;
                 NavDrawerAccount account = (NavDrawerAccount) getItemAt(position);
                 accountViewHolder.name.setText(account.getName());
-                if(account == accountItems.get(currentAccountIndex)) accountViewHolder.name.setTextColor(Color.BLUE);
+                if(account == accountItems.get(currentAccountIndex)) accountViewHolder.name.setTextColor(Color.parseColor("#C2C2FF"));
                 else accountViewHolder.name.setTextColor(Color.WHITE);
                 break;
             default:

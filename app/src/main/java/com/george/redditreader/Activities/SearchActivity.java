@@ -18,6 +18,7 @@ public class SearchActivity extends SwipeActivity {
         setContentView(R.layout.activity_search);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

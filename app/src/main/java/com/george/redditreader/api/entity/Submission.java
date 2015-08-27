@@ -69,7 +69,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	private Thumbnail thumbnailObject;
     
     // 
-    //private String likes;
+    private String likes;
     //private String authorFlairCSSClass;
     //private String linkFlairCSSClass;
     //private String distinguished;
@@ -172,6 +172,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setNSFW(safeJsonToBoolean(obj.get("over_18")));
 			setHidden(safeJsonToBoolean(obj.get("hidden")));
 			setClicked(safeJsonToBoolean(obj.get("clicked")));
+			setLikes(safeJsonToString(obj.get("likes")));
 
 			title = StringEscapeUtils.unescapeHtml(title);
 			selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
@@ -214,6 +215,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     //public void setRestClient(HttpClient restClient) {
     //    this.restClient = restClient;
     //}
+
+	public void setLikes(String likes) {
+		this.likes = (likes==null) ? "null" : likes;
+	}
+
+	public String getLikes() {
+		return likes;
+	}
 
     public void setUpVotes(Long upVotes) {
         this.upVotes = upVotes;
