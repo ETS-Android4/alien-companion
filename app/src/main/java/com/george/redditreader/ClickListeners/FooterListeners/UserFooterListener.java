@@ -10,7 +10,7 @@ import com.george.redditreader.enums.LoadType;
 /**
  * Created by George on 8/1/2015.
  */
-public class UserFooterListener implements View.OnClickListener {
+public class UserFooterListener implements View.OnClickListener { //TODO: to be deleted
 
     private Activity activity;
     private UserFragment userFragment;
@@ -22,8 +22,8 @@ public class UserFooterListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        userFragment.showMore.setVisibility(View.GONE);
-        userFragment.footerProgressBar.setVisibility(View.VISIBLE);
+        //userFragment.showMore.setVisibility(View.GONE);
+        //userFragment.footerProgressBar.setVisibility(View.VISIBLE);
         LoadUserContentTask task = new LoadUserContentTask(activity, userFragment, LoadType.extend, userFragment.userContent);
         task.execute();
     }

@@ -9,6 +9,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Kind;
 import com.george.redditreader.api.entity.Submission;
@@ -74,13 +75,13 @@ public class Comments implements ActorDriven {
      * 
      * @return Parsed list of comments.
      */
-    public List<Comment> parseBreadth(String url) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> parseBreadth(String url) throws RetrievalFailedException, RedditError {
     	
     	// Determine cookie
     	String cookie = (user == null) ? null : user.getCookie();
     	
     	// List of submissions
-        List<Comment> comments = new LinkedList<Comment>();
+        List<RedditItem> comments = new LinkedList<>();
         
         // Send request to reddit server via REST client
         Object response = httpClient.get(url, cookie).getResponseObject();
@@ -140,10 +141,10 @@ public class Comments implements ActorDriven {
     	String cookie = (user == null) ? null : user.getCookie();
     	
     	// List of submissions
-        List<Comment> comments = new LinkedList<Comment>();
+        List<Comment> comments = new LinkedList<>();
         
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject(); //TODO: set modhash
+        Object response = httpClient.get(url, cookie).getResponseObject();
         
         if (response instanceof JSONArray) {
         	
@@ -164,7 +165,7 @@ public class Comments implements ActorDriven {
 		String cookie = (user == null) ? null : user.getCookie();
 
 		// List of submissions
-		List<Comment> comments = new LinkedList<Comment>();
+		List<Comment> comments = new LinkedList<>();
 
 		// Send request to reddit server via REST client
 		Object response = httpClient.get(url, cookie).getResponseObject(); //TODO: set modhash
@@ -208,7 +209,7 @@ public class Comments implements ActorDriven {
         
         // Iterate over the submission results
         JSONObject data;
-        Comment comment;
+		Comment comment;
         for (Object anArray : array) {
             data = (JSONObject) anArray;
             
@@ -260,7 +261,7 @@ public class Comments implements ActorDriven {
      * 
      * @return Comments of a user.
      */
-    public List<Comment> ofUser(String username, String sort, String time, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> ofUser(String username, String sort, String time, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
         
     	// Format parameters
     	String params = "";
@@ -291,7 +292,7 @@ public class Comments implements ActorDriven {
      * 
      * @return Comments of a user.
      */
-    public List<Comment> ofUser(String username, UserOverviewSort sort, TimeSpan time, int count, int limit, Comment after, Comment before, boolean show_given) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> ofUser(String username, UserOverviewSort sort, TimeSpan time, int count, int limit, Comment after, Comment before, boolean show_given) throws RetrievalFailedException, RedditError {
        
     	if (username == null || username.isEmpty()) {
     		throw new IllegalArgumentException("The username must be set.");
@@ -307,7 +308,7 @@ public class Comments implements ActorDriven {
 		//		(before != null) ? before.getFullName() : null,
 		//		(show_given) ? "given" : null
 		//);
-		List<Comment> comments = new ArrayList<>();
+		List<RedditItem> comments = new ArrayList<>();
 		comments.addAll(ofUser(
 				username,
 				(sort != null) ? sort.value() : null,
@@ -336,7 +337,7 @@ public class Comments implements ActorDriven {
      * 
      * @return Comments of a user.
      */
-    public List<Comment> ofUser(User target, UserOverviewSort sort, TimeSpan time, int count, int limit, Comment after, Comment before, boolean show_given) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> ofUser(User target, UserOverviewSort sort, TimeSpan time, int count, int limit, Comment after, Comment before, boolean show_given) throws RetrievalFailedException, RedditError {
     	
     	if (target == null) {
     		throw new IllegalArgumentException("The user targeted must be set.");
@@ -397,19 +398,19 @@ public class Comments implements ActorDriven {
     //	return ofSubmission(submission, commentId, parentsShown, depth, limit, sort);
     //}
     
-	/**
-	 * Flatten the comment tree.
-	 * The original comment tree is not overwritten.
-	 * 
-	 * @param cs		List of comments that you get returned from one of the other methods here
-	 * @param target	List in which to place the flattend comment tree.
-	 */
-	public static void flattenCommentTree(List<Comment> cs, List<Comment> target) {
-		for (Comment c : cs) {
-			target.add(c);
-			flattenCommentTree(c.getReplies(), target);
-		}
-	}
+	///**
+	// * Flatten the comment tree.
+	// * The original comment tree is not overwritten.
+	// *
+	// * @param cs		List of comments that you get returned from one of the other methods here
+	// * @param target	List in which to place the flattend comment tree.
+	// */
+	//public static void flattenCommentTree(List<Comment> cs, List<Comment> target) {
+	//	for (Comment c : cs) {
+	//		target.add(c);
+	//		flattenCommentTree(c.getReplies(), target);
+	//	}
+	//}
 
 	public static void indentCommentTree(List<Comment> comments) {
 		for(Comment c : comments) {

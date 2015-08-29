@@ -1,6 +1,7 @@
 package com.george.redditreader.ClickListeners;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -21,19 +22,20 @@ import com.george.redditreader.enums.UserActionType;
  */
 public class CommentItemOptionsListener implements View.OnClickListener {
 
-    private Activity activity;
+    //private Activity activity;
+    private Context context;
     private Comment comment;
     private RecyclerView.Adapter recyclerAdapter;
     private BaseAdapter adapter;
 
-    public CommentItemOptionsListener(Activity activity, Comment comment, BaseAdapter adapter) {
-        this.activity = activity;
+    public CommentItemOptionsListener(Context context, Comment comment, BaseAdapter adapter) {
+        this.context = context;
         this.comment = comment;
         this.adapter = adapter;
     }
 
-    public CommentItemOptionsListener(Activity activity, Comment comment, RecyclerView.Adapter adapter) {
-        this.activity = activity;
+    public CommentItemOptionsListener(Context context, Comment comment, RecyclerView.Adapter adapter) {
+        this.context = context;
         this.comment = comment;
         this.recyclerAdapter = adapter;
     }
@@ -58,7 +60,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 if(adapter != null) adapter.notifyDataSetChanged();
                 else recyclerAdapter.notifyDataSetChanged();
 
-                LoadUserActionTask task = new LoadUserActionTask(activity, comment.getFullName(), actionType);
+                LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), actionType);
                 task.execute();
                 break;
             case R.id.btn_downvote:
@@ -77,15 +79,15 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 if(adapter != null) adapter.notifyDataSetChanged();
                 else recyclerAdapter.notifyDataSetChanged();
 
-                task = new LoadUserActionTask(activity, comment.getFullName(), actionType);
+                task = new LoadUserActionTask(context, comment.getFullName(), actionType);
                 task.execute();
                 break;
             case R.id.btn_reply:
                 break;
             case R.id.btn_view_user:
-                Intent intent = new Intent(activity, UserActivity.class);
+                Intent intent = new Intent(context, UserActivity.class);
                 intent.putExtra("username", comment.getAuthor());
-                activity.startActivity(intent);
+                context.startActivity(intent);
                 break;
             case R.id.btn_more:
                 showMoreOptionsPopup(v);
@@ -94,7 +96,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
     }
 
     private void showMoreOptionsPopup(View v) {
-        PopupMenu popupMenu = new PopupMenu(activity, v);
+        PopupMenu popupMenu = new PopupMenu(context, v);
         popupMenu.inflate(R.menu.menu_comment_more_options);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -109,7 +111,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     case R.id.action_open_browser:
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
                         + "?comment=" + comment.getIdentifier()));
-                        activity.startActivity(intent);
+                        context.startActivity(intent);
                         return true;
                     case R.id.action_save:
                         return true;

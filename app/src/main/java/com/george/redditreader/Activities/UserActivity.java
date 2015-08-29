@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.george.redditreader.Fragments.UserFragment;
 import com.george.redditreader.R;
 
 public class UserActivity extends SwipeActivity {
@@ -18,6 +19,16 @@ public class UserActivity extends SwipeActivity {
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setupFragment();
+    }
+
+    private void setupFragment() {
+        UserFragment userFragment = (UserFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
+        if(userFragment == null) {
+            userFragment = new UserFragment();
+            getFragmentManager().beginTransaction().add(R.id.fragmentHolder, userFragment, "listFragment").commit();
+        }
     }
 
     @Override

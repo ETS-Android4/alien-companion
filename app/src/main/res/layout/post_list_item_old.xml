@@ -20,7 +20,7 @@
             android:layout_weight="8"
             android:clickable="false"
             android:focusable="false"
-            android:id="@+id/layout_postLinkButton"
+            android:id="@+id/linkButton"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:background="@drawable/touch_selector">
@@ -28,7 +28,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/imgView_postImage"
+                android:id="@+id/postImage"
                 android:src="@mipmap/ic_launcher"
                 android:layout_weight="1" />
 
@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="(Post Title Here)"
-                    android:id="@+id/txtView_postTitle"
+                    android:id="@+id/postTitle"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -57,57 +57,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(score)"
-                        android:id="@+id/txtView_postScore"/>
+                        android:id="@+id/score"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" - "
-                        android:id="@+id/textView7" />
+                        android:text=" - (age)"
+                        android:id="@+id/age" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(age)"
-                        android:id="@+id/txtView_postAge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" - "
-                        android:id="@+id/textView8" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(author)"
-                        android:id="@+id/txtView_postAuthor" />
+                        android:text=" - (author)"
+                        android:id="@+id/author" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(subreddit)"
-                        android:id="@+id/txtView_postSubreddit"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" - " />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(domain)"
-                        android:id="@+id/txtView_postDomain" />
-                </LinearLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(subreddit) - (domain)"
+                    android:id="@+id/postDets2"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -118,7 +88,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:clickable="false"
-            android:id="@+id/layout_postCommentsButton"
+            android:id="@+id/commentsButton"
             android:background="@drawable/touch_selector"
             android:focusable="false">
 
@@ -126,14 +96,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="#####"
-                android:id="@+id/txtView_postComments"
+                android:id="@+id/numberOfComments"
                 android:textStyle="bold"
                 android:gravity="center" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/imgView_commentsIcon"
+                android:id="@+id/commentsIcon"
                 android:src="@mipmap/ic_action_comments_grey" />
         </LinearLayout>
     </LinearLayout>
@@ -143,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:id="@+id/layout_postOptions">
+        android:id="@+id/layout_post_options">
 
         <include layout="@layout/post_list_item_options"/>
     </LinearLayout>

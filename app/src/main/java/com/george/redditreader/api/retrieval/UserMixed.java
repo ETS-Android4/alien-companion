@@ -2,6 +2,7 @@ package com.george.redditreader.api.retrieval;
 
 import android.util.Log;
 
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Kind;
 import com.george.redditreader.api.entity.Submission;
@@ -67,13 +68,13 @@ public class UserMixed implements ActorDriven {
         this.user = new_actor;
     }
 
-    public List<Object> parse(String url) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> parse(String url) throws RetrievalFailedException, RedditError {
         Log.d("parse url", url);
 
         String cookie = (user == null) ? null : user.getCookie();
 
         // List of submissions
-        List<Object> submissions = new ArrayList<>();
+        List<RedditItem> submissions = new ArrayList<>();
 
         // Send request to reddit server via REST client
         Object response = httpClient.get(url, cookie).getResponseObject();
@@ -88,7 +89,7 @@ public class UserMixed implements ActorDriven {
 
             // Iterate over the submission results
             JSONObject data;
-            Object submission;
+            RedditItem submission;
             for (Object anArray : array) {
                 data = (JSONObject) anArray;
 
@@ -117,7 +118,7 @@ public class UserMixed implements ActorDriven {
         return submissions;
     }
 
-    protected List<Object> ofUser(String username, String userContent, String sort, String time, String count, String limit, String after, String before, String show) {
+    protected List<RedditItem> ofUser(String username, String userContent, String sort, String time, String count, String limit, String after, String before, String show) {
 
         // Format parameters
         String params = "";
@@ -133,7 +134,7 @@ public class UserMixed implements ActorDriven {
         return parse(String.format(ApiEndpointUtils.USER_MIXED, username, userContent, params));
     }
 
-    public List<Object> ofUser(String username, UserSubmissionsCategory userContent, UserOverviewSort sort, TimeSpan timeSpan, int count, int limit, Thing after, Thing before, boolean show_given) {
+    public List<RedditItem> ofUser(String username, UserSubmissionsCategory userContent, UserOverviewSort sort, TimeSpan timeSpan, int count, int limit, Thing after, Thing before, boolean show_given) {
 
         if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("The username must be defined.");

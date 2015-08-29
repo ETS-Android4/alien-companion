@@ -1,11 +1,12 @@
 package com.george.redditreader.LoadTasks;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Adapters.PostListAdapter;
+import com.george.redditreader.Adapters.PostListAdapterOld;
 import com.george.redditreader.Fragments.SearchFragment;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.george.redditreader.enums.LoadType;
@@ -27,13 +28,14 @@ import java.util.List;
 public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
 
     private Exception exception;
-    private Activity activity;
+    //private Activity activity;
+    private Context context;
     private SearchFragment sf;
     private HttpClient httpClient;
     private LoadType loadType;
 
-    public LoadSearchTask(Activity activity, SearchFragment searchFragment, LoadType loadType) {
-        this.activity = activity;
+    public LoadSearchTask(Context context, SearchFragment searchFragment, LoadType loadType) {
+        this.context = context;
         this.sf = searchFragment;
         this.loadType = loadType;
         httpClient = new RedditHttpClient();
@@ -41,31 +43,31 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
 
     @Override
     protected List<Submission> doInBackground(Void... unused) {
-        try {
-            Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
-            List<Submission> submissions = null;
-
-            if(loadType == LoadType.extend) {
-                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, sf.postListAdapter.getLastPost(), null, true);
-            }
-            else {
-                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-                sf.postListAdapter = new PostListAdapter(activity, submissions);
-            }
-            ImageLoader.preloadImages(submissions, activity);
-            return submissions;
-        } catch (RetrievalFailedException e) {
-            exception = e;
-        } catch (RedditError e) {
-            exception = e;
-        }
+        //try {
+        //    Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
+        //    List<Submission> submissions = null;
+//
+        //    if(loadType == LoadType.extend) {
+        //        submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, sf.postListAdapterOld.getLastPost(), null, true);
+        //    }
+        //    else {
+        //        submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
+        //        sf.postListAdapterOld = new PostListAdapterOld((Activity) context, submissions);
+        //    }
+        //    ImageLoader.preloadThumbnails(submissions, context);
+        //    return submissions;
+        //} catch (RetrievalFailedException e) {
+        //    exception = e;
+        //} catch (RedditError e) {
+        //    exception = e;
+        //}
         return null;
     }
 
     @Override
     protected void onPostExecute(List<Submission> submissions) {
         if(exception != null) {
-            ToastUtils.postsLoadError(activity);
+            ToastUtils.postsLoadError(context);
             if(loadType == LoadType.extend) {
                 sf.footerProgressBar.setVisibility(View.GONE);
                 sf.showMore.setVisibility(View.VISIBLE);
@@ -76,31 +78,31 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<Submission>> {
                 case init:
                     sf.mainProgressBar.setVisibility(View.GONE);
                     if(submissions.size() != 0) {
-                        sf.contentView.setAdapter(sf.postListAdapter);
+                        sf.contentView.setAdapter(sf.postListAdapterOld);
                         sf.showMore.setVisibility(View.VISIBLE);
                         sf.hasPosts = true;
                     }
                     else {
                         sf.hasPosts = false;
-                        ToastUtils.noResults(activity, sf.searchQuery);
+                        ToastUtils.noResults(context, sf.searchQuery);
                     }
                     break;
                 case refresh:
                     sf.mainProgressBar.setVisibility(View.GONE);
                     if(submissions.size() != 0) {
-                        sf.contentView.setAdapter(sf.postListAdapter);
+                        sf.contentView.setAdapter(sf.postListAdapterOld);
                         sf.contentView.setVisibility(View.VISIBLE);
                         sf.showMore.setVisibility(View.VISIBLE);
                         sf.hasPosts = true;
                     }
                     else {
                         sf.hasPosts = false;
-                        ToastUtils.noResults(activity, sf.searchQuery);
+                        ToastUtils.noResults(context, sf.searchQuery);
                     }
                     break;
                 case extend:
                     sf.footerProgressBar.setVisibility(View.GONE);
-                    sf.postListAdapter.addAll(submissions);
+                    sf.postListAdapterOld.addAll(submissions);
                     sf.showMore.setVisibility(View.VISIBLE);
                     break;
             }

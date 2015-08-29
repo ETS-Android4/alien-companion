@@ -30,7 +30,7 @@ public class SubredditActivity extends SwipeActivity {
         listFragment = (PostListFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
         if(listFragment == null) {
             listFragment = new PostListFragment();
-            getFragmentManager().beginTransaction().add(R.id.fragmentHolder, listFragment).commit();
+            getFragmentManager().beginTransaction().add(R.id.fragmentHolder, listFragment, "listFragment").commit();
         }
     }
 

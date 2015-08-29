@@ -1,13 +1,12 @@
 package com.george.redditreader.Adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ import java.util.List;
 /**
  * Created by George on 5/9/2015.
  */
-public class PostListAdapter extends ArrayAdapter<Submission> {
+public class PostListAdapterOld extends ArrayAdapter<Submission> { //TODO: to be deleted
 
     private Activity activity;
     private LayoutInflater inflater;
@@ -57,8 +56,8 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
         ImageView moreOptions;
     }
 
-    public PostListAdapter(Activity activity, List<Submission> posts) {
-        super(activity, R.layout.post_list_item, posts);
+    public PostListAdapterOld(Activity activity, List<Submission> posts) {
+        super(activity, R.layout.post_list_item_old, posts);
         inflater = activity.getWindow().getLayoutInflater();
         this.posts = posts;
         this.activity = activity;
@@ -71,7 +70,7 @@ public class PostListAdapter extends ArrayAdapter<Submission> {
 
         ViewHolder holder = null;
         if(row == null) {
-            row = inflater.inflate(R.layout.post_list_item, parent, false);
+            row = inflater.inflate(R.layout.post_list_item_old, parent, false);
             holder = new ViewHolder();
 
             holder.title = (TextView) row.findViewById(R.id.postTitle);

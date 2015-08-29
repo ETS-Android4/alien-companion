@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.george.redditreader.Adapters.PostListAdapter;
+import com.george.redditreader.Adapters.PostListAdapterOld;
 import com.george.redditreader.ClickListeners.FooterListeners.SearchFooterListener;
 import com.george.redditreader.LoadTasks.LoadSearchTask;
 import com.george.redditreader.enums.LoadType;
@@ -36,7 +36,7 @@ public class SearchFragment extends Fragment {
     public ProgressBar footerProgressBar;
     public ListView contentView;
     public Button showMore;
-    public PostListAdapter postListAdapter;
+    public PostListAdapterOld postListAdapterOld;
     public SearchSort searchSort;
     public TimeSpan timeSpan;
     public String searchQuery;
@@ -91,11 +91,11 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_post_list_old, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (ListView) view.findViewById(R.id.listView);
 
-        if(postListAdapter == null) {
+        if(postListAdapterOld == null) {
             Log.d("PostListFragment", "Loading posts...");
             setSearchSort(SearchSort.RELEVANCE);
             setTimeSpan(TimeSpan.ALL);
@@ -104,7 +104,7 @@ public class SearchFragment extends Fragment {
         }
         else {
             mainProgressBar.setVisibility(View.GONE);
-            contentView.setAdapter(postListAdapter);
+            contentView.setAdapter(postListAdapterOld);
         }
 
         return view;

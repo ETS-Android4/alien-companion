@@ -12,6 +12,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.entity.Kind;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.entity.User;
@@ -84,14 +85,14 @@ public class Submissions implements ActorDriven {
      * @param url 	URL
      * @return 		Listing of submissions
      */
-    public List<Submission> parse(String url) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> parse(String url) throws RetrievalFailedException, RedditError {
 		Log.d("parse url", url);
     	
     	// Determine cookie
     	String cookie = (user == null) ? null : user.getCookie();
     	
     	// List of submissions
-        List<Submission> submissions = new LinkedList<Submission>();
+        List<RedditItem> submissions = new LinkedList<>();
         
         // Send request to reddit server via REST client
         Object response = httpClient.get(url, cookie).getResponseObject();
@@ -133,7 +134,7 @@ public class Submissions implements ActorDriven {
         
     }
 
-	protected List<Submission> frontpage(String sort, String timeSpan, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
+	protected List<RedditItem> frontpage(String sort, String timeSpan, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
 
 		// Format parameters
 		String params = "";
@@ -149,7 +150,7 @@ public class Submissions implements ActorDriven {
 		return parse(String.format(ApiEndpointUtils.SUBMISSIONS_GET_FRONT, sort, params));
 	}
 
-	public List<Submission> frontpage(SubmissionSort sort, TimeSpan timeSpan, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, RedditError {
+	public List<RedditItem> frontpage(SubmissionSort sort, TimeSpan timeSpan, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, RedditError {
 
 		return frontpage(
 				(sort != null) ? sort.value() : "hot",
@@ -177,7 +178,7 @@ public class Submissions implements ActorDriven {
      * @param show				Show all (disables filters such as "hide links that I have voted on")
      * @return 					The linked list containing submissions
      */
-    protected List<Submission> ofSubreddit(String subreddit, String sort, String timeSpan, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
+    protected List<RedditItem> ofSubreddit(String subreddit, String sort, String timeSpan, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
     	assert subreddit != null && user != null;
     	
     	// Encode the reddit name for the URL:
@@ -214,7 +215,7 @@ public class Submissions implements ActorDriven {
      * @param show_all			Show all (disables filters such as "hide links that I have voted on")
      * @return 					The linked list containing submissions
      */
-    public List<Submission> ofSubreddit(String subreddit, SubmissionSort sort, TimeSpan timeSpan, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> ofSubreddit(String subreddit, SubmissionSort sort, TimeSpan timeSpan, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, RedditError {
     	
     	if (subreddit == null || subreddit.isEmpty()) {
     		throw new IllegalArgumentException("The subreddit must be defined.");
@@ -250,7 +251,7 @@ public class Submissions implements ActorDriven {
      * @param show				Show all (disables filters such as "hide links that I have voted on")
      * @return 					The linked list containing submissions
      */
-    protected List<Submission> search(String subreddit, String query, String syntax, String sort, String time, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
+    protected List<RedditItem> search(String subreddit, String query, String syntax, String sort, String time, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
     	assert query != null && user != null;
     	
     	// Format parameters
@@ -293,7 +294,7 @@ public class Submissions implements ActorDriven {
      * @param show_all			Show all (disables filters such as "hide links that I have voted on")
      * @return 					The linked list containing submissions
      */
-    public List<Submission> search(String subreddit, String query, QuerySyntax syntax, SearchSort sort, TimeSpan time, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, IllegalArgumentException {
+    public List<RedditItem> search(String subreddit, String query, QuerySyntax syntax, SearchSort sort, TimeSpan time, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, IllegalArgumentException {
     	
     	if (query == null || query.isEmpty()) {
     		throw new IllegalArgumentException("The query must be defined.");
@@ -332,7 +333,7 @@ public class Submissions implements ActorDriven {
      * 
      * @return Comments of a user.
      */
-    protected List<Submission> ofUser(String username, String category, String sort, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
+    protected List<RedditItem> ofUser(String username, String category, String sort, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
     	
     	// Format parameters
     	String params = "";
@@ -363,7 +364,7 @@ public class Submissions implements ActorDriven {
      * 
      * @return Submissions of a user.
      */
-    public List<Submission> ofUser(String username, UserSubmissionsCategory category, UserOverviewSort sort, int count, int limit, Submission after, Submission before, boolean show_given) throws RetrievalFailedException, IllegalArgumentException {
+    public List<RedditItem> ofUser(String username, UserSubmissionsCategory category, UserOverviewSort sort, int count, int limit, Submission after, Submission before, boolean show_given) throws RetrievalFailedException, IllegalArgumentException {
     	
     	if (username == null || username.isEmpty()) {
     		throw new IllegalArgumentException("The username must be defined.");

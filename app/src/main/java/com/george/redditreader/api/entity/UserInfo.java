@@ -2,6 +2,9 @@ package com.george.redditreader.api.entity;
 
 import android.content.Context;
 
+import com.george.redditreader.Adapters.RedditItemListAdapter;
+import com.george.redditreader.Models.RedditItem;
+import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.api.retrieval.Trophies;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.squareup.picasso.Picasso;
@@ -15,7 +18,19 @@ import java.util.List;
  *
  * @author Raul Rene Lepsa
  */
-public class UserInfo {
+public class UserInfo implements RedditItem {
+
+    public int getViewType(){
+        return RedditItemListAdapter.VIEW_TYPE_USER_INFO;
+    }
+
+    public String getThumbnail() {
+        return null;
+    }
+
+    public void setThumbnailObject(Thumbnail thumbnailObject) {
+
+    }
 
     // User identifier
     private String id;

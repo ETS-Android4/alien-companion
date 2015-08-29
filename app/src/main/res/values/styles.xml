@@ -36,7 +36,7 @@
         <item name="android:textColor">@color/black</item>
 
         <!-- android:actionMenuTextColor is the color of the text of
-              action (menu) items in the Toolbar, at least in the
+              action (menu) redditItems in the Toolbar, at least in the
               Theme.AppCompat theme.
               For some reason, they already get the textColorPrimary
               when running on API 21, but not on older versions of

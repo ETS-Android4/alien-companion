@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if(listFragment == null) {
             //Log.d("MainActivity", "Creating new fragment...");
             listFragment = new PostListFragment();
-            fm.beginTransaction().add(R.id.fragmentHolder, listFragment).commit();
+            fm.beginTransaction().add(R.id.fragmentHolder, listFragment, "listFragment").commit();
         }
     }
 

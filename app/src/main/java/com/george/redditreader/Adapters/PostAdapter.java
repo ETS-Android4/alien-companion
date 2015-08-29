@@ -89,7 +89,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 v.setOnLongClickListener(mLongListener);
                 break;
             case VIEW_TYPE_CONTENT:
-                resource = R.layout.post_details;
+                resource = R.layout.post_details_old;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 viewHolder = new ContentViewHolder(v);
@@ -193,15 +193,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
 
-                //cvh.commentLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                //    @Override
-                //    public boolean onLongClick(View v) {
-                //        if (position == selectedComment) selectedComment = -1;
-                //        else selectedComment = position;
-                //        notifyDataSetChanged();
-                //        return true;
-                //    }
-                //});
                 //user logged in
                 if(MainActivity.currentUser != null) {
                     //check user vote
@@ -281,12 +272,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     }
                 }
                 contentVH.author.setText(post.getAuthor());
-                //if (post.getScore() > 0) {
-                //    //contentVH.postDets2.setText("+ " + post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-                //    contentVH.score.setText("+ " + post.getScore());
-                //} else {
-                //    //contentVH.postDets2.setText(post.getScore() + " - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-                //}
                 contentVH.score.setText(Long.toString(post.getScore()));
                 contentVH.age.setText(" - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 contentVH.subreddit.setText(post.getSubreddit());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.retrieval.params.CommentSort;
@@ -24,7 +25,7 @@ public class ExtendedComments {
      * The result is maximum amount_first_depth * RedditConstants.MAX_LIMIT_COMMENTS
      * Which can be quite alot (e.g. 500x500 = 250000 comments)
      *
-     * @param submissionId 			Submission ID36 identifier
+     * @param submission 			Submission object
      * @param sort  				(Optional, set null if not used) CommentSort enum indicating the type of sorting to be applied (e.g. HOT, NEW, TOP, etc)
      * @param amount_first_depth	(Optional, set -1 if not used) Integer representing the amount of first depth comments to retrieve
      * @param after					(Optional, set to null if not used) After which comment to retrieve
@@ -72,14 +73,14 @@ public class ExtendedComments {
      * 
      * @return Comments of a user.
      */
-    public List<Comment> ofUser(String username, UserOverviewSort sort, TimeSpan time, int amount, Comment after) {
+    public List<RedditItem> ofUser(String username, UserOverviewSort sort, TimeSpan time, int amount, Comment after) {
     	
     	if (amount < 0) {
     		throw new IllegalArgumentException("A negative amount of comments is not allowed.");
     	}
 
     	// List of comments
-        List<Comment> result = new LinkedList<Comment>();
+        List<RedditItem> result = new LinkedList<>();
 
         // Do all iterations
         int counter = 0;
@@ -90,9 +91,9 @@ public class ExtendedComments {
 			amount -= limit;
 			
 			// Retrieve comments
-			List<Comment> subresult = comments.ofUser(username, sort, time, counter, limit, after, null, true);
+			List<RedditItem> subresult = comments.ofUser(username, sort, time, counter, limit, after, null, true);
 			if (subresult == null) {
-				return new ArrayList<Comment>();
+				return new ArrayList<>();
 			}
 			result.addAll(subresult);
 			
@@ -111,7 +112,7 @@ public class ExtendedComments {
 			}
 			
 			// Previous last comment
-			after = subresult.get(subresult.size() - 1);
+			after = (Comment) subresult.get(subresult.size() - 1);
 			
 		}
 		

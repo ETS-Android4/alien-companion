@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by George on 6/13/2015.
  */
-public class UserAdapter extends BaseAdapter {
+public class UserAdapterOld extends BaseAdapter { //TODO: to be deleted
 
     private static final int VIEW_TYPE_INFO = 0;
     private static final int VIEW_TYPE_POST = 1;
@@ -47,7 +47,7 @@ public class UserAdapter extends BaseAdapter {
 
     public int selectedPosition;
 
-    public UserAdapter(Activity activity) {
+    public UserAdapterOld(Activity activity) {
         mActivity = activity;
         mInflater = activity.getWindow().getLayoutInflater();
         mData = new ArrayList<>();
@@ -157,7 +157,7 @@ public class UserAdapter extends BaseAdapter {
            case VIEW_TYPE_POST:
                PostItemListViewholderTemp postViewHolder;
                if(row == null) {
-                   row = mInflater.inflate(R.layout.post_list_item, parent, false);
+                   row = mInflater.inflate(R.layout.post_list_item_old, parent, false);
                    postViewHolder = new PostItemListViewholderTemp(row);
                    row.setTag(postViewHolder);
                }
@@ -370,7 +370,7 @@ public class UserAdapter extends BaseAdapter {
 
         public CommentViewHolder(View itemView) {
             postTitle = (TextView) itemView.findViewById(R.id.txtView_postTitle);
-            commentDets = (TextView) itemView.findViewById(R.id.txtView_commentDets);
+            commentDets = (TextView) itemView.findViewById(R.id.txtView_commentAge);
             commentBody = (TextView) itemView.findViewById(R.id.txtView_commentBody);
             commentLayout = (LinearLayout) itemView.findViewById(R.id.layout_comment);
             commentOptionsLayout = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);

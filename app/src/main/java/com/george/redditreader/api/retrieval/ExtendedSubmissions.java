@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.retrieval.params.QuerySyntax;
 import com.george.redditreader.api.retrieval.params.SearchSort;
@@ -31,7 +32,7 @@ public class ExtendedSubmissions {
      * @param after				Submission after which the submissions need to be fetched.
      * @return					List of the submissions
      */
-    public List<Submission> ofSubreddit(String redditName, SubmissionSort sort, int amount, Submission after) {
+    public List<RedditItem> ofSubreddit(String redditName, SubmissionSort sort, int amount, Submission after) {
     	
     	if (amount < 0) {
     		System.err.println("You cannot retrieve a negative amount of submissions.");
@@ -39,7 +40,7 @@ public class ExtendedSubmissions {
     	}
 
     	// List of submissions
-        List<Submission> result = new LinkedList<Submission>();
+        List<RedditItem> result = new LinkedList<>();
 
         // Do all iterations
         int counter = 0;
@@ -50,9 +51,9 @@ public class ExtendedSubmissions {
 			amount -= limit;
 			
 			// Retrieve submissions
-			List<Submission> subresult = submissions.ofSubreddit(redditName, sort, null, counter, limit, after, null, true);//TODO: modify to add support for timespan sorting
+			List<RedditItem> subresult = submissions.ofSubreddit(redditName, sort, null, counter, limit, after, null, true);//TODO: modify to add support for timespan sorting
 			if (subresult == null) {
-				return new ArrayList<Submission>();
+				return new ArrayList<>();
 			}
 			result.addAll(subresult);
 			
@@ -71,7 +72,7 @@ public class ExtendedSubmissions {
 			}
 			
 			// Previous last submission
-			after = subresult.get(subresult.size() - 1);
+			after = (Submission) subresult.get(subresult.size() - 1);
 			
 		}
 		
@@ -89,7 +90,7 @@ public class ExtendedSubmissions {
      * @param after				Submission after which to get
      * @return					List of the submissions
      */
-    public List<Submission> get(String redditName, SubmissionSort sort, int amount, Submission after) {
+    public List<RedditItem> get(String redditName, SubmissionSort sort, int amount, Submission after) {
     	return ofSubreddit(redditName, sort, amount, after);
     }
     
@@ -100,7 +101,7 @@ public class ExtendedSubmissions {
      * @param sort			Subreddit sorting method
      * @return <code>List</code> of submissions on the subreddit.
      */
-    public List<Submission> ofSubreddit(String redditName, SubmissionSort sort) {
+    public List<RedditItem> ofSubreddit(String redditName, SubmissionSort sort) {
     	return ofSubreddit(redditName, sort, RedditConstants.APPROXIMATE_MAX_LISTING_AMOUNT, null);
     }
     
@@ -111,7 +112,7 @@ public class ExtendedSubmissions {
      * @param amount			Desired amount which will be attempted. No guarantee! See request limits.
      * @return					List of the submissions
      */
-    public List<Submission> ofSubreddit(String redditName, SubmissionSort sort, int amount) {
+    public List<RedditItem> ofSubreddit(String redditName, SubmissionSort sort, int amount) {
     	return ofSubreddit(redditName, sort, amount, null);
     }
     
@@ -125,7 +126,7 @@ public class ExtendedSubmissions {
      * @param after				Submission after which the submissions need to be fetched.
      * @return					List of the submissions
      */
-    public List<Submission> search(String query, SearchSort sort, TimeSpan time, int amount, Submission after) {
+    public List<RedditItem> search(String query, SearchSort sort, TimeSpan time, int amount, Submission after) {
     	
     	if (amount < 0) {
     		System.err.println("You cannot retrieve a negative amount of submissions.");
@@ -133,7 +134,7 @@ public class ExtendedSubmissions {
     	}
 
     	// List of submissions
-        List<Submission> result = new LinkedList<Submission>();
+        List<RedditItem> result = new LinkedList<>();
 
         // Do all iterations
         int counter = 0;
@@ -144,9 +145,9 @@ public class ExtendedSubmissions {
 			amount -= limit;
 			
 			// Retrieve submissions
-			List<Submission> subresult = submissions.search(null, query, QuerySyntax.LUCENE, sort, time, counter, limit, after, null, true); //TODO: modify to support subreddit restriction
+			List<RedditItem> subresult = submissions.search(null, query, QuerySyntax.LUCENE, sort, time, counter, limit, after, null, true); //TODO: modify to support subreddit restriction
 			if (subresult == null) {
-				return new ArrayList<Submission>();
+				return new ArrayList<>();
 			}
 			result.addAll(subresult);
 			
@@ -165,7 +166,7 @@ public class ExtendedSubmissions {
 			}
 			
 			// Previous last submission
-			after = subresult.get(subresult.size() - 1);
+			after = (Submission) subresult.get(subresult.size() - 1);
 			
 		}
 		
@@ -182,7 +183,7 @@ public class ExtendedSubmissions {
      * @param amount	How many to retrieve (if possible, result <= amount guaranteed)
      * @return <code>List</code> of submissions that match the query.
      */
-    public List<Submission> search(String query, SearchSort sort, TimeSpan time, int amount) {
+    public List<RedditItem> search(String query, SearchSort sort, TimeSpan time, int amount) {
     	return search(query, sort, time, amount, null);
     }
     
@@ -194,7 +195,7 @@ public class ExtendedSubmissions {
      * @param time		Search time
      * @return <code>List</code> of submissions that match the query.
      */
-    public List<Submission> search(String query, SearchSort sort, TimeSpan time) {
+    public List<RedditItem> search(String query, SearchSort sort, TimeSpan time) {
     	return search(query, sort, time, RedditConstants.APPROXIMATE_MAX_LISTING_AMOUNT);
     }
 
@@ -209,7 +210,7 @@ public class ExtendedSubmissions {
      * @param after				Submission after which the submissions need to be fetched.
      * @return					List of the submissions
      */
-    public List<Submission> ofUser(String username, UserSubmissionsCategory category, UserOverviewSort sort, int amount, Submission after) {
+    public List<RedditItem> ofUser(String username, UserSubmissionsCategory category, UserOverviewSort sort, int amount, Submission after) {
     	
     	if (amount < 0) {
     		System.err.println("You cannot retrieve a negative amount of submissions.");
@@ -217,7 +218,7 @@ public class ExtendedSubmissions {
     	}
 
     	// List of submissions
-        List<Submission> result = new LinkedList<Submission>();
+        List<RedditItem> result = new LinkedList<>();
 
         // Do all iterations
         int counter = 0;
@@ -228,9 +229,9 @@ public class ExtendedSubmissions {
 			amount -= limit;
 			
 			// Retrieve submissions
-			List<Submission> subresult = submissions.ofUser(username, category, sort, counter, limit, after, null, true);
+			List<RedditItem> subresult = submissions.ofUser(username, category, sort, counter, limit, after, null, true);
 			if (subresult == null) {
-				return new ArrayList<Submission>();
+				return new ArrayList<>();
 			}
 			result.addAll(subresult);
 			
@@ -249,7 +250,7 @@ public class ExtendedSubmissions {
 			}
 			
 			// Previous last submission
-			after = subresult.get(subresult.size() - 1);
+			after = (Submission) subresult.get(subresult.size() - 1);
 			
 		}
 		
@@ -266,7 +267,7 @@ public class ExtendedSubmissions {
      * @param amount			Desired amount which will be attempted. No guarantee! See request limits.
      * @return					List of the submissions
      */
-    public List<Submission> ofUser(String username, UserSubmissionsCategory category, UserOverviewSort sort, int amount) {
+    public List<RedditItem> ofUser(String username, UserSubmissionsCategory category, UserOverviewSort sort, int amount) {
     	return ofUser(username, category, sort, amount, null);
     }
 	

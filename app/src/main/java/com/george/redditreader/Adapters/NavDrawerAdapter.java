@@ -188,8 +188,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     private void collapseAccountItems() {
         items.removeAll(accountItems);
         accountItemsVisible = false;
-        notifyDataSetChanged();
-
+        //notifyDataSetChanged();
+        notifyItemChanged(0);
+        notifyItemRangeRemoved(1, accountItems.size());
     }
 
     private void expandAccountItems() {
@@ -199,7 +200,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             i++;
         }
         accountItemsVisible = true;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(0);
+        notifyItemRangeInserted(1, accountItems.size());
     }
 
     public void toggleSubredditItems() {
@@ -214,13 +217,18 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
         items.removeAll(subredditItems);
         subredditItemsVisible = false;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(items.size()-1);
+        notifyItemRangeRemoved(items.size(), subredditItems.size());
     }
 
     private void expandSubredditItems() {
+        int position = items.size();
         items.addAll(subredditItems);
         subredditItemsVisible = true;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+        notifyItemChanged(position-1);
+        notifyItemRangeInserted(position, subredditItems.size());
     }
 
     @Override

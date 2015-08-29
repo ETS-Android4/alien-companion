@@ -4,7 +4,10 @@ package com.george.redditreader.Fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,9 +19,11 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Adapters.PostListAdapter;
+import com.george.redditreader.Adapters.PostListAdapterOld;
+import com.george.redditreader.Adapters.RedditItemListAdapter;
 import com.george.redditreader.ClickListeners.FooterListeners.SubredditFooterListener;
 import com.george.redditreader.LoadTasks.LoadPostsTask;
+import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.SubmissionSort;
@@ -30,11 +35,13 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
  */
 public class PostListFragment extends Fragment {
 
-    public PostListAdapter postListAdapter;
-    public Button showMore;
-    public ProgressBar footerProgressBar;
+    //public PostListAdapterOld postListAdapterOld;
+    public RedditItemListAdapter postListAdapter;
+    //public Button showMore;
+    //public ProgressBar footerProgressBar;
     public ProgressBar mainProgressBar;
-    public ListView contentView;
+    //public ListView contentView;
+    public RecyclerView contentView;
     public String subreddit;
     private AppCompatActivity activity;
     public SubmissionSort submissionSort;
@@ -55,19 +62,28 @@ public class PostListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
-        contentView = (ListView) view.findViewById(R.id.listView);
+        contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
-        if(postListAdapter == null) {
-            //Log.d("PostListFragment", "Loading posts...");
-            setSubmissionSort(SubmissionSort.HOT);
-            LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
-            task.execute();
-        }
-        else {
-            mainProgressBar.setVisibility(View.GONE);
-            contentView.setAdapter(postListAdapter);
-        }
+        contentView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        contentView.setHasFixedSize(true);
+        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
+        setSubmissionSort(SubmissionSort.HOT);
+        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
+        task.execute();
+
+        //if(postListAdapter == null) {
+        //    //Log.d("PostListFragment", "Loading posts...");
+        //    setSubmissionSort(SubmissionSort.HOT);
+        //    LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
+        //    task.execute();
+        //}
+        //else {
+        //    mainProgressBar.setVisibility(View.GONE);
+        //    contentView.setAdapter(postListAdapter);
+        //}
+
+        //Log.d("geo debug", "oncreateview called");
         return view;
     }
 
@@ -199,22 +215,22 @@ public class PostListFragment extends Fragment {
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
-        createFooter();
-        if(!hasPosts)
-            showMore.setVisibility(View.GONE);
-        else
-            showMore.setVisibility(View.VISIBLE);
+        //createFooter();
+        //if(!hasPosts)
+        //    showMore.setVisibility(View.GONE);
+        //else
+        //    showMore.setVisibility(View.VISIBLE);
     }
 
-    private void createFooter() {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.footer_layout, null);
-        contentView.addFooterView(view);
-        footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        footerProgressBar.setVisibility(View.GONE);
-        showMore = (Button) view.findViewById(R.id.showMore);
-        showMore.setOnClickListener(new SubredditFooterListener(activity, this));
-    }
+    //private void createFooter() {
+    //    LayoutInflater inflater = getActivity().getLayoutInflater();
+    //    View view = inflater.inflate(R.layout.footer_layout, null);
+    //    contentView.addFooterView(view);
+    //    footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+    //    footerProgressBar.setVisibility(View.GONE);
+    //    showMore = (Button) view.findViewById(R.id.showMore);
+    //    showMore.setOnClickListener(new SubredditFooterListener(activity, this));
+    //}
 
     //Reload Posts List
     public void refreshList() {

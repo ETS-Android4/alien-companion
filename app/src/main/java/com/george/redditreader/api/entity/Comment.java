@@ -1,5 +1,8 @@
 package com.george.redditreader.api.entity;
 
+import com.george.redditreader.Adapters.RedditItemListAdapter;
+import com.george.redditreader.Models.RedditItem;
+import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToInteger;
@@ -7,6 +10,7 @@ import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToS
 import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
 import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToDouble;
 
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +24,19 @@ import org.json.simple.JSONObject;
  * @author Raul Rene Lepsa
  * @author Simon Kassing
  */
-public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpIndData {
+public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpIndData, RedditItem {
+
+    public int getViewType(){
+        return RedditItemListAdapter.VIEW_TYPE_USER_COMMENT;
+    }
+
+    public String getThumbnail() {
+        return null;
+    }
+
+    public void setThumbnailObject(Thumbnail thumbnailObject) {
+
+    }
 
     private String author;			// Username of the author
     private String parentId;		// Parent identifier
@@ -126,11 +142,11 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
         mIndentation = indentation;
     }
 
-    public void indentReplies() {
-        for(Comment c : mChildren) {
-            c.setIndentation(getIndentation()+1);
-        }
-    }
+    //public void indentReplies() {
+    //    for(Comment c : mChildren) {
+    //        c.setIndentation(getIndentation()+1);
+    //    }
+    //}
 
     public void setLinkTitle(String title) {
         this.linkTitle = title;

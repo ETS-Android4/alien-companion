@@ -10,6 +10,8 @@ import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToS
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
+import com.george.redditreader.Adapters.RedditItemListAdapter;
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
@@ -27,7 +29,11 @@ import java.util.List;
  * @author Danny Tsegai
  * @author Simon Kassing
  */
-public class Submission extends Thing implements Serializable, MultiLevelExpIndListAdapter.ExpIndData {
+public class Submission extends Thing implements Serializable, MultiLevelExpIndListAdapter.ExpIndData, RedditItem {
+
+	public int getViewType(){
+		return RedditItemListAdapter.VIEW_TYPE_POST;
+	}
 
     //private HttpClient restClient;
 

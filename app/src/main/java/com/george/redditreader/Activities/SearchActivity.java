@@ -15,7 +15,7 @@ public class SearchActivity extends SwipeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_search_old);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
@@ -23,6 +23,14 @@ public class SearchActivity extends SwipeActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         activityStarted = true;
+    }
+
+    private void setupFragment() {
+        SearchFragment searchFragment = (SearchFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
+        if(searchFragment == null) {
+            searchFragment = new SearchFragment();
+            getFragmentManager().beginTransaction().add(R.id.fragmentHolder, searchFragment, "listFragment").commit();
+        }
     }
 
     @Override

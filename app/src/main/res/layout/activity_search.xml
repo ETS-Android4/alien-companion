@@ -6,9 +6,10 @@
 
     <include layout="@layout/my_toolbar" />
 
-    <fragment
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.george.redditreader.Fragments.SearchFragment"
-        android:id="@+id/fragment4" />
+        android:id="@+id/fragmentHolder"></LinearLayout>
+
 </LinearLayout>

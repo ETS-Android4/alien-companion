@@ -2,6 +2,7 @@ package com.george.redditreader.Utils;
 
 import android.content.Context;
 
+import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.Models.Thumbnail;
 import com.george.redditreader.api.entity.Submission;
 import com.squareup.picasso.Picasso;
@@ -14,7 +15,7 @@ import java.util.List;
 public class ImageLoader {
 
     //TODO: Load and Cache Images with Universal Image Loader instead of Picasso
-    //public static List<Thumbnail> preloadImages(List<Submission> posts, Context context) {
+    //public static List<Thumbnail> preloadThumbnails(List<Submission> posts, Context context) {
     //    //if (BuildConfig.DEBUG) {
     //    //    Picasso.with(activity).setIndicatorsEnabled(true);
     //    //    Picasso.with(activity).setLoggingEnabled(true);
@@ -33,7 +34,7 @@ public class ImageLoader {
     //    return  thumbnails;
     //}
 
-    public static void preloadUserImages(List<Object> posts, Context context) {
+    public static void preloadUserImages(List<RedditItem> posts, Context context) {
         //if (BuildConfig.DEBUG) {
         //    Picasso.with(activity).setIndicatorsEnabled(true);
         //    Picasso.with(activity).setLoggingEnabled(true);
@@ -53,20 +54,20 @@ public class ImageLoader {
         }
     }
 
-    public static void preloadImages(List<Submission> posts, Context context) {
+    public static void preloadThumbnails(List<RedditItem> posts, Context context) {
         //if (BuildConfig.DEBUG) {
         //    Picasso.with(activity).setIndicatorsEnabled(true);
         //    Picasso.with(activity).setLoggingEnabled(true);
         //}
-        for(Submission submission : posts) {
-                Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
-                try {
-                    Picasso.with(context).load(thumbnail.getUrl()).fetch();
-                    thumbnail.setHasThumbnail(true);
-                } catch (IllegalArgumentException e) {
-                    thumbnail.setHasThumbnail(false);
-                }
-                submission.setThumbnailObject(thumbnail);
+        for(RedditItem submission : posts) {
+            Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
+            try {
+                Picasso.with(context).load(thumbnail.getUrl()).fetch();
+                thumbnail.setHasThumbnail(true);
+            } catch (IllegalArgumentException e) {
+                thumbnail.setHasThumbnail(false);
+            }
+            submission.setThumbnailObject(thumbnail);
         }
     }
 

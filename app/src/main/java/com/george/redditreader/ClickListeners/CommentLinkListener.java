@@ -1,6 +1,7 @@
 package com.george.redditreader.ClickListeners;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
@@ -13,21 +14,22 @@ import com.george.redditreader.api.entity.Comment;
  */
 public class CommentLinkListener implements View.OnClickListener {
 
-    private Activity activity;
-
+    //private Activity activity;
+    private Context context;
     private Comment comment;
 
-    public CommentLinkListener(Activity activity, Comment comment) {
-        this.activity = activity;
+    public CommentLinkListener(Context context, Comment comment) {
+        //this.activity = activity;
+        this.context = context;
         this.comment = comment;
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(activity, PostActivity.class);
+        Intent intent = new Intent(context, PostActivity.class);
         String postInfo[] = {comment.getSubreddit(), comment.getLinkId().substring(3), comment.getIdentifier(), null};
         intent.putExtra("postInfo", postInfo);
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
 }

@@ -10,7 +10,7 @@ import com.george.redditreader.R;
 /**
  * Created by sound on 8/27/2015.
  */
-public class PostItemListViewholderTemp {
+public class PostItemListViewholderTemp { //TODO: to be deleted
 
     public TextView title;
     public TextView score;

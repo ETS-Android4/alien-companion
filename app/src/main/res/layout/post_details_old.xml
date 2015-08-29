@@ -1,7 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.george.redditreader.temp.PostDetailsFragment"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,7 +9,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/layout_postLinkButton"
+        android:id="@+id/layout_post_details"
         android:background="@drawable/touch_selector">
 
         <LinearLayout
@@ -36,7 +35,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="(Post Title Here)"
-                        android:id="@+id/txtView_postTitle"
+                        android:id="@+id/postTitle"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -48,26 +47,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="(displayURL)"
-                            android:id="@+id/txtView_postDomain" />
+                            android:text="(displayURL) - (postTag) - "
+                            android:id="@+id/postDets1" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=" - "
-                            android:id="@+id/textView4" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="(comments)"
-                            android:id="@+id/txtView_postComments" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" comments"
-                            android:id="@+id/textView5" />
+                            android:text="##### comments"
+                            android:id="@+id/txtView_comments" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -75,7 +62,7 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imgView_postImage"
+                    android:id="@+id/postImage"
                     android:src="@mipmap/ic_launcher"
                     android:layout_weight="1" />
 
@@ -90,8 +77,8 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="(author)"
-                    android:id="@+id/txtView_postAuthor"
+                    android:text="(author here)"
+                    android:id="@+id/author"
                     android:layout_weight="1"
                     android:gravity="left" />
 
@@ -105,27 +92,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(score)"
-                        android:id="@+id/txtView_postScore" />
+                        android:text="#####"
+                        android:id="@+id/postScore" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" - "
-                        android:id="@+id/textView6" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(age)"
-                        android:id="@+id/txtView_postAge" />
+                        android:text=" - #### h"
+                        android:id="@+id/postAge" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="(subreddit)"
-                    android:id="@+id/txtView_postSubreddit"
+                    android:id="@+id/subreddit"
                     android:layout_weight="1"
                     android:gravity="right" />
             </LinearLayout>
@@ -135,7 +116,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/layout_postOptions"
+            android:id="@+id/layout_post_options"
             android:visibility="gone">
 
             <include layout="@layout/post_list_item_options"/>
@@ -145,7 +126,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/txtView_selfText"
+            android:id="@+id/selfText"
             android:textSize="15sp"
             android:text="(Self Text Here)"
             android:background="#ffe3e3e3"
@@ -160,8 +141,7 @@
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pBar_comments"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp" />
+        android:id="@+id/progressBar3"
+        android:layout_gravity="center" />
 
 </LinearLayout>

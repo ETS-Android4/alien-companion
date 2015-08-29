@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,9 +17,11 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Adapters.UserAdapter;
+import com.george.redditreader.Adapters.RedditItemListAdapter;
+import com.george.redditreader.Adapters.UserAdapterOld;
 import com.george.redditreader.ClickListeners.FooterListeners.UserFooterListener;
 import com.george.redditreader.LoadTasks.LoadUserContentTask;
+import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
@@ -29,9 +33,11 @@ import com.george.redditreader.api.retrieval.params.UserOverviewSort;
 public class UserFragment extends Fragment {
 
     public ProgressBar progressBar;
-    public ProgressBar footerProgressBar;
-    public ListView contentView;
-    public UserAdapter userAdapter;
+    //public ProgressBar footerProgressBar;
+    //public ListView contentView;
+    //public UserAdapterOld userAdapterOld;
+    public RecyclerView contentView;
+    public RedditItemListAdapter userAdapter;
     private AppCompatActivity activity;
     public String username;
     public UserOverviewSort userOverviewSort;
@@ -64,18 +70,18 @@ public class UserFragment extends Fragment {
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
-        createFooter();
+        //createFooter();
     }
 
-    private void createFooter() {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.footer_layout, null);
-        contentView.addFooterView(view);
-        footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        footerProgressBar.setVisibility(View.GONE);
-        showMore = (Button) view.findViewById(R.id.showMore);
-        showMore.setOnClickListener(new UserFooterListener(activity, this));
-    }
+    //private void createFooter() {
+    //    LayoutInflater inflater = getActivity().getLayoutInflater();
+    //    View view = inflater.inflate(R.layout.footer_layout, null);
+    //    contentView.addFooterView(view);
+    //    footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+    //    footerProgressBar.setVisibility(View.GONE);
+    //    showMore = (Button) view.findViewById(R.id.showMore);
+    //    showMore.setOnClickListener(new UserFooterListener(activity, this));
+    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,20 +89,29 @@ public class UserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar5);
-        contentView = (ListView) view.findViewById(R.id.listView2);
+        contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
-        if(userAdapter == null) {
-            //setUserContent(UserContent.overview);
-            userContent = UserSubmissionsCategory.OVERVIEW;
-            //setUserOverviewSort(UserOverviewSort.NEW);
-            userOverviewSort = UserOverviewSort.NEW;
-            LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
-            task.execute();
-        }
-        else {
-            progressBar.setVisibility(View.GONE);
-            contentView.setAdapter(userAdapter);
-        }
+        contentView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        contentView.setHasFixedSize(true);
+        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        userContent = UserSubmissionsCategory.OVERVIEW;
+        userOverviewSort = UserOverviewSort.NEW;
+        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
+        task.execute();
+
+        //if(userAdapter == null) {
+        //    //setUserContent(UserContent.overview);
+        //    userContent = UserSubmissionsCategory.OVERVIEW;
+        //    //setUserOverviewSort(UserOverviewSort.NEW);
+        //    userOverviewSort = UserOverviewSort.NEW;
+        //    LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
+        //    task.execute();
+        //}
+        //else {
+        //    progressBar.setVisibility(View.GONE);
+        //    contentView.setAdapter(userAdapter);
+        //}
 
         return view;
     }
