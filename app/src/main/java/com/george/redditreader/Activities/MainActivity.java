@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +36,8 @@ import com.george.redditreader.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.imid.swipebacklayout.lib.ViewDragHelper;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
 
     public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+
+    public static boolean initialized;
 
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
@@ -60,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
     //public static MenuItem toggleHiddenMenuItem;
 
     public static SharedPreferences prefs;
+    public static int swipeSetting;
+    public static boolean showNSFWpreview;
+    public static int initialCommentCount;
 
     public static SavedAccount currentAccount;
     public static User currentUser;
@@ -69,8 +77,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
+        initialized = true;
         showHiddenPosts = false;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        getCurrentSettings();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,6 +110,25 @@ public class MainActivity extends AppCompatActivity {
         listFragment.setSubreddit(null);
         listFragment.setSubmissionSort(SubmissionSort.HOT);
         listFragment.refreshList();
+    }
+
+    public static void getCurrentSettings() {
+        showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
+        swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
+        switch (swipeSetting) {
+            case 0:
+                swipeSetting = ViewDragHelper.EDGE_LEFT;
+                break;
+            case 1:
+                swipeSetting = ViewDragHelper.EDGE_RIGHT;
+                break;
+            case 2:
+                swipeSetting = ViewDragHelper.EDGE_LEFT | ViewDragHelper.EDGE_RIGHT;
+                break;
+            case 3:
+                swipeSetting = ViewDragHelper.STATE_IDLE;
+        }
+        initialCommentCount = Integer.parseInt(prefs.getString("initialComments", "100"));
     }
 
     @Override
@@ -269,11 +298,11 @@ public class MainActivity extends AppCompatActivity {
     //    super.onStop();
     //    Log.d("geo test", "on stop called");
     //}
-//
+
     //@Override
     //public void onDestroy() {
     //    super.onDestroy();
-    //    Log.d("geo test", "on destroy called");
+    //    Log.d("geo debug", "MainActivity onDestroy called");
     //}
 
 }

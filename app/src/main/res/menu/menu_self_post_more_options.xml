@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
+        android:orderInCategory="96" />
+    <item android:id="@+id/action_share" android:title="Share"
+        android:orderInCategory="97" />
+    <item android:id="@+id/action_view_subreddit" android:title="View subreddit"
+        android:orderInCategory="98" />
+    <item android:id="@+id/action_download_comments" android:title="Download comments"
+        android:orderInCategory="99" />
+    <item android:id="@+id/action_report" android:title="Report"
+        android:orderInCategory="100" />
+
+</menu>

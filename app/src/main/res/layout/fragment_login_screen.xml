@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter account credentials"
+        android:text="Log in"
         android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginLeft="15dp"

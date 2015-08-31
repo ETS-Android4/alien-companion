@@ -10,9 +10,9 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.Activities.UserActivity;
-import com.george.redditreader.Adapters.PostListAdapterOld;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
 import com.george.redditreader.LoadTasks.LoadUserActionTask;
 import com.george.redditreader.R;
@@ -24,21 +24,18 @@ import com.george.redditreader.enums.UserActionType;
  */
 public class PostItemOptionsListener implements View.OnClickListener {
 
-    //private Activity activity;
     private Context context;
     private Submission post;
-    private BaseAdapter adapter;
+    private BaseAdapter adapter; //TODO: to be deleted
     private RecyclerView.Adapter recyclerAdapter;
 
-    public PostItemOptionsListener(Context context, Submission post, BaseAdapter adapter) {
-        //this.activity = activity;
+    public PostItemOptionsListener(Context context, Submission post, BaseAdapter adapter) { //TODO: to be deleted
         this.context = context;
         this.post = post;
         this.adapter = adapter;
     }
 
     public PostItemOptionsListener(Context context, Submission post, RecyclerView.Adapter adapter) {
-        //this.activity = activity;
         this.context = context;
         this.post = post;
         this.recyclerAdapter = adapter;
@@ -110,9 +107,6 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 else {
                     post.setHidden(true);
                     actionType = UserActionType.hide;
-                    //PostListAdapterOld postListAdapterOld = (PostListAdapterOld) adapter;
-                    //postListAdapterOld.remove(post);
-                    //postListAdapterOld.selectedPosition = -1;
                     RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
                     redditItemListAdapter.remove(post);
                 }
@@ -140,12 +134,38 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
     private void showMoreOptionsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(context, v);
-        popupMenu.inflate(R.menu.menu_post_more_options);
+        //inflate the right menu layout
+        String currentUser = (MainActivity.currentUser!=null) ? MainActivity.currentUser.getUsername() : "";
+        if(post.getAuthor().equals(currentUser)) {
+            if(post.isSelf()) popupMenu.inflate((R.menu.menu_self_post_more_options_account));
+            else popupMenu.inflate(R.menu.menu_post_more_options_account);
+        }
+        else {
+            if(post.isSelf()) popupMenu.inflate(R.menu.menu_self_post_more_options);
+            else popupMenu.inflate(R.menu.menu_post_more_options);
+        }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_edit:
+                        return true;
+                    case R.id.action_delete:
+                        RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
+                        redditItemListAdapter.remove(post);
+                        LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
+                        task.execute();
+                        return true;
+                    case R.id.action_mark_nsfw: //TODO: show proper user action
+                        UserActionType actionType;
+                        if(post.isNSFW()) actionType = UserActionType.unmarkNSFW;
+                        else actionType = UserActionType.markNSFW;
+                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task.execute();
+                        return true;
                     case R.id.action_copy_link:
+                        return true;
+                    case R.id.action_copy_permalink:
                         return true;
                     case R.id.action_share:
                         return true;

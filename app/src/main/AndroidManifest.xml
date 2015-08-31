@@ -52,6 +52,11 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_subreddit" >
         </activity>
+        <activity
+            android:name=".Activities.SubmitPostActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_submit_post" >
+        </activity>
     </application>
 
 </manifest>

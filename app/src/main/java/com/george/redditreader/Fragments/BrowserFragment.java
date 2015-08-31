@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ public class BrowserFragment extends Fragment {
     private WebView webView;
     private ProgressBar progressBar;
     private Submission post;
-    private BackNavActivity activity;
+    private AppCompatActivity activity;
     private Bundle webViewBundle;
     private String url;
     private String domain;
@@ -82,7 +83,7 @@ public class BrowserFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (BackNavActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

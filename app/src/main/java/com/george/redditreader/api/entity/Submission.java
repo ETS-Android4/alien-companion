@@ -63,7 +63,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
     private Double created;
     private Double createdUTC;
-    private Boolean visited;
+    //private Boolean visited;
     private Boolean self;
     private Boolean saved;
     private Boolean edited;
@@ -170,7 +170,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setCreated(safeJsonToDouble(obj.get("created")));
 			setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
 
-			setVisited(safeJsonToBoolean(obj.get("visited")));
+			//setVisited(safeJsonToBoolean(obj.get("visited")));
 			setSelf(safeJsonToBoolean(obj.get("is_self")));
 			setSaved(safeJsonToBoolean(obj.get("saved")));
 			setEdited(safeJsonToBoolean(obj.get("edited")));
@@ -285,10 +285,6 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     public void setPermalink(String permalink) {
         this.permalink = permalink;
     }
-
-    //public HttpClient getRestClient() {
-    //    return restClient;
-    //}
 
     public Long getCommentCount() {
         return commentCount;
@@ -462,19 +458,19 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 		this.created = created;
 	}
 
-	/**
-	 * @return the visited
-	 */
-	public Boolean isVisited() {
-		return visited;
-	}
+	///**
+	// * @return the visited
+	// */
+	//public Boolean isVisited() {
+	//	return visited;
+	//}
 
-	/**
-	 * @param visited the visited to set
-	 */
-	public void setVisited(Boolean visited) {
-		this.visited = visited;
-	}
+	///**
+	// * @param visited the visited to set
+	// */
+	//public void setVisited(Boolean visited) {
+	//	this.visited = visited;
+	//}
 
 	/**
 	 * @return the self

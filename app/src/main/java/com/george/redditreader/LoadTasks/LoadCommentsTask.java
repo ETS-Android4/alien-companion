@@ -40,7 +40,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
             List<Comment> comments;
             comments = cmnts.ofSubmission(postFragment.post, PostFragment.commentLinkId, postFragment.parentsShown, RedditConstants.MAX_COMMENT_DEPTH,
-                    Integer.parseInt(MainActivity.prefs.getString("initialComments", "100")), postFragment.commentSort);
+                    MainActivity.initialCommentCount, postFragment.commentSort);
 
             if(postFragment.post.getThumbnailObject() == null) {
                 ImageLoader.preloadThumbnail(postFragment.post, context);

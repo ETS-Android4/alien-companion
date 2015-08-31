@@ -2,6 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:actionOverflowButtonStyle">@style/OverFlow</item>
         <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
@@ -51,6 +52,13 @@
               but setting this also changes the popup menu's background,
               even if we define popupTheme for our <Toolbar> -->
          <!--<item name="android:background">@color/primary_dark</item>-->
+    </style>
+
+    <style name="SwipeBackLayout">
+        <item name="edge_size">50dip</item>
+        <item name="shadow_left">@drawable/shadow_left</item>
+        <item name="shadow_right">@drawable/shadow_right</item>
+        <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
 
 </resources>

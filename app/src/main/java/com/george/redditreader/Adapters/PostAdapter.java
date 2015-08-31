@@ -62,7 +62,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
      */
     private final int mPaddingDP = 5;
 
-    private boolean showNSFW;
+    //private boolean showNSFW;
     private String author;
     public int selectedComment = -1;
 
@@ -72,7 +72,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         mListener = listener;
         mLongListener = longListener;
 
-        showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
+        //showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
     }
 
     @Override
@@ -225,8 +225,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         @Override
                         public void onClick(View v) {
                             MainActivity.showFullCommentsButton = false;
-                            //PostFragment postFragment = (PostFragment) activity.getFragmentManager()
-                            //        .findFragmentById(R.id.fragment2);
                             postFragment.loadFullComments();
                         }
                     });
@@ -258,7 +256,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     Thumbnail thumbnail = post.getThumbnailObject();
                     if (thumbnail.hasThumbnail()) {
-                        if(post.isNSFW() && !showNSFW) {
+                        if(post.isNSFW() && !MainActivity.showNSFWpreview) {
                             contentVH.postImage.setImageResource(R.drawable.nsfw2);
                         }
                         else {

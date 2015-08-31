@@ -61,7 +61,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 else {
                     submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
                 }
-                //plf.postListAdapterOld = new PostListAdapterOld((Activity) context, submissions);
                 plf.postListAdapter = new RedditItemListAdapter(context, submissions);
             }
             ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading

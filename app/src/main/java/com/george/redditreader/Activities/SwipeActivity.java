@@ -11,13 +11,13 @@ public abstract class SwipeActivity extends AppCompatActivity {
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
     private GestureDetector gestureDetector;
-    private boolean enabled;
+    //private boolean enabled;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-        enabled = MainActivity.prefs.getBoolean("swipeBack", true);
-        if(enabled) gestureDetector = new GestureDetector(this, new SwipeDetector() );
+        //enabled = MainActivity.prefs.getBoolean("swipeBack", true);
+        //if(MainActivity.swipeEnabled) gestureDetector = new GestureDetector(this, new SwipeDetector() );
     }
 
     private class SwipeDetector extends GestureDetector.SimpleOnGestureListener {

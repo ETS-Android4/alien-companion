@@ -21,11 +21,13 @@
         android:key="navigation"
         android:title="@string/options_navigation">
 
-        <CheckBoxPreference
+        <ListPreference
             android:key="swipeBack"
             android:title="Swipe to go back"
-            android:summary="Enable/disable horizontal swiping for back navigation"
-            android:defaultValue="true"/>
+            android:summary="Change edge tracking mode or disable it"
+            android:entries="@array/swipeEntries"
+            android:entryValues="@array/swipeValues"
+            android:defaultValue="0"/>
 
         <CheckBoxPreference
             android:key="newSubredditWindow"

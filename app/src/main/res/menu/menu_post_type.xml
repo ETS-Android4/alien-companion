@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/action_submit_link" android:title="@string/submit_link"
+        android:orderInCategory="98" />
+    <item android:id="@+id/action_submit_text" android:title="@string/submit_text"
+        android:orderInCategory="99" />
+    <!--<item android:id="@+id/action_submit_image" android:title="@string/submit_image"
+        android:orderInCategory="100" />-->
+
+</menu>

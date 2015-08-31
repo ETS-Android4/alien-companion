@@ -2,14 +2,20 @@ package com.george.redditreader.Activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.george.redditreader.Fragments.PostFragment;
 import com.george.redditreader.R;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
-public class PostActivity extends SwipeActivity {
+
+public class PostActivity extends SwipeBackActivity {
+
+    //private SwipeBackLayout swipeBackLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +25,9 @@ public class PostActivity extends SwipeActivity {
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
+        swipeBackLayout.setEdgeTrackingEnabled(MainActivity.swipeSetting);
     }
 
     @Override
@@ -58,5 +67,11 @@ public class PostActivity extends SwipeActivity {
         onBackPressed();
         overridePendingTransition(R.anim.stay, R.anim.slide_out_right);
     }
+
+    //@Override
+    //public void onDestroy() {
+    //    super.onDestroy();
+    //    Log.d("geo debug", "PostActivity onDestroy called");
+    //}
 
 }

@@ -2,6 +2,7 @@ package com.george.redditreader.Fragments;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,21 +14,19 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Adapters.PostListAdapterOld;
+import com.george.redditreader.Activities.SubmitPostActivity;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
-import com.george.redditreader.ClickListeners.FooterListeners.SubredditFooterListener;
 import com.george.redditreader.LoadTasks.LoadPostsTask;
 import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.SubmissionSort;
 import com.george.redditreader.api.retrieval.params.TimeSpan;
+import com.george.redditreader.enums.SubmitPostType;
 
 
 /**
@@ -35,12 +34,8 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
  */
 public class PostListFragment extends Fragment {
 
-    //public PostListAdapterOld postListAdapterOld;
     public RedditItemListAdapter postListAdapter;
-    //public Button showMore;
-    //public ProgressBar footerProgressBar;
     public ProgressBar mainProgressBar;
-    //public ListView contentView;
     public RecyclerView contentView;
     public String subreddit;
     private AppCompatActivity activity;
@@ -108,10 +103,43 @@ public class PostListFragment extends Fragment {
                 if(MainActivity.showHiddenPosts) item.setChecked(true);
                 else item.setChecked(false);
                 refreshList();
-                break;
+                return true;
+            case R.id.action_hide_read:
+                postListAdapter.hideReadPosts();
+                return true;
+            case R.id.action_submit_post:
+                showSubmitPopup(activity.findViewById(R.id.action_refresh)); //TODO: put correct anchor
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSubmitPopup(View v) {
+        PopupMenu popupMenu = new PopupMenu(activity, v);
+        popupMenu.inflate(R.menu.menu_post_type);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(activity, SubmitPostActivity.class);
+                intent.putExtra("subreddit", subreddit);
+                switch (item.getItemId()) {
+                    case R.id.action_submit_link:
+                        intent.putExtra("postType", SubmitPostType.link);
+                        startActivity(intent);
+                        return true;
+                    case R.id.action_submit_text:
+                        intent.putExtra("postType", SubmitPostType.self);
+                        startActivity(intent);
+                        return true;
+                    //case R.id.action_submit_image: //TODO: implement direct image posting
+                    //    return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.show();
     }
 
     private void showSortPopup(View v) {

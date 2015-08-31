@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
-import com.george.redditreader.Adapters.UserAdapterOld;
 import com.george.redditreader.Fragments.UserFragment;
 import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
@@ -71,7 +70,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         userContent = userMixed.ofUser(uf.username, this.userContent, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
 
                         uf.userAdapter = new RedditItemListAdapter(activity);
-                        uf.userAdapter.add(userInfo);
+                        if(this.userContent == UserSubmissionsCategory.OVERVIEW) uf.userAdapter.add(userInfo);
                         uf.userAdapter.addAll(userContent);
                     }
                     ImageLoader.preloadUserImages(userContent, activity);

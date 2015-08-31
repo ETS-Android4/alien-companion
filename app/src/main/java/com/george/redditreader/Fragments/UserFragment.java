@@ -12,14 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
-import com.george.redditreader.Adapters.UserAdapterOld;
-import com.george.redditreader.ClickListeners.FooterListeners.UserFooterListener;
 import com.george.redditreader.LoadTasks.LoadUserContentTask;
 import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.api.retrieval.params.UserSubmissionsCategory;
@@ -33,9 +30,6 @@ import com.george.redditreader.api.retrieval.params.UserOverviewSort;
 public class UserFragment extends Fragment {
 
     public ProgressBar progressBar;
-    //public ProgressBar footerProgressBar;
-    //public ListView contentView;
-    //public UserAdapterOld userAdapterOld;
     public RecyclerView contentView;
     public RedditItemListAdapter userAdapter;
     private AppCompatActivity activity;

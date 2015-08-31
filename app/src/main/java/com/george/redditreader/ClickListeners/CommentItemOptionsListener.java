@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.LoadTasks.LoadUserActionTask;
@@ -97,11 +98,19 @@ public class CommentItemOptionsListener implements View.OnClickListener {
 
     private void showMoreOptionsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(context, v);
-        popupMenu.inflate(R.menu.menu_comment_more_options);
+        if(MainActivity.currentUser!=null && comment.getAuthor().equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_comment_more_options_account);
+        else popupMenu.inflate(R.menu.menu_comment_more_options);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_delete:
+                        //TODO: add visual indication that the comment was deleted
+                        LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), UserActionType.delete);
+                        task.execute();
+                        return true;
+                    case R.id.action_edit:
+                        return true;
                     case R.id.action_copy_link:
                         String commentLink = "http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
                                 + "?comment=" + comment.getIdentifier();

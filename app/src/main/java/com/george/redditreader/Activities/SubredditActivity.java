@@ -9,7 +9,10 @@ import android.view.MenuItem;
 import com.george.redditreader.Fragments.PostListFragment;
 import com.george.redditreader.R;
 
-public class SubredditActivity extends SwipeActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
+public class SubredditActivity extends SwipeBackActivity {
 
     private PostListFragment listFragment;
 
@@ -22,6 +25,9 @@ public class SubredditActivity extends SwipeActivity {
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
+        swipeBackLayout.setEdgeTrackingEnabled(MainActivity.swipeSetting);
 
         setupFragment();
     }

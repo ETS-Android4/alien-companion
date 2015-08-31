@@ -7,19 +7,19 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.george.redditreader.Adapters.PostListAdapterOld;
-import com.george.redditreader.ClickListeners.FooterListeners.SearchFooterListener;
+import com.george.redditreader.Adapters.RedditItemListAdapter;
 import com.george.redditreader.LoadTasks.LoadSearchTask;
+import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.SearchSort;
@@ -31,12 +31,9 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
 public class SearchFragment extends Fragment {
 
     private AppCompatActivity activity;
-    //private HttpClient restClient;
     public ProgressBar mainProgressBar;
-    public ProgressBar footerProgressBar;
-    public ListView contentView;
-    public Button showMore;
-    public PostListAdapterOld postListAdapterOld;
+    public RecyclerView contentView;
+    public RedditItemListAdapter postListAdapter;
     public SearchSort searchSort;
     public TimeSpan timeSpan;
     public String searchQuery;
@@ -49,7 +46,6 @@ public class SearchFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        //restClient = new RedditHttpClient();
         searchQuery = activity.getIntent().getStringExtra("query");
         subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
@@ -72,40 +68,49 @@ public class SearchFragment extends Fragment {
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
-        createFooter();
-        if(!hasPosts)
-            showMore.setVisibility(View.GONE);
-        else showMore.setVisibility(View.VISIBLE);
+        //createFooter();
+        //if(!hasPosts)
+        //    showMore.setVisibility(View.GONE);
+        //else showMore.setVisibility(View.VISIBLE);
     }
 
-    private void createFooter() {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.footer_layout, null);
-        contentView.addFooterView(view);
-        footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        footerProgressBar.setVisibility(View.GONE);
-        showMore = (Button) view.findViewById(R.id.showMore);
-        showMore.setOnClickListener(new SearchFooterListener(activity, this));
-    }
+    //private void createFooter() {
+    //    LayoutInflater inflater = getActivity().getLayoutInflater();
+    //    View view = inflater.inflate(R.layout.footer_layout, null);
+    //    contentView.addFooterView(view);
+    //    footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+    //    footerProgressBar.setVisibility(View.GONE);
+    //    showMore = (Button) view.findViewById(R.id.showMore);
+    //    showMore.setOnClickListener(new SearchFooterListener(activity, this));
+    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_list_old, container, false);
+        View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
-        contentView = (ListView) view.findViewById(R.id.listView);
+        contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
-        if(postListAdapterOld == null) {
-            Log.d("PostListFragment", "Loading posts...");
-            setSearchSort(SearchSort.RELEVANCE);
-            setTimeSpan(TimeSpan.ALL);
-            LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
-            task.execute();
-        }
-        else {
-            mainProgressBar.setVisibility(View.GONE);
-            contentView.setAdapter(postListAdapterOld);
-        }
+        contentView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        contentView.setHasFixedSize(true);
+        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        setSearchSort(SearchSort.RELEVANCE);
+        setTimeSpan(TimeSpan.ALL);
+        LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
+        task.execute();
+
+        //if(postListAdapter == null) {
+        //    //Log.d("PostListFragment", "Loading posts...");
+        //    setSearchSort(SearchSort.RELEVANCE);
+        //    setTimeSpan(TimeSpan.ALL);
+        //    LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
+        //    task.execute();
+        //}
+        //else {
+        //    mainProgressBar.setVisibility(View.GONE);
+        //    contentView.setAdapter(postListAdapter);
+        //}
 
         return view;
     }

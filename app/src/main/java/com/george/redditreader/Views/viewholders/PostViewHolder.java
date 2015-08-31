@@ -52,12 +52,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ProgressBar commentsProgress;
 
     private PostViewType viewType;
-    //public int selectedPosition;
+
+    private static final int clickedColor = Color.GRAY;
+    private static final int notClickedColor = Color.BLACK;
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
         this.viewType = type;
-        //this.selectedPosition = -1;
 
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
         score = (TextView) itemView.findViewById(R.id.txtView_postScore);
@@ -94,7 +95,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         score.setText(Long.toString(post.getScore()));
         author.setText(post.getAuthor());
         age.setText(ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-        subreddit.setText(post.getSubreddit());
         domain.setText(post.getDomain());
         commentCount.setText(Long.toString(post.getCommentCount()));
 
@@ -141,14 +141,25 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             else hide.setImageResource(R.mipmap.ic_action_hide);
         }
 
-        PostItemListener listener = new PostItemListener(context, post);
-        linkButton.setOnClickListener(listener);
-
         switch (viewType) {
             case listItem:
-                commentsButton.setOnClickListener(listener);
+                if(post.isSelf()) subreddit.setVisibility(View.GONE);
+                else {
+                    subreddit.setVisibility(View.VISIBLE);
+                    subreddit.setText(post.getSubreddit() + " - ");
+                }
+
+                if(post.isClicked()) {
+                    title.setTextColor(clickedColor);
+                    commentCount.setTextColor(clickedColor);
+                }
+                else {
+                    title.setTextColor(notClickedColor);
+                    commentCount.setTextColor(notClickedColor);
+                }
                 break;
             case details:
+                subreddit.setText(post.getSubreddit());
                 break;
         }
     }

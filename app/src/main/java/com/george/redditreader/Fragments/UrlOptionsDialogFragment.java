@@ -25,9 +25,9 @@ public class UrlOptionsDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
-                    case 0:
+                    case 1: //copy link address
                         break;
-                    case 1:
+                    case 0: //open in browser
                         Intent intent;
                         try {
                             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -37,7 +37,7 @@ public class UrlOptionsDialogFragment extends DialogFragment {
                             getActivity().startActivity(intent);
                         }
                         break;
-                    case 2:
+                    case 2: //share
                         break;
                 }
             }

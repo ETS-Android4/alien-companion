@@ -96,8 +96,8 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
         }
         else {
             String query = editText.getText().toString();
-            query = query.replaceAll("\\s","");
-            if(!query.equals("")) {
+            //query = query.replaceAll("\\s","");
+            if(!query.replaceAll("\\s","").equals("")) {
                 dismiss();
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
                 if(!SearchActivity.activityStarted) {
@@ -110,6 +110,8 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
                     activity.startActivity(intent);
                 }
                 else {
+                    if(checkBox.isChecked()) searchFragment.subreddit = subreddit;
+                    else searchFragment.subreddit = null;
                     searchFragment.setSearchQuery(query);
                     searchFragment.setActionBarTitle();
                     searchFragment.refreshList();

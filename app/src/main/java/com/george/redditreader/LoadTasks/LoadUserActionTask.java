@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.action.MarkActions;
+import com.george.redditreader.api.action.SubmitActions;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.exception.ActionFailedException;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
@@ -34,6 +35,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... unused) {
         try {
             MarkActions markActions = new MarkActions(httpClient, MainActivity.currentUser);
+            SubmitActions submitActions = new SubmitActions(httpClient, MainActivity.currentUser);
             switch (userActionType) {
                 case novote:
                     markActions.vote(postName, 0);
@@ -57,6 +59,17 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     markActions.unhide(postName);
                     break;
                 case report:
+                    break;
+                case edit:
+                    break;
+                case delete:
+                    submitActions.delete(postName);
+                    break;
+                case markNSFW:
+                    markActions.markNSFW(postName);
+                    break;
+                case unmarkNSFW:
+                    markActions.unmarkNSFW(postName);
                     break;
             }
         } catch (ActionFailedException | NullPointerException e) {

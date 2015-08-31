@@ -28,4 +28,10 @@ public class SettingsActivity extends BackNavActivity {
                 .commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        MainActivity.getCurrentSettings();
+        super.onBackPressed();
+    }
+
 }

@@ -38,4 +38,5 @@ dependencies {
     //compile group: 'org.apache.commons', name: 'commons-lang2', version: '2.6'
     compile files('libs/commons-lang-2.1.jar')
     //compile group: 'com.github.jreddit', name: 'jreddit', version: '1.0.3'
+    //compile 'me.imid.swipebacklayout.lib:library:1.0.0'
 }

@@ -53,7 +53,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 break;
             case search:
                 SearchFragment searchFragment = (SearchFragment) fragment;
-                //searchFragment.searchAdapter.setLoadingMoreItems(true);
+                searchFragment.postListAdapter.setLoadingMoreItems(true);
                 LoadSearchTask searchTask = new LoadSearchTask(context, searchFragment, LoadType.extend);
                 searchTask.execute();
                 break;

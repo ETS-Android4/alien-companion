@@ -27,6 +27,7 @@ import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.R;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -338,7 +339,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 subredditRowViewHolder.name.setText(subreddit);
                 //Highlight current subreddit
                 String currentSubreddit = activity.getListFragment().subreddit;
-                if(subreddit.equals(currentSubreddit) ||
+                if(subreddit.toLowerCase().equals(currentSubreddit) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
                     subredditRowViewHolder.name.setTextColor(Color.BLUE);
                     subredditRowViewHolder.layout.setBackgroundColor(Color.parseColor("#E7E7E8"));

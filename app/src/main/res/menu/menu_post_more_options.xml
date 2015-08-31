@@ -2,6 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_copy_link" android:title="Copy link"
+    android:orderInCategory="95" />
+    <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
         android:orderInCategory="96" />
     <item android:id="@+id/action_share" android:title="Share"
         android:orderInCategory="97" />

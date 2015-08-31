@@ -94,5 +94,12 @@
     <string name="user_hidden">hidden</string>
     <string name="user_saved">saved</string>
     <string name="action_show_hidden">Show hidden posts </string>
+    <string name="title_activity_submit_post">SubmitPostActivity</string>
+    <string name="action_submit">Submit</string>
+    <string name="submit_link">Link post</string>
+    <string name="submit_text">Text post</string>
+    <string name="submit_image">Image post</string>
+    <string name="action_submit_post">Submit post</string>
+    <string name="action_hide_read">Hide read</string>
 
 </resources>

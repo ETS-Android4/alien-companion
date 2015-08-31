@@ -23,10 +23,9 @@ import android.widget.TextView;
 import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.ClickListeners.CommentItemOptionsListener;
 import com.george.redditreader.ClickListeners.CommentLinkListener;
-import com.george.redditreader.ClickListeners.FooterListeners.SubredditFooterListener;
+import com.george.redditreader.ClickListeners.PostItemListener;
 import com.george.redditreader.ClickListeners.PostItemOptionsListener;
 import com.george.redditreader.ClickListeners.ShowMoreListener;
-import com.george.redditreader.Fragments.PostListFragment;
 import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.Models.ShowMore;
 import com.george.redditreader.R;
@@ -36,7 +35,6 @@ import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.entity.Trophy;
 import com.george.redditreader.api.entity.UserInfo;
-import com.george.redditreader.api.utils.RedditConstants;
 import com.george.redditreader.enums.PostViewType;
 import com.squareup.picasso.Picasso;
 
@@ -127,8 +125,20 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public void setLoadingMoreItems(boolean flag) {
         loadingMoreItems = flag;
-        notifyItemChanged(redditItems.size()-1);
+        notifyItemChanged(redditItems.size() - 1);
     }
+
+    public void hideReadPosts() {
+        for(int i = redditItems.size()-1;i>=0;i--) {
+            if(redditItems.get(i) instanceof Submission) {
+                Submission post = (Submission) redditItems.get(i);
+                if(post.isClicked()) redditItems.remove(i);
+            }
+        }
+        selectedPosition = -1;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -169,12 +179,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         View.OnLongClickListener longListener = new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //int previousPosition = selectedPosition;
+                int previousPosition = selectedPosition;
                 if (position == selectedPosition) selectedPosition = -1;
                 else selectedPosition = position;
-                //notifyItemChanged(previousPosition);
-                //notifyItemChanged(position);
-                notifyDataSetChanged();
+                notifyItemChanged(previousPosition);
+                notifyItemChanged(position);
+                //notifyDataSetChanged();
                 return true;
             }
         };
@@ -185,6 +195,9 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 Submission post = (Submission) getItemAt(position);
                 postViewHolder.bindModel(context, post);
 
+                PostItemListener listener = new PostItemListener(context, post, this, position);
+                postViewHolder.linkButton.setOnClickListener(listener);
+                postViewHolder.commentsButton.setOnClickListener(listener);
                 postViewHolder.linkButton.setOnLongClickListener(longListener);
                 postViewHolder.commentsButton.setOnLongClickListener(longListener);
 
