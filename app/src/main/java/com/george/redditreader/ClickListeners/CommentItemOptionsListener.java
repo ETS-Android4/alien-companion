@@ -15,6 +15,7 @@ import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.LoadTasks.LoadUserActionTask;
 import com.george.redditreader.R;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.entity.Comment;
 import com.george.redditreader.enums.UserActionType;
 
@@ -46,44 +47,55 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_upvote:
                 UserActionType actionType;
-                if(comment.getLikes().equals("true")) {
-                    comment.setLikes("null");
-                    comment.setScore(comment.getScore() - 1);
-                    actionType = UserActionType.novote;
-                }
-                else {
-                    if(comment.getLikes().equals("false")) comment.setScore(comment.getScore() + 2);
-                    else comment.setScore(comment.getScore() + 1);
-                    comment.setLikes("true");
-                    actionType = UserActionType.upvote;
-                }
+                LoadUserActionTask task;
+                if(MainActivity.currentUser!=null) {
+                    if (comment.getLikes().equals("true")) {
+                        comment.setLikes("null");
+                        comment.setScore(comment.getScore() - 1);
+                        actionType = UserActionType.novote;
+                    } else {
+                        if (comment.getLikes().equals("false"))
+                            comment.setScore(comment.getScore() + 2);
+                        else comment.setScore(comment.getScore() + 1);
+                        comment.setLikes("true");
+                        actionType = UserActionType.upvote;
+                    }
 
-                if(adapter != null) adapter.notifyDataSetChanged();
-                else recyclerAdapter.notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                    else recyclerAdapter.notifyDataSetChanged();
 
-                LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                task.execute();
+                    task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                    task.execute();
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote:
-                if(comment.getLikes().equals("false")) {
-                    comment.setLikes("null");
-                    comment.setScore(comment.getScore() + 1);
-                    actionType = UserActionType.novote;
-                }
-                else {
-                    if(comment.getLikes().equals("true")) comment.setScore(comment.getScore() - 2);
-                    else comment.setScore(comment.getScore() - 1);
-                    comment.setLikes("false");
-                    actionType = UserActionType.downvote;
-                }
+                if(MainActivity.currentUser!=null) {
+                    if (comment.getLikes().equals("false")) {
+                        comment.setLikes("null");
+                        comment.setScore(comment.getScore() + 1);
+                        actionType = UserActionType.novote;
+                    } else {
+                        if (comment.getLikes().equals("true"))
+                            comment.setScore(comment.getScore() - 2);
+                        else comment.setScore(comment.getScore() - 1);
+                        comment.setLikes("false");
+                        actionType = UserActionType.downvote;
+                    }
 
-                if(adapter != null) adapter.notifyDataSetChanged();
-                else recyclerAdapter.notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                    else recyclerAdapter.notifyDataSetChanged();
 
-                task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                task.execute();
+                    task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                    task.execute();
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_reply:
+                if(MainActivity.currentUser!=null) {
+
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to reply");
                 break;
             case R.id.btn_view_user:
                 Intent intent = new Intent(context, UserActivity.class);
@@ -123,6 +135,10 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         context.startActivity(intent);
                         return true;
                     case R.id.action_save:
+                        if(MainActivity.currentUser!=null) {
+
+                        }
+                        else ToastUtils.displayShortToast(context, "Must be logged in to save");
                         return true;
                     case R.id.action_report:
                         return true;

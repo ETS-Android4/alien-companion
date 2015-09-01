@@ -138,6 +138,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+        final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
+                .findFragmentByTag("postFragment");
         int viewType = getItemViewType(position);
         switch (viewType) {
             case VIEW_TYPE_ITEM:
@@ -145,7 +147,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 final Comment comment = (Comment) getItemAt(position);
 
                 //Comment permalink case
-                if(comment.getIdentifier().equals(PostFragment.commentLinkId))
+                if(comment.getIdentifier().equals(postFragment.commentLinkId))
                     cvh.commentLayout.setBackgroundColor(Color.parseColor("#FFFFD1"));
                 else cvh.commentLayout.setBackgroundColor(Color.WHITE);
 
@@ -217,14 +219,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 final Submission post = (Submission) getItemAt(position);
                 author = post.getAuthor();
 
-                final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
-                        .findFragmentById(R.id.fragment2);
-                if(MainActivity.showFullCommentsButton) {
+                if(postFragment.showFullCommentsButton) {
                     contentVH.fullComments.setVisibility(View.VISIBLE);
                     contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            MainActivity.showFullCommentsButton = false;
+                            postFragment.showFullCommentsButton = false;
                             postFragment.loadFullComments();
                         }
                     });
@@ -237,7 +237,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
 
-                    if(post.getSelftextHTML() == null || MainActivity.showFullCommentsButton) contentVH.selfText.setVisibility(View.GONE);
+                    if(post.getSelftextHTML() == null || postFragment.showFullCommentsButton) contentVH.selfText.setVisibility(View.GONE);
                     else {
                         //Self text textview
                         contentVH.selfText.setVisibility(View.VISIBLE);

@@ -125,10 +125,18 @@ public class BrowserFragment extends Fragment {
         return view;
     }
 
+    @Override
     public void onPause() {
         super.onPause();
+        webView.onPause();
         webViewBundle = new Bundle();
         webView.saveState(webViewBundle);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        webView.onResume();
     }
 
     @Override
@@ -141,7 +149,7 @@ public class BrowserFragment extends Fragment {
                 webView.goForward();
                 return true;
             case R.id.action_open_browser:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())));
                 return true;
             case R.id.action_refresh:
                 webView.reload();

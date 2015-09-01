@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private NavDrawerAdapter adapter;
     private DrawerLayout.LayoutParams drawerParams;
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
-    public static boolean showFullCommentsButton;
+    //public static boolean showFullCommentsButton;
 
     public static boolean showHiddenPosts;
     //public static MenuItem toggleHiddenMenuItem;

@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Adapters.PostAdapter;
 import com.george.redditreader.LoadTasks.LoadCommentsTask;
@@ -26,7 +25,7 @@ import com.george.redditreader.api.retrieval.params.CommentSort;
  * A simple {@link Fragment} subclass.
  */
 public class PostFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
-    private static final String GROUPS_KEY = "groups_key";
+    //private static final String GROUPS_KEY = "groups_key";
 
     public PostAdapter postAdapter;
     private RecyclerView mRecyclerView;
@@ -37,10 +36,11 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public ProgressBar progressBar;
     private boolean loadFromList;
     public boolean noResponseObject;
-    public static String commentLinkId;
+    public String commentLinkId;
     public int parentsShown = -1;
     private boolean titleUpdated = true;
     public boolean commentsLoaded;
+    public boolean showFullCommentsButton;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -49,14 +49,15 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         setHasOptionsMenu(true);
 
         post = (Submission) activity.getIntent().getSerializableExtra("post");
+        String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
         loadFromList = (post != null);
+        //loadFromLink = activity.getIntent().getBooleanExtra("loadFromLink", false);
         if(!loadFromList) {
-            if(activity.getIntent().getStringArrayExtra("postInfo")!=null) {
-                String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
+            if(postInfo!=null) {
                 post = new Submission(postInfo[1]);
                 post.setSubreddit(postInfo[0]);
                 commentLinkId = postInfo[2];
-                if(commentLinkId != null) MainActivity.showFullCommentsButton = true;
+                if(commentLinkId != null) showFullCommentsButton = true;
                 if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
             }
             else {

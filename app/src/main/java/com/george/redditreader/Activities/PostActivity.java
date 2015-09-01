@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.george.redditreader.Fragments.PostFragment;
+import com.george.redditreader.Fragments.SearchFragment;
 import com.george.redditreader.R;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -20,7 +21,7 @@ public class PostActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_user);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
@@ -28,6 +29,16 @@ public class PostActivity extends SwipeBackActivity {
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MainActivity.swipeSetting);
+
+        setupFragment();
+    }
+
+    private void setupFragment() {
+        PostFragment postFragment = (PostFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
+        if(postFragment == null) {
+            postFragment = new PostFragment();
+            getFragmentManager().beginTransaction().add(R.id.fragmentHolder, postFragment, "postFragment").commit();
+        }
     }
 
     @Override
@@ -52,8 +63,8 @@ public class PostActivity extends SwipeBackActivity {
     @Override
     public void onBackPressed () {
         //MainActivity.commentsLoaded = false;
-        MainActivity.showFullCommentsButton = false;
-        PostFragment.commentLinkId = null;
+        //MainActivity.showFullCommentsButton = false;
+        //PostFragment.commentLinkId = null;
         super.onBackPressed();
     }
 
@@ -63,10 +74,10 @@ public class PostActivity extends SwipeBackActivity {
     //    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     //}
 
-    public void previous() {
-        onBackPressed();
-        overridePendingTransition(R.anim.stay, R.anim.slide_out_right);
-    }
+    //public void previous() {
+    //    onBackPressed();
+    //    overridePendingTransition(R.anim.stay, R.anim.slide_out_right);
+    //}
 
     //@Override
     //public void onDestroy() {

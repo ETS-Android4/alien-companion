@@ -16,6 +16,7 @@ import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
 import com.george.redditreader.LoadTasks.LoadUserActionTask;
 import com.george.redditreader.R;
+import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.enums.UserActionType;
 
@@ -46,76 +47,85 @@ public class PostItemOptionsListener implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_upvote:
                 UserActionType actionType;
-                if(post.getLikes().equals("true")) {
-                    post.setLikes("null");
-                    post.setScore(post.getScore() - 1);
-                    actionType = UserActionType.novote;
-                }
-                else {
-                    if(post.getLikes().equals("false")) post.setScore(post.getScore() + 2);
-                    else post.setScore(post.getScore() + 1);
-                    post.setLikes("true");
-                    actionType = UserActionType.upvote;
-                }
+                LoadUserActionTask task;
+                if(MainActivity.currentUser!=null) {
+                    if (post.getLikes().equals("true")) {
+                        post.setLikes("null");
+                        post.setScore(post.getScore() - 1);
+                        actionType = UserActionType.novote;
+                    } else {
+                        if (post.getLikes().equals("false")) post.setScore(post.getScore() + 2);
+                        else post.setScore(post.getScore() + 1);
+                        post.setLikes("true");
+                        actionType = UserActionType.upvote;
+                    }
 
-                if(adapter != null) adapter.notifyDataSetChanged();
-                else recyclerAdapter.notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                    else recyclerAdapter.notifyDataSetChanged();
 
-                LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                task.execute();
+                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                    task.execute();
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote:
-                if(post.getLikes().equals("false")) {
-                    post.setLikes("null");
-                    post.setScore(post.getScore() + 1);
-                    actionType = UserActionType.novote;
-                }
-                else {
-                    if(post.getLikes().equals("true")) post.setScore(post.getScore() - 2);
-                    else post.setScore(post.getScore() - 1);
-                    post.setLikes("false");
-                    actionType = UserActionType.downvote;
-                }
+                if(MainActivity.currentUser!=null) {
+                    if (post.getLikes().equals("false")) {
+                        post.setLikes("null");
+                        post.setScore(post.getScore() + 1);
+                        actionType = UserActionType.novote;
+                    } else {
+                        if (post.getLikes().equals("true")) post.setScore(post.getScore() - 2);
+                        else post.setScore(post.getScore() - 1);
+                        post.setLikes("false");
+                        actionType = UserActionType.downvote;
+                    }
 
-                if(adapter != null) adapter.notifyDataSetChanged();
-                else recyclerAdapter.notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                    else recyclerAdapter.notifyDataSetChanged();
 
-                task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                task.execute();
+                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                    task.execute();
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_save:
-                if(post.isSaved()) {
-                    post.setSaved(false);
-                    actionType = UserActionType.unsave;
-                }
-                else {
-                    post.setSaved(true);
-                    actionType = UserActionType.save;
-                }
+                if(MainActivity.currentUser!=null) {
+                    if (post.isSaved()) {
+                        post.setSaved(false);
+                        actionType = UserActionType.unsave;
+                    } else {
+                        post.setSaved(true);
+                        actionType = UserActionType.save;
+                    }
 
-                if(adapter != null) adapter.notifyDataSetChanged();
-                else recyclerAdapter.notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                    else recyclerAdapter.notifyDataSetChanged();
 
-                task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                task.execute();
+                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                    task.execute();
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to save");
                 break;
             case R.id.btn_hide:
-                if(post.isHidden()) {
-                    post.setHidden(false);
-                    actionType = UserActionType.unhide;
-                }
-                else {
-                    post.setHidden(true);
-                    actionType = UserActionType.hide;
-                    RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
-                    redditItemListAdapter.remove(post);
-                }
+                if(MainActivity.currentUser!=null) {
+                    if (post.isHidden()) {
+                        post.setHidden(false);
+                        actionType = UserActionType.unhide;
+                    } else {
+                        post.setHidden(true);
+                        actionType = UserActionType.hide;
+                        RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
+                        redditItemListAdapter.remove(post);
+                    }
 
-                if(adapter != null) adapter.notifyDataSetChanged();
-                else recyclerAdapter.notifyDataSetChanged();
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                    else recyclerAdapter.notifyDataSetChanged();
 
-                task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                task.execute();
+                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                    task.execute();
+                }
+                else ToastUtils.displayShortToast(context, "Must be logged in to hide");
                 break;
             case R.id.btn_view_user:
                 Intent intent = new Intent(context, UserActivity.class);
