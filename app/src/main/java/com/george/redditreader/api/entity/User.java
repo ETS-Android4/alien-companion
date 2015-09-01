@@ -47,6 +47,13 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public User(HttpClient httpClient, String username, String modhash, String cookie) {
+        this.httpClient = httpClient;
+        this.username = username;
+        this.modhash = modhash;
+        this.cookie = cookie;
+    }
+
     /**
      * Get the user name of the user.
      * @return User name

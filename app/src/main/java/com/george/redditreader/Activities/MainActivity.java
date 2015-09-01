@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 
 import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.PostListFragment;
-import com.george.redditreader.LoadTasks.LoadUserTask;
 import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.Utils.ScrimInsetsFrameLayout;
 import com.george.redditreader.api.entity.User;
@@ -34,6 +32,7 @@ import com.george.redditreader.Models.NavDrawer.NavDrawerSubreddits;
 import com.george.redditreader.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import me.imid.swipebacklayout.lib.ViewDragHelper;
@@ -105,11 +104,27 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeCurrentUser(SavedAccount account) {
         currentAccount = account;
-        currentUser = (account!=null) ? new User(new RedditHttpClient(), account.getUsername(), account.getPassword()) : null;
-        initNavDrawerContent();
-        listFragment.setSubreddit(null);
-        listFragment.setSubmissionSort(SubmissionSort.HOT);
-        listFragment.refreshList();
+        currentUser = (account!=null) ? new User(new RedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        //initNavDrawerContent();
+        if(currentUser!=null) {
+            adapter.showUserMenuItems();
+            adapter.updateSubredditItems(currentAccount.getSubreddits());
+        }
+        else {
+            adapter.hideUserMenuItems();
+            List<String> subreddits = new ArrayList<>();
+            Collections.addAll(subreddits, defaultSubredditStrings);
+            adapter.updateSubredditItems(subreddits);
+        }
+        homePage();
+    }
+
+    public void homePage() {
+        if(listFragment!=null) {
+            listFragment.setSubreddit(null);
+            listFragment.setSubmissionSort(SubmissionSort.HOT);
+            listFragment.refreshList();
+        }
     }
 
     public static void getCurrentSettings() {
@@ -222,10 +237,12 @@ public class MainActivity extends AppCompatActivity {
 
         drawerContent.setAdapter(adapter);
 
-        if(currentAccount != null) {
-            LoadUserTask task = new LoadUserTask(this, adapter);
-            task.execute();
-        }
+        adapter.importAccounts();
+
+        //if(currentAccount != null) {
+        //    LoadUserTask task = new LoadUserTask(this, adapter);
+        //    task.execute();
+        //}
     }
 
     private List<NavDrawerItem> getMenuItems() {

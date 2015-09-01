@@ -3,11 +3,9 @@ package com.george.redditreader.ClickListeners.NavDrawerListeners;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Adapters.NavDrawerAdapter;
 import com.george.redditreader.Fragments.AccountOptionsDialogFragment;
 import com.george.redditreader.Fragments.AddAccountDialogFragment;
 import com.george.redditreader.Models.NavDrawer.NavDrawerAccount;
@@ -42,10 +40,11 @@ public class AccountListener extends NavDrawerListener {
                     public void run() {
                         //NavDrawerAdapter.currentAccountIndex = 0;
                         SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                        editor.putInt("currentAccountIndex", 0);
+                        editor.putString("currentAccountName", "Logged out");
                         editor.apply();
                         getActivity().changeCurrentUser(null);
-                        getAdapter().notifyDataSetChanged();
+                        getAdapter().setCurrentAccountName("Logged out");
+                        //getAdapter().notifyDataSetChanged();
                     }
                 }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
@@ -55,10 +54,12 @@ public class AccountListener extends NavDrawerListener {
                     public void run() {
                         //NavDrawerAdapter.currentAccountIndex = position - 1;
                         SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                        editor.putInt("currentAccountIndex", position - 1);
+                        NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
+                        editor.putString("currentAccountName", accountItem.getName());
                         editor.apply();
-                        getActivity().changeCurrentUser(getAdapter().accountItems.get(position - 1).savedAccount);
-                        getAdapter().notifyDataSetChanged();
+                        getActivity().changeCurrentUser(accountItem.savedAccount);
+                        getAdapter().setCurrentAccountName(accountItem.getName());
+                        //getAdapter().notifyDataSetChanged();
                     }
                 }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;

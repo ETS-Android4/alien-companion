@@ -25,9 +25,9 @@ import com.george.redditreader.Models.NavDrawer.NavDrawerMenuItem;
 import com.george.redditreader.Models.NavDrawer.NavDrawerSubredditItem;
 import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.R;
+import com.george.redditreader.enums.MenuType;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -64,15 +64,37 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     private List<NavDrawerItem> subredditItems;
     public List<NavDrawerAccount> accountItems;
 
-    public static int currentAccountIndex;
+    public static String currentAccountName;
+
+    private NavDrawerMenuItem profile;
+    private NavDrawerMenuItem messages;
 
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
         this.activity = activity;
         subredditItemsVisible = true;
         accountItemsVisible = false;
-        importAccounts();
-        //Log.d("current account index", "at init : " + currentAccountIndex);
+        currentAccountName = "Logged out";
+        profile = new NavDrawerMenuItem(MenuType.profile);
+        messages = new NavDrawerMenuItem(MenuType.messages);
+        //importAccounts();
+        Log.d("current account name", "at init : " + currentAccountName);
+    }
+
+    public void setCurrentAccountName(String name) {
+        currentAccountName = name;
+        toggleAccountItems();
+        Log.d("current account name", "current : " + currentAccountName);
+    }
+
+    public void showUserMenuItems() {
+        add(1, profile);
+        add(2, messages);
+    }
+
+    public void hideUserMenuItems() {
+        items.remove(profile);
+        items.remove(messages);
     }
 
     public void updateSubredditItems(List<String> subredditNames) {
@@ -90,21 +112,30 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    private void importAccounts() {
-        currentAccountIndex = MainActivity.prefs.getInt("currentAccountIndex", 0);
+    public void importAccounts() {
+        currentAccountName = MainActivity.prefs.getString("currentAccountName", "Logged out");
         List<SavedAccount> savedAccounts = readAccounts();
 
+        SavedAccount currentAccount = null;
         accountItems = new ArrayList<>();
         accountItems.add(new NavDrawerAccount(1));
-        accountItems.add(new NavDrawerAccount(0));
         if(savedAccounts != null) {
             for(SavedAccount account : savedAccounts) {
                 accountItems.add(new NavDrawerAccount(account));
+                if(account.getUsername().equals(currentAccountName)) currentAccount = account;
             }
-            SavedAccount currentAccount = accountItems.get(currentAccountIndex).savedAccount;
-            MainActivity.currentAccount = currentAccount;
         }
+        accountItems.add(new NavDrawerAccount(0));
+        //notifyDataSetChanged();
+        if(currentAccount!=null) activity.changeCurrentUser(currentAccount);
+    }
 
+    public void accountAdded(NavDrawerAccount accountItem, String name) {
+        items.add(accountItems.size(), accountItem);
+        accountItems.add(accountItems.size()-1, accountItem);
+        setCurrentAccountName(name);
+        notifyDataSetChanged();
+        Log.d("current account name", "after add : " + currentAccountName);
     }
 
     private List<SavedAccount> readAccounts() {
@@ -134,7 +165,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void deleteAccount(String accountToDelete) {
-        //Log.d("current account index", "before delete : " + currentAccountIndex);
+        Log.d("current account name", "before delete : " + currentAccountName);
         List<SavedAccount> accounts = readAccounts();
         for(SavedAccount account : accounts) {
             if(account.getUsername().equals(accountToDelete)) {
@@ -143,26 +174,29 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             }
         }
         saveAccounts(accounts);
-        int i=0;
+        boolean justRemove = true;
+        int i =0;
         for(NavDrawerAccount account : accountItems) {
             if(account.getName().equals(accountToDelete)) {
                 accountItems.remove(account);
                 items.remove(account);
-                if(currentAccountIndex == i) currentAccountIndex = 0;
-                else if(currentAccountIndex > i) currentAccountIndex -=1;
+                if(currentAccountName.equals(accountToDelete)) {
+                    currentAccountName = "Logged out";
+                    justRemove = false;
+                }
                 break;
             }
             i++;
         }
         SharedPreferences.Editor editor = MainActivity.prefs.edit();
-        editor.putInt("currentAccountIndex", currentAccountIndex);
+        editor.putString("currentAccountName", currentAccountName);
         editor.apply();
-        if(currentAccountIndex==0) {
+        if(justRemove) notifyItemRemoved(i+1);
+        else {
             activity.getDrawerLayout().closeDrawers();
             activity.changeCurrentUser(null);
         }
-        else notifyDataSetChanged();
-        //Log.d("current account index", "after delete : " + currentAccountIndex);
+        Log.d("current account name", "after delete : " + currentAccountName);
     }
 
     public void add(NavDrawerItem item) {
@@ -294,7 +328,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 //NavDrawerHeader header = (NavDrawerHeader) getItemAt(position);
-                headerViewHolder.currentAccount.setText(accountItems.get(currentAccountIndex).getName());
+                //if(MainActivity.currentUser!=null) headerViewHolder.currentAccount.setText(MainActivity.currentUser.getUsername());
+                //else headerViewHolder.currentAccount.setText("Logged out");
+                headerViewHolder.currentAccount.setText(currentAccountName);
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand);
                 break;
@@ -353,7 +389,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 SubredditRowViewHolder accountViewHolder = (SubredditRowViewHolder) viewHolder;
                 NavDrawerAccount account = (NavDrawerAccount) getItemAt(position);
                 accountViewHolder.name.setText(account.getName());
-                if(account == accountItems.get(currentAccountIndex)) accountViewHolder.name.setTextColor(Color.parseColor("#C2C2FF"));
+                //if(account == accountItems.get(currentAccountName)) accountViewHolder.name.setTextColor(Color.parseColor("#C2C2FF"));
+                //else accountViewHolder.name.setTextColor(Color.WHITE);
+                if(currentAccountName.equals(account.getName())) accountViewHolder.name.setTextColor(Color.parseColor("#C2C2FF"));
                 else accountViewHolder.name.setTextColor(Color.WHITE);
                 break;
             default:

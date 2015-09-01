@@ -4,12 +4,16 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.Models.NavDrawer.NavDrawerAccount;
 import com.george.redditreader.Models.SavedAccount;
 import com.george.redditreader.Utils.ToastUtils;
+import com.george.redditreader.api.entity.Subreddit;
 import com.george.redditreader.api.entity.User;
 import com.george.redditreader.api.exception.ActionFailedException;
+import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.george.redditreader.api.utils.httpClient.RedditHttpClient;
@@ -24,6 +28,7 @@ import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +42,8 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     private String username;
     private String password;
     private Exception exception;
+
+    private String currentAccountName;
 
     private static final String DEBUG_USER = "user account info";
 
@@ -76,35 +83,40 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     @Override
     protected SavedAccount doInBackground(Void... unused) {
-        //SystemClock.sleep(5000);
+        User user = new User(httpClient, username, password);
         try {
-            //User user;
-            //try {
-            //    user = new User(httpClient, URLEncoder.encode(username, "utf-8"), URLEncoder.encode(password, "utf-8"));
-            //} catch (UnsupportedEncodingException e) {
-            //    e.printStackTrace();
-            //    user = new User(httpClient, username, password);
-            //}
-            User user = new User(httpClient, username, password);
-            MainActivity.currentUser = user;
+            //MainActivity.currentUser = user;
             user.connect();
+            List<String> subredditNames = new ArrayList<>();
 
-            SavedAccount newAccount = new SavedAccount(username, password);
+            try {
+                List<Subreddit> subreddits = user.getSubscribed(0);
+                for (Subreddit subreddit : subreddits) {
+                    subredditNames.add(subreddit.getDisplayName());
+                }
+            } catch (RetrievalFailedException | NullPointerException | RedditError e) {
+                e.printStackTrace();
+                Collections.addAll(subredditNames, MainActivity.defaultSubredditStrings);
+            }
+
+            //SavedAccount newAccount = new SavedAccount(username, password);
+            SavedAccount newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), subredditNames);
 
             List<SavedAccount> accounts = readFromFile();
             if(accounts == null) accounts = new ArrayList<>();
             accounts.add(newAccount);
             saveToFile(accounts);
 
+            currentAccountName = newAccount.getUsername();
             SharedPreferences.Editor editor = MainActivity.prefs.edit();
-            editor.putInt("currentAccountIndex", accounts.size() + 1);
+            editor.putString("currentAccountName", currentAccountName);
             editor.apply();
 
             return newAccount;
             //user.getSubscribed(0);
             //ProfileActions profileActions = new ProfileActions(httpClient, user);
             //profileActions.getUserInformation();
-        } catch (RetrievalFailedException | ActionFailedException | IOException | ParseException | NullPointerException e) {
+        } catch (ActionFailedException | IOException | ParseException | NullPointerException e) {
             e.printStackTrace();
             exception = e;
         }
@@ -122,6 +134,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             //ToastUtils.displayShortToast(context, "Logged in as " + username);
 
             MainActivity mainActivity = (MainActivity) context;
+            mainActivity.getNavDrawerAdapter().accountAdded(new NavDrawerAccount(account), currentAccountName);
             mainActivity.changeCurrentUser(account);
             //Intent mStartActivity = new Intent(context, MainActivity.class);
             //int mPendingIntentId = 123456;
