@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences prefs;
     public static int swipeSetting;
+    public static boolean swipeRefresh;
     public static boolean endlessPosts;
     public static boolean showNSFWpreview;
     public static boolean hideNSFW;
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getCurrentSettings() {
+        swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
         hideNSFW = prefs.getBoolean("hideNSFW", false);

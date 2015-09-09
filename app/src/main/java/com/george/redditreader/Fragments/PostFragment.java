@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.PostActivity;
 import com.george.redditreader.Activities.SubmitActivity;
 import com.george.redditreader.Adapters.PostAdapter;
@@ -30,12 +32,13 @@ import com.george.redditreader.enums.SubmitType;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
+public class PostFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, SwipeRefreshLayout.OnRefreshListener {
     //private static final String GROUPS_KEY = "groups_key";
 
     public PostAdapter postAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private PostActivity activity;
     public Submission post;
     public CommentSort commentSort;
@@ -71,6 +74,13 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 post = new Submission(activity.getIntent().getStringExtra("postId"));
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(MainActivity.swipeRefresh) swipeRefreshLayout.setEnabled(true);
+        else swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
@@ -164,16 +174,29 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_post, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_post_list, container, false);
 
-        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar_fullLoad);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.GONE);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.content_recyclerview);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_postList);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mLayoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                    swipeRefreshLayout.setEnabled(true);
+                else swipeRefreshLayout.setEnabled(false);
+            }
+        });
 
         setCommentSort(CommentSort.TOP);
         postAdapter = new PostAdapter(activity, this, this);
@@ -219,6 +242,11 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         //}
 
         return rootView;
+    }
+
+    @Override public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
+        refreshComments();
     }
 
     @Override

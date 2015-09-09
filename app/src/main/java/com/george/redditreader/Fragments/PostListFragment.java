@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,12 +34,13 @@ import com.george.redditreader.enums.SubmitType;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostListFragment extends Fragment {
+public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public RedditItemListAdapter postListAdapter;
     public ProgressBar mainProgressBar;
     public RecyclerView contentView;
     private LinearLayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
     public String subreddit;
     private AppCompatActivity activity;
     public SubmissionSort submissionSort;
@@ -59,6 +62,8 @@ public class PostListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadMore = MainActivity.endlessPosts;
+        if(MainActivity.swipeRefresh) swipeRefreshLayout.setEnabled(true);
+        else swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
@@ -66,6 +71,13 @@ public class PostListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        //swipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+        //        android.R.color.holo_green_light,
+        //        android.R.color.holo_orange_light,
+        //        android.R.color.holo_red_light);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
@@ -76,6 +88,10 @@ public class PostListFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+                if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+                else swipeRefreshLayout.setEnabled(false);
+
                 int pastVisiblesItems, visibleItemCount, totalItemCount;
                 visibleItemCount = layoutManager.getChildCount();
                 totalItemCount = layoutManager.getItemCount();
@@ -109,6 +125,11 @@ public class PostListFragment extends Fragment {
 
         //Log.d("geo debug", "oncreateview called");
         return view;
+    }
+
+    @Override public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
+        refreshList();
     }
 
     @Override

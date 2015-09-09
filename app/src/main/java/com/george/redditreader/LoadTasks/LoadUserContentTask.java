@@ -130,6 +130,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case init:
                     uf.progressBar.setVisibility(View.GONE);
                     uf.contentView.setAdapter(uf.userAdapter);
+                    if(things.size()<25) uf.hasMore = false;
                     break;
                 case refresh:
                     if(things.size() != 0) {
@@ -137,11 +138,14 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         uf.contentView.setAdapter(uf.userAdapter);
                         uf.contentView.setVisibility(View.VISIBLE);
                     }
+                    if(things.size()==25) uf.hasMore = true;
                     break;
                 case extend:
                     //uf.footerProgressBar.setVisibility(View.GONE);
                     //uf.showMore.setVisibility(View.VISIBLE);
                     uf.userAdapter.setLoadingMoreItems(false);
+                    if(things.size()==0) uf.hasMore = false;
+                    if(MainActivity.endlessPosts) uf.loadMore = true;
                     break;
             }
         }
