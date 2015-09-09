@@ -39,7 +39,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         try {
             Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
             List<Comment> comments;
-            comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, RedditConstants.MAX_COMMENT_DEPTH,
+            comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, MainActivity.initialCommentDepth,
                     MainActivity.initialCommentCount, postFragment.commentSort);
 
             if(postFragment.post.getThumbnailObject() == null) {

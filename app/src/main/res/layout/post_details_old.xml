@@ -47,7 +47,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="(displayURL) - (postTag) - "
+                            android:text="(domain) - "
                             android:id="@+id/postDets1" />
 
                         <TextView
@@ -55,6 +55,14 @@
                             android:layout_height="wrap_content"
                             android:text="##### comments"
                             android:id="@+id/txtView_comments" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NSFW"
+                            android:id="@+id/txtView_nsfw"
+                            android:textColor="#d81d1b"
+                            android:background="@drawable/round_corner_nsfw" />
                     </LinearLayout>
 
                 </LinearLayout>

@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.george.redditreader.Activities.OfflineActivity">
+
+    <item android:id="@+id/action_sort" android:title="@string/action_sort"
+        android:icon="@mipmap/ic_sort_white_24dp" app:showAsAction="always"/>
+
+    <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
+        android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
+        android:orderInCategory="102" app:showAsAction="never" />
+</menu>

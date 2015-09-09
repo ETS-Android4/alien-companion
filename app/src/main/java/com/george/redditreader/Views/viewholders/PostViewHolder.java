@@ -36,6 +36,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView domain;
     public TextView subreddit;
     public TextView commentCount;
+    public TextView nsfw;
     public TextView selfText;
     public ImageView postImage;
     public LinearLayout commentsButton;
@@ -67,6 +68,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         domain = (TextView) itemView.findViewById(R.id.txtView_postDomain);
         subreddit = (TextView) itemView.findViewById(R.id.txtView_postSubreddit);
         commentCount = (TextView) itemView.findViewById(R.id.txtView_postComments);
+        nsfw = (TextView) itemView.findViewById(R.id.txtView_nsfw);
         postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
         linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
         upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
@@ -97,6 +99,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         age.setText(ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
         domain.setText(post.getDomain());
         commentCount.setText(Long.toString(post.getCommentCount()));
+        if(post.isNSFW()) nsfw.setVisibility(View.VISIBLE);
+        else nsfw.setVisibility(View.GONE);
 
         Thumbnail postThumbnail = post.getThumbnailObject();
         if(postThumbnail == null) postThumbnail = new Thumbnail(); //TODO: check why thumbnail is null
@@ -105,7 +109,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             if (postThumbnail.isSelf()) {
                 postImage.setImageResource(R.drawable.self_default2);
             } else if (post.isNSFW() && !MainActivity.prefs.getBoolean("showNSFWthumb", false)) {
-                postImage.setImageResource(R.drawable.nsfw2);
+                //postImage.setImageResource(R.drawable.nsfw2);
+                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
             } else {
                 try {
                     //Get Post Thumbnail

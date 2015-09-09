@@ -17,5 +17,9 @@
         <attr name="shadow_bottom" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="ScrollViewWithMaxHeight">
+        <attr name="maxHeight" format="dimension"/>
+    </declare-styleable>
+
     <attr name="SwipeBackLayoutStyle" format="reference"/>
 </resources>

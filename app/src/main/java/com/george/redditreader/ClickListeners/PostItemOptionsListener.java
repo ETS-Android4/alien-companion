@@ -1,6 +1,8 @@
 package com.george.redditreader.ClickListeners;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +20,7 @@ import com.george.redditreader.LoadTasks.LoadUserActionTask;
 import com.george.redditreader.R;
 import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.entity.Submission;
+import com.george.redditreader.api.utils.ApiEndpointUtils;
 import com.george.redditreader.enums.UserActionType;
 
 /**
@@ -174,10 +177,23 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task.execute();
                         return true;
                     case R.id.action_copy_link:
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("Post link", post.getURL());
+                        clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_copy_permalink:
+                        String postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
+                        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        clip = ClipData.newPlainText("Post permalink", postLink);
+                        clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_share:
+                        postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, postLink);
+                        sendIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(sendIntent, "Share post to.."));
                         return true;
                     case R.id.action_view_subreddit:
                         Intent intent = new Intent(context, SubredditActivity.class);

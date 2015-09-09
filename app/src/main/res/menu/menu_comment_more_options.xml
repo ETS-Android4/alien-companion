@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/action_copy_link" android:title="Copy link"
-        android:orderInCategory="96" />
+    <item android:id="@+id/action_copy_link" android:title="Copy permalink"
+        android:orderInCategory="95" />
     <item android:id="@+id/action_copy_text" android:title="Copy text"
+        android:orderInCategory="96" />
+    <item android:id="@+id/action_share" android:title="Share"
         android:orderInCategory="97" />
     <item android:id="@+id/action_open_browser" android:title="Open in browser"
         android:orderInCategory="98" />

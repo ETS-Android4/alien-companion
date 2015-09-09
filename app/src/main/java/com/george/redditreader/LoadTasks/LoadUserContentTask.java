@@ -54,7 +54,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         try {
             List<RedditItem> userContent = null;
             switch (this.userContent) {
-                case OVERVIEW: case GILDED:
+                case OVERVIEW: case GILDED: case SAVED:
                     UserMixed userMixed = new UserMixed(httpClient, MainActivity.currentUser);
                     if(mLoadType == LoadType.extend) {
                         RedditItem lastItem = uf.userAdapter.getLastItem();
@@ -90,7 +90,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         uf.userAdapter.addAll(userContent);
                     }
                     break;
-                case SUBMITTED: case LIKED: case DISLIKED: case HIDDEN: case SAVED:
+                case SUBMITTED: case LIKED: case DISLIKED: case HIDDEN:
                     Submissions submissions = new Submissions(httpClient, MainActivity.currentUser);
                     if(mLoadType == LoadType.extend) {
                         Submission lastPost = (Submission) uf.userAdapter.getLastItem();

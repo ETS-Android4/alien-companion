@@ -101,5 +101,7 @@
     <string name="submit_image">Image post</string>
     <string name="action_submit_post">Submit post</string>
     <string name="action_hide_read">Hide read</string>
+    <string name="action_reply">Reply</string>
+    <string name="title_activity_offline">OfflineActivity</string>
 
 </resources>

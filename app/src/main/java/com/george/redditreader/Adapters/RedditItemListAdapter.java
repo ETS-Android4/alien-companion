@@ -226,7 +226,6 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_SHOW_MORE:
                 FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
                 Activity activity = (Activity) context;
-                //footerViewHolder.showMoreButton.setOnClickListener(new SubredditFooterListener(context, (PostListFragment) activity.getFragmentManager().findFragmentByTag("postListFragment")));
                 footerViewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(context, activity.getFragmentManager().findFragmentByTag("listFragment")));
                 if(loadingMoreItems) {
                     footerViewHolder.showMoreProgress.setVisibility(View.VISIBLE);

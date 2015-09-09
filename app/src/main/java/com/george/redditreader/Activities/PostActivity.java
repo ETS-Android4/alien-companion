@@ -2,12 +2,10 @@ package com.george.redditreader.Activities;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.george.redditreader.Fragments.PostFragment;
-import com.george.redditreader.Fragments.SearchFragment;
 import com.george.redditreader.R;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -21,7 +19,7 @@ public class PostActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_single_fragment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);
@@ -60,13 +58,13 @@ public class PostActivity extends SwipeBackActivity {
         }
     }
 
-    @Override
-    public void onBackPressed () {
-        //MainActivity.commentsLoaded = false;
-        //MainActivity.showFullCommentsButton = false;
-        //PostFragment.commentLinkId = null;
-        super.onBackPressed();
-    }
+    //@Override
+    //public void onBackPressed () {
+    //    //MainActivity.commentsLoaded = false;
+    //    //MainActivity.showFullCommentsButton = false;
+    //    //PostFragment.commentLinkId = null;
+    //    super.onBackPressed();
+    //}
 
     //public void next() {
     //    commentsLoaded = false;

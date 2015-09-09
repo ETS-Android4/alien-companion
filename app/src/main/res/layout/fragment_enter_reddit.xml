@@ -17,14 +17,15 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp" />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
         android:hint="subreddit"
         android:layout_margin="5dp"
         android:singleLine="true"
-        android:imeOptions="actionGo"/>
+        android:imeOptions="actionGo"
+        android:completionThreshold="1" />
 
     <LinearLayout
         android:orientation="horizontal"

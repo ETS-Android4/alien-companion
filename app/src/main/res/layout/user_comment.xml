@@ -54,11 +54,6 @@
                 android:text="(age)"
                 android:id="@+id/txtView_commentAge" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" ago"
-                android:id="@+id/textView13" />
         </LinearLayout>
 
         <TextView

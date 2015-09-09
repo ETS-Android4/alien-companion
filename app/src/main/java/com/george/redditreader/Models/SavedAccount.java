@@ -9,16 +9,9 @@ import java.util.List;
 public class SavedAccount implements Serializable {
 
     private String username;
-    private String password;
     private String modhash;
     private String cookie;
     private List<String> subreddits;
-
-
-    public SavedAccount(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
     public SavedAccount(String username, String modhash, String cookie, List<String> subreddits) {
         this.username = username;
@@ -53,10 +46,6 @@ public class SavedAccount implements Serializable {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
 }

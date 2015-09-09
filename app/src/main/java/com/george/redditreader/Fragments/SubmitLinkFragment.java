@@ -4,6 +4,7 @@ package com.george.redditreader.Fragments;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -43,5 +44,13 @@ public class SubmitLinkFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_submit) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 }

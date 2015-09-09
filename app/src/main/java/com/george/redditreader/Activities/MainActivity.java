@@ -40,7 +40,7 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String[] defaultSubredditStrings = {"all", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "showerthoughts"};
+    public static final String[] defaultSubredditStrings = {"all", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
@@ -65,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences prefs;
     public static int swipeSetting;
+    public static boolean endlessPosts;
     public static boolean showNSFWpreview;
+    public static boolean hideNSFW;
     public static int initialCommentCount;
+    public static int initialCommentDepth;
 
     public static SavedAccount currentAccount;
     public static User currentUser;
@@ -128,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getCurrentSettings() {
+        endlessPosts = prefs.getBoolean("endlessPosts", true);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
+        hideNSFW = prefs.getBoolean("hideNSFW", false);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
         switch (swipeSetting) {
             case 0:
@@ -143,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 swipeSetting = ViewDragHelper.STATE_IDLE;
         }
-        initialCommentCount = Integer.parseInt(prefs.getString("initialComments", "100"));
+        initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
+        initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
     }
 
     @Override
@@ -238,19 +244,10 @@ public class MainActivity extends AppCompatActivity {
         drawerContent.setAdapter(adapter);
 
         adapter.importAccounts();
-
-        //if(currentAccount != null) {
-        //    LoadUserTask task = new LoadUserTask(this, adapter);
-        //    task.execute();
-        //}
     }
 
     private List<NavDrawerItem> getMenuItems() {
         List<NavDrawerItem> menuItems = new ArrayList<>();
-        //if(currentUser != null) {
-            //menuItems.add(new NavDrawerMenuItem(MenuType.profile));
-            //menuItems.add(new NavDrawerMenuItem(MenuType.messages));
-        //}
         menuItems.add(new NavDrawerMenuItem(MenuType.user));
         menuItems.add(new NavDrawerMenuItem(MenuType.subreddit));
         menuItems.add(new NavDrawerMenuItem(MenuType.settings));

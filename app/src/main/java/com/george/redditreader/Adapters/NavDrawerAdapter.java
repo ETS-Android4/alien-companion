@@ -68,6 +68,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private NavDrawerMenuItem profile;
     private NavDrawerMenuItem messages;
+    private boolean userMenuItemsVisible;
 
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
@@ -88,13 +89,17 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void showUserMenuItems() {
-        add(1, profile);
-        add(2, messages);
+        if(!userMenuItemsVisible) {
+            add(1, profile);
+            add(2, messages);
+            userMenuItemsVisible = true;
+        }
     }
 
     public void hideUserMenuItems() {
         items.remove(profile);
         items.remove(messages);
+        userMenuItemsVisible = false;
     }
 
     public void updateSubredditItems(List<String> subredditNames) {

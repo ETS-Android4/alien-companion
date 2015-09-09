@@ -62,17 +62,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
      */
     private final int mPaddingDP = 5;
 
-    //private boolean showNSFW;
     private String author;
-    public int selectedComment = -1;
+    public int selectedPosition;
 
     public PostAdapter (Activity activity, View.OnClickListener listener, View.OnLongClickListener longListener) {
         super();
         this.activity = activity;
         mListener = listener;
         mLongListener = longListener;
-
-        //showNSFW = MainActivity.prefs.getBoolean("showNSFWthumb", false);
+        selectedPosition = -1;
     }
 
     @Override
@@ -138,6 +136,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+
         final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
                 .findFragmentByTag("postFragment");
         int viewType = getItemViewType(position);
@@ -146,14 +145,51 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 CommentViewHolder cvh = (CommentViewHolder) viewHolder;
                 final Comment comment = (Comment) getItemAt(position);
 
+                //View.OnClickListener listener = new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View v) {
+                //        selectedPosition = -1;
+                //        toggleGroup(position);
+                //    }
+                //};
+                //View.OnLongClickListener longListener = new View.OnLongClickListener() {
+                //    @Override
+                //    public boolean onLongClick(View v) {
+                //        if(!comment.isGroup()) {
+                //            int previousPosition = selectedPosition;
+                //            if (position == selectedPosition) selectedPosition = -1;
+                //            else selectedPosition = position;
+                //            //notifyDataSetChanged();
+                //            notifyItemChanged(previousPosition);
+                //            notifyItemChanged(selectedPosition);
+                //            return true;
+                //        }
+                //        else return false;
+                //    }
+                //};
+//
+                //cvh.commentLayout.setOnClickListener(listener);
+                //cvh.commentLayout.setOnLongClickListener(longListener);
+
+                cvh.score.setText(Long.toString(comment.getScore()));
+                String ageString = " pts - " + ConvertUtils.getSubmissionAge(comment.getCreatedUTC());
+                if(comment.getEdited()) ageString += "*";
+                cvh.age.setText(ageString);
+
                 //Comment permalink case
                 if(comment.getIdentifier().equals(postFragment.commentLinkId))
                     cvh.commentLayout.setBackgroundColor(Color.parseColor("#FFFFD1"));
                 else cvh.commentLayout.setBackgroundColor(Color.WHITE);
 
                 //Author textview
-                if(author.equals(comment.getAuthor())) cvh.authorTextView.setTextColor(Color.parseColor("#3399FF"));
-                else cvh.authorTextView.setTextColor(Color.parseColor("#ff0000"));
+                if(author.equals(comment.getAuthor())) {
+                    cvh.authorTextView.setTextColor(Color.WHITE);
+                    cvh.authorTextView.setBackgroundResource(R.drawable.rounded_corner_blue);
+                }
+                else {
+                    cvh.authorTextView.setTextColor(Color.parseColor("#5972ff"));
+                    cvh.authorTextView.setBackgroundColor(Color.TRANSPARENT);
+                }
                 cvh.authorTextView.setText(comment.getAuthor());
 
                 //Comment textview
@@ -174,15 +210,21 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
 
                 if (comment.isGroup()) {
-                    cvh.hiddenCommentsCountTextView.setVisibility(View.VISIBLE);
-                    cvh.hiddenCommentsCountTextView.setText(Integer.toString(comment.getGroupSize() + 1));
+                    cvh.commentHidden.setVisibility(View.VISIBLE);
+                    int hiddenComments = comment.getGroupSize();
+                    if(hiddenComments+1 == 1) cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
+                    else {
+                        cvh.hiddenCommentsCountTextView.setVisibility(View.VISIBLE);
+                        cvh.hiddenCommentsCountTextView.setText("+" + Integer.toString(hiddenComments));
+                    }
                     cvh.commentTextView.setVisibility(View.GONE);
                 } else {
+                    cvh.commentHidden.setVisibility(View.GONE);
                     cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
                     cvh.commentTextView.setVisibility(View.VISIBLE);
                 }
 
-                if(selectedComment == position) {
+                if(selectedPosition == position) {
                     cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
                     CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
                     cvh.upvote.setOnClickListener(listener);
@@ -199,15 +241,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 if(MainActivity.currentUser != null) {
                     //check user vote
                     if (comment.getLikes().equals("true")) {
-                        //cvh.score.setTextColor(Color.parseColor("#FF6600"));
+                        cvh.score.setTextColor(Color.parseColor("#FF6600"));
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
                     } else if (comment.getLikes().equals("false")) {
-                        //cvh.score.setTextColor(Color.BLUE);
+                        cvh.score.setTextColor(Color.BLUE);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
-                        //cvh.score.setTextColor(Color.BLACK);
+                        cvh.score.setTextColor(Color.BLACK);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
                     }
@@ -215,6 +257,18 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 break;
             case VIEW_TYPE_CONTENT:
+                View.OnLongClickListener longListener = new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int previousPosition = selectedPosition;
+                        if (position == selectedPosition) selectedPosition = -1;
+                        else selectedPosition = position;
+                        notifyItemChanged(previousPosition);
+                        notifyItemChanged(position);
+                        //notifyDataSetChanged();
+                        return true;
+                    }
+                };
                 final ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
                 final Submission post = (Submission) getItemAt(position);
                 author = post.getAuthor();
@@ -232,7 +286,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 else contentVH.fullComments.setVisibility(View.GONE);
 
                 contentVH.postTitle.setText(post.getTitle());
-                contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments");
+                contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments ");
+                if(post.isNSFW()) contentVH.nsfw.setVisibility(View.VISIBLE);
+                else contentVH.nsfw.setVisibility(View.GONE);
 
                 if (post.isSelf()) {
                     contentVH.postDets1.setVisibility(View.GONE);
@@ -257,7 +313,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     Thumbnail thumbnail = post.getThumbnailObject();
                     if (thumbnail.hasThumbnail()) {
                         if(post.isNSFW() && !MainActivity.showNSFWpreview) {
-                            contentVH.postImage.setImageResource(R.drawable.nsfw2);
+                            //contentVH.postImage.setImageResource(R.drawable.nsfw2);
+                            contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                         }
                         else {
                             try {
@@ -310,22 +367,19 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         }
                     }
                 });
-                contentVH.postDetails.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if(contentVH.postOptions.getVisibility() == View.VISIBLE) contentVH.postOptions.setVisibility(View.GONE);
-                        else contentVH.postOptions.setVisibility(View.VISIBLE);
-                        return true;
-                    }
-                });
-                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
-                contentVH.upvote.setOnClickListener(optionsListener);
-                contentVH.downvote.setOnClickListener(optionsListener);
-                contentVH.save.setOnClickListener(optionsListener);
-                contentVH.hide.setOnClickListener(optionsListener);
-                contentVH.viewUser.setOnClickListener(optionsListener);
-                contentVH.openBrowser.setOnClickListener(optionsListener);
-                contentVH.moreOptions.setOnClickListener(optionsListener);
+                contentVH.postDetails.setOnLongClickListener(longListener);
+                if(selectedPosition == position) {
+                    contentVH.postOptions.setVisibility(View.VISIBLE);
+                    PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
+                    contentVH.upvote.setOnClickListener(optionsListener);
+                    contentVH.downvote.setOnClickListener(optionsListener);
+                    contentVH.save.setOnClickListener(optionsListener);
+                    contentVH.hide.setOnClickListener(optionsListener);
+                    contentVH.viewUser.setOnClickListener(optionsListener);
+                    contentVH.openBrowser.setOnClickListener(optionsListener);
+                    contentVH.moreOptions.setOnClickListener(optionsListener);
+                }
+                else contentVH.postOptions.setVisibility(View.GONE);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -344,6 +398,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView authorTextView;
         public TextView commentTextView;
         public TextView hiddenCommentsCountTextView;
+        public TextView commentHidden;
+        public TextView score;
+        public TextView age;
         private View view;
         public LinearLayout commentLayout;
         public LinearLayout commentOptionsLayout;
@@ -361,6 +418,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             view = itemView;
             authorTextView = (TextView) itemView.findViewById(R.id.author_textview);
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);
+            score = (TextView) itemView.findViewById(R.id.txtView_score);
+            commentHidden = (TextView) itemView.findViewById(R.id.txtView_commentHidden);
+            age = (TextView) itemView.findViewById(R.id.txtView_age);
             colorBand = itemView.findViewById(R.id.color_band);
             hiddenCommentsCountTextView = (TextView) itemView.findViewById(R.id.hidden_comments_count_textview);
             commentLayout = (LinearLayout) itemView.findViewById(R.id.commentLayout);
@@ -391,6 +451,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView age;
         public TextView subreddit;
         public TextView selfText;
+        public TextView nsfw;
         public ImageView postImage;
         public ProgressBar progressBar;
         public LinearLayout fullComments;
@@ -412,6 +473,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             score = (TextView) itemView.findViewById(R.id.postScore);
             age = (TextView) itemView.findViewById(R.id.postAge);
             subreddit = (TextView) itemView.findViewById(R.id.subreddit);
+            nsfw = (TextView) itemView.findViewById(R.id.txtView_nsfw);
             selfText = (TextView) itemView.findViewById(R.id.selfText);
             postImage = (ImageView) itemView.findViewById(R.id.postImage);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);

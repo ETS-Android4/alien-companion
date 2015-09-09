@@ -116,6 +116,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     //plf.postListAdapter.notifyDataSetChanged();
                     plf.postListAdapter.setLoadingMoreItems(false);
                     plf.postListAdapter.addAll(submissions);
+                    if(MainActivity.endlessPosts) plf.loadMore = true;
                     break;
             }
         }

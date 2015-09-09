@@ -7,13 +7,15 @@
         android:orderInCategory="94" />
     <item android:id="@+id/action_disable_inbox_replies" android:title="Disable inbox replies"
         android:orderInCategory="95" />
-    <item android:id="@+id/action_copy_link" android:title="Copy link"
+    <item android:id="@+id/action_copy_link" android:title="Copy permalink"
         android:orderInCategory="96" />
     <item android:id="@+id/action_copy_text" android:title="Copy text"
         android:orderInCategory="97" />
-    <item android:id="@+id/action_open_browser" android:title="Open in browser"
+    <item android:id="@+id/action_share" android:title="Share"
         android:orderInCategory="98" />
-    <item android:id="@+id/action_save" android:title="Save"
+    <item android:id="@+id/action_open_browser" android:title="Open in browser"
         android:orderInCategory="99" />
+    <item android:id="@+id/action_save" android:title="Save"
+        android:orderInCategory="100" />
 
 </menu>

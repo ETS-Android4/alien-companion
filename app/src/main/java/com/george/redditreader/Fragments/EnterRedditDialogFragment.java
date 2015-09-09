@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,6 +23,7 @@ import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.SubmissionSort;
+import com.george.redditreader.api.utils.RedditConstants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +31,7 @@ import com.george.redditreader.api.retrieval.params.SubmissionSort;
 public class EnterRedditDialogFragment extends DialogFragment implements View.OnClickListener {
 
     private MainActivity activity;
-    private EditText editText;
+    private AutoCompleteTextView subredditField;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -41,14 +44,19 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_reddit, container, false);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity,
+                android.R.layout.simple_dropdown_item_1line, RedditConstants.popularSubreddits);
+
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);
-        editText = (EditText) view.findViewById(R.id.editText_subreddit);
-        editText.requestFocus();
+        subredditField = (AutoCompleteTextView) view.findViewById(R.id.editText_subreddit);
+        subredditField.setAdapter(adapter);
+        subredditField.requestFocus();
 
         cancelButton.setOnClickListener(this);
         viewButton.setOnClickListener(this);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        subredditField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 onClick(v);
@@ -81,7 +89,7 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
             dismiss();
         }
         else {
-            String subreddit = editText.getText().toString();
+            String subreddit = subredditField.getText().toString();
             subreddit = subreddit.replaceAll("\\s","");
             if(!subreddit.equals("")) {
                 dismiss();
@@ -101,9 +109,9 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
                 }
             }
             else {
-                editText.setText("");
-                editText.setHint(R.string.enter_subreddit);
-                editText.setHintTextColor(getResources().getColor(R.color.red));
+                subredditField.setText("");
+                subredditField.setHint(R.string.enter_subreddit);
+                subredditField.setHintTextColor(getResources().getColor(R.color.red));
             }
         }
     }

@@ -12,6 +12,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Models.RedditItem;
 import com.george.redditreader.api.entity.Kind;
 import com.george.redditreader.api.entity.Submission;
@@ -119,8 +120,16 @@ public class Submissions implements ActorDriven {
                         // Create and add submission
                         data = ((JSONObject) data.get("data"));
                         submission = new Submission(data);
-                        submission.setUser(user);
-                        submissions.add(submission);
+						if(!submission.isNSFW()) {
+							submission.setUser(user);
+							submissions.add(submission);
+						}
+						else {
+							if(!MainActivity.hideNSFW) {
+								submission.setUser(user);
+								submissions.add(submission);
+							}
+						}
                     }
 				}
 			}

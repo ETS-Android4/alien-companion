@@ -16,33 +16,63 @@
             android:layout_height="match_parent"
             android:background="#ff0000"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/listPreferredItemHeight"
-            android:background="@drawable/touch_selector">
+            android:background="@drawable/touch_selector"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/hidden_comments_count_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:background="#00ff00"
-                android:padding="5dp"
-                android:layout_margin="16dp"
-                android:text="10 hidden"
-                android:layout_alignParentRight="true"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
 
-            <TextView
-                android:id="@+id/author_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#ff0000"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="author"
-                android:layout_alignBaseline="@id/hidden_comments_count_textview"
-                android:padding="16dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="[+] "
+                    android:id="@+id/txtView_commentHidden" />
+
+                <TextView
+                    android:id="@+id/author_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#5972ff"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="author" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" "
+                    android:id="@+id/textView10" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(score)"
+                    android:id="@+id/txtView_score" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - (age) "
+                    android:id="@+id/txtView_age" />
+
+                <TextView
+                    android:id="@+id/hidden_comments_count_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:background="@drawable/rounded_corner_orange"
+                    android:padding="5dp"
+                    android:text="10 hidden"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="5dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/comment_textview"
@@ -54,13 +84,7 @@
                 android:text="comment"
                 android:paddingBottom="16dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?android:attr/listDivider"
-                android:layout_below="@id/comment_textview"/>
-
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

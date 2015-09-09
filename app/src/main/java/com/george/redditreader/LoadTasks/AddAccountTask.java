@@ -15,6 +15,7 @@ import com.george.redditreader.api.entity.User;
 import com.george.redditreader.api.exception.ActionFailedException;
 import com.george.redditreader.api.exception.RedditError;
 import com.george.redditreader.api.exception.RetrievalFailedException;
+import com.george.redditreader.api.utils.RedditConstants;
 import com.george.redditreader.api.utils.httpClient.HttpClient;
 import com.george.redditreader.api.utils.httpClient.RedditHttpClient;
 
@@ -91,12 +92,15 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
             try {
                 List<Subreddit> subreddits = user.getSubscribed(0);
-                for (Subreddit subreddit : subreddits) {
-                    subredditNames.add(subreddit.getDisplayName());
+                if(subreddits.size()==0) Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
+                else {
+                    for (Subreddit subreddit : subreddits) {
+                        subredditNames.add(subreddit.getDisplayName());
+                    }
                 }
             } catch (RetrievalFailedException | NullPointerException | RedditError e) {
                 e.printStackTrace();
-                Collections.addAll(subredditNames, MainActivity.defaultSubredditStrings);
+                Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
             }
 
             //SavedAccount newAccount = new SavedAccount(username, password);

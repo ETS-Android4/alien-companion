@@ -2,11 +2,13 @@ package com.george.redditreader.Fragments;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +17,15 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.PostActivity;
+import com.george.redditreader.Activities.SubmitActivity;
 import com.george.redditreader.Adapters.PostAdapter;
+import com.george.redditreader.ClickListeners.ShowMoreListener;
 import com.george.redditreader.LoadTasks.LoadCommentsTask;
 import com.george.redditreader.R;
+import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.api.entity.Submission;
 import com.george.redditreader.api.retrieval.params.CommentSort;
+import com.george.redditreader.enums.SubmitType;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,6 +107,12 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             case R.id.action_sort:
                 showSortPopup(activity.findViewById(R.id.action_sort));
                 return true;
+            case R.id.action_reply:
+                Intent intent = new Intent(activity, SubmitActivity.class);
+                intent.putExtra("submitType", SubmitType.comment);
+                intent.putExtra("postName", post.getFullName());
+                startActivity(intent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -159,31 +171,47 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.content_recyclerview);
 
         mRecyclerView.setHasFixedSize(true);
-
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mLayoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        if(postAdapter == null) {
-            setCommentSort(CommentSort.TOP);
-            postAdapter = new PostAdapter(activity, this, this);
+        setCommentSort(CommentSort.TOP);
+        postAdapter = new PostAdapter(activity, this, this);
 
-            if(loadFromList) {
-                postAdapter.add(post);
-            }
-            else {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            mRecyclerView.setAdapter(postAdapter);
-
-            LoadCommentsTask task = new LoadCommentsTask(activity, this);
-            task.execute();
-
-            if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
+        if(loadFromList) {
+            postAdapter.add(post);
         }
         else {
-            mRecyclerView.setAdapter(postAdapter);
+            progressBar.setVisibility(View.VISIBLE);
         }
+
+        mRecyclerView.setAdapter(postAdapter);
+
+        LoadCommentsTask task = new LoadCommentsTask(activity, this);
+        task.execute();
+
+        if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
+        //if(postAdapter == null) {
+        //    setCommentSort(CommentSort.TOP);
+        //    postAdapter = new PostAdapter(activity, this, this);
+//
+        //    if(loadFromList) {
+        //        postAdapter.add(post);
+        //    }
+        //    else {
+        //        progressBar.setVisibility(View.VISIBLE);
+        //    }
+//
+        //    mRecyclerView.setAdapter(postAdapter);
+//
+        //    LoadCommentsTask task = new LoadCommentsTask(activity, this);
+        //    task.execute();
+//
+        //    if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
+        //}
+        //else {
+        //    mRecyclerView.setAdapter(postAdapter);
+        //}
 
         //if (savedInstanceState != null) {
         //    List<Integer> groups = savedInstanceState.getIntegerArrayList(GROUPS_KEY);
@@ -196,28 +224,26 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onClick(View v) {
         int position = mRecyclerView.getChildPosition(v);
-        postAdapter.selectedComment = -1;
-        //if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_ITEM) {
-            postAdapter.toggleGroup(position);
-        //}
-        //else if (postAdapter.getItemViewType(position) == PostAdapter.VIEW_TYPE_CONTENT) {
-        //    if(!post.isSelf()) {
-        //        LinkHandler linkHandler = new LinkHandler(activity, post);
-        //        linkHandler.handleIt();
-        //    }
-        //}
+        int previousPosition = postAdapter.selectedPosition;
+        postAdapter.selectedPosition = -1;
+        postAdapter.notifyItemChanged(previousPosition);
+        postAdapter.toggleGroup(position);
     }
 
     @Override
     public boolean onLongClick(View v) {
         int position = mRecyclerView.getChildPosition(v);
         if(!postAdapter.getItemAt(position).isGroup()) {
-            if (position == postAdapter.selectedComment) postAdapter.selectedComment = -1;
-            else postAdapter.selectedComment = position;
-            postAdapter.notifyDataSetChanged();
+            int previousPosition = postAdapter.selectedPosition;
+            if (position == postAdapter.selectedPosition) postAdapter.selectedPosition = -1;
+            else postAdapter.selectedPosition = position;
+            postAdapter.notifyItemChanged(previousPosition);
+            postAdapter.notifyItemChanged(postAdapter.selectedPosition);
             return true;
         }
-        else return false;
+        else {
+            return false;
+        }
     }
 
     public void loadFullComments() {

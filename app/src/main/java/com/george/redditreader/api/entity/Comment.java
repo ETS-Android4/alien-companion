@@ -11,6 +11,7 @@ import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToB
 import static com.george.redditreader.api.utils.httpClient.JsonUtils.safeJsonToDouble;
 
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import org.json.simple.JSONObject;
  * @author Raul Rene Lepsa
  * @author Simon Kassing
  */
-public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpIndData, RedditItem {
+public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpIndData, RedditItem, Serializable {
 
     public int getViewType(){
         return RedditItemListAdapter.VIEW_TYPE_USER_COMMENT;
@@ -51,6 +52,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
     private double created;         // Created timestamp
     private double createdUTC;      // Created UTC timestamp
     private Boolean hasReplies;		// If replies exist on reddit
+    private Boolean saved;
     //private List<Comment> replies;  // Replies if retrieved
     private Integer gilded;        	// Amount of times the comment been gilded
     private Integer score;        	// Karma score
@@ -93,10 +95,12 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             this.setLinkId(safeJsonToString(obj.get("link_id")));
             this.setBodyHTML(safeJsonToString(obj.get("body_html")));
             this.setScoreHidden(safeJsonToBoolean(obj.get("score_hidden")));
+            this.setSaved(safeJsonToBoolean(obj.get("saved")));
 
             this.setLinkTitle(safeJsonToString(obj.get("link_title")));
             setLikes(safeJsonToString(obj.get("likes")));
 
+            linkTitle = StringEscapeUtils.unescapeHtml(linkTitle);
             bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
 
             setIndentation(0);
@@ -276,6 +280,13 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 		this.score = score;
 	}
 
+    public void setSaved(Boolean flag) {
+        this.saved = flag;
+    }
+
+    public Boolean isSaved() {
+        return saved;
+    }
 	/**
 	 * @return the subreddit
 	 */

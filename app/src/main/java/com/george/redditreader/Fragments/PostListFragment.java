@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,15 +17,16 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.george.redditreader.Activities.MainActivity;
-import com.george.redditreader.Activities.SubmitPostActivity;
+import com.george.redditreader.Activities.SubmitActivity;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
+import com.george.redditreader.ClickListeners.ShowMoreListener;
 import com.george.redditreader.LoadTasks.LoadPostsTask;
 import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.enums.LoadType;
 import com.george.redditreader.R;
 import com.george.redditreader.api.retrieval.params.SubmissionSort;
 import com.george.redditreader.api.retrieval.params.TimeSpan;
-import com.george.redditreader.enums.SubmitPostType;
+import com.george.redditreader.enums.SubmitType;
 
 
 /**
@@ -37,12 +37,14 @@ public class PostListFragment extends Fragment {
     public RedditItemListAdapter postListAdapter;
     public ProgressBar mainProgressBar;
     public RecyclerView contentView;
+    private LinearLayoutManager layoutManager;
     public String subreddit;
     private AppCompatActivity activity;
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
     public boolean hasPosts;
+    public boolean loadMore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,14 +56,41 @@ public class PostListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        loadMore = MainActivity.endlessPosts;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
-        contentView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager = new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
         contentView.setHasFixedSize(true);
         contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int pastVisiblesItems, visibleItemCount, totalItemCount;
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+                if (loadMore) {
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
+                        loadMore = false;
+                        //Log.d("scroll listener", "load more now");
+                        ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
+                        listener.onClick(recyclerView);
+                    }
+                }
+            }
+        });
 
         setSubmissionSort(SubmissionSort.HOT);
         LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
@@ -121,15 +150,15 @@ public class PostListFragment extends Fragment {
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(activity, SubmitPostActivity.class);
+                Intent intent = new Intent(activity, SubmitActivity.class);
                 intent.putExtra("subreddit", subreddit);
                 switch (item.getItemId()) {
                     case R.id.action_submit_link:
-                        intent.putExtra("postType", SubmitPostType.link);
+                        intent.putExtra("submitType", SubmitType.link);
                         startActivity(intent);
                         return true;
                     case R.id.action_submit_text:
-                        intent.putExtra("postType", SubmitPostType.self);
+                        intent.putExtra("submitType", SubmitType.self);
                         startActivity(intent);
                         return true;
                     //case R.id.action_submit_image: //TODO: implement direct image posting

@@ -1,6 +1,8 @@
 package com.george.redditreader.ClickListeners;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,12 +13,15 @@ import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
 import com.george.redditreader.Activities.MainActivity;
+import com.george.redditreader.Activities.SubmitActivity;
 import com.george.redditreader.Activities.SubredditActivity;
 import com.george.redditreader.Activities.UserActivity;
 import com.george.redditreader.LoadTasks.LoadUserActionTask;
 import com.george.redditreader.R;
 import com.george.redditreader.Utils.ToastUtils;
 import com.george.redditreader.api.entity.Comment;
+import com.george.redditreader.api.utils.ApiEndpointUtils;
+import com.george.redditreader.enums.SubmitType;
 import com.george.redditreader.enums.UserActionType;
 
 /**
@@ -93,7 +98,10 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 break;
             case R.id.btn_reply:
                 if(MainActivity.currentUser!=null) {
-
+                    Intent intent = new Intent(context, SubmitActivity.class);
+                    intent.putExtra("submitType", SubmitType.comment);
+                    intent.putExtra("originalComment", comment);
+                    context.startActivity(intent);
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to reply");
                 break;
@@ -124,19 +132,38 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     case R.id.action_edit:
                         return true;
                     case R.id.action_copy_link:
-                        String commentLink = "http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
+                        String commentLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
                                 + "?comment=" + comment.getIdentifier();
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("Comment permalink", commentLink);
+                        clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_copy_text:
+                        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        clip = ClipData.newPlainText("Comment permalink", comment.getBody()); //TODO: escape markdown/HTML foramtting (maybe)
+                        clipboard.setPrimaryClip(clip);
+                        return true;
+                    case R.id.action_share:
+                        commentLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
+                                + "?comment=" + comment.getIdentifier();
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, commentLink);
+                        sendIntent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(sendIntent, "Share comment to.."));
                         return true;
                     case R.id.action_open_browser:
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
                         + "?comment=" + comment.getIdentifier()));
                         context.startActivity(intent);
                         return true;
-                    case R.id.action_save:
+                    case R.id.action_save: //TODO: show proper user action
                         if(MainActivity.currentUser!=null) {
-
+                            UserActionType actionType;
+                            if(comment.isSaved()) actionType = UserActionType.unsave;
+                            else actionType = UserActionType.save;
+                            task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                            task.execute();
                         }
                         else ToastUtils.displayShortToast(context, "Must be logged in to save");
                         return true;

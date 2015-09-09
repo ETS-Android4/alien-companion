@@ -52,8 +52,6 @@
         <item>@string/remove</item>
         <item>@string/revalidate</item>
         <item>@string/change_password</item>
-        <item>@string/move_up</item>
-        <item>@string/move_down</item>
     </array>
 
     <array name="swipeEntries">
@@ -68,6 +66,14 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
+    </string-array>
+
+    <string-array name="commentDepth">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
     <string name="cached_posts">Cached posts</string>
