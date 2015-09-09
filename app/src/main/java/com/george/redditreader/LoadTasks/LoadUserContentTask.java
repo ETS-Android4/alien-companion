@@ -144,7 +144,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     //uf.footerProgressBar.setVisibility(View.GONE);
                     //uf.showMore.setVisibility(View.VISIBLE);
                     uf.userAdapter.setLoadingMoreItems(false);
-                    if(things.size()==0) uf.hasMore = false;
+                    if(things.size()<25) uf.hasMore = false;
                     if(MainActivity.endlessPosts) uf.loadMore = true;
                     break;
             }

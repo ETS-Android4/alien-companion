@@ -81,9 +81,11 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         sf.contentView.setAdapter(sf.postListAdapter);
                         //sf.showMore.setVisibility(View.VISIBLE);
                         sf.hasPosts = true;
+                        if(submissions.size()<25) sf.hasMore = false;
                     }
                     else {
                         sf.hasPosts = false;
+                        sf.hasMore = false;
                         ToastUtils.noResults(context, sf.searchQuery);
                     }
                     break;
@@ -94,9 +96,11 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         sf.contentView.setVisibility(View.VISIBLE);
                         //sf.showMore.setVisibility(View.VISIBLE);
                         sf.hasPosts = true;
+                        if(submissions.size()==25) sf.hasMore = true;
                     }
                     else {
                         sf.hasPosts = false;
+                        sf.hasMore = false;
                         ToastUtils.noResults(context, sf.searchQuery);
                     }
                     break;
@@ -106,6 +110,8 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     //sf.showMore.setVisibility(View.VISIBLE);
                     sf.postListAdapter.setLoadingMoreItems(false);
                     sf.postListAdapter.addAll(submissions);
+                    if(!(submissions.size()==25)) sf.hasMore = false;
+                    if(MainActivity.endlessPosts) sf.loadMore = true;
                     break;
             }
         }

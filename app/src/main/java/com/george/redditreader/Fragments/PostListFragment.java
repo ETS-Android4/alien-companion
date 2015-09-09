@@ -62,7 +62,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onResume() {
         super.onResume();
         loadMore = MainActivity.endlessPosts;
-        if(MainActivity.swipeRefresh) swipeRefreshLayout.setEnabled(true);
+        if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }
 

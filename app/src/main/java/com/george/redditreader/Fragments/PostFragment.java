@@ -79,7 +79,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onResume() {
         super.onResume();
-        if(MainActivity.swipeRefresh) swipeRefreshLayout.setEnabled(true);
+        if(MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }
 

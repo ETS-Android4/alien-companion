@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +18,9 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.george.redditreader.Activities.MainActivity;
 import com.george.redditreader.Adapters.RedditItemListAdapter;
+import com.george.redditreader.ClickListeners.ShowMoreListener;
 import com.george.redditreader.LoadTasks.LoadSearchTask;
 import com.george.redditreader.Views.DividerItemDecoration;
 import com.george.redditreader.enums.LoadType;
@@ -28,17 +31,21 @@ import com.george.redditreader.api.retrieval.params.TimeSpan;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private AppCompatActivity activity;
     public ProgressBar mainProgressBar;
     public RecyclerView contentView;
+    private LinearLayoutManager layoutManager;
+    private SwipeRefreshLayout swipeRefreshLayout;
     public RedditItemListAdapter postListAdapter;
     public SearchSort searchSort;
     public TimeSpan timeSpan;
     public String searchQuery;
     public String subreddit;
     public boolean hasPosts;
+    public boolean loadMore;
+    public boolean hasMore = true;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -49,6 +56,14 @@ public class SearchFragment extends Fragment {
         searchQuery = activity.getIntent().getStringExtra("query");
         subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadMore = MainActivity.endlessPosts;
+        if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+        else swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
@@ -91,9 +106,38 @@ public class SearchFragment extends Fragment {
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
-        contentView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        layoutManager = new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
         contentView.setHasFixedSize(true);
         contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                    swipeRefreshLayout.setEnabled(true);
+                else swipeRefreshLayout.setEnabled(false);
+
+                int pastVisiblesItems, visibleItemCount, totalItemCount;
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+                if (loadMore && hasMore) {
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
+                        loadMore = false;
+                        //Log.d("scroll listener", "load more now");
+                        ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
+                        listener.onClick(recyclerView);
+                    }
+                }
+            }
+        });
 
         setSearchSort(SearchSort.RELEVANCE);
         setTimeSpan(TimeSpan.ALL);
@@ -113,6 +157,11 @@ public class SearchFragment extends Fragment {
         //}
 
         return view;
+    }
+
+    @Override public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
+        refreshList();
     }
 
     //Reload posts list
