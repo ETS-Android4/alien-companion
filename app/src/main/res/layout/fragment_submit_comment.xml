@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.george.redditreader.Fragments.SubmitCommentFragment"
+    tools:context="com.dyejeekis.aliencompanion.Fragments.SubmitCommentFragment"
     android:orientation="vertical"
     android:divider="@drawable/mydivider"
     android:showDividers="middle">
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/layout_originalComment">
 
-        <com.george.redditreader.Views.ScrollViewWithMaxHeight
+        <com.dyejeekis.aliencompanion.Views.ScrollViewWithMaxHeight
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:textSize="20sp"
                 android:padding="10dp"
                 android:textIsSelectable="true"/>
-        </com.george.redditreader.Views.ScrollViewWithMaxHeight>
+        </com.dyejeekis.aliencompanion.Views.ScrollViewWithMaxHeight>
     </LinearLayout>
 
     <LinearLayout

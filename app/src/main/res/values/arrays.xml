@@ -76,6 +76,75 @@
         <item>5</item>
     </string-array>
 
+    <array name="toolbarColors">
+        <item>@string/Red</item>
+        <item>@string/Pink</item>
+        <item>@string/Purple</item>
+        <item>@string/DeepPurple</item>
+        <item>@string/Indigo</item>
+        <item>@string/Blue</item>
+        <item>@string/LightBlue</item>
+        <item>@string/Cyan</item>
+        <item>@string/Teal</item>
+        <item>@string/Green</item>
+        <item>@string/LightGreen</item>
+        <item>@string/Lime</item>
+        <item>@string/Yellow</item>
+        <item>@string/Amber</item>
+        <item>@string/Orange</item>
+        <item>@string/DeepOrange</item>
+        <item>@string/Brown</item>
+        <item>@string/Grey</item>
+        <item>@string/BlueGrey</item>
+        <item>@string/Black</item>
+    </array>
+
+    <string-array name="colorPrimaryValues">
+        <item>#F44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#3F51B5</item>
+        <item>#2196F3</item>
+        <item>#03A9F4</item>
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#8BC34A</item>
+        <item>#CDDC39</item>
+        <item>#FFEB3B</item>
+        <item>#FFC107</item>
+        <item>#FF9800</item>
+        <item>#FF5722</item>
+        <item>#795548</item>
+        <item>#9E9E9E</item>
+        <item>#607D8B</item>
+        <item>#181818</item>
+    </string-array>
+
+    <string-array name="colorPrimaryDarkValues">
+        <item>#D32F2F</item>
+        <item>#C2185B</item>
+        <item>#7B1FA2</item>
+        <item>#512DA8</item>
+        <item>#303F9F</item>
+        <item>#1976D2</item>
+        <item>#0288D1</item>
+        <item>#0097A7</item>
+        <item>#00796B</item>
+        <item>#388E3C</item>
+        <item>#689F38</item>
+        <item>#AFB42B</item>
+        <item>#FBC02D</item>
+        <item>#FFA000</item>
+        <item>#F57C00</item>
+        <item>#E64A19</item>
+        <item>#5D4037</item>
+        <item>#616161</item>
+        <item>#455A64</item>
+        <item>#000000</item>
+    </string-array>
+
     <string name="cached_posts">Cached posts</string>
     <string name="reddit_games">games</string>
     <string name="reddit_movies">movies</string>
@@ -95,4 +164,24 @@
     <string name="disabled">Disabled</string>
     <string name="top">Top</string>
     <string name="both">Both</string>
+    <string name="Red">Red</string>
+    <string name="Pink">Pink</string>
+    <string name="Purple">Purple</string>
+    <string name="Indigo">Indigo</string>
+    <string name="DeepPurple">Deep Purple</string>
+    <string name="Blue">Blue</string>
+    <string name="LightBlue">Light Blue</string>
+    <string name="Teal">Teal</string>
+    <string name="Green">Green</string>
+    <string name="LightGreen">Light Green</string>
+    <string name="Lime">Lime</string>
+    <string name="Yellow">Yellow</string>
+    <string name="Amber">Amber</string>
+    <string name="Orange">Orange</string>
+    <string name="DeepOrange">Deep Orange</string>
+    <string name="Brown">Brown</string>
+    <string name="Grey">Grey</string>
+    <string name="BlueGrey">Blue Grey</string>
+    <string name="Black">Black</string>
+    <string name="Cyan">Cyan</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.george.redditreader" >
+    package="com.dyejeekis.aliencompanion" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Activities.MainActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -23,42 +23,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.PostActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.PostActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post" >
         </activity>
         <activity
-            android:name=".Activities.BrowserActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.BrowserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_browser" >
         </activity>
         <activity
-            android:name=".Activities.UserActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.UserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_user" >
         </activity>
         <activity
-            android:name=".Activities.SearchActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.SearchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name=".Activities.SettingsActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_prefs" >
         </activity>
         <activity
-            android:name=".Activities.SubredditActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.SubredditActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_subreddit" >
         </activity>
         <activity
-            android:name=".Activities.SubmitActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.SubmitActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_submit_post" >
         </activity>
         <activity
-            android:name=".Activities.OfflineActivity"
+            android:name="com.dyejeekis.aliencompanion.Activities.OfflineActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_offline" >
         </activity>

@@ -20,8 +20,8 @@
     </style>
 
     <style  name = "CustomProgressBarHorizontal"  parent = "android:Widget.ProgressBar.Horizontal" >
-        <item  name = "android:minHeight" > 10dip </item >
-        <item  name = "android:maxHeight" > 20dip </item >
+        <item  name = "android:minHeight" > 5dip </item >
+        <item  name = "android:maxHeight" > 10dip </item >
     </style >
 
     <style name="ToolbarTheme" parent="AppTheme">
@@ -47,7 +47,7 @@
         <item name="actionMenuTextColor">@color/black</item>
         <!-- android:textColorSecondary is the color of the menu
              overflow icon (three vertical dots) -->
-        <item name="android:textColorSecondary">@color/dark_gray</item>
+        <item name="android:textColorSecondary">@color/white</item>
 
         <!-- This would set the toolbar's background color,
               but setting this also changes the popup menu's background,

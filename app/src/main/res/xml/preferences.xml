@@ -16,6 +16,13 @@
         android:key="appearance"
         android:title="@string/options_appearance">
 
+        <ListPreference
+            android:key="toolbarColor"
+            android:title="Toolbar color"
+            android:entries="@array/toolbarColors"
+            android:entryValues="@array/colorPrimaryValues"
+            android:defaultValue="@string/Blue"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="navigation"

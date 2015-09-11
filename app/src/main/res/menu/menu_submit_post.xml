@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.george.redditreader.Activities.SubmitActivity">
+    tools:context="com.dyejeekis.aliencompanion.Activities.SubmitActivity">
 
     <item android:id="@+id/action_submit" android:title="@string/action_submit" android:icon="@mipmap/ic_send_white_24dp"
         android:orderInCategory="100" app:showAsAction="always" />
