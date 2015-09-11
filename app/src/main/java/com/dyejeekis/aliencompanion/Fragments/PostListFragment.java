@@ -123,6 +123,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         return view;
     }
 
+    public void colorSchemeChanged() {
+        swipeRefreshLayout.setColorSchemeColors(MainActivity.colorPrimary);
+        postListAdapter.notifyDataSetChanged();
+    }
+
     @Override public void onRefresh() {
         swipeRefreshLayout.setRefreshing(false);
         refreshList();

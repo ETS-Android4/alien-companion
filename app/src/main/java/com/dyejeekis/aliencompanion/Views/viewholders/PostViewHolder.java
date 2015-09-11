@@ -96,6 +96,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.isNSFW()) nsfw.setVisibility(View.VISIBLE);
         else nsfw.setVisibility(View.GONE);
 
+        layoutPostOptions.setBackgroundColor(MainActivity.colorPrimary);
+
         Thumbnail postThumbnail = post.getThumbnailObject();
         if(postThumbnail == null) postThumbnail = new Thumbnail(); //TODO: check why thumbnail is null
         if (postThumbnail.hasThumbnail()){

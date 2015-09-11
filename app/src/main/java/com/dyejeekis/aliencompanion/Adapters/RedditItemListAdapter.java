@@ -290,6 +290,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
             layoutComment.setOnClickListener(new CommentLinkListener(context, comment));
 
+            layoutCommentOptions.setBackgroundColor(MainActivity.colorPrimary);
             //user logged in
             if(MainActivity.currentUser != null) {
                 //check user vote

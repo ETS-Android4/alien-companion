@@ -237,6 +237,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
 
+                cvh.commentOptionsLayout.setBackgroundColor(MainActivity.colorPrimary);
+
                 //user logged in
                 if(MainActivity.currentUser != null) {
                     //check user vote
@@ -331,6 +333,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 contentVH.age.setText(" - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 contentVH.subreddit.setText(post.getSubreddit());
 
+                contentVH.postOptions.setBackgroundColor(MainActivity.colorPrimary);
                 //user logged in
                 if(MainActivity.currentUser != null) {
                     //check user vote
@@ -430,6 +433,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             reply = (ImageView) itemView.findViewById(R.id.btn_reply);
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
+
         }
 
         public void setColorBandColor(int indentation) {

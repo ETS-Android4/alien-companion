@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -187,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setBackgroundColor(colorPrimary);
             colorPrimaryDark = getPrimaryDarkColor();
             drawerLayout.setStatusBarBackgroundColor(colorPrimaryDark);
-            listFragment.swipeRefreshLayout.setColorSchemeColors(colorPrimary);
+            listFragment.colorSchemeChanged();
             adapter.notifyDataSetChanged();
             //Log.d("geo test", "main color changed");
         }
