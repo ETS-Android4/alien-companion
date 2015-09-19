@@ -178,8 +178,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 //Comment permalink case
                 if(comment.getIdentifier().equals(postFragment.commentLinkId))
-                    cvh.commentLayout.setBackgroundColor(Color.parseColor("#FFFFD1"));
-                else cvh.commentLayout.setBackgroundColor(Color.WHITE);
+                    cvh.commentLayout.setBackgroundColor(MainActivity.commentPermaLinkBackgroundColor);
+                else cvh.commentLayout.setBackgroundColor(MainActivity.backgroundColor);
 
                 //Author textview
                 if(author.equals(comment.getAuthor())) {
@@ -251,7 +251,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
-                        cvh.score.setTextColor(Color.BLACK);
+                        cvh.score.setTextColor(MainActivity.textColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
                     }
@@ -333,7 +333,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 contentVH.age.setText(" - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 contentVH.subreddit.setText(post.getSubreddit());
 
-                contentVH.postOptions.setBackgroundColor(MainActivity.colorPrimary);
+                contentVH.postOptions.setBackgroundColor(MainActivity.currentColor);
                 //user logged in
                 if(MainActivity.currentUser != null) {
                     //check user vote
@@ -346,7 +346,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote);
                         contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
-                        contentVH.score.setTextColor(Color.BLACK);
+                        contentVH.score.setTextColor(MainActivity.textColor);
                         contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote);
                         contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote);
                     }

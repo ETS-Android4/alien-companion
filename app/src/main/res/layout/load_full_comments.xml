@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:text="You are viewing a single comment&apos;s thread. Tap here to view the rest of the comments."
         android:id="@+id/textView2"
-        android:textSize="15sp"
+        android:textSize="?attr/font_small"
         android:padding="5dp" />
 </LinearLayout>

@@ -24,7 +24,7 @@ import java.net.URL;
  */
 public class RedditHttpClient implements HttpClient, Serializable {
 
-    private String userAgent = "android:com.george.redditreader:v0.1 (by /u/ubercharge_ready)";
+    private String userAgent = "android:com.dyejeekis.aliencompanion:v0.2 (by /u/ubercharge_ready)";
 
     public Response get(String urlPath, String cookie) throws RetrievalFailedException {
 
@@ -40,8 +40,8 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setRequestProperty("Cookie", "reddit_session="+cookie);
             connection.setDoInput(true);
             //connection.setDoOutput(true);
-            //connection.setConnectTimeout(5000);
-            //connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
 
             //printRequestProperties(connection);
 

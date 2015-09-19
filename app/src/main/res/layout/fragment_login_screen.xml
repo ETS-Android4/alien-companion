@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/themeDialogBackgroundColor">
 
     <TextView
         android:layout_width="wrap_content"
@@ -10,7 +11,8 @@
         android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:textColor="?attr/themeTextColor" />
 
     <EditText
         android:layout_width="match_parent"
@@ -19,7 +21,9 @@
         android:hint="username"
         android:layout_margin="5dp"
         android:singleLine="true"
-        android:imeOptions="actionNext"/>
+        android:imeOptions="actionNext"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor" />
 
     <EditText
         android:layout_width="match_parent"
@@ -30,7 +34,9 @@
         android:hint="password"
         android:layout_margin="5dp"
         android:singleLine="true"
-        android:imeOptions="actionGo" />
+        android:imeOptions="actionGo"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -44,12 +50,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CANCEL"
-            android:id="@+id/btn_cancel" />
+            android:id="@+id/btn_cancel"
+            android:textColor="#03A9F4"
+            android:background="@android:color/transparent" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ADD"
-            android:id="@+id/btn_add" />
+            android:id="@+id/btn_add"
+            android:textColor="#03A9F4"
+            android:background="@android:color/transparent" />
     </LinearLayout>
 </LinearLayout>

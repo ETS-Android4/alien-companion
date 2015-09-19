@@ -200,7 +200,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void showContentPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(activity, view);
-        if(username.equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
+        if(MainActivity.currentUser!=null && username.equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
         else popupMenu.inflate(R.menu.menu_user_content);
         //popupMenu.inflate(R.menu.menu_user_content_public);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,12 +61,13 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout.LayoutParams drawerParams;
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     private Toolbar toolbar;
-    //public static boolean showFullCommentsButton;
 
     public static boolean showHiddenPosts;
-    //public static MenuItem toggleHiddenMenuItem;
 
     public static SharedPreferences prefs;
+    public static boolean nightThemeEnabled;
+    public static int fontStyle;
+    public static int currentFontStyle;
     public static int colorPrimary;
     public static int colorPrimaryDark;
     public static int currentColor;
@@ -77,19 +79,38 @@ public class MainActivity extends AppCompatActivity {
     public static boolean hideNSFW;
     public static int initialCommentCount;
     public static int initialCommentDepth;
+    public static int textColor;
+    public static int backgroundColor;
+    public static int commentPermaLinkBackgroundColor;
 
     public static SavedAccount currentAccount;
     public static User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        getCurrentSettings();
+        getTheme().applyStyle(fontStyle, true);
+        if(nightThemeEnabled) {
+            getTheme().applyStyle(R.style.selectedTheme_night, true);
+            colorPrimary = Color.parseColor("#181818");
+            colorPrimaryDark = Color.BLACK;
+            textColor = Color.WHITE;
+            backgroundColor = Color.BLACK;
+            commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+        }
+        else {
+            getTheme().applyStyle(R.style.selectedTheme_day, true);
+            textColor = Color.BLACK;
+            backgroundColor = Color.WHITE;
+            commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
         initialized = true;
         showHiddenPosts = false;
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        getCurrentSettings();
+        currentFontStyle = fontStyle;
         currentColor = colorPrimary;
         colorPrimaryDark = getPrimaryDarkColor();
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -141,7 +162,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getCurrentSettings() {
-        //Log.d("geo test", "settings changed");
+        //Log.d("geo test", "settings saved");
+        nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+        fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
+        switch (fontStyle) {
+            case 0:
+                fontStyle = R.style.FontStyle_Small;
+                break;
+            case 1:
+                fontStyle = R.style.FontStyle_Medium;
+                break;
+            case 2:
+                fontStyle = R.style.FontStyle_Large;
+                break;
+            case 3:
+                fontStyle = R.style.FontStyle_ExtraLarge;
+                break;
+        }
         colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
@@ -181,7 +218,13 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        if(currentColor != colorPrimary) {
+        if(currentFontStyle != fontStyle) {
+            currentFontStyle = fontStyle;
+            getTheme().applyStyle(fontStyle, true);
+            listFragment.refreshList();
+        }
+
+        if(!nightThemeEnabled && currentColor != colorPrimary) {
             currentColor = colorPrimary;
             toolbar.setBackgroundColor(colorPrimary);
             colorPrimaryDark = getPrimaryDarkColor();

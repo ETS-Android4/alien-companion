@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.Window;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.utils.ApiEndpointUtils;

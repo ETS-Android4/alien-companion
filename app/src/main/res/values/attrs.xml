@@ -21,5 +21,23 @@
         <attr name="maxHeight" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="FontStyle">
+        <attr name="font_small" format="dimension" />
+        <attr name="font_medium" format="dimension" />
+        <attr name="font_large" format="dimension" />
+        <attr name="font_xlarge" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="selectedTheme">
+        <attr name="themeTextColor" format="color"/>
+        <attr name="themeTextHintColor" format="color"/>
+        <attr name="themeTextBackgroundColor" format="color"/>
+        <attr name="themeBackgroundColor" format="color"/>
+        <attr name="themeSelector" format="reference"/>
+        <attr name="themeDrawerBackgroundColor" format="color"/>
+        <attr name="themeDrawerSelector" format="reference"/>
+        <attr name="themeDialogBackgroundColor" format="color"/>
+    </declare-styleable>
+
     <attr name="SwipeBackLayoutStyle" format="reference"/>
 </resources>

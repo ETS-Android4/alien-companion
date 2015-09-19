@@ -1,6 +1,7 @@
 package com.dyejeekis.aliencompanion.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -332,10 +333,25 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
-                //NavDrawerHeader header = (NavDrawerHeader) getItemAt(position);
-                //if(MainActivity.currentUser!=null) headerViewHolder.currentAccount.setText(MainActivity.currentUser.getUsername());
-                //else headerViewHolder.currentAccount.setText("Logged out");
                 headerViewHolder.currentAccount.setText(currentAccountName);
+                headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
+                        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                        editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
+                        editor.apply();
+                        //if(MainActivity.nightThemeEnabled) activity.getTheme().applyStyle(R.style.selectedTheme_night, true);
+                        //else activity.getTheme().applyStyle(R.style.selectedTheme_day, true);
+                        Intent i = activity.getBaseContext().getPackageManager()
+                                .getLaunchIntentForPackage( activity.getBaseContext().getPackageName() );
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        activity.finish();
+                        activity.startActivity(i);
+                    }
+                });
+                if(MainActivity.nightThemeEnabled) headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_white);
+                else headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand);
                 break;
@@ -345,22 +361,27 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 menuRowViewHolder.name.setText(menuItem.getMenuType().value());
                 switch (menuItem.getMenuType()) {
                     case profile:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
+                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_white);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
                         break;
                     case messages:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_grey);
+                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_white);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_grey);
                         break;
                     case user:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_grey);
+                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_white);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_grey);
                         break;
                     case subreddit:
                         menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_subreddit);
                         break;
                     case settings:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_grey);
+                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_white);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_grey);
                         break;
                     case cached:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
+                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
                         break;
                 }
                 break;
@@ -382,12 +403,16 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 String currentSubreddit = activity.getListFragment().subreddit;
                 if(subreddit.toLowerCase().equals(currentSubreddit) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
-                    subredditRowViewHolder.name.setTextColor(MainActivity.colorPrimary);
-                    subredditRowViewHolder.layout.setBackgroundColor(Color.parseColor("#E7E7E8"));
+                    if(MainActivity.nightThemeEnabled) subredditRowViewHolder.name.setTextColor(Color.WHITE);
+                    else subredditRowViewHolder.name.setTextColor(MainActivity.colorPrimary);
+                    if(MainActivity.nightThemeEnabled) subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                    else subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
                 }
                 else {
-                    subredditRowViewHolder.name.setTextColor(Color.BLACK);
-                    subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                    subredditRowViewHolder.name.setTextColor(MainActivity.textColor);
+                    //subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                    if(MainActivity.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
+                    else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                 }
                 break;
             case VIEW_TYPE_ACCOUNT:
@@ -451,16 +476,16 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         public TextView currentAccount;
-        public CircleImageView circleImageView;
         public LinearLayout accountLayout;
         public ImageView toggle;
+        public CircleImageView themeSwitch;
 
         public HeaderViewHolder(View row) {
             super(row);
             currentAccount = (TextView) row.findViewById(R.id.txtView_currentAccount);
-            circleImageView = (CircleImageView) row.findViewById(R.id.circleView);
             accountLayout = (LinearLayout) row.findViewById(R.id.layout_account);
             toggle = (ImageView) row.findViewById(R.id.imgView_toggle);
+            themeSwitch = (CircleImageView) row.findViewById(R.id.themeSwitch);
         }
     }
 }

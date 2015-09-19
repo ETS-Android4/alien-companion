@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_view_user"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_user"
+        android:src="@mipmap/ic_action_user_white"
         android:padding="5dp" />
 
     <ImageView

@@ -17,11 +17,18 @@
         android:title="@string/options_appearance">
 
         <ListPreference
+            android:key="fontSize"
+            android:title="Font size"
+            android:entries="@array/fontSizes"
+            android:entryValues="@array/swipeValues"
+            android:defaultValue="1"/>
+
+        <ListPreference
             android:key="toolbarColor"
             android:title="Toolbar color"
             android:entries="@array/toolbarColors"
             android:entryValues="@array/colorPrimaryValues"
-            android:defaultValue="@string/Blue"/>
+            android:defaultValue="#2196F3"/>
 
     </PreferenceCategory>
     <PreferenceCategory

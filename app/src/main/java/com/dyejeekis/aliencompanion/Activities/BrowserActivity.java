@@ -17,11 +17,14 @@ public class BrowserActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getTheme().applyStyle(MainActivity.fontStyle, true);
+        if(MainActivity.nightThemeEnabled) getTheme().applyStyle(R.style.selectedTheme_night, true);
+        else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(MainActivity.colorPrimary);
+        toolbar.setBackgroundColor(MainActivity.currentColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
         setSupportActionBar(toolbar);

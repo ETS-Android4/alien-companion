@@ -303,7 +303,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     upvote.setImageResource(R.mipmap.ic_action_upvote);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                 } else {
-                    commentScore.setTextColor(Color.BLACK);
+                    commentScore.setTextColor(MainActivity.textColor);
                     upvote.setImageResource(R.mipmap.ic_action_upvote);
                     downvote.setImageResource(R.mipmap.ic_action_downvote);
                 }

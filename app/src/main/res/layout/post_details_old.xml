@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/layout_post_details"
-        android:background="@drawable/touch_selector">
+        android:background="?attr/themeSelector">
 
         <LinearLayout
             android:orientation="vertical"
@@ -36,8 +36,9 @@
                         android:layout_height="wrap_content"
                         android:text="(Post Title Here)"
                         android:id="@+id/postTitle"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="?attr/font_medium"
+                        android:textStyle="bold"
+                        android:textColor="?attr/themeTextColor" />
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -48,13 +49,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="(domain) - "
-                            android:id="@+id/postDets1" />
+                            android:id="@+id/postDets1"
+                            android:textSize="?attr/font_small"
+                            android:textColor="?attr/themeTextColor" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="##### comments"
-                            android:id="@+id/txtView_comments" />
+                            android:id="@+id/txtView_comments"
+                            android:textSize="?attr/font_small"
+                            android:textColor="?attr/themeTextColor" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -62,7 +67,8 @@
                             android:text="NSFW"
                             android:id="@+id/txtView_nsfw"
                             android:textColor="#d81d1b"
-                            android:background="@drawable/round_corner_nsfw" />
+                            android:background="@drawable/round_corner_nsfw"
+                            android:textSize="?attr/font_small" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -88,7 +94,9 @@
                     android:text="(author here)"
                     android:id="@+id/author"
                     android:layout_weight="1"
-                    android:gravity="left" />
+                    android:gravity="left"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextColor" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -101,13 +109,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#####"
-                        android:id="@+id/postScore" />
+                        android:id="@+id/postScore"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" - #### h"
-                        android:id="@+id/postAge" />
+                        android:id="@+id/postAge"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
                 </LinearLayout>
 
                 <TextView
@@ -116,7 +128,9 @@
                     android:text="(subreddit)"
                     android:id="@+id/subreddit"
                     android:layout_weight="1"
-                    android:gravity="right" />
+                    android:gravity="right"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextColor" />
             </LinearLayout>
         </LinearLayout>
 
@@ -135,10 +149,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/selfText"
-            android:textSize="15sp"
             android:text="(Self Text Here)"
-            android:background="#ffe3e3e3"
-            android:padding="5dp" />
+            android:background="?attr/themeTextBackgroundColor"
+            android:padding="5dp"
+            android:textSize="?attr/font_small"
+            android:textColor="?attr/themeTextColor" />
 
     </LinearLayout>
 

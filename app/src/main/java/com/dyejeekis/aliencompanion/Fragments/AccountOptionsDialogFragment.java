@@ -3,8 +3,10 @@ package com.dyejeekis.aliencompanion.Fragments;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.Window;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.R;
@@ -13,6 +15,11 @@ import com.dyejeekis.aliencompanion.R;
  * Created by sound on 8/27/2015.
  */
 public class AccountOptionsDialogFragment extends DialogFragment {
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
@@ -27,8 +34,6 @@ public class AccountOptionsDialogFragment extends DialogFragment {
                         activity.getNavDrawerAdapter().deleteAccount(accountName);
                         break;
                     case 1:
-                        break;
-                    case 2:
                         break;
                 }
             }

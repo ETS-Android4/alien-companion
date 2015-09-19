@@ -31,7 +31,8 @@
                 android:id="@+id/txtView_originalComment"
                 android:textSize="20sp"
                 android:padding="10dp"
-                android:textIsSelectable="true"/>
+                android:textIsSelectable="true"
+                android:textColor="?attr/themeTextColor" />
         </com.dyejeekis.aliencompanion.Views.ScrollViewWithMaxHeight>
     </LinearLayout>
 
@@ -48,7 +49,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/editText_reply"
             android:hint="Your comment"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/themeTextColor"
+            android:textColorHint="?attr/themeTextHintColor" />
     </LinearLayout>
 
 </LinearLayout>

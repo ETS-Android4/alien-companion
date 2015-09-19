@@ -33,6 +33,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView nsfw;
     public TextView selfText;
     public ImageView postImage;
+    public ImageView commentsIcon;
     public LinearLayout commentsButton;
     public LinearLayout linkButton;
     public LinearLayout fullComments;
@@ -49,7 +50,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     private PostViewType viewType;
 
     private static final int clickedColor = Color.GRAY;
-    private static final int notClickedColor = Color.BLACK;
+    //private static final int notClickedColor = MainActivity.textColor;
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
@@ -63,6 +64,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         subreddit = (TextView) itemView.findViewById(R.id.txtView_postSubreddit);
         commentCount = (TextView) itemView.findViewById(R.id.txtView_postComments);
         nsfw = (TextView) itemView.findViewById(R.id.txtView_nsfw);
+        commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
         postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
         linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
         upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
@@ -87,6 +89,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindModel(Context context, Submission post) {
+        if(MainActivity.nightThemeEnabled) commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_white_24dp);
+        else commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_black_24dp);
+
         title.setText(post.getTitle());
         score.setText(Long.toString(post.getScore()));
         author.setText(post.getAuthor());
@@ -96,7 +101,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.isNSFW()) nsfw.setVisibility(View.VISIBLE);
         else nsfw.setVisibility(View.GONE);
 
-        layoutPostOptions.setBackgroundColor(MainActivity.colorPrimary);
+        layoutPostOptions.setBackgroundColor(MainActivity.currentColor);
 
         Thumbnail postThumbnail = post.getThumbnailObject();
         if(postThumbnail == null) postThumbnail = new Thumbnail(); //TODO: check why thumbnail is null
@@ -130,7 +135,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 upvote.setImageResource(R.mipmap.ic_action_upvote);
                 downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
             } else {
-                score.setTextColor(Color.BLACK);
+                score.setTextColor(MainActivity.textColor);
                 upvote.setImageResource(R.mipmap.ic_action_upvote);
                 downvote.setImageResource(R.mipmap.ic_action_downvote);
             }
@@ -155,8 +160,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     commentCount.setTextColor(clickedColor);
                 }
                 else {
-                    title.setTextColor(notClickedColor);
-                    commentCount.setTextColor(notClickedColor);
+                    title.setTextColor(MainActivity.textColor);
+                    commentCount.setTextColor(MainActivity.textColor);
                 }
                 break;
             case details:

@@ -13,7 +13,9 @@
         android:id="@+id/editText_title"
         android:hint="title"
         android:singleLine="true"
-        android:imeOptions="actionNext" />
+        android:imeOptions="actionNext"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor" />
 
     <EditText
         android:layout_width="match_parent"
@@ -23,7 +25,9 @@
         android:layout_marginTop="10dp"
         android:singleLine="true"
         android:imeOptions="actionNext"
-        android:inputType="textUri" />
+        android:inputType="textUri"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor" />
 
     <EditText
         android:layout_width="match_parent"
@@ -32,5 +36,7 @@
         android:hint="subreddit"
         android:layout_marginTop="10dp"
         android:singleLine="true"
-        android:imeOptions="actionNext" />
+        android:imeOptions="actionNext"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor" />
 </LinearLayout>

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:divider="@drawable/mydivider"
+        android:divider="?android:attr/listDivider"
         android:showDividers="middle">
 
         <LinearLayout
@@ -23,7 +23,7 @@
             android:id="@+id/layout_postLinkButton"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="@drawable/touch_selector">
+            android:background="?attr/themeSelector">
 
             <ImageView
                 android:layout_width="0dp"
@@ -45,8 +45,9 @@
                     android:layout_height="wrap_content"
                     android:text="(Post Title Here)"
                     android:id="@+id/txtView_postTitle"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="?attr/font_medium"
+                    android:textColor="?attr/themeTextColor" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -57,31 +58,41 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(score)"
-                        android:id="@+id/txtView_postScore"/>
+                        android:id="@+id/txtView_postScore"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" - "
-                        android:id="@+id/textView7" />
+                        android:id="@+id/textView7"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(age)"
-                        android:id="@+id/txtView_postAge" />
+                        android:id="@+id/txtView_postAge"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" - "
-                        android:id="@+id/textView8" />
+                        android:id="@+id/textView8"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(author)"
-                        android:id="@+id/txtView_postAuthor" />
+                        android:id="@+id/txtView_postAuthor"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                 </LinearLayout>
 
@@ -94,19 +105,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(subreddit) - "
-                        android:id="@+id/txtView_postSubreddit"/>
+                        android:id="@+id/txtView_postSubreddit"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(domain)"
-                        android:id="@+id/txtView_postDomain" />
+                        android:id="@+id/txtView_postDomain"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" "
-                        android:id="@+id/textView12" />
+                        android:id="@+id/textView12"
+                        android:textSize="?attr/font_small"
+                        android:textColor="?attr/themeTextColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -114,7 +131,8 @@
                         android:text="NSFW"
                         android:id="@+id/txtView_nsfw"
                         android:textColor="#d81d1b"
-                        android:background="@drawable/round_corner_nsfw" />
+                        android:background="@drawable/round_corner_nsfw"
+                        android:textSize="?attr/font_small" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -128,7 +146,7 @@
             android:gravity="center"
             android:clickable="false"
             android:id="@+id/layout_postCommentsButton"
-            android:background="@drawable/touch_selector"
+            android:background="?attr/themeSelector"
             android:focusable="false">
 
             <TextView
@@ -137,13 +155,15 @@
                 android:text="#####"
                 android:id="@+id/txtView_postComments"
                 android:textStyle="bold"
-                android:gravity="center" />
+                android:gravity="center"
+                android:textSize="?attr/font_small"
+                android:textColor="?attr/themeTextColor" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imgView_commentsIcon"
-                android:src="@mipmap/ic_action_comments_grey" />
+                android:src="@mipmap/ic_chat_bubble_outline_black_24dp" />
         </LinearLayout>
     </LinearLayout>
 
