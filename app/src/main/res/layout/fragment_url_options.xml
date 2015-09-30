@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/themeDialogBackgroundColor">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(url)"
+        android:id="@+id/textView_title"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="20sp"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open in browser"
+        android:id="@+id/textView_openBrowser"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:padding="10dp"
+        android:background="?attr/themeSelector" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Copy link address"
+        android:id="@+id/textView_copyLink"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:padding="10dp"
+        android:background="?attr/themeSelector" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share"
+        android:id="@+id/textView_share"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:padding="10dp"
+        android:background="?attr/themeSelector" />
+</LinearLayout>

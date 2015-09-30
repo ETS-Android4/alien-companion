@@ -68,6 +68,16 @@
          <!--<item name="android:background">@color/primary_dark</item>-->
     </style>
 
+    <style name="OverflowStyleDark">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:colorBackground">@color/darker_gray</item>
+    </style>
+
+    <style name="AlertDialogDark">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/darker_gray</item>
+    </style>
+
     <style name="SwipeBackLayout">
         <item name="edge_size">50dip</item>
         <item name="shadow_left">@drawable/shadow_left</item>
@@ -131,10 +141,6 @@
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
         <item name="themeDialogBackgroundColor">@color/darker_gray</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
-    </style>
-
-    <style name="DarkDialog">
-        <item name="android:windowBackground">@color/darker_gray</item>
     </style>
 
 </resources>

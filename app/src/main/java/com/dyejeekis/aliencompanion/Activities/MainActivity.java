@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         currentColor = colorPrimary;
         colorPrimaryDark = getPrimaryDarkColor();
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
         toolbar.setBackgroundColor(colorPrimary);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -291,7 +292,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        int menuResource;
+        if(offlineModeEnabled) menuResource = R.menu.menu_main_offline;
+        else menuResource = R.menu.menu_main;
+        getMenuInflater().inflate(menuResource, menu);
         //toggleHiddenMenuItem = (MenuItem) findViewById(R.id.action_toggle_hidden);
         return true;
     }

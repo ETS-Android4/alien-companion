@@ -4,7 +4,8 @@
     tools:context="com.dyejeekis.aliencompanion.Fragments.VerifyAccountDialogFragment"
     android:orientation="horizontal"
     android:gravity="center"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:background="?attr/themeDialogBackgroundColor">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -19,6 +20,7 @@
         android:text="Verifying account"
         android:id="@+id/textView3"
         android:textSize="20sp"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:textColor="?attr/themeTextColor" />
 
 </LinearLayout>

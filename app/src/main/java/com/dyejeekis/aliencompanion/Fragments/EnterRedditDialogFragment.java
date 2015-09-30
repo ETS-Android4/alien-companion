@@ -43,8 +43,8 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_reddit, container, false);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity,
-                android.R.layout.simple_dropdown_item_1line, RedditConstants.popularSubreddits);
+        int dropdownResource = (MainActivity.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, dropdownResource, RedditConstants.popularSubreddits);
 
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);

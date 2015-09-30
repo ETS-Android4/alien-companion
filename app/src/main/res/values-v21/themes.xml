@@ -22,8 +22,14 @@
         <item name="android:elevation">4dp</item>
         <!--<item name="android:panelBackground">@android:color/holo_green_light</item>-->
         <!--<item name="android:popupBackground">@color/white</item>-->
-        <item name="android:textColor">@color/black</item>
-        <item name="actionMenuTextColor">@color/black</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="actionMenuTextColor">@android:color/black</item>
         <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="OverflowStyleDark">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:colorBackground">@color/darker_gray</item>
+        <item name="android:elevation">0dip</item>
     </style>
 </resources>

@@ -354,12 +354,20 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void setActionBarSubtitle() {
-        if(timeSpan == null) {
-            activity.getSupportActionBar().setSubtitle(submissionSort.value());
+        String subtitle;
+        if(MainActivity.offlineModeEnabled) {
+            subtitle = "offline";
         }
         else {
-            activity.getSupportActionBar().setSubtitle(submissionSort.value()+": "+timeSpan.value());
+            if (timeSpan == null) {
+                //activity.getSupportActionBar().setSubtitle(submissionSort.value());
+                subtitle = submissionSort.value();
+            } else {
+                //activity.getSupportActionBar().setSubtitle(submissionSort.value() + ": " + timeSpan.value());
+                subtitle = submissionSort.value() + ": " + timeSpan.value();
+            }
         }
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
 }

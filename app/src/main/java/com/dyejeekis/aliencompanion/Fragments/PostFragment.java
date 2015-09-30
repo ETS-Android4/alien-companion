@@ -303,7 +303,10 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void setActionBarSubtitle() {
-        activity.getSupportActionBar().setSubtitle(commentSort.value());
+        String subtitle;
+        if(MainActivity.offlineModeEnabled) subtitle = "offline";
+        else subtitle = commentSort.value();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
 }

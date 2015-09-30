@@ -30,6 +30,7 @@ public class SubredditActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_single_fragment);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
         toolbar.setBackgroundColor(MainActivity.currentColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
@@ -53,7 +54,10 @@ public class SubredditActivity extends SwipeBackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        int menuResource;
+        if(MainActivity.offlineModeEnabled) menuResource = R.menu.menu_main_offline;
+        else menuResource = R.menu.menu_main;
+        getMenuInflater().inflate(menuResource, menu);
         return true;
     }
 

@@ -51,7 +51,10 @@ public class PostActivity extends SwipeBackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_post, menu);
+        int menuResource;
+        if(MainActivity.offlineModeEnabled) menuResource = R.menu.menu_post_offline;
+        else menuResource = R.menu.menu_post;
+        getMenuInflater().inflate(menuResource, menu);
         return true;
     }
 
