@@ -21,7 +21,10 @@ public class SubredditActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MainActivity.nightThemeEnabled) getTheme().applyStyle(R.style.selectedTheme_night, true);
+        if(MainActivity.nightThemeEnabled) {
+            getTheme().applyStyle(R.style.PopupDarkTheme, true);
+            getTheme().applyStyle(R.style.selectedTheme_night, true);
+        }
         else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);

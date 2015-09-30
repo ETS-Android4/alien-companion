@@ -37,6 +37,7 @@
         <attr name="themeDrawerBackgroundColor" format="color"/>
         <attr name="themeDrawerSelector" format="reference"/>
         <attr name="themeDialogBackgroundColor" format="color"/>
+        <attr name="themeDivider" format="reference"/>
     </declare-styleable>
 
     <attr name="SwipeBackLayoutStyle" format="reference"/>

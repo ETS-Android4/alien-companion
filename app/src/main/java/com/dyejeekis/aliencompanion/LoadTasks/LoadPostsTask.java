@@ -19,6 +19,9 @@ import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.retrieval.Submissions;
 import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 /**
@@ -40,30 +43,50 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         httpClient = new RedditHttpClient();
     }
 
+    private List<RedditItem> readPostsFromFile(String filename) {
+        List<RedditItem> posts = null;
+        try {
+            FileInputStream fis = context.openFileInput(filename.toLowerCase());
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            posts = (List<RedditItem>) ois.readObject();
+            ois.close();
+            fis.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
         try {
-            Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
-            List<RedditItem> submissions = null;
-
-            if(loadType == LoadType.extend) {
-                if(plf.subreddit == null) {
-                    submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
-                }
-                else {
-                    submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
-                }
+            List<RedditItem> submissions;
+            if(MainActivity.offlineModeEnabled) {
+                String filename;
+                if(plf.subreddit == null) filename = "frontpage";
+                else filename = plf.subreddit.toLowerCase();
+                submissions = readPostsFromFile(filename);
+                if(submissions!=null) plf.postListAdapter = new RedditItemListAdapter(context, submissions);
             }
             else {
-                if(plf.subreddit == null) {
-                    submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
+
+                if (loadType == LoadType.extend) {
+                    if (plf.subreddit == null) {
+                        submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
+                    } else {
+                        submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
+                    }
+                } else {
+                    if (plf.subreddit == null) {
+                        submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                    } else {
+                        submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                    }
+                    plf.postListAdapter = new RedditItemListAdapter(context, submissions);
                 }
-                else {
-                    submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
-                }
-                plf.postListAdapter = new RedditItemListAdapter(context, submissions);
+                ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
             }
-            ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
             return submissions;
         } catch (RetrievalFailedException | RedditError e) {
             exception = e;
@@ -74,27 +97,32 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
-        if(exception != null) {
-            ToastUtils.postsLoadError(context);
-            if(loadType == LoadType.extend) {
-                //plf.footerProgressBar.setVisibility(View.GONE);
-                //plf.showMore.setVisibility(View.VISIBLE);
-                //plf.postListAdapter.loadingMoreItems = false;
-                //plf.postListAdapter.notifyDataSetChanged();
-                plf.postListAdapter.setLoadingMoreItems(false);
+        plf.mainProgressBar.setVisibility(View.GONE);
+
+        if(exception != null || submissions == null) {
+            if(MainActivity.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
+            else {
+                ToastUtils.postsLoadError(context);
+                if (loadType == LoadType.extend) {
+                    //plf.footerProgressBar.setVisibility(View.GONE);
+                    //plf.showMore.setVisibility(View.VISIBLE);
+                    //plf.postListAdapter.loadingMoreItems = false;
+                    //plf.postListAdapter.notifyDataSetChanged();
+                    plf.postListAdapter.setLoadingMoreItems(false);
+                }
             }
         }
         else {
             switch (loadType) {
                 case init:
-                    plf.mainProgressBar.setVisibility(View.GONE);
+                    //plf.mainProgressBar.setVisibility(View.GONE);
                     //plf.contentView.setAdapter(plf.postListAdapterOld);
                     plf.contentView.setAdapter(plf.postListAdapter);
                     //plf.showMore.setVisibility(View.VISIBLE);
                     plf.hasPosts = true;
                     break;
                 case refresh:
-                    plf.mainProgressBar.setVisibility(View.GONE);
+                    //plf.mainProgressBar.setVisibility(View.GONE);
                     if(submissions.size() != 0) {
                         //plf.contentView.setAdapter(plf.postListAdapterOld);
                         plf.contentView.setAdapter(plf.postListAdapter);

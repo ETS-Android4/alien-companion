@@ -343,15 +343,30 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         editor.apply();
                         //if(MainActivity.nightThemeEnabled) activity.getTheme().applyStyle(R.style.selectedTheme_night, true);
                         //else activity.getTheme().applyStyle(R.style.selectedTheme_day, true);
-                        Intent i = activity.getBaseContext().getPackageManager()
-                                .getLaunchIntentForPackage( activity.getBaseContext().getPackageName() );
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        activity.finish();
-                        activity.startActivity(i);
+                        restartApp();
                     }
                 });
-                if(MainActivity.nightThemeEnabled) headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_white);
-                else headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);
+                headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
+                        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                        editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
+                        editor.apply();
+                        //notifyItemChanged(0);
+                        restartApp();
+                    }
+                });
+                if(MainActivity.nightThemeEnabled) {
+                    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_white);
+                    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_white);
+                    else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_white);
+                }
+                else {
+                    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);
+                    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_grey);
+                    else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_grey);
+                }
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand);
                 break;
@@ -429,6 +444,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
+    private void restartApp() {
+        Intent i = activity.getBaseContext().getPackageManager()
+                .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra("subreddit", activity.getListFragment().subreddit);
+        activity.finish();
+        activity.startActivity(i);
+    }
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -479,6 +503,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         public LinearLayout accountLayout;
         public ImageView toggle;
         public CircleImageView themeSwitch;
+        public CircleImageView offlineSwitch;
 
         public HeaderViewHolder(View row) {
             super(row);
@@ -486,6 +511,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             accountLayout = (LinearLayout) row.findViewById(R.id.layout_account);
             toggle = (ImageView) row.findViewById(R.id.imgView_toggle);
             themeSwitch = (CircleImageView) row.findViewById(R.id.themeSwitch);
+            offlineSwitch = (CircleImageView) row.findViewById(R.id.offlineSwitch);
         }
     }
 }

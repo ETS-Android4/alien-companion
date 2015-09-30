@@ -60,11 +60,29 @@
         <item>@string/disabled</item>
     </array>
 
+    <array name="screenOrientation">
+        <item>@string/portrait</item>
+        <item>@string/landscape</item>
+        <item>@string/systemDefault</item>
+    </array>
+
+    <string-array name="orientationValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="swipeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
+    </string-array>
+
+    <string-array name="syncPostCount">
+        <item>10</item>
+        <item>25</item>
+        <item>50</item>
     </string-array>
 
     <string-array name="commentDepth">
@@ -194,4 +212,7 @@
     <string name="medium">Medium</string>
     <string name="large">Large</string>
     <string name="xlarge">Extra Large</string>
+    <string name="portrait">Portrait</string>
+    <string name="landscape">Landscape</string>
+    <string name="systemDefault">System Default</string>
 </resources>

@@ -22,6 +22,8 @@ import com.dyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
+import com.dyejeekis.aliencompanion.Services.DownloaderService;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.R;
@@ -157,6 +159,15 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 return true;
             case R.id.action_hide_read:
                 postListAdapter.hideReadPosts();
+                return true;
+            case R.id.action_sync_posts:
+                String filename = (subreddit==null) ? "frontpage" : subreddit;
+                ToastUtils.displayShortToast(activity, filename + " added to sync queue");
+                Intent intent = new Intent(activity, DownloaderService.class);
+                intent.putExtra("sort", submissionSort);
+                intent.putExtra("time", timeSpan);
+                intent.putExtra("subreddit", subreddit);
+                activity.startService(intent);
                 return true;
             case R.id.action_submit_post:
                 showSubmitPopup(activity.findViewById(R.id.action_refresh)); //TODO: put correct anchor

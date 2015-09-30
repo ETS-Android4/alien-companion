@@ -36,13 +36,18 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     @Override
     protected List<Comment> doInBackground(Void... unused) {
         try {
-            Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
             List<Comment> comments;
-            comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, MainActivity.initialCommentDepth,
-                    MainActivity.initialCommentCount, postFragment.commentSort);
+            if(MainActivity.offlineModeEnabled) {
+                comments = postFragment.post.getSyncedComments();
+            }
+            else {
+                Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
+                comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, MainActivity.initialCommentDepth,
+                        MainActivity.initialCommentCount, postFragment.commentSort);
 
-            if(postFragment.post.getThumbnailObject() == null) {
-                ImageLoader.preloadThumbnail(postFragment.post, context);
+                if (postFragment.post.getThumbnailObject() == null) {
+                    ImageLoader.preloadThumbnail(postFragment.post, context);
+                }
             }
             Comments.indentCommentTree(comments);
 

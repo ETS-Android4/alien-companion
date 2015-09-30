@@ -11,6 +11,8 @@
 
     <color name="light_gray">#d8d8d8</color>
 
+    <color name="lighter_gray">#eeeeee</color>
+
     <color name="dark_gray">#878787</color>
 
     <color name="darker_gray">#404040</color>

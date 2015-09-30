@@ -5,15 +5,17 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.R;
+
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
-    private static final int[] ATTRS = new int[]{
-            android.R.attr.listDivider
-    };
+    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
 
     public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
 
@@ -24,9 +26,12 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private int mOrientation;
 
     public DividerItemDecoration(Context context, int orientation) {
-        final TypedArray a = context.obtainStyledAttributes(ATTRS);
-        mDivider = a.getDrawable(0);
-        a.recycle();
+        if(MainActivity.nightThemeEnabled) mDivider = ContextCompat.getDrawable(context, R.drawable.divider_dark_theme);
+        else {
+            final TypedArray a = context.obtainStyledAttributes(ATTRS);
+            mDivider = a.getDrawable(0);
+            a.recycle();
+        }
         setOrientation(orientation);
     }
 

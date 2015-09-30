@@ -24,7 +24,7 @@ public class SettingsActivity extends BackNavActivity {
         setContentView(R.layout.activity_settings);
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(MainActivity.colorPrimary);
+        toolbar.setBackgroundColor(MainActivity.currentColor);
         //currentColor = MainActivity.colorPrimary;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);

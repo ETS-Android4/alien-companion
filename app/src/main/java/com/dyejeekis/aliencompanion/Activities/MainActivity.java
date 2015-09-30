@@ -2,6 +2,7 @@ package com.dyejeekis.aliencompanion.Activities;
 
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences prefs;
     public static boolean nightThemeEnabled;
+    public static boolean offlineModeEnabled;
+    public static int screenOrientation;
+    public static int currentOrientation;
     public static int fontStyle;
     public static int currentFontStyle;
     public static int colorPrimary;
@@ -82,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
     public static int textColor;
     public static int backgroundColor;
     public static int commentPermaLinkBackgroundColor;
+    public static int syncPostCount;
+    public static int syncCommentCount;
+    public static int syncCommentDepth;
 
     public static SavedAccount currentAccount;
     public static User currentUser;
@@ -90,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         getCurrentSettings();
+        setOrientation();
         getTheme().applyStyle(fontStyle, true);
         if(nightThemeEnabled) {
+            getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
             colorPrimary = Color.parseColor("#181818");
             colorPrimaryDark = Color.BLACK;
@@ -105,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             backgroundColor = Color.WHITE;
             commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
@@ -125,6 +135,21 @@ public class MainActivity extends AppCompatActivity {
         initNavDrawer();
 
         setupMainFragment();
+    }
+
+    private void setOrientation() {
+        currentOrientation = screenOrientation;
+        switch (screenOrientation) {
+            case 0:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+                break;
+            case 1:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                break;
+            case 2:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
+                break;
+        }
     }
 
     private void setupMainFragment() {
@@ -163,7 +188,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static void getCurrentSettings() {
         //Log.d("geo test", "settings saved");
+        screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+        offlineModeEnabled = prefs.getBoolean("offlineMode", false);
         fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
         switch (fontStyle) {
             case 0:
@@ -201,6 +228,9 @@ public class MainActivity extends AppCompatActivity {
         }
         initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
         initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
+        syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
+        syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
+        syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
     }
 
     private int getPrimaryDarkColor() {
@@ -217,6 +247,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        if(currentOrientation != screenOrientation) setOrientation();
 
         if(currentFontStyle != fontStyle) {
             currentFontStyle = fontStyle;

@@ -30,6 +30,13 @@
             android:entryValues="@array/colorPrimaryValues"
             android:defaultValue="#2196F3"/>
 
+        <ListPreference
+            android:key="screenOrientation"
+            android:title="Screen Orientation"
+            android:entries="@array/screenOrientation"
+            android:entryValues="@array/orientationValues"
+            android:defaultValue="2"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="navigation"
@@ -104,6 +111,45 @@
             android:entries="@array/commentDepth"
             android:entryValues="@array/commentDepth"
             android:defaultValue="3"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="sync"
+        android:title="@string/sync_options">
+
+        <ListPreference
+            android:key="syncPostCount"
+            android:title="Sync post count"
+            android:summary="Number of posts that get saved locally"
+            android:entries="@array/syncPostCount"
+            android:entryValues="@array/syncPostCount"
+            android:defaultValue="25"/>
+
+        <ListPreference
+            android:key="syncCommentCount"
+            android:title="Sync comment count"
+            android:summary="Number of comments per post that get saved locally"
+            android:entries="@array/commentCount"
+            android:entryValues="@array/commentCount"
+            android:defaultValue="100"/>
+
+        <ListPreference
+            android:key="syncCommentDepth"
+            android:title="Sync comment depth"
+            android:summary="Choose the maximum comment depth of locally saved threads"
+            android:entries="@array/commentDepth"
+            android:entryValues="@array/commentDepth"
+            android:defaultValue="3"/>
+
+        <!--<CheckBoxPreference
+            android:key="syncArticles"
+            android:title="Sync articles"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="syncImages"
+            android:title="Sync images"
+            android:defaultValue="false"/>-->
 
     </PreferenceCategory>
     <PreferenceCategory

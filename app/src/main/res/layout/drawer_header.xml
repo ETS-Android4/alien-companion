@@ -29,14 +29,30 @@
             android:layout_height="wrap_content"
             android:id="@+id/imgView_toggle"
             android:layout_marginLeft="15dp" />
+
     </LinearLayout>
 
     <!--android:src="@drawable/aka"-->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="38dp"
-        android:src="@mipmap/ic_action_night_switch_grey"
-        android:id="@+id/themeSwitch" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="38dp"
+            android:src="@mipmap/ic_action_night_switch_grey"
+            android:id="@+id/themeSwitch" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="38dp"
+            android:src="@mipmap/ic_action_online_mode_grey"
+            android:id="@+id/offlineSwitch" />
+    </LinearLayout>
 </RelativeLayout>

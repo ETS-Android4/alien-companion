@@ -67,7 +67,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         return null;
     }
 
-    private void saveToFile(List<SavedAccount> updatedAccounts) {
+    private void writeToFile(List<SavedAccount> updatedAccounts) {
         try {
             FileOutputStream fos = context.openFileOutput(MainActivity.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -106,7 +106,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             List<SavedAccount> accounts = readFromFile();
             if(accounts == null) accounts = new ArrayList<>();
             accounts.add(newAccount);
-            saveToFile(accounts);
+            writeToFile(accounts);
 
             currentAccountName = newAccount.getUsername();
             SharedPreferences.Editor editor = MainActivity.prefs.edit();

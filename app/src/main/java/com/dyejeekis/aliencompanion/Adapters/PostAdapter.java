@@ -313,7 +313,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     Thumbnail thumbnail = post.getThumbnailObject();
-                    if (thumbnail.hasThumbnail()) {
+                    if (thumbnail!=null && thumbnail.hasThumbnail()) {
                         if(post.isNSFW() && !MainActivity.showNSFWpreview) {
                             //contentVH.postImage.setImageResource(R.drawable.nsfw2);
                             contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));

@@ -103,5 +103,7 @@
     <string name="action_hide_read">Hide read</string>
     <string name="action_reply">Reply</string>
     <string name="title_activity_offline">OfflineActivity</string>
+    <string name="sync_posts">Sync posts</string>
+    <string name="sync_options">Sync Options</string>
 
 </resources>

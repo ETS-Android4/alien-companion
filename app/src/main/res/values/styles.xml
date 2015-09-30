@@ -8,6 +8,24 @@
         <!--<item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>-->
     </style>
 
+    <style name="PopupDarkTheme">
+        <item name="android:popupMenuStyle">@style/PopupMenuStyleDark</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/myPopupMenuTextAppearanceLarge</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/myPopupMenuTextAppearanceSmall</item>
+    </style>
+
+    <style name="PopupMenuStyleDark" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/darker_gray</item>
+    </style>
+
+    <style name="myPopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="myPopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="MainActivityTheme" parent="AppTheme">
     </style>
 
@@ -94,12 +112,13 @@
     <style name="selectedTheme.day">
         <item name="themeTextColor">@android:color/black</item>
         <item name="themeTextHintColor">@color/hint_light</item>
-        <item name="themeTextBackgroundColor">@color/light_gray</item>
+        <item name="themeTextBackgroundColor">@color/lighter_gray</item>
         <item name="themeBackgroundColor">@android:color/white</item>
         <item name="themeSelector">@drawable/touch_selector</item>
         <item name="themeDrawerBackgroundColor">@android:color/white</item>
         <item name="themeDrawerSelector">@drawable/touch_selector</item>
         <item name="themeDialogBackgroundColor">@android:color/white</item>
+        <item name="themeDivider">?android:attr/listDivider</item>
     </style>
 
     <style name="selectedTheme.night">
@@ -111,6 +130,7 @@
         <item name="themeDrawerBackgroundColor">@color/primary_dark</item>
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
         <item name="themeDialogBackgroundColor">@color/darker_gray</item>
+        <item name="themeDivider">@drawable/divider_dark_theme</item>
     </style>
 
     <style name="DarkDialog">

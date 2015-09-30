@@ -77,7 +77,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         showMoreButton = new ShowMore();
         redditItems.addAll(items);
         //if(items.size() == RedditConstants.DEFAULT_LIMIT)
-            redditItems.add(showMoreButton);
+        if(!MainActivity.offlineModeEnabled) redditItems.add(showMoreButton);
     }
 
     public void add(RedditItem item) {

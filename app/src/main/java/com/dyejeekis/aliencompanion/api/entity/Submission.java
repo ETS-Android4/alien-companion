@@ -16,6 +16,7 @@ import com.dyejeekis.aliencompanion.Models.Thumbnail;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -73,13 +74,24 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     private Boolean clicked;
 
 	private Thumbnail thumbnailObject;
+
+	private List<Comment> syncedComments;
     
     // 
     private String likes;
     //private String authorFlairCSSClass;
     //private String linkFlairCSSClass;
     //private String distinguished;
-    
+
+	public void setSyncedComments(List<Comment> comments) {
+		syncedComments = comments;
+	}
+
+	public List<Comment> getSyncedComments() {
+		if(syncedComments!=null) return syncedComments;
+		return null;
+	}
+
     /**
 	 * @return the approvedBy
 	 */
