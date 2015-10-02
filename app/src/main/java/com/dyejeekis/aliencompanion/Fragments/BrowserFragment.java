@@ -164,6 +164,7 @@ public class BrowserFragment extends Fragment {
                 webView.reload();
                 return true;
             case R.id.action_comments:
+                MainActivity.dualPaneActive = false; //set to false to open comments in a new activity
                 Intent intent = new Intent(activity, PostActivity.class);
                 intent.putExtra("post", post);
                 startActivity(intent);

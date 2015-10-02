@@ -14,6 +14,34 @@
         android:showDividers="middle|end">
 
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="false"
+            android:id="@+id/layout_postCommentsButton"
+            android:background="?attr/themeSelector"
+            android:focusable="false">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="#####"
+                android:id="@+id/txtView_postComments"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="?attr/font_small"
+                android:textColor="?attr/themeTextColor" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgView_commentsIcon"
+                android:src="@mipmap/ic_chat_bubble_outline_black_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -138,33 +166,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="false"
-            android:id="@+id/layout_postCommentsButton"
-            android:background="?attr/themeSelector"
-            android:focusable="false">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="#####"
-                android:id="@+id/txtView_postComments"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/imgView_commentsIcon"
-                android:src="@mipmap/ic_chat_bubble_outline_black_24dp" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

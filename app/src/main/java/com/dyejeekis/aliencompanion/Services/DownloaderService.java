@@ -68,30 +68,36 @@ public class DownloaderService extends IntentService {
             else
                 posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MainActivity.syncPostCount, null, null, MainActivity.showHiddenPosts);
 
-            for (RedditItem post : posts) {
-                Submission submission = (Submission) post;
-                List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MainActivity.syncCommentDepth, MainActivity.syncCommentCount, CommentSort.TOP);
-                submission.setSyncedComments(comments);
+            if(posts!=null) {
+                writePostsToFile(posts, filename);
+                for (RedditItem post : posts) {
+                    Submission submission = (Submission) post;
+                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MainActivity.syncCommentDepth, MainActivity.syncCommentCount, CommentSort.TOP);
+                    submission.setSyncedComments(comments);
+                    writePostToFile(submission, submission.getIdentifier());
+                }
+                //writePostsToFile(posts, filename + "Comments");
             }
+
         } catch (RetrievalFailedException | RedditError e) {
             e.printStackTrace();
         }
 
-        if(posts!=null) {
-            writePostsToFile(posts, filename);
-            Log.d("geo test", "download complete");
-        }
-        else {
-            Log.d("geo test", "download failed");
-        }
+        //if(posts!=null) {
+        //    writePostsToFile(posts, filename);
+        //    Log.d("geo test", "download complete");
+        //}
+        //else {
+        //    Log.d("geo test", "download failed");
+        //}
     }
 
     private Notification buildForegroundNotification(String filename) {
         NotificationCompat.Builder b=new NotificationCompat.Builder(this);
         b.setOngoing(true);
-        b.setContentTitle("Downloading posts...")
-                .setContentText(filename)
-                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Downloading posts...");
+        b.setContentTitle("Alien Companion")
+                .setContentText("Syncing " + filename +"...")
+                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...");
         return(b.build());
     }
 
@@ -102,6 +108,20 @@ public class DownloaderService extends IntentService {
             fos = openFileOutput(filename, Context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(posts);
+            oos.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writePostToFile(Submission post, String filename) {
+        try {
+            FileOutputStream fos;
+            ObjectOutputStream oos;
+            fos = openFileOutput(filename, Context.MODE_PRIVATE);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(post);
             oos.close();
             fos.close();
         } catch (IOException e) {

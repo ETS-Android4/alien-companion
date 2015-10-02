@@ -9,12 +9,16 @@ import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Utils.ImageLoader;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
+import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.exception.RedditError;
 import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.retrieval.Comments;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 /**
@@ -33,12 +37,26 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         this.httpClient = new RedditHttpClient();
     }
 
+    private List<Comment> readCommentsFromFile(String filename) {
+        try {
+            FileInputStream fis = context.openFileInput(filename);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Submission post = (Submission) ois.readObject();
+            return post.getSyncedComments();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            exception = e;
+        }
+        return null;
+    }
+
     @Override
     protected List<Comment> doInBackground(Void... unused) {
         try {
             List<Comment> comments;
             if(MainActivity.offlineModeEnabled) {
-                comments = postFragment.post.getSyncedComments();
+                String filename = postFragment.post.getIdentifier();
+                comments = readCommentsFromFile(filename);
             }
             else {
                 Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
@@ -63,8 +81,11 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     protected void onPostExecute(List<Comment> comments) {
         postFragment.progressBar.setVisibility(View.GONE);
         if(exception != null) {
-            postFragment.noResponseObject = true;
-            ToastUtils.commentsLoadError(context);
+            if(exception instanceof IOException) ToastUtils.displayShortToast(context, "No comments found");
+            else {
+                postFragment.noResponseObject = true;
+                ToastUtils.commentsLoadError(context);
+            }
         }
         else {
             postFragment.noResponseObject = false;

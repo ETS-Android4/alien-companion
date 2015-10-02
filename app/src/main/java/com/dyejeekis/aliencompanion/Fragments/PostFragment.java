@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -104,6 +105,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                     post = new Submission(activity.getIntent().getStringExtra("postId"));
                 }
             }
+            if(MainActivity.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) MainActivity.dualPaneActive = true;
         }
     }
 
