@@ -42,6 +42,12 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean loadMore;
     public boolean hasMore = true;
 
+    public static UserFragment newInstance(RedditItemListAdapter adapter) {
+        UserFragment newInstance = new UserFragment();
+        newInstance.userAdapter = adapter;
+        return newInstance;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -132,8 +138,15 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         userContent = UserSubmissionsCategory.OVERVIEW;
         userOverviewSort = UserOverviewSort.NEW;
-        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
-        task.execute();
+
+        if(userAdapter == null) {
+            LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
+            task.execute();
+        }
+        else {
+            progressBar.setVisibility(View.GONE);
+            contentView.setAdapter(userAdapter);
+        }
 
         //if(userAdapter == null) {
         //    //setUserContent(UserContent.overview);

@@ -7,7 +7,9 @@ import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.PostActivity;
+import com.dyejeekis.aliencompanion.Activities.SearchActivity;
 import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
+import com.dyejeekis.aliencompanion.Activities.UserActivity;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.LinkHandler;
 import com.dyejeekis.aliencompanion.R;
@@ -47,6 +49,8 @@ public class PostItemListener implements View.OnClickListener {
                 PostFragment fragment = PostFragment.newInstance(post);
                 if(context instanceof MainActivity) ((MainActivity) context).setupPostFragment(fragment);
                 else if(context instanceof SubredditActivity) ((SubredditActivity) context).setupPostFragment(fragment);
+                else if(context instanceof UserActivity) ((UserActivity) context).setupPostFragment(fragment);
+                else if(context instanceof SearchActivity) ((SearchActivity) context).setupPostFragment(fragment);
             }
             else {
                 Intent intent = new Intent(context, PostActivity.class);

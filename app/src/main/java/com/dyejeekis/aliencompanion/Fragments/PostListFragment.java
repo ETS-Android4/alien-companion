@@ -52,12 +52,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public static PostListFragment newInstance(RedditItemListAdapter adapter) {
         PostListFragment listFragment = new PostListFragment();
-
         listFragment.postListAdapter = adapter;
-        //Bundle args = new Bundle();
-        //args.putInt("someInt", someInt);
-        //listFragment.setArguments(args);
-
         return listFragment;
     }
 

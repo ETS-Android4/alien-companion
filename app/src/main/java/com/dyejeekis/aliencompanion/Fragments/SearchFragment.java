@@ -46,6 +46,12 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public boolean loadMore;
     public boolean hasMore = true;
 
+    public static SearchFragment newInstance(RedditItemListAdapter adapter) {
+        SearchFragment newInstance = new SearchFragment();
+        newInstance.postListAdapter = adapter;
+        return newInstance;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -141,8 +147,15 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         setSearchSort(SearchSort.RELEVANCE);
         setTimeSpan(TimeSpan.ALL);
-        LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
-        task.execute();
+
+        if(postListAdapter == null) {
+            LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
+            task.execute();
+        }
+        else {
+            mainProgressBar.setVisibility(View.GONE);
+            contentView.setAdapter(postListAdapter);
+        }
 
         //if(postListAdapter == null) {
         //    //Log.d("PostListFragment", "Loading posts...");

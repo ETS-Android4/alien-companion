@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.PostActivity;
+import com.dyejeekis.aliencompanion.Activities.UserActivity;
+import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
 
 /**
@@ -24,10 +27,16 @@ public class CommentLinkListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, PostActivity.class);
         String postInfo[] = {comment.getSubreddit(), comment.getLinkId().substring(3), comment.getIdentifier(), null};
-        intent.putExtra("postInfo", postInfo);
-        context.startActivity(intent);
+        if(MainActivity.dualPaneActive) {
+            PostFragment fragment = PostFragment.newInstance(postInfo);
+            ((UserActivity) context).setupPostFragment(fragment);
+        }
+        else {
+            Intent intent = new Intent(context, PostActivity.class);
+            intent.putExtra("postInfo", postInfo);
+            context.startActivity(intent);
+        }
     }
 
 }
