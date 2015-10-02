@@ -199,8 +199,8 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         intent.putExtra("subreddit", post.getSubreddit().toLowerCase());
                         context.startActivity(intent);
                         return true;
-                    case R.id.action_download_comments:
-                        return true;
+                    //case R.id.action_download_comments:
+                    //    return true;
                     case R.id.action_report:
                         return true;
                     default:

@@ -152,7 +152,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 if(post.isSelf()) subreddit.setVisibility(View.GONE);
                 else {
                     subreddit.setVisibility(View.VISIBLE);
-                    subreddit.setText(post.getSubreddit() + " - ");
+                    subreddit.setText(post.getSubreddit() + " · ");
                 }
 
                 if(post.isClicked()) {

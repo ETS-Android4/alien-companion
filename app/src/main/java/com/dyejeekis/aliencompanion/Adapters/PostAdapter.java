@@ -172,7 +172,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 //cvh.commentLayout.setOnLongClickListener(longListener);
 
                 cvh.score.setText(Long.toString(comment.getScore()));
-                String ageString = " pts - " + ConvertUtils.getSubmissionAge(comment.getCreatedUTC());
+                String ageString = " pts · " + ConvertUtils.getSubmissionAge(comment.getCreatedUTC());
                 if(comment.getEdited()) ageString += "*";
                 cvh.age.setText(ageString);
 
@@ -309,7 +309,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
-                    contentVH.postDets1.setText(post.getDomain() + " - ");
+                    contentVH.postDets1.setText(post.getDomain() + " · ");
                     contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0f));
                     contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                     Thumbnail thumbnail = post.getThumbnailObject();
@@ -330,7 +330,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 contentVH.author.setText(post.getAuthor());
                 contentVH.score.setText(Long.toString(post.getScore()));
-                contentVH.age.setText(" - " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
+                contentVH.age.setText(" · " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
                 contentVH.subreddit.setText(post.getSubreddit());
 
                 contentVH.postOptions.setBackgroundColor(MainActivity.currentColor);

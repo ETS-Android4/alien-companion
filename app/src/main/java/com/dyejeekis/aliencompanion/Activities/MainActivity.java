@@ -356,12 +356,12 @@ public class MainActivity extends AppCompatActivity {
                 View.inflate(this, R.layout.activity_main_dual_panel, container);
                 resource = R.id.listFragmentHolder;
 
-                //PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
-                //if(postFragment!=null) {
-                //    fm.beginTransaction().remove(postFragment).commit();
-                //    postFragment = (PostFragment) recreateFragment(postFragment);
-                //    fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
-                //}
+                PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+                if(postFragment!=null) {
+                    fm.beginTransaction().remove(postFragment).commitAllowingStateLoss();
+                    postFragment = recreatePostFragment(postFragment, fm);
+                    fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commitAllowingStateLoss();
+                }
             } else {
                 dualPaneActive = false;
                 View.inflate(this, R.layout.activity_main, container);
@@ -481,6 +481,15 @@ public class MainActivity extends AppCompatActivity {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
         PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter);
+        newInstance.setInitialSavedState(savedState);
+
+        return newInstance;
+    }
+
+    public static PostFragment recreatePostFragment(PostFragment f, FragmentManager fm) {
+        Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
+
+        PostFragment newInstance = PostFragment.newInstance(f.postAdapter);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

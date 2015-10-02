@@ -59,6 +59,15 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         return postFragment;
     }
 
+    public static PostFragment newInstance(PostAdapter postAdapter) {
+        PostFragment newInstance = new PostFragment();
+        newInstance.postAdapter = postAdapter;
+        newInstance.post = (Submission) postAdapter.getItemAt(0);
+        newInstance.commentsLoaded = true;
+
+        return newInstance;
+    }
+
     public static PostFragment newInstance(String[] postInfo) {
         PostFragment postFragment = new PostFragment();
         postFragment.loadFromList = false;
@@ -233,19 +242,20 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         });
 
         setCommentSort(CommentSort.TOP);
-        postAdapter = new PostAdapter(activity, this, this);
+        if(postAdapter == null) {
+            postAdapter = new PostAdapter(activity, this, this);
 
-        if(loadFromList) {
-            postAdapter.add(post);
+            if (loadFromList) postAdapter.add(post);
+            else progressBar.setVisibility(View.VISIBLE);
+
+            mRecyclerView.setAdapter(postAdapter);
+
+            LoadCommentsTask task = new LoadCommentsTask(activity, this);
+            task.execute();
         }
         else {
-            progressBar.setVisibility(View.VISIBLE);
+            mRecyclerView.setAdapter(postAdapter);
         }
-
-        mRecyclerView.setAdapter(postAdapter);
-
-        LoadCommentsTask task = new LoadCommentsTask(activity, this);
-        task.execute();
 
         if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
         //if(postAdapter == null) {

@@ -115,12 +115,12 @@ public class UserActivity extends SwipeBackActivity {
                 View.inflate(this, R.layout.activity_main_dual_panel, container);
                 resource = R.id.listFragmentHolder;
 
-                //PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
-                //if(postFragment!=null) {
-                //    fm.beginTransaction().remove(postFragment).commit();
-                //    postFragment = (PostFragment) recreateFragment(postFragment);
-                //    fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
-                //}
+                PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+                if(postFragment!=null) {
+                    fm.beginTransaction().remove(postFragment).commitAllowingStateLoss();
+                    postFragment = MainActivity.recreatePostFragment(postFragment, fm);
+                    fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commitAllowingStateLoss();
+                }
             } else {
                 MainActivity.dualPaneActive = false;
                 View.inflate(this, R.layout.activity_main, container);
