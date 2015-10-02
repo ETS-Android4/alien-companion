@@ -50,6 +50,17 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public boolean hasPosts;
     public boolean loadMore;
 
+    public static PostListFragment newInstance(RedditItemListAdapter adapter) {
+        PostListFragment listFragment = new PostListFragment();
+
+        listFragment.postListAdapter = adapter;
+        //Bundle args = new Bundle();
+        //args.putInt("someInt", someInt);
+        //listFragment.setArguments(args);
+
+        return listFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,8 +118,15 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
 
         setSubmissionSort(SubmissionSort.HOT);
-        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
-        task.execute();
+
+        if(postListAdapter == null) {
+            LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
+            task.execute();
+        }
+        else {
+            mainProgressBar.setVisibility(View.GONE);
+            contentView.setAdapter(postListAdapter);
+        }
 
         //if(postListAdapter == null) {
         //    //Log.d("PostListFragment", "Loading posts...");

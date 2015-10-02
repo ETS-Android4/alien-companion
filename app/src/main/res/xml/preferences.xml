@@ -37,6 +37,12 @@
             android:entryValues="@array/orientationValues"
             android:defaultValue="2"/>
 
+        <CheckBoxPreference
+            android:key="dualPane"
+            android:title="Dual pane in landscape"
+            android:summary="Tablet recommended"
+            android:defaultValue="true"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="navigation"
@@ -141,6 +147,9 @@
             android:entryValues="@array/commentDepth"
             android:defaultValue="3"/>
 
+        <Preference
+            android:key="clearSynced"
+            android:title="Clear all synced posts" />
         <!--<CheckBoxPreference
             android:key="syncArticles"
             android:title="Sync articles"

@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.PostActivity;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
@@ -61,21 +62,31 @@ public class BrowserFragment extends Fragment {
         }
     }
 
+    public BrowserFragment newInstance(Submission post) {
+        BrowserFragment newInstance = new BrowserFragment();
+        newInstance.post = post;
+        newInstance.url = post.getURL();
+        newInstance.domain = post.getDomain();
+
+        return newInstance;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        post = (Submission) activity.getIntent().getSerializableExtra("post");
-        if(post != null) {
-            url = post.getUrl();
-            domain = post.getDomain();
-        }
-        else {
-            url = activity.getIntent().getStringExtra("url");
-            domain = activity.getIntent().getStringExtra("domain");
-        }
+        //if(!MainActivity.dualPaneActive) {
+            post = (Submission) activity.getIntent().getSerializableExtra("post");
+            if (post != null) {
+                url = post.getUrl();
+                domain = post.getDomain();
+            } else {
+                url = activity.getIntent().getStringExtra("url");
+                domain = activity.getIntent().getStringExtra("domain");
+            }
+        //}
     }
 
     @Override

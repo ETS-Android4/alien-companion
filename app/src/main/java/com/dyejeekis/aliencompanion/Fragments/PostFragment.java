@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,7 +38,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private PostActivity activity;
+    private AppCompatActivity activity;
     public Submission post;
     public CommentSort commentSort;
     public ProgressBar progressBar;
@@ -49,27 +50,59 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
 
+    public static PostFragment newInstance(Submission post) {
+        PostFragment postFragment = new PostFragment();
+        postFragment.post = post;
+        postFragment.loadFromList = true;
+
+        return postFragment;
+    }
+
+    public static PostFragment newInstance(String[] postInfo) {
+        PostFragment postFragment = new PostFragment();
+        postFragment.loadFromList = false;
+
+        postFragment.post = new Submission(postInfo[1]);
+        postFragment.post.setSubreddit(postInfo[0]);
+        postFragment.commentLinkId = postInfo[2];
+        if (postFragment.commentLinkId != null) postFragment.showFullCommentsButton = true;
+        if (postInfo[3] != null) postFragment.parentsShown = Integer.valueOf(postInfo[3]);
+
+        return postFragment;
+    }
+
+    public static PostFragment newInstance(String postId) {
+        PostFragment postFragment = new PostFragment();
+        postFragment.loadFromList = false;
+
+        postFragment.titleUpdated = false;
+        postFragment.post = new Submission(postId);
+
+        return postFragment;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        post = (Submission) activity.getIntent().getSerializableExtra("post");
-        String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
-        loadFromList = (post != null);
-        //loadFromLink = activity.getIntent().getBooleanExtra("loadFromLink", false);
-        if(!loadFromList) {
-            if(postInfo!=null) {
-                post = new Submission(postInfo[1]);
-                post.setSubreddit(postInfo[0]);
-                commentLinkId = postInfo[2];
-                if(commentLinkId != null) showFullCommentsButton = true;
-                if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
-            }
-            else {
-                titleUpdated = false;
-                post = new Submission(activity.getIntent().getStringExtra("postId"));
+        if(!MainActivity.dualPaneActive) {
+            post = (Submission) activity.getIntent().getSerializableExtra("post");
+            String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
+            loadFromList = (post != null);
+            //loadFromLink = activity.getIntent().getBooleanExtra("loadFromLink", false);
+            if (!loadFromList) {
+                if (postInfo != null) {
+                    post = new Submission(postInfo[1]);
+                    post.setSubreddit(postInfo[0]);
+                    commentLinkId = postInfo[2];
+                    if (commentLinkId != null) showFullCommentsButton = true;
+                    if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
+                } else {
+                    titleUpdated = false;
+                    post = new Submission(activity.getIntent().getStringExtra("postId"));
+                }
             }
         }
     }
@@ -84,7 +117,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (PostActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override
@@ -299,14 +332,16 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void setActionBarTitle() {
-        activity.getSupportActionBar().setTitle(post.getSubreddit());
+        if(!MainActivity.dualPaneActive) activity.getSupportActionBar().setTitle(post.getSubreddit().toLowerCase());
     }
 
     public void setActionBarSubtitle() {
-        String subtitle;
-        if(MainActivity.offlineModeEnabled) subtitle = "offline";
-        else subtitle = commentSort.value();
-        activity.getSupportActionBar().setSubtitle(subtitle);
+        if(!MainActivity.dualPaneActive) {
+            String subtitle;
+            if (MainActivity.offlineModeEnabled) subtitle = "offline";
+            else subtitle = commentSort.value();
+            activity.getSupportActionBar().setSubtitle(subtitle);
+        }
     }
 
 }

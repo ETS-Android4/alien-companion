@@ -31,6 +31,7 @@ public class SearchActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_single_fragment);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
         toolbar.setBackgroundColor(MainActivity.currentColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
         toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);

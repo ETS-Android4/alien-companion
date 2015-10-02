@@ -11,7 +11,7 @@
 
         <include layout="@layout/my_toolbar" />
 
-        <include layout="@layout/activity_main" />
+        <!--<include layout="@layout/activity_main" />-->
 
     </LinearLayout>
 

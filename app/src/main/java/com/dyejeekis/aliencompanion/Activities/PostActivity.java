@@ -1,6 +1,7 @@
 package com.dyejeekis.aliencompanion.Activities;
 
 import android.annotation.TargetApi;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,6 +70,17 @@ public class PostActivity extends SwipeBackActivity {
                 return false;
         }
     }
+
+    //@Override
+    //public void onConfigurationChanged(Configuration newConfig) {
+    //    super.onConfigurationChanged(newConfig);
+//
+    //    //if(MainActivity.dualPane) {
+    //    //    if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    //    //        finish();
+    //    //    }
+    //    //}
+    //}
 
     //@Override
     //public void onBackPressed () {

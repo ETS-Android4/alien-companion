@@ -1,9 +1,11 @@
 package com.dyejeekis.aliencompanion.Activities;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -17,12 +19,16 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.dyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
+import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Models.SavedAccount;
 import com.dyejeekis.aliencompanion.Utils.ScrimInsetsFrameLayout;
+import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
@@ -43,7 +49,7 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String[] defaultSubredditStrings = {"all", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
+    public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
@@ -57,17 +63,21 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private PostListFragment listFragment;
+    //private PostFragment postFragment;
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
     private DrawerLayout.LayoutParams drawerParams;
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     private Toolbar toolbar;
+    private LinearLayout container;
 
     public static boolean showHiddenPosts;
 
     public static SharedPreferences prefs;
     public static boolean nightThemeEnabled;
     public static boolean offlineModeEnabled;
+    public static boolean dualPane;
+    public static boolean dualPaneActive;
     public static int screenOrientation;
     public static int currentOrientation;
     public static int fontStyle;
@@ -118,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
+        container = (LinearLayout) findViewById(R.id.container);
         initialized = true;
         showHiddenPosts = false;
         currentFontStyle = fontStyle;
@@ -135,7 +146,18 @@ public class MainActivity extends AppCompatActivity {
 
         initNavDrawer();
 
-        setupMainFragment();
+        int resource;
+        if(dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            dualPaneActive = true;
+            View.inflate(this, R.layout.activity_main_dual_panel, container);
+            resource = R.id.listFragmentHolder;
+        }
+        else {
+            View.inflate(this, R.layout.activity_main, container);
+            dualPaneActive = false;
+            resource = R.id.fragmentHolder;
+        }
+        setupMainFragment(resource);
     }
 
     private void setOrientation() {
@@ -153,12 +175,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setupMainFragment() {
-        listFragment = (PostListFragment) fm.findFragmentById(R.id.fragmentHolder);
+    public void setupPostFragment(PostFragment postFragment) {
+        PostFragment oldFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+        if(oldFragment!=null) fm.beginTransaction().remove(oldFragment).commit();
+        fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
+    }
+
+    private void setupMainFragment(int containerRes) {
+        listFragment = (PostListFragment) fm.findFragmentById(containerRes);
         if(listFragment == null) {
             //Log.d("MainActivity", "Creating new fragment...");
             listFragment = new PostListFragment();
-            fm.beginTransaction().add(R.id.fragmentHolder, listFragment, "listFragment").commit();
+            fm.beginTransaction().add(containerRes, listFragment, "listFragment").commit();
         }
     }
 
@@ -189,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static void getCurrentSettings() {
         //Log.d("geo test", "settings saved");
+        dualPane = prefs.getBoolean("dualPane", true);
+        //dualPane = true;
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         nightThemeEnabled = prefs.getBoolean("nightTheme", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
@@ -315,6 +345,30 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+
+        if(dualPane) {
+            container.removeViewAt(1);
+            fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
+            listFragment = recreateListFragment(listFragment);
+            int resource;
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                dualPaneActive = true;
+                View.inflate(this, R.layout.activity_main_dual_panel, container);
+                resource = R.id.listFragmentHolder;
+
+                //PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+                //if(postFragment!=null) {
+                //    fm.beginTransaction().remove(postFragment).commit();
+                //    postFragment = (PostFragment) recreateFragment(postFragment);
+                //    fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
+                //}
+            } else {
+                dualPaneActive = false;
+                View.inflate(this, R.layout.activity_main, container);
+                resource = R.id.fragmentHolder;
+            }
+            fm.beginTransaction().add(resource, listFragment, "listFragment").commitAllowingStateLoss();
+        }
     }
 
     private void initNavDrawer() {
@@ -421,6 +475,15 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.currentUser = null; //user connects every time main activity is started
             super.onBackPressed();
         }
+    }
+
+    private PostListFragment recreateListFragment(PostListFragment f) {
+        Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
+
+        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter);
+        newInstance.setInitialSavedState(savedState);
+
+        return newInstance;
     }
 
     //@Override

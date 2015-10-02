@@ -237,7 +237,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
 
-                cvh.commentOptionsLayout.setBackgroundColor(MainActivity.colorPrimary);
+                cvh.commentOptionsLayout.setBackgroundColor(MainActivity.currentColor);
 
                 //user logged in
                 if(MainActivity.currentUser != null) {

@@ -87,17 +87,15 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             user.connect();
             List<String> subredditNames = new ArrayList<>();
 
+            subredditNames.add("All");
             try {
                 List<Subreddit> subreddits = user.getSubscribed(0);
-                if(subreddits.size()==0) Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
-                else {
-                    for (Subreddit subreddit : subreddits) {
-                        subredditNames.add(subreddit.getDisplayName());
-                    }
+                for (Subreddit subreddit : subreddits) {
+                    subredditNames.add(subreddit.getDisplayName());
                 }
             } catch (RetrievalFailedException | NullPointerException | RedditError e) {
                 e.printStackTrace();
-                Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
+                //Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
             }
 
             //SavedAccount newAccount = new SavedAccount(username, password);

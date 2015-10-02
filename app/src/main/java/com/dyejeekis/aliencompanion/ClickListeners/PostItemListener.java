@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.PostActivity;
+import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
+import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.LinkHandler;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
@@ -40,9 +43,16 @@ public class PostItemListener implements View.OnClickListener {
             adapter.notifyItemChanged(position); //TODO: write clicked post name to a file
         }
         if(v.getId() == R.id.layout_postCommentsButton || post.isSelf()) {
-            Intent intent = new Intent(context, PostActivity.class);
-            intent.putExtra("post", post);
-            context.startActivity(intent);
+            if(MainActivity.dualPaneActive) {
+                PostFragment fragment = PostFragment.newInstance(post);
+                if(context instanceof MainActivity) ((MainActivity) context).setupPostFragment(fragment);
+                else if(context instanceof SubredditActivity) ((SubredditActivity) context).setupPostFragment(fragment);
+            }
+            else {
+                Intent intent = new Intent(context, PostActivity.class);
+                intent.putExtra("post", post);
+                context.startActivity(intent);
+            }
         }
         else {
             LinkHandler linkHandler = new LinkHandler(context, post);
