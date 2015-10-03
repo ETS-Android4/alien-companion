@@ -135,7 +135,7 @@ public class SubredditActivity extends SwipeBackActivity {
     private PostListFragment recreateListFragment(PostListFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter);
+        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.submissionSort, f.timeSpan);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

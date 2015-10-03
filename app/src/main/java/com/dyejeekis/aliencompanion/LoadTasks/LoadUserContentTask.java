@@ -40,6 +40,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     private Activity activity;
     private UserFragment uf;
     private HttpClient httpClient;
+    private RedditItemListAdapter adapter;
 
     public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory userContent) {
         this.activity = activity;
@@ -47,6 +48,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         this.userContent = userContent;
         mLoadType = loadType;
         httpClient = new RedditHttpClient();
+        //adapter = new RedditItemListAdapter(activity);
     }
 
     @Override
@@ -60,7 +62,9 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         RedditItem lastItem = uf.userAdapter.getLastItem();
                         userContent = userMixed.ofUser(uf.username, this.userContent, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastItem, null, false);
 
-                        uf.userAdapter.addAll(userContent);
+                        //uf.userAdapter.addAll(userContent);
+                        adapter = uf.userAdapter;
+                        adapter.addAll(userContent);
                     }
                     else {
                         UserDetails userDetails = new UserDetails(httpClient, MainActivity.currentUser);
@@ -69,9 +73,12 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
                         userContent = userMixed.ofUser(uf.username, this.userContent, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
 
-                        uf.userAdapter = new RedditItemListAdapter(activity);
-                        if(this.userContent == UserSubmissionsCategory.OVERVIEW) uf.userAdapter.add(userInfo);
-                        uf.userAdapter.addAll(userContent);
+                        //uf.userAdapter = new RedditItemListAdapter(activity);
+                        //if(this.userContent == UserSubmissionsCategory.OVERVIEW) uf.userAdapter.add(userInfo);
+                        //uf.userAdapter.addAll(userContent);
+                        adapter = new RedditItemListAdapter(activity);
+                        if(this.userContent == UserSubmissionsCategory.OVERVIEW) adapter.add(userInfo);
+                        adapter.addAll(userContent);
                     }
                     ImageLoader.preloadUserImages(userContent, activity);
                     break;
@@ -81,13 +88,17 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         Comment lastComment = (Comment) uf.userAdapter.getLastItem();
                         userContent = comments.ofUser(uf.username, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
 
-                        uf.userAdapter.addAll(userContent);
+                        //uf.userAdapter.addAll(userContent);
+                        adapter = uf.userAdapter;
+                        adapter.addAll(userContent);
                     }
                     else {
                         userContent = comments.ofUser(uf.username, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
 
-                        uf.userAdapter = new RedditItemListAdapter(activity);
-                        uf.userAdapter.addAll(userContent);
+                        //uf.userAdapter = new RedditItemListAdapter(activity);
+                        //uf.userAdapter.addAll(userContent);
+                        adapter = new RedditItemListAdapter(activity);
+                        adapter.addAll(userContent);
                     }
                     break;
                 case SUBMITTED: case LIKED: case DISLIKED: case HIDDEN:
@@ -96,13 +107,17 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         Submission lastPost = (Submission) uf.userAdapter.getLastItem();
                         userContent = submissions.ofUser(uf.username, this.userContent, uf.userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, false);
 
-                        uf.userAdapter.addAll(userContent);
+                        //uf.userAdapter.addAll(userContent);
+                        adapter = uf.userAdapter;
+                        adapter.addAll(userContent);
                     }
                     else {
                         userContent = submissions.ofUser(uf.username, this.userContent, uf.userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
 
-                        uf.userAdapter = new RedditItemListAdapter(activity);
-                        uf.userAdapter.addAll(userContent);
+                        //uf.userAdapter = new RedditItemListAdapter(activity);
+                        //uf.userAdapter.addAll(userContent);
+                        adapter = new RedditItemListAdapter(activity);
+                        adapter.addAll(userContent);
                     }
                     ImageLoader.preloadUserImages(userContent, activity);
                     break;
@@ -117,11 +132,14 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
     @Override
     protected void onPostExecute(List<RedditItem> things) {
+        UserFragment.currentlyLoading = false;
+        UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
+        uf = userFragment;
+        uf.userAdapter = adapter;
+
         if(mException != null) {
             ToastUtils.userLoadError(activity);
             if(mLoadType == LoadType.extend) {
-                //uf.footerProgressBar.setVisibility(View.GONE);
-                //uf.showMore.setVisibility(View.VISIBLE);
                 uf.userAdapter.setLoadingMoreItems(false);
             }
         }
@@ -141,8 +159,6 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     if(things.size()==25) uf.hasMore = true;
                     break;
                 case extend:
-                    //uf.footerProgressBar.setVisibility(View.GONE);
-                    //uf.showMore.setVisibility(View.VISIBLE);
                     uf.userAdapter.setLoadingMoreItems(false);
                     if(things.size()<25) uf.hasMore = false;
                     if(MainActivity.endlessPosts) uf.loadMore = true;

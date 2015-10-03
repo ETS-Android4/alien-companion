@@ -40,6 +40,7 @@ public class PostItemListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        PostFragment.currentlyLoading = true;
         if(!post.isClicked() && position != -1) {
             post.setClicked(true);
             adapter.notifyItemChanged(position); //TODO: write clicked post name to a file

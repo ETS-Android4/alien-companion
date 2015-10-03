@@ -1,5 +1,6 @@
 package com.dyejeekis.aliencompanion.LoadTasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -79,7 +80,11 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
 
     @Override
     protected void onPostExecute(List<Comment> comments) {
+        PostFragment.currentlyLoading = false;
+        PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
+        postFragment = fragment;
         postFragment.progressBar.setVisibility(View.GONE);
+
         if(exception != null) {
             if(exception instanceof IOException) ToastUtils.displayShortToast(context, "No comments found");
             else {

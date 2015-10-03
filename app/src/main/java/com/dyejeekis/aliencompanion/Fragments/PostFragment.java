@@ -51,6 +51,8 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
 
+    public static boolean currentlyLoading = false;
+
     public static PostFragment newInstance(Submission post) {
         PostFragment postFragment = new PostFragment();
         postFragment.post = post;
@@ -241,49 +243,25 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             }
         });
 
-        setCommentSort(CommentSort.TOP);
-        if(postAdapter == null) {
-            postAdapter = new PostAdapter(activity, this, this);
+        setCommentSort(CommentSort.TOP); //TODO: change this for orientation changes
+        if(!currentlyLoading) {
+            if (postAdapter == null) {
+                currentlyLoading = true;
+                postAdapter = new PostAdapter(activity, this, this);
 
-            if (loadFromList) postAdapter.add(post);
-            else progressBar.setVisibility(View.VISIBLE);
+                if (loadFromList) postAdapter.add(post);
+                else progressBar.setVisibility(View.VISIBLE);
 
-            mRecyclerView.setAdapter(postAdapter);
+                mRecyclerView.setAdapter(postAdapter);
 
-            LoadCommentsTask task = new LoadCommentsTask(activity, this);
-            task.execute();
-        }
-        else {
-            mRecyclerView.setAdapter(postAdapter);
+                LoadCommentsTask task = new LoadCommentsTask(activity, this);
+                task.execute();
+            } else {
+                mRecyclerView.setAdapter(postAdapter);
+            }
         }
 
         if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
-        //if(postAdapter == null) {
-        //    setCommentSort(CommentSort.TOP);
-        //    postAdapter = new PostAdapter(activity, this, this);
-//
-        //    if(loadFromList) {
-        //        postAdapter.add(post);
-        //    }
-        //    else {
-        //        progressBar.setVisibility(View.VISIBLE);
-        //    }
-//
-        //    mRecyclerView.setAdapter(postAdapter);
-//
-        //    LoadCommentsTask task = new LoadCommentsTask(activity, this);
-        //    task.execute();
-//
-        //    if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
-        //}
-        //else {
-        //    mRecyclerView.setAdapter(postAdapter);
-        //}
-
-        //if (savedInstanceState != null) {
-        //    List<Integer> groups = savedInstanceState.getIntegerArrayList(GROUPS_KEY);
-        //    postAdapter.restoreGroups(groups);
-        //}
 
         return rootView;
     }

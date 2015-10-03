@@ -46,9 +46,14 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public boolean loadMore;
     public boolean hasMore = true;
 
-    public static SearchFragment newInstance(RedditItemListAdapter adapter) {
+    public static boolean currentlyLoading = false;
+
+    public static SearchFragment newInstance(RedditItemListAdapter adapter, String searchQuery, SearchSort sort, TimeSpan time) {
         SearchFragment newInstance = new SearchFragment();
         newInstance.postListAdapter = adapter;
+        newInstance.searchQuery = searchQuery;
+        newInstance.searchSort = sort;
+        newInstance.timeSpan = time;
         return newInstance;
     }
 
@@ -58,7 +63,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        searchQuery = activity.getIntent().getStringExtra("query");
+        if(searchQuery==null) searchQuery = activity.getIntent().getStringExtra("query");
         subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
     }
@@ -88,21 +93,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
-        //createFooter();
-        //if(!hasPosts)
-        //    showMore.setVisibility(View.GONE);
-        //else showMore.setVisibility(View.VISIBLE);
     }
-
-    //private void createFooter() {
-    //    LayoutInflater inflater = getActivity().getLayoutInflater();
-    //    View view = inflater.inflate(R.layout.footer_layout, null);
-    //    contentView.addFooterView(view);
-    //    footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-    //    footerProgressBar.setVisibility(View.GONE);
-    //    showMore = (Button) view.findViewById(R.id.showMore);
-    //    showMore.setOnClickListener(new SearchFooterListener(activity, this));
-    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -145,29 +136,19 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
 
-        setSearchSort(SearchSort.RELEVANCE);
-        setTimeSpan(TimeSpan.ALL);
-
-        if(postListAdapter == null) {
-            LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
-            task.execute();
+        if(!currentlyLoading) {
+            if (postListAdapter == null) {
+                currentlyLoading = true;
+                setSearchSort(SearchSort.RELEVANCE);
+                setTimeSpan(TimeSpan.ALL);
+                LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
+                task.execute();
+            } else {
+                setActionBarSubtitle();
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(postListAdapter);
+            }
         }
-        else {
-            mainProgressBar.setVisibility(View.GONE);
-            contentView.setAdapter(postListAdapter);
-        }
-
-        //if(postListAdapter == null) {
-        //    //Log.d("PostListFragment", "Loading posts...");
-        //    setSearchSort(SearchSort.RELEVANCE);
-        //    setTimeSpan(TimeSpan.ALL);
-        //    LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
-        //    task.execute();
-        //}
-        //else {
-        //    mainProgressBar.setVisibility(View.GONE);
-        //    contentView.setAdapter(postListAdapter);
-        //}
 
         return view;
     }

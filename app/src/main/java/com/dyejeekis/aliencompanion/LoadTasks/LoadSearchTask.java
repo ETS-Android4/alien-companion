@@ -1,5 +1,6 @@
 package com.dyejeekis.aliencompanion.LoadTasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -33,6 +34,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private SearchFragment sf;
     private HttpClient httpClient;
     private LoadType loadType;
+    private RedditItemListAdapter adapter;
 
     public LoadSearchTask(Context context, SearchFragment searchFragment, LoadType loadType) {
         this.context = context;
@@ -49,10 +51,12 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
             if(loadType == LoadType.extend) {
                 submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) sf.postListAdapter.getLastItem(), null, true);
+                adapter = sf.postListAdapter;
             }
             else {
                 submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-                sf.postListAdapter = new RedditItemListAdapter(context, submissions);
+                //sf.postListAdapter = new RedditItemListAdapter(context, submissions);
+                adapter = new RedditItemListAdapter(context, submissions);
             }
             ImageLoader.preloadThumbnails(submissions, context);
             return submissions;
@@ -65,11 +69,14 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
+        SearchFragment.currentlyLoading = false;
+        SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+        sf = fragment;
+        sf.postListAdapter = adapter;
+
         if(exception != null) {
             ToastUtils.postsLoadError(context);
             if(loadType == LoadType.extend) {
-                //sf.footerProgressBar.setVisibility(View.GONE);
-                //sf.showMore.setVisibility(View.VISIBLE);
                 sf.postListAdapter.setLoadingMoreItems(false);
             }
         }
@@ -79,7 +86,6 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     sf.mainProgressBar.setVisibility(View.GONE);
                     if(submissions.size() != 0) {
                         sf.contentView.setAdapter(sf.postListAdapter);
-                        //sf.showMore.setVisibility(View.VISIBLE);
                         sf.hasPosts = true;
                         if(submissions.size()<25) sf.hasMore = false;
                     }
@@ -94,7 +100,6 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     if(submissions.size() != 0) {
                         sf.contentView.setAdapter(sf.postListAdapter);
                         sf.contentView.setVisibility(View.VISIBLE);
-                        //sf.showMore.setVisibility(View.VISIBLE);
                         sf.hasPosts = true;
                         if(submissions.size()==25) sf.hasMore = true;
                     }
@@ -105,9 +110,6 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     }
                     break;
                 case extend:
-                    //sf.footerProgressBar.setVisibility(View.GONE);
-                    //sf.postListAdapterOld.addAll(submissions);
-                    //sf.showMore.setVisibility(View.VISIBLE);
                     sf.postListAdapter.setLoadingMoreItems(false);
                     sf.postListAdapter.addAll(submissions);
                     if(!(submissions.size()==25)) sf.hasMore = false;

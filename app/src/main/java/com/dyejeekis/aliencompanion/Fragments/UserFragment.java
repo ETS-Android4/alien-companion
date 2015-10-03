@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,9 +43,14 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean loadMore;
     public boolean hasMore = true;
 
-    public static UserFragment newInstance(RedditItemListAdapter adapter) {
+    public static boolean currentlyLoading = false;
+
+    public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category) {
         UserFragment newInstance = new UserFragment();
         newInstance.userAdapter = adapter;
+        newInstance.username = username;
+        newInstance.userOverviewSort = sort;
+        newInstance.userContent = category;
         return newInstance;
     }
 
@@ -54,7 +60,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        username = activity.getIntent().getStringExtra("username");
+        if(username==null) username = activity.getIntent().getStringExtra("username");
     }
 
     @Override
@@ -82,18 +88,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
-        //createFooter();
     }
-
-    //private void createFooter() {
-    //    LayoutInflater inflater = getActivity().getLayoutInflater();
-    //    View view = inflater.inflate(R.layout.footer_layout, null);
-    //    contentView.addFooterView(view);
-    //    footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-    //    footerProgressBar.setVisibility(View.GONE);
-    //    showMore = (Button) view.findViewById(R.id.showMore);
-    //    showMore.setOnClickListener(new UserFooterListener(activity, this));
-    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,7 +112,8 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+                if (MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                    swipeRefreshLayout.setEnabled(true);
                 else swipeRefreshLayout.setEnabled(false);
 
                 int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -136,30 +132,21 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
 
-        userContent = UserSubmissionsCategory.OVERVIEW;
-        userOverviewSort = UserOverviewSort.NEW;
-
-        if(userAdapter == null) {
-            LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
-            task.execute();
+        if(!currentlyLoading) {
+            if (userAdapter == null) {
+                currentlyLoading = true;
+                userContent = UserSubmissionsCategory.OVERVIEW;
+                userOverviewSort = UserOverviewSort.NEW;
+                LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
+                task.execute();
+            } else {
+                setActionBarSubtitle();
+                progressBar.setVisibility(View.GONE);
+                contentView.setAdapter(userAdapter);
+            }
         }
-        else {
-            progressBar.setVisibility(View.GONE);
-            contentView.setAdapter(userAdapter);
-        }
-
-        //if(userAdapter == null) {
-        //    //setUserContent(UserContent.overview);
-        //    userContent = UserSubmissionsCategory.OVERVIEW;
-        //    //setUserOverviewSort(UserOverviewSort.NEW);
-        //    userOverviewSort = UserOverviewSort.NEW;
-        //    LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
-        //    task.execute();
-        //}
-        //else {
-        //    progressBar.setVisibility(View.GONE);
-        //    contentView.setAdapter(userAdapter);
-        //}
+        //else
+        //    Log.d("geo test", "currently loading");
 
         return view;
     }
@@ -169,7 +156,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         refreshUser();
     }
 
-    //Refresh User Posts
     private void refreshUser() {
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -180,14 +166,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void setActionBarTitle() {
         activity.getSupportActionBar().setTitle(username);
     }
-
-    //public void setUserContent(UserContent userContent) {
-    //    this.userContent = userContent;
-    //}
-
-    //public void setUserOverviewSort (UserOverviewSort sort) {
-    //    this.userOverviewSort = sort;
-    //}
 
     public void setActionBarSubtitle() {
         String subtitle = userContent.value();

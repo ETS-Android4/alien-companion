@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,6 +32,8 @@ import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.enums.SubmitType;
 
+import java.sql.Time;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,9 +53,14 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public boolean hasPosts;
     public boolean loadMore;
 
-    public static PostListFragment newInstance(RedditItemListAdapter adapter) {
+    public static boolean currentlyLoading = false;
+
+    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time) {
         PostListFragment listFragment = new PostListFragment();
         listFragment.postListAdapter = adapter;
+        listFragment.subreddit = subreddit;
+        listFragment.submissionSort = sort;
+        listFragment.timeSpan = time;
         return listFragment;
     }
 
@@ -62,7 +70,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        subreddit = activity.getIntent().getStringExtra("subreddit");
+        if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
     }
 
     @Override
@@ -93,7 +101,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+                if (MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                    swipeRefreshLayout.setEnabled(true);
                 else swipeRefreshLayout.setEnabled(false);
 
                 int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -112,29 +121,20 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
-        setSubmissionSort(SubmissionSort.HOT);
 
-        if(postListAdapter == null) {
-            LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
-            task.execute();
+        if(!currentlyLoading) {
+            if (postListAdapter == null) {
+                currentlyLoading = true;
+                setSubmissionSort(SubmissionSort.HOT);
+                LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
+                task.execute();
+            } else {
+                setActionBarSubtitle();
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(postListAdapter);
+            }
         }
-        else {
-            mainProgressBar.setVisibility(View.GONE);
-            contentView.setAdapter(postListAdapter);
-        }
 
-        //if(postListAdapter == null) {
-        //    //Log.d("PostListFragment", "Loading posts...");
-        //    setSubmissionSort(SubmissionSort.HOT);
-        //    LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
-        //    task.execute();
-        //}
-        //else {
-        //    mainProgressBar.setVisibility(View.GONE);
-        //    contentView.setAdapter(postListAdapter);
-        //}
-
-        //Log.d("geo debug", "oncreateview called");
         return view;
     }
 
@@ -318,26 +318,10 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
-        //createFooter();
-        //if(!hasPosts)
-        //    showMore.setVisibility(View.GONE);
-        //else
-        //    showMore.setVisibility(View.VISIBLE);
     }
 
-    //private void createFooter() {
-    //    LayoutInflater inflater = getActivity().getLayoutInflater();
-    //    View view = inflater.inflate(R.layout.footer_layout, null);
-    //    contentView.addFooterView(view);
-    //    footerProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-    //    footerProgressBar.setVisibility(View.GONE);
-    //    showMore = (Button) view.findViewById(R.id.showMore);
-    //    showMore.setOnClickListener(new SubredditFooterListener(activity, this));
-    //}
-
-    //Reload Posts List
     public void refreshList() {
-        Log.d("PostListFragment", "Refreshing posts...");
+        //Log.d("PostListFragment", "Refreshing posts...");
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
         LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh);
@@ -372,13 +356,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             subtitle = "offline";
         }
         else {
-            if (timeSpan == null) {
-                //activity.getSupportActionBar().setSubtitle(submissionSort.value());
-                subtitle = submissionSort.value();
-            } else {
-                //activity.getSupportActionBar().setSubtitle(submissionSort.value() + ": " + timeSpan.value());
-                subtitle = submissionSort.value() + ": " + timeSpan.value();
-            }
+            if (timeSpan == null) subtitle = submissionSort.value();
+            else subtitle = submissionSort.value() + ": " + timeSpan.value();
         }
         activity.getSupportActionBar().setSubtitle(subtitle);
     }
