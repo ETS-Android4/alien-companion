@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_posts" android:title="Posts"
+        android:orderInCategory="95"/>
+    <item android:id="@+id/action_comments" android:title="Comments"
+        android:orderInCategory="96"/>
+
+</menu>

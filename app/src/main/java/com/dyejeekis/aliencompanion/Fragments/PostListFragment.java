@@ -110,7 +110,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-                if (loadMore) {
+                if (!MainActivity.offlineModeEnabled && loadMore) {
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
                         loadMore = false;
                         //Log.d("scroll listener", "load more now");
@@ -217,7 +217,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         popupMenu.show();
     }
 
-    private void showSortPopup(View v) {
+    public void showSortPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_posts_sort);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

@@ -7,11 +7,11 @@
         android:icon="@mipmap/ic_reply_white_24dp" app:showAsAction="always"
         android:orderInCategory="98"/>
 
-    <item android:id="@+id/action_sort" android:title="@string/action_sort"
+    <item android:id="@+id/action_sort_comments" android:title="@string/action_sort"
         android:icon="@mipmap/ic_sort_white_24dp" app:showAsAction="always"
         android:orderInCategory="99"/>
 
-    <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
+    <item android:id="@+id/action_refresh_comments" android:title="@string/action_refresh"
         android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"
         android:orderInCategory="100"/>
 

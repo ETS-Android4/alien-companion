@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
@@ -93,6 +94,18 @@ public class SubredditActivity extends SwipeBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(MainActivity.dualPaneActive) {
+            switch (item.getItemId()) {
+                case R.id.action_sort:
+                    MainActivity.actionSort = true;
+                    showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+                    return true;
+                case R.id.action_refresh:
+                    MainActivity.actionSort = false;
+                    showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
+                    return true;
+            }
+        }
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
@@ -101,6 +114,32 @@ public class SubredditActivity extends SwipeBackActivity {
             default:
                 return false;
         }
+    }
+
+    private void showPostsOrCommentsPopup(final View v) {
+        final PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.menu_posts_or_comments);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_posts:
+                        if (MainActivity.actionSort) listFragment.showSortPopup(v);
+                        else listFragment.refreshList();
+                        return true;
+                    case R.id.action_comments:
+                        PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+                        if (postFragment != null) {
+                            if (MainActivity.actionSort) postFragment.showSortPopup(v);
+                            else postFragment.refreshComments();
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.show();
     }
 
     @Override

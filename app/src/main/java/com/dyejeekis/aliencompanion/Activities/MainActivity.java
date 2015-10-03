@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 import com.dyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
     private Toolbar toolbar;
     private LinearLayout container;
+
+    public static boolean actionSort = false;
 
     public static boolean showHiddenPosts;
 
@@ -332,7 +335,45 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(dualPaneActive) {
+            switch (item.getItemId()) {
+                case R.id.action_sort:
+                    actionSort = true;
+                    showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+                    return true;
+                case R.id.action_refresh:
+                    actionSort = false;
+                    showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
+                    return true;
+            }
+        }
         return drawerToggle.onOptionsItemSelected(item);
+    }
+
+    private void showPostsOrCommentsPopup(final View v) {
+        final PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.menu_posts_or_comments);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_posts:
+                        if (actionSort) listFragment.showSortPopup(v);
+                        else listFragment.refreshList();
+                        return true;
+                    case R.id.action_comments:
+                        PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+                        if (postFragment != null) {
+                            if (actionSort) postFragment.showSortPopup(v);
+                            else postFragment.refreshComments();
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popupMenu.show();
     }
 
     @Override

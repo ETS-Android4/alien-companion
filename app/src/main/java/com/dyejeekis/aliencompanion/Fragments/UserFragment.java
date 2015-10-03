@@ -156,7 +156,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         refreshUser();
     }
 
-    private void refreshUser() {
+    public void refreshUser() {
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh, userContent);
@@ -189,7 +189,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return super.onOptionsItemSelected(item);
     }
 
-    private void showContentPopup(View view) {
+    public void showContentPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(activity, view);
         if(MainActivity.currentUser!=null && username.equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
         else popupMenu.inflate(R.menu.menu_user_content);

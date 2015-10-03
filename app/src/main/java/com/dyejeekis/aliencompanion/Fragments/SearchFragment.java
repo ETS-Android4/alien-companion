@@ -196,7 +196,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         this.searchQuery = query;
     }
 
-    private void showSortPopup(View v) {
+    public void showSortPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_search_sort);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

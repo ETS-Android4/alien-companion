@@ -155,10 +155,10 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_refresh:
+            case R.id.action_refresh_comments:
                 refreshComments();
                 return true;
-            case R.id.action_sort:
+            case R.id.action_sort_comments:
                 showSortPopup(activity.findViewById(R.id.action_sort));
                 return true;
             case R.id.action_reply:
@@ -172,7 +172,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSortPopup(View v) {
+    public void showSortPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_comments_sort);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
