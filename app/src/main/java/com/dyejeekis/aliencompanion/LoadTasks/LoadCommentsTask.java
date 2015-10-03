@@ -80,7 +80,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
 
     @Override
     protected void onPostExecute(List<Comment> comments) {
-        PostFragment.currentlyLoading = false;
+        //PostFragment.currentlyLoading = false;
         PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
         postFragment = fragment;
         postFragment.progressBar.setVisibility(View.GONE);

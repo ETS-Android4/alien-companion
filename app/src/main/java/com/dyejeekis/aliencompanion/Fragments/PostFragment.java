@@ -51,7 +51,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
 
-    public static boolean currentlyLoading = false;
+    //public static boolean currentlyLoading = false;
 
     public static PostFragment newInstance(Submission post) {
         PostFragment postFragment = new PostFragment();
@@ -244,9 +244,9 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         });
 
         setCommentSort(CommentSort.TOP); //TODO: change this for orientation changes
-        if(!currentlyLoading) {
+        //if(!currentlyLoading) {
             if (postAdapter == null) {
-                currentlyLoading = true;
+                //currentlyLoading = true;
                 postAdapter = new PostAdapter(activity, this, this);
 
                 if (loadFromList) postAdapter.add(post);
@@ -259,7 +259,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             } else {
                 mRecyclerView.setAdapter(postAdapter);
             }
-        }
+        //}
 
         if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
 

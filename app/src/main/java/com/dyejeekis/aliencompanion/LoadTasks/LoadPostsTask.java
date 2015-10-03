@@ -112,10 +112,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             else {
                 ToastUtils.postsLoadError(context);
                 if (loadType == LoadType.extend) {
-                    //plf.footerProgressBar.setVisibility(View.GONE);
-                    //plf.showMore.setVisibility(View.VISIBLE);
-                    //plf.postListAdapter.loadingMoreItems = false;
-                    //plf.postListAdapter.notifyDataSetChanged();
                     plf.postListAdapter.setLoadingMoreItems(false);
                 }
             }
