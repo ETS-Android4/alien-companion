@@ -81,24 +81,26 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     @Override
     protected void onPostExecute(List<Comment> comments) {
         //PostFragment.currentlyLoading = false;
-        PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
-        postFragment = fragment;
-        postFragment.progressBar.setVisibility(View.GONE);
+        try {
+            PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
+            postFragment = fragment;
+            postFragment.progressBar.setVisibility(View.GONE);
 
-        if(exception != null) {
-            if(exception instanceof IOException) ToastUtils.displayShortToast(context, "No comments found");
-            else {
-                postFragment.noResponseObject = true;
-                ToastUtils.commentsLoadError(context);
+            if (exception != null) {
+                if (exception instanceof IOException)
+                    ToastUtils.displayShortToast(context, "No comments found");
+                else {
+                    postFragment.noResponseObject = true;
+                    ToastUtils.commentsLoadError(context);
+                }
+            } else {
+                postFragment.noResponseObject = false;
+                postFragment.commentsLoaded = true;
+                postFragment.postAdapter.clear();
+                postFragment.postAdapter.add(postFragment.post);
+                postFragment.postAdapter.addAll(comments);
+                postFragment.postAdapter.notifyDataSetChanged();
             }
-        }
-        else {
-            postFragment.noResponseObject = false;
-            postFragment.commentsLoaded = true;
-            postFragment.postAdapter.clear();
-            postFragment.postAdapter.add(postFragment.post);
-            postFragment.postAdapter.addAll(comments);
-            postFragment.postAdapter.notifyDataSetChanged();
-        }
+        } catch (NullPointerException e) {}
     }
 }

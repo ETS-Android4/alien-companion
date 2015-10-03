@@ -20,6 +20,7 @@ import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.MenuItemLi
 import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.NavDrawerListener;
 import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditsListener;
+import com.dyejeekis.aliencompanion.Fragments.ConfirmationDialogFragment;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
@@ -337,26 +338,61 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
-                        SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                        editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
-                        editor.apply();
-                        //if(MainActivity.nightThemeEnabled) activity.getTheme().applyStyle(R.style.selectedTheme_night, true);
-                        //else activity.getTheme().applyStyle(R.style.selectedTheme_day, true);
-                        restartApp();
+                        String text = (MainActivity.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
+                        text += " (App will restart)";
+                        View.OnClickListener listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
+                                SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                                editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
+                                editor.apply();
+                                restartApp();
+                            }
+                        };
+                        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
+                        dialog.show(activity.getFragmentManager(), "dialog");
                     }
                 });
+                //headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View v) {
+                //        MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
+                //        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                //        editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
+                //        editor.apply();
+                //        restartApp();
+                //    }
+                //});
                 headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
-                        SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                        editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
-                        editor.apply();
-                        //notifyItemChanged(0);
-                        restartApp();
+                        String text = (MainActivity.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
+                        text += " (App will restart)";
+                        View.OnClickListener listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
+                                SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                                editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
+                                editor.apply();
+                                restartApp();
+                            }
+                        };
+                        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
+                        dialog.show(activity.getFragmentManager(), "dialog");
                     }
                 });
+                //headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View v) {
+                //        MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
+                //        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                //        editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
+                //        editor.apply();
+                //        restartApp();
+                //    }
+                //});
                 if(MainActivity.nightThemeEnabled) {
                     headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_white);
                     if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_white);

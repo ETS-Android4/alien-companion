@@ -70,52 +70,51 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
         SearchFragment.currentlyLoading = false;
-        SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
-        sf = fragment;
-        sf.postListAdapter = adapter;
+        try {
+            SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            sf = fragment;
+            sf.postListAdapter = adapter;
 
-        if(exception != null) {
-            ToastUtils.postsLoadError(context);
-            if(loadType == LoadType.extend) {
-                sf.postListAdapter.setLoadingMoreItems(false);
-            }
-        }
-        else {
-            switch (loadType) {
-                case init:
-                    sf.mainProgressBar.setVisibility(View.GONE);
-                    if(submissions.size() != 0) {
-                        sf.contentView.setAdapter(sf.postListAdapter);
-                        sf.hasPosts = true;
-                        if(submissions.size()<25) sf.hasMore = false;
-                    }
-                    else {
-                        sf.hasPosts = false;
-                        sf.hasMore = false;
-                        ToastUtils.noResults(context, sf.searchQuery);
-                    }
-                    break;
-                case refresh:
-                    sf.mainProgressBar.setVisibility(View.GONE);
-                    if(submissions.size() != 0) {
-                        sf.contentView.setAdapter(sf.postListAdapter);
-                        sf.contentView.setVisibility(View.VISIBLE);
-                        sf.hasPosts = true;
-                        if(submissions.size()==25) sf.hasMore = true;
-                    }
-                    else {
-                        sf.hasPosts = false;
-                        sf.hasMore = false;
-                        ToastUtils.noResults(context, sf.searchQuery);
-                    }
-                    break;
-                case extend:
+            if (exception != null) {
+                ToastUtils.postsLoadError(context);
+                if (loadType == LoadType.extend) {
                     sf.postListAdapter.setLoadingMoreItems(false);
-                    sf.postListAdapter.addAll(submissions);
-                    if(!(submissions.size()==25)) sf.hasMore = false;
-                    if(MainActivity.endlessPosts) sf.loadMore = true;
-                    break;
+                }
+            } else {
+                switch (loadType) {
+                    case init:
+                        sf.mainProgressBar.setVisibility(View.GONE);
+                        if (submissions.size() != 0) {
+                            sf.contentView.setAdapter(sf.postListAdapter);
+                            sf.hasPosts = true;
+                            if (submissions.size() < 25) sf.hasMore = false;
+                        } else {
+                            sf.hasPosts = false;
+                            sf.hasMore = false;
+                            ToastUtils.noResults(context, sf.searchQuery);
+                        }
+                        break;
+                    case refresh:
+                        sf.mainProgressBar.setVisibility(View.GONE);
+                        if (submissions.size() != 0) {
+                            sf.contentView.setAdapter(sf.postListAdapter);
+                            sf.contentView.setVisibility(View.VISIBLE);
+                            sf.hasPosts = true;
+                            if (submissions.size() == 25) sf.hasMore = true;
+                        } else {
+                            sf.hasPosts = false;
+                            sf.hasMore = false;
+                            ToastUtils.noResults(context, sf.searchQuery);
+                        }
+                        break;
+                    case extend:
+                        sf.postListAdapter.setLoadingMoreItems(false);
+                        sf.postListAdapter.addAll(submissions);
+                        if (!(submissions.size() == 25)) sf.hasMore = false;
+                        if (MainActivity.endlessPosts) sf.loadMore = true;
+                        break;
+                }
             }
-        }
+        } catch (NullPointerException e) {}
     }
 }

@@ -102,44 +102,45 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
         PostListFragment.currentlyLoading = false;
-        PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
-        plf = fragment;
-        plf.postListAdapter = adapter;
-        plf.mainProgressBar.setVisibility(View.GONE);
+        try {
+            PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            plf = fragment;
+            plf.postListAdapter = adapter;
+            plf.mainProgressBar.setVisibility(View.GONE);
 
-        if(exception != null || submissions == null) {
-            if(MainActivity.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
-            else {
-                ToastUtils.postsLoadError(context);
-                if (loadType == LoadType.extend) {
-                    plf.postListAdapter.setLoadingMoreItems(false);
+            if (exception != null || submissions == null) {
+                if (MainActivity.offlineModeEnabled)
+                    ToastUtils.displayShortToast(context, "No posts found");
+                else {
+                    ToastUtils.postsLoadError(context);
+                    if (loadType == LoadType.extend) {
+                        plf.postListAdapter.setLoadingMoreItems(false);
+                    }
+                }
+            } else {
+                switch (loadType) {
+                    case init:
+                        plf.contentView.setAdapter(plf.postListAdapter);
+                        plf.hasPosts = true;
+                        break;
+                    case refresh:
+                        if (submissions.size() != 0) {
+                            plf.contentView.setAdapter(plf.postListAdapter);
+                            plf.contentView.setVisibility(View.VISIBLE);
+                            plf.hasPosts = true;
+                        } else {
+                            plf.hasPosts = false;
+                            ToastUtils.subredditNotFound(context);
+                        }
+                        break;
+                    case extend:
+                        plf.postListAdapter.setLoadingMoreItems(false);
+                        plf.postListAdapter.addAll(submissions);
+                        if (MainActivity.endlessPosts) plf.loadMore = true;
+                        break;
                 }
             }
-        }
-        else {
-            switch (loadType) {
-                case init:
-                    plf.contentView.setAdapter(plf.postListAdapter);
-                    plf.hasPosts = true;
-                    break;
-                case refresh:
-                    if(submissions.size() != 0) {
-                        plf.contentView.setAdapter(plf.postListAdapter);
-                        plf.contentView.setVisibility(View.VISIBLE);
-                        plf.hasPosts = true;
-                    }
-                    else {
-                        plf.hasPosts = false;
-                        ToastUtils.subredditNotFound(context);
-                    }
-                    break;
-                case extend:
-                    plf.postListAdapter.setLoadingMoreItems(false);
-                    plf.postListAdapter.addAll(submissions);
-                    if(MainActivity.endlessPosts) plf.loadMore = true;
-                    break;
-            }
-        }
+        } catch (NullPointerException e) {}
     }
 
 }

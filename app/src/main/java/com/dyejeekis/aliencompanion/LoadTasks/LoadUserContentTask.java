@@ -27,6 +27,8 @@ import com.dyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory
 import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import java.util.List;
 
 /**
@@ -133,37 +135,38 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     @Override
     protected void onPostExecute(List<RedditItem> things) {
         UserFragment.currentlyLoading = false;
-        UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
-        uf = userFragment;
-        uf.userAdapter = adapter;
+        try {
+            UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
+            uf = userFragment;
+            uf.userAdapter = adapter;
 
-        if(mException != null) {
-            ToastUtils.userLoadError(activity);
-            if(mLoadType == LoadType.extend) {
-                uf.userAdapter.setLoadingMoreItems(false);
-            }
-        }
-        else {
-            switch (mLoadType) {
-                case init:
-                    uf.progressBar.setVisibility(View.GONE);
-                    uf.contentView.setAdapter(uf.userAdapter);
-                    if(things.size()<25) uf.hasMore = false;
-                    break;
-                case refresh:
-                    if(things.size() != 0) {
+            if (mException != null) {
+                ToastUtils.userLoadError(activity);
+                if (mLoadType == LoadType.extend) {
+                    uf.userAdapter.setLoadingMoreItems(false);
+                }
+            } else {
+                switch (mLoadType) {
+                    case init:
                         uf.progressBar.setVisibility(View.GONE);
                         uf.contentView.setAdapter(uf.userAdapter);
-                        uf.contentView.setVisibility(View.VISIBLE);
-                    }
-                    if(things.size()==25) uf.hasMore = true;
-                    break;
-                case extend:
-                    uf.userAdapter.setLoadingMoreItems(false);
-                    if(things.size()<25) uf.hasMore = false;
-                    if(MainActivity.endlessPosts) uf.loadMore = true;
-                    break;
+                        if (things.size() < 25) uf.hasMore = false;
+                        break;
+                    case refresh:
+                        if (things.size() != 0) {
+                            uf.progressBar.setVisibility(View.GONE);
+                            uf.contentView.setAdapter(uf.userAdapter);
+                            uf.contentView.setVisibility(View.VISIBLE);
+                        }
+                        if (things.size() == 25) uf.hasMore = true;
+                        break;
+                    case extend:
+                        uf.userAdapter.setLoadingMoreItems(false);
+                        if (things.size() < 25) uf.hasMore = false;
+                        if (MainActivity.endlessPosts) uf.loadMore = true;
+                        break;
+                }
             }
-        }
+        } catch (NullPointerException e) {}
     }
 }

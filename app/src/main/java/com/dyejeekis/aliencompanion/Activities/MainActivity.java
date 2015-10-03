@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean nightThemeEnabled;
     public static boolean offlineModeEnabled;
     public static boolean dualPane;
+    public static boolean dualPaneCurrent;
     public static boolean dualPaneActive;
     public static int screenOrientation;
     public static int currentOrientation;
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         getCurrentSettings();
+        dualPaneCurrent = dualPane;
         setOrientation();
         getTheme().applyStyle(fontStyle, true);
         if(nightThemeEnabled) {
@@ -284,6 +286,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(currentOrientation != screenOrientation) setOrientation();
 
+        if(dualPaneCurrent != dualPane) {
+            dualPaneCurrent = dualPane;
+            toggleDualPane();
+        }
+
         if(currentFontStyle != fontStyle) {
             currentFontStyle = fontStyle;
             getTheme().applyStyle(fontStyle, true);
@@ -404,6 +411,33 @@ public class MainActivity extends AppCompatActivity {
                     fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commitAllowingStateLoss();
                 }
             } else {
+                dualPaneActive = false;
+                View.inflate(this, R.layout.activity_main, container);
+                resource = R.id.fragmentHolder;
+            }
+            fm.beginTransaction().add(resource, listFragment, "listFragment").commitAllowingStateLoss();
+        }
+    }
+
+    private void toggleDualPane() {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            container.removeViewAt(1);
+            fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
+            listFragment = recreateListFragment(listFragment);
+            int resource;
+            if(dualPane) {
+                dualPaneActive = true;
+                View.inflate(this, R.layout.activity_main_dual_panel, container);
+                resource = R.id.listFragmentHolder;
+
+                PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+                if(postFragment!=null) {
+                    fm.beginTransaction().remove(postFragment).commitAllowingStateLoss();
+                    postFragment = recreatePostFragment(postFragment, fm);
+                    fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commitAllowingStateLoss();
+                }
+            }
+            else {
                 dualPaneActive = false;
                 View.inflate(this, R.layout.activity_main, container);
                 resource = R.id.fragmentHolder;
