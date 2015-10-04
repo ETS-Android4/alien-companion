@@ -73,7 +73,6 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
         try {
             SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             sf = fragment;
-            sf.postListAdapter = adapter;
 
             if (exception != null) {
                 ToastUtils.postsLoadError(context);
@@ -81,6 +80,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     sf.postListAdapter.setLoadingMoreItems(false);
                 }
             } else {
+                sf.postListAdapter = adapter;
                 switch (loadType) {
                     case init:
                         sf.mainProgressBar.setVisibility(View.GONE);

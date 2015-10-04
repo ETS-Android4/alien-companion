@@ -105,7 +105,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         try {
             PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             plf = fragment;
-            plf.postListAdapter = adapter;
             plf.mainProgressBar.setVisibility(View.GONE);
 
             if (exception != null || submissions == null) {
@@ -118,6 +117,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     }
                 }
             } else {
+                plf.postListAdapter = adapter;
                 switch (loadType) {
                     case init:
                         plf.contentView.setAdapter(plf.postListAdapter);

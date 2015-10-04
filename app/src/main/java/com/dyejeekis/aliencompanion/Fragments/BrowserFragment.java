@@ -2,7 +2,10 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -117,21 +121,34 @@ public class BrowserFragment extends Fragment {
         webView = (WebView) view.findViewById(R.id.webView);
 
         webView.setWebViewClient(new MyWebViewClient());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setDisplayZoomControls(false);
-        webView.getSettings().setBuiltInZoomControls(true);
+        WebSettings settings = webView.getSettings();
+        settings.setAppCacheMaxSize(20 * 1024 * 1024);
+        //settings.setAppCachePath(activity.getCacheDir().getAbsolutePath());
+        settings.setAllowFileAccess(true);
+        settings.setAppCacheEnabled(true);
+        if(!isNetworkAvailable()) settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+        else settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        settings.setJavaScriptEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setUseWideViewPort(true);
+        settings.setDisplayZoomControls(false);
+        settings.setBuiltInZoomControls(true);
 
         if(webViewBundle == null) {
             webView.setWebChromeClient(new MyWebChromeClient());
-            webView.clearCache(true);
+            //webView.clearCache(true);
             webView.loadUrl(url);
         }
         else {
             webView.restoreState(webViewBundle);
         }
         return view;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

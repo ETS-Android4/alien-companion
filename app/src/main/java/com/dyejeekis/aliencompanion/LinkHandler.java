@@ -170,34 +170,37 @@ public class LinkHandler {
     private int getYoutubeVideoTime(String youtubeURL) {
         int timeMillis = 0;
 
-        String pattern = "(?<=t=)[^#\\&\\?\\n]*";
+        try {
+            String pattern = "(?<=t=)[^#\\&\\?\\n]*";
 
-        Pattern timePattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = timePattern.matcher(youtubeURL);
+            Pattern timePattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = timePattern.matcher(youtubeURL);
 
-        if(matcher.find()){
-            String time = matcher.group();
-            if(time.contains("h") || time.contains("m") || time.contains("s")) {
-                String secondsPattern = "(?<=m?)(\\d{1,6})(?=s)";
-                String minutesPattern = "(?<=h?)(\\d{1,6})(?=m)";
-                String hoursPattern = "(\\d{1,6})(?=h)";
+            if (matcher.find()) {
+                String time = matcher.group();
+                if (time.contains("h") || time.contains("m") || time.contains("s")) {
+                    String secondsPattern = "(?<=m?)(\\d{1,6})(?=s)";
+                    String minutesPattern = "(?<=h?)(\\d{1,6})(?=m)";
+                    String hoursPattern = "(\\d{1,6})(?=h)";
 
-                Pattern compiledSeconds = Pattern.compile(secondsPattern);
-                Pattern compiledMinutes = Pattern.compile(minutesPattern);
-                Pattern compiledHours = Pattern.compile(hoursPattern);
-                matcher = compiledSeconds.matcher(time);
-                if(matcher.find())
-                    timeMillis += Integer.parseInt(matcher.group()) * 1000;
-                matcher = compiledMinutes.matcher(time);
-                if(matcher.find())
-                    timeMillis += Integer.parseInt(matcher.group()) * 60 * 1000;
-                matcher = compiledHours.matcher(time);
-                if(matcher.find())
-                    timeMillis += Integer.parseInt(matcher.group()) * 60 * 60 * 1000;
+                    Pattern compiledSeconds = Pattern.compile(secondsPattern);
+                    Pattern compiledMinutes = Pattern.compile(minutesPattern);
+                    Pattern compiledHours = Pattern.compile(hoursPattern);
+                    matcher = compiledSeconds.matcher(time);
+                    if (matcher.find())
+                        timeMillis += Integer.parseInt(matcher.group()) * 1000;
+                    matcher = compiledMinutes.matcher(time);
+                    if (matcher.find())
+                        timeMillis += Integer.parseInt(matcher.group()) * 60 * 1000;
+                    matcher = compiledHours.matcher(time);
+                    if (matcher.find())
+                        timeMillis += Integer.parseInt(matcher.group()) * 60 * 60 * 1000;
+                } else {
+                    timeMillis = Integer.parseInt(matcher.group()) * 1000;
+                }
             }
-            else {
-                timeMillis = Integer.parseInt(matcher.group()) * 1000;
-            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
         return timeMillis;
     }
