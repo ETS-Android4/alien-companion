@@ -2,6 +2,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,12 @@ public class ConfirmationDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+        setDialogWidth();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         setDialogWidth();
     }
 

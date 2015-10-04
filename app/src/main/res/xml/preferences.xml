@@ -26,6 +26,7 @@
         <ListPreference
             android:key="toolbarColor"
             android:title="Toolbar color"
+            android:summary="Only applies to light mode"
             android:entries="@array/toolbarColors"
             android:entryValues="@array/colorPrimaryValues"
             android:defaultValue="#2196F3"/>

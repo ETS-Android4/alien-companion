@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.KeyEvent;
@@ -72,6 +73,12 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
     @Override
     public void onResume() {
         super.onResume();
+        setDialogWidth();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         setDialogWidth();
     }
 

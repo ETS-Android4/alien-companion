@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -57,6 +58,12 @@ public class AccountOptionsDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
+        setDialogWidth();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         setDialogWidth();
     }
 
