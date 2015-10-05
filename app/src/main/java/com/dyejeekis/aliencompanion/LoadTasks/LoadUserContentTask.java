@@ -138,6 +138,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         try {
             UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
             uf = userFragment;
+            uf.progressBar.setVisibility(View.GONE);
 
             if (mException != null) {
                 ToastUtils.userLoadError(activity);
@@ -148,13 +149,13 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 uf.userAdapter = adapter;
                 switch (mLoadType) {
                     case init:
-                        uf.progressBar.setVisibility(View.GONE);
+                        //uf.progressBar.setVisibility(View.GONE);
                         uf.contentView.setAdapter(uf.userAdapter);
                         if (things.size() < 25) uf.hasMore = false;
                         break;
                     case refresh:
                         if (things.size() != 0) {
-                            uf.progressBar.setVisibility(View.GONE);
+                            //uf.progressBar.setVisibility(View.GONE);
                             uf.contentView.setAdapter(uf.userAdapter);
                             uf.contentView.setVisibility(View.VISIBLE);
                         }

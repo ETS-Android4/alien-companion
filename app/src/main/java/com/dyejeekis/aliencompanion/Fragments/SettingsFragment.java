@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 
 import java.io.File;
@@ -25,6 +26,7 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
 
         Preference clearSynced = findPreference("clearSynced");
+        Preference clearCache = findPreference("clearCache");
         clearSynced.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -44,6 +46,15 @@ public class SettingsFragment extends PreferenceFragment {
 
                 new AlertDialog.Builder(getActivity()).setMessage("Delete all synced posts and comments?").setPositiveButton("Yes", listener)
                         .setNegativeButton("No", null).show();
+                return false;
+            }
+        });
+
+        clearCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                GeneralUtils.deleteCache(getActivity());
+                ToastUtils.displayShortToast(getActivity(), "Cache cleared");
                 return false;
             }
         });

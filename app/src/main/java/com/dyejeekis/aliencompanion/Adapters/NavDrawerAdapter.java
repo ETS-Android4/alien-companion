@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
@@ -334,6 +335,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
+                headerViewHolder.headerLayout.setBackgroundColor(MainActivity.currentColor);
                 headerViewHolder.currentAccount.setText(currentAccountName);
                 headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -393,18 +395,18 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 //        restartApp();
                 //    }
                 //});
-                if(MainActivity.nightThemeEnabled) {
+                //if(MainActivity.nightThemeEnabled) {
                     headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_white);
                     if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_white);
                     else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_white);
-                }
-                else {
-                    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);
-                    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_grey);
-                    else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_grey);
-                }
-                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse);
-                else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand);
+                //}
+                //else {
+                //    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);
+                //    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_grey);
+                //    else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_grey);
+                //}
+                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse_white);
+                else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand_white);
                 break;
             case VIEW_TYPE_MENU_ITEM:
                 MenuRowViewHolder menuRowViewHolder= (MenuRowViewHolder) viewHolder;
@@ -439,8 +441,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
                 //NavDrawerSubreddits subreddits = (NavDrawerSubreddits) getItemAt(position);
-                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse);
-                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand);
+                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse_grey);
+                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand_grey);
                 SubredditsListener listener = new SubredditsListener(activity);
                 subredditsViewHolder.layoutToggle.setOnClickListener(listener);
                 subredditsViewHolder.layoutEdit.setOnClickListener(listener);
@@ -535,6 +537,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public RelativeLayout headerLayout;
         public TextView currentAccount;
         public LinearLayout accountLayout;
         public ImageView toggle;
@@ -543,6 +546,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
         public HeaderViewHolder(View row) {
             super(row);
+            headerLayout = (RelativeLayout) row.findViewById(R.id.layout_header);
             currentAccount = (TextView) row.findViewById(R.id.txtView_currentAccount);
             accountLayout = (LinearLayout) row.findViewById(R.id.layout_account);
             toggle = (ImageView) row.findViewById(R.id.imgView_toggle);

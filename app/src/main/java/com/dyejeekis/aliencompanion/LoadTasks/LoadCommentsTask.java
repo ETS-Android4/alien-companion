@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.LoadTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
@@ -18,6 +19,7 @@ import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
@@ -39,7 +41,9 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     }
 
     private List<Comment> readCommentsFromFile(String filename) {
+        Log.d("Geo test", "reading comments from " + filename);
         try {
+            exception = null;
             FileInputStream fis = context.openFileInput(filename);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Submission post = (Submission) ois.readObject();
@@ -56,8 +60,10 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         try {
             List<Comment> comments;
             if(MainActivity.offlineModeEnabled) {
-                String filename = postFragment.post.getIdentifier();
+                String postId = postFragment.post.getIdentifier();
+                String filename = postFragment.post.getSubreddit().toLowerCase() + postId;
                 comments = readCommentsFromFile(filename);
+                if(exception != null) comments = readCommentsFromFile("frontpage" + postId);
             }
             else {
                 Comments cmnts = new Comments(httpClient, MainActivity.currentUser);

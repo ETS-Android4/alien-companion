@@ -24,6 +24,7 @@ import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
 import com.dyejeekis.aliencompanion.Services.DownloaderService;
+import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.dyejeekis.aliencompanion.enums.LoadType;
@@ -89,7 +90,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.colorPrimary);
+        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
@@ -174,13 +175,18 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 postListAdapter.hideReadPosts();
                 return true;
             case R.id.action_sync_posts:
-                String filename = (subreddit==null) ? "frontpage" : subreddit;
-                ToastUtils.displayShortToast(activity, filename + " added to sync queue");
-                Intent intent = new Intent(activity, DownloaderService.class);
-                intent.putExtra("sort", submissionSort);
-                intent.putExtra("time", timeSpan);
-                intent.putExtra("subreddit", subreddit);
-                activity.startService(intent);
+                String toastMessage;
+                if(GeneralUtils.isNetworkAvailable(activity)) {
+                    String filename = (subreddit == null) ? "frontpage" : subreddit;
+                    toastMessage = filename + " added to sync queue";
+                    Intent intent = new Intent(activity, DownloaderService.class);
+                    intent.putExtra("sort", submissionSort);
+                    intent.putExtra("time", timeSpan);
+                    intent.putExtra("subreddit", subreddit);
+                    activity.startService(intent);
+                }
+                else toastMessage = "Check your connection and try again";
+                ToastUtils.displayShortToast(activity, toastMessage);
                 return true;
             case R.id.action_submit_post:
                 showSubmitPopup(activity.findViewById(R.id.action_refresh)); //TODO: put correct anchor
@@ -317,6 +323,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
+        if(submissionSort == null) submissionSort = SubmissionSort.HOT;
         setActionBarSubtitle();
     }
 

@@ -9,8 +9,6 @@ import android.util.Log;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
-import com.dyejeekis.aliencompanion.R;
-import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.exception.RedditError;
@@ -23,10 +21,11 @@ import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,12 +68,13 @@ public class DownloaderService extends IntentService {
                 posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MainActivity.syncPostCount, null, null, MainActivity.showHiddenPosts);
 
             if(posts!=null) {
+                deletePreviousComments(filename);
                 writePostsToFile(posts, filename);
                 for (RedditItem post : posts) {
                     Submission submission = (Submission) post;
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MainActivity.syncCommentDepth, MainActivity.syncCommentCount, CommentSort.TOP);
                     submission.setSyncedComments(comments);
-                    writePostToFile(submission, submission.getIdentifier());
+                    writePostToFile(submission, filename + submission.getIdentifier());
                 }
                 //writePostsToFile(posts, filename + "Comments");
             }
@@ -117,6 +117,7 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
+            Log.d("Geo test", "writing comments to " + filename);
             FileOutputStream fos;
             ObjectOutputStream oos;
             fos = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -126,6 +127,22 @@ public class DownloaderService extends IntentService {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void deletePreviousComments(final String subreddit) {
+        File dir = getFilesDir();
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if(filename.length()>=subreddit.length() && filename.substring(0, subreddit.length()).equals(subreddit)) return true;
+                return false;
+            }
+        };
+        File[] files = dir.listFiles(filenameFilter);
+        for(File file : files) {
+            Log.d("Geo test", "Deleting " + file.getName());
+            file.delete();
         }
     }
 }

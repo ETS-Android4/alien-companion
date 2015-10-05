@@ -186,5 +186,9 @@
         android:key="other"
         android:title="@string/options_other">
 
+        <Preference
+            android:key="clearCache"
+            android:title="Clear cache"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

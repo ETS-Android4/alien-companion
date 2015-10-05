@@ -123,7 +123,9 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onResume() {
         super.onResume();
-        if(MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+        if(MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0){
+            swipeRefreshLayout.setEnabled(true);
+        }
         else swipeRefreshLayout.setEnabled(false);
     }
 
@@ -149,6 +151,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
+        if(commentSort == null) commentSort = CommentSort.TOP;
         setActionBarSubtitle();
     }
 
@@ -226,7 +229,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.colorPrimary);
+        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -237,8 +240,9 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                if (MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0) {
                     swipeRefreshLayout.setEnabled(true);
+                }
                 else swipeRefreshLayout.setEnabled(false);
             }
         });

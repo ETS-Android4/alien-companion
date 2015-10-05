@@ -87,6 +87,10 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
+        if(userContent == null) {
+            userContent = UserSubmissionsCategory.OVERVIEW;
+            userOverviewSort = UserOverviewSort.NEW;
+        }
         setActionBarSubtitle();
     }
 
@@ -100,7 +104,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.colorPrimary);
+        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);

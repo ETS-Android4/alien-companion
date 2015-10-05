@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.PostActivity;
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 
 /**
@@ -126,7 +127,7 @@ public class BrowserFragment extends Fragment {
         //settings.setAppCachePath(activity.getCacheDir().getAbsolutePath());
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);
-        if(!isNetworkAvailable()) settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+        if(!GeneralUtils.isNetworkAvailable(activity) && MainActivity.offlineModeEnabled) settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
         else settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
@@ -143,12 +144,6 @@ public class BrowserFragment extends Fragment {
             webView.restoreState(webViewBundle);
         }
         return view;
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

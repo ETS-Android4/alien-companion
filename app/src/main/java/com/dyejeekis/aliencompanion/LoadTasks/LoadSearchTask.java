@@ -73,6 +73,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
         try {
             SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             sf = fragment;
+            sf.mainProgressBar.setVisibility(View.GONE);
 
             if (exception != null) {
                 ToastUtils.postsLoadError(context);
@@ -80,10 +81,10 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     sf.postListAdapter.setLoadingMoreItems(false);
                 }
             } else {
-                sf.postListAdapter = adapter;
+                if(submissions.size()>0) sf.postListAdapter = adapter;
                 switch (loadType) {
                     case init:
-                        sf.mainProgressBar.setVisibility(View.GONE);
+                        //sf.mainProgressBar.setVisibility(View.GONE);
                         if (submissions.size() != 0) {
                             sf.contentView.setAdapter(sf.postListAdapter);
                             sf.hasPosts = true;
@@ -95,7 +96,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         }
                         break;
                     case refresh:
-                        sf.mainProgressBar.setVisibility(View.GONE);
+                        //sf.mainProgressBar.setVisibility(View.GONE);
                         if (submissions.size() != 0) {
                             sf.contentView.setAdapter(sf.postListAdapter);
                             sf.contentView.setVisibility(View.VISIBLE);

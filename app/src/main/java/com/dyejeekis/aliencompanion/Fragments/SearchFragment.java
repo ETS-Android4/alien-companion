@@ -92,6 +92,10 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
+        if(searchSort == null || timeSpan == null) {
+            searchSort = SearchSort.RELEVANCE;
+            timeSpan = TimeSpan.ALL;
+        }
         setActionBarSubtitle();
     }
 
@@ -104,7 +108,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.colorPrimary);
+        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);

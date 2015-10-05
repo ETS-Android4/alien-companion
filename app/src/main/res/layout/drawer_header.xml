@@ -4,7 +4,8 @@
     android:layout_height="178dp"
     android:orientation="vertical"
     android:weightSum="1"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/layout_header">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +23,7 @@
             android:text="(account name)"
             android:id="@+id/txtView_currentAccount"
             android:textSize="20sp"
-            android:textColor="?attr/themeTextColor" />
+            android:textColor="#ffffff" />
 
         <ImageView
             android:layout_width="wrap_content"
