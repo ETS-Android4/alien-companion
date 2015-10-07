@@ -41,7 +41,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     }
 
     private List<Comment> readCommentsFromFile(String filename) {
-        Log.d("Geo test", "reading comments from " + filename);
+        //Log.d("Geo test", "reading comments from " + filename);
         try {
             exception = null;
             FileInputStream fis = context.openFileInput(filename);

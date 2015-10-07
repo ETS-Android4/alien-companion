@@ -1,6 +1,8 @@
 package com.dyejeekis.aliencompanion.Utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -40,5 +42,21 @@ public class GeneralUtils {
         else {
             return false;
         }
+    }
+
+    public static int getPortraitWidth(Activity activity) {
+        int portraitWidthPixels;
+        if(activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) portraitWidthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+        else portraitWidthPixels = activity.getResources().getDisplayMetrics().heightPixels;
+
+        return portraitWidthPixels;
+    }
+
+    public static int getPortraitHeight(Activity activity) {
+        int portraitHeightPixels;
+        if(activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) portraitHeightPixels = activity.getResources().getDisplayMetrics().heightPixels;
+        else portraitHeightPixels = activity.getResources().getDisplayMetrics().widthPixels;
+
+        return portraitHeightPixels;
     }
 }

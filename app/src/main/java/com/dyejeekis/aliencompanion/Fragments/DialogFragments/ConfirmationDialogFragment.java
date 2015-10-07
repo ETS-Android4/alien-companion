@@ -1,6 +1,5 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.res.Configuration;
 import android.os.Bundle;

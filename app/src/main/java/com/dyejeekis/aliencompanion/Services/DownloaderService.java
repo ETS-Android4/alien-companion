@@ -44,7 +44,7 @@ public class DownloaderService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent i) {
-        Log.d("geo test", "downloading posts...");
+        //Log.d("geo test", "downloading posts...");
         String subreddit = i.getStringExtra("subreddit");
         String filename;
         if (subreddit != null) filename = subreddit.toLowerCase();
@@ -117,7 +117,7 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
-            Log.d("Geo test", "writing comments to " + filename);
+            //Log.d("Geo test", "writing comments to " + filename);
             FileOutputStream fos;
             ObjectOutputStream oos;
             fos = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -141,7 +141,7 @@ public class DownloaderService extends IntentService {
         };
         File[] files = dir.listFiles(filenameFilter);
         for(File file : files) {
-            Log.d("Geo test", "Deleting " + file.getName());
+            //Log.d("Geo test", "Deleting " + file.getName());
             file.delete();
         }
     }

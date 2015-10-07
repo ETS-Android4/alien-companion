@@ -9,9 +9,10 @@ import android.view.View;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.SettingsActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
-import com.dyejeekis.aliencompanion.Fragments.EnterRedditDialogFragment;
-import com.dyejeekis.aliencompanion.Fragments.EnterUserDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.EnterUserDialogFragment;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 
 /**
  * Created by George on 6/26/2015.
@@ -39,6 +40,12 @@ public class MenuItemListener extends NavDrawerListener {
                 }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
             case messages:
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.displayShortToast(getActivity(), "Coming soon!");
+                    }
+                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;
             case user:
                 new Handler().postDelayed(new Runnable() {

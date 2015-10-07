@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -31,7 +31,7 @@ import java.net.URISyntaxException;
 /**
  * Created by George on 8/16/2015.
  */
-public class UrlOptionsDialogFragment extends DialogFragment {
+public class UrlOptionsDialogFragment extends ScalableDialogFragment {
 
     private String url;
 
@@ -93,23 +93,23 @@ public class UrlOptionsDialogFragment extends DialogFragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDialogWidth();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setDialogWidth();
-    }
-
-    private void setDialogWidth() {
-        Window window = getDialog().getWindow();
-        int width = 6 * getResources().getDisplayMetrics().widthPixels / 7;
-        window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    setDialogWidth();
+    //}
+//
+    //@Override
+    //public void onConfigurationChanged(Configuration newConfig) {
+    //    super.onConfigurationChanged(newConfig);
+    //    setDialogWidth();
+    //}
+//
+    //private void setDialogWidth() {
+    //    Window window = getDialog().getWindow();
+    //    int width = 6 * getResources().getDisplayMetrics().widthPixels / 7;
+    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //}
 
     //@Override
     //public Dialog onCreateDialog(Bundle bundle) {

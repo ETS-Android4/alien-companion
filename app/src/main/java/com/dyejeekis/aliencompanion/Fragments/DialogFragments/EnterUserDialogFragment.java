@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
 
 import android.app.DialogFragment;
@@ -24,7 +24,7 @@ import com.dyejeekis.aliencompanion.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EnterUserDialogFragment extends DialogFragment implements View.OnClickListener {
+public class EnterUserDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
 
     private MainActivity activity;
     private EditText editText;
@@ -62,23 +62,23 @@ public class EnterUserDialogFragment extends DialogFragment implements View.OnCl
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDialogWidth();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setDialogWidth();
-    }
-
-    private void setDialogWidth() {
-        Window window = getDialog().getWindow();
-        int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
-        window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    setDialogWidth();
+    //}
+//
+    //@Override
+    //public void onConfigurationChanged(Configuration newConfig) {
+    //    super.onConfigurationChanged(newConfig);
+    //    setDialogWidth();
+    //}
+//
+    //private void setDialogWidth() {
+    //    Window window = getDialog().getWindow();
+    //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
+    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //}
 
     @Override
     public void onClick(View view) {

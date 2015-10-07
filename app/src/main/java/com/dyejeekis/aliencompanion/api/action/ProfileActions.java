@@ -1,5 +1,8 @@
 package com.dyejeekis.aliencompanion.api.action;
 
+import android.util.Log;
+
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.entity.UserInfo;
 import com.dyejeekis.aliencompanion.api.exception.ActionFailedException;
@@ -14,6 +17,8 @@ import org.json.simple.JSONObject;
  * Created by George on 8/10/2015.
  */
 public class ProfileActions implements ActorDriven {
+
+    private static final String DEBUG_PASSWORD_CHANGE = "user password change";
 
     private HttpClient httpClient;
     private User user;
@@ -58,19 +63,22 @@ public class ProfileActions implements ActorDriven {
     public boolean changePassword(String currentPassword, String newPassword) throws ActionFailedException {
 
         // Make the request
-        JSONObject object = (JSONObject) update(currentPassword, "", newPassword).getResponseObject();
+        JSONObject object = (JSONObject) update(ConvertUtils.URLEncodeString(currentPassword), "", ConvertUtils.URLEncodeString(newPassword)).getResponseObject();
 
         // User required
         if (object.toJSONString().contains(".error.USER_REQUIRED")) {
-            System.err.println("Change password failed: please login first.");
+            //System.err.println("Change password failed: please login first.");
+            Log.e(DEBUG_PASSWORD_CHANGE, "Change password failed: please login first.");
             return false;
         } // Rate limit exceeded
         else if (object.toJSONString().contains(".error.RATELIMIT.field-ratelimit")) {
-            System.err.println("Change password failed: you are doing that too much.");
+            //System.err.println("Change password failed: you are doing that too much.");
+            Log.e(DEBUG_PASSWORD_CHANGE, "Change password failed: please login first.");
             return false;
         } // Incorrect password
         else if (object.toJSONString().contains(".error.BAD_PASSWORD")) {
-            System.err.println("Change password failed: current password is bad.");
+            //System.err.println("Change password failed: current password is bad.");
+            Log.e(DEBUG_PASSWORD_CHANGE, "Change password failed: please login first.");
             return false;
         } else {
             return true;

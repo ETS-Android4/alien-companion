@@ -3,14 +3,12 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +20,7 @@ import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
 import com.dyejeekis.aliencompanion.Services.DownloaderService;
 import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -32,8 +31,6 @@ import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.enums.SubmitType;
-
-import java.sql.Time;
 
 
 /**
@@ -165,12 +162,12 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 searchDialog.setArguments(args);
                 searchDialog.show(activity.getFragmentManager(), "dialog");
                 return true;
-            case R.id.action_toggle_hidden:
-                MainActivity.showHiddenPosts = !MainActivity.showHiddenPosts;
-                if(MainActivity.showHiddenPosts) item.setChecked(true);
-                else item.setChecked(false);
-                refreshList();
-                return true;
+            //case R.id.action_toggle_hidden:
+            //    MainActivity.showHiddenPosts = !MainActivity.showHiddenPosts;
+            //    if(MainActivity.showHiddenPosts) item.setChecked(true);
+            //    else item.setChecked(false);
+            //    refreshList();
+            //    return true;
             case R.id.action_hide_read:
                 postListAdapter.hideReadPosts();
                 return true;

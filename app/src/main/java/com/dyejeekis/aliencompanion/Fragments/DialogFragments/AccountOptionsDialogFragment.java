@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -23,7 +23,7 @@ import com.dyejeekis.aliencompanion.R;
 /**
  * Created by sound on 8/27/2015.
  */
-public class AccountOptionsDialogFragment extends DialogFragment {
+public class AccountOptionsDialogFragment extends ScalableDialogFragment {
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -47,7 +47,18 @@ public class AccountOptionsDialogFragment extends DialogFragment {
                 activity.getNavDrawerAdapter().deleteAccount(accountName);
             }
         });
-        changePass.setOnClickListener(null); //TODO: add functionality
+        changePass.setOnClickListener(null); //TODO: implement password changing after OAuth2
+        //changePass.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        dismiss();
+        //        ChangePasswordDialogFragment dialog = new ChangePasswordDialogFragment();
+        //        Bundle bundle = new Bundle();
+        //        bundle.putString("username", accountName);
+        //        dialog.setArguments(bundle);
+        //        dialog.show(getActivity().getFragmentManager(), "dialog");
+        //    }
+        //});
 
         getDialog().setCanceledOnTouchOutside(true);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -55,23 +66,23 @@ public class AccountOptionsDialogFragment extends DialogFragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDialogWidth();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setDialogWidth();
-    }
-
-    private void setDialogWidth() {
-        Window window = getDialog().getWindow();
-        int width = 6 * getResources().getDisplayMetrics().widthPixels / 7;
-        window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    setDialogWidth();
+    //}
+//
+    //@Override
+    //public void onConfigurationChanged(Configuration newConfig) {
+    //    super.onConfigurationChanged(newConfig);
+    //    setDialogWidth();
+    //}
+//
+    //private void setDialogWidth() {
+    //    Window window = getDialog().getWindow();
+    //    int width = 6 * getResources().getDisplayMetrics().widthPixels / 7;
+    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //}
 
     //@Override
     //public Dialog onCreateDialog(Bundle bundle) {

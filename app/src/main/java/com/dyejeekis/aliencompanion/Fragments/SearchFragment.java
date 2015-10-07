@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadSearchTask;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.dyejeekis.aliencompanion.enums.LoadType;

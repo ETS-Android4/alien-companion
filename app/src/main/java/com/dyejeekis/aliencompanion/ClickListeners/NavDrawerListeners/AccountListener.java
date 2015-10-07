@@ -6,8 +6,8 @@ import android.os.Handler;
 import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
-import com.dyejeekis.aliencompanion.Fragments.AccountOptionsDialogFragment;
-import com.dyejeekis.aliencompanion.Fragments.AddAccountDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.AccountOptionsDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.AddAccountDialogFragment;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 
 /**

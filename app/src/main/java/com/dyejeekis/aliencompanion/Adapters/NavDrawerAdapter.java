@@ -21,7 +21,7 @@ import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.MenuItemLi
 import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.NavDrawerListener;
 import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditsListener;
-import com.dyejeekis.aliencompanion.Fragments.ConfirmationDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.ConfirmationDialogFragment;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
@@ -396,9 +396,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 //    }
                 //});
                 //if(MainActivity.nightThemeEnabled) {
-                    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_white);
-                    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_white);
-                    else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_white);
+                    headerViewHolder.themeSwitch.setImageResource(R.drawable.ic_action_theme_switch);
+                    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
+                    else headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_online);
                 //}
                 //else {
                 //    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);

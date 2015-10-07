@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
 
 import android.app.DialogFragment;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
+import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
@@ -27,7 +28,7 @@ import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EnterRedditDialogFragment extends DialogFragment implements View.OnClickListener {
+public class EnterRedditDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
 
     private MainActivity activity;
     private AutoCompleteTextView subredditField;
@@ -70,23 +71,23 @@ public class EnterRedditDialogFragment extends DialogFragment implements View.On
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDialogWidth();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setDialogWidth();
-    }
-
-    private void setDialogWidth() {
-        Window window = getDialog().getWindow();
-        int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
-        window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    setDialogWidth();
+    //}
+//
+    //@Override
+    //public void onConfigurationChanged(Configuration newConfig) {
+    //    super.onConfigurationChanged(newConfig);
+    //    setDialogWidth();
+    //}
+//
+    //private void setDialogWidth() {
+    //    Window window = getDialog().getWindow();
+    //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
+    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //}
 
     @Override
     public void onClick(View view) {

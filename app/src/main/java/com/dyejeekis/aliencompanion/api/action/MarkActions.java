@@ -106,10 +106,10 @@ public class MarkActions implements ActorDriven {
      *
      * @throws ActionFailedException If the action failed
      */
-    public boolean report(String fullName) throws ActionFailedException {
+    public boolean report(String fullName, String reason) throws ActionFailedException {
 
         JSONObject object = (JSONObject) httpClient.post(
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                "thing_id=" + fullName + "&reason=" + reason + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.REPORT, user.getCookie()
         ).getResponseObject();
 

@@ -1,10 +1,12 @@
 package com.dyejeekis.aliencompanion.ClickListeners;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.PopupMenu;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
+import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
@@ -123,7 +127,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        //TODO: add visual indication that the comment was deleted
+                        if(recyclerAdapter instanceof RedditItemListAdapter) ((RedditItemListAdapter) recyclerAdapter).remove(comment);
                         LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), UserActionType.delete);
                         task.execute();
                         return true;
@@ -171,6 +175,14 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         else ToastUtils.displayShortToast(context, "Must be logged in to save");
                         return true;
                     case R.id.action_report:
+                        if(MainActivity.currentUser!=null) {
+                            ReportDialogFragment dialog = new ReportDialogFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("postId", comment.getFullName());
+                            dialog.setArguments(bundle);
+                            dialog.show(((Activity) context).getFragmentManager(), "dialog");
+                        }
+                        else ToastUtils.displayShortToast(context, "Must be logged in to report");
                         return true;
                     default:
                         return false;

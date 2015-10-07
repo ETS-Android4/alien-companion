@@ -30,11 +30,13 @@
     <style name="MainActivityTheme" parent="AppTheme">
     </style>
 
+    <style name="SettingsLightTheme">
+        <item name="themeBackgroundColor">@android:color/white</item>
+    </style>
+
     <style name="SettingsDarkTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:textColorSecondary">@color/dark_gray</item>
-        <item name="android:background">@android:drawable/screen_background_dark</item>
-        <!--<item name="android:background">@android:color/transparent</item>
-        <item name="android:windowBackground">@android:drawable/screen_background_dark_transparent</item>-->
+        <item name="themeBackgroundColor">@android:color/black</item>
     </style>
 
     <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">

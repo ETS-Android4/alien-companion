@@ -52,6 +52,7 @@ public class SubmitCommentFragment extends Fragment {
         layoutOriginalComment = (LinearLayout) view.findViewById(R.id.layout_originalComment);
         originalCommentTextView = (TextView) view.findViewById(R.id.txtView_originalComment);
         replyField = (EditText) view.findViewById(R.id.editText_reply);
+        replyField.requestFocus();
 
         if(originalComment == null || edit) {
             layoutOriginalComment.setVisibility(View.GONE);

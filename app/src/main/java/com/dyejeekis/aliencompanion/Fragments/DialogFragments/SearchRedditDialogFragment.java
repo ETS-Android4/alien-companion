@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -17,12 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.Activities.SearchActivity;
+import com.dyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.dyejeekis.aliencompanion.R;
 
 /**
  * Created by George on 6/22/2015.
  */
-public class SearchRedditDialogFragment extends DialogFragment implements View.OnClickListener {
+public class SearchRedditDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
 
     private AppCompatActivity activity;
     private EditText editText;
@@ -76,17 +77,17 @@ public class SearchRedditDialogFragment extends DialogFragment implements View.O
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDialogWidth();
-    }
-
-    private void setDialogWidth() {
-        Window window = getDialog().getWindow();
-        int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
-        window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    setDialogWidth();
+    //}
+//
+    //private void setDialogWidth() {
+    //    Window window = getDialog().getWindow();
+    //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
+    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //}
 
     @Override
     public void onClick(View view) {

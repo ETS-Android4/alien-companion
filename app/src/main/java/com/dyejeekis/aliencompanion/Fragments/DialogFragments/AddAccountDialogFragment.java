@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Fragments;
+package com.dyejeekis.aliencompanion.Fragments.DialogFragments;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -19,7 +19,7 @@ import com.dyejeekis.aliencompanion.R;
 /**
  * Created by George on 8/16/2015.
  */
-public class AddAccountDialogFragment extends DialogFragment implements View.OnClickListener {
+public class AddAccountDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
 
     private Activity activity;
     private EditText usernameField;
@@ -54,17 +54,17 @@ public class AddAccountDialogFragment extends DialogFragment implements View.OnC
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setDialogWidth();
-    }
-
-    private void setDialogWidth() {
-        Window window = getDialog().getWindow();
-        int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
-        window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    }
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    setDialogWidth();
+    //}
+//
+    //private void setDialogWidth() {
+    //    Window window = getDialog().getWindow();
+    //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
+    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    //}
 
     @Override
     public void onClick(View v) {

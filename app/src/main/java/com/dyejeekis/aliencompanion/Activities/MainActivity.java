@@ -28,6 +28,7 @@ import com.dyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Models.SavedAccount;
+import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.Utils.ScrimInsetsFrameLayout;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.entity.User;
@@ -514,15 +515,9 @@ public class MainActivity extends AppCompatActivity {
     private int calculateDrawerWidth() {
         final float scale = getResources().getDisplayMetrics().density;
         int drawerWidth = (int) (320 * scale + 0.5f);
-        //Display display = getWindowManager().getDefaultDisplay();
-        //Point size = new Point();
-        //display.getSize(size);
-        //int width = size.x;
-        //int height = size.y;
-//
-        //drawerWidth = (width < height) ? Math.round(drawerSizeModifier*width) : Math.round(drawerSizeModifier*height);
 
         return drawerWidth;
+        //return GeneralUtils.getPortraitWidth(this)/2;
     }
 
     public PostListFragment getListFragment() {

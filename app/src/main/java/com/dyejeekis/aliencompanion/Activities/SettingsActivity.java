@@ -23,6 +23,7 @@ public class SettingsActivity extends BackNavActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if(MainActivity.nightThemeEnabled) getTheme().applyStyle(R.style.SettingsDarkTheme, true);
+        else getTheme().applyStyle(R.style.SettingsLightTheme, true);
         setContentView(R.layout.activity_settings);
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);

@@ -66,7 +66,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
                         //uf.userAdapter.addAll(userContent);
                         adapter = uf.userAdapter;
-                        adapter.addAll(userContent);
+                        adapter.addAll(userContent); //TODO: throws runtime exception because notifydatachanged is called on background thread
                     }
                     else {
                         UserDetails userDetails = new UserDetails(httpClient, MainActivity.currentUser);

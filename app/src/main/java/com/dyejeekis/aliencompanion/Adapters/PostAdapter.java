@@ -20,7 +20,7 @@ import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
-import com.dyejeekis.aliencompanion.Fragments.UrlOptionsDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
 import com.dyejeekis.aliencompanion.LinkHandler;
 import com.dyejeekis.aliencompanion.MyClickableSpan;
 import com.dyejeekis.aliencompanion.MyHtmlTagHandler;

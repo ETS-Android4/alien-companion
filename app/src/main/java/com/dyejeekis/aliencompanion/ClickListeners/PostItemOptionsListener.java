@@ -1,10 +1,12 @@
 package com.dyejeekis.aliencompanion.ClickListeners;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +16,9 @@ import android.widget.PopupMenu;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
+import com.dyejeekis.aliencompanion.Adapters.PostAdapter;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
@@ -161,10 +165,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_edit:
+                        //TODO: implement editing of self posts
                         return true;
                     case R.id.action_delete:
-                        RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
-                        redditItemListAdapter.remove(post);
+                        if(recyclerAdapter instanceof RedditItemListAdapter) ((RedditItemListAdapter) recyclerAdapter).remove(post);
                         LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
                         task.execute();
                         return true;
@@ -202,6 +206,14 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     //case R.id.action_download_comments:
                     //    return true;
                     case R.id.action_report:
+                        if(MainActivity.currentUser!=null) {
+                            ReportDialogFragment dialog = new ReportDialogFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("postId", post.getFullName());
+                            dialog.setArguments(bundle);
+                            dialog.show(((Activity) context).getFragmentManager(), "dialog");
+                        }
+                        else ToastUtils.displayShortToast(context, "Must be logged in to report");
                         return true;
                     default:
                         return false;

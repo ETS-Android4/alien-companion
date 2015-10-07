@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/themeBackgroundColor"
+    android:padding="10dp">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup_report_reasons">
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="spam"
+            android:id="@+id/radioButton_spam"
+            android:checked="false"
+            android:textSize="20sp"
+            android:textColor="?attr/themeTextColor"
+            android:padding="5dp" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="vote manipulation"
+            android:id="@+id/radioButton_vote_manip"
+            android:checked="false"
+            android:textSize="20sp"
+            android:textColor="?attr/themeTextColor"
+            android:padding="5dp" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="personal information"
+            android:id="@+id/radioButton_personal_info"
+            android:checked="false"
+            android:textSize="20sp"
+            android:textColor="?attr/themeTextColor"
+            android:padding="5dp" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sexualizing minors"
+            android:id="@+id/radioButton_minors"
+            android:checked="false"
+            android:textColor="?attr/themeTextColor"
+            android:textSize="20sp"
+            android:padding="5dp" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="breaking reddit"
+            android:id="@+id/radioButton_broke_reddit"
+            android:checked="false"
+            android:textColor="?attr/themeTextColor"
+            android:textSize="20sp"
+            android:padding="5dp" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="other (max 100 characters):"
+            android:id="@+id/radioButton_other"
+            android:checked="false"
+            android:textColor="?attr/themeTextColor"
+            android:textSize="20sp"
+            android:padding="5dp" />
+
+    </RadioGroup>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_other_reason"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor"
+        android:hint="your reason"
+        android:maxLength="100"
+        android:textSize="20sp"
+        android:singleLine="true"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:id="@+id/button_cancel"
+            android:textColor="#03A9F4"
+            android:background="@android:color/transparent" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REPORT"
+            android:id="@+id/button_report"
+            android:textColor="#03A9F4"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
+</LinearLayout>

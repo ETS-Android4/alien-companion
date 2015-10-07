@@ -1,13 +1,16 @@
 package com.dyejeekis.aliencompanion.LoadTasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.action.MarkActions;
+import com.dyejeekis.aliencompanion.api.action.ProfileActions;
 import com.dyejeekis.aliencompanion.api.action.SubmitActions;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
+import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
@@ -24,7 +27,10 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private String postName;
     private Exception exception;
     private Submission submission;
-    private String commentText;
+    private String text;
+    private User user;
+    private String currentPass, newPass;
+    private String title, linkOrText, subreddit, captcha_iden, captcha_sol;
 
     public LoadUserActionTask(Context context, String postName, UserActionType userActionType) {
         this.context = context;
@@ -41,11 +47,29 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         httpClient = new RedditHttpClient();
     }
 
-    public LoadUserActionTask(Context context, String postName, UserActionType userActionType, String commentText) {
+    public LoadUserActionTask(Context context, String postName, UserActionType userActionType, String text) {
         this.context = context;
         this.userActionType = userActionType;
         this.postName = postName;
-        this.commentText = commentText;
+        this.text = text;
+        httpClient = new RedditHttpClient();
+    }
+
+    public LoadUserActionTask(Context context, UserActionType userActionType, User user, String currentPass, String newPass) {
+        this.context = context;
+        this.userActionType = userActionType;
+        this.user = user;
+        this.currentPass = currentPass;
+        this.newPass = newPass;
+        httpClient = new RedditHttpClient();
+    }
+
+    public LoadUserActionTask(Context context, UserActionType userActionType, String title, String linkOrText, String subreddit) {
+        this.context = context;
+        this.userActionType = userActionType;
+        this.title = title;
+        this.linkOrText = linkOrText;
+        this.subreddit = subreddit;
         httpClient = new RedditHttpClient();
     }
 
@@ -77,9 +101,10 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     markActions.unhide(postName);
                     break;
                 case report:
+                    markActions.report(postName, text);
                     break;
                 case edit:
-                    submitActions.editUserText(postName, commentText);
+                    submitActions.editUserText(postName, text);
                     break;
                 case delete:
                     submitActions.delete(postName);
@@ -91,11 +116,21 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     markActions.unmarkNSFW(postName);
                     break;
                 case submitLink:
+                    captcha_iden = null;
+                    captcha_sol = null;
+                    submitActions.submitLink(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitText:
+                    captcha_iden = null;
+                    captcha_sol = null;
+                    submitActions.submitSelfPost(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitComment:
-                    submitActions.comment(postName, commentText);
+                    submitActions.comment(postName, text);
+                    break;
+                case changePassword:
+                    ProfileActions profileActions = new ProfileActions(httpClient, user);
+                    profileActions.changePassword(currentPass, newPass);
                     break;
             }
         } catch (ActionFailedException | NullPointerException e) {
@@ -113,6 +148,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         else {
             switch (userActionType) {
                 case submitText: case submitLink:
+                    ((Activity) context).finish();
                     ToastUtils.displayShortToast(context, "Submission sucessful");
                     break;
                 case submitComment:
@@ -129,6 +165,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     break;
                 case edit:
                     ToastUtils.displayShortToast(context, "Edit successful");
+                    break;
+                case changePassword:
+                    ToastUtils.displayShortToast(context, "Password change successful");
+                    break;
+                case report:
+                    ToastUtils.displayShortToast(context, "Report sent");
                     break;
             }
         }

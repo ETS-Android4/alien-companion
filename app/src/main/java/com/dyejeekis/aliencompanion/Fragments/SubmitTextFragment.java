@@ -1,5 +1,6 @@
 package com.dyejeekis.aliencompanion.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.dyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
+import com.dyejeekis.aliencompanion.enums.UserActionType;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +43,7 @@ public class SubmitTextFragment extends Fragment {
         textField = (EditText) view.findViewById(R.id.editText_text);
         subredditField = (EditText) view.findViewById(R.id.editText_subreddit);
         subredditField.setText(subreddit);
+        titleField.requestFocus();
 
         return view;
     }
@@ -46,7 +51,29 @@ public class SubmitTextFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_submit) {
-
+            String title = titleField.getText().toString();
+            String text = textField.getText().toString();
+            String subreddit = subredditField.getText().toString();
+            if(title.replaceAll("\\s","").length()==0) title = "";
+            subreddit = subreddit.replaceAll("\\s","");
+            if(title.length()==0 || subreddit.length()==0) {
+                //ToastUtils.displayShortToast(getActivity(), "All fields are required");
+                if(title.length()==0) {
+                    titleField.setText("");
+                    titleField.setHint("enter a title");
+                    titleField.setHintTextColor(Color.RED);
+                }
+                if(subreddit.length()==0) {
+                    subredditField.setText("");
+                    subredditField.setHint("enter subreddit");
+                    subredditField.setHintTextColor(Color.RED);
+                }
+            }
+            else {
+                ToastUtils.displayShortToast(getActivity(), "Submitting..");
+                LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.submitText, title, text, subreddit);
+                task.execute();
+            }
         }
 
         return super.onOptionsItemSelected(item);
