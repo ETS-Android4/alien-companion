@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_compose" android:title="@string/action_compose"
+        android:icon="@mipmap/ic_create_white_24dp" app:showAsAction="always"/>
+
+    <item android:id="@+id/action_sort" android:title="@string/action_sort"
+        android:icon="@mipmap/ic_sort_white_24dp" app:showAsAction="always"/>
+
+    <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
+        android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"/>
+
+</menu>

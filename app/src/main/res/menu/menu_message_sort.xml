@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_message_all" android:title="@string/all"
+        android:orderInCategory="90" />
+
+    <item android:id="@+id/action_message_unread" android:title="@string/unread"
+        android:orderInCategory="91" />
+
+    <!--<item android:id="@+id/action_message_messages" android:title="@string/messages"
+        android:orderInCategory="92" />-->
+
+    <item android:id="@+id/action_message_comment_replies" android:title="@string/comment_replies"
+        android:orderInCategory="93" />
+
+    <item android:id="@+id/action_message_post_replies" android:title="@string/post_replies"
+        android:orderInCategory="94" />
+
+    <item android:id="@+id/action_message_mentions" android:title="@string/username_mentions"
+        android:orderInCategory="95" />
+
+</menu>

@@ -152,5 +152,7 @@
         <item name="themeDialogBackgroundColor">@color/darker_gray</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
     </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

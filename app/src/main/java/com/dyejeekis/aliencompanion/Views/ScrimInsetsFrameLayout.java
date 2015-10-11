@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion.Utils;/*
+package com.dyejeekis.aliencompanion.Views;/*
 * Copyright 2014 Google Inc.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,7 +60,7 @@ public class ScrimInsetsFrameLayout extends FrameLayout {
             return;
         }
         mInsetForeground = a.getDrawable(
-                R.styleable.ScrimInsetsView_insetForeground);
+                R.styleable.ScrimInsetsView_scrimInsetForeground);
         a.recycle();
 
         setWillNotDraw(true);

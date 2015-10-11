@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/themeBackgroundColor"
+    android:background="?attr/themeDialogBackgroundColor"
     android:padding="10dp">
 
     <RadioGroup
@@ -18,7 +18,8 @@
             android:checked="false"
             android:textSize="20sp"
             android:textColor="?attr/themeTextColor"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:buttonTint="?attr/themeTextColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -28,7 +29,8 @@
             android:checked="false"
             android:textSize="20sp"
             android:textColor="?attr/themeTextColor"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:buttonTint="?attr/themeTextColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -38,7 +40,8 @@
             android:checked="false"
             android:textSize="20sp"
             android:textColor="?attr/themeTextColor"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:buttonTint="?attr/themeTextColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -48,7 +51,8 @@
             android:checked="false"
             android:textColor="?attr/themeTextColor"
             android:textSize="20sp"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:buttonTint="?attr/themeTextColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -58,7 +62,8 @@
             android:checked="false"
             android:textColor="?attr/themeTextColor"
             android:textSize="20sp"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:buttonTint="?attr/themeTextColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -68,7 +73,8 @@
             android:checked="false"
             android:textColor="?attr/themeTextColor"
             android:textSize="20sp"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:buttonTint="?attr/themeTextColor" />
 
     </RadioGroup>
 

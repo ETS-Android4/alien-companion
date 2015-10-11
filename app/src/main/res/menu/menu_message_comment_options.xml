@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_reply" android:title="@string/action_reply" android:orderInCategory="90"/>
+
+    <item android:id="@+id/action_copy_text" android:title="@string/action_copy_text" android:orderInCategory="91"/>
+
+    <item android:id="@+id/action_context" android:title="@string/action_context" android:orderInCategory="92"/>
+
+    <item android:id="@+id/action_report" android:title="@string/action_report" android:orderInCategory="95"/>
+
+</menu>

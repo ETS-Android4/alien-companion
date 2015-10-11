@@ -3,7 +3,7 @@
     android:layout_height="match_parent" tools:context="com.dyejeekis.aliencompanion.Fragments.PostListFragment"
     android:id="@+id/swipe_container">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: rename to a more fitting name -->
 
     <RelativeLayout
         android:layout_width="match_parent"

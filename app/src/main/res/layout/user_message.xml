@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:id="@+id/layout_message"
+        android:background="?attr/themeSelector">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Message Subject Here)"
+            android:id="@+id/txtView_msgSubject"
+            android:textSize="?attr/font_medium"
+            android:textStyle="bold"
+            android:textColor="?attr/themeTextColor" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="from "
+                android:id="@+id/textView_dest"
+                android:textSize="?attr/font_small"
+                android:textColor="?attr/themeTextColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(author)"
+                android:id="@+id/textView_messageAuthor"
+                android:textSize="?attr/font_small"
+                android:textColor="#5972ff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" · sent "
+                android:id="@+id/textView17"
+                android:textSize="?attr/font_small"
+                android:textColor="?attr/themeTextColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(age)"
+                android:id="@+id/txtView_messageAge"
+                android:textSize="?attr/font_small"
+                android:textColor="?attr/themeTextColor" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Message body here)"
+            android:id="@+id/txtView_messageBody"
+            android:textSize="?attr/font_small"
+            android:textColor="?attr/themeTextColor" />
+
+    </LinearLayout>
+
+    <!--<LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_messageOptions"
+        android:visibility="gone">
+        <include layout="@layout/comment_list_item_options"/>
+    </LinearLayout>-->
+</LinearLayout>

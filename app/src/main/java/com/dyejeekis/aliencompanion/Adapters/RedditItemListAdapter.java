@@ -29,6 +29,7 @@ import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
+import com.dyejeekis.aliencompanion.api.entity.Message;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.entity.Trophy;
 import com.dyejeekis.aliencompanion.api.entity.UserInfo;
@@ -50,6 +51,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     public static final int VIEW_TYPE_USER_INFO = 2;
 
     public static final int VIEW_TYPE_SHOW_MORE = 3;
+
+    public static final int VIEW_TYPE_MESSAGE = 4;
 
     private final Context context;
 
@@ -166,6 +169,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                         .inflate(resource, parent, false);
                 viewHolder = new FooterViewHolder(v);
                 break;
+            case VIEW_TYPE_MESSAGE:
+                resource = R.layout.user_message;
+                v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+                viewHolder = new MessageViewHolder(v);
+                break;
         }
 
         return viewHolder;
@@ -233,6 +241,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     footerViewHolder.showMoreButton.setVisibility(View.VISIBLE);
                 }
                 break;
+            case VIEW_TYPE_MESSAGE:
+                MessageViewHolder messageViewHolder = (MessageViewHolder) viewHolder;
+                Message message = (Message) getItemAt(position);
+                messageViewHolder.bindModel(context, message);
+                break;
         }
     }
 
@@ -248,6 +261,42 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public RedditItem getItemAt(int position) {
         return redditItems.get(position);
+    }
+
+    public static class MessageViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView subject;
+        public TextView body;
+        public TextView age;
+        public TextView author;
+        public TextView dest;
+        public LinearLayout layoutMessage;
+        //public LinearLayout layoutMessageOptions;
+
+        public MessageViewHolder(View itemView) {
+            super(itemView);
+            layoutMessage = (LinearLayout) itemView.findViewById(R.id.layout_message);
+            //layoutMessageOptions = (LinearLayout) itemView.findViewById(R.id.layout_messageOptions);
+            subject = (TextView) itemView.findViewById(R.id.txtView_msgSubject);
+            body = (TextView) itemView.findViewById(R.id.txtView_messageBody);
+            age = (TextView) itemView.findViewById(R.id.txtView_messageAge);
+            author = (TextView) itemView.findViewById(R.id.textView_messageAuthor);
+            dest = (TextView) itemView.findViewById(R.id.textView_dest);
+        }
+
+        public void bindModel(Context context, Message message) {
+            subject.setText(message.subject);
+            body.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML)));
+            //TODO: make body links clickable
+            age.setText(ConvertUtils.getSubmissionAge(message.createdUTC));
+            author.setText(message.author);
+
+            if(message.author.equals(MainActivity.currentUser.getUsername()) && !message.destination.equals(MainActivity.currentUser.getUsername())) {
+                dest.setText("to ");
+                author.setText(message.destination);
+            }
+            //TODO: set click listeners
+        }
     }
 
     public static class UserCommentViewHolder extends RecyclerView.ViewHolder {
@@ -405,4 +454,5 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             showMoreProgress = (ProgressBar) itemView.findViewById(R.id.progressBar);
         }
     }
+
 }

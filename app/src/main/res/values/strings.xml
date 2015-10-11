@@ -105,5 +105,19 @@
     <string name="title_activity_offline">OfflineActivity</string>
     <string name="sync_posts">Sync posts</string>
     <string name="sync_options">Sync Options</string>
+    <string name="title_activity_message">MessageActivity</string>
+    <string name="action_compose">Compose</string>
+    <string name="inbox">Inbox</string>
+    <string name="sent">Sent</string>
+    <string name="unread">Unread</string>
+    <string name="messages">Messages</string>
+    <string name="comment_replies">Comment replies</string>
+    <string name="post_replies">Post replies</string>
+    <string name="username_mentions">Username mentions</string>
+    <string name="action_report">Report</string>
+    <string name="action_block_user">Block user</string>
+    <string name="action_context">Context</string>
+    <string name="action_copy_text">Copy text</string>
+    <string name="posts">Posts</string>
 
 </resources>

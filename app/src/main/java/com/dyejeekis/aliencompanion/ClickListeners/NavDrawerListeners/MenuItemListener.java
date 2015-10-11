@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Activities.MessageActivity;
 import com.dyejeekis.aliencompanion.Activities.SettingsActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
 import com.dyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialogFragment;
@@ -43,7 +44,9 @@ public class MenuItemListener extends NavDrawerListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ToastUtils.displayShortToast(getActivity(), "Coming soon!");
+                        //ToastUtils.displayShortToast(getActivity(), "Coming soon!");
+                        Intent intent = new Intent(getActivity(), MessageActivity.class);
+                        getActivity().startActivity(intent);
                     }
                 }, MainActivity.NAV_DRAWER_CLOSE_TIME);
                 break;

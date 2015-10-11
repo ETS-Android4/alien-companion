@@ -80,38 +80,55 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 if (loadType == LoadType.extend) {
                     sf.postListAdapter.setLoadingMoreItems(false);
                 }
+                else {
+                    sf.postListAdapter = new RedditItemListAdapter(context);
+                    sf.contentView.setAdapter(sf.postListAdapter);
+                }
             } else {
-                if(submissions.size()>0) sf.postListAdapter = adapter;
+                if(submissions.size()>0) {
+                    sf.postListAdapter = adapter;
+                    sf.hasPosts = true;
+                }
+                else {
+                    sf.postListAdapter = new RedditItemListAdapter(context);
+                    sf.hasMore = false;
+                    sf.hasPosts = false;
+                    ToastUtils.noResults(context, sf.searchQuery);
+                }
                 switch (loadType) {
-                    case init:
-                        //sf.mainProgressBar.setVisibility(View.GONE);
-                        if (submissions.size() != 0) {
-                            sf.contentView.setAdapter(sf.postListAdapter);
-                            sf.hasPosts = true;
-                            if (submissions.size() < 25) sf.hasMore = false;
-                        } else {
-                            sf.hasPosts = false;
-                            sf.hasMore = false;
-                            ToastUtils.noResults(context, sf.searchQuery);
-                        }
-                        break;
-                    case refresh:
-                        //sf.mainProgressBar.setVisibility(View.GONE);
-                        if (submissions.size() != 0) {
-                            sf.contentView.setAdapter(sf.postListAdapter);
-                            sf.contentView.setVisibility(View.VISIBLE);
-                            sf.hasPosts = true;
-                            if (submissions.size() == 25) sf.hasMore = true;
-                        } else {
-                            sf.hasPosts = false;
-                            sf.hasMore = false;
-                            ToastUtils.noResults(context, sf.searchQuery);
-                        }
+                    //case init:
+                    //    //sf.mainProgressBar.setVisibility(View.GONE);
+                    //    if (submissions.size() != 0) {
+                    //        sf.contentView.setAdapter(sf.postListAdapter);
+                    //        sf.hasPosts = true;
+                    //        if (submissions.size() < RedditConstants.DEFAULT_LIMIT) sf.hasMore = false;
+                    //    } else {
+                    //        sf.hasPosts = false;
+                    //        sf.hasMore = false;
+                    //        ToastUtils.noResults(context, sf.searchQuery);
+                    //    }
+                    //    break;
+                    //case refresh:
+                    //    //sf.mainProgressBar.setVisibility(View.GONE);
+                    //    if (submissions.size() != 0) {
+                    //        sf.contentView.setAdapter(sf.postListAdapter);
+                    //        sf.contentView.setVisibility(View.VISIBLE);
+                    //        sf.hasPosts = true;
+                    //        if (submissions.size() == RedditConstants.DEFAULT_LIMIT) sf.hasMore = true;
+                    //    } else {
+                    //        sf.hasPosts = false;
+                    //        sf.hasMore = false;
+                    //        ToastUtils.noResults(context, sf.searchQuery);
+                    //    }
+                    //    break;
+                    case init: case refresh:
+                        sf.contentView.setAdapter(sf.postListAdapter);
+                        sf.contentView.setVisibility(View.VISIBLE);
                         break;
                     case extend:
                         sf.postListAdapter.setLoadingMoreItems(false);
                         sf.postListAdapter.addAll(submissions);
-                        if (!(submissions.size() == 25)) sf.hasMore = false;
+                        if (!(submissions.size() == RedditConstants.DEFAULT_LIMIT)) sf.hasMore = false;
                         if (MainActivity.endlessPosts) sf.loadMore = true;
                         break;
                 }

@@ -115,9 +115,14 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     if (loadType == LoadType.extend) {
                         plf.postListAdapter.setLoadingMoreItems(false);
                     }
+                    else {
+                        plf.postListAdapter = new RedditItemListAdapter(context);
+                        plf.contentView.setAdapter(plf.postListAdapter);
+                    }
                 }
             } else {
-                plf.postListAdapter = adapter;
+                if(submissions.size()>0) plf.postListAdapter = adapter;
+                else plf.postListAdapter = new RedditItemListAdapter(context);
                 switch (loadType) {
                     case init:
                         plf.contentView.setAdapter(plf.postListAdapter);

@@ -5,9 +5,11 @@ import android.app.Fragment;
 import android.content.Context;
 import android.view.View;
 
+import com.dyejeekis.aliencompanion.Fragments.MessageFragment;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.dyejeekis.aliencompanion.Fragments.UserFragment;
+import com.dyejeekis.aliencompanion.LoadTasks.LoadMessagesTask;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadSearchTask;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadUserContentTask;
@@ -19,7 +21,7 @@ import com.dyejeekis.aliencompanion.enums.LoadType;
 public class ShowMoreListener implements View.OnClickListener {
 
     private enum FragmentType {
-        subreddit, user, search
+        subreddit, user, search, message
     }
 
     private Context context;
@@ -33,6 +35,7 @@ public class ShowMoreListener implements View.OnClickListener {
         if(fragment instanceof PostListFragment) type = FragmentType.subreddit;
         else if(fragment instanceof UserFragment) type = FragmentType.user;
         else if(fragment instanceof SearchFragment) type = FragmentType.search;
+        else if(fragment instanceof MessageFragment) type = FragmentType.message;
         else throw new IllegalArgumentException("invalid fragment type");
     }
 
@@ -57,6 +60,11 @@ public class ShowMoreListener implements View.OnClickListener {
                 LoadSearchTask searchTask = new LoadSearchTask(context, searchFragment, LoadType.extend);
                 searchTask.execute();
                 break;
+            case message:
+                MessageFragment messageFragment = (MessageFragment) fragment;
+                messageFragment.adapter.setLoadingMoreItems(true);
+                LoadMessagesTask messagesTask = new LoadMessagesTask(context, messageFragment, LoadType.extend);
+                messagesTask.execute();
         }
     }
 }

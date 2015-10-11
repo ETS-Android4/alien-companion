@@ -19,14 +19,30 @@ public class ApiEndpointUtils {
     public static final String CAPTCHA_NEEDS = REDDIT_BASE_API_ENDPOINT + "/needs_captcha.json";
     
     /* Message specific constants */
+
+    public static final String MESSAGE_API_ENDPOINT = "/message";
+
+    public static final String MESSAGE_ALL = MESSAGE_API_ENDPOINT + "/inbox.json?%s";
+
+    public static final String MESSAGE_UNREAD = MESSAGE_API_ENDPOINT + "/unread.json?%s";
+
+    public static final String MESSAGE_MESSAGES = MESSAGE_API_ENDPOINT + "/messages.json?%s";
+
+    public static final String MESSAGE_COMMENT_REPLIES = MESSAGE_API_ENDPOINT + "/comments.json?%s";
+
+    public static final String MESSAGE_POST_REPLIES = MESSAGE_API_ENDPOINT + "/selfreply.json?%s";
+
+    public static final String MESSAGE_USERNAME_MENTIONS = MESSAGE_API_ENDPOINT + "/mentions.json?%s";
+
+    public static final String MESSAGE_SENT = MESSAGE_API_ENDPOINT + "/sent.json?%s";
     
     public static final String MESSAGE_COMPOSE = REDDIT_BASE_API_ENDPOINT + "/compose";
-    
-    public static final String MESSAGE_READ = REDDIT_BASE_API_ENDPOINT + "/read_message";
-
-    public static final String MESSAGE_GET = "/message/%s.json";
-    
-    public static final String BLOCK = REDDIT_BASE_API_ENDPOINT + "/block";
+    //
+    //public static final String MESSAGE_READ = REDDIT_BASE_API_ENDPOINT + "/read_message";
+//
+    //public static final String MESSAGE_GET = "/message/%s.json";
+    //
+    //public static final String BLOCK = REDDIT_BASE_API_ENDPOINT + "/block";
     
     /* API functions */
     

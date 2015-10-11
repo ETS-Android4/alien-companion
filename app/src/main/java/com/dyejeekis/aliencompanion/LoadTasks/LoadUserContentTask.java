@@ -66,7 +66,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
                         //uf.userAdapter.addAll(userContent);
                         adapter = uf.userAdapter;
-                        adapter.addAll(userContent); //TODO: throws runtime exception because notifydatachanged is called on background thread
+                        //adapter.addAll(userContent); //NOTE TO SELF: dont call notifydatasetchanged() on background thread
                     }
                     else {
                         UserDetails userDetails = new UserDetails(httpClient, MainActivity.currentUser);
@@ -92,7 +92,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
                         //uf.userAdapter.addAll(userContent);
                         adapter = uf.userAdapter;
-                        adapter.addAll(userContent);
+                        //adapter.addAll(userContent);
                     }
                     else {
                         userContent = comments.ofUser(uf.username, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
@@ -111,7 +111,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
                         //uf.userAdapter.addAll(userContent);
                         adapter = uf.userAdapter;
-                        adapter.addAll(userContent);
+                        //adapter.addAll(userContent);
                     }
                     else {
                         userContent = submissions.ofUser(uf.username, this.userContent, uf.userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
@@ -145,13 +145,18 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 if (mLoadType == LoadType.extend) {
                     uf.userAdapter.setLoadingMoreItems(false);
                 }
+                else {
+                    uf.userAdapter = new RedditItemListAdapter(activity);
+                    uf.contentView.setAdapter(uf.userAdapter);
+                }
             } else {
-                uf.userAdapter = adapter;
+                if(things.size()>0) uf.userAdapter = adapter;
+                else uf.userAdapter = new RedditItemListAdapter(activity);
                 switch (mLoadType) {
                     case init:
                         //uf.progressBar.setVisibility(View.GONE);
                         uf.contentView.setAdapter(uf.userAdapter);
-                        if (things.size() < 25) uf.hasMore = false;
+                        if (things.size() < RedditConstants.DEFAULT_LIMIT) uf.hasMore = false;
                         break;
                     case refresh:
                         if (things.size() != 0) {
@@ -159,11 +164,12 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                             uf.contentView.setAdapter(uf.userAdapter);
                             uf.contentView.setVisibility(View.VISIBLE);
                         }
-                        if (things.size() == 25) uf.hasMore = true;
+                        if (things.size() == RedditConstants.DEFAULT_LIMIT) uf.hasMore = true;
                         break;
                     case extend:
                         uf.userAdapter.setLoadingMoreItems(false);
-                        if (things.size() < 25) uf.hasMore = false;
+                        uf.userAdapter.addAll(things);
+                        if (things.size() < RedditConstants.DEFAULT_LIMIT) uf.hasMore = false;
                         if (MainActivity.endlessPosts) uf.loadMore = true;
                         break;
                 }
