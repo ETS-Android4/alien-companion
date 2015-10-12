@@ -38,6 +38,7 @@ public class Message extends Thing implements RedditItem {
     public String author;
     public String destination;
     public String subreddit;
+    public String context;
     public double created;
     public double createdUTC;
     public Boolean isNew;
@@ -53,6 +54,7 @@ public class Message extends Thing implements RedditItem {
             this.body = safeJsonToString(obj.get("body"));
             this.bodyHTML = safeJsonToString(obj.get("body_html"));
             this.subreddit = safeJsonToString(obj.get("subreddit"));
+            this.context = safeJsonToString(obj.get("context"));
             this.created = safeJsonToDouble(obj.get("created"));
             this.createdUTC = safeJsonToDouble(obj.get("created_utc"));
             this.isNew = safeJsonToBoolean(obj.get("new"));

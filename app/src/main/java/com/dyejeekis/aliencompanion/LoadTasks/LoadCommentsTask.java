@@ -100,6 +100,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                     ToastUtils.commentsLoadError(context);
                 }
             } else {
+                if(!postFragment.titleUpdated) postFragment.setActionBarTitle();
                 postFragment.noResponseObject = false;
                 postFragment.commentsLoaded = true;
                 postFragment.postAdapter.clear();

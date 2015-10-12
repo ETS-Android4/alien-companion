@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,14 @@ import android.widget.TextView;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.dyejeekis.aliencompanion.ClickListeners.CommentLinkListener;
+import com.dyejeekis.aliencompanion.ClickListeners.MessageItemListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.ShowMore;
+import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
@@ -286,8 +290,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
-            body.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML)));
-            //TODO: make body links clickable
+            SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
+            strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+            body.setText(strBuilder);
+            body.setMovementMethod(MyLinkMovementMethod.getInstance());
+            //body.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML)));
             age.setText(ConvertUtils.getSubmissionAge(message.createdUTC));
 
             if(message.author.equals(MainActivity.currentUser.getUsername()) && !message.destination.equals(MainActivity.currentUser.getUsername())) {
@@ -298,7 +305,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 dest.setText("from ");
                 author.setText(message.author);
             }
-            //TODO: set click listeners
+
+            MessageItemListener listener = new MessageItemListener(context, message);
+            layoutMessage.setOnClickListener(listener);
+            layoutMessage.setOnLongClickListener(listener);
         }
     }
 
@@ -336,7 +346,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public void bindModel(Context context, Comment comment) {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
-            commentBody.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
+            SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
+            strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+            commentBody.setText(strBuilder);
+            commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
+            //commentBody.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
             commentScore.setText(Long.toString(comment.getScore()));
             commentAge.setText(ConvertUtils.getSubmissionAge(comment.getCreatedUTC()));
 

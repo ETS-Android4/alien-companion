@@ -122,7 +122,7 @@ public class LinkHandler {
         return intent;
     }
 
-    public String[] getRedditPostInfo(String url) {
+    public static String[] getRedditPostInfo(String url) {
 
         String[] postInfo = new String[4];
 

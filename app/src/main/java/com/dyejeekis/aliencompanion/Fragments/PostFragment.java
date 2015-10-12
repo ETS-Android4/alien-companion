@@ -47,7 +47,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean noResponseObject;
     public String commentLinkId;
     public int parentsShown = -1;
-    private boolean titleUpdated = true;
+    public boolean titleUpdated;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
 
@@ -265,7 +265,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             }
         //}
 
-        if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
+        //if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
 
         return rootView;
     }
@@ -326,14 +326,27 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void setActionBarTitle() {
-        if(!MainActivity.dualPaneActive) activity.getSupportActionBar().setTitle(post.getSubreddit().toLowerCase());
+        if(!MainActivity.dualPaneActive) {
+            String title;
+            if (post.getSubreddit() != null) {
+                title = post.getSubreddit().toLowerCase();
+                titleUpdated = true;
+            } else {
+                title = "Loading..";
+                titleUpdated = false;
+            }
+            activity.getSupportActionBar().setTitle(title);
+        }
     }
 
     public void setActionBarSubtitle() {
         if(!MainActivity.dualPaneActive) {
             String subtitle;
             if (MainActivity.offlineModeEnabled) subtitle = "offline";
-            else subtitle = commentSort.value();
+            else {
+                if(commentSort==null) commentSort = CommentSort.TOP;
+                subtitle = commentSort.value();
+            }
             activity.getSupportActionBar().setSubtitle(subtitle);
         }
     }

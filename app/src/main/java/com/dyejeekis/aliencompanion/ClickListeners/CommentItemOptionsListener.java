@@ -147,7 +147,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         return true;
                     case R.id.action_copy_text:
                         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        clip = ClipData.newPlainText("Comment permalink", comment.getBody()); //TODO: escape markdown/HTML foramtting (maybe)
+                        clip = ClipData.newPlainText("Comment body", comment.getBody()); //TODO: escape markdown/HTML foramtting (maybe)
                         clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_share:

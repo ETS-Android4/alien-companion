@@ -1,5 +1,23 @@
 package com.dyejeekis.aliencompanion.Utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.URLSpan;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
+import com.dyejeekis.aliencompanion.LinkHandler;
+import com.dyejeekis.aliencompanion.MyClickableSpan;
+import com.dyejeekis.aliencompanion.R;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -69,5 +87,75 @@ public class ConvertUtils {
             e.printStackTrace();
         }
         return string;
+    }
+
+    public static SpannableStringBuilder modifyURLSpan(final Context context, CharSequence sequence) {
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+
+        // Get an array of URLSpan from SpannableStringBuilder object
+        URLSpan[] urlSpans = strBuilder.getSpans(0, strBuilder.length(), URLSpan.class);
+
+        // Add onClick listener for each of URLSpan object
+        for (final URLSpan span : urlSpans) {
+            int start = strBuilder.getSpanStart(span);
+            int end = strBuilder.getSpanEnd(span);
+            // The original URLSpan needs to be removed to block the behavior of browser opening
+            strBuilder.removeSpan(span);
+
+            MyClickableSpan myClickableSpan;
+
+            if(span.getURL().substring(0,2).equals("/s") || span.getURL().equals("#s")) {
+                myClickableSpan = new MyClickableSpan() {
+
+                    boolean spoilerHidden = true;
+                    TextPaint textPaint;
+
+                    @Override
+                    public boolean onLongClick(View widget) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onClick(View widget) {
+                        spoilerHidden = !spoilerHidden;
+                        updateDrawState(textPaint);
+                        widget.invalidate();
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        int backgroundColor = (MainActivity.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
+                        super.updateDrawState(ds);
+                        ds.setUnderlineText(false);
+                        ds.bgColor = backgroundColor;
+                        if(spoilerHidden) ds.setColor(backgroundColor);
+                        else ds.setColor(Color.WHITE);
+                        textPaint = ds;
+                    }
+                };
+            }
+            else {
+                myClickableSpan = new MyClickableSpan()
+                {
+                    @Override
+                    public void onClick(View widget) {
+                        LinkHandler linkHandler = new LinkHandler(context, span.getURL());
+                        linkHandler.handleIt();
+                    }
+
+                    @Override
+                    public boolean onLongClick(View v) {
+                        Bundle args = new Bundle();
+                        args.putString("url", span.getURL());
+                        UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
+                        dialogFragment.setArguments(args);
+                        dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                        return true;
+                    }
+                };
+            }
+            strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return strBuilder;
     }
 }
