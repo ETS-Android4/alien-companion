@@ -45,12 +45,13 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public static boolean currentlyLoading = false;
 
-    public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category) {
+    public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category, boolean hasMore) {
         UserFragment newInstance = new UserFragment();
         newInstance.userAdapter = adapter;
         newInstance.username = username;
         newInstance.userOverviewSort = sort;
         newInstance.userContent = category;
+        newInstance.hasMore = hasMore;
         return newInstance;
     }
 

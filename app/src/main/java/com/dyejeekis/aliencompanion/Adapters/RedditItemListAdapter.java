@@ -289,11 +289,14 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             body.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML)));
             //TODO: make body links clickable
             age.setText(ConvertUtils.getSubmissionAge(message.createdUTC));
-            author.setText(message.author);
 
             if(message.author.equals(MainActivity.currentUser.getUsername()) && !message.destination.equals(MainActivity.currentUser.getUsername())) {
                 dest.setText("to ");
                 author.setText(message.destination);
+            }
+            else {
+                dest.setText("from ");
+                author.setText(message.author);
             }
             //TODO: set click listeners
         }

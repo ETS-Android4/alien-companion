@@ -151,7 +151,8 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 }
             } else {
                 if(things.size()>0) uf.userAdapter = adapter;
-                else uf.userAdapter = new RedditItemListAdapter(activity);
+                //else uf.userAdapter = new RedditItemListAdapter(activity);
+                uf.hasMore = things.size() == RedditConstants.DEFAULT_LIMIT;
                 switch (mLoadType) {
                     case init:
                         //uf.progressBar.setVisibility(View.GONE);
@@ -169,7 +170,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     case extend:
                         uf.userAdapter.setLoadingMoreItems(false);
                         uf.userAdapter.addAll(things);
-                        if (things.size() < RedditConstants.DEFAULT_LIMIT) uf.hasMore = false;
+                        //if (!(things.size() == RedditConstants.DEFAULT_LIMIT)) uf.hasMore = false;
                         if (MainActivity.endlessPosts) uf.loadMore = true;
                         break;
                 }

@@ -83,10 +83,9 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
             } else {
                 if(messages.size()>0) mf.adapter = adapter;
-                else mf.adapter = new RedditItemListAdapter(context);
+                //else mf.adapter = new RedditItemListAdapter(context);
 
-                if(messages.size()<RedditConstants.DEFAULT_LIMIT) mf.loadMore = false;
-                else if(MainActivity.endlessPosts)  mf.loadMore = true;
+                mf.hasMore = messages.size() == RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     case init:
                     case refresh:
@@ -98,6 +97,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case extend:
                         mf.adapter.setLoadingMoreItems(false);
                         mf.adapter.addAll(messages);
+                        if(MainActivity.endlessPosts) mf.loadMore = true;
                         break;
                 }
             }

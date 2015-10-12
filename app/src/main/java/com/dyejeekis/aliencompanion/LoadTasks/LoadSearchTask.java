@@ -89,12 +89,8 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     sf.postListAdapter = adapter;
                     sf.hasPosts = true;
                 }
-                else {
-                    sf.postListAdapter = new RedditItemListAdapter(context);
-                    sf.hasMore = false;
-                    sf.hasPosts = false;
-                    ToastUtils.noResults(context, sf.searchQuery);
-                }
+
+                sf.hasMore = submissions.size() == RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     //case init:
                     //    //sf.mainProgressBar.setVisibility(View.GONE);
@@ -124,6 +120,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case init: case refresh:
                         sf.contentView.setAdapter(sf.postListAdapter);
                         sf.contentView.setVisibility(View.VISIBLE);
+                        if(submissions.size() == 0) ToastUtils.noResults(context, sf.searchQuery);
                         break;
                     case extend:
                         sf.postListAdapter.setLoadingMoreItems(false);

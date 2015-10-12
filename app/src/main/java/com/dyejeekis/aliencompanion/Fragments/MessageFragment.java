@@ -42,15 +42,16 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public MessageCategory category;
     public MessageCategorySort sort;
     public boolean loadMore;
+    public boolean hasMore;
 
     public static boolean currentlyLoading = false;
 
-    public static MessageFragment newInstance(RedditItemListAdapter adapter, MessageCategory category, MessageCategorySort sort) {
+    public static MessageFragment newInstance(RedditItemListAdapter adapter, MessageCategory category, MessageCategorySort sort, boolean hasMore) {
         MessageFragment newInstance = new MessageFragment();
         newInstance.adapter = adapter;
         newInstance.category = category;
         newInstance.sort = sort;
-
+        newInstance.hasMore = hasMore;
         return newInstance;
     }
 
@@ -98,7 +99,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-                if (!MainActivity.offlineModeEnabled && loadMore) {
+                if (loadMore && hasMore) {
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
                         loadMore = false;
                         //Log.d("scroll listener", "load more now");

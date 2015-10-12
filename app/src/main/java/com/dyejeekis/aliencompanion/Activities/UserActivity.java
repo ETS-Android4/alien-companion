@@ -169,7 +169,7 @@ public class UserActivity extends SwipeBackActivity {
     private UserFragment recreateUserFragment(UserFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        UserFragment newInstance = UserFragment.newInstance(f.userAdapter, f.username, f.userOverviewSort, f.userContent);
+        UserFragment newInstance = UserFragment.newInstance(f.userAdapter, f.username, f.userOverviewSort, f.userContent, f.hasMore);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

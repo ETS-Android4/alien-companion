@@ -115,7 +115,7 @@ public class MessageActivity extends SwipeBackActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_posts:
+                    case R.id.action_messages:
                         if (MainActivity.actionSort) messageFragment.showCategoryPopup(v);
                         else messageFragment.refreshList();
                         return true;
@@ -166,7 +166,7 @@ public class MessageActivity extends SwipeBackActivity {
     private MessageFragment recreateMessageFragment(MessageFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        MessageFragment newInstance = MessageFragment.newInstance(f.adapter, f.category, f.sort);
+        MessageFragment newInstance = MessageFragment.newInstance(f.adapter, f.category, f.sort, f.hasMore);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

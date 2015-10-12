@@ -49,12 +49,13 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     public static boolean currentlyLoading = false;
 
-    public static SearchFragment newInstance(RedditItemListAdapter adapter, String searchQuery, SearchSort sort, TimeSpan time) {
+    public static SearchFragment newInstance(RedditItemListAdapter adapter, String searchQuery, SearchSort sort, TimeSpan time, boolean hasMore) {
         SearchFragment newInstance = new SearchFragment();
         newInstance.postListAdapter = adapter;
         newInstance.searchQuery = searchQuery;
         newInstance.searchSort = sort;
         newInstance.timeSpan = time;
+        newInstance.hasMore = hasMore;
         return newInstance;
     }
 
