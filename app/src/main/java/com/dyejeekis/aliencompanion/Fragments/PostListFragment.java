@@ -49,7 +49,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
-    public boolean hasPosts;
+    //public boolean hasPosts;
     public boolean loadMore;
 
     public static boolean currentlyLoading = false;

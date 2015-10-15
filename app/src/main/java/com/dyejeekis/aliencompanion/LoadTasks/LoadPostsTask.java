@@ -116,7 +116,8 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     if (loadType == LoadType.extend) {
                         plf.postListAdapter.setLoadingMoreItems(false);
                     }
-                    else {
+                    else if(loadType == LoadType.init){
+                        //plf.hasPosts = false;
                         plf.postListAdapter = new RedditItemListAdapter(context);
                         plf.contentView.setAdapter(plf.postListAdapter);
                     }
@@ -128,13 +129,14 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case init:
                         plf.contentView.setVisibility(View.VISIBLE);
                         plf.contentView.setAdapter(plf.postListAdapter);
-                        if(submissions.size()!=0) {
-                            plf.hasPosts = true;
-                        }
-                        else {
-                            plf.hasPosts = false;
-                            ToastUtils.subredditNotFound(context);
-                        }
+                        if(submissions.size()==0) ToastUtils.subredditNotFound(context);
+                        //if(submissions.size()!=0) {
+                        //    plf.hasPosts = true;
+                        //}
+                        //else {
+                        //    plf.hasPosts = false;
+                        //    ToastUtils.subredditNotFound(context);
+                        //}
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
