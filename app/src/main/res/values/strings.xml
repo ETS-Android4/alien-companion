@@ -119,5 +119,8 @@
     <string name="action_context">Context</string>
     <string name="action_copy_text">Copy text</string>
     <string name="posts">Posts</string>
+    <string name="action_switch_view">Switch view</string>
+    <string name="list_default">List</string>
+    <string name="list_reversed">List (reversed)</string>
 
 </resources>

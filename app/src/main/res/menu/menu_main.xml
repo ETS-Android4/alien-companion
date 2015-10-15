@@ -14,6 +14,9 @@
     <!--<item android:id="@+id/action_toggle_hidden" android:title="@string/action_show_hidden"
         android:orderInCategory="101" app:showAsAction="never" android:checkable="true" />-->
 
+    <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
+        android:orderInCategory="101" app:showAsAction="never" />
+
     <item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
         android:orderInCategory="102" app:showAsAction="never" />
 

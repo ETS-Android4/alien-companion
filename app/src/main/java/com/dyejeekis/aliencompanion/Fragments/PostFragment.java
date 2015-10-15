@@ -162,7 +162,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 refreshComments();
                 return true;
             case R.id.action_sort_comments:
-                showSortPopup(activity.findViewById(R.id.action_sort));
+                showSortPopup(activity.findViewById(R.id.action_sort_comments));
                 return true;
             case R.id.action_reply:
                 Intent intent = new Intent(activity, SubmitActivity.class);

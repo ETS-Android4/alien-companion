@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/action_list_default" android:title="@string/list_default"
+            android:orderInCategory="5"/>
+
+        <item android:id="@+id/action_list_reversed" android:title="@string/list_reversed"
+            android:orderInCategory="10"/>
+    </group>
+
+</menu>

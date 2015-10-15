@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     public static int syncPostCount;
     public static int syncCommentCount;
     public static int syncCommentDepth;
+    public static int currentPostListView;
 
     public static SavedAccount currentAccount;
     public static User currentUser;
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void getCurrentSettings() {
+        currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
         //Log.d("geo test", "settings saved");
         dualPane = prefs.getBoolean("dualPane", true);
         //dualPane = true;

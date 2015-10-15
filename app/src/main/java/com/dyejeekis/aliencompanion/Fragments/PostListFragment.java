@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -162,6 +163,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 searchDialog.setArguments(args);
                 searchDialog.show(activity.getFragmentManager(), "dialog");
                 return true;
+            case R.id.action_switch_view:
+                showViewsPopup(activity.findViewById(R.id.action_refresh));
+                return true;
             //case R.id.action_toggle_hidden:
             //    MainActivity.showHiddenPosts = !MainActivity.showHiddenPosts;
             //    if(MainActivity.showHiddenPosts) item.setChecked(true);
@@ -191,6 +195,45 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showViewsPopup(View v) {
+        PopupMenu popupMenu = new PopupMenu(activity, v);
+        popupMenu.inflate(R.menu.menu_post_views);
+        int index;
+        switch (MainActivity.currentPostListView) {
+            case R.layout.post_list_item_reversed:
+                index = 1;
+                break;
+            default:
+                index = 0;
+                break;
+        }
+        popupMenu.getMenu().getItem(index).setChecked(true);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                int resource = -1;
+                switch (item.getItemId()) {
+                    case R.id.action_list_default:
+                        resource = R.layout.post_list_item;
+                        break;
+                    case R.id.action_list_reversed:
+                        resource = R.layout.post_list_item_reversed;
+                        break;
+                }
+                if (resource != -1) {
+                    MainActivity.currentPostListView = resource;
+                    editor.putInt("postListView", resource);
+                    editor.apply();
+                    refreshList();
+                    return true;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 
     private void showSubmitPopup(View v) {

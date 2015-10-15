@@ -150,7 +150,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType) {
             case VIEW_TYPE_POST:
-                int resource = (MainActivity.dualPaneActive) ? R.layout.post_list_item_reversed : R.layout.post_list_item;
+                int resource = (MainActivity.dualPaneActive) ? R.layout.post_list_item_reversed : MainActivity.currentPostListView;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 viewHolder = new PostViewHolder(v, PostViewType.listItem);
