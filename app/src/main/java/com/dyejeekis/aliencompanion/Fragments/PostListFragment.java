@@ -23,6 +23,7 @@ import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
+import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Services.DownloaderService;
 import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
@@ -32,6 +33,8 @@ import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.enums.SubmitType;
+
+import java.util.List;
 
 
 /**
@@ -227,7 +230,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     MainActivity.currentPostListView = resource;
                     editor.putInt("postListView", resource);
                     editor.apply();
-                    refreshList();
+                    redrawList();
+                    //refreshList();
                     return true;
                 }
                 return false;
@@ -386,6 +390,13 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mainProgressBar.setVisibility(View.VISIBLE);
         LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
         task.execute();
+    }
+
+    public void redrawList() {
+        List<RedditItem> items = postListAdapter.redditItems;
+        items.remove(items.size()-1);
+        postListAdapter = new RedditItemListAdapter(activity, items);
+        contentView.setAdapter(postListAdapter);
     }
 
     public void setSubreddit(String subreddit) {

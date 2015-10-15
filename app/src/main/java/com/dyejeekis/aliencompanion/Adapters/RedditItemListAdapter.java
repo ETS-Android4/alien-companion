@@ -60,7 +60,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     private final Context context;
 
-    private List<RedditItem> redditItems;
+    public List<RedditItem> redditItems;
 
     private ShowMore showMoreButton;
 
