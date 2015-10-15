@@ -106,6 +106,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             plf = fragment;
             plf.mainProgressBar.setVisibility(View.GONE);
+            plf.swipeRefreshLayout.setRefreshing(false);
 
             if (exception != null || submissions == null) {
                 if (MainActivity.offlineModeEnabled)
@@ -125,18 +126,24 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 else plf.postListAdapter = new RedditItemListAdapter(context);
                 switch (loadType) {
                     case init:
+                        plf.contentView.setVisibility(View.VISIBLE);
                         plf.contentView.setAdapter(plf.postListAdapter);
-                        plf.hasPosts = true;
+                        if(submissions.size()!=0) {
+                            plf.hasPosts = true;
+                        }
+                        else {
+                            plf.hasPosts = false;
+                            ToastUtils.subredditNotFound(context);
+                        }
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
                             plf.contentView.setAdapter(plf.postListAdapter);
-                            plf.contentView.setVisibility(View.VISIBLE);
-                            plf.hasPosts = true;
-                        } else {
-                            plf.hasPosts = false;
-                            ToastUtils.subredditNotFound(context);
-                        }
+                            //plf.hasPosts = true;
+                        } //else {
+                            //plf.hasPosts = false;
+                            //ToastUtils.subredditNotFound(context);
+                        //}
                         break;
                     case extend:
                         plf.postListAdapter.setLoadingMoreItems(false);

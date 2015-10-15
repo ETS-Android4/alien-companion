@@ -107,11 +107,12 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
                     startActivity(intent);
                 }
                 else {
-                    PostListFragment listFragment = activity.getListFragment();
-                    listFragment.setSubreddit(subreddit);
-                    listFragment.setSubmissionSort(SubmissionSort.HOT);
                     activity.getNavDrawerAdapter().notifyDataSetChanged();
-                    listFragment.refreshList();
+                    PostListFragment listFragment = activity.getListFragment();
+                    listFragment.changeSubreddit(subreddit);
+                    //listFragment.setSubreddit(subreddit);
+                    //listFragment.setSubmissionSort(SubmissionSort.HOT);
+                    //listFragment.refreshList();
                 }
             }
             else {

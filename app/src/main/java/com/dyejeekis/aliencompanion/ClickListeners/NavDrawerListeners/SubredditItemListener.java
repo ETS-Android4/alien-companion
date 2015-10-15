@@ -24,10 +24,11 @@ public class SubredditItemListener extends NavDrawerListener {
         getDrawerLayout().closeDrawers();
 
         PostListFragment listFragment = getActivity().getListFragment();
-        listFragment.setSubmissionSort(SubmissionSort.HOT);
+        //listFragment.setSubmissionSort(SubmissionSort.HOT);
         String subredditName = (subreddit.getName()!=null) ? subreddit.getName().toLowerCase() : null;
-        listFragment.setSubreddit(subredditName);
-        listFragment.refreshList();
+        //listFragment.setSubreddit(subredditName);
+        //listFragment.refreshList();
+        listFragment.changeSubreddit(subredditName);
     }
 
     @Override

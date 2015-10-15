@@ -123,7 +123,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         return -1;
     }
 
-    public RedditItem getLastItem() {
+    public RedditItem getLastItem() { //TODO: check out of bounds index exception, probably related to load task
         return redditItems.get(redditItems.size()-2);
     }
 

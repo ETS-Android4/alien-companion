@@ -369,9 +369,22 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void refreshList() {
         //Log.d("PostListFragment", "Refreshing posts...");
+        //contentView.setVisibility(View.GONE);
+        //mainProgressBar.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
+        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh);
+        task.execute();
+    }
+
+    public void changeSubreddit(String subreddit) {
+        this.subreddit = subreddit;
+        this.submissionSort = SubmissionSort.HOT;
+        this.timeSpan = null;
+        setActionBarTitle();
+        setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
-        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh);
+        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
         task.execute();
     }
 
