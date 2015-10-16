@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.LoadTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
@@ -10,6 +11,8 @@ import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
+import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
+import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
@@ -37,12 +40,28 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private PostListFragment plf;
     private HttpClient httpClient;
     private RedditItemListAdapter adapter;
+    private SubmissionSort sort;
+    private TimeSpan time;
+    private boolean changedSort;
 
     public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType) {
         this.context = context;
         this.plf = plf;
         this.loadType = loadType;
         httpClient = new RedditHttpClient();
+        sort = plf.submissionSort;
+        time = plf.timeSpan;
+        changedSort = false;
+    }
+
+    public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType, SubmissionSort sort, TimeSpan time) {
+        this.context = context;
+        this.plf = plf;
+        this.loadType = loadType;
+        httpClient = new RedditHttpClient();
+        this.sort = sort;
+        this.time = time;
+        changedSort = true;
     }
 
     private List<RedditItem> readPostsFromFile(String filename) {
@@ -75,16 +94,16 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
                 if (loadType == LoadType.extend) {
                     if (plf.subreddit == null) {
-                        submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
+                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
                     } else {
-                        submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
+                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
                     }
                     adapter = plf.postListAdapter;
                 } else {
                     if (plf.subreddit == null) {
-                        submissions = subms.frontpage(plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
                     } else {
-                        submissions = subms.ofSubreddit(plf.subreddit, plf.submissionSort, plf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
                     }
                     //plf.postListAdapter = new RedditItemListAdapter(context, submissions);
                     adapter = new RedditItemListAdapter(context, submissions);
@@ -117,14 +136,16 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         plf.postListAdapter.setLoadingMoreItems(false);
                     }
                     else if(loadType == LoadType.init){
-                        //plf.hasPosts = false;
+                        plf.contentView.setVisibility(View.VISIBLE);
                         plf.postListAdapter = new RedditItemListAdapter(context);
                         plf.contentView.setAdapter(plf.postListAdapter);
                     }
                 }
             } else {
                 if(submissions.size()>0) plf.postListAdapter = adapter;
-                else plf.postListAdapter = new RedditItemListAdapter(context);
+                //else plf.postListAdapter = new RedditItemListAdapter(context);
+                plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
+
                 switch (loadType) {
                     case init:
                         plf.contentView.setVisibility(View.VISIBLE);
@@ -140,6 +161,11 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
+                            if(changedSort) {
+                                plf.submissionSort = sort;
+                                plf.timeSpan = time;
+                                plf.setActionBarSubtitle();
+                            }
                             plf.contentView.setAdapter(plf.postListAdapter);
                             //plf.hasPosts = true;
                         } //else {
@@ -150,11 +176,13 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case extend:
                         plf.postListAdapter.setLoadingMoreItems(false);
                         plf.postListAdapter.addAll(submissions);
-                        if (MainActivity.endlessPosts) plf.loadMore = true;
+                        plf.loadMore = MainActivity.endlessPosts;
+                        //if (MainActivity.endlessPosts) plf.loadMore = true;
                         break;
                 }
             }
         } catch (NullPointerException e) {}
+        //Log.d("geo test", "loadmore: " + plf.loadMore + " hasMore: " + plf.hasMore);
     }
 
 }
