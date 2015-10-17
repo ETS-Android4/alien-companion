@@ -11,4 +11,7 @@
 
     <item android:id="@+id/action_search" android:title="@string/action_new_search"
         android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
+        android:orderInCategory="105" app:showAsAction="never" />
 </menu>

@@ -95,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
     public static int initialCommentCount;
     public static int initialCommentDepth;
     public static int textColor;
+    public static int textHintColor;
+    public static int linkColor;
     public static int backgroundColor;
     public static int commentPermaLinkBackgroundColor;
     public static int syncPostCount;
@@ -118,12 +120,16 @@ public class MainActivity extends AppCompatActivity {
             colorPrimary = Color.parseColor("#181818");
             colorPrimaryDark = Color.BLACK;
             textColor = Color.WHITE;
+            textHintColor = getResources().getColor(R.color.hint_dark);
+            linkColor = Color.parseColor("#0080FF");
             backgroundColor = Color.BLACK;
             commentPermaLinkBackgroundColor = Color.parseColor("#545454");
         }
         else {
             getTheme().applyStyle(R.style.selectedTheme_day, true);
             textColor = Color.BLACK;
+            textHintColor = getResources().getColor(R.color.hint_light);
+            linkColor = colorPrimary;
             backgroundColor = Color.WHITE;
             commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
         }
@@ -293,11 +299,12 @@ public class MainActivity extends AppCompatActivity {
         if(currentFontStyle != fontStyle) {
             currentFontStyle = fontStyle;
             getTheme().applyStyle(fontStyle, true);
-            listFragment.refreshList();
+            listFragment.redrawList();
         }
 
         if(!nightThemeEnabled && currentColor != colorPrimary) {
             currentColor = colorPrimary;
+            linkColor = colorPrimary;
             toolbar.setBackgroundColor(colorPrimary);
             colorPrimaryDark = getPrimaryDarkColor();
             drawerLayout.setStatusBarBackgroundColor(colorPrimaryDark);
@@ -548,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
     private PostListFragment recreateListFragment(PostListFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.submissionSort, f.timeSpan);
+        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.submissionSort, f.timeSpan, f.currentLoadType);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

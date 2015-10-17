@@ -2,12 +2,9 @@ package com.dyejeekis.aliencompanion.Adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +17,7 @@ import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
-import com.dyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
 import com.dyejeekis.aliencompanion.LinkHandler;
-import com.dyejeekis.aliencompanion.MyClickableSpan;
 import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -246,15 +241,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     if (comment.getLikes().equals("true")) {
                         cvh.score.setTextColor(Color.parseColor("#FF6600"));
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     } else if (comment.getLikes().equals("false")) {
                         cvh.score.setTextColor(Color.BLUE);
-                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
                         cvh.score.setTextColor(MainActivity.textColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote);
-                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
+                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     }
                 }
 
@@ -342,22 +337,22 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     if (post.getLikes().equals("true")) {
                         contentVH.score.setTextColor(Color.parseColor("#FF6600"));
                         contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     } else if (post.getLikes().equals("false")) {
                         contentVH.score.setTextColor(Color.BLUE);
-                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote);
+                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
                         contentVH.score.setTextColor(MainActivity.textColor);
-                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote);
-                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote);
+                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
+                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     }
                     //check saved post
                     if(post.isSaved()) contentVH.save.setImageResource(R.mipmap.ic_action_save_yellow);
-                    else contentVH.save.setImageResource(R.mipmap.ic_action_save);
+                    else contentVH.save.setImageResource(R.mipmap.ic_action_save_white);
                     //check hidden post
                     if(post.isHidden()) contentVH.hide.setImageResource(R.mipmap.ic_action_hide_red);
-                    else contentVH.hide.setImageResource(R.mipmap.ic_action_hide);
+                    else contentVH.hide.setImageResource(R.mipmap.ic_action_hide_white);
                 }
 
                 if (postFragment.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);

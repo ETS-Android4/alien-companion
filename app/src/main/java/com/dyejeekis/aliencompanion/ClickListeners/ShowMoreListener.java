@@ -44,6 +44,7 @@ public class ShowMoreListener implements View.OnClickListener {
         switch (type) {
             case subreddit:
                 PostListFragment postListFragment = (PostListFragment) fragment;
+                postListFragment.currentLoadType = LoadType.extend;
                 postListFragment.postListAdapter.setLoadingMoreItems(true);
                 LoadPostsTask subredditTask = new LoadPostsTask(context, postListFragment, LoadType.extend);
                 subredditTask.execute();
@@ -56,6 +57,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 break;
             case search:
                 SearchFragment searchFragment = (SearchFragment) fragment;
+                searchFragment.currentLoadType = LoadType.extend;
                 searchFragment.postListAdapter.setLoadingMoreItems(true);
                 LoadSearchTask searchTask = new LoadSearchTask(context, searchFragment, LoadType.extend);
                 searchTask.execute();

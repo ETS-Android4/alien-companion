@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,18 +53,17 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
-    //public boolean hasPosts;
     public boolean loadMore;
     public boolean hasMore;
+    public LoadType currentLoadType;
 
-    public static boolean currentlyLoading = false;
-
-    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time) {
+    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time, LoadType currentLoadType) {
         PostListFragment listFragment = new PostListFragment();
         listFragment.postListAdapter = adapter;
         listFragment.subreddit = subreddit;
         listFragment.submissionSort = sort;
         listFragment.timeSpan = time;
+        listFragment.currentLoadType = currentLoadType;
         return listFragment;
     }
 
@@ -125,9 +125,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
 
 
-        if(!currentlyLoading) {
+        if(currentLoadType == null) {
+            //Log.d("geo test", "currentLoadType is null");
             if (postListAdapter == null) {
-                currentlyLoading = true;
+                //Log.d("geo test", "postListAdapter is null");
+                currentLoadType = LoadType.init;
                 setSubmissionSort(SubmissionSort.HOT);
                 LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
                 task.execute();
@@ -136,6 +138,29 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 mainProgressBar.setVisibility(View.GONE);
                 contentView.setAdapter(postListAdapter);
             }
+        }
+        else switch (currentLoadType) {
+            case init:
+                //Log.d("geo test", "currentLoadType is init");
+                contentView.setVisibility(View.GONE);
+                mainProgressBar.setVisibility(View.VISIBLE);
+                break;
+            case refresh:
+                //Log.d("geo test", "currentLoadType is refersh");
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(postListAdapter);
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+                break;
+            case extend:
+                //Log.d("geo test", "currentLoadType is extend");
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(postListAdapter);
+                postListAdapter.setLoadingMoreItems(true);
+                break;
         }
 
         return view;
@@ -147,7 +172,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(false);
         refreshList();
     }
 
@@ -209,6 +233,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             case R.layout.post_list_item_reversed:
                 index = 1;
                 break;
+            case R.layout.post_list_item_card:
+                index = 2;
+                break;
             default:
                 index = 0;
                 break;
@@ -217,7 +244,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                SharedPreferences.Editor editor = MainActivity.prefs.edit();
                 int resource = -1;
                 switch (item.getItemId()) {
                     case R.id.action_list_default:
@@ -226,13 +252,16 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     case R.id.action_list_reversed:
                         resource = R.layout.post_list_item_reversed;
                         break;
+                    case R.id.action_cards:
+                        resource = R.layout.post_list_item_card;
+                        break;
                 }
-                if (resource != -1) {
+                if (resource != -1 && resource != MainActivity.currentPostListView) {
+                    SharedPreferences.Editor editor = MainActivity.prefs.edit();
                     MainActivity.currentPostListView = resource;
                     editor.putInt("postListView", resource);
                     editor.apply();
-                    redrawList();
-                    //refreshList();
+                    if(currentLoadType==null) redrawList();
                     return true;
                 }
                 return false;
@@ -276,26 +305,19 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sort_hot:
-                        //setSubmissionSort(SubmissionSort.HOT);
                         refreshList(SubmissionSort.HOT, null);
                         return true;
                     case R.id.action_sort_new:
-                        //setSubmissionSort(SubmissionSort.NEW);
                         refreshList(SubmissionSort.NEW, null);
                         return true;
                     case R.id.action_sort_rising:
-                        //setSubmissionSort(SubmissionSort.RISING);
                         refreshList(SubmissionSort.RISING, null);
                         return true;
                     case R.id.action_sort_top:
-                        //setSubmissionSort(SubmissionSort.TOP);
-                        //refreshList();
                         tempSort = SubmissionSort.TOP;
                         showSortTimePopup(activity.findViewById(R.id.action_sort));
                         return true;
                     case R.id.action_sort_controversial:
-                        //setSubmissionSort(SubmissionSort.CONTROVERSIAL);
-                        //refreshList();
                         tempSort = SubmissionSort.CONTROVERSIAL;
                         showSortTimePopup(activity.findViewById(R.id.action_sort));
                         return true;
@@ -315,27 +337,21 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sort_hour:
-                        //setSubmissionSort(TimeSpan.HOUR);
                         refreshList(tempSort, TimeSpan.HOUR);
                         return true;
                     case R.id.action_sort_day:
-                        //setSubmissionSort(TimeSpan.DAY);
                         refreshList(tempSort, TimeSpan.DAY);
                         return true;
                     case R.id.action_sort_week:
-                        //setSubmissionSort(TimeSpan.WEEK);
                         refreshList(tempSort, TimeSpan.WEEK);
                         return true;
                     case R.id.action_sort_month:
-                        //setSubmissionSort(TimeSpan.MONTH);
                         refreshList(tempSort, TimeSpan.MONTH);
                         return true;
                     case R.id.action_sort_year:
-                        //setSubmissionSort(TimeSpan.YEAR);
                         refreshList(tempSort, TimeSpan.YEAR);
                         return true;
                     case R.id.action_sort_all:
-                        //setSubmissionSort(TimeSpan.ALL);
                         refreshList(tempSort, TimeSpan.ALL);
                         return true;
                     default:
@@ -373,21 +389,21 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void refreshList() {
-        //Log.d("PostListFragment", "Refreshing posts...");
-        //contentView.setVisibility(View.GONE);
-        //mainProgressBar.setVisibility(View.VISIBLE);
+        currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh);
         task.execute();
     }
 
     public void refreshList(SubmissionSort sort, TimeSpan time) {
+        currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
         task.execute();
     }
 
     public void changeSubreddit(String subreddit) {
+        currentLoadType = LoadType.init;
         this.subreddit = subreddit;
         this.submissionSort = SubmissionSort.HOT;
         this.timeSpan = null;

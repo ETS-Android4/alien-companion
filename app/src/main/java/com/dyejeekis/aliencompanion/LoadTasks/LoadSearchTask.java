@@ -3,12 +3,15 @@ package com.dyejeekis.aliencompanion.LoadTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
+import com.dyejeekis.aliencompanion.api.retrieval.params.SearchSort;
+import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
@@ -35,27 +38,43 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private HttpClient httpClient;
     private LoadType loadType;
     private RedditItemListAdapter adapter;
+    private SearchSort sort;
+    private TimeSpan time;
+    private boolean changedSort;
 
     public LoadSearchTask(Context context, SearchFragment searchFragment, LoadType loadType) {
         this.context = context;
         this.sf = searchFragment;
         this.loadType = loadType;
         httpClient = new RedditHttpClient();
+        sort = sf.searchSort;
+        time = sf.timeSpan;
+        changedSort = false;
+    }
+
+    public LoadSearchTask(Context context, SearchFragment searchFragment, LoadType loadType, SearchSort sort, TimeSpan time) {
+        this.context = context;
+        this.sf = searchFragment;
+        this.loadType = loadType;
+        httpClient = new RedditHttpClient();
+        this.sort = sort;
+        this.time = time;
+        changedSort = true;
     }
 
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
+        //SystemClock.sleep(5000);
         try {
             Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
             List<RedditItem> submissions;
 
             if(loadType == LoadType.extend) {
-                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, (Submission) sf.postListAdapter.getLastItem(), null, true);
+                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) sf.postListAdapter.getLastItem(), null, true);
                 adapter = sf.postListAdapter;
             }
             else {
-                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sf.searchSort, sf.timeSpan, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-                //sf.postListAdapter = new RedditItemListAdapter(context, submissions);
+                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
                 adapter = new RedditItemListAdapter(context, submissions);
             }
             ImageLoader.preloadThumbnails(submissions, context);
@@ -69,67 +88,51 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
-        SearchFragment.currentlyLoading = false;
         try {
             SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             sf = fragment;
+            sf.currentLoadType = null;
             sf.mainProgressBar.setVisibility(View.GONE);
+            sf.swipeRefreshLayout.setRefreshing(false);
+            sf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null) {
                 ToastUtils.postsLoadError(context);
                 if (loadType == LoadType.extend) {
                     sf.postListAdapter.setLoadingMoreItems(false);
                 }
-                else {
+                else if(loadType == LoadType.init){
                     sf.postListAdapter = new RedditItemListAdapter(context);
                     sf.contentView.setAdapter(sf.postListAdapter);
                 }
             } else {
-                if(submissions.size()>0) {
-                    sf.postListAdapter = adapter;
-                    sf.hasPosts = true;
-                }
+                if(submissions.size()>0) sf.postListAdapter = adapter;
 
-                sf.hasMore = submissions.size() == RedditConstants.DEFAULT_LIMIT;
+                sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
-                    //case init:
-                    //    //sf.mainProgressBar.setVisibility(View.GONE);
-                    //    if (submissions.size() != 0) {
-                    //        sf.contentView.setAdapter(sf.postListAdapter);
-                    //        sf.hasPosts = true;
-                    //        if (submissions.size() < RedditConstants.DEFAULT_LIMIT) sf.hasMore = false;
-                    //    } else {
-                    //        sf.hasPosts = false;
-                    //        sf.hasMore = false;
-                    //        ToastUtils.noResults(context, sf.searchQuery);
-                    //    }
-                    //    break;
-                    //case refresh:
-                    //    //sf.mainProgressBar.setVisibility(View.GONE);
-                    //    if (submissions.size() != 0) {
-                    //        sf.contentView.setAdapter(sf.postListAdapter);
-                    //        sf.contentView.setVisibility(View.VISIBLE);
-                    //        sf.hasPosts = true;
-                    //        if (submissions.size() == RedditConstants.DEFAULT_LIMIT) sf.hasMore = true;
-                    //    } else {
-                    //        sf.hasPosts = false;
-                    //        sf.hasMore = false;
-                    //        ToastUtils.noResults(context, sf.searchQuery);
-                    //    }
-                    //    break;
-                    case init: case refresh:
+                    case init:
                         sf.contentView.setAdapter(sf.postListAdapter);
-                        sf.contentView.setVisibility(View.VISIBLE);
-                        if(submissions.size() == 0) ToastUtils.noResults(context, sf.searchQuery);
+                        if(submissions.size()==0) ToastUtils.noResults(context, sf.searchQuery);
+                        break;
+                    case refresh:
+                        if (submissions.size() != 0) {
+                            if(changedSort) {
+                                sf.searchSort = sort;
+                                sf.timeSpan = time;
+                                sf.setActionBarSubtitle();
+                            }
+                            sf.contentView.setAdapter(sf.postListAdapter);
+                        }
                         break;
                     case extend:
                         sf.postListAdapter.setLoadingMoreItems(false);
                         sf.postListAdapter.addAll(submissions);
-                        if (!(submissions.size() == RedditConstants.DEFAULT_LIMIT)) sf.hasMore = false;
-                        if (MainActivity.endlessPosts) sf.loadMore = true;
+                        sf.loadMore = MainActivity.endlessPosts;
                         break;
                 }
             }
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 }

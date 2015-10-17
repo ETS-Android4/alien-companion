@@ -152,6 +152,12 @@ public class ConvertUtils {
                         dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
                         return true;
                     }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(MainActivity.linkColor);
+                    }
                 };
             }
             strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

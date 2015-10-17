@@ -153,7 +153,16 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 int resource = (MainActivity.dualPaneActive) ? R.layout.post_list_item_reversed : MainActivity.currentPostListView;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                viewHolder = new PostViewHolder(v, PostViewType.listItem);
+                PostViewType type;
+                switch (resource) {
+                    case R.layout.post_list_item_card:
+                        type = PostViewType.cards;
+                        break;
+                    default:
+                        type = PostViewType.listItem;
+                        break;
+                }
+                viewHolder = new PostViewHolder(v, type);
                 break;
             case VIEW_TYPE_USER_COMMENT:
                 resource = R.layout.user_comment;
@@ -207,13 +216,16 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 PostItemListener listener = new PostItemListener(context, post, this, position);
                 postViewHolder.linkButton.setOnClickListener(listener);
                 postViewHolder.commentsButton.setOnClickListener(listener);
-                postViewHolder.linkButton.setOnLongClickListener(longListener);
-                postViewHolder.commentsButton.setOnLongClickListener(longListener);
-
-                //post item selected
-                PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
-                if(selectedPosition == position) postViewHolder.showPostOptions(optionsListener);
-                else postViewHolder.hidePostOptions();
+                switch (postViewHolder.viewType) {
+                    case listItem: case details:
+                        postViewHolder.linkButton.setOnLongClickListener(longListener);
+                        postViewHolder.commentsButton.setOnLongClickListener(longListener);
+                        //post item selected
+                        PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
+                        if(selectedPosition == position) postViewHolder.showPostOptions(optionsListener);
+                        else postViewHolder.hidePostOptions();
+                        break;
+                }
                 break;
             case VIEW_TYPE_USER_COMMENT:
                 Comment comment = (Comment) getItemAt(position);
@@ -363,15 +375,15 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 if (comment.getLikes().equals("true")) {
                     commentScore.setTextColor(Color.parseColor("#FF6600"));
                     upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                    downvote.setImageResource(R.mipmap.ic_action_downvote);
+                    downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                 } else if (comment.getLikes().equals("false")) {
                     commentScore.setTextColor(Color.BLUE);
-                    upvote.setImageResource(R.mipmap.ic_action_upvote);
+                    upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                 } else {
                     commentScore.setTextColor(MainActivity.textColor);
-                    upvote.setImageResource(R.mipmap.ic_action_upvote);
-                    downvote.setImageResource(R.mipmap.ic_action_downvote);
+                    upvote.setImageResource(R.mipmap.ic_action_upvote_white);
+                    downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                 }
             }
         }

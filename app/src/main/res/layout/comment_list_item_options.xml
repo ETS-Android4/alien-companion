@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_upvote"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_upvote"
+        android:src="@mipmap/ic_action_upvote_white"
         android:padding="5dp" />
 
     <ImageView
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_downvote"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_downvote"
+        android:src="@mipmap/ic_action_downvote_white"
         android:padding="5dp" />
 
     <ImageView

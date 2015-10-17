@@ -183,7 +183,7 @@ public class SearchActivity extends SwipeBackActivity {
     private SearchFragment recreateSearchFragment(SearchFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        SearchFragment newInstance = SearchFragment.newInstance(f.postListAdapter, f.searchQuery, f.searchSort, f.timeSpan, f.hasMore);
+        SearchFragment newInstance = SearchFragment.newInstance(f.postListAdapter, f.searchQuery, f.searchSort, f.timeSpan, f.hasMore, f.currentLoadType);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

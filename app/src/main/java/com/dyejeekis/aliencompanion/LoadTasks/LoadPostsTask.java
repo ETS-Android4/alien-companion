@@ -3,6 +3,7 @@ package com.dyejeekis.aliencompanion.LoadTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
@@ -80,6 +81,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
+        //SystemClock.sleep(5000);
         try {
             List<RedditItem> submissions;
             if(MainActivity.offlineModeEnabled) {
@@ -105,7 +107,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     } else {
                         submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
                     }
-                    //plf.postListAdapter = new RedditItemListAdapter(context, submissions);
                     adapter = new RedditItemListAdapter(context, submissions);
                 }
                 ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
@@ -120,12 +121,13 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
-        PostListFragment.currentlyLoading = false;
         try {
             PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             plf = fragment;
+            plf.currentLoadType = null;
             plf.mainProgressBar.setVisibility(View.GONE);
             plf.swipeRefreshLayout.setRefreshing(false);
+            plf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null || submissions == null) {
                 if (MainActivity.offlineModeEnabled)
@@ -136,28 +138,18 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         plf.postListAdapter.setLoadingMoreItems(false);
                     }
                     else if(loadType == LoadType.init){
-                        plf.contentView.setVisibility(View.VISIBLE);
                         plf.postListAdapter = new RedditItemListAdapter(context);
                         plf.contentView.setAdapter(plf.postListAdapter);
                     }
                 }
             } else {
                 if(submissions.size()>0) plf.postListAdapter = adapter;
-                //else plf.postListAdapter = new RedditItemListAdapter(context);
                 plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
 
                 switch (loadType) {
                     case init:
-                        plf.contentView.setVisibility(View.VISIBLE);
                         plf.contentView.setAdapter(plf.postListAdapter);
                         if(submissions.size()==0) ToastUtils.subredditNotFound(context);
-                        //if(submissions.size()!=0) {
-                        //    plf.hasPosts = true;
-                        //}
-                        //else {
-                        //    plf.hasPosts = false;
-                        //    ToastUtils.subredditNotFound(context);
-                        //}
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -167,21 +159,18 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                                 plf.setActionBarSubtitle();
                             }
                             plf.contentView.setAdapter(plf.postListAdapter);
-                            //plf.hasPosts = true;
-                        } //else {
-                            //plf.hasPosts = false;
-                            //ToastUtils.subredditNotFound(context);
-                        //}
+                        }
                         break;
                     case extend:
                         plf.postListAdapter.setLoadingMoreItems(false);
                         plf.postListAdapter.addAll(submissions);
                         plf.loadMore = MainActivity.endlessPosts;
-                        //if (MainActivity.endlessPosts) plf.loadMore = true;
                         break;
                 }
             }
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         //Log.d("geo test", "loadmore: " + plf.loadMore + " hasMore: " + plf.hasMore);
     }
 

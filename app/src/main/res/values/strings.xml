@@ -79,7 +79,7 @@
     <string name="sort_relevance">Relevance</string>
     <string name="sort_comments">Comments</string>
     <string name="title_activity_search">SearchActivity</string>
-    <string name="action_new_search">New Search</string>
+    <string name="action_new_search">Search again</string>
     <string name="enter_search_term">enter search term</string>
     <string name="action_comments">Comments</string>
     <string name="title_activity_edit_prefs">EditPrefsActivity</string>
@@ -122,5 +122,6 @@
     <string name="action_switch_view">Switch view</string>
     <string name="list_default">List</string>
     <string name="list_reversed">List (reversed)</string>
+    <string name="cards">Cards</string>
 
 </resources>

@@ -112,9 +112,10 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
                 else {
                     if(checkBox.isChecked()) searchFragment.subreddit = subreddit;
                     else searchFragment.subreddit = null;
-                    searchFragment.setSearchQuery(query);
-                    searchFragment.setActionBarTitle();
-                    searchFragment.refreshList();
+                    searchFragment.changeQuery(query);
+                    //searchFragment.setSearchQuery(query);
+                    //searchFragment.setActionBarTitle();
+                    //searchFragment.refreshList();
                 }
             }
             else {
