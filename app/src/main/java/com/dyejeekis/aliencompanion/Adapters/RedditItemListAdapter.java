@@ -150,7 +150,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType) {
             case VIEW_TYPE_POST:
-                int resource = (MainActivity.dualPaneActive) ? R.layout.post_list_item_reversed : MainActivity.currentPostListView;
+                int resource = MainActivity.currentPostListView;
+                if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 PostViewType type;
@@ -216,14 +217,18 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 PostItemListener listener = new PostItemListener(context, post, this, position);
                 postViewHolder.linkButton.setOnClickListener(listener);
                 postViewHolder.commentsButton.setOnClickListener(listener);
+
+                PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
                 switch (postViewHolder.viewType) {
                     case listItem: case details:
                         postViewHolder.linkButton.setOnLongClickListener(longListener);
                         postViewHolder.commentsButton.setOnLongClickListener(longListener);
                         //post item selected
-                        PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
                         if(selectedPosition == position) postViewHolder.showPostOptions(optionsListener);
                         else postViewHolder.hidePostOptions();
+                        break;
+                    case cards: case cardDetails:
+                        postViewHolder.setCardButtonsListener(optionsListener);
                         break;
                 }
                 break;
@@ -381,7 +386,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                 } else {
-                    commentScore.setTextColor(MainActivity.textColor);
+                    commentScore.setTextColor(MainActivity.textHintColor);
                     upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                 }

@@ -22,6 +22,7 @@
     </declare-styleable>
 
     <declare-styleable name="FontStyle">
+        <attr name="font_comments" format="dimension"/>
         <attr name="font_small" format="dimension" />
         <attr name="font_medium" format="dimension" />
         <attr name="font_large" format="dimension" />

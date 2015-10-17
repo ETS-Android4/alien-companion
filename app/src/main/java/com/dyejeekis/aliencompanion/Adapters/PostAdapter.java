@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
+import com.dyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.LinkHandler;
@@ -23,8 +24,10 @@ import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
+import com.dyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
+import com.dyejeekis.aliencompanion.enums.PostViewType;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.Utils;
 import com.squareup.picasso.Picasso;
@@ -57,7 +60,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
      */
     private final int mPaddingDP = 5;
 
-    private String author;
+    private String author = "";
     public int selectedPosition;
 
     public PostAdapter (Activity activity, View.OnClickListener listener, View.OnLongClickListener longListener) {
@@ -82,10 +85,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 v.setOnLongClickListener(mLongListener);
                 break;
             case VIEW_TYPE_CONTENT:
-                resource = R.layout.post_details_old;
+                resource = R.layout.post_details_card;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                viewHolder = new ContentViewHolder(v);
+                //viewHolder = new ContentViewHolder(v);
+                viewHolder = new PostViewHolder(v, PostViewType.cardDetails);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -247,7 +251,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
-                        cvh.score.setTextColor(MainActivity.textColor);
+                        cvh.score.setTextColor(MainActivity.textHintColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     }
@@ -255,25 +259,19 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 break;
             case VIEW_TYPE_CONTENT:
-                View.OnLongClickListener longListener = new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        int previousPosition = selectedPosition;
-                        if (position == selectedPosition) selectedPosition = -1;
-                        else selectedPosition = position;
-                        notifyItemChanged(previousPosition);
-                        notifyItemChanged(position);
-                        //notifyDataSetChanged();
-                        return true;
-                    }
-                };
-                final ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
-                final Submission post = (Submission) getItemAt(position);
+                PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
+                Submission post = (Submission) getItemAt(position);
                 author = post.getAuthor();
+                postViewHolder.bindModel(activity, post);
+
+                PostItemListener listener = new PostItemListener(activity, post, this, position);
+                postViewHolder.linkButton.setOnClickListener(listener);
+                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
+                postViewHolder.setCardButtonsListener(optionsListener);
 
                 if(postFragment.showFullCommentsButton) {
-                    contentVH.fullComments.setVisibility(View.VISIBLE);
-                    contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
+                    postViewHolder.fullComments.setVisibility(View.VISIBLE);
+                    postViewHolder.fullComments.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             postFragment.showFullCommentsButton = false;
@@ -281,105 +279,135 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         }
                     });
                 }
-                else contentVH.fullComments.setVisibility(View.GONE);
+                else postViewHolder.fullComments.setVisibility(View.GONE);
 
-                contentVH.postTitle.setText(post.getTitle());
-                contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments ");
-                if(post.isNSFW()) contentVH.nsfw.setVisibility(View.VISIBLE);
-                else contentVH.nsfw.setVisibility(View.GONE);
-
-                if (post.isSelf()) {
-                    contentVH.postDets1.setVisibility(View.GONE);
-
-                    if(post.getSelftextHTML() == null || postFragment.showFullCommentsButton) contentVH.selfText.setVisibility(View.GONE);
-                    else {
-                        //Self text textview
-                        contentVH.selfText.setVisibility(View.VISIBLE);
-                        strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
-                                Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
-                        //strBuilder = modifyURLSpan(strBuilder);
-                        strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
-                        contentVH.selfText.setText(strBuilder);
-                        contentVH.selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
-                    }
-
-                    contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
-                    contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                } else {
-                    contentVH.postDets1.setText(post.getDomain() + " · ");
-                    contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0f));
-                    contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-                    Thumbnail thumbnail = post.getThumbnailObject();
-                    if (thumbnail!=null && thumbnail.hasThumbnail()) {
-                        if(post.isNSFW() && !MainActivity.showNSFWpreview) {
-                            //contentVH.postImage.setImageResource(R.drawable.nsfw2);
-                            contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                        }
-                        else {
-                            try {
-                                //Get Post Thumbnail
-                                Picasso.with(activity).load(thumbnail.getUrl()).placeholder(R.drawable.noimage).into(contentVH.postImage);
-                            } catch (IllegalArgumentException e) { e.printStackTrace(); }
-                        }
-                    } else {
-                        contentVH.postImage.setVisibility(View.GONE);
-                    }
-                }
-                contentVH.author.setText(post.getAuthor());
-                contentVH.score.setText(Long.toString(post.getScore()));
-                contentVH.age.setText(" · " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
-                contentVH.subreddit.setText(post.getSubreddit());
-
-                contentVH.postOptions.setBackgroundColor(MainActivity.currentColor);
-                //user logged in
-                if(MainActivity.currentUser != null) {
-                    //check user vote
-                    if (post.getLikes().equals("true")) {
-                        contentVH.score.setTextColor(Color.parseColor("#FF6600"));
-                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
-                    } else if (post.getLikes().equals("false")) {
-                        contentVH.score.setTextColor(Color.BLUE);
-                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
-                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
-                    } else {
-                        contentVH.score.setTextColor(MainActivity.textColor);
-                        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
-                        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
-                    }
-                    //check saved post
-                    if(post.isSaved()) contentVH.save.setImageResource(R.mipmap.ic_action_save_yellow);
-                    else contentVH.save.setImageResource(R.mipmap.ic_action_save_white);
-                    //check hidden post
-                    if(post.isHidden()) contentVH.hide.setImageResource(R.mipmap.ic_action_hide_red);
-                    else contentVH.hide.setImageResource(R.mipmap.ic_action_hide_white);
-                }
-
-                if (postFragment.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
-                else contentVH.progressBar.setVisibility(View.VISIBLE);
-
-                contentVH.postDetails.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!post.isSelf()) {
-                            LinkHandler linkHandler = new LinkHandler(activity, post);
-                            linkHandler.handleIt();
-                        }
-                    }
-                });
-                contentVH.postDetails.setOnLongClickListener(longListener);
-                if(selectedPosition == position) {
-                    contentVH.postOptions.setVisibility(View.VISIBLE);
-                    PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
-                    contentVH.upvote.setOnClickListener(optionsListener);
-                    contentVH.downvote.setOnClickListener(optionsListener);
-                    contentVH.save.setOnClickListener(optionsListener);
-                    contentVH.hide.setOnClickListener(optionsListener);
-                    contentVH.viewUser.setOnClickListener(optionsListener);
-                    contentVH.openBrowser.setOnClickListener(optionsListener);
-                    contentVH.moreOptions.setOnClickListener(optionsListener);
-                }
-                else contentVH.postOptions.setVisibility(View.GONE);
+                if (postFragment.commentsLoaded) postViewHolder.commentsProgress.setVisibility(View.GONE); //TODO: replace commentsLoaded field and condition
+                else postViewHolder.commentsProgress.setVisibility(View.VISIBLE);
+                //View.OnLongClickListener longListener = new View.OnLongClickListener() {
+                //    @Override
+                //    public boolean onLongClick(View v) {
+                //        int previousPosition = selectedPosition;
+                //        if (position == selectedPosition) selectedPosition = -1;
+                //        else selectedPosition = position;
+                //        notifyItemChanged(previousPosition);
+                //        notifyItemChanged(position);
+                //        //notifyDataSetChanged();
+                //        return true;
+                //    }
+                //};
+                //final ContentViewHolder contentVH = (ContentViewHolder) viewHolder;
+                //final Submission post = (Submission) getItemAt(position);
+                //author = post.getAuthor();
+//
+                //if(postFragment.showFullCommentsButton) {
+                //    contentVH.fullComments.setVisibility(View.VISIBLE);
+                //    contentVH.fullComments.setOnClickListener(new View.OnClickListener() {
+                //        @Override
+                //        public void onClick(View v) {
+                //            postFragment.showFullCommentsButton = false;
+                //            postFragment.loadFullComments();
+                //        }
+                //    });
+                //}
+                //else contentVH.fullComments.setVisibility(View.GONE);
+//
+                //contentVH.postTitle.setText(post.getTitle());
+                //contentVH.comments.setText(Long.toString(post.getCommentCount()) + " comments ");
+                //if(post.isNSFW()) contentVH.nsfw.setVisibility(View.VISIBLE);
+                //else contentVH.nsfw.setVisibility(View.GONE);
+//
+                //if (post.isSelf()) {
+                //    contentVH.postDets1.setVisibility(View.GONE);
+//
+                //    if(post.getSelftextHTML() == null || postFragment.showFullCommentsButton) contentVH.selfText.setVisibility(View.GONE);
+                //    else {
+                //        //Self text textview
+                //        contentVH.selfText.setVisibility(View.VISIBLE);
+                //        strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
+                //                Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
+                //        //strBuilder = modifyURLSpan(strBuilder);
+                //        strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
+                //        contentVH.selfText.setText(strBuilder);
+                //        contentVH.selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
+                //    }
+//
+                //    contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f));
+                //    contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                //} else {
+                //    contentVH.postDets1.setText(post.getDomain() + " · ");
+                //    contentVH.selfText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0f));
+                //    contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+                //    Thumbnail thumbnail = post.getThumbnailObject();
+                //    if (thumbnail!=null && thumbnail.hasThumbnail()) {
+                //        if(post.isNSFW() && !MainActivity.showNSFWpreview) {
+                //            //contentVH.postImage.setImageResource(R.drawable.nsfw2);
+                //            contentVH.postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                //        }
+                //        else {
+                //            try {
+                //                //Get Post Thumbnail
+                //                Picasso.with(activity).load(thumbnail.getUrl()).placeholder(R.drawable.noimage).into(contentVH.postImage);
+                //            } catch (IllegalArgumentException e) { e.printStackTrace(); }
+                //        }
+                //    } else {
+                //        contentVH.postImage.setVisibility(View.GONE);
+                //    }
+                //}
+                //contentVH.author.setText(post.getAuthor());
+                //contentVH.score.setText(Long.toString(post.getScore()));
+                //contentVH.age.setText(" · " + ConvertUtils.getSubmissionAge(post.getCreatedUTC()));
+                //contentVH.subreddit.setText(post.getSubreddit());
+//
+                //contentVH.postOptions.setBackgroundColor(MainActivity.currentColor);
+                ////user logged in
+                //if(MainActivity.currentUser != null) {
+                //    //check user vote
+                //    if (post.getLikes().equals("true")) {
+                //        contentVH.score.setTextColor(Color.parseColor("#FF6600"));
+                //        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                //        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
+                //    } else if (post.getLikes().equals("false")) {
+                //        contentVH.score.setTextColor(Color.BLUE);
+                //        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
+                //        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+                //    } else {
+                //        contentVH.score.setTextColor(MainActivity.textColor);
+                //        contentVH.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
+                //        contentVH.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
+                //    }
+                //    //check saved post
+                //    if(post.isSaved()) contentVH.save.setImageResource(R.mipmap.ic_action_save_yellow);
+                //    else contentVH.save.setImageResource(R.mipmap.ic_action_save_white);
+                //    //check hidden post
+                //    if(post.isHidden()) contentVH.hide.setImageResource(R.mipmap.ic_action_hide_red);
+                //    else contentVH.hide.setImageResource(R.mipmap.ic_action_hide_white);
+                //}
+//
+                //if (postFragment.commentsLoaded) contentVH.progressBar.setVisibility(View.GONE);
+                //else contentVH.progressBar.setVisibility(View.VISIBLE);
+//
+                //contentVH.postDetails.setOnClickListener(new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View v) {
+                //        if(!post.isSelf()) {
+                //            LinkHandler linkHandler = new LinkHandler(activity, post);
+                //            linkHandler.handleIt();
+                //        }
+                //    }
+                //});
+                //contentVH.postDetails.setOnLongClickListener(longListener);
+                //if(selectedPosition == position) {
+                //    contentVH.postOptions.setVisibility(View.VISIBLE);
+                //    PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
+                //    contentVH.upvote.setOnClickListener(optionsListener);
+                //    contentVH.downvote.setOnClickListener(optionsListener);
+                //    contentVH.save.setOnClickListener(optionsListener);
+                //    contentVH.hide.setOnClickListener(optionsListener);
+                //    contentVH.viewUser.setOnClickListener(optionsListener);
+                //    contentVH.openBrowser.setOnClickListener(optionsListener);
+                //    contentVH.moreOptions.setOnClickListener(optionsListener);
+                //}
+                //else contentVH.postOptions.setVisibility(View.GONE);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");

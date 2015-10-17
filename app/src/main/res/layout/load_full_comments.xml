@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="10dp"
     android:background="#fffc8d"
     android:id="@+id/fullLoad">
@@ -12,5 +12,6 @@
         android:text="You are viewing a single comment&apos;s thread. Tap here to view the rest of the comments."
         android:id="@+id/textView2"
         android:textSize="?attr/font_small"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:textColor="@android:color/black" />
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
+import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
@@ -35,7 +38,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView commentCount;
     public TextView nsfw;
     public TextView selfText;
-    public TextView selfTextPreview;
+    public TextView selfTextCard;
     public ImageView postImage;
     public ImageView commentsIcon;
     public LinearLayout layoutSelfTextPreview;
@@ -111,7 +114,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
                 fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
-                selfTextPreview = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
+                selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
+                break;
+            case cardDetails:
+                fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
+                commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
+                domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
+                fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
+                layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
+                selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
                 break;
         }
     }
@@ -171,13 +182,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             else hide.setImageResource(hideResource);
         }
 
-        if(viewType == PostViewType.listItem || viewType == PostViewType.cards) {
-            if(post.isSelf()) subreddit.setVisibility(View.GONE);
-            else {
-                subreddit.setVisibility(View.VISIBLE);
-                subreddit.setText(post.getSubreddit() + " · ");
-            }
+        // postviewtype must not be details
+        if(post.isSelf()) subreddit.setVisibility(View.GONE);
+        else {
+            subreddit.setVisibility(View.VISIBLE);
+            subreddit.setText(post.getSubreddit() + " · ");
+        }
 
+        if(viewType == PostViewType.listItem || viewType == PostViewType.cards) {
             if(post.isClicked()) {
                 title.setTextColor(clickedColor);
                 if(viewType == PostViewType.listItem) commentCount.setTextColor(clickedColor);
@@ -206,7 +218,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                         layoutSelfTextPreview.setVisibility(View.VISIBLE);
                         String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
                         if(text.length()>200) text = text.substring(0, 200) + " ...";
-                        selfTextPreview.setText(text);
+                        selfTextCard.setText(text);
                     } catch (NullPointerException e) {
                         layoutSelfTextPreview.setVisibility(View.GONE);
                     }
@@ -219,7 +231,36 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     fullUrl.setText(post.getURL());
                 }
                 break;
+            case cardDetails:
+                moreOptions.setImageResource(moreResource);
+                if(post.isSelf()) {
+                    linkButton.setVisibility(View.GONE);
+                    if(post.getSelftextHTML()!=null) {
+                        layoutSelfTextPreview.setVisibility(View.VISIBLE);
+                        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
+                        stringBuilder = ConvertUtils.modifyURLSpan(context, stringBuilder);
+                        selfTextCard.setText(stringBuilder);
+                        selfTextCard.setMovementMethod(MyLinkMovementMethod.getInstance());
+                    }
+                    else layoutSelfTextPreview.setVisibility(View.GONE);
+                }
+                else {
+                    layoutSelfTextPreview.setVisibility(View.GONE);
+                    linkButton.setVisibility(View.VISIBLE);
+                    domain2.setText(post.getDomain());
+                    domain2.setTextColor(MainActivity.linkColor);
+                    fullUrl.setText(post.getURL());
+                }
+                break;
         }
+    }
+
+    public void setCardButtonsListener(PostItemOptionsListener listener) {
+        upvote.setOnClickListener(listener);
+        downvote.setOnClickListener(listener);
+        save.setOnClickListener(listener);
+        hide.setOnClickListener(listener);
+        moreOptions.setOnClickListener(listener);
     }
 
     public void showPostOptions(PostItemOptionsListener listener) {

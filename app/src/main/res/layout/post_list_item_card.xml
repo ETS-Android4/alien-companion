@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="10dp"
         android:id="@+id/layout_postCommentsButton"
         android:background="?attr/themeBackgroundColor">
 
@@ -192,14 +191,15 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp">
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -251,42 +251,44 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|right"
-                android:paddingRight="10dp">
+                android:gravity="center_vertical|right">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_upvote"
-                    android:src="@mipmap/ic_action_upvote_grey" />
+                    android:src="@mipmap/ic_action_upvote_grey"
+                    android:paddingTop="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_downvote"
                     android:src="@mipmap/ic_action_downvote_grey"
-                    android:layout_marginLeft="8dp" />
+                    android:padding="10dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_save"
                     android:src="@mipmap/ic_action_save_grey"
-                    android:layout_marginLeft="8dp" />
+                    android:padding="10dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_hide"
                     android:src="@mipmap/ic_action_hide_grey"
-                    android:layout_marginLeft="8dp" />
+                    android:padding="10dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_more"
                     android:src="@mipmap/ic_action_more_vertical_grey"
-                    android:layout_marginLeft="8dp" />
+                    android:padding="10dp" />
             </LinearLayout>
         </LinearLayout>
 

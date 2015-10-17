@@ -48,6 +48,17 @@ public class PostItemOptionsListener implements View.OnClickListener {
         this.recyclerAdapter = adapter;
     }
 
+    private void viewUser() {
+        Intent intent = new Intent(context, UserActivity.class);
+        intent.putExtra("username", post.getAuthor());
+        context.startActivity(intent);
+    }
+
+    private void openInBrowser() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getURL()));
+        context.startActivity(intent);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -134,13 +145,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 else ToastUtils.displayShortToast(context, "Must be logged in to hide");
                 break;
             case R.id.btn_view_user:
-                Intent intent = new Intent(context, UserActivity.class);
-                intent.putExtra("username", post.getAuthor());
-                context.startActivity(intent);
+                viewUser();
                 break;
             case R.id.btn_open_browser:
-                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getURL()));
-                context.startActivity(intent);
+                openInBrowser();
                 break;
             case R.id.btn_more:
                 showMoreOptionsPopup(v);
@@ -151,15 +159,17 @@ public class PostItemOptionsListener implements View.OnClickListener {
     private void showMoreOptionsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(context, v);
         //inflate the right menu layout
+        int resource;
         String currentUser = (MainActivity.currentUser!=null) ? MainActivity.currentUser.getUsername() : "";
         if(post.getAuthor().equals(currentUser)) {
-            if(post.isSelf()) popupMenu.inflate((R.menu.menu_self_post_more_options_account));
-            else popupMenu.inflate(R.menu.menu_post_more_options_account);
+            if(post.isSelf()) resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options_account : R.menu.menu_self_post_more_options_account;
+            else resource = (MainActivity.currentPostListView == R.layout.post_list_item_card) ? R.menu.menu_post_card_more_options_account : R.menu.menu_post_more_options_account;
         }
         else {
-            if(post.isSelf()) popupMenu.inflate(R.menu.menu_self_post_more_options);
-            else popupMenu.inflate(R.menu.menu_post_more_options);
+            if(post.isSelf()) resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
+            else resource = (MainActivity.currentPostListView == R.layout.post_list_item_card) ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
         }
+        popupMenu.inflate(resource);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -190,6 +200,9 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         clip = ClipData.newPlainText("Post permalink", postLink);
                         clipboard.setPrimaryClip(clip);
                         return true;
+                    case R.id.action_open_browser:
+                        openInBrowser();
+                        return true;
                     case R.id.action_share:
                         postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
                         Intent sendIntent = new Intent();
@@ -197,6 +210,9 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         sendIntent.putExtra(Intent.EXTRA_TEXT, postLink);
                         sendIntent.setType("text/plain");
                         context.startActivity(Intent.createChooser(sendIntent, "Share post to.."));
+                        return true;
+                    case R.id.action_view_user:
+                        viewUser();
                         return true;
                     case R.id.action_view_subreddit:
                         Intent intent = new Intent(context, SubredditActivity.class);

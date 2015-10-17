@@ -58,6 +58,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_more"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_more"
+        android:src="@mipmap/ic_action_more_vertical_white"
         android:padding="5dp" />
 </LinearLayout>

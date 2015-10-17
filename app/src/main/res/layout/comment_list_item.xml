@@ -35,7 +35,7 @@
                     android:text="[+] "
                     android:id="@+id/txtView_commentHidden"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextColor" />
+                    android:textColor="?attr/themeTextHintColor" />
 
                 <TextView
                     android:id="@+id/author_textview"
@@ -60,7 +60,7 @@
                     android:text="(score)"
                     android:id="@+id/txtView_score"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextColor" />
+                    android:textColor="?attr/themeTextHintColor" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -68,7 +68,7 @@
                     android:text=" · (age) "
                     android:id="@+id/txtView_age"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextColor" />
+                    android:textColor="?attr/themeTextHintColor" />
 
                 <TextView
                     android:id="@+id/hidden_comments_count_textview"
@@ -92,7 +92,7 @@
                 android:layout_below="@id/author_textview"
                 android:text="comment"
                 android:paddingBottom="16dp"
-                android:textSize="?attr/font_small"
+                android:textSize="?attr/font_comments"
                 android:textColor="?attr/themeTextColor" />
 
         </LinearLayout>
