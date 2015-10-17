@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/action_copy_link" android:title="Copy link"
+    <!--<item android:id="@+id/action_copy_link" android:title="Copy link"
     android:orderInCategory="95" />
     <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
-        android:orderInCategory="96" />
+        android:orderInCategory="96" />-->
+    <item android:id="@+id/action_copy_to_clipboard" android:title="Copy to clipboard"
+        android:orderInCategory="12" />
     <item android:id="@+id/action_share" android:title="Share"
         android:orderInCategory="97" />
     <item android:id="@+id/action_view_subreddit" android:title="View subreddit"

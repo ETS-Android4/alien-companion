@@ -2,6 +2,7 @@ package com.dyejeekis.aliencompanion.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,6 +43,14 @@ public class GeneralUtils {
         else {
             return false;
         }
+    }
+
+    public static void shareUrl(Context context, String label, String url) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(sendIntent, label));
     }
 
     public static int getPortraitWidth(Activity activity) {
