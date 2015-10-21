@@ -167,20 +167,24 @@ public class PostItemOptionsListener implements View.OnClickListener {
         if(post.getAuthor().equals(currentUser)) {
             if(post.isSelf()) {
                 labelNSFWindex = 2;
-                if(MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) resource = R.menu.menu_self_post_card_more_options_account;
+                if(MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card
+                        || recyclerAdapter instanceof PostAdapter) resource = R.menu.menu_self_post_card_more_options_account;
                 else resource = R.menu.menu_self_post_more_options_account;
             //resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options_account : R.menu.menu_self_post_more_options_account;
             }
             else {
                 labelNSFWindex = 1;
-                if(MainActivity.currentPostListView == R.layout.post_list_item_card) resource = R.menu.menu_post_card_more_options_account;
+                if(MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card)
+                    resource = R.menu.menu_post_card_more_options_account;
                 else resource = R.menu.menu_post_more_options_account;
             //resource = (MainActivity.currentPostListView == R.layout.post_list_item_card) ? R.menu.menu_post_card_more_options_account : R.menu.menu_post_more_options_account;
             }
         }
         else {
-            if(post.isSelf()) resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
-            else resource = (MainActivity.currentPostListView == R.layout.post_list_item_card) ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
+            if(post.isSelf()) resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card
+                    || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
+            else resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card || recyclerAdapter instanceof PostAdapter)
+                    ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
         }
         popupMenu.inflate(resource);
         if(labelNSFWindex != -1 && post.isNSFW()) popupMenu.getMenu().getItem(labelNSFWindex).setTitle("Unmark NSFW");

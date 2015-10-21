@@ -1,8 +1,13 @@
 package com.dyejeekis.aliencompanion.api.entity;
 
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
+import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import static com.dyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToInteger;
@@ -38,6 +43,18 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     }
 
+    public String getMainText() {
+        return bodyHTML;
+    }
+
+    public SpannableStringBuilder getPreparedText() {
+        return bodyPrepared;
+    }
+
+    public void storePreparedText(SpannableStringBuilder stringBuilder) {
+        bodyPrepared = stringBuilder;
+    }
+
     private String author;			// Username of the author
     private String parentId;		// Parent identifier
     private String subreddit;		// Subreddit name
@@ -57,6 +74,9 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
     private Integer score;        	// Karma score
     private Integer upvotes;        // Number of upvotes that this body received
     private Integer downvotes;      // Number of downvotes that this body received
+
+    public SpannableStringBuilder bodyPrepared;
+    public String agePrepared;
 
     private boolean mIsGroup;
     private int mGroupSize;
@@ -101,6 +121,9 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
             linkTitle = StringEscapeUtils.unescapeHtml(linkTitle);
             bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+
+            //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
+            agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
             setIndentation(0);
             mChildren = new LinkedList<>();

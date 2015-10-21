@@ -1,5 +1,7 @@
 package com.dyejeekis.aliencompanion.api.entity;
 
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 
 import static com.dyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
@@ -13,6 +15,8 @@ import org.json.simple.JSONObject;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
+import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
@@ -36,6 +40,19 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 		return RedditItemListAdapter.VIEW_TYPE_POST;
 	}
 
+	public String getMainText() {
+		return selftextHTML;
+	}
+
+	public SpannableStringBuilder getPreparedText() {
+		return selfTextPrepared;
+	}
+
+	public void storePreparedText(SpannableStringBuilder stringBuilder) {
+		//selfTextPrepared = stringBuilder;
+		//if(selfTextPrepared.toString().length()>200) selfTextPreparedPreview = selfTextPrepared.toString().substring(0, 200) + " ...";
+	}
+
     //private HttpClient restClient;
 
     /** This is the user that will vote on a submission. */
@@ -54,6 +71,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     private String domain;
     private String bannedBy;
     private String approvedBy;
+
+	public SpannableStringBuilder selfTextPrepared;
+	public String selfTextPreparedPreview;
+	public String agePrepared;
     
     private Long gilded;
     private Long commentCount;
@@ -194,6 +215,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 			title = StringEscapeUtils.unescapeHtml(title);
 			selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
+
+			if(selftextHTML!=null) {
+				SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(selftextHTML, null, new MyHtmlTagHandler()));
+				String text = stringBuilder.toString();
+				if(text.length()>200) selfTextPreparedPreview = text.substring(0,200) + " ...";
+				else selfTextPreparedPreview = text;
+			}
+			agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
 			//Log.e("self text html", selftextHTML);
 

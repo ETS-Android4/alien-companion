@@ -11,6 +11,7 @@ import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
@@ -111,6 +112,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
                 ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
             }
+            //ConvertUtils.preparePostsText(context, submissions);
             return submissions;
         } catch (RetrievalFailedException | RedditError e) {
             exception = e;

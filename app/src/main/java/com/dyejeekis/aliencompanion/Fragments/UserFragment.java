@@ -19,12 +19,17 @@ import android.widget.ProgressBar;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
+import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadUserContentTask;
+import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,16 +39,17 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public ProgressBar progressBar;
     public RecyclerView contentView;
     private LinearLayoutManager layoutManager;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
     public RedditItemListAdapter userAdapter;
     private AppCompatActivity activity;
     public String username;
     public UserOverviewSort userOverviewSort;
-    public UserSubmissionsCategory userContent;
+    public UserSubmissionsCategory userContent, tempCategory;
     public boolean loadMore;
     public boolean hasMore = true;
+    public LoadType currentLoadType;
 
-    public static boolean currentlyLoading = false;
+    //public static boolean currentlyLoading = false;
 
     public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category, boolean hasMore) {
         UserFragment newInstance = new UserFragment();
@@ -137,18 +143,42 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
 
-        if(!currentlyLoading) {
+        if(currentLoadType == null) {
             if (userAdapter == null) {
-                currentlyLoading = true;
+                //currentlyLoading = true;
+                currentLoadType = LoadType.init;
                 userContent = UserSubmissionsCategory.OVERVIEW;
                 userOverviewSort = UserOverviewSort.NEW;
-                LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init, userContent);
+                LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init);
                 task.execute();
             } else {
                 setActionBarSubtitle();
                 progressBar.setVisibility(View.GONE);
                 contentView.setAdapter(userAdapter);
             }
+        }
+        else switch (currentLoadType) {
+            case init:
+                //Log.d("geo test", "currentLoadType is init");
+                contentView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                break;
+            case refresh:
+                //Log.d("geo test", "currentLoadType is refersh");
+                progressBar.setVisibility(View.GONE);
+                contentView.setAdapter(userAdapter);
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override public void run() {
+                        swipeRefreshLayout.setRefreshing(true);
+                    }
+                });
+                break;
+            case extend:
+                //Log.d("geo test", "currentLoadType is extend");
+                progressBar.setVisibility(View.GONE);
+                contentView.setAdapter(userAdapter);
+                userAdapter.setLoadingMoreItems(true);
+                break;
         }
         //else
         //    Log.d("geo test", "currently loading");
@@ -157,15 +187,42 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(false);
+        //swipeRefreshLayout.setRefreshing(false);
         refreshUser();
     }
 
     public void refreshUser() {
+        currentLoadType = LoadType.refresh;
+        swipeRefreshLayout.setRefreshing(true);
+        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh);
+        task.execute();
+    }
+
+    public void refreshUser(UserSubmissionsCategory category, UserOverviewSort sort) {
+        currentLoadType = LoadType.refresh;
+        swipeRefreshLayout.setRefreshing(true);
+        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh, category, sort);
+        task.execute();
+    }
+
+    public void changeUser(String username) {
+        currentLoadType = LoadType.init;
+        this.username = username;
+        this.userContent = UserSubmissionsCategory.OVERVIEW;
+        this.userOverviewSort = UserOverviewSort.NEW;
+        setActionBarTitle();
+        setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh, userContent);
+        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init);
         task.execute();
+    }
+
+    public void redrawList() {
+        List<RedditItem> items = userAdapter.redditItems;
+        items.remove(items.size() - 1);
+        userAdapter = new RedditItemListAdapter(activity, items);
+        contentView.setAdapter(userAdapter);
     }
 
     public void setActionBarTitle() {
@@ -204,46 +261,46 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_user_overview:
-                        userContent = UserSubmissionsCategory.OVERVIEW;
+                        tempCategory = UserSubmissionsCategory.OVERVIEW;
                         showSortPopup();
                         return true;
                     case R.id.action_user_comments:
-                        userContent = UserSubmissionsCategory.COMMENTS;
+                        tempCategory = UserSubmissionsCategory.COMMENTS;
                         showSortPopup();
                         return true;
                     case R.id.action_user_submitted:
-                        userContent = UserSubmissionsCategory.SUBMITTED;
+                        tempCategory = UserSubmissionsCategory.SUBMITTED;
                         showSortPopup();
                         return true;
                     case R.id.action_user_gilded:
-                        userOverviewSort = null;
-                        userContent = UserSubmissionsCategory.GILDED;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = null;
+                        //userContent = UserSubmissionsCategory.GILDED;
+                        //setActionBarSubtitle();
+                        refreshUser(UserSubmissionsCategory.GILDED, null);
                         return true;
                     case R.id.action_user_upvoted:
-                        userOverviewSort = null;
-                        userContent = UserSubmissionsCategory.LIKED;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = null;
+                        //userContent = UserSubmissionsCategory.LIKED;
+                        //setActionBarSubtitle();
+                        refreshUser(UserSubmissionsCategory.LIKED, null);
                         return true;
                     case R.id.action_user_downvoted:
-                        userOverviewSort = null;
-                        userContent = UserSubmissionsCategory.DISLIKED;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = null;
+                        //userContent = UserSubmissionsCategory.DISLIKED;
+                        //setActionBarSubtitle();
+                        refreshUser(UserSubmissionsCategory.DISLIKED, null);
                         return true;
                     case R.id.action_user_hidden:
-                        userOverviewSort = null;
-                        userContent = UserSubmissionsCategory.HIDDEN;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = null;
+                        //userContent = UserSubmissionsCategory.HIDDEN;
+                        //setActionBarSubtitle();
+                        refreshUser(UserSubmissionsCategory.HIDDEN, null);
                         return true;
                     case R.id.action_user_saved:
-                        userOverviewSort = null;
-                        userContent = UserSubmissionsCategory.SAVED;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = null;
+                        //userContent = UserSubmissionsCategory.SAVED;
+                        //setActionBarSubtitle();
+                        refreshUser(UserSubmissionsCategory.SAVED, null);
                         return true;
                     default:
                         return false;
@@ -265,24 +322,24 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sort_new:
-                        userOverviewSort = UserOverviewSort.NEW;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = UserOverviewSort.NEW;
+                        //setActionBarSubtitle();
+                        refreshUser(tempCategory, UserOverviewSort.NEW);
                         return true;
                     case R.id.action_sort_hot:
-                        userOverviewSort = UserOverviewSort.HOT;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = UserOverviewSort.HOT;
+                        //setActionBarSubtitle();
+                        refreshUser(tempCategory, UserOverviewSort.HOT);
                         return true;
                     case R.id.action_sort_top:
-                        userOverviewSort = UserOverviewSort.TOP;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = UserOverviewSort.TOP;
+                        //setActionBarSubtitle();
+                        refreshUser(tempCategory, UserOverviewSort.TOP);
                         return true;
                     case R.id.action_sort_controversial:
-                        userOverviewSort = UserOverviewSort.COMMENTS;
-                        setActionBarSubtitle();
-                        refreshUser();
+                        //userOverviewSort = UserOverviewSort.COMMENTS;
+                        //setActionBarSubtitle();
+                        refreshUser(tempCategory, UserOverviewSort.COMMENTS);
                         return true;
                     default:
                         return false;

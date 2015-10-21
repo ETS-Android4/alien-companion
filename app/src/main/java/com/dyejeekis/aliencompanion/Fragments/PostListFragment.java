@@ -233,8 +233,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             case R.layout.post_list_item_reversed:
                 index = 1;
                 break;
-            case R.layout.post_list_item_card:
+            case R.layout.post_list_item_small_card:
                 index = 2;
+                break;
+            case R.layout.post_list_item_card:
+                index = 3;
                 break;
             default:
                 index = 0;
@@ -251,6 +254,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         break;
                     case R.id.action_list_reversed:
                         resource = R.layout.post_list_item_reversed;
+                        break;
+                    case R.id.action_small_cards:
+                        resource = R.layout.post_list_item_small_card;
                         break;
                     case R.id.action_cards:
                         resource = R.layout.post_list_item_card;

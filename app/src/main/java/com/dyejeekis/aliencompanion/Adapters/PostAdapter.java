@@ -98,41 +98,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return viewHolder;
     }
 
-    //private SpannableStringBuilder modifyURLSpan(CharSequence sequence) {
-    //    SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
-//
-    //    // Get an array of URLSpan from SpannableStringBuilder object
-    //    URLSpan[] urlSpans = strBuilder.getSpans(0, strBuilder.length(), URLSpan.class);
-//
-    //    // Add onClick listener for each of URLSpan object
-    //    for (final URLSpan span : urlSpans) {
-    //        int start = strBuilder.getSpanStart(span);
-    //        int end = strBuilder.getSpanEnd(span);
-    //        // The original URLSpan needs to be removed to block the behavior of browser opening
-    //        strBuilder.removeSpan(span);
-//
-    //        strBuilder.setSpan(new MyClickableSpan()
-    //        {
-    //            @Override
-    //            public void onClick(View widget) {
-    //                LinkHandler linkHandler = new LinkHandler(activity, span.getURL());
-    //                linkHandler.handleIt();
-    //            }
-////
-    //            @Override
-    //            public boolean onLongClick(View v) {
-    //                Bundle args = new Bundle();
-    //                args.putString("url", span.getURL());
-    //                UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
-    //                dialogFragment.setArguments(args);
-    //                dialogFragment.show(activity.getFragmentManager(), "dialog");
-    //                return true;
-    //            }
-    //        }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-    //    }
-    //    return strBuilder;
-    //}
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
@@ -144,34 +109,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 CommentViewHolder cvh = (CommentViewHolder) viewHolder;
                 final Comment comment = (Comment) getItemAt(position);
 
-                //View.OnClickListener listener = new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View v) {
-                //        selectedPosition = -1;
-                //        toggleGroup(position);
-                //    }
-                //};
-                //View.OnLongClickListener longListener = new View.OnLongClickListener() {
-                //    @Override
-                //    public boolean onLongClick(View v) {
-                //        if(!comment.isGroup()) {
-                //            int previousPosition = selectedPosition;
-                //            if (position == selectedPosition) selectedPosition = -1;
-                //            else selectedPosition = position;
-                //            //notifyDataSetChanged();
-                //            notifyItemChanged(previousPosition);
-                //            notifyItemChanged(selectedPosition);
-                //            return true;
-                //        }
-                //        else return false;
-                //    }
-                //};
-//
-                //cvh.commentLayout.setOnClickListener(listener);
-                //cvh.commentLayout.setOnLongClickListener(longListener);
-
                 cvh.score.setText(Long.toString(comment.getScore()));
-                String ageString = " pts · " + ConvertUtils.getSubmissionAge(comment.getCreatedUTC());
+                String ageString = " pts · " + comment.agePrepared;
                 if(comment.getEdited()) ageString += "*";
                 cvh.age.setText(ageString);
 
@@ -194,9 +133,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 //Comment textview
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                         Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-                //strBuilder = modifyURLSpan(strBuilder);
                 strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
                 cvh.commentTextView.setText(strBuilder);
+                //cvh.commentTextView.setText(comment.bodyPrepared);
                 cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
 
                 if (comment.getIndentation() == 0) {

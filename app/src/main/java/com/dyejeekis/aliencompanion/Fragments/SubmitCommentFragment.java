@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
@@ -62,7 +63,8 @@ public class SubmitCommentFragment extends Fragment {
             }
         }
         else {
-            originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML())));
+            originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null, new MyHtmlTagHandler())));
+            //originalCommentTextView.setText(originalComment.bodyPrepared);
         }
 
         return view;

@@ -42,7 +42,7 @@ public class PostItemListener implements View.OnClickListener {
     public void onClick(View v) {
         if(!post.isClicked() && position != -1) {
             post.setClicked(true);
-            adapter.notifyItemChanged(position); //TODO: write clicked post name to a file
+            adapter.notifyItemChanged(position); //TODO: write clicked post name to a file (maybe)
         }
         if(v.getId() == R.id.layout_postCommentsButton || post.isSelf()) {
             if(MainActivity.dualPaneActive) {

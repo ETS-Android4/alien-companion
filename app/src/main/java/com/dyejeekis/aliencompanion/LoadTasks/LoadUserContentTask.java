@@ -8,6 +8,8 @@ import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Fragments.UserFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.dyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
@@ -38,48 +40,55 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
     private Exception mException;
     private LoadType mLoadType;
-    private UserSubmissionsCategory userContent;
+    //private UserSubmissionsCategory userContent;
     private Activity activity;
     private UserFragment uf;
     private HttpClient httpClient;
     private RedditItemListAdapter adapter;
+    private UserSubmissionsCategory userCategory;
+    private UserOverviewSort userSort;
+    private boolean changedSort;
 
-    public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory userContent) {
+    public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType) {
         this.activity = activity;
         this.uf = userFragment;
-        this.userContent = userContent;
         mLoadType = loadType;
+        this.userCategory = uf.userContent;
+        this.userSort = uf.userOverviewSort;
         httpClient = new RedditHttpClient();
-        //adapter = new RedditItemListAdapter(activity);
+        changedSort = false;
+    }
+
+    public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory category, UserOverviewSort sort) {
+        this.activity = activity;
+        this.uf = userFragment;
+        mLoadType = loadType;
+        this.userCategory = category;
+        this.userSort = sort;
+        httpClient = new RedditHttpClient();
+        changedSort = true;
     }
 
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
         try {
             List<RedditItem> userContent = null;
-            switch (this.userContent) {
+            switch (this.userCategory) {
                 case OVERVIEW: case GILDED: case SAVED:
                     UserMixed userMixed = new UserMixed(httpClient, MainActivity.currentUser);
                     if(mLoadType == LoadType.extend) {
                         RedditItem lastItem = uf.userAdapter.getLastItem();
-                        userContent = userMixed.ofUser(uf.username, this.userContent, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastItem, null, false);
-
-                        //uf.userAdapter.addAll(userContent);
+                        userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastItem, null, false);
                         adapter = uf.userAdapter;
-                        //adapter.addAll(userContent); //NOTE TO SELF: dont call notifydatasetchanged() on background thread
                     }
                     else {
                         UserDetails userDetails = new UserDetails(httpClient, MainActivity.currentUser);
                         UserInfo userInfo = userDetails.ofUser(uf.username);
                         userInfo.retrieveTrophies(activity, httpClient);
 
-                        userContent = userMixed.ofUser(uf.username, this.userContent, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
-
-                        //uf.userAdapter = new RedditItemListAdapter(activity);
-                        //if(this.userContent == UserSubmissionsCategory.OVERVIEW) uf.userAdapter.add(userInfo);
-                        //uf.userAdapter.addAll(userContent);
+                        userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
                         adapter = new RedditItemListAdapter(activity);
-                        if(this.userContent == UserSubmissionsCategory.OVERVIEW) adapter.add(userInfo);
+                        if(this.userCategory == UserSubmissionsCategory.OVERVIEW) adapter.add(userInfo);
                         adapter.addAll(userContent);
                     }
                     ImageLoader.preloadUserImages(userContent, activity);
@@ -88,17 +97,11 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     Comments comments = new Comments(httpClient, MainActivity.currentUser);
                     if(mLoadType == LoadType.extend) {
                         Comment lastComment = (Comment) uf.userAdapter.getLastItem();
-                        userContent = comments.ofUser(uf.username, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
-
-                        //uf.userAdapter.addAll(userContent);
+                        userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
                         adapter = uf.userAdapter;
-                        //adapter.addAll(userContent);
                     }
                     else {
-                        userContent = comments.ofUser(uf.username, uf.userOverviewSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
-
-                        //uf.userAdapter = new RedditItemListAdapter(activity);
-                        //uf.userAdapter.addAll(userContent);
+                        userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
                         adapter = new RedditItemListAdapter(activity);
                         adapter.addAll(userContent);
                     }
@@ -107,23 +110,18 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     Submissions submissions = new Submissions(httpClient, MainActivity.currentUser);
                     if(mLoadType == LoadType.extend) {
                         Submission lastPost = (Submission) uf.userAdapter.getLastItem();
-                        userContent = submissions.ofUser(uf.username, this.userContent, uf.userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, false);
-
-                        //uf.userAdapter.addAll(userContent);
+                        userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, false);
                         adapter = uf.userAdapter;
-                        //adapter.addAll(userContent);
                     }
                     else {
-                        userContent = submissions.ofUser(uf.username, this.userContent, uf.userOverviewSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
-
-                        //uf.userAdapter = new RedditItemListAdapter(activity);
-                        //uf.userAdapter.addAll(userContent);
+                        userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
                         adapter = new RedditItemListAdapter(activity);
                         adapter.addAll(userContent);
                     }
                     ImageLoader.preloadUserImages(userContent, activity);
                     break;
             }
+            //ConvertUtils.preparePostsText(activity, userContent);
             return userContent;
         } catch (RetrievalFailedException | RedditError | NullPointerException | ClassCastException e) {
             mException = e;
@@ -134,47 +132,51 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
     @Override
     protected void onPostExecute(List<RedditItem> things) {
-        UserFragment.currentlyLoading = false;
         try {
             UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
             uf = userFragment;
+            uf.currentLoadType = null;
             uf.progressBar.setVisibility(View.GONE);
+            uf.swipeRefreshLayout.setRefreshing(false);
+            uf.contentView.setVisibility(View.VISIBLE);
 
             if (mException != null) {
                 ToastUtils.userLoadError(activity);
                 if (mLoadType == LoadType.extend) {
                     uf.userAdapter.setLoadingMoreItems(false);
                 }
-                else {
+                else if(mLoadType == LoadType.init){
                     uf.userAdapter = new RedditItemListAdapter(activity);
                     uf.contentView.setAdapter(uf.userAdapter);
                 }
             } else {
                 if(things.size()>0) uf.userAdapter = adapter;
-                //else uf.userAdapter = new RedditItemListAdapter(activity);
-                uf.hasMore = things.size() == RedditConstants.DEFAULT_LIMIT;
+                else ToastUtils.displayShortToast(activity, "No posts found");
+                uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT;
                 switch (mLoadType) {
                     case init:
-                        //uf.progressBar.setVisibility(View.GONE);
                         uf.contentView.setAdapter(uf.userAdapter);
-                        if (things.size() < RedditConstants.DEFAULT_LIMIT) uf.hasMore = false;
+                        //if(things.size() == 0) ToastUtils.displayShortToast(activity, "User not found");
                         break;
                     case refresh:
                         if (things.size() != 0) {
-                            //uf.progressBar.setVisibility(View.GONE);
+                            if(changedSort) {
+                                uf.userContent = userCategory;
+                                uf.userOverviewSort = userSort;
+                                uf.setActionBarSubtitle();
+                            }
                             uf.contentView.setAdapter(uf.userAdapter);
-                            uf.contentView.setVisibility(View.VISIBLE);
                         }
-                        if (things.size() == RedditConstants.DEFAULT_LIMIT) uf.hasMore = true;
                         break;
                     case extend:
                         uf.userAdapter.setLoadingMoreItems(false);
                         uf.userAdapter.addAll(things);
-                        //if (!(things.size() == RedditConstants.DEFAULT_LIMIT)) uf.hasMore = false;
                         if (MainActivity.endlessPosts) uf.loadMore = true;
                         break;
                 }
             }
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 }

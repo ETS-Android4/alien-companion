@@ -27,7 +27,7 @@ public class CommentLinkListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        String postInfo[] = {comment.getSubreddit(), comment.getLinkId().substring(3), comment.getIdentifier(), null};
+        String postInfo[] = {comment.getSubreddit(), comment.getLinkId().substring(3), comment.getIdentifier(), "5"};
         if(MainActivity.dualPaneActive) {
             PostFragment fragment = PostFragment.newInstance(postInfo);
             ((UserActivity) context).setupPostFragment(fragment);

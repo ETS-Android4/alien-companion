@@ -1,5 +1,9 @@
 package com.dyejeekis.aliencompanion.api.retrieval;
 
+import android.content.Context;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+
 import static com.dyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
 
 import java.util.ArrayList;
@@ -10,6 +14,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.dyejeekis.aliencompanion.Models.RedditItem;
+import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
 import com.dyejeekis.aliencompanion.api.entity.Kind;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
@@ -168,7 +174,7 @@ public class Comments implements ActorDriven {
 		List<Comment> comments = new LinkedList<>();
 
 		// Send request to reddit server via REST client
-		Object response = httpClient.get(url, cookie).getResponseObject(); //TODO: set modhash
+		Object response = httpClient.get(url, cookie).getResponseObject();
 
 		if (response instanceof JSONArray) {
 
@@ -412,16 +418,23 @@ public class Comments implements ActorDriven {
 	//	}
 	//}
 
-	public static void indentCommentTree(List<Comment> comments) {
+	public static void indentCommentTree(Context context, List<Comment> comments) {
 		for(Comment c : comments) {
+			//prepareCommentBody(context, c);
 			List<Comment> replies = c.getReplies();
 			if(replies.size() != 0) {
 				for(Comment r : replies) {
 					r.setIndentation(c.getIndentation()+1);
-					indentCommentTree(replies);
+					//prepareCommentBody(context, r);
+					indentCommentTree(context, replies);
 				}
 			}
 		}
+	}
+
+	public static void prepareCommentBody(Context context, Comment comment) {
+		comment.bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
+		comment.bodyPrepared = ConvertUtils.modifyURLSpan(context, comment.bodyPrepared);
 	}
 	
 	/**

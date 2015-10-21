@@ -1,5 +1,7 @@
 package com.dyejeekis.aliencompanion.Models;
 
+import android.text.SpannableStringBuilder;
+
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 
 /**
@@ -22,4 +24,14 @@ public class ShowMore implements RedditItem {
     public void setThumbnailObject(Thumbnail thumbnailObject) {
 
     }
+
+    public String getMainText() {
+        return "SHOW MORE";
+    }
+
+    public SpannableStringBuilder getPreparedText() {
+        return null;
+    }
+
+    public void storePreparedText(SpannableStringBuilder stringBuilder) {}
 }

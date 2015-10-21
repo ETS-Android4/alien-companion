@@ -10,6 +10,7 @@ import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SearchSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
@@ -78,6 +79,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 adapter = new RedditItemListAdapter(context, submissions);
             }
             ImageLoader.preloadThumbnails(submissions, context);
+            //ConvertUtils.preparePostsText(context, submissions);
             return submissions;
         } catch (RetrievalFailedException | RedditError e) {
             exception = e;

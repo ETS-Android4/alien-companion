@@ -156,6 +156,9 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                         .inflate(resource, parent, false);
                 PostViewType type;
                 switch (resource) {
+                    case R.layout.post_list_item_small_card:
+                        type = PostViewType.smallCards;
+                        break;
                     case R.layout.post_list_item_card:
                         type = PostViewType.cards;
                         break;
@@ -227,7 +230,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                         if(selectedPosition == position) postViewHolder.showPostOptions(optionsListener);
                         else postViewHolder.hidePostOptions();
                         break;
-                    case cards: case cardDetails:
+                    case cards: case cardDetails: case smallCards:
                         postViewHolder.setCardButtonsListener(optionsListener);
                         break;
                 }
@@ -307,12 +310,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
-            SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
-            strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
-            body.setText(strBuilder);
+            //SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
+            //strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+            body.setText(message.bodyPrepared);
             body.setMovementMethod(MyLinkMovementMethod.getInstance());
             //body.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML)));
-            age.setText(ConvertUtils.getSubmissionAge(message.createdUTC));
+            age.setText(message.agePrepared);
 
             if(message.author.equals(MainActivity.currentUser.getUsername()) && !message.destination.equals(MainActivity.currentUser.getUsername())) {
                 dest.setText("to ");
@@ -366,10 +369,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
             strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
             commentBody.setText(strBuilder);
+            //commentBody.setText(ConvertUtils.modifyURLSpan(context, comment.bodyPrepared));
             commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             //commentBody.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
             commentScore.setText(Long.toString(comment.getScore()));
-            commentAge.setText(ConvertUtils.getSubmissionAge(comment.getCreatedUTC()));
+            commentAge.setText(comment.agePrepared);
 
             layoutComment.setOnClickListener(new CommentLinkListener(context, comment));
 

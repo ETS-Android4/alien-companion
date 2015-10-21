@@ -74,7 +74,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                     ImageLoader.preloadThumbnail(postFragment.post, context);
                 }
             }
-            Comments.indentCommentTree(comments);
+            Comments.indentCommentTree(context, comments);
 
             return comments;
         } catch (RetrievalFailedException | RedditError | NullPointerException e) {

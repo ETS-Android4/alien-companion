@@ -21,12 +21,15 @@ import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadMessagesTask;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
+import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.dyejeekis.aliencompanion.api.retrieval.params.MessageCategory;
 import com.dyejeekis.aliencompanion.api.retrieval.params.MessageCategorySort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.enums.LoadType;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,12 +42,13 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private LinearLayoutManager layoutManager;
     public SwipeRefreshLayout swipeRefreshLayout;
     public AppCompatActivity activity;
-    public MessageCategory category;
+    public MessageCategory category, tempCategory;
     public MessageCategorySort sort;
     public boolean loadMore;
     public boolean hasMore;
+    public LoadType currentLoadType;
 
-    public static boolean currentlyLoading = false;
+    //public static boolean currentlyLoading = false;
 
     public static MessageFragment newInstance(RedditItemListAdapter adapter, MessageCategory category, MessageCategorySort sort, boolean hasMore) {
         MessageFragment newInstance = new MessageFragment();
@@ -110,9 +114,10 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         });
 
-        if(!currentlyLoading) {
+        if(currentLoadType == null) {
             if (adapter == null) {
-                currentlyLoading = true;
+                //currentlyLoading = true;
+                currentLoadType = LoadType.init;
                 category = MessageCategory.INBOX;
                 sort = MessageCategorySort.ALL;
                 LoadMessagesTask task = new LoadMessagesTask(activity, this, LoadType.init);
@@ -166,15 +171,28 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(false);
         refreshList();
     }
 
     public void refreshList() {
-        contentView.setVisibility(View.GONE);
-        mainProgressBar.setVisibility(View.VISIBLE);
+        currentLoadType = LoadType.refresh;
+        swipeRefreshLayout.setRefreshing(true);
         LoadMessagesTask task = new LoadMessagesTask(activity, this, LoadType.refresh);
         task.execute();
+    }
+
+    public void refreshList(MessageCategory category, MessageCategorySort sort) {
+        currentLoadType = LoadType.refresh;
+        swipeRefreshLayout.setRefreshing(true);
+        LoadMessagesTask task = new LoadMessagesTask(activity, this, LoadType.refresh, category, sort);
+        task.execute();
+    }
+
+    public void redrawList() {
+        List<RedditItem> items = adapter.redditItems;
+        items.remove(items.size()-1);
+        adapter = new RedditItemListAdapter(activity, items);
+        contentView.setAdapter(adapter);
     }
 
     public void showCategoryPopup(View v) {
@@ -186,13 +204,10 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 switch (item.getItemId()) {
                     case R.id.action_message_inbox:
                         showSortPopup(activity.findViewById(R.id.action_sort));
-                        category = MessageCategory.INBOX;
+                        tempCategory = MessageCategory.INBOX;
                         return true;
                     case R.id.action__message_sent:
-                        category = MessageCategory.SENT;
-                        sort = null;
-                        setActionBarSubtitle();
-                        refreshList();
+                        refreshList(MessageCategory.SENT, null);
                         return true;
                     default:
                         return false;
@@ -210,14 +225,14 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_message_all:
-                        sort = MessageCategorySort.ALL;
-                        setActionBarSubtitle();
-                        refreshList();
+                        //sort = MessageCategorySort.ALL;
+                        //setActionBarSubtitle();
+                        refreshList(tempCategory, MessageCategorySort.ALL);
                         return true;
                     case R.id.action_message_unread:
-                        sort = MessageCategorySort.UNREAD;
-                        setActionBarSubtitle();
-                        refreshList();
+                        //sort = MessageCategorySort.UNREAD;
+                        //setActionBarSubtitle();
+                        refreshList(tempCategory, MessageCategorySort.UNREAD);
                         return true;
                     //case R.id.action_message_messages:
                     //    sort = MessageCategorySort.MESSAGES;
@@ -225,19 +240,19 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     //    refreshList();
                     //    return true;
                     case R.id.action_message_comment_replies:
-                        sort = MessageCategorySort.COMMENT_REPLIES;
-                        setActionBarSubtitle();
-                        refreshList();
+                        //sort = MessageCategorySort.COMMENT_REPLIES;
+                        //setActionBarSubtitle();
+                        refreshList(tempCategory, MessageCategorySort.COMMENT_REPLIES);
                         return true;
                     case R.id.action_message_post_replies:
-                        sort = MessageCategorySort.POST_REPLIES;
-                        setActionBarSubtitle();
-                        refreshList();
+                        //sort = MessageCategorySort.POST_REPLIES;
+                        //setActionBarSubtitle();
+                        refreshList(tempCategory, MessageCategorySort.POST_REPLIES);
                         return true;
                     case R.id.action_message_mentions:
-                        sort = MessageCategorySort.USERNAME_MENTIONS;
-                        setActionBarSubtitle();
-                        refreshList();
+                        //sort = MessageCategorySort.USERNAME_MENTIONS;
+                        //setActionBarSubtitle();
+                        refreshList(tempCategory, MessageCategorySort.USERNAME_MENTIONS);
                         return true;
                     default:
                         return false;

@@ -123,5 +123,6 @@
     <string name="list_default">List</string>
     <string name="list_reversed">List (reversed)</string>
     <string name="cards">Cards</string>
+    <string name="small_cards">Small cards</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.dyejeekis.aliencompanion.api.entity;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
@@ -31,6 +32,16 @@ public class UserInfo implements RedditItem {
     public void setThumbnailObject(Thumbnail thumbnailObject) {
 
     }
+
+    public String getMainText() {
+        return "";
+    }
+
+    public SpannableStringBuilder getPreparedText() {
+        return null;
+    }
+
+    public void storePreparedText(SpannableStringBuilder stringBuilder) {}
 
     // User identifier
     private String id;

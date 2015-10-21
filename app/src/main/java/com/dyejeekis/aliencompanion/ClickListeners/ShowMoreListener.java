@@ -51,8 +51,9 @@ public class ShowMoreListener implements View.OnClickListener {
                 break;
             case user:
                 UserFragment userFragment = (UserFragment) fragment;
+                userFragment.currentLoadType = LoadType.extend;
                 userFragment.userAdapter.setLoadingMoreItems(true);
-                LoadUserContentTask userTask = new LoadUserContentTask((Activity) context, userFragment, LoadType.extend, userFragment.userContent);
+                LoadUserContentTask userTask = new LoadUserContentTask((Activity) context, userFragment, LoadType.extend);
                 userTask.execute();
                 break;
             case search:
@@ -64,6 +65,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 break;
             case message:
                 MessageFragment messageFragment = (MessageFragment) fragment;
+                messageFragment.currentLoadType = LoadType.extend;
                 messageFragment.adapter.setLoadingMoreItems(true);
                 LoadMessagesTask messagesTask = new LoadMessagesTask(context, messageFragment, LoadType.extend);
                 messagesTask.execute();
