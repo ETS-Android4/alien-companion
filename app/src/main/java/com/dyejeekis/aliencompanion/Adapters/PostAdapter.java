@@ -182,11 +182,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 if(MainActivity.currentUser != null) {
                     //check user vote
                     if (comment.getLikes().equals("true")) {
-                        cvh.score.setTextColor(Color.parseColor("#FF6600"));
+                        cvh.score.setTextColor(CommentViewHolder.upvoteColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     } else if (comment.getLikes().equals("false")) {
-                        cvh.score.setTextColor(Color.BLUE);
+                        cvh.score.setTextColor(CommentViewHolder.downvoteColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
@@ -376,12 +376,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public ImageView reply;
         public ImageView viewUser;
         public ImageView more;
+        public static int upvoteColor, downvoteColor;
 
         private static final String[] indColors = {"#000000", "#3366FF", "#E65CE6",
                 "#E68A5C", "#00E68A", "#CCCC33"};
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+            upvoteColor = Color.parseColor("#ff8b60");
+            downvoteColor = Color.parseColor("#9494ff");
             view = itemView;
             authorTextView = (TextView) itemView.findViewById(R.id.author_textview);
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);

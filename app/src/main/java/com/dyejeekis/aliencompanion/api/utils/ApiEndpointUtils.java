@@ -1,6 +1,8 @@
 package com.dyejeekis.aliencompanion.api.utils;
 
 
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+
 /**
  * Some constants that are used for specifying Reddit API endpoints (example: /api/new_captcha)
  *
@@ -8,7 +10,9 @@ package com.dyejeekis.aliencompanion.api.utils;
  */
 public class ApiEndpointUtils {
 
-    public static final String REDDIT_BASE_URL = "http://www.reddit.com";
+    public static final String REDDIT_BASE_URL_OAUTH = "https://oauth.reddit.com";
+
+    public static final String REDDIT_BASE_URL = (RedditOAuth.useOAuth2) ? REDDIT_BASE_URL_OAUTH : "http://www.reddit.com";
 
     public static final String REDDIT_BASE_API_ENDPOINT = "/api";
 

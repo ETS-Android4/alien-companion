@@ -68,6 +68,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        loadMore = MainActivity.endlessPosts;
         if(searchQuery==null) searchQuery = activity.getIntent().getStringExtra("query");
         subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
@@ -76,7 +77,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onResume() {
         super.onResume();
-        loadMore = MainActivity.endlessPosts;
+        //loadMore = MainActivity.endlessPosts;
         if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }

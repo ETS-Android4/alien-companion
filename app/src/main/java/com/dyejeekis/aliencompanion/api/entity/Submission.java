@@ -73,7 +73,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     private String approvedBy;
 
 	public SpannableStringBuilder selfTextPrepared;
-	public String selfTextPreparedPreview;
+	//public String selfTextPreparedPreview;
 	public String agePrepared;
     
     private Long gilded;
@@ -216,12 +216,12 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			title = StringEscapeUtils.unescapeHtml(title);
 			selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
 
-			if(selftextHTML!=null) {
-				SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(selftextHTML, null, new MyHtmlTagHandler()));
-				String text = stringBuilder.toString();
-				if(text.length()>200) selfTextPreparedPreview = text.substring(0,200) + " ...";
-				else selfTextPreparedPreview = text;
-			}
+			//if(selftextHTML!=null) {
+			//	SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(selftextHTML, null, new MyHtmlTagHandler()));
+			//	String text = stringBuilder.toString();
+			//	if(text.length()>200) selfTextPreparedPreview = text.substring(0,200) + " ...";
+			//	else selfTextPreparedPreview = text;
+			//}
 			agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
 			//Log.e("self text html", selftextHTML);

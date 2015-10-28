@@ -57,13 +57,14 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public boolean hasMore;
     public LoadType currentLoadType;
 
-    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time, LoadType currentLoadType) {
+    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
         listFragment.postListAdapter = adapter;
         listFragment.subreddit = subreddit;
         listFragment.submissionSort = sort;
         listFragment.timeSpan = time;
         listFragment.currentLoadType = currentLoadType;
+        listFragment.hasMore = hasMore;
         return listFragment;
     }
 
@@ -73,13 +74,14 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        loadMore = MainActivity.endlessPosts;
         if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadMore = MainActivity.endlessPosts;
+        //loadMore = MainActivity.endlessPosts;
         if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }

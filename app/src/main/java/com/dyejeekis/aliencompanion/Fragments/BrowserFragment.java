@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -21,10 +25,16 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Activities.OAuthActivity;
 import com.dyejeekis.aliencompanion.Activities.PostActivity;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDialogFragment;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +60,27 @@ public class BrowserFragment extends Fragment {
             //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             //startActivity(intent);
             //return true;
+            if(url.substring(0, 15).equals("redditoauthtest")) {
+                Log.d("geotest", url);
+                activity.finish();
+                //final String code = RedditOAuth.getAuthorizationCode(url);
+//
+                //AsyncTask.execute(new Runnable() {
+                //    @Override
+                //    public void run() {
+                //        try {
+                //            RedditOAuth.getOAuthToken(new RedditHttpClient(), code);
+                //        } catch (Exception e) {e.printStackTrace();}
+                //    }
+                //});
+
+                //VerifyAccountDialogFragment dialog = new VerifyAccountDialogFragment();
+                //Bundle bundle = new Bundle();
+                //bundle.putString("code", code);
+                //dialog.setArguments(bundle);
+                //dialog.show(activity.getFragmentManager(), "dialog");
+
+            }
             return false;
         }
     }
@@ -109,8 +140,11 @@ public class BrowserFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
-        activity.getSupportActionBar().setTitle(domain);
-        if(post != null) activity.getSupportActionBar().setSubtitle(post.getCommentCount() + " comments");
+        try {
+            activity.getSupportActionBar().setTitle(domain);
+            if (post != null)
+                activity.getSupportActionBar().setSubtitle(post.getCommentCount() + " comments");
+        } catch (NullPointerException e) {}
     }
 
     @Override
@@ -123,7 +157,9 @@ public class BrowserFragment extends Fragment {
 
         webView.setWebViewClient(new MyWebViewClient());
         WebSettings settings = webView.getSettings();
-        settings.setAppCacheMaxSize(20 * 1024 * 1024);
+        //if(activity instanceof OAuthActivity) settings.setAppCacheEnabled(false);
+        //else settings.setAppCacheEnabled(true);
+        //settings.setAppCacheMaxSize(20 * 1024 * 1024);
         //settings.setAppCachePath(activity.getCacheDir().getAbsolutePath());
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);
@@ -134,10 +170,11 @@ public class BrowserFragment extends Fragment {
         settings.setUseWideViewPort(true);
         settings.setDisplayZoomControls(false);
         settings.setBuiltInZoomControls(true);
+        settings.setSaveFormData(false);
+        settings.setSavePassword(false);
 
         if(webViewBundle == null) {
             webView.setWebChromeClient(new MyWebChromeClient());
-            //webView.clearCache(true);
             webView.loadUrl(url);
         }
         else {

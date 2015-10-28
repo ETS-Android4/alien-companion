@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,8 +27,12 @@ import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubredditItem;
+import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.SavedAccount;
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.api.entity.OAuthToken;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 import com.dyejeekis.aliencompanion.enums.MenuType;
 
 import java.io.FileInputStream;
@@ -136,6 +141,22 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         accountItems.add(new NavDrawerAccount(0));
         //notifyDataSetChanged();
         if(currentAccount!=null) activity.changeCurrentUser(currentAccount);
+        else if(RedditOAuth.useOAuth2){
+            MainActivity.currentAccessToken = MainActivity.prefs.getString("appAccessToken", "null");
+            if(MainActivity.currentAccessToken.equals("null")) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
+                            SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                            editor.putString("appAccessToken", token.accessToken);
+                            editor.apply();
+                        } catch (Exception e) {e.printStackTrace();}
+                    }
+                });
+            }
+        }
     }
 
     public void accountAdded(NavDrawerAccount accountItem, String name) {

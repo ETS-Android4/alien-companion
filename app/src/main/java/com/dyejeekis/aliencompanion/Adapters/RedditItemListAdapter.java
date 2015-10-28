@@ -346,9 +346,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public ImageView reply;
         public ImageView viewUser;
         public ImageView more;
+        private static int upvoteColor, downvoteColor;
 
         public UserCommentViewHolder(View itemView) {
             super(itemView);
+            upvoteColor = Color.parseColor("#ff8b60");
+            downvoteColor = Color.parseColor("#9494ff");
             layoutComment = (LinearLayout) itemView.findViewById(R.id.layout_comment);
             layoutCommentOptions = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);
             postTitle = (TextView) itemView.findViewById(R.id.txtView_postTitle);
@@ -382,11 +385,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             if(MainActivity.currentUser != null) {
                 //check user vote
                 if (comment.getLikes().equals("true")) {
-                    commentScore.setTextColor(Color.parseColor("#FF6600"));
+                    commentScore.setTextColor(upvoteColor);
                     upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                 } else if (comment.getLikes().equals("false")) {
-                    commentScore.setTextColor(Color.BLUE);
+                    commentScore.setTextColor(downvoteColor);
                     upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                 } else {

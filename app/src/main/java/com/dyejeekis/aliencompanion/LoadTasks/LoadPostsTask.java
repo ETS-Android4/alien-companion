@@ -132,18 +132,15 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             plf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null || submissions == null) {
-                if (MainActivity.offlineModeEnabled)
-                    ToastUtils.displayShortToast(context, "No posts found");
-                else {
-                    ToastUtils.postsLoadError(context);
-                    if (loadType == LoadType.extend) {
-                        plf.postListAdapter.setLoadingMoreItems(false);
-                    }
-                    else if(loadType == LoadType.init){
-                        plf.postListAdapter = new RedditItemListAdapter(context);
-                        plf.contentView.setAdapter(plf.postListAdapter);
-                    }
+                if(loadType == LoadType.extend) {
+                    plf.postListAdapter.setLoadingMoreItems(false);
                 }
+                else if(loadType == LoadType.init) {
+                    plf.postListAdapter = new RedditItemListAdapter(context);
+                    plf.contentView.setAdapter(plf.postListAdapter);
+                }
+                if(MainActivity.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
+                else ToastUtils.postsLoadError(context);
             } else {
                 if(submissions.size()>0) plf.postListAdapter = adapter;
                 plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;

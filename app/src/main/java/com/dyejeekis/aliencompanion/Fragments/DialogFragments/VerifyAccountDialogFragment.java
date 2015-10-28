@@ -11,6 +11,7 @@ import android.view.Window;
 
 import com.dyejeekis.aliencompanion.LoadTasks.AddAccountTask;
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,8 +25,11 @@ public class VerifyAccountDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         String username = getArguments().getString("username");
         String password = getArguments().getString("password");
+        String oauthCode = getArguments().getString("code");
 
-        AddAccountTask task = new AddAccountTask(this, username, password);
+        AddAccountTask task;
+        if(RedditOAuth.useOAuth2) task =  new AddAccountTask(this, oauthCode);
+        else task =  new AddAccountTask(this, username, password);
         task.execute();
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -41,6 +41,7 @@ import com.dyejeekis.aliencompanion.R;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import me.imid.swipebacklayout.lib.ViewDragHelper;
 
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean showHiddenPosts;
 
     public static SharedPreferences prefs;
+    public static String deviceID;
     public static boolean nightThemeEnabled;
     public static boolean offlineModeEnabled;
     public static boolean dualPane;
@@ -106,10 +108,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static SavedAccount currentAccount;
     public static User currentUser;
+    public static String currentAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        getDeviceId();
         getCurrentSettings();
         dualPaneCurrent = dualPane;
         setOrientation();
@@ -217,10 +221,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void homePage() {
-        if(listFragment!=null) {
-            listFragment.setSubreddit(null);
-            listFragment.setSubmissionSort(SubmissionSort.HOT);
-            listFragment.refreshList();
+        if(listFragment!=null) listFragment.changeSubreddit(null);
+    }
+
+    private void getDeviceId() {
+        deviceID = prefs.getString("deviceID", "null");
+        if(deviceID.equals("null")) {
+            deviceID = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("deviceID", deviceID);
+            editor.apply();
         }
     }
 
@@ -288,6 +298,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
+        listFragment.loadMore = endlessPosts;
 
         if(currentOrientation != screenOrientation) setOrientation();
 
@@ -555,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
     private PostListFragment recreateListFragment(PostListFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.submissionSort, f.timeSpan, f.currentLoadType);
+        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.submissionSort, f.timeSpan, f.currentLoadType, f.hasMore);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

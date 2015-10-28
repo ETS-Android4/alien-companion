@@ -14,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import com.dyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.retrieval.Subreddits;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 /**
  * This class represents a user connected to Reddit.
@@ -31,9 +32,10 @@ import com.dyejeekis.aliencompanion.api.retrieval.Subreddits;
  */
 public class User implements Serializable {
 
-    private final String username;
+    private String username;
     private final HttpClient httpClient;
     private String modhash, cookie, password;
+    private OAuthToken tokenObject;
 
     /**
      * Create a user.
@@ -52,6 +54,19 @@ public class User implements Serializable {
         this.username = username;
         this.modhash = modhash;
         this.cookie = cookie;
+    }
+
+    public User(HttpClient httpClient, OAuthToken tokenObject) {
+        this.httpClient = httpClient;
+        this.tokenObject = tokenObject;
+    }
+
+    public OAuthToken getTokenObject() {
+        return tokenObject;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -95,9 +110,14 @@ public class User implements Serializable {
      * @throws ParseException If parsing JSON fails.
      */
     public void connect() throws IOException, ParseException {
-        ArrayList<String> hashCookiePair = hashCookiePair(ConvertUtils.URLEncodeString(username), ConvertUtils.URLEncodeString(password));
-        this.modhash = hashCookiePair.get(0);
-        this.cookie = hashCookiePair.get(1);
+        if(RedditOAuth.useOAuth2) {
+
+        }
+        else {
+            ArrayList<String> hashCookiePair = hashCookiePair(ConvertUtils.URLEncodeString(username), ConvertUtils.URLEncodeString(password));
+            this.modhash = hashCookiePair.get(0);
+            this.cookie = hashCookiePair.get(1);
+        }
     }
 
     /**

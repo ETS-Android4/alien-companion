@@ -64,12 +64,13 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         super.onCreate(bundle);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+        loadMore = MainActivity.endlessPosts;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadMore = MainActivity.endlessPosts;
+        //loadMore = MainActivity.endlessPosts;
         if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }

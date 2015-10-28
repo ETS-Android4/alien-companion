@@ -1,5 +1,6 @@
 package com.dyejeekis.aliencompanion.LoadTasks;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 import org.json.simple.parser.ParseException;
 
@@ -39,6 +41,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     private HttpClient httpClient;
     private String username;
     private String password;
+    private String oauthCode;
     private Exception exception;
 
     private String currentAccountName;
@@ -51,6 +54,13 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         httpClient = new RedditHttpClient();
         this.username =  username;
         this.password = password;
+    }
+
+    public AddAccountTask(DialogFragment dialogFragment, String oauthCode) {
+        this.dialogFragment = dialogFragment;
+        context = dialogFragment.getActivity();
+        httpClient = new RedditHttpClient();
+        this.oauthCode = oauthCode;
     }
 
     private List<SavedAccount> readFromFile() {
@@ -81,40 +91,40 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     @Override
     protected SavedAccount doInBackground(Void... unused) {
-        User user = new User(httpClient, username, password);
         try {
-            //MainActivity.currentUser = user;
-            user.connect();
-            List<String> subredditNames = new ArrayList<>();
-
-            subredditNames.add("All");
-            try {
-                List<Subreddit> subreddits = user.getSubscribed(0);
-                for (Subreddit subreddit : subreddits) {
-                    subredditNames.add(subreddit.getDisplayName());
-                }
-            } catch (RetrievalFailedException | NullPointerException | RedditError e) {
-                e.printStackTrace();
-                //Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
+            if(RedditOAuth.useOAuth2) {
+                RedditOAuth.getOAuthToken(httpClient, oauthCode);
             }
+            else {
+                User user = new User(httpClient, username, password);
+                user.connect();
+                List<String> subredditNames = new ArrayList<>();
 
-            //SavedAccount newAccount = new SavedAccount(username, password);
-            SavedAccount newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), subredditNames);
+                subredditNames.add("All");
+                try {
+                    List<Subreddit> subreddits = user.getSubscribed(0);
+                    for (Subreddit subreddit : subreddits) {
+                        subredditNames.add(subreddit.getDisplayName());
+                    }
+                } catch (RetrievalFailedException | NullPointerException | RedditError e) {
+                    e.printStackTrace();
+                    //Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
+                }
 
-            List<SavedAccount> accounts = readFromFile();
-            if(accounts == null) accounts = new ArrayList<>();
-            accounts.add(newAccount);
-            writeToFile(accounts);
+                SavedAccount newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), subredditNames);
 
-            currentAccountName = newAccount.getUsername();
-            SharedPreferences.Editor editor = MainActivity.prefs.edit();
-            editor.putString("currentAccountName", currentAccountName);
-            editor.apply();
+                List<SavedAccount> accounts = readFromFile();
+                if(accounts == null) accounts = new ArrayList<>();
+                accounts.add(newAccount);
+                writeToFile(accounts);
 
-            return newAccount;
-            //user.getSubscribed(0);
-            //ProfileActions profileActions = new ProfileActions(httpClient, user);
-            //profileActions.getUserInformation();
+                currentAccountName = newAccount.getUsername();
+                SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                editor.putString("currentAccountName", currentAccountName);
+                editor.apply();
+
+                return newAccount;
+            }
         } catch (ActionFailedException | IOException | ParseException | NullPointerException e) {
             e.printStackTrace();
             exception = e;
@@ -125,22 +135,14 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     @Override
     protected void onPostExecute(SavedAccount account) {
         dialogFragment.dismiss();
-        if(exception != null) {
+        if(exception != null || account == null) {
             ToastUtils.displayShortToast(context, "Failed to verify account");
-            //dialogFragment.dismiss();
         }
         else {
-            //ToastUtils.displayShortToast(context, "Logged in as " + username);
-
+            ToastUtils.displayShortToast(context, "Logged in as " + username);
             MainActivity mainActivity = (MainActivity) context;
             mainActivity.getNavDrawerAdapter().accountAdded(new NavDrawerAccount(account), currentAccountName);
             mainActivity.changeCurrentUser(account);
-            //Intent mStartActivity = new Intent(context, MainActivity.class);
-            //int mPendingIntentId = 123456;
-            //PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-            //AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            //mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-            //System.exit(0);
         }
     }
 }

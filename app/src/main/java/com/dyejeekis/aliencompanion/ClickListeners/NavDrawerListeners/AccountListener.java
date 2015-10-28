@@ -1,14 +1,19 @@
 package com.dyejeekis.aliencompanion.ClickListeners.NavDrawerListeners;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
+import com.dyejeekis.aliencompanion.Activities.BrowserActivity;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Activities.OAuthActivity;
 import com.dyejeekis.aliencompanion.Fragments.DialogFragments.AccountOptionsDialogFragment;
 import com.dyejeekis.aliencompanion.Fragments.DialogFragments.AddAccountDialogFragment;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 /**
  * Created by George on 6/26/2015.
@@ -29,10 +34,19 @@ public class AccountListener extends NavDrawerListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        AddAccountDialogFragment dialogFragment = new AddAccountDialogFragment();
-                        dialogFragment.show(getActivity().getFragmentManager(), "dialog");
+                        if(RedditOAuth.useOAuth2) {
+                            String url = RedditOAuth.getOauthAuthUrl();
+                            //Log.d("geotest", url);
+                            Intent intent = new Intent(getActivity(), OAuthActivity.class);
+                            intent.putExtra("url", url);
+                            getActivity().startActivity(intent);
+                        }
+                        else {
+                            AddAccountDialogFragment dialogFragment = new AddAccountDialogFragment();
+                            dialogFragment.show(getActivity().getFragmentManager(), "dialog");
+                        }
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MainActivity.NAV_DRAWER_CLOSE_TIME + 75);
                 break;
             case NavDrawerAccount.TYPE_LOGGED_OUT:
                 new Handler().postDelayed(new Runnable() {

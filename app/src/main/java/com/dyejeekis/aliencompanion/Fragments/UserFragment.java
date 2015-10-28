@@ -67,13 +67,14 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        loadMore = MainActivity.endlessPosts;
         if(username==null) username = activity.getIntent().getStringExtra("username");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadMore = MainActivity.endlessPosts;
+        //loadMore = MainActivity.endlessPosts;
         if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }

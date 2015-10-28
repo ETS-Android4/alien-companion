@@ -1,10 +1,15 @@
 package com.dyejeekis.aliencompanion.api.utils.httpClient;
 
+import android.util.Base64;
 import android.util.Log;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialogFragment;
+import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.dyejeekis.aliencompanion.enums.LoadType;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.JSONParser;
@@ -24,7 +29,7 @@ import java.net.URL;
  */
 public class RedditHttpClient implements HttpClient, Serializable {
 
-    private String userAgent = "android:com.dyejeekis.aliencompanion:v0.2 (by /u/ubercharge_ready)";
+    private String userAgent = "android:com.dyejeekis.aliencompanion:v0.2 (by /u/alien_companion)";
 
     public Response get(String urlPath, String cookie) throws RetrievalFailedException {
 
@@ -37,7 +42,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setUseCaches(false);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", userAgent);
-            connection.setRequestProperty("Cookie", "reddit_session="+cookie);
+            connection.setRequestProperty("Cookie", "reddit_session=" + cookie);
             connection.setDoInput(true);
             //connection.setDoOutput(true);
             connection.setConnectTimeout(5000);
@@ -54,7 +59,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
-            //printHeaderFields(connection);
+            printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + urlPath);
@@ -87,12 +92,16 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setUseCaches(false);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", userAgent);
-            connection.setRequestProperty("Cookie", "reddit_session="+cookie);
+            if(RedditOAuth.useOAuth2 && cookie == null) {
+                if(!MainActivity.currentAccessToken.equals("null")) connection.setRequestProperty("Authorization", "bearer " + MainActivity.currentAccessToken);
+                else connection.setRequestProperty("Authorization", RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET);
+            }
+            else connection.setRequestProperty("Cookie", "reddit_session="+cookie);
             connection.setDoOutput(true);
             connection.setDoInput(true);
             connection.setChunkedStreamingMode(1000);
 
-            //printRequestProperties(connection);
+            printRequestProperties(connection);
 
             OutputStream outputStream = connection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(

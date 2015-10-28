@@ -61,11 +61,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public PostViewType viewType;
 
     private static final int clickedColor = Color.GRAY;
+    private static int upvoteColor, downvoteColor;
     //private static final int notClickedColor = MainActivity.textColor;
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
         this.viewType = type;
+        upvoteColor = Color.parseColor("#ff8b60");
+        downvoteColor = Color.parseColor("#9494ff");
 
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
         score = (TextView) itemView.findViewById(R.id.txtView_postScore);
@@ -185,11 +188,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(MainActivity.currentUser != null) {
             //check user vote
             if (post.getLikes().equals("true")) {
-                score.setTextColor(Color.parseColor("#FF6600"));
+                score.setTextColor(upvoteColor);
                 upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
                 downvote.setImageResource(downvoteResource);
             } else if (post.getLikes().equals("false")) {
-                score.setTextColor(Color.BLUE);
+                score.setTextColor(downvoteColor);
                 upvote.setImageResource(upvoteResource);
                 downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
             } else {
@@ -203,6 +206,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             //check hidden post
             if(post.isHidden()) hide.setImageResource(R.mipmap.ic_action_hide_red);
             else hide.setImageResource(hideResource);
+        }
+        else {
+            upvote.setImageResource(upvoteResource);
+            downvote.setImageResource(downvoteResource);
+            save.setImageResource(saveResource);
+            hide.setImageResource(hideResource);
         }
 
         // postviewtype must not be details
@@ -240,19 +249,19 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 moreOptions.setImageResource(moreResource);
                 if(post.isSelf()) {
                     linkButton.setVisibility(View.GONE);
-                    //try {
-                    //    layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                    //    String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
-                    //    if(text.length()>200) text = text.substring(0, 200) + " ...";
-                    //    selfTextCard.setText(text);
-                    //} catch (NullPointerException e) {
-                    //    layoutSelfTextPreview.setVisibility(View.GONE);
-                    //}
-                    if(post.selfTextPreparedPreview == null) layoutSelfTextPreview.setVisibility(View.GONE);
-                    else {
+                    try {
+                        String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
+                        if(text.length()>200) text = text.substring(0, 200) + " ...";
+                        selfTextCard.setText(text);
                         layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                        selfTextCard.setText(post.selfTextPreparedPreview);
+                    } catch (NullPointerException e) {
+                        layoutSelfTextPreview.setVisibility(View.GONE);
                     }
+                    //if(post.selfTextPreparedPreview == null) layoutSelfTextPreview.setVisibility(View.GONE);
+                    //else {
+                    //    layoutSelfTextPreview.setVisibility(View.VISIBLE);
+                    //    selfTextCard.setText(post.selfTextPreparedPreview);
+                    //}
                 }
                 else {
                     layoutSelfTextPreview.setVisibility(View.GONE);
