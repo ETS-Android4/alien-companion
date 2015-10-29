@@ -15,7 +15,7 @@
 
     </LinearLayout>
 
-    <com.dyejeekis.aliencompanion.Views.ScrimInsetsFrameLayout
+    <android.support.design.widget.NavigationView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="320dp"
@@ -32,6 +32,6 @@
             android:choiceMode="singleChoice" />
         <!-- Your drawer content -->
 
-    </com.dyejeekis.aliencompanion.Views.ScrimInsetsFrameLayout>
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

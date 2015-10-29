@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
     private DrawerLayout.LayoutParams drawerParams;
-    private ScrimInsetsFrameLayout scrimInsetsFrameLayout;
+    private NavigationView scrimInsetsFrameLayout;
     private Toolbar toolbar;
     private LinearLayout container;
 
@@ -467,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
     private void initNavDrawer() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        scrimInsetsFrameLayout = (ScrimInsetsFrameLayout) findViewById(R.id.scrimInsetsFrameLayout);
+        scrimInsetsFrameLayout = (NavigationView) findViewById(R.id.scrimInsetsFrameLayout);
         drawerLayout.setStatusBarBackgroundColor(colorPrimaryDark);
 
         drawerParams = new DrawerLayout.LayoutParams(calculateDrawerWidth(), ViewGroup.LayoutParams.MATCH_PARENT);

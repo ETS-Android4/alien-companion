@@ -1,6 +1,7 @@
 package com.dyejeekis.aliencompanion;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import com.dyejeekis.aliencompanion.Activities.PostActivity;
 import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
@@ -57,51 +59,54 @@ public class LinkHandler {
     }
 
     public void handleIt() {
-        Intent intent = null;
-        Activity activity = (Activity) context;
+        try {
+            Intent intent = null;
+            Activity activity = (Activity) context;
 
-        Log.d("Link Full URL", url);
-        if(domain == null) {
-            intent = getNoDomainIntent(activity, url);
-        }
-        else {
-            //Log.d("Link Domain", domain);
-            if ((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
-                if(MainActivity.prefs.getBoolean("handleYoutube", true)) {
-                    String videoId = getYoutubeVideoId(url);
-                    int time = getYoutubeVideoTime(url);
-                    //Log.d("youtube video id", videoId);
-                    intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
-                }
-            } else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
-                String postInfo[] = getRedditPostInfo(url);
-                if(postInfo != null) { //case url of reddit post
+            Log.d("Link Full URL", url);
+            if (domain == null) {
+                intent = getNoDomainIntent(activity, url);
+            } else {
+                //Log.d("Link Domain", domain);
+                if ((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
+                    if (MainActivity.prefs.getBoolean("handleYoutube", true)) {
+                        String videoId = getYoutubeVideoId(url);
+                        int time = getYoutubeVideoTime(url);
+                        //Log.d("youtube video id", videoId);
+                        intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+                    }
+                } else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
+                    String postInfo[] = getRedditPostInfo(url);
+                    if (postInfo != null) { //case url of reddit post
+                        intent = new Intent(activity, PostActivity.class);
+                        intent.putExtra("postInfo", postInfo);
+                    } else { //case url of subreddit/user
+                        Pattern pattern = Pattern.compile("/(r|u|user)/[\\w\\.]+", Pattern.CASE_INSENSITIVE);
+                        Matcher matcher = pattern.matcher(url);
+                        if (matcher.find()) intent = getNoDomainIntent(activity, matcher.group());
+                    }
+                } else if (domain.equals("redd.it")) {
                     intent = new Intent(activity, PostActivity.class);
-                    intent.putExtra("postInfo", postInfo);
-                }
-                else { //case url of subreddit/user
-                    Pattern pattern = Pattern.compile("/(r|u|user)/[\\w\\.]+", Pattern.CASE_INSENSITIVE);
-                    Matcher matcher = pattern.matcher(url);
-                    if(matcher.find()) intent = getNoDomainIntent(activity, matcher.group());
-                }
-            } else if (domain.equals("redd.it")) {
-                intent = new Intent(activity, PostActivity.class);
-                intent.putExtra("postId", url.substring(15));
-            } else if(MainActivity.prefs.getBoolean("handleOther", true) && !domain.equals("play.google.com")){
-                intent = new Intent(activity, BrowserActivity.class);
-                if (post != null) {
-                    intent.putExtra("post", post);
-                } else {
-                    intent.putExtra("url", url);
-                    intent.putExtra("domain", domain);
+                    intent.putExtra("postId", url.substring(15));
+                } else if (MainActivity.prefs.getBoolean("handleOther", true) && !domain.equals("play.google.com")) {
+                    intent = new Intent(activity, BrowserActivity.class);
+                    if (post != null) {
+                        intent.putExtra("post", post);
+                    } else {
+                        intent.putExtra("url", url);
+                        intent.putExtra("domain", domain);
+                    }
                 }
             }
-        }
 
-        //if(intent != null) activity.startActivity(intent);
-        //else ToastUtils.displayShortToast(context, "Could not resolve hyperlink");
-        if(intent == null) intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        activity.startActivity(intent);
+            //if(intent != null) activity.startActivity(intent);
+            //else ToastUtils.displayShortToast(context, "Could not resolve hyperlink");
+            if (intent == null) intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            activity.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            ToastUtils.displayShortToast(context, "No activity found to handle Intent");
+            e.printStackTrace();
+        }
     }
 
     //Get an intent for links like '/r/movies' or '/u/someuser' //TODO: maybe use regex here
