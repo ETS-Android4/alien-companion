@@ -2,8 +2,10 @@ package com.dyejeekis.aliencompanion.Services;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -38,18 +40,34 @@ public class DownloaderService extends IntentService {
 
     private static final int FOREGROUND_ID = 574974;
 
+    private int MAX_PROGRESS;
+
+    private int progress;
+
+    private NotificationManager notificationManager;
+
     public DownloaderService() {
         super("DownloaderService");
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        MAX_PROGRESS = MainActivity.syncPostCount + 1;
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    @Override
     public void onHandleIntent(Intent i) {
         //Log.d("geo test", "downloading posts...");
+        progress = 0;
         String subreddit = i.getStringExtra("subreddit");
         String filename;
         if (subreddit != null) filename = subreddit.toLowerCase();
         else filename = "frontpage";
-        startForeground(FOREGROUND_ID, buildForegroundNotification(filename));
+
+        NotificationCompat.Builder builder =new NotificationCompat.Builder(this);
+        startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
 
         SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
         TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
@@ -71,6 +89,7 @@ public class DownloaderService extends IntentService {
                 deletePreviousComments(filename);
                 writePostsToFile(posts, filename);
                 for (RedditItem post : posts) {
+                    increaseProgress(builder);
                     Submission submission = (Submission) post;
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MainActivity.syncCommentDepth, MainActivity.syncCommentCount, CommentSort.TOP);
                     submission.setSyncedComments(comments);
@@ -92,13 +111,18 @@ public class DownloaderService extends IntentService {
         //}
     }
 
-    private Notification buildForegroundNotification(String filename) {
-        NotificationCompat.Builder b=new NotificationCompat.Builder(this);
+    private Notification buildForegroundNotification(NotificationCompat.Builder b, String filename) {
         b.setOngoing(true);
         b.setContentTitle("Alien Companion")
                 .setContentText("Syncing " + filename +"...")
-                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...");
+                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...").setProgress(MAX_PROGRESS, 0, false);
         return(b.build());
+    }
+
+    private void increaseProgress(NotificationCompat.Builder b) {
+        progress++;
+        b.setProgress(MAX_PROGRESS, progress, false);
+        notificationManager.notify(FOREGROUND_ID, b.build());
     }
 
     private void writePostsToFile(List<RedditItem> posts, String filename) {

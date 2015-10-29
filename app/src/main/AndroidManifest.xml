@@ -75,6 +75,11 @@
             android:configChanges="orientation|screenSize"
             android:label="OAuthActivity" >
         </activity>
+        <activity
+            android:name=".Activities.EditSubredditsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="EditSubredditsActivity" >
+        </activity>
     </application>
 
 </manifest>

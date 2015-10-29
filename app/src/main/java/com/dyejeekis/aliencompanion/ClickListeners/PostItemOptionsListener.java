@@ -193,7 +193,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_copy_to_clipboard:
-                        TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST URL", "COMMENTS URL",
+                        TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -203,7 +203,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                                             stringToCopy = post.getURL();
                                             label = "Post url";
                                         } else {
-                                            stringToCopy = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
+                                            stringToCopy = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
                                             label = "Comments url";
                                         }
                                         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -242,7 +242,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_copy_permalink:
-                        String postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
+                        String postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
                         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                         clip = ClipData.newPlainText("Post permalink", postLink);
                         clipboard.setPrimaryClip(clip);
@@ -251,10 +251,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         openInBrowser();
                         return true;
                     case R.id.action_share:
-                        final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
-                        if(post.isSelf()) GeneralUtils.shareUrl(context, "Share post url to..", commentsUrl);
+                        final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
+                        if(post.isSelf()) GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
                         else {
-                            choiceDialog = TwoOptionDialogFragment.newInstance("POST URL", "COMMENTS URL", new View.OnClickListener() {
+                            choiceDialog = TwoOptionDialogFragment.newInstance("SHARE LINK", "SHARE COMMENTS", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     String label;
