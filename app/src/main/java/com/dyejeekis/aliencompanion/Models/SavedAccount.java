@@ -1,6 +1,7 @@
 package com.dyejeekis.aliencompanion.Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +23,10 @@ public class SavedAccount implements Serializable {
 
     public List<String> getSubreddits() {
         return subreddits;
+    }
+
+    public ArrayList<String> getSubredditsArraylist() {
+        return (ArrayList<String>) subreddits;
     }
 
     public void setSubreddits(List<String> subreddits) {

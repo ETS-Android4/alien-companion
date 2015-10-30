@@ -143,6 +143,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector</item>
         <item name="themeDialogBackgroundColor">@android:color/white</item>
         <item name="themeDivider">?android:attr/listDivider</item>
+        <item name="themeDragHandle">@mipmap/ic_action_drag_handle_grey</item>
     </style>
 
     <style name="selectedTheme.night">
@@ -155,6 +156,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
         <item name="themeDialogBackgroundColor">@color/darker_gray</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
+        <item name="themeDragHandle">@mipmap/ic_action_drag_handle_white</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

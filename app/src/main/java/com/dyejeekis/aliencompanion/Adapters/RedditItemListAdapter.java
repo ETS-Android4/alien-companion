@@ -310,11 +310,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
-            //SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
-            //strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
-            body.setText(message.bodyPrepared);
+            SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
+            strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+            body.setText(strBuilder);
+            //body.setText(message.bodyPrepared);
             body.setMovementMethod(MyLinkMovementMethod.getInstance());
-            //body.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML)));
             age.setText(message.agePrepared);
 
             if(message.author.equals(MainActivity.currentUser.getUsername()) && !message.destination.equals(MainActivity.currentUser.getUsername())) {
