@@ -10,8 +10,10 @@ import com.dyejeekis.aliencompanion.api.action.MarkActions;
 import com.dyejeekis.aliencompanion.api.action.ProfileActions;
 import com.dyejeekis.aliencompanion.api.action.SubmitActions;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
+import com.dyejeekis.aliencompanion.api.entity.Subreddit;
 import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.exception.ActionFailedException;
+import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.UserActionType;
@@ -73,11 +75,20 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         httpClient = new RedditHttpClient();
     }
 
+    public LoadUserActionTask(Context context, UserActionType type, String subreddit) {
+        this.context = context;
+        //this.user = MainActivity.currentUser;
+        this.userActionType = type;
+        this.subreddit = subreddit;
+        httpClient = new RedditHttpClient();
+    }
+
     @Override
     protected Void doInBackground(Void... unused) {
         try {
             MarkActions markActions = new MarkActions(httpClient, MainActivity.currentUser);
             SubmitActions submitActions = new SubmitActions(httpClient, MainActivity.currentUser);
+            ProfileActions profileActions = new ProfileActions(httpClient, MainActivity.currentUser);
             switch (userActionType) {
                 case novote:
                     markActions.vote(postName, 0);
@@ -129,11 +140,18 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     submitActions.comment(postName, text);
                     break;
                 case changePassword:
-                    ProfileActions profileActions = new ProfileActions(httpClient, user);
-                    profileActions.changePassword(currentPass, newPass);
+                    //profileActions.changePassword(currentPass, newPass);
+                    break;
+                case subscribe:
+                    String fullname = Subreddit.getSubreddit(httpClient, subreddit).getFullName();
+                    profileActions.subscribe(fullname);
+                    break;
+                case unsubscribe:
+                    fullname = Subreddit.getSubreddit(httpClient, subreddit).getFullName();
+                    profileActions.unsubscribe(fullname);
                     break;
             }
-        } catch (ActionFailedException | NullPointerException e) {
+        } catch (ActionFailedException | NullPointerException | RetrievalFailedException e) {
             e.printStackTrace();
             exception = e;
         }
@@ -171,6 +189,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     break;
                 case report:
                     ToastUtils.displayShortToast(context, "Report sent");
+                    break;
+                case subscribe:
+                    ToastUtils.displayShortToast(context, "Subscribed to " + subreddit);
+                    break;
+                case unsubscribe:
+                    ToastUtils.displayShortToast(context, "Unsubscribed from " + subreddit);
                     break;
             }
         }

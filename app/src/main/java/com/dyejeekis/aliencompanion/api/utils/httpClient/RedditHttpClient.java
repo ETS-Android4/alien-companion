@@ -59,7 +59,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
-            printHeaderFields(connection);
+            //printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + urlPath);
@@ -122,7 +122,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
             Response result = new HttpResponse(content, responseObject, connection);
 
-            //printHeaderFields(connection);
+            printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + urlPath);

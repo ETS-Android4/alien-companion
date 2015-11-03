@@ -140,6 +140,8 @@ public class ApiEndpointUtils {
     
     public static final String USER_REGISTER = REDDIT_BASE_API_ENDPOINT + "/register";
 
+    public static final String USER_SUBSCRIBE = REDDIT_BASE_API_ENDPOINT + "/subscribe";
+
     /* Subreddits specific constants */
 
     public static final String SUBREDDITS = "/subreddits.json";

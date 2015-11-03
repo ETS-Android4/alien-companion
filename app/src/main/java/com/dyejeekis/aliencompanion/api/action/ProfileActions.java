@@ -177,6 +177,18 @@ public class ProfileActions implements ActorDriven {
         return httpClient.post(params, ApiEndpointUtils.USER_DELETE, user.getCookie());
     }
 
+    public Response subscribe(String subreddit) throws ActionFailedException {
+        String params = "action=sub&sr=" + subreddit + "&uh=" + user.getModhash();
+
+        return httpClient.post(params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
+    }
+
+    public Response unsubscribe(String subreddit) throws ActionFailedException {
+        String params = "action=unsub&sr=" + subreddit + "&uh=" + user.getModhash();
+
+        return httpClient.post(params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
+    }
+
     /**
      * Creates a new account.
      *

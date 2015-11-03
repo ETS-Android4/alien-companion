@@ -1,5 +1,9 @@
 package com.dyejeekis.aliencompanion.api.entity;
 
+import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+
 import static com.dyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
 import static com.dyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToDouble;
 import static com.dyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToLong;
@@ -121,6 +125,22 @@ public class Subreddit extends Thing {
             System.err.println("Error creating Subreddit");
         }
         
+    }
+
+    public static Subreddit getSubreddit(HttpClient httpClient, String subreddit) {
+        String url = "/r/" + subreddit + "/about.json";
+
+        String cookie = (MainActivity.currentUser!=null) ? MainActivity.currentUser.getCookie() : null;
+
+        Object response = httpClient.get(url, cookie).getResponseObject();
+
+        if(response instanceof JSONObject) {
+            JSONObject object = (JSONObject) response;
+            JSONObject data = (JSONObject) object.get("data");
+            Subreddit sr = new Subreddit(data);
+            return sr;
+        }
+        return null;
     }
     
     /**

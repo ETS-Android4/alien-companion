@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +28,9 @@ import android.widget.PopupMenu;
 import com.dyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
 import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
+import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.dyejeekis.aliencompanion.Models.SavedAccount;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Views.ScrimInsetsFrameLayout;
 import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
@@ -206,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeCurrentUser(SavedAccount account) {
         currentAccount = account;
-        currentUser = (account!=null) ? new User(new RedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        currentUser = (account.loggedIn) ? new User(new RedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie()) : null;
         //initNavDrawerContent();
         if(currentUser!=null) {
             adapter.showUserMenuItems();
@@ -214,9 +218,10 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             adapter.hideUserMenuItems();
-            List<String> subreddits = new ArrayList<>();
-            Collections.addAll(subreddits, defaultSubredditStrings);
-            adapter.updateSubredditItems(subreddits);
+            adapter.updateSubredditItems(currentAccount.getSubreddits());
+            //List<String> subreddits = new ArrayList<>();
+            //Collections.addAll(subreddits, defaultSubredditStrings);
+            //adapter.updateSubredditItems(subreddits);
         }
         homePage();
     }
@@ -301,6 +306,31 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         listFragment.loadMore = endlessPosts;
+
+        if(EditSubredditsActivity.changesMade) {
+            EditSubredditsActivity.changesMade = false;
+            getNavDrawerAdapter().updateSubredditItems(currentAccount.getSubreddits());
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<SavedAccount> accounts = new ArrayList<SavedAccount>();
+                    boolean check = true;
+                    //if(currentAccount != null) {
+                        for (NavDrawerAccount accountItem : adapter.accountItems) {
+                            if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT) {
+                                SavedAccount accountToSave;
+                                if (check && accountItem.getName().equals(currentAccount.getUsername())) {
+                                    check = false;
+                                    accountToSave = currentAccount;
+                                } else accountToSave = accountItem.savedAccount;
+                                accounts.add(accountToSave);
+                            }
+                        }
+                        getNavDrawerAdapter().saveAccounts(accounts);
+                    //}
+                }
+            });
+        }
 
         if(currentOrientation != screenOrientation) setOrientation();
 

@@ -67,7 +67,8 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             }
             else {
                 Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
-                comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, MainActivity.initialCommentDepth,
+                int depth = (postFragment.commentLinkId!=null) ? 999 : MainActivity.initialCommentDepth;
+                comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, depth,
                         MainActivity.initialCommentCount, postFragment.commentSort);
 
                 if (postFragment.post.getThumbnailObject() == null) {

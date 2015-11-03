@@ -39,6 +39,12 @@ public class NavDrawerAccount implements NavDrawerItem {
         }
     }
 
+    public NavDrawerAccount(SavedAccount account, boolean loggedOut) {
+        this.type = TYPE_LOGGED_OUT;
+        this.savedAccount = account;
+        this.name = "Logged out";
+    }
+
     public NavDrawerAccount(SavedAccount account) {
         this.type = TYPE_ACCOUNT;
         this.savedAccount = account;

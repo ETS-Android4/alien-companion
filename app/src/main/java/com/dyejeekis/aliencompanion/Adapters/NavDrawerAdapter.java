@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -131,12 +132,22 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
         SavedAccount currentAccount = null;
         accountItems = new ArrayList<>();
-        accountItems.add(new NavDrawerAccount(1));
+        //accountItems.add(new NavDrawerAccount(1));
         if(savedAccounts != null) {
             for(SavedAccount account : savedAccounts) {
                 accountItems.add(new NavDrawerAccount(account));
                 if(account.getUsername().equals(currentAccountName)) currentAccount = account;
             }
+        }
+        else {
+            List<String> subreddits = new ArrayList<>();
+            Collections.addAll(subreddits, MainActivity.defaultSubredditStrings);
+            SavedAccount loggedOut = new SavedAccount(subreddits);
+            accountItems.add(new NavDrawerAccount(loggedOut, true));
+            currentAccount = loggedOut;
+            List<SavedAccount> accounts = new ArrayList<>();
+            accounts.add(loggedOut);
+            saveAccounts(accounts);
         }
         accountItems.add(new NavDrawerAccount(0));
         //notifyDataSetChanged();
@@ -167,7 +178,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         Log.d("current account name", "after add : " + currentAccountName);
     }
 
-    private List<SavedAccount> readAccounts() {
+    public List<SavedAccount> readAccounts() {
         try {
             FileInputStream fis = activity.openFileInput(MainActivity.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
@@ -181,7 +192,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         return null;
     }
 
-    private void saveAccounts(List<SavedAccount> updatedAccounts) {
+    public void saveAccounts(List<SavedAccount> updatedAccounts) {
         try {
             FileOutputStream fos = activity.openFileOutput(MainActivity.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);

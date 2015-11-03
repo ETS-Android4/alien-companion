@@ -29,12 +29,12 @@ public class SubredditsListener extends NavDrawerListener {
         else if(v.getId() == R.id.layoutEdit){
             //ToastUtils.displayShortToast(getActivity(), "Coming soon!");
             Intent intent = new Intent(getActivity(), EditSubredditsActivity.class);
-            ArrayList<String> subreddits;
-            if(MainActivity.currentUser != null) subreddits = MainActivity.currentAccount.getSubredditsArraylist();
-            else {
-                subreddits = new ArrayList<>();
-                Collections.addAll(subreddits, RedditConstants.defaultSubscribed);  //TODO: set proper list
-            }
+            ArrayList<String> subreddits = (ArrayList) MainActivity.currentAccount.getSubreddits();
+            //if(MainActivity.currentUser != null) subreddits = MainActivity.currentAccount.getSubredditsArraylist();
+            //else {
+            //    subreddits = new ArrayList<>();
+            //    Collections.addAll(subreddits, RedditConstants.defaultSubscribed);  //TODO: set proper list
+            //}
             intent.putStringArrayListExtra("subreddits", subreddits);
             getActivity().startActivity(intent);
         }

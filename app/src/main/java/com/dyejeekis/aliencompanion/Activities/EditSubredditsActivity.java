@@ -4,8 +4,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.AddSubredditDialogFragment;
 import com.dyejeekis.aliencompanion.R;
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -19,6 +22,7 @@ public class EditSubredditsActivity extends BackNavActivity {
     private ArrayList<String> subreddits;
     private DragSortListView dslv;
     private ArrayAdapter adapter;
+    public static boolean changesMade;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -39,6 +43,7 @@ public class EditSubredditsActivity extends BackNavActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);
         subreddits = getIntent().getStringArrayListExtra("subreddits");
         adapter = new ArrayAdapter(this, R.layout.draggable_subreddit_item, R.id.subreddit_text, subreddits);
@@ -47,6 +52,7 @@ public class EditSubredditsActivity extends BackNavActivity {
             @Override
             public void drop(int from, int to) {
                 if (from != to) {
+                    changesMade= true;
                     String temp = subreddits.get(from);
                     subreddits.remove(from);
                     subreddits.add(to, temp);
@@ -57,9 +63,40 @@ public class EditSubredditsActivity extends BackNavActivity {
         dslv.setRemoveListener(new DragSortListView.RemoveListener() {
             @Override
             public void remove(int which) {
+                changesMade = true;
                 subreddits.remove(which);
                 adapter.notifyDataSetChanged();
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_subreddits, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_subreddit:
+                AddSubredditDialogFragment dialog = new AddSubredditDialogFragment();
+                dialog.show(getFragmentManager(), "dialog");
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(changesMade && MainActivity.currentAccount!=null) MainActivity.currentAccount.setSubreddits(subreddits);
+        super.onBackPressed();
+    }
+
+    public void addSubreddit(String subreddit) {
+        changesMade = true;
+        subreddits.add(subreddit);
+        adapter.notifyDataSetChanged();
+    }
+
 }

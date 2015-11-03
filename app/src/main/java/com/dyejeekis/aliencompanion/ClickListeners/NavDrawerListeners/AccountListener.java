@@ -27,7 +27,7 @@ public class AccountListener extends NavDrawerListener {
     @Override
     public void onClick(View v) {
         final int position = getRecyclerView().getChildPosition(v);
-        NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
+        final NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
         getDrawerLayout().closeDrawers();
         switch (accountItem.getAccountType()) {
             case NavDrawerAccount.TYPE_ADD:
@@ -48,20 +48,21 @@ public class AccountListener extends NavDrawerListener {
                     }
                 }, MainActivity.NAV_DRAWER_CLOSE_TIME + 75);
                 break;
+            //case NavDrawerAccount.TYPE_LOGGED_OUT:
+            //    new Handler().postDelayed(new Runnable() {
+            //        @Override
+            //        public void run() {
+            //            //NavDrawerAdapter.currentAccountIndex = 0;
+            //            SharedPreferences.Editor editor = MainActivity.prefs.edit();
+            //            editor.putString("currentAccountName", "Logged out");
+            //            editor.apply();
+            //            getActivity().changeCurrentUser(null);
+            //            getAdapter().setCurrentAccountName("Logged out");
+            //            //getAdapter().notifyDataSetChanged();
+            //        }
+            //    }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+            //    break;
             case NavDrawerAccount.TYPE_LOGGED_OUT:
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //NavDrawerAdapter.currentAccountIndex = 0;
-                        SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                        editor.putString("currentAccountName", "Logged out");
-                        editor.apply();
-                        getActivity().changeCurrentUser(null);
-                        getAdapter().setCurrentAccountName("Logged out");
-                        //getAdapter().notifyDataSetChanged();
-                    }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
-                break;
             case NavDrawerAccount.TYPE_ACCOUNT:
                 new Handler().postDelayed(new Runnable() {
                     @Override

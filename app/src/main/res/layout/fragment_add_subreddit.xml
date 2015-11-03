@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.dyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialogFragment"
+    android:orientation="vertical"
+    android:background="?attr/themeDialogBackgroundColor">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add subreddit"
+        android:id="@+id/textView"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="?attr/themeTextColor" />
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_subreddit"
+        android:hint="subreddit"
+        android:layout_margin="5dp"
+        android:singleLine="true"
+        android:imeOptions="actionGo"
+        android:completionThreshold="1"
+        android:textColor="?attr/themeTextColor"
+        android:textColorHint="?attr/themeTextHintColor" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subscribe"
+        android:id="@+id/checkBox_subscribe"
+        android:checked="false"
+        android:textColor="?attr/themeTextColor" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CANCEL"
+            android:id="@+id/button_cancel"
+            android:textColor="#03A9F4"
+            android:background="@android:color/transparent" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD"
+            android:id="@+id/button_view"
+            android:textColor="#03A9F4"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
+</LinearLayout>
