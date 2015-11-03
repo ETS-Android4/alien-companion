@@ -63,22 +63,16 @@ public class BrowserFragment extends Fragment {
             if(url.substring(0, 15).equals("redditoauthtest")) {
                 Log.d("geotest", url);
                 activity.finish();
-                //final String code = RedditOAuth.getAuthorizationCode(url);
-//
-                //AsyncTask.execute(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        try {
-                //            RedditOAuth.getOAuthToken(new RedditHttpClient(), code);
-                //        } catch (Exception e) {e.printStackTrace();}
-                //    }
-                //});
+                final String code = RedditOAuth.getAuthorizationCode(url);
 
-                //VerifyAccountDialogFragment dialog = new VerifyAccountDialogFragment();
-                //Bundle bundle = new Bundle();
-                //bundle.putString("code", code);
-                //dialog.setArguments(bundle);
-                //dialog.show(activity.getFragmentManager(), "dialog");
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            RedditOAuth.getOAuthToken(new RedditHttpClient(), code);
+                        } catch (Exception e) {e.printStackTrace();}
+                    }
+                });
 
             }
             return false;

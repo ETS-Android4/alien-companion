@@ -151,23 +151,24 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
         accountItems.add(new NavDrawerAccount(0));
         //notifyDataSetChanged();
-        if(currentAccount!=null) activity.changeCurrentUser(currentAccount);
-        else if(RedditOAuth.useOAuth2){
-            MainActivity.currentAccessToken = MainActivity.prefs.getString("appAccessToken", "null");
-            if(MainActivity.currentAccessToken.equals("null")) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
-                            SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                            editor.putString("appAccessToken", token.accessToken);
-                            editor.apply();
-                        } catch (Exception e) {e.printStackTrace();}
-                    }
-                });
-            }
-        }
+        activity.changeCurrentUser(currentAccount);
+        //if(currentAccount!=null) activity.changeCurrentUser(currentAccount);
+        //else if(RedditOAuth.useOAuth2){
+        //    MainActivity.currentAccessToken = MainActivity.prefs.getString("appAccessToken", "null");
+        //    if(MainActivity.currentAccessToken.equals("null")) {
+        //        AsyncTask.execute(new Runnable() {
+        //            @Override
+        //            public void run() {
+        //                try {
+        //                    OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
+        //                    SharedPreferences.Editor editor = MainActivity.prefs.edit();
+        //                    editor.putString("appAccessToken", token.accessToken);
+        //                    editor.apply();
+        //                } catch (Exception e) {e.printStackTrace();}
+        //            }
+        //        });
+        //    }
+        //}
     }
 
     public void accountAdded(NavDrawerAccount accountItem, String name) {

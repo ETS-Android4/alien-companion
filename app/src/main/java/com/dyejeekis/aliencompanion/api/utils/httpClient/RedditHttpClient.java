@@ -86,15 +86,20 @@ public class RedditHttpClient implements HttpClient, Serializable {
         HttpURLConnection connection = null;
         //OutputStream outputStream = null;
         //InputStream inputStream = null;
+        String baseUrl = (MainActivity.currentAccessToken == null) ? "http://www.reddit.com" : ApiEndpointUtils.REDDIT_BASE_URL;
         try {
-            URL url = new URL(ApiEndpointUtils.REDDIT_BASE_URL + urlPath);
+            URL url = new URL(baseUrl + urlPath);
             connection = (HttpURLConnection) url.openConnection();
             connection.setUseCaches(false);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", userAgent);
             if(RedditOAuth.useOAuth2 && cookie == null) {
-                if(!MainActivity.currentAccessToken.equals("null")) connection.setRequestProperty("Authorization", "bearer " + MainActivity.currentAccessToken);
-                else connection.setRequestProperty("Authorization", RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET);
+                if(MainActivity.currentAccessToken!=null) connection.setRequestProperty("Authorization", "bearer " + MainActivity.currentAccessToken);
+                else {
+                    String userCredentials = RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET;
+                    String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
+                    connection.setRequestProperty("Authorization", basicAuth);
+                }
             }
             else connection.setRequestProperty("Cookie", "reddit_session="+cookie);
             connection.setDoOutput(true);
@@ -125,14 +130,14 @@ public class RedditHttpClient implements HttpClient, Serializable {
             printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
-                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + urlPath);
+                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
             } else {
                 return result;
             }
         } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + urlPath);
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
         } catch (ParseException e) {
-            throw new ActionFailedException("Failed to parse the response from GET request to URI path: " + urlPath);
+            throw new ActionFailedException("Failed to parse the response from GET request to URI path: " + baseUrl + urlPath);
         } finally {
             //if(outputStream != null) {
             //    IOUtils.closeQuietly(outputStream);
