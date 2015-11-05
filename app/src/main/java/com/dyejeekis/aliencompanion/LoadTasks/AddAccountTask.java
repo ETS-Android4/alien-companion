@@ -114,7 +114,8 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 SavedAccount newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), subredditNames);
 
                 List<SavedAccount> accounts = readFromFile();
-                if(accounts == null) accounts = new ArrayList<>();
+                //if(accounts == null) accounts = new ArrayList<>();
+                assert accounts != null;
                 accounts.add(newAccount);
                 writeToFile(accounts);
 
@@ -139,7 +140,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             ToastUtils.displayShortToast(context, "Failed to verify account");
         }
         else {
-            ToastUtils.displayShortToast(context, "Logged in as " + username);
+            //ToastUtils.displayShortToast(context, "Logged in as " + username);
             MainActivity mainActivity = (MainActivity) context;
             mainActivity.getNavDrawerAdapter().accountAdded(new NavDrawerAccount(account), currentAccountName);
             mainActivity.changeCurrentUser(account);

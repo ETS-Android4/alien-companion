@@ -56,7 +56,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public ImageView moreOptions;
     public ProgressBar commentsProgress;
 
-    private int upvoteResource, downvoteResource, saveResource, hideResource, moreResource;
+    private int upvoteResource, downvoteResource, saveResource, hideResource, moreResource, commentsResource;
 
     public PostViewType viewType;
 
@@ -95,6 +95,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             saveResource = R.mipmap.ic_action_save_white;
             hideResource = R.mipmap.ic_action_hide_white;
             moreResource = R.mipmap.ic_action_more_vertical_white;
+            commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
         }
         else {
             upvoteResource = R.mipmap.ic_action_upvote_grey;
@@ -102,6 +103,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             saveResource = R.mipmap.ic_action_save_grey;
             hideResource = R.mipmap.ic_action_hide_grey;
             moreResource = R.mipmap.ic_action_more_vertical_grey;
+            commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
         }
         switch (viewType) {
             case listItem:
@@ -234,8 +236,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         switch (viewType) {
             case listItem:
-                if(MainActivity.nightThemeEnabled) commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_white_24dp);
-                else commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_black_24dp);
+                //if(MainActivity.nightThemeEnabled) commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_white_24dp);
+                //else commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_black_24dp);
+                commentsIcon.setImageResource(commentsResource);
                 layoutPostOptions.setBackgroundColor(MainActivity.currentColor);
                 break;
             case details:

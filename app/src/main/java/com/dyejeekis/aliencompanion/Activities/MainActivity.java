@@ -223,7 +223,12 @@ public class MainActivity extends AppCompatActivity {
             //Collections.addAll(subreddits, defaultSubredditStrings);
             //adapter.updateSubredditItems(subreddits);
         }
-        homePage();
+        //homePage();
+        try {
+            listFragment.changeSubreddit(listFragment.subreddit);
+            String message = (currentUser==null) ? "Logged out" : "Logged in as " + account.getUsername();
+            ToastUtils.displayShortToast(this, message);
+        } catch (NullPointerException e) {}
     }
 
     public void homePage() {
@@ -317,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                     boolean check = true;
                     //if(currentAccount != null) {
                         for (NavDrawerAccount accountItem : adapter.accountItems) {
-                            if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT) {
+                            if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT || accountItem.getAccountType() == NavDrawerAccount.TYPE_LOGGED_OUT) {
                                 SavedAccount accountToSave;
                                 if (check && accountItem.getName().equals(currentAccount.getUsername())) {
                                     check = false;

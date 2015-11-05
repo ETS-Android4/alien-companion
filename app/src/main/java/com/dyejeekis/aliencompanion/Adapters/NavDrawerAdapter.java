@@ -135,7 +135,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         //accountItems.add(new NavDrawerAccount(1));
         if(savedAccounts != null) {
             for(SavedAccount account : savedAccounts) {
-                accountItems.add(new NavDrawerAccount(account));
+                if(!account.loggedIn) accountItems.add(new NavDrawerAccount(account, true));
+                else accountItems.add(new NavDrawerAccount(account));
                 if(account.getUsername().equals(currentAccountName)) currentAccount = account;
             }
         }
@@ -176,7 +177,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         accountItems.add(accountItems.size()-1, accountItem);
         setCurrentAccountName(name);
         notifyDataSetChanged();
-        Log.d("current account name", "after add : " + currentAccountName);
+        //Log.d("current account name", "after add : " + currentAccountName);
     }
 
     public List<SavedAccount> readAccounts() {
@@ -235,9 +236,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         if(justRemove) notifyItemRemoved(i+1);
         else {
             activity.getDrawerLayout().closeDrawers();
-            activity.changeCurrentUser(null);
+            activity.changeCurrentUser(accountItems.get(0).savedAccount);
         }
-        Log.d("current account name", "after delete : " + currentAccountName);
+        //Log.d("current account name", "after delete : " + currentAccountName);
     }
 
     public void add(NavDrawerItem item) {

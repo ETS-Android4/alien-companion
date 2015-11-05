@@ -6,10 +6,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.dyejeekis.aliencompanion.Fragments.DialogFragments.AddSubredditDialogFragment;
+import com.dyejeekis.aliencompanion.Fragments.DialogFragments.SubredditOptionsDialogFragment;
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.api.entity.Subreddit;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.util.ArrayList;
@@ -48,6 +52,17 @@ public class EditSubredditsActivity extends BackNavActivity {
         subreddits = getIntent().getStringArrayListExtra("subreddits");
         adapter = new ArrayAdapter(this, R.layout.draggable_subreddit_item, R.id.subreddit_text, subreddits);
         dslv.setAdapter(adapter);
+        dslv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                SubredditOptionsDialogFragment dialog = new SubredditOptionsDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("subreddit", subreddits.get(position));
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "dialog");
+                return true;
+            }
+        });
         dslv.setDropListener(new DragSortListView.DropListener() {
             @Override
             public void drop(int from, int to) {
@@ -96,6 +111,12 @@ public class EditSubredditsActivity extends BackNavActivity {
     public void addSubreddit(String subreddit) {
         changesMade = true;
         subreddits.add(subreddit);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void removeSubreddit(String subreddit) {
+        changesMade = true;
+        subreddits.remove(subreddit);
         adapter.notifyDataSetChanged();
     }
 

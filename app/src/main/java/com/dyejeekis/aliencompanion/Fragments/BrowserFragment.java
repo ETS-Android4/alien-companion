@@ -157,8 +157,9 @@ public class BrowserFragment extends Fragment {
         //settings.setAppCachePath(activity.getCacheDir().getAbsolutePath());
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);
-        if(!GeneralUtils.isNetworkAvailable(activity) && MainActivity.offlineModeEnabled) settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
-        else settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        //if(!GeneralUtils.isNetworkAvailable(activity) && MainActivity.offlineModeEnabled) settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+        //else settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
@@ -166,6 +167,7 @@ public class BrowserFragment extends Fragment {
         settings.setBuiltInZoomControls(true);
         settings.setSaveFormData(false);
         settings.setSavePassword(false);
+        settings.setDomStorageEnabled(true);
 
         if(webViewBundle == null) {
             webView.setWebChromeClient(new MyWebChromeClient());
