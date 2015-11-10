@@ -16,6 +16,7 @@ import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.Utils.ImageLoader;
@@ -40,7 +41,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     //private Activity activity;
     private Context context;
     private PostListFragment plf;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
     private RedditItemListAdapter adapter;
     private SubmissionSort sort;
     private TimeSpan time;
@@ -50,7 +51,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.context = context;
         this.plf = plf;
         this.loadType = loadType;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
         sort = plf.submissionSort;
         time = plf.timeSpan;
         changedSort = false;
@@ -60,7 +61,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.context = context;
         this.plf = plf;
         this.loadType = loadType;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
         this.sort = sort;
         this.time = time;
         changedSort = true;
@@ -147,8 +148,11 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
                 switch (loadType) {
                     case init:
-                        plf.contentView.setAdapter(plf.postListAdapter);
-                        if(submissions.size()==0) ToastUtils.subredditNotFound(context);
+                        if(submissions.size()==0) {
+                            plf.contentView.setAdapter(new RedditItemListAdapter(context));
+                            ToastUtils.displayShortToast(context, "No posts found");
+                        }
+                        else plf.contentView.setAdapter(plf.postListAdapter);
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -159,6 +163,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             }
                             plf.contentView.setAdapter(plf.postListAdapter);
                         }
+                        else ToastUtils.displayShortToast(context, "No posts found");
                         break;
                     case extend:
                         plf.postListAdapter.setLoadingMoreItems(false);

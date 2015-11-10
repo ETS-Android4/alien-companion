@@ -15,6 +15,7 @@ import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.UserActionType;
 
@@ -24,7 +25,7 @@ import com.dyejeekis.aliencompanion.enums.UserActionType;
 public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
 
     private Context context;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
     private UserActionType userActionType;
     private String postName;
     private Exception exception;
@@ -38,7 +39,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.context = context;
         this.userActionType = userActionType;
         this.postName = postName;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, String postName, UserActionType userActionType, Submission submission) {
@@ -46,7 +47,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.userActionType = userActionType;
         this.postName = postName;
         this.submission = submission;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, String postName, UserActionType userActionType, String text) {
@@ -54,7 +55,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.userActionType = userActionType;
         this.postName = postName;
         this.text = text;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, UserActionType userActionType, User user, String currentPass, String newPass) {
@@ -63,7 +64,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.user = user;
         this.currentPass = currentPass;
         this.newPass = newPass;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, UserActionType userActionType, String title, String linkOrText, String subreddit) {
@@ -72,7 +73,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.title = title;
         this.linkOrText = linkOrText;
         this.subreddit = subreddit;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, UserActionType type, String subreddit) {
@@ -80,7 +81,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         //this.user = MainActivity.currentUser;
         this.userActionType = type;
         this.subreddit = subreddit;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
     }
 
     @Override

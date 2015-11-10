@@ -14,6 +14,7 @@ import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SearchSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Utils.ImageLoader;
@@ -36,7 +37,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     //private Activity activity;
     private Context context;
     private SearchFragment sf;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
     private LoadType loadType;
     private RedditItemListAdapter adapter;
     private SearchSort sort;
@@ -47,7 +48,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.context = context;
         this.sf = searchFragment;
         this.loadType = loadType;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
         sort = sf.searchSort;
         time = sf.timeSpan;
         changedSort = false;
@@ -57,7 +58,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.context = context;
         this.sf = searchFragment;
         this.loadType = loadType;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
         this.sort = sort;
         this.time = time;
         changedSort = true;
@@ -113,8 +114,11 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     case init:
-                        sf.contentView.setAdapter(sf.postListAdapter);
-                        if(submissions.size()==0) ToastUtils.noResults(context, sf.searchQuery);
+                        if(submissions.size()==0) {
+                            sf.contentView.setAdapter(new RedditItemListAdapter(context));
+                            ToastUtils.noResults(context, sf.searchQuery);
+                        }
+                        else sf.contentView.setAdapter(sf.postListAdapter);
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -125,6 +129,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             }
                             sf.contentView.setAdapter(sf.postListAdapter);
                         }
+                        else ToastUtils.displayShortToast(context, "No posts found");
                         break;
                     case extend:
                         sf.postListAdapter.setLoadingMoreItems(false);

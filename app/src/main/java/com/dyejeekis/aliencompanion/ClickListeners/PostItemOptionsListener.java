@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
 import com.dyejeekis.aliencompanion.Adapters.PostAdapter;
@@ -26,6 +27,7 @@ import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.dyejeekis.aliencompanion.enums.SubmitType;
 import com.dyejeekis.aliencompanion.enums.UserActionType;
 
 /**
@@ -214,7 +216,12 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         choiceDialog.show(((Activity) context).getFragmentManager(), "dialog");
                         return true;
                     case R.id.action_edit:
-                        //TODO: implement editing of self posts
+                        Intent intent = new Intent(context, SubmitActivity.class);
+                        intent.putExtra("submitType", SubmitType.comment);
+                        intent.putExtra("selfText", post.getSelftext());
+                        intent.putExtra("edit", true);
+                        intent.putExtra("postName", post.getFullName());
+                        context.startActivity(intent);
                         return true;
                     case R.id.action_delete:
                         if (recyclerAdapter instanceof RedditItemListAdapter)
@@ -282,7 +289,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         viewUser();
                         return true;
                     case R.id.action_view_subreddit:
-                        Intent intent = new Intent(context, SubredditActivity.class);
+                        intent = new Intent(context, SubredditActivity.class);
                         intent.putExtra("subreddit", post.getSubreddit().toLowerCase());
                         context.startActivity(intent);
                         return true;

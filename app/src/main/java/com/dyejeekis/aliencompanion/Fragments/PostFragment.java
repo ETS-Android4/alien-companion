@@ -25,9 +25,12 @@ import com.dyejeekis.aliencompanion.Adapters.PostAdapter;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadCommentsTask;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.dyejeekis.aliencompanion.api.entity.Comment;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.dyejeekis.aliencompanion.enums.SubmitType;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +47,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public CommentSort commentSort;
     public ProgressBar progressBar;
     private boolean loadFromList;
-    public boolean noResponseObject;
+    public boolean noResponseObject; //TODO: check this variable
     public String commentLinkId;
     public int parentsShown = -1;
     public boolean titleUpdated;
@@ -307,18 +310,13 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
     public void refreshComments() {
         if(!noResponseObject) {
-            postAdapter.clear();
-            postAdapter.add(post);
-            postAdapter.notifyDataSetChanged();
             commentsLoaded = false;
+            postAdapter.commentsRefreshed(post, new ArrayList<Comment>());
         }
-        //else {
-        //    progressBar.setVisibility(View.VISIBLE);
-        //}
 
+        setActionBarSubtitle();
         LoadCommentsTask task = new LoadCommentsTask(activity, this);
         task.execute();
-        //progressBar.setVisibility(View.GONE);
     }
 
     public void setCommentSort(CommentSort sort) {

@@ -17,6 +17,7 @@ import com.dyejeekis.aliencompanion.api.exception.RedditError;
 import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
@@ -38,7 +39,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private DialogFragment dialogFragment;
     private Context context;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
     private String username;
     private String password;
     private String oauthCode;
@@ -51,7 +52,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     public AddAccountTask(DialogFragment dialogFragment, String username, String password) {
         this.dialogFragment = dialogFragment;
         context = dialogFragment.getActivity();
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
         this.username =  username;
         this.password = password;
     }
@@ -59,7 +60,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     public AddAccountTask(DialogFragment dialogFragment, String oauthCode) {
         this.dialogFragment = dialogFragment;
         context = dialogFragment.getActivity();
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
         this.oauthCode = oauthCode;
     }
 

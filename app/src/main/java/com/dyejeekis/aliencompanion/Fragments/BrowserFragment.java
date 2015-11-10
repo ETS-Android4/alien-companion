@@ -31,6 +31,7 @@ import com.dyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDialo
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
@@ -69,7 +70,7 @@ public class BrowserFragment extends Fragment {
                     @Override
                     public void run() {
                         try {
-                            RedditOAuth.getOAuthToken(new RedditHttpClient(), code);
+                            RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), code);
                         } catch (Exception e) {e.printStackTrace();}
                     }
                 });

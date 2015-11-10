@@ -21,6 +21,7 @@ import com.dyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
 import java.io.File;
@@ -43,6 +44,8 @@ public class DownloaderService extends IntentService {
     private int MAX_PROGRESS;
 
     private int progress;
+
+    private HttpClient httpClient = new PoliteRedditHttpClient();
 
     private NotificationManager notificationManager;
 
@@ -73,7 +76,7 @@ public class DownloaderService extends IntentService {
         TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
         assert submissionSort!=null && timeSpan!=null;
 
-        HttpClient httpClient = new RedditHttpClient();
+        //HttpClient httpClient = new RedditHttpClient();
 
         Submissions submissions = new Submissions(httpClient, MainActivity.currentUser);
         Comments cmntsRetrieval = new Comments(httpClient, MainActivity.currentUser);

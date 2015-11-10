@@ -2,6 +2,9 @@ package com.dyejeekis.aliencompanion.multilevelexpindlistview;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.dyejeekis.aliencompanion.api.entity.Comment;
+import com.dyejeekis.aliencompanion.api.entity.Submission;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -101,6 +104,18 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
         mData = new ArrayList<ExpIndData>();
         mGroups = new HashMap<ExpIndData, List<? extends ExpIndData>>();
         mNotifyOnChange = true;
+    }
+
+    public void updateItem(int index, ExpIndData item) {
+        mData.set(index, item);
+        notifyItemChanged(index);
+    }
+
+    public void commentsRefreshed(Submission post, List<Comment> comments) {
+        mData.clear();
+        mData.add(post);
+        addAll(comments);
+        notifyDataSetChanged();
     }
 
     public void add(ExpIndData item) {

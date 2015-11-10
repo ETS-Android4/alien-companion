@@ -16,6 +16,7 @@ import com.dyejeekis.aliencompanion.api.exception.RedditError;
 import com.dyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.dyejeekis.aliencompanion.api.retrieval.Comments;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
 import java.io.FileInputStream;
@@ -32,12 +33,12 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     private Exception exception;
     private Context context;
     private PostFragment postFragment;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
 
     public LoadCommentsTask(Context context, PostFragment postFragment) {
         this.context = context;
         this.postFragment = postFragment;
-        this.httpClient = new RedditHttpClient();
+        //this.httpClient = new PoliteRedditHttpClient();
     }
 
     private List<Comment> readCommentsFromFile(String filename) {
@@ -92,8 +93,10 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
             postFragment = fragment;
             postFragment.progressBar.setVisibility(View.GONE);
+            postFragment.commentsLoaded = true;
 
             if (exception != null) {
+                postFragment.postAdapter.notifyItemChanged(0);
                 if (exception instanceof IOException)
                     ToastUtils.displayShortToast(context, "No comments found");
                 else {
@@ -103,11 +106,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             } else {
                 if(!postFragment.titleUpdated) postFragment.setActionBarTitle();
                 postFragment.noResponseObject = false;
-                postFragment.commentsLoaded = true;
-                postFragment.postAdapter.clear();
-                postFragment.postAdapter.add(postFragment.post);
-                postFragment.postAdapter.addAll(comments);
-                postFragment.postAdapter.notifyDataSetChanged();
+                postFragment.postAdapter.commentsRefreshed(postFragment.post, comments);
             }
         } catch (NullPointerException e) {}
     }

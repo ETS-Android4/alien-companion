@@ -52,7 +52,7 @@
         <ListPreference
             android:key="swipeBack"
             android:title="Swipe to go back"
-            android:summary="Change edge tracking mode or disable it"
+            android:summary="Change edge tracking side or disable it"
             android:entries="@array/swipeEntries"
             android:entryValues="@array/swipeValues"
             android:defaultValue="0"/>

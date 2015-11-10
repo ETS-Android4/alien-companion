@@ -11,6 +11,7 @@ import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Utils.ImageLoader;
@@ -43,7 +44,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     //private UserSubmissionsCategory userContent;
     private Activity activity;
     private UserFragment uf;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
     private RedditItemListAdapter adapter;
     private UserSubmissionsCategory userCategory;
     private UserOverviewSort userSort;
@@ -55,7 +56,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         mLoadType = loadType;
         this.userCategory = uf.userContent;
         this.userSort = uf.userOverviewSort;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
         changedSort = false;
     }
 
@@ -65,7 +66,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         mLoadType = loadType;
         this.userCategory = category;
         this.userSort = sort;
-        httpClient = new RedditHttpClient();
+        //httpClient = new RedditHttpClient();
         changedSort = true;
     }
 

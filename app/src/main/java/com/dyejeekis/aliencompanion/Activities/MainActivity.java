@@ -34,6 +34,7 @@ import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Views.ScrimInsetsFrameLayout;
 import com.dyejeekis.aliencompanion.api.entity.User;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.MenuType;
 import com.dyejeekis.aliencompanion.Models.NavDrawer.NavDrawerHeader;
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeCurrentUser(SavedAccount account) {
         currentAccount = account;
-        currentUser = (account.loggedIn) ? new User(new RedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        currentUser = (account.loggedIn) ? new User(new PoliteRedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie()) : null;
         //initNavDrawerContent();
         if(currentUser!=null) {
             adapter.showUserMenuItems();

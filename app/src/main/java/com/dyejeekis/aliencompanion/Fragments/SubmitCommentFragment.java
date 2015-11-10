@@ -30,6 +30,7 @@ public class SubmitCommentFragment extends Fragment {
     private LinearLayout layoutOriginalComment;
     //private String originalComment;
     private Comment originalComment;
+    private String selfText;
     private String postName;
     private boolean edit;
 
@@ -41,6 +42,7 @@ public class SubmitCommentFragment extends Fragment {
 
         originalComment = (Comment) getActivity().getIntent().getSerializableExtra("originalComment");
         postName = getActivity().getIntent().getStringExtra("postName");
+        selfText = getActivity().getIntent().getStringExtra("selfText");
         edit = getActivity().getIntent().getBooleanExtra("edit", false);
     }
 
@@ -58,8 +60,16 @@ public class SubmitCommentFragment extends Fragment {
         if(originalComment == null || edit) {
             layoutOriginalComment.setVisibility(View.GONE);
             if(edit) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit comment");
-                replyField.setText(originalComment.getBody());
+                String title;
+                if(selfText != null) {
+                    title = "Edit self-post";
+                    replyField.setText(selfText);
+                }
+                else {
+                    title = "Edit comment";
+                    replyField.setText(originalComment.getBody());
+                }
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
             }
         }
         else {
@@ -73,16 +83,12 @@ public class SubmitCommentFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_submit) {
-            LoadUserActionTask task;
-            String fullname;
-            UserActionType actionType = UserActionType.submitComment;
-            if(originalComment!=null || edit) {
-                fullname = originalComment.getFullName();
-                if(edit) actionType = UserActionType.edit;
-            }
-            else fullname = postName;
+            String fullname = (selfText != null || !edit) ? postName : originalComment.getFullName();
+            if(fullname==null) fullname = originalComment.getFullName();
+            UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
+            //TODO: sort this shit
 
-            task = new LoadUserActionTask(getActivity(), fullname, actionType, replyField.getText().toString());
+            LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, replyField.getText().toString());
             task.execute();
 
             getActivity().finish();

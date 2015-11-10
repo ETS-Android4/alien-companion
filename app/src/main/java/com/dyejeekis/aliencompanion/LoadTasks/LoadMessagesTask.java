@@ -20,6 +20,7 @@ import com.dyejeekis.aliencompanion.api.retrieval.params.MessageCategory;
 import com.dyejeekis.aliencompanion.api.retrieval.params.MessageCategorySort;
 import com.dyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.dyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.dyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.dyejeekis.aliencompanion.enums.LoadType;
 
@@ -35,7 +36,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private Exception exception;
     private Context context;
     private MessageFragment mf;
-    private HttpClient httpClient;
+    private HttpClient httpClient = new PoliteRedditHttpClient();
     private LoadType loadType;
     private RedditItemListAdapter adapter;
     private MessageCategory category;
@@ -49,7 +50,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.category = mf.category;
         this.sort = mf.sort;
         changedSort = false;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
     }
 
     public LoadMessagesTask(Context context, MessageFragment mf, LoadType loadType, MessageCategory category, MessageCategorySort sort) {
@@ -59,7 +60,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.category = category;
         this.sort = sort;
         changedSort = true;
-        httpClient = new RedditHttpClient();
+        //httpClient = new PoliteRedditHttpClient();
     }
 
     @Override
