@@ -48,6 +48,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean loadMore;
     public boolean hasMore = true;
     public LoadType currentLoadType;
+    public LoadUserContentTask task;
 
     //public static boolean currentlyLoading = false;
 
@@ -150,7 +151,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 currentLoadType = LoadType.init;
                 userContent = UserSubmissionsCategory.OVERVIEW;
                 userOverviewSort = UserOverviewSort.NEW;
-                LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init);
+                task = new LoadUserContentTask(activity, this, LoadType.init);
                 task.execute();
             } else {
                 setActionBarSubtitle();
@@ -193,20 +194,23 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void refreshUser() {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh);
+        task = new LoadUserContentTask(activity, this, LoadType.refresh);
         task.execute();
     }
 
     public void refreshUser(UserSubmissionsCategory category, UserOverviewSort sort) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.refresh, category, sort);
+        task = new LoadUserContentTask(activity, this, LoadType.refresh, category, sort);
         task.execute();
     }
 
     public void changeUser(String username) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.init;
         this.username = username;
         this.userContent = UserSubmissionsCategory.OVERVIEW;
@@ -215,7 +219,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        LoadUserContentTask task = new LoadUserContentTask(activity, this, LoadType.init);
+        task = new LoadUserContentTask(activity, this, LoadType.init);
         task.execute();
     }
 

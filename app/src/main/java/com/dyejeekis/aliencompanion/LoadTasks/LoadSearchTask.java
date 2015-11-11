@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -79,7 +80,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
                 adapter = new RedditItemListAdapter(context, submissions);
             }
-            ImageLoader.preloadThumbnails(submissions, context);
+            //ImageLoader.preloadThumbnails(submissions, context);
             //ConvertUtils.preparePostsText(context, submissions);
             return submissions;
         } catch (RetrievalFailedException | RedditError e) {
@@ -87,6 +88,14 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onCancelled(List<RedditItem> submissions) {
+        try {
+            SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            fragment.loadMore = MainActivity.endlessPosts;
+        } catch (NullPointerException e) {}
     }
 
     @Override
@@ -109,8 +118,10 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     sf.contentView.setAdapter(sf.postListAdapter);
                 }
             } else {
-                if(submissions.size()>0) sf.postListAdapter = adapter;
-
+                if(submissions.size()>0) {
+                    ImageLoader.preloadThumbnails(submissions, context);
+                    sf.postListAdapter = adapter;
+                }
                 sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     case init:

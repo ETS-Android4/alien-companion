@@ -1,5 +1,7 @@
 package com.dyejeekis.aliencompanion.api.utils.httpClient;
 
+import android.util.Log;
+
 /**
  * Created by sound on 11/10/2015.
  */
@@ -17,7 +19,7 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
     /**
      * Last time a request was made.
      */
-    private long lastReqTime = 0;
+    private static long lastReqTime = 0;
 
     public PoliteRedditHttpClient() {
         super();
@@ -43,6 +45,7 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
 
     private void noteTime() {
         lastReqTime = System.currentTimeMillis();
+        //Log.d("geotest", String.valueOf(lastReqTime));
     }
 
     private void waitIfNeeded() {

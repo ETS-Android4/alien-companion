@@ -55,7 +55,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             String content = IOUtils.toString(inputStream, "UTF-8");
             IOUtils.closeQuietly(inputStream);
 
-            Log.d("inputstream object: ", content);
+            //Log.d("inputstream object: ", content);
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 

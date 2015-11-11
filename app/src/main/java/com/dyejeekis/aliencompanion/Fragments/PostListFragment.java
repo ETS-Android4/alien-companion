@@ -56,6 +56,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public boolean loadMore;
     public boolean hasMore;
     public LoadType currentLoadType;
+    public LoadPostsTask task;
 
     public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
@@ -133,7 +134,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 //Log.d("geo test", "postListAdapter is null");
                 currentLoadType = LoadType.init;
                 setSubmissionSort(SubmissionSort.HOT);
-                LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
+                task = new LoadPostsTask(activity, this, LoadType.init);
                 task.execute();
             } else {
                 setActionBarSubtitle();
@@ -397,20 +398,23 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void refreshList() {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh);
+        task = new LoadPostsTask(activity, this, LoadType.refresh);
         task.execute();
     }
 
     public void refreshList(SubmissionSort sort, TimeSpan time) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
+        task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
         task.execute();
     }
 
     public void changeSubreddit(String subreddit) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.init;
         this.subreddit = subreddit;
         this.submissionSort = SubmissionSort.HOT;
@@ -419,7 +423,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
-        LoadPostsTask task = new LoadPostsTask(activity, this, LoadType.init);
+        task = new LoadPostsTask(activity, this, LoadType.init);
         task.execute();
     }
 

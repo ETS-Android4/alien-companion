@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Fragments.UserFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -92,7 +93,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         if(this.userCategory == UserSubmissionsCategory.OVERVIEW) adapter.add(userInfo);
                         adapter.addAll(userContent);
                     }
-                    ImageLoader.preloadUserImages(userContent, activity);
+                    //ImageLoader.preloadUserImages(userContent, activity);
                     break;
                 case COMMENTS:
                     Comments comments = new Comments(httpClient, MainActivity.currentUser);
@@ -119,7 +120,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         adapter = new RedditItemListAdapter(activity);
                         adapter.addAll(userContent);
                     }
-                    ImageLoader.preloadUserImages(userContent, activity);
+                    //ImageLoader.preloadUserImages(userContent, activity);
                     break;
             }
             //ConvertUtils.preparePostsText(activity, userContent);
@@ -129,6 +130,14 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onCancelled(List<RedditItem> submissions) {
+        try {
+            UserFragment fragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
+            fragment.loadMore = MainActivity.endlessPosts;
+        } catch (NullPointerException e) {}
     }
 
     @Override
@@ -151,7 +160,10 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     uf.contentView.setAdapter(uf.userAdapter);
                 }
             } else {
-                if(things.size()>0) uf.userAdapter = adapter;
+                if(things.size()>0) {
+                    ImageLoader.preloadUserImages(things, activity);
+                    uf.userAdapter = adapter;
+                }
                 else ToastUtils.displayShortToast(activity, "No posts found");
                 uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT;
                 switch (mLoadType) {
@@ -172,7 +184,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     case extend:
                         uf.userAdapter.setLoadingMoreItems(false);
                         uf.userAdapter.addAll(things);
-                        if (MainActivity.endlessPosts) uf.loadMore = true;
+                        uf.loadMore = MainActivity.endlessPosts;
                         break;
                 }
             }

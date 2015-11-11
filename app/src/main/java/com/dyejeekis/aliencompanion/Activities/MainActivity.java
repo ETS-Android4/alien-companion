@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeCurrentUser(SavedAccount account) {
         currentAccount = account;
-        currentUser = (account.loggedIn) ? new User(new PoliteRedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
         //initNavDrawerContent();
         if(currentUser!=null) {
             adapter.showUserMenuItems();

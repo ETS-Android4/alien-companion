@@ -47,6 +47,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public boolean loadMore;
     public boolean hasMore;
     public LoadType currentLoadType;
+    public LoadMessagesTask task;
 
     //public static boolean currentlyLoading = false;
 
@@ -121,7 +122,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 currentLoadType = LoadType.init;
                 category = MessageCategory.INBOX;
                 sort = MessageCategorySort.ALL;
-                LoadMessagesTask task = new LoadMessagesTask(activity, this, LoadType.init);
+                task = new LoadMessagesTask(activity, this, LoadType.init);
                 task.execute();
             } else {
                 setActionBarSubtitle();
@@ -176,16 +177,18 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     public void refreshList() {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadMessagesTask task = new LoadMessagesTask(activity, this, LoadType.refresh);
+        task = new LoadMessagesTask(activity, this, LoadType.refresh);
         task.execute();
     }
 
     public void refreshList(MessageCategory category, MessageCategorySort sort) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadMessagesTask task = new LoadMessagesTask(activity, this, LoadType.refresh, category, sort);
+        task = new LoadMessagesTask(activity, this, LoadType.refresh, category, sort);
         task.execute();
     }
 

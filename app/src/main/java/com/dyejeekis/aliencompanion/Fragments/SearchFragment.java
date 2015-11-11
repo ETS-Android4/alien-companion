@@ -50,6 +50,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public boolean loadMore;
     public boolean hasMore = true;
     public LoadType currentLoadType;
+    public LoadSearchTask task;
 
     public static SearchFragment newInstance(RedditItemListAdapter adapter, String searchQuery, SearchSort sort, TimeSpan time, boolean hasMore, LoadType currentLoadType) {
         SearchFragment newInstance = new SearchFragment();
@@ -151,7 +152,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 currentLoadType = LoadType.init;
                 setSearchSort(SearchSort.RELEVANCE);
                 setTimeSpan(TimeSpan.ALL);
-                LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
+                task = new LoadSearchTask(activity, this, LoadType.init);
                 task.execute();
             } else {
                 setActionBarSubtitle();
@@ -188,20 +189,23 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     public void refreshList() {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.refresh);
+        task = new LoadSearchTask(activity, this, LoadType.refresh);
         task.execute();
     }
 
     public void refreshList(SearchSort sort, TimeSpan time) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
-        LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.refresh, sort, time);
+        task = new LoadSearchTask(activity, this, LoadType.refresh, sort, time);
         task.execute();
     }
 
     public void changeQuery(String newQuery) {
+        if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.init;
         searchQuery = newQuery;
         searchSort = SearchSort.RELEVANCE;
@@ -210,7 +214,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
-        LoadSearchTask task = new LoadSearchTask(activity, this, LoadType.init);
+        task = new LoadSearchTask(activity, this, LoadType.init);
         task.execute();
     }
 

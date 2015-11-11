@@ -44,31 +44,35 @@ public class ShowMoreListener implements View.OnClickListener {
         switch (type) {
             case subreddit:
                 PostListFragment postListFragment = (PostListFragment) fragment;
+                //if(postListFragment.currentLoadType!=null) postListFragment.task.cancel(true);
                 postListFragment.currentLoadType = LoadType.extend;
                 postListFragment.postListAdapter.setLoadingMoreItems(true);
-                LoadPostsTask subredditTask = new LoadPostsTask(context, postListFragment, LoadType.extend);
-                subredditTask.execute();
+                postListFragment.task = new LoadPostsTask(context, postListFragment, LoadType.extend);
+                postListFragment.task.execute();
                 break;
             case user:
                 UserFragment userFragment = (UserFragment) fragment;
+                //if(userFragment.currentLoadType!=null) userFragment.task.cancel(true);
                 userFragment.currentLoadType = LoadType.extend;
                 userFragment.userAdapter.setLoadingMoreItems(true);
-                LoadUserContentTask userTask = new LoadUserContentTask((Activity) context, userFragment, LoadType.extend);
-                userTask.execute();
+                userFragment.task = new LoadUserContentTask((Activity) context, userFragment, LoadType.extend);
+                userFragment.task.execute();
                 break;
             case search:
                 SearchFragment searchFragment = (SearchFragment) fragment;
+                //if(searchFragment.currentLoadType!=null) searchFragment.task.cancel(true);
                 searchFragment.currentLoadType = LoadType.extend;
                 searchFragment.postListAdapter.setLoadingMoreItems(true);
-                LoadSearchTask searchTask = new LoadSearchTask(context, searchFragment, LoadType.extend);
-                searchTask.execute();
+                searchFragment.task = new LoadSearchTask(context, searchFragment, LoadType.extend);
+                searchFragment.task.execute();
                 break;
             case message:
                 MessageFragment messageFragment = (MessageFragment) fragment;
+                //if(messageFragment.currentLoadType!=null) messageFragment.task.cancel(true);
                 messageFragment.currentLoadType = LoadType.extend;
                 messageFragment.adapter.setLoadingMoreItems(true);
-                LoadMessagesTask messagesTask = new LoadMessagesTask(context, messageFragment, LoadType.extend);
-                messagesTask.execute();
+                messageFragment.task = new LoadMessagesTask(context, messageFragment, LoadType.extend);
+                messageFragment.task.execute();
         }
     }
 }

@@ -53,6 +53,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean titleUpdated;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
+    public LoadCommentsTask task;
 
     //public static boolean currentlyLoading = false;
 
@@ -261,7 +262,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
                 mRecyclerView.setAdapter(postAdapter);
 
-                LoadCommentsTask task = new LoadCommentsTask(activity, this);
+                task = new LoadCommentsTask(activity, this);
                 task.execute();
             } else {
                 mRecyclerView.setAdapter(postAdapter);
@@ -309,13 +310,14 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void refreshComments() {
+        if(!commentsLoaded) task.cancel(true);
         if(!noResponseObject) {
             commentsLoaded = false;
             postAdapter.commentsRefreshed(post, new ArrayList<Comment>());
         }
 
         setActionBarSubtitle();
-        LoadCommentsTask task = new LoadCommentsTask(activity, this);
+        task = new LoadCommentsTask(activity, this);
         task.execute();
     }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Fragments.MessageFragment;
+import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.dyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -86,6 +87,14 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
     }
 
     @Override
+    protected void onCancelled(List<RedditItem> messages) {
+        try {
+            MessageFragment fragment = (MessageFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            fragment.loadMore = MainActivity.endlessPosts;
+        } catch (NullPointerException e) {}
+    }
+
+    @Override
     public void onPostExecute(List<RedditItem> messages) {
         try {
             MessageFragment fragment = (MessageFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
@@ -126,7 +135,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case extend:
                         mf.adapter.setLoadingMoreItems(false);
                         mf.adapter.addAll(messages);
-                        if(MainActivity.endlessPosts) mf.loadMore = true;
+                        mf.loadMore = MainActivity.endlessPosts;
                         break;
                 }
             }

@@ -19,6 +19,7 @@ import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.dyejeekis.aliencompanion.Utils.ImageLoader;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.enums.PostViewType;
 import com.squareup.picasso.Picasso;
@@ -148,7 +149,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         else nsfw.setVisibility(View.GONE);
 
         Thumbnail postThumbnail = post.getThumbnailObject();
-        if(postThumbnail == null) postThumbnail = new Thumbnail(); //TODO: check why thumbnail is null
+        if(postThumbnail == null) postThumbnail = new Thumbnail();
+        //ImageLoader.preloadThumbnail(post, context);
+        //Thumbnail postThumbnail = post.getThumbnailObject();
         //TODO: clean this
         if(viewType == PostViewType.smallCards) {
             postImage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));

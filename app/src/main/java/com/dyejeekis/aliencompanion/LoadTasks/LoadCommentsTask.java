@@ -72,9 +72,9 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, depth,
                         MainActivity.initialCommentCount, postFragment.commentSort);
 
-                if (postFragment.post.getThumbnailObject() == null) {
-                    ImageLoader.preloadThumbnail(postFragment.post, context);
-                }
+                //if (postFragment.post.getThumbnailObject() == null) {
+                //    ImageLoader.preloadThumbnail(postFragment.post, context);
+                //}
             }
             Comments.indentCommentTree(context, comments);
 
@@ -94,6 +94,9 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             postFragment = fragment;
             postFragment.progressBar.setVisibility(View.GONE);
             postFragment.commentsLoaded = true;
+            if (postFragment.post.getThumbnailObject() == null) {
+                ImageLoader.preloadThumbnail(postFragment.post, context);
+            }
 
             if (exception != null) {
                 postFragment.postAdapter.notifyItemChanged(0);

@@ -111,15 +111,23 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     }
                     adapter = new RedditItemListAdapter(context, submissions);
                 }
-                ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
+                //ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
             }
             //ConvertUtils.preparePostsText(context, submissions);
             return submissions;
-        } catch (RetrievalFailedException | RedditError e) {
+        } catch (RetrievalFailedException | RedditError | NullPointerException e) {
             exception = e;
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onCancelled(List<RedditItem> submissions) {
+        try {
+            PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            fragment.loadMore = MainActivity.endlessPosts;
+        } catch (NullPointerException e) {}
     }
 
     @Override
@@ -143,7 +151,10 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 if(MainActivity.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
                 else ToastUtils.postsLoadError(context);
             } else {
-                if(submissions.size()>0) plf.postListAdapter = adapter;
+                if(submissions.size()>0) {
+                    ImageLoader.preloadThumbnails(submissions, context);
+                    plf.postListAdapter = adapter;
+                }
                 plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
 
                 switch (loadType) {

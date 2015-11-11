@@ -1,7 +1,11 @@
 package com.dyejeekis.aliencompanion.Utils;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
+import com.dyejeekis.aliencompanion.Fragments.PostListFragment;
+import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
