@@ -2,6 +2,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -78,6 +79,14 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         //loadMore = MainActivity.endlessPosts;
         if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if(!MainActivity.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
+            userAdapter.notifyItemChanged(0);
     }
 
     @Override
@@ -224,10 +233,12 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void redrawList() {
-        List<RedditItem> items = userAdapter.redditItems;
-        items.remove(items.size() - 1);
-        userAdapter = new RedditItemListAdapter(activity, items);
-        contentView.setAdapter(userAdapter);
+        try {
+            List<RedditItem> items = userAdapter.redditItems;
+            items.remove(items.size() - 1);
+            userAdapter = new RedditItemListAdapter(activity, items);
+            contentView.setAdapter(userAdapter);
+        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     public void setActionBarTitle() {

@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
-import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.api.entity.Comment;

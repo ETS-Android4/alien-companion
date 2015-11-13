@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion;
+package com.dyejeekis.aliencompanion.Utils;
 
 import android.text.style.ClickableSpan;
 import android.view.View;

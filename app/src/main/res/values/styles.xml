@@ -144,6 +144,7 @@
         <item name="themeDialogBackgroundColor">@android:color/white</item>
         <item name="themeDivider">?android:attr/listDivider</item>
         <item name="themeDragHandle">@mipmap/ic_action_drag_handle_grey</item>
+        <item name="themeButtonSelector">@drawable/touch_selector_button_light</item>
     </style>
 
     <style name="selectedTheme.night">
@@ -157,8 +158,25 @@
         <item name="themeDialogBackgroundColor">@color/darker_gray</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
         <item name="themeDragHandle">@mipmap/ic_action_drag_handle_white</item>
+        <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="nsfwLabel">
+        <item name="android:textColor">#d81d1b</item>
+        <item name="android:textSize">?attr/font_small</item>
+        <!--<item name="android:background">@drawable/round_corner_nsfw</item>--> <!-- TODO: look into applying background for this style -->
+    </style>
+
+    <style name="upvotedStyle">
+        <item name="android:textColor">#ff8b60</item>
+        <item name="android:textSize">?attr/font_small</item>
+    </style>
+
+    <style name="downvotedStyle">
+        <item name="android:textColor">#9494ff</item>
+        <item name="android:textSize">?attr/font_small</item>
+    </style>
 
 </resources>

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,11 +17,10 @@ import android.widget.TextView;
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
-import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
-import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
+import com.dyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.dyejeekis.aliencompanion.Utils.ImageLoader;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.enums.PostViewType;
 import com.squareup.picasso.Picasso;
@@ -30,17 +31,14 @@ import com.squareup.picasso.Picasso;
 public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public TextView title;
-    public TextView score;
-    public TextView age;
-    public TextView author;
-    public TextView domain;
     public TextView domain2;
     public TextView fullUrl;
-    public TextView subreddit;
-    public TextView commentCount;
-    public TextView nsfw;
     public TextView selfText;
     public TextView selfTextCard;
+    public TextView postDets1;
+    public TextView postDets2;
+    public TextView scoreText;
+    public TextView commentsText;
     public ImageView postImage;
     public ImageView commentsIcon;
     public LinearLayout layoutSelfTextPreview;
@@ -61,9 +59,9 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public PostViewType viewType;
 
-    private static final int clickedColor = Color.GRAY;
+    //private static final int clickedColor = Color.GRAY;
+    private static final int clickedColor = MainActivity.textHintColor;
     private static int upvoteColor, downvoteColor;
-    //private static final int notClickedColor = MainActivity.textColor;
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
@@ -72,13 +70,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         downvoteColor = Color.parseColor("#9494ff");
 
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
-        score = (TextView) itemView.findViewById(R.id.txtView_postScore);
-        age = (TextView) itemView.findViewById(R.id.txtView_postAge);
-        author = (TextView) itemView.findViewById(R.id.txtView_postAuthor);
-        domain = (TextView) itemView.findViewById(R.id.txtView_postDomain);
-        subreddit = (TextView) itemView.findViewById(R.id.txtView_postSubreddit);
-        commentCount = (TextView) itemView.findViewById(R.id.txtView_postComments);
-        nsfw = (TextView) itemView.findViewById(R.id.txtView_nsfw);
+        commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
         postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
         linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
         upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
@@ -110,6 +102,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             case listItem:
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
+                postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+                postDets2 = (TextView) itemView.findViewById(R.id.textView_dets2);
                 break;
             case details:
                 selfText = (TextView) itemView.findViewById(R.id.txtView_selfText);
@@ -118,21 +112,27 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 break;
             case smallCards:
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
+                postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+                scoreText = (TextView) itemView.findViewById(R.id.textView_score);
                 break;
             case cards:
+                postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
                 fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
                 selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
+                scoreText = (TextView) itemView.findViewById(R.id.textView_score);
                 break;
             case cardDetails:
+                postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
                 fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
                 commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
                 domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
                 fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
                 selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
+                scoreText = (TextView) itemView.findViewById(R.id.textView_score);
                 break;
         }
     }
@@ -140,13 +140,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public void bindModel(Context context, Submission post) {
 
         title.setText(post.getTitle());
-        score.setText(Long.toString(post.getScore()));
-        author.setText(post.getAuthor());
-        age.setText(post.agePrepared);
-        domain.setText(post.getDomain());
-        commentCount.setText(Long.toString(post.getCommentCount()));
-        if(post.isNSFW()) nsfw.setVisibility(View.VISIBLE);
-        else nsfw.setVisibility(View.GONE);
 
         Thumbnail postThumbnail = post.getThumbnailObject();
         if(postThumbnail == null) postThumbnail = new Thumbnail();
@@ -189,70 +182,30 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             else postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
         }
 
-        //user logged in
-        if(MainActivity.currentUser != null) {
-            //check user vote
-            if (post.getLikes().equals("true")) {
-                score.setTextColor(upvoteColor);
-                upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                downvote.setImageResource(downvoteResource);
-            } else if (post.getLikes().equals("false")) {
-                score.setTextColor(downvoteColor);
-                upvote.setImageResource(upvoteResource);
-                downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
-            } else {
-                score.setTextColor(MainActivity.textHintColor);
-                upvote.setImageResource(upvoteResource);
-                downvote.setImageResource(downvoteResource);
-            }
-            //check saved post
-            if(post.isSaved()) save.setImageResource(R.mipmap.ic_action_save_yellow);
-            else save.setImageResource(saveResource);
-            //check hidden post
-            if(post.isHidden()) hide.setImageResource(R.mipmap.ic_action_hide_red);
-            else hide.setImageResource(hideResource);
-        }
-        else {
-            upvote.setImageResource(upvoteResource);
-            downvote.setImageResource(downvoteResource);
-            save.setImageResource(saveResource);
-            hide.setImageResource(hideResource);
-        }
-
-        // postviewtype must not be details
-        if(post.isSelf()) subreddit.setVisibility(View.GONE);
-        else {
-            subreddit.setVisibility(View.VISIBLE);
-            subreddit.setText(post.getSubreddit() + " · ");
-        }
-
         if(viewType == PostViewType.listItem || viewType == PostViewType.cards || viewType == PostViewType.smallCards) {
             if(post.isClicked()) {
                 title.setTextColor(clickedColor);
-                if(viewType == PostViewType.listItem) commentCount.setTextColor(clickedColor);
+                if(viewType == PostViewType.listItem) commentsText.setTextColor(clickedColor);
             }
             else {
                 title.setTextColor(MainActivity.textColor);
-                if(viewType == PostViewType.listItem) commentCount.setTextColor(MainActivity.textColor);
+                if(viewType == PostViewType.listItem) commentsText.setTextColor(MainActivity.textColor);
             }
         }
 
         switch (viewType) {
             case listItem:
-                //if(MainActivity.nightThemeEnabled) commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_white_24dp);
-                //else commentsIcon.setImageResource(R.mipmap.ic_chat_bubble_outline_black_24dp);
                 commentsIcon.setImageResource(commentsResource);
                 layoutPostOptions.setBackgroundColor(MainActivity.currentColor);
-                break;
-            case details:
-                layoutPostOptions.setBackgroundColor(MainActivity.currentColor);
-                subreddit.setText(post.getSubreddit());
+                bindPostList(context, post);
                 break;
             case smallCards:
                 moreOptions.setImageResource(moreResource);
+                bindPostCards(context, post);
                 break;
             case cards:
                 moreOptions.setImageResource(moreResource);
+                bindPostCards(context, post);
                 if(post.isSelf()) {
                     linkButton.setVisibility(View.GONE);
                     try {
@@ -263,11 +216,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     } catch (NullPointerException e) {
                         layoutSelfTextPreview.setVisibility(View.GONE);
                     }
-                    //if(post.selfTextPreparedPreview == null) layoutSelfTextPreview.setVisibility(View.GONE);
-                    //else {
-                    //    layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                    //    selfTextCard.setText(post.selfTextPreparedPreview);
-                    //}
                 }
                 else {
                     layoutSelfTextPreview.setVisibility(View.GONE);
@@ -279,15 +227,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 break;
             case cardDetails:
                 moreOptions.setImageResource(moreResource);
+                bindPostCards(context, post);
                 if(post.isSelf()) {
                     linkButton.setVisibility(View.GONE);
                     if(post.getSelftextHTML()!=null) {
                         layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                        //if(post.selfTextPrepared == null) {
-                        //    post.selfTextPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
-                        //    post.selfTextPrepared = ConvertUtils.modifyURLSpan(context, post.selfTextPrepared);
-                        //}
-                        //selfTextCard.setText(post.selfTextPrepared);
                         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         stringBuilder = ConvertUtils.modifyURLSpan(context, stringBuilder);
                         selfTextCard.setText(stringBuilder);
@@ -303,6 +247,73 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     fullUrl.setText(post.getURL());
                 }
                 break;
+        }
+    }
+
+    private void bindPostList(Context context, Submission post) {
+        String dets1 = post.getScore() + " · " + post.agePrepared + " · " + post.getAuthor();
+        setIconsAndScoreText(context, postDets1, dets1, post);
+        String dets2 = (post.isSelf()) ? post.getDomain() : post.getSubreddit() + " · " + post.getDomain();
+        postDets2.setText(dets2);
+        commentsText.setText(String.valueOf(post.getCommentCount()));
+
+        if(post.isNSFW()) appendNsfwLabel(context, postDets2);
+    }
+
+    private void bindPostCards(Context context, Submission post) {
+        String dets = post.getAuthor() + " · " + post.agePrepared + " · ";
+        if(post.isSelf()) dets += post.getDomain();
+        else dets += post.getSubreddit() + " · " + post.getDomain();
+        postDets1.setText(dets);
+        //scoreText.setText(post.getScore() + " score");
+        setIconsAndScoreText(context, scoreText, post.getScore() + " score", post);
+        commentsText.setText(post.getCommentCount() + " comments");
+
+        if(post.isNSFW()) appendNsfwLabel(context, postDets1);
+    }
+
+    private void appendNsfwLabel(Context context, TextView textView) {
+        SpannableString nsfwSpan = new SpannableString(" · NSFW");
+        nsfwSpan.setSpan(new TextAppearanceSpan(context, R.style.nsfwLabel), 2, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.append(nsfwSpan);
+    }
+
+    private void setIconsAndScoreText(Context context, TextView textView, String text, Submission post) {
+        if(MainActivity.currentUser != null) {
+            //check user vote
+            if (post.getLikes().equals("true")) {
+                int index = text.indexOf(" ");
+                SpannableString spannable = new SpannableString(text);
+                spannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                textView.setText(spannable);
+                upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                downvote.setImageResource(downvoteResource);
+            } else if (post.getLikes().equals("false")) {
+                int index = text.indexOf(" ");
+                SpannableString spannable = new SpannableString(text);
+                spannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                textView.setText(spannable);
+                upvote.setImageResource(upvoteResource);
+                downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+            } else {
+                textView.setText(text);
+                textView.setTextColor(MainActivity.textHintColor);
+                upvote.setImageResource(upvoteResource);
+                downvote.setImageResource(downvoteResource);
+            }
+            //check saved post
+            if(post.isSaved()) save.setImageResource(R.mipmap.ic_action_save_yellow);
+            else save.setImageResource(saveResource);
+            //check hidden post
+            if(post.isHidden()) hide.setImageResource(R.mipmap.ic_action_hide_red);
+            else hide.setImageResource(hideResource);
+        }
+        else {
+            textView.setText(text);
+            upvote.setImageResource(upvoteResource);
+            downvote.setImageResource(downvoteResource);
+            save.setImageResource(saveResource);
+            hide.setImageResource(hideResource);
         }
     }
 

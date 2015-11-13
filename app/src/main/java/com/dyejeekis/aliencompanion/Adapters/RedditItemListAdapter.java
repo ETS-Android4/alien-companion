@@ -27,8 +27,8 @@ import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.ShowMore;
-import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
-import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
+import com.dyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
@@ -420,9 +420,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public TableLayout layoutTrophies;
         public TextView linkKarma;
         public TextView commentKarma;
+        //private boolean trophiesAdded;
 
         public UserInfoViewHolder(View itemView) {
             super(itemView);
+            //trophiesAdded = false;
             layoutKarma = (LinearLayout) itemView.findViewById(R.id.layout_karma);
             layoutTrophies = (TableLayout) itemView.findViewById(R.id.layout_trophies);
             linkKarma = (TextView) itemView.findViewById(R.id.txtView_linkKarma);
@@ -433,17 +435,19 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             linkKarma.setText(Long.toString(userInfo.getLinkKarma()));
             commentKarma.setText(Long.toString(userInfo.getCommentKarma()));
 
-            //setupTrophiesView((Activity) context, layoutTrophies, userInfo.getTrophyList());
+            setupTrophiesView((Activity) context, layoutTrophies, userInfo.getTrophyList());
         }
 
         private void setupTrophiesView(Activity mActivity, TableLayout trophiesLayout, List<Trophy> trophiesList) {
-
+            //trophiesAdded = true;
+            trophiesLayout.removeAllViews();
             DisplayMetrics dm = new DisplayMetrics();
             mActivity.getWindowManager().getDefaultDisplay().getMetrics(dm);
             int width=dm.widthPixels;
             //int height=dm.heightPixels;
             int dens=dm.densityDpi;
             double wi=(double)width/(double)dens;
+            if(MainActivity.dualPaneActive) wi /= 2;
             //double hi=(double)height/(double)dens;
             //double x = Math.pow(wi,2);
             //double y = Math.pow(hi,2);

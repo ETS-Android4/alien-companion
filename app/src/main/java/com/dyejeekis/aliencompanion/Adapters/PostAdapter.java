@@ -18,19 +18,16 @@ import com.dyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.dyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
-import com.dyejeekis.aliencompanion.LinkHandler;
-import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
-import com.dyejeekis.aliencompanion.MyLinkMovementMethod;
+import com.dyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
+import com.dyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.R;
-import com.dyejeekis.aliencompanion.Models.Thumbnail;
 import com.dyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 import com.dyejeekis.aliencompanion.enums.PostViewType;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.Utils;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by George on 5/17/2015.
@@ -404,7 +401,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         }
 
         public void setColorBandColor(int indentation) {
-            int color = Color.parseColor(indColors[indentation]);
+            int index = (indentation >= indColors.length) ? (indentation - indColors.length)+1 : indentation;
+            int color = Color.parseColor(indColors[index]);
             colorBand.setBackgroundColor(color);
         }
 
@@ -413,53 +411,53 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         }
     }
 
-    public static class ContentViewHolder extends RecyclerView.ViewHolder {
-        public TextView postTitle;
-        public TextView postDets1;
-        public TextView comments;
-        public TextView author;
-        public TextView score;
-        public TextView age;
-        public TextView subreddit;
-        public TextView selfText;
-        public TextView nsfw;
-        public ImageView postImage;
-        public ProgressBar progressBar;
-        public LinearLayout fullComments;
-        public LinearLayout postDetails;
-        public LinearLayout postOptions;
-        public ImageView upvote;
-        public ImageView downvote;
-        public ImageView save;
-        public ImageView hide;
-        public ImageView viewUser;
-        public ImageView openBrowser;
-        public ImageView moreOptions;
-
-        public ContentViewHolder(View itemView) {
-            super(itemView);
-            postTitle = (TextView) itemView.findViewById(R.id.postTitle);
-            postDets1 = (TextView) itemView.findViewById(R.id.postDets1);
-            author = (TextView) itemView.findViewById(R.id.author);
-            score = (TextView) itemView.findViewById(R.id.postScore);
-            age = (TextView) itemView.findViewById(R.id.postAge);
-            subreddit = (TextView) itemView.findViewById(R.id.subreddit);
-            nsfw = (TextView) itemView.findViewById(R.id.txtView_nsfw);
-            selfText = (TextView) itemView.findViewById(R.id.selfText);
-            postImage = (ImageView) itemView.findViewById(R.id.postImage);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);
-            comments = (TextView) itemView.findViewById(R.id.txtView_comments);
-            fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
-            postDetails = (LinearLayout) itemView.findViewById(R.id.layout_post_details);
-            postOptions = (LinearLayout) itemView.findViewById(R.id.layout_post_options);
-            upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
-            downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
-            save =  (ImageView) itemView.findViewById(R.id.btn_save);
-            hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
-            viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
-            openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
-            moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
-        }
-    }
+    //public static class ContentViewHolder extends RecyclerView.ViewHolder {
+    //    public TextView postTitle;
+    //    public TextView postDets1;
+    //    public TextView comments;
+    //    public TextView author;
+    //    public TextView score;
+    //    public TextView age;
+    //    public TextView subreddit;
+    //    public TextView selfText;
+    //    public TextView nsfw;
+    //    public ImageView postImage;
+    //    public ProgressBar progressBar;
+    //    public LinearLayout fullComments;
+    //    public LinearLayout postDetails;
+    //    public LinearLayout postOptions;
+    //    public ImageView upvote;
+    //    public ImageView downvote;
+    //    public ImageView save;
+    //    public ImageView hide;
+    //    public ImageView viewUser;
+    //    public ImageView openBrowser;
+    //    public ImageView moreOptions;
+//
+    //    public ContentViewHolder(View itemView) {
+    //        super(itemView);
+    //        postTitle = (TextView) itemView.findViewById(R.id.postTitle);
+    //        postDets1 = (TextView) itemView.findViewById(R.id.postDets1);
+    //        author = (TextView) itemView.findViewById(R.id.author);
+    //        score = (TextView) itemView.findViewById(R.id.postScore);
+    //        age = (TextView) itemView.findViewById(R.id.postAge);
+    //        subreddit = (TextView) itemView.findViewById(R.id.subreddit);
+    //        nsfw = (TextView) itemView.findViewById(R.id.txtView_nsfw);
+    //        selfText = (TextView) itemView.findViewById(R.id.selfText);
+    //        postImage = (ImageView) itemView.findViewById(R.id.postImage);
+    //        progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar3);
+    //        comments = (TextView) itemView.findViewById(R.id.txtView_comments);
+    //        fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
+    //        postDetails = (LinearLayout) itemView.findViewById(R.id.layout_post_details);
+    //        postOptions = (LinearLayout) itemView.findViewById(R.id.layout_post_options);
+    //        upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+    //        downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+    //        save =  (ImageView) itemView.findViewById(R.id.btn_save);
+    //        hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+    //        viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+    //        openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
+    //        moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+    //    }
+    //}
 
 }

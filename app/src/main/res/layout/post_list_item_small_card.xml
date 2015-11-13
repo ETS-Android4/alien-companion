@@ -46,83 +46,21 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="(post details here)"
+            android:id="@+id/textView_dets1"
+            android:textSize="?attr/font_small"
+            android:textColor="?attr/themeTextHintColor"
+            android:longClickable="false"
             android:paddingLeft="10dp"
-            android:paddingBottom="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(username)"
-                android:id="@+id/txtView_postAuthor"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" · "
-                android:id="@+id/textView16"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(age)"
-                android:id="@+id/txtView_postAge"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" · "
-                android:id="@+id/textView19"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(subreddit) · "
-                android:id="@+id/txtView_postSubreddit"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(domain)"
-                android:id="@+id/txtView_postDomain"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView15"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor"
-                android:text=" " />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NSFW"
-                android:id="@+id/txtView_nsfw"
-                android:textColor="#d81d1b"
-                android:background="@drawable/round_corner_nsfw"
-                android:textSize="?attr/font_small" />
-        </LinearLayout>
+            android:visibility="visible" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -130,97 +68,70 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                android:layout_weight="1"
+                android:weightSum="2">
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="##### score"
+                    android:id="@+id/textView_score"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_weight="1" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(score)"
-                        android:id="@+id/txtView_postScore"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" points"
-                        android:id="@+id/textView26"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(commentCount)"
-                        android:id="@+id/txtView_postComments"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" comments"
-                        android:id="@+id/textView27"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="##### comments"
+                    android:id="@+id/textView_comments"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|right">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_upvote"
+                android:src="@mipmap/ic_action_upvote_grey"
+                android:padding="10dp"
+                android:cropToPadding="false" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_upvote"
-                    android:src="@mipmap/ic_action_upvote_grey"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="10dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_downvote"
+                android:src="@mipmap/ic_action_downvote_grey"
+                android:padding="10dp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_downvote"
-                    android:src="@mipmap/ic_action_downvote_grey"
-                    android:padding="10dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_save"
+                android:src="@mipmap/ic_action_save_grey"
+                android:padding="10dp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_save"
-                    android:src="@mipmap/ic_action_save_grey"
-                    android:padding="10dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_hide"
+                android:src="@mipmap/ic_action_hide_grey"
+                android:padding="10dp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_hide"
-                    android:src="@mipmap/ic_action_hide_grey"
-                    android:padding="10dp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_more"
+                android:src="@mipmap/ic_action_more_vertical_grey"
+                android:padding="10dp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_more"
-                    android:src="@mipmap/ic_action_more_vertical_grey"
-                    android:padding="10dp" />
-            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

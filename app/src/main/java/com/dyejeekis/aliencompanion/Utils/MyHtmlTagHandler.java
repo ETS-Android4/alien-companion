@@ -1,11 +1,15 @@
-package com.dyejeekis.aliencompanion;
+package com.dyejeekis.aliencompanion.Utils;
 
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.style.StrikethroughSpan;
+import android.util.Log;
+import android.util.Xml;
 
 import org.xml.sax.XMLReader;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by George on 8/6/2015.
@@ -17,7 +21,34 @@ public class MyHtmlTagHandler implements Html.TagHandler {
         if(tag.equalsIgnoreCase("del")) {
             processStrike(opening, output);
         }
+        //else if(tag.equalsIgnoreCase("a")) {
+        //    if(isSpoiler(xmlReader)) {
+        //        processSpoiler(opening, output, xmlReader);
+        //    }
+        //}
     }
+
+    //private boolean isSpoiler(XMLReader xmlReader) {
+    //    try {
+    //        Field elementField = xmlReader.getClass().getDeclaredField("href");
+    //        elementField.setAccessible(true);
+    //        Log.d("geotest", "field: " + elementField.toString());
+    //        try {
+    //            String string = (String) elementField.get(xmlReader);
+    //            Log.d("geotest", "value: " + string);
+    //            if (string.equalsIgnoreCase("#s") || string.equalsIgnoreCase("/s")) return true;
+    //        } catch (IllegalAccessException e) {
+    //            e.printStackTrace();
+    //        }
+    //    } catch (NoSuchFieldException e) {
+    //        e.printStackTrace();
+    //    }
+    //    return false;
+    //}
+
+    //private void processSpoiler(boolean opening, Editable output, XMLReader xmlReader) {
+//
+    //}
 
     private void processStrike(boolean opening, Editable output) {
         int len = output.length();

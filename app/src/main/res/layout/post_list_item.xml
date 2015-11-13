@@ -49,91 +49,21 @@
                     android:textSize="?attr/font_medium"
                     android:textColor="?attr/themeTextColor" />
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(score) · (age) · (author)"
+                    android:id="@+id/textView_dets1"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(score)"
-                        android:id="@+id/txtView_postScore"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" · "
-                        android:id="@+id/textView7"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(age)"
-                        android:id="@+id/txtView_postAge"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" · "
-                        android:id="@+id/textView8"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(author)"
-                        android:id="@+id/txtView_postAuthor"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(subreddit) · "
-                        android:id="@+id/txtView_postSubreddit"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="(domain)"
-                        android:id="@+id/txtView_postDomain"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" "
-                        android:id="@+id/textView12"
-                        android:textSize="?attr/font_small"
-                        android:textColor="?attr/themeTextHintColor" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NSFW"
-                        android:id="@+id/txtView_nsfw"
-                        android:textColor="#d81d1b"
-                        android:background="@drawable/round_corner_nsfw"
-                        android:textSize="?attr/font_small" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(subreddit) · (domain) · NSFW"
+                    android:id="@+id/textView_dets2"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor" />
 
             </LinearLayout>
         </LinearLayout>
@@ -153,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="#####"
-                android:id="@+id/txtView_postComments"
+                android:id="@+id/textView_comments"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="?attr/font_small"

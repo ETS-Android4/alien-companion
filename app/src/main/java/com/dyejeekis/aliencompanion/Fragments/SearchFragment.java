@@ -219,10 +219,12 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     public void redrawList() {
-        List<RedditItem> items = postListAdapter.redditItems;
-        items.remove(items.size() - 1);
-        postListAdapter = new RedditItemListAdapter(activity, items);
-        contentView.setAdapter(postListAdapter);
+        try {
+            List<RedditItem> items = postListAdapter.redditItems;
+            items.remove(items.size() - 1);
+            postListAdapter = new RedditItemListAdapter(activity, items);
+            contentView.setAdapter(postListAdapter);
+        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     @Override

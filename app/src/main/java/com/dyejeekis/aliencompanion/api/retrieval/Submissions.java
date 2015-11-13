@@ -49,6 +49,8 @@ public class Submissions implements ActorDriven {
     private final HttpClient httpClient;
     private User user;
 
+	public static int postsSkipped;
+
     /**
      * Constructor.
      * Default general actor will be used.
@@ -56,6 +58,7 @@ public class Submissions implements ActorDriven {
      */
     public Submissions(HttpClient httpClient) {
         this.httpClient = httpClient;
+		postsSkipped = 0;
     }
     
     /**
@@ -68,6 +71,7 @@ public class Submissions implements ActorDriven {
     public Submissions(HttpClient httpClient, User actor) {
     	this.httpClient = httpClient;
         this.user = actor;
+		postsSkipped = 0;
     }
     
     /**
@@ -129,6 +133,7 @@ public class Submissions implements ActorDriven {
 								submission.setUser(user);
 								submissions.add(submission);
 							}
+							else postsSkipped ++;
 						}
                     }
 				}

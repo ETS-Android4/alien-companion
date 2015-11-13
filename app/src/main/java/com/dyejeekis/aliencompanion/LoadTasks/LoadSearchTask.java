@@ -122,7 +122,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     ImageLoader.preloadThumbnails(submissions, context);
                     sf.postListAdapter = adapter;
                 }
-                sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
+                sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (loadType) {
                     case init:
                         if(submissions.size()==0) {

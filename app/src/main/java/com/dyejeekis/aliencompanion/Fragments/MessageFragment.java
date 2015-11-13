@@ -193,10 +193,12 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     public void redrawList() {
-        List<RedditItem> items = adapter.redditItems;
-        items.remove(items.size()-1);
-        adapter = new RedditItemListAdapter(activity, items);
-        contentView.setAdapter(adapter);
+        try {
+            List<RedditItem> items = adapter.redditItems;
+            items.remove(items.size() - 1);
+            adapter = new RedditItemListAdapter(activity, items);
+            contentView.setAdapter(adapter);
+        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     public void showCategoryPopup(View v) {

@@ -165,7 +165,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     uf.userAdapter = adapter;
                 }
                 else ToastUtils.displayShortToast(activity, "No posts found");
-                uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT;
+                uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (mLoadType) {
                     case init:
                         uf.contentView.setAdapter(uf.userAdapter);

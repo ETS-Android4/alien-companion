@@ -9,18 +9,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
 import com.dyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
-import com.dyejeekis.aliencompanion.LinkHandler;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
-import com.dyejeekis.aliencompanion.MyClickableSpan;
-import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.R;
-import com.dyejeekis.aliencompanion.api.entity.Submission;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;

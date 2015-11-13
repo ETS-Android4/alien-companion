@@ -1,6 +1,5 @@
 package com.dyejeekis.aliencompanion.api.entity;
 
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
@@ -15,12 +14,10 @@ import org.json.simple.JSONObject;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.Models.Thumbnail;
-import com.dyejeekis.aliencompanion.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.dyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 

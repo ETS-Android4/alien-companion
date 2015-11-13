@@ -1,4 +1,4 @@
-package com.dyejeekis.aliencompanion;
+package com.dyejeekis.aliencompanion.Utils;
 
 import android.text.Layout;
 import android.text.Selection;

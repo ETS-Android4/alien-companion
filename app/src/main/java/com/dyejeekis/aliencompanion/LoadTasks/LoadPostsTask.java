@@ -155,7 +155,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     ImageLoader.preloadThumbnails(submissions, context);
                     plf.postListAdapter = adapter;
                 }
-                plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT;
+                plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
 
                 switch (loadType) {
                     case init:

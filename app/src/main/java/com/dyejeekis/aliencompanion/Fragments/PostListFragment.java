@@ -428,10 +428,12 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void redrawList() {
-        List<RedditItem> items = postListAdapter.redditItems;
-        items.remove(items.size()-1);
-        postListAdapter = new RedditItemListAdapter(activity, items);
-        contentView.setAdapter(postListAdapter);
+        try {
+            List<RedditItem> items = postListAdapter.redditItems;
+            items.remove(items.size() - 1);
+            postListAdapter = new RedditItemListAdapter(activity, items);
+            contentView.setAdapter(postListAdapter);
+        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     public void setSubreddit(String subreddit) {

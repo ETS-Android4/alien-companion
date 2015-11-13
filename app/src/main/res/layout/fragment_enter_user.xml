@@ -43,7 +43,7 @@
             android:text="CANCEL"
             android:id="@+id/button_cancel"
             android:textColor="#03A9F4"
-            android:background="@android:color/transparent" />
+            android:background="?attr/themeButtonSelector" />
 
         <Button
             android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             android:text="VIEW"
             android:id="@+id/button_view"
             android:textColor="#03A9F4"
-            android:background="@android:color/transparent" />
+            android:background="?attr/themeButtonSelector" />
     </LinearLayout>
 
 </LinearLayout>

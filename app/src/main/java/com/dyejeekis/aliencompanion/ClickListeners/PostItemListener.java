@@ -11,7 +11,7 @@ import com.dyejeekis.aliencompanion.Activities.SearchActivity;
 import com.dyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.dyejeekis.aliencompanion.Activities.UserActivity;
 import com.dyejeekis.aliencompanion.Fragments.PostFragment;
-import com.dyejeekis.aliencompanion.LinkHandler;
+import com.dyejeekis.aliencompanion.Utils.LinkHandler;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.api.entity.Submission;
 
