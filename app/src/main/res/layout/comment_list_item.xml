@@ -23,11 +23,12 @@
             android:background="?attr/themeSelector"
             android:orientation="vertical">
 
-            <LinearLayout
+            <org.apmem.tools.layouts.FlowLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:layoutDirection="ltr">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,7 +82,7 @@
                     android:text="10 hidden"
                     android:layout_marginLeft="5dp"
                     android:textSize="?attr/font_small" />
-            </LinearLayout>
+            </org.apmem.tools.layouts.FlowLayout>
 
             <TextView
                 android:id="@+id/comment_textview"
