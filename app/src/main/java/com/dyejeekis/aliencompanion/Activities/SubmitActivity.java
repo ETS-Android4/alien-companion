@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.dyejeekis.aliencompanion.Fragments.ComposeMessageFragment;
 import com.dyejeekis.aliencompanion.Fragments.SubmitCommentFragment;
 import com.dyejeekis.aliencompanion.Fragments.SubmitImageFragment;
 import com.dyejeekis.aliencompanion.Fragments.SubmitLinkFragment;
@@ -42,14 +43,10 @@ public class SubmitActivity extends BackNavActivity {
             switch (submitType) {
                 case link:
                     getSupportActionBar().setTitle("Submit link");
-                    //SubmitLinkFragment linkFragment = new SubmitLinkFragment();
-                    //getFragmentManager().beginTransaction().add(R.id.fragmentHolder, linkFragment, "submitFragment").commit();
                     fragment = new SubmitLinkFragment();
                     break;
                 case self:
                     getSupportActionBar().setTitle("Submit text");
-                    //SubmitTextFragment textFragment = new SubmitTextFragment();
-                    //getFragmentManager().beginTransaction().add(R.id.fragmentHolder, textFragment, "submitFragment").commit();
                     fragment = new SubmitTextFragment();
                     break;
                 case image:
@@ -58,9 +55,11 @@ public class SubmitActivity extends BackNavActivity {
                     break;
                 case comment:
                     getSupportActionBar().setTitle("Submit reply");
-                    //SubmitCommentFragment commentFragment = new SubmitCommentFragment();
-                    //getFragmentManager().beginTransaction().add(R.id.fragmentHolder, commentFragment, "submitFragment").commit();
                     fragment = new SubmitCommentFragment();
+                    break;
+                case message:
+                    getSupportActionBar().setTitle("Compose message");
+                    fragment = new ComposeMessageFragment();
                     break;
             }
             getFragmentManager().beginTransaction().add(R.id.fragmentHolder, fragment, "submitFragment").commit();

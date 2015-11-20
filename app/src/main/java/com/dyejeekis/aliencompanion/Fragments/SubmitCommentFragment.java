@@ -17,6 +17,7 @@ import com.dyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
 import com.dyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.dyejeekis.aliencompanion.R;
 import com.dyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.api.entity.Comment;
 import com.dyejeekis.aliencompanion.enums.UserActionType;
 
@@ -88,10 +89,11 @@ public class SubmitCommentFragment extends Fragment {
             UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
             //TODO: sort this shit
 
+            ToastUtils.displayShortToast(getActivity(), "Submitting..");
             LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, replyField.getText().toString());
             task.execute();
 
-            getActivity().finish();
+            //getActivity().finish();
         }
 
         return super.onOptionsItemSelected(item);

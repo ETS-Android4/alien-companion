@@ -154,7 +154,10 @@ public class MainActivity extends AppCompatActivity {
         currentColor = colorPrimary;
         colorPrimaryDark = getPrimaryDarkColor();
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
+        if(MainActivity.nightThemeEnabled) {
+            getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
+            toolbar.setPopupTheme(R.style.OverflowStyleDark);
+        }
         toolbar.setBackgroundColor(colorPrimary);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

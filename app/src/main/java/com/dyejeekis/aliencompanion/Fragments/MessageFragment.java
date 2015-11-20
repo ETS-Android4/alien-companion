@@ -2,6 +2,7 @@ package com.dyejeekis.aliencompanion.Fragments;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,17 +18,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dyejeekis.aliencompanion.Activities.MainActivity;
+import com.dyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.dyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.dyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadMessagesTask;
 import com.dyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
 import com.dyejeekis.aliencompanion.Models.RedditItem;
 import com.dyejeekis.aliencompanion.R;
+import com.dyejeekis.aliencompanion.Utils.ToastUtils;
 import com.dyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.dyejeekis.aliencompanion.api.retrieval.params.MessageCategory;
 import com.dyejeekis.aliencompanion.api.retrieval.params.MessageCategorySort;
 import com.dyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.dyejeekis.aliencompanion.enums.LoadType;
+import com.dyejeekis.aliencompanion.enums.SubmitType;
 
 import java.util.List;
 
@@ -139,6 +143,10 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         switch (item.getItemId()) {
             case R.id.action_compose:
                 //start compose message activity
+                //ToastUtils.displayShortToast(activity, "Coming soon!");
+                Intent intent = new Intent(activity, SubmitActivity.class);
+                intent.putExtra("submitType", SubmitType.message);
+                activity.startActivity(intent);
                 return true;
             case R.id.action_sort:
                 showCategoryPopup(activity.findViewById(R.id.action_sort));

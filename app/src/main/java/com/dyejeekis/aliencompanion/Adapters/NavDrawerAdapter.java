@@ -1,10 +1,13 @@
 package com.dyejeekis.aliencompanion.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -376,9 +379,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     public void onClick(View v) {
                         String text = (MainActivity.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
                         text += " (App will restart)";
-                        View.OnClickListener listener = new View.OnClickListener() {
+                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
+                            public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
                                 SharedPreferences.Editor editor = MainActivity.prefs.edit();
                                 editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
@@ -386,8 +389,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                                 restartApp();
                             }
                         };
-                        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
-                        dialog.show(activity.getFragmentManager(), "dialog");
+                        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+                                .setNegativeButton("No", null).show();
+                        //ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
+                        //dialog.show(activity.getFragmentManager(), "dialog");
                     }
                 });
                 //headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
@@ -405,9 +410,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     public void onClick(View v) {
                         String text = (MainActivity.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
                         text += " (App will restart)";
-                        View.OnClickListener listener = new View.OnClickListener() {
+                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
+                            public void onClick(DialogInterface dialog, int which) {
                                 MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
                                 SharedPreferences.Editor editor = MainActivity.prefs.edit();
                                 editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
@@ -415,8 +420,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                                 restartApp();
                             }
                         };
-                        ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
-                        dialog.show(activity.getFragmentManager(), "dialog");
+                        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+                                .setNegativeButton("No", null).show();
+                        //ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
+                        //dialog.show(activity.getFragmentManager(), "dialog");
                     }
                 });
                 //headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {

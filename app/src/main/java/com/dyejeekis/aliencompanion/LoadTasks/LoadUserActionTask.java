@@ -34,12 +34,20 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private User user;
     private String currentPass, newPass;
     private String title, linkOrText, subreddit, captcha_iden, captcha_sol;
+    private String recipient, subject, message;
+
+    public LoadUserActionTask(Context context, String recipient, String subject, String message) {
+        this.context = context;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.message = message;
+        userActionType = UserActionType.sendMessage;
+    }
 
     public LoadUserActionTask(Context context, String postName, UserActionType userActionType) {
         this.context = context;
         this.userActionType = userActionType;
         this.postName = postName;
-        //httpClient = new PoliteRedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, String postName, UserActionType userActionType, Submission submission) {
@@ -47,7 +55,6 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.userActionType = userActionType;
         this.postName = postName;
         this.submission = submission;
-        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, String postName, UserActionType userActionType, String text) {
@@ -55,7 +62,6 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.userActionType = userActionType;
         this.postName = postName;
         this.text = text;
-        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, UserActionType userActionType, User user, String currentPass, String newPass) {
@@ -64,7 +70,6 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.user = user;
         this.currentPass = currentPass;
         this.newPass = newPass;
-        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, UserActionType userActionType, String title, String linkOrText, String subreddit) {
@@ -73,15 +78,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.title = title;
         this.linkOrText = linkOrText;
         this.subreddit = subreddit;
-        //httpClient = new RedditHttpClient();
     }
 
     public LoadUserActionTask(Context context, UserActionType type, String subreddit) {
         this.context = context;
-        //this.user = MainActivity.currentUser;
         this.userActionType = type;
         this.subreddit = subreddit;
-        //httpClient = new RedditHttpClient();
     }
 
     @Override
@@ -151,6 +153,11 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     fullname = Subreddit.getSubreddit(httpClient, subreddit).getFullName();
                     profileActions.unsubscribe(fullname);
                     break;
+                case sendMessage:
+                    captcha_iden = null;
+                    captcha_sol = null;
+                    submitActions.compose(recipient, subject, message, captcha_iden, captcha_sol);
+                    break;
             }
         } catch (ActionFailedException | NullPointerException | RetrievalFailedException e) {
             e.printStackTrace();
@@ -168,9 +175,10 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             switch (userActionType) {
                 case submitText: case submitLink:
                     ((Activity) context).finish();
-                    ToastUtils.displayShortToast(context, "Submission sucessful");
+                    ToastUtils.displayShortToast(context, "Submission successful");
                     break;
                 case submitComment:
+                    ((Activity) context).finish();
                     ToastUtils.displayShortToast(context, "Reply sent");
                     break;
                 case save:
@@ -196,6 +204,10 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     break;
                 case unsubscribe:
                     ToastUtils.displayShortToast(context, "Unsubscribed from " + subreddit);
+                    break;
+                case sendMessage:
+                    ((Activity) context).finish();
+                    ToastUtils.displayShortToast(context, "Message sent");
                     break;
             }
         }

@@ -4,6 +4,9 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">?attr/themeBackgroundColor</item>
+        <item name="android:textColor">?attr/themeTextColor</item>
+        <item name="android:textColorSecondary">?attr/themeTextHintColor</item>
         <!--<item name="android:textColor">@android:color/black</item>-->
         <!--<item name="android:actionOverflowButtonStyle">@style/OverFlow</item>-->
         <!--<item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>-->
@@ -30,14 +33,14 @@
     <style name="MainActivityTheme" parent="AppTheme">
     </style>
 
-    <style name="SettingsLightTheme">
+    <!--<style name="SettingsLightTheme">
         <item name="themeBackgroundColor">@android:color/white</item>
     </style>
 
     <style name="SettingsDarkTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:textColorSecondary">@color/dark_gray</item>
         <item name="themeBackgroundColor">@android:color/black</item>
-    </style>
+    </style>-->
 
     <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/white</item>

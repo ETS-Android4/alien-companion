@@ -21,10 +21,14 @@ public class SettingsActivity extends BackNavActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
+        if(MainActivity.nightThemeEnabled) {
+            getTheme().applyStyle(R.style.selectedTheme_night, true);
+        }
+        else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(bundle);
-        if(MainActivity.nightThemeEnabled) getTheme().applyStyle(R.style.SettingsDarkTheme, true);
-        else getTheme().applyStyle(R.style.SettingsLightTheme, true);
         setContentView(R.layout.activity_settings);
+        if(MainActivity.nightThemeEnabled)
+            getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(MainActivity.currentColor);

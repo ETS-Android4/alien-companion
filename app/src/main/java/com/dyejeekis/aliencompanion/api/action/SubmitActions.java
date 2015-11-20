@@ -262,4 +262,28 @@ public class SubmitActions implements ActorDriven {
 
     }
 
+    public boolean compose(String recipient, String subject, String message, String iden, String captcha) throws ActionFailedException {
+        JSONObject object = (JSONObject) httpClient.post("api_type=json&to=" + recipient + "&subject=" + subject + "&text=" + message + "&iden=" + iden + "&captcha=" + captcha
+        + "&uh=" + user.getModhash(), ApiEndpointUtils.MESSAGE_COMPOSE, user.getCookie()).getResponseObject();
+
+        String responseAsString = object.toJSONString();
+
+        if (responseAsString.contains(".error.USER_REQUIRED")) {
+            System.err.println("User is required for this action.");
+            return false;
+        } else if (responseAsString.contains(".error.NOT_AUTHOR")) {
+            System.err.println("User is not the author of this thing.");
+            return false;
+        } else if (responseAsString.contains(".error.TOO_LONG")) {
+            System.err.println("The text is too long.");
+            return false;
+        } else if (responseAsString.contains(".error.NO_TEXT")) {
+            System.err.println("Missing text.");
+            return false;
+
+        } else {
+            return true;
+        }
+    }
+
 }

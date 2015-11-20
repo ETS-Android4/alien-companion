@@ -10,7 +10,7 @@
                 android:endColor="#ff747674"
                 android:angle="270"
                 />-->
-            <solid android:color="@android:color/transparent"/>
+            <solid android:color="@android:color/white"/>
         </shape>
     </item>
 

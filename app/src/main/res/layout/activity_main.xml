@@ -4,8 +4,7 @@
     tools:context=".MainActivity"
     android:orientation="vertical"
     android:baselineAligned="false"
-    android:id="@+id/fragmentHolder"
-    android:background="?attr/themeBackgroundColor">
+    android:id="@+id/fragmentHolder">
 
 
 </RelativeLayout>
