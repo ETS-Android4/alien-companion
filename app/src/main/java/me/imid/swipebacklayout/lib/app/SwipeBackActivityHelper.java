@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.dyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.R;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.Utils;

@@ -2,32 +2,32 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
-        android:fragment="com.dyejeekis.aliencompanion.Fragments.PreferenceFragments.GeneralFragment"
+        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.GeneralFragment"
         android:summary="@string/options_general_sub"
         android:title="@string/options_general">
     </header>
     <header
-        android:fragment="com.dyejeekis.aliencompanion.Fragments.PreferenceFragments.AppearanceFragment"
+        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.AppearanceFragment"
         android:summary="@string/options_appearance_sub"
         android:title="@string/options_appearance">
     </header>
     <header
-        android:fragment="com.dyejeekis.aliencompanion.Fragments.PreferenceFragments.NavigationFragment"
+        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.NavigationFragment"
         android:summary="@string/options_navigation_sub"
         android:title="@string/options_navigation">
     </header>
     <header
-        android:fragment="com.dyejeekis.aliencompanion.Fragments.PreferenceFragments.PostsFragment"
+        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.PostsFragment"
         android:summary="@string/options_posts_sub"
         android:title="@string/options_posts">
     </header>
     <header
-        android:fragment="com.dyejeekis.aliencompanion.Fragments.PreferenceFragments.CommentsFragment"
+        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.CommentsFragment"
         android:summary="@string/options_comments_sub"
         android:title="@string/options_comments">
     </header>
     <header
-        android:fragment="com.dyejeekis.aliencompanion.Fragments.PreferenceFragments.OtherFragment"
+        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.OtherFragment"
         android:summary="@string/options_other_sub"
         android:title="@string/options_other">
     </header>

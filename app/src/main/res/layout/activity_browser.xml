@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dyejeekis.aliencompanion.Activities.BrowserActivity"
+    tools:context="com.gDyejeekis.aliencompanion.Activities.BrowserActivity"
     android:orientation="vertical">
 
     <include layout="@layout/my_toolbar" />
@@ -9,7 +9,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.dyejeekis.aliencompanion.Fragments.BrowserFragment"
+        android:name="com.gDyejeekis.aliencompanion.Fragments.BrowserFragment"
         android:id="@+id/fragment"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />

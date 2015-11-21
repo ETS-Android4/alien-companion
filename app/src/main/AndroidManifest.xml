@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dyejeekis.aliencompanion" >
+    package="com.gDyejeekis.aliencompanion" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Activities.MainActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -25,58 +25,58 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.PostActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.PostActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post" >
         </activity>
         <activity
-            android:name=".Activities.BrowserActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.BrowserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_browser" >
         </activity>
         <activity
-            android:name=".Activities.UserActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.UserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_user" >
         </activity>
         <activity
-            android:name=".Activities.SearchActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.SearchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name=".Activities.SettingsActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_prefs" >
         </activity>
         <activity
-            android:name=".Activities.SubredditActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.SubredditActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_subreddit" >
         </activity>
         <activity
-            android:name=".Activities.SubmitActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.SubmitActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_submit_post" >
         </activity>
 
         <service
-            android:name=".Services.DownloaderService"
+            android:name="com.gDyejeekis.aliencompanion.Services.DownloaderService"
             android:enabled="true" >
         </service>
 
         <activity
-            android:name=".Activities.MessageActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.MessageActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_message" >
         </activity>
         <activity
-            android:name=".Activities.OAuthActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.OAuthActivity"
             android:configChanges="orientation|screenSize"
             android:label="OAuthActivity" >
         </activity>
         <activity
-            android:name=".Activities.EditSubredditsActivity"
+            android:name="com.gDyejeekis.aliencompanion.Activities.EditSubredditsActivity"
             android:configChanges="orientation|screenSize"
             android:label="Edit" >
         </activity>

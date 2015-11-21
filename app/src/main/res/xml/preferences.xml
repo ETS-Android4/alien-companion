@@ -42,7 +42,7 @@
             android:key="dualPane"
             android:title="Dual pane in landscape"
             android:summary="Tablet recommended"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
     <PreferenceCategory

@@ -44,7 +44,7 @@ import android.widget.Checkable;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.dyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.R;
 
 import java.io.File;
 import java.io.FileWriter;
