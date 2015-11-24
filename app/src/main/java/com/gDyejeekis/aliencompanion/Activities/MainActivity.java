@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
             MyApplication.currentColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
             toolbar.setBackgroundColor(MyApplication.colorPrimary);
-            MyApplication.colorPrimaryDark = MyApplication.getPrimaryDarkColor(getResources().getStringArray(R.array.colorPrimaryValues), getResources().getStringArray(R.array.colorPrimaryDarkValues));
+            MyApplication.colorPrimaryDark = MyApplication.getPrimaryDarkColor(MyApplication.primaryColors, MyApplication.primaryDarkColors);
             drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
             listFragment.colorSchemeChanged();
             adapter.notifyDataSetChanged();
@@ -406,7 +406,11 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.action_refresh:
                     MyApplication.actionSort = false;
-                    showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
+                    try {
+                        showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
+                    } catch (Exception e) {
+                        showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+                    } //TODO: find a more suitable anchor
                     return true;
             }
         }
