@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.EditSubredditsActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class SubredditsListener extends NavDrawerListener {
         else if(v.getId() == R.id.layoutEdit){
             //ToastUtils.displayShortToast(getActivity(), "Coming soon!");
             Intent intent = new Intent(getActivity(), EditSubredditsActivity.class);
-            ArrayList<String> subreddits = (ArrayList) MainActivity.currentAccount.getSubreddits();
+            ArrayList<String> subreddits = (ArrayList) MyApplication.currentAccount.getSubreddits();
             //if(MainActivity.currentUser != null) subreddits = MainActivity.currentAccount.getSubredditsArraylist();
             //else {
             //    subreddits = new ArrayList<>();

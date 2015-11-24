@@ -11,6 +11,7 @@ import com.gDyejeekis.aliencompanion.Activities.OAuthActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AccountOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 /**
@@ -44,7 +45,7 @@ public class AccountListener extends NavDrawerListener {
                             dialogFragment.show(getActivity().getFragmentManager(), "dialog");
                         }
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME + 75);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME + 75);
                 break;
             //case NavDrawerAccount.TYPE_LOGGED_OUT:
             //    new Handler().postDelayed(new Runnable() {
@@ -66,7 +67,7 @@ public class AccountListener extends NavDrawerListener {
                     @Override
                     public void run() {
                         //NavDrawerAdapter.currentAccountIndex = position - 1;
-                        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                        SharedPreferences.Editor editor = MyApplication.prefs.edit();
                         NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
                         editor.putString("currentAccountName", accountItem.getName());
                         editor.apply();
@@ -74,7 +75,7 @@ public class AccountListener extends NavDrawerListener {
                         getAdapter().setCurrentAccountName(accountItem.getName());
                         //getAdapter().notifyDataSetChanged();
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
         }
     }

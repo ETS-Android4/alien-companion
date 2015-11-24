@@ -1,10 +1,11 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.action.MarkActions;
 import com.gDyejeekis.aliencompanion.api.action.ProfileActions;
@@ -88,9 +89,9 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... unused) {
         try {
-            MarkActions markActions = new MarkActions(httpClient, MainActivity.currentUser);
-            SubmitActions submitActions = new SubmitActions(httpClient, MainActivity.currentUser);
-            ProfileActions profileActions = new ProfileActions(httpClient, MainActivity.currentUser);
+            MarkActions markActions = new MarkActions(httpClient, MyApplication.currentUser);
+            SubmitActions submitActions = new SubmitActions(httpClient, MyApplication.currentUser);
+            ProfileActions profileActions = new ProfileActions(httpClient, MyApplication.currentUser);
             switch (userActionType) {
                 case novote:
                     markActions.vote(postName, 0);

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.R;
@@ -60,7 +61,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public PostViewType viewType;
 
     //private static final int clickedColor = Color.GRAY;
-    private static final int clickedColor = MainActivity.textHintColor;
+    private static final int clickedColor = MyApplication.textHintColor;
     private static int upvoteColor, downvoteColor;
 
     public PostViewHolder(View itemView, PostViewType type) {
@@ -80,7 +81,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
 
-        if(viewType == PostViewType.listItem || viewType == PostViewType.details || MainActivity.nightThemeEnabled) {
+        if(viewType == PostViewType.listItem || viewType == PostViewType.details || MyApplication.nightThemeEnabled) {
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
             upvoteResource = R.mipmap.ic_action_upvote_white;
@@ -151,7 +152,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             if(post.isSelf()) linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
             else {
                 linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-                if (post.isNSFW() && !MainActivity.prefs.getBoolean("showNSFWthumb", false)) {
+                if (post.isNSFW() && !MyApplication.prefs.getBoolean("showNSFWthumb", false)) {
                     postImage.setImageResource(R.drawable.nsfw2);
                 }
                 else if(postThumbnail.hasThumbnail()){
@@ -169,7 +170,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 if (postThumbnail.isSelf()) {
                     postImage.setImageResource(R.drawable.self_default2);
                     //postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                } else if (post.isNSFW() && !MainActivity.prefs.getBoolean("showNSFWthumb", false)) {
+                } else if (post.isNSFW() && !MyApplication.prefs.getBoolean("showNSFWthumb", false)) {
                     //postImage.setImageResource(R.drawable.nsfw2);
                     postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
@@ -188,15 +189,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 if(viewType == PostViewType.listItem) commentsText.setTextColor(clickedColor);
             }
             else {
-                title.setTextColor(MainActivity.textColor);
-                if(viewType == PostViewType.listItem) commentsText.setTextColor(MainActivity.textColor);
+                title.setTextColor(MyApplication.textColor);
+                if(viewType == PostViewType.listItem) commentsText.setTextColor(MyApplication.textColor);
             }
         }
 
         switch (viewType) {
             case listItem:
                 commentsIcon.setImageResource(commentsResource);
-                layoutPostOptions.setBackgroundColor(MainActivity.currentColor);
+                layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
                 bindPostList(context, post);
                 break;
             case smallCards:
@@ -221,7 +222,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     layoutSelfTextPreview.setVisibility(View.GONE);
                     linkButton.setVisibility(View.VISIBLE);
                     domain2.setText(post.getDomain());
-                    domain2.setTextColor(MainActivity.linkColor);
+                    domain2.setTextColor(MyApplication.linkColor);
                     fullUrl.setText(post.getURL());
                 }
                 break;
@@ -243,7 +244,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     layoutSelfTextPreview.setVisibility(View.GONE);
                     linkButton.setVisibility(View.VISIBLE);
                     domain2.setText(post.getDomain());
-                    domain2.setTextColor(MainActivity.linkColor);
+                    domain2.setTextColor(MyApplication.linkColor);
                     fullUrl.setText(post.getURL());
                 }
                 break;
@@ -279,7 +280,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setIconsAndScoreText(Context context, TextView textView, String text, Submission post) {
-        if(MainActivity.currentUser != null) {
+        if(MyApplication.currentUser != null) {
             //check user vote
             if (post.getLikes().equals("true")) {
                 int index = text.indexOf(" ");
@@ -297,7 +298,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
             } else {
                 textView.setText(text);
-                textView.setTextColor(MainActivity.textHintColor);
+                textView.setTextColor(MyApplication.textHintColor);
                 upvote.setImageResource(upvoteResource);
                 downvote.setImageResource(downvoteResource);
             }

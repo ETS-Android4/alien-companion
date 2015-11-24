@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
@@ -82,7 +83,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         //SystemClock.sleep(5000);
         try {
             List<RedditItem> submissions;
-            if(MainActivity.offlineModeEnabled) {
+            if(MyApplication.offlineModeEnabled) {
                 String filename;
                 if(plf.subreddit == null) filename = "frontpage";
                 else filename = plf.subreddit.toLowerCase();
@@ -90,20 +91,20 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 if(submissions!=null) adapter = new RedditItemListAdapter(context, submissions);//plf.postListAdapter = new RedditItemListAdapter(context, submissions);
             }
             else {
-                Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
+                Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
 
                 if (loadType == LoadType.extend) {
                     if (plf.subreddit == null) {
-                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
+                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     } else {
-                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MainActivity.showHiddenPosts);
+                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     }
                     adapter = plf.postListAdapter;
                 } else {
                     if (plf.subreddit == null) {
-                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     } else {
-                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MainActivity.showHiddenPosts);
+                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     }
                     adapter = new RedditItemListAdapter(context, submissions);
                 }
@@ -122,7 +123,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     protected void onCancelled(List<RedditItem> submissions) {
         try {
             PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
-            fragment.loadMore = MainActivity.endlessPosts;
+            fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
 
@@ -144,7 +145,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     plf.postListAdapter = new RedditItemListAdapter(context);
                     plf.contentView.setAdapter(plf.postListAdapter);
                 }
-                if(MainActivity.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
+                if(MyApplication.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
                 else ToastUtils.postsLoadError(context);
             } else {
                 if(submissions.size()>0) {
@@ -175,7 +176,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case extend:
                         plf.postListAdapter.setLoadingMoreItems(false);
                         plf.postListAdapter.addAll(submissions);
-                        plf.loadMore = MainActivity.endlessPosts;
+                        plf.loadMore = MyApplication.endlessPosts;
                         break;
                 }
             }

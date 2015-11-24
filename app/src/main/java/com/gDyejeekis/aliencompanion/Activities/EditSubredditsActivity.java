@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddSubredditDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditOptionsDialogFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.mobeta.android.dslv.DragSortListView;
 
@@ -29,7 +30,7 @@ public class EditSubredditsActivity extends BackNavActivity {
     @Override
     public void onCreate(Bundle bundle) {
         //getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MainActivity.nightThemeEnabled) {
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
         }
@@ -38,10 +39,10 @@ public class EditSubredditsActivity extends BackNavActivity {
         setContentView(R.layout.activity_edit_subreddits);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MainActivity.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
-        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
+        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
+        toolbar.setBackgroundColor(MyApplication.currentColor);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
+        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -102,7 +103,7 @@ public class EditSubredditsActivity extends BackNavActivity {
 
     @Override
     public void onBackPressed() {
-        if(changesMade && MainActivity.currentAccount!=null) MainActivity.currentAccount.setSubreddits(subreddits);
+        if(changesMade && MyApplication.currentAccount!=null) MyApplication.currentAccount.setSubreddits(subreddits);
         super.onBackPressed();
     }
 

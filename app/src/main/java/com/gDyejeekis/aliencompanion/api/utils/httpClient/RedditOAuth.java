@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.RandomString;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 
@@ -127,7 +128,7 @@ public class RedditOAuth {
     }
 
     public static OAuthToken getApplicationToken(HttpClient httpClient) {
-        JSONObject jsonObject = (JSONObject) httpClient.post("grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MainActivity.deviceID, OAUTH_TOKEN_URL, null);
+        JSONObject jsonObject = (JSONObject) httpClient.post("grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MyApplication.deviceID, OAUTH_TOKEN_URL, null);
         return new OAuthToken(jsonObject);
     }
 

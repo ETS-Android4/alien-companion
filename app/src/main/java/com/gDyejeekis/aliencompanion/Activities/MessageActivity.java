@@ -14,6 +14,7 @@ import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.Fragments.MessageFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -27,8 +28,8 @@ public class MessageActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MainActivity.nightThemeEnabled) {
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
         }
@@ -38,20 +39,20 @@ public class MessageActivity extends SwipeBackActivity {
         container = (LinearLayout) findViewById(R.id.container);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MainActivity.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
-        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
+        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
+        toolbar.setBackgroundColor(MyApplication.currentColor);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
+        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
-        swipeBackLayout.setEdgeTrackingEnabled(MainActivity.swipeSetting);
+        swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
 
         fm = getFragmentManager();
 
         int resource;
-        if(MainActivity.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             MainActivity.dualPaneActive = true;
             View.inflate(this, R.layout.activity_main_dual_panel, container);
             resource = R.id.listFragmentHolder;
@@ -90,11 +91,11 @@ public class MessageActivity extends SwipeBackActivity {
         if(MainActivity.dualPaneActive) {
             switch (item.getItemId()) {
                 case R.id.action_sort:
-                    MainActivity.actionSort = true;
+                    MyApplication.actionSort = true;
                     showMessagesOrCommentsPopup(findViewById(R.id.action_sort));
                     return true;
                 case R.id.action_refresh:
-                    MainActivity.actionSort = false;
+                    MyApplication.actionSort = false;
                     showMessagesOrCommentsPopup(findViewById(R.id.action_refresh));
                     return true;
             }
@@ -116,13 +117,13 @@ public class MessageActivity extends SwipeBackActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_messages:
-                        if (MainActivity.actionSort) messageFragment.showCategoryPopup(v);
+                        if (MyApplication.actionSort) messageFragment.showCategoryPopup(v);
                         else messageFragment.refreshList();
                         return true;
                     case R.id.action_comments:
                         PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
                         if (postFragment != null) {
-                            if (MainActivity.actionSort) postFragment.showSortPopup(v);
+                            if (MyApplication.actionSort) postFragment.showSortPopup(v);
                             else postFragment.refreshComments();
                         }
                         return true;
@@ -138,7 +139,7 @@ public class MessageActivity extends SwipeBackActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(MainActivity.dualPane) {
+        if(MyApplication.dualPane) {
             container.removeViewAt(1);
             fm.beginTransaction().remove(messageFragment).commitAllowingStateLoss();
             messageFragment = recreateMessageFragment(messageFragment);

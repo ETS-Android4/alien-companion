@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SearchSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
@@ -65,7 +66,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     protected List<RedditItem> doInBackground(Void... unused) {
         //SystemClock.sleep(5000);
         try {
-            Submissions subms = new Submissions(httpClient, MainActivity.currentUser);
+            Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
             List<RedditItem> submissions;
 
             if(loadType == LoadType.extend) {
@@ -90,7 +91,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     protected void onCancelled(List<RedditItem> submissions) {
         try {
             SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
-            fragment.loadMore = MainActivity.endlessPosts;
+            fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
 
@@ -141,7 +142,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case extend:
                         sf.postListAdapter.setLoadingMoreItems(false);
                         sf.postListAdapter.addAll(submissions);
-                        sf.loadMore = MainActivity.endlessPosts;
+                        sf.loadMore = MyApplication.endlessPosts;
                         break;
                 }
             }

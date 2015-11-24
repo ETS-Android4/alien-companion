@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -17,8 +18,8 @@ public class PostActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MainActivity.nightThemeEnabled) {
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
         }
@@ -26,14 +27,14 @@ public class PostActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(MainActivity.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
-        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
+        toolbar.setBackgroundColor(MyApplication.currentColor);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
+        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
-        swipeBackLayout.setEdgeTrackingEnabled(MainActivity.swipeSetting);
+        swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
 
         setupFragment();
     }
@@ -50,7 +51,7 @@ public class PostActivity extends SwipeBackActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         int menuResource;
-        if(MainActivity.offlineModeEnabled) menuResource = R.menu.menu_post_offline;
+        if(MyApplication.offlineModeEnabled) menuResource = R.menu.menu_post_offline;
         else menuResource = R.menu.menu_post;
         getMenuInflater().inflate(menuResource, menu);
         return true;

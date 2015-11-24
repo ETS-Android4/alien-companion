@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
@@ -48,15 +49,17 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
+    //public static final String currentVersion = "0.1.1";
 
-    public static final int NAV_DRAWER_CLOSE_TIME = 200;
+    //public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
-    public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
+    //public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
-    public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+    //public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
 
-    public static boolean initialized;
+    //public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+
+    //public static boolean initialized;
 
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
@@ -70,89 +73,90 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private LinearLayout container;
 
-    public static boolean actionSort = false;
+    //public static boolean actionSort = false;
 
-    public static boolean showHiddenPosts;
+    //public static boolean showHiddenPosts;
 
-    public static SharedPreferences prefs;
-    public static String deviceID;
-    public static boolean nightThemeEnabled;
-    public static boolean offlineModeEnabled;
-    public static boolean dualPane;
-    public static boolean dualPaneCurrent;
+    //public static SharedPreferences prefs;
+    //public static String deviceID;
+    //public static boolean nightThemeEnabled;
+    //public static boolean offlineModeEnabled;
+    //public static boolean dualPane;
+    //public static boolean dualPaneCurrent;
     public static boolean dualPaneActive;
-    public static int screenOrientation;
-    public static int currentOrientation;
-    public static int fontStyle;
-    public static int currentFontStyle;
-    public static int colorPrimary;
-    public static int colorPrimaryDark;
-    public static int currentColor;
-    public static int swipeSetting;
-    public static boolean swipeRefresh;
-    public static int drawerGravity;
-    public static boolean endlessPosts;
-    public static boolean showNSFWpreview;
-    public static boolean hideNSFW;
-    public static int initialCommentCount;
-    public static int initialCommentDepth;
-    public static int textColor;
-    public static int textHintColor;
-    public static int linkColor;
-    public static int backgroundColor;
-    public static int commentPermaLinkBackgroundColor;
-    public static int syncPostCount;
-    public static int syncCommentCount;
-    public static int syncCommentDepth;
-    public static int currentPostListView;
+    //public static int screenOrientation;
+    //public static int currentOrientation;
+    //public static int fontStyle;
+    //public static int currentFontStyle;
+    //public static int colorPrimary;
+    //public static int colorPrimaryDark;
+    //public static int currentColor;
+    //public static int swipeSetting;
+    //public static boolean swipeRefresh;
+    //public static int drawerGravity;
+    //public static boolean endlessPosts;
+    //public static boolean showNSFWpreview;
+    //public static boolean hideNSFW;
+    //public static int initialCommentCount;
+    //public static int initialCommentDepth;
+    //public static int textColor;
+    //public static int textHintColor;
+    //public static int linkColor;
+    //public static int backgroundColor;
+    //public static int commentPermaLinkBackgroundColor;
+    //public static int syncPostCount;
+    //public static int syncCommentCount;
+    //public static int syncCommentDepth;
+    //public static int currentPostListView;
 
-    public static SavedAccount currentAccount;
-    public static User currentUser;
-    public static String currentAccessToken;
+    //public static SavedAccount currentAccount;
+    //public static User currentUser;
+    //public static String currentAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        getDeviceId();
-        getCurrentSettings();
-        dualPaneCurrent = dualPane;
+        //prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //getDeviceId();
+        //getCurrentSettings();
+        //dualPaneCurrent = MyApplication.dualPane;
         setOrientation();
-        getTheme().applyStyle(fontStyle, true);
-        if(nightThemeEnabled) {
+        MyApplication.setThemeRelatedFields();
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
-            colorPrimary = Color.parseColor("#181818");
-            colorPrimaryDark = Color.BLACK;
-            textColor = Color.WHITE;
-            textHintColor = getResources().getColor(R.color.hint_dark);
-            linkColor = Color.parseColor("#0080FF");
-            backgroundColor = Color.BLACK;
-            commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+            //MyApplication.colorPrimary = Color.parseColor("#181818");
+            //colorPrimaryDark = Color.BLACK;
+            //textColor = Color.WHITE;
+            //textHintColor = getResources().getColor(R.color.hint_dark);
+            //linkColor = Color.parseColor("#0080FF");
+            //backgroundColor = Color.BLACK;
+            //commentPermaLinkBackgroundColor = Color.parseColor("#545454");
         }
         else {
             getTheme().applyStyle(R.style.selectedTheme_day, true);
-            textColor = Color.BLACK;
-            textHintColor = getResources().getColor(R.color.hint_light);
-            linkColor = colorPrimary;
-            backgroundColor = Color.WHITE;
-            commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+            //colorPrimaryDark = getPrimaryDarkColor();
+            //textColor = Color.BLACK;
+            //textHintColor = getResources().getColor(R.color.hint_light);
+            //linkColor = MyApplication.colorPrimary;
+            //backgroundColor = Color.WHITE;
+            //commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
         container = (LinearLayout) findViewById(R.id.container);
-        initialized = true;
-        showHiddenPosts = false;
-        currentFontStyle = fontStyle;
-        currentColor = colorPrimary;
-        colorPrimaryDark = getPrimaryDarkColor();
+        //initialized = true;
+        //showHiddenPosts = false;
+        //currentFontStyle = MyApplication.fontStyle;
+        //currentColor = MyApplication.colorPrimary;
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MainActivity.nightThemeEnabled) {
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
             toolbar.setPopupTheme(R.style.OverflowStyleDark);
         }
-        toolbar.setBackgroundColor(colorPrimary);
+        toolbar.setBackgroundColor(MyApplication.currentColor);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -163,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         initNavDrawer();
 
         int resource;
-        if(dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             dualPaneActive = true;
             View.inflate(this, R.layout.activity_main_dual_panel, container);
             resource = R.id.listFragmentHolder;
@@ -177,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setOrientation() {
-        currentOrientation = screenOrientation;
-        switch (screenOrientation) {
+        MyApplication.currentOrientation = MyApplication.screenOrientation;
+        switch (MyApplication.screenOrientation) {
             case 0:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
                 break;
@@ -207,16 +211,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeCurrentUser(SavedAccount account) {
-        currentAccount = account;
-        currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        MyApplication.currentAccount = account;
+        MyApplication.currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
         //initNavDrawerContent();
-        if(currentUser!=null) {
+        if(MyApplication.currentUser!=null) {
             adapter.showUserMenuItems();
-            adapter.updateSubredditItems(currentAccount.getSubreddits());
+            adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         }
         else {
             adapter.hideUserMenuItems();
-            adapter.updateSubredditItems(currentAccount.getSubreddits());
+            adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
             //List<String> subreddits = new ArrayList<>();
             //Collections.addAll(subreddits, defaultSubredditStrings);
             //adapter.updateSubredditItems(subreddits);
@@ -224,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         //homePage();
         try {
             listFragment.changeSubreddit(listFragment.subreddit);
-            String message = (currentUser==null) ? "Logged out" : "Logged in as " + account.getUsername();
+            String message = (MyApplication.currentUser==null) ? "Logged out" : "Logged in as " + account.getUsername();
             ToastUtils.displayShortToast(this, message);
         } catch (NullPointerException e) {}
     }
@@ -233,86 +237,86 @@ public class MainActivity extends AppCompatActivity {
         if(listFragment!=null) listFragment.changeSubreddit(null);
     }
 
-    private void getDeviceId() {
-        deviceID = prefs.getString("deviceID", "null");
-        if(deviceID.equals("null")) {
-            deviceID = UUID.randomUUID().toString();
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("deviceID", deviceID);
-            editor.apply();
-        }
-    }
+    //private void getDeviceId() {
+    //    deviceID = prefs.getString("deviceID", "null");
+    //    if(deviceID.equals("null")) {
+    //        deviceID = UUID.randomUUID().toString();
+    //        SharedPreferences.Editor editor = prefs.edit();
+    //        editor.putString("deviceID", deviceID);
+    //        editor.apply();
+    //    }
+    //}
 
-    public static void getCurrentSettings() {
-        currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
-        //Log.d("geo test", "settings saved");
-        dualPane = prefs.getBoolean("dualPane", false);
-        //dualPane = true;
-        screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
-        nightThemeEnabled = prefs.getBoolean("nightTheme", false);
-        offlineModeEnabled = prefs.getBoolean("offlineMode", false);
-        fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
-        switch (fontStyle) {
-            case 0:
-                fontStyle = R.style.FontStyle_Small;
-                break;
-            case 1:
-                fontStyle = R.style.FontStyle_Medium;
-                break;
-            case 2:
-                fontStyle = R.style.FontStyle_Large;
-                break;
-            case 3:
-                fontStyle = R.style.FontStyle_ExtraLarge;
-                break;
-        }
-        colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
-        swipeRefresh = prefs.getBoolean("swipeRefresh", true);
-        drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
-        endlessPosts = prefs.getBoolean("endlessPosts", true);
-        showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
-        hideNSFW = prefs.getBoolean("hideNSFW", false);
-        swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
-        switch (swipeSetting) {
-            case 0:
-                swipeSetting = ViewDragHelper.EDGE_LEFT;
-                break;
-            case 1:
-                swipeSetting = ViewDragHelper.EDGE_RIGHT;
-                break;
-            case 2:
-                swipeSetting = ViewDragHelper.EDGE_LEFT | ViewDragHelper.EDGE_RIGHT;
-                break;
-            case 3:
-                swipeSetting = ViewDragHelper.STATE_IDLE;
-        }
-        initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
-        initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
-        syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
-        syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
-        syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
-    }
+    //public static void getCurrentSettings() {
+    //    currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
+    //    //Log.d("geo test", "settings saved");
+    //    dualPane = prefs.getBoolean("dualPane", false);
+    //    //dualPane = true;
+    //    screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
+    //    nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+    //    offlineModeEnabled = prefs.getBoolean("offlineMode", false);
+    //    fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
+    //    switch (fontStyle) {
+    //        case 0:
+    //            fontStyle = R.style.FontStyle_Small;
+    //            break;
+    //        case 1:
+    //            fontStyle = R.style.FontStyle_Medium;
+    //            break;
+    //        case 2:
+    //            fontStyle = R.style.FontStyle_Large;
+    //            break;
+    //        case 3:
+    //            fontStyle = R.style.FontStyle_ExtraLarge;
+    //            break;
+    //    }
+    //    colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
+    //    swipeRefresh = prefs.getBoolean("swipeRefresh", true);
+    //    drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
+    //    endlessPosts = prefs.getBoolean("endlessPosts", true);
+    //    showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
+    //    hideNSFW = prefs.getBoolean("hideNSFW", false);
+    //    swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
+    //    switch (swipeSetting) {
+    //        case 0:
+    //            swipeSetting = ViewDragHelper.EDGE_LEFT;
+    //            break;
+    //        case 1:
+    //            swipeSetting = ViewDragHelper.EDGE_RIGHT;
+    //            break;
+    //        case 2:
+    //            swipeSetting = ViewDragHelper.EDGE_LEFT | ViewDragHelper.EDGE_RIGHT;
+    //            break;
+    //        case 3:
+    //            swipeSetting = ViewDragHelper.STATE_IDLE;
+    //    }
+    //    initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
+    //    initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
+    //    syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
+    //    syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
+    //    syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
+    //}
 
-    private int getPrimaryDarkColor() {
-        String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
-        int index = 0;
-        for(String color : primaryColors) {
-            if(Color.parseColor(color)==colorPrimary) break;
-            index++;
-        }
-        String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
-        return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
-    }
+    //private int getPrimaryDarkColor() {
+    //    String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
+    //    int index = 0;
+    //    for(String color : primaryColors) {
+    //        if(Color.parseColor(color)==MyApplication.colorPrimary) break;
+    //        index++;
+    //    }
+    //    String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
+    //    return Color.parseColor(primaryDarkColors[index]);
+    //}
 
     @Override
     public void onResume() {
         super.onResume();
 
-        listFragment.loadMore = endlessPosts;
+        listFragment.loadMore = MyApplication.endlessPosts;
 
         if(EditSubredditsActivity.changesMade) {
             EditSubredditsActivity.changesMade = false;
-            getNavDrawerAdapter().updateSubredditItems(currentAccount.getSubreddits());
+            getNavDrawerAdapter().updateSubredditItems(MyApplication.currentAccount.getSubreddits());
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -322,9 +326,9 @@ public class MainActivity extends AppCompatActivity {
                         for (NavDrawerAccount accountItem : adapter.accountItems) {
                             if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT || accountItem.getAccountType() == NavDrawerAccount.TYPE_LOGGED_OUT) {
                                 SavedAccount accountToSave;
-                                if (check && accountItem.getName().equals(currentAccount.getUsername())) {
+                                if (check && accountItem.getName().equals(MyApplication.currentAccount.getUsername())) {
                                     check = false;
-                                    accountToSave = currentAccount;
+                                    accountToSave = MyApplication.currentAccount;
                                 } else accountToSave = accountItem.savedAccount;
                                 accounts.add(accountToSave);
                             }
@@ -335,43 +339,43 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        if(currentOrientation != screenOrientation) setOrientation();
+        if(MyApplication.currentOrientation != MyApplication.screenOrientation) setOrientation();
 
-        if(dualPaneCurrent != dualPane) {
-            dualPaneCurrent = dualPane;
+        if(MyApplication.dualPaneCurrent != MyApplication.dualPane) {
+            MyApplication.dualPaneCurrent = MyApplication.dualPane;
             toggleDualPane();
         }
 
-        if(currentFontStyle != fontStyle) {
-            currentFontStyle = fontStyle;
-            getTheme().applyStyle(fontStyle, true);
+        if(MyApplication.currentFontStyle != MyApplication.fontStyle) {
+            MyApplication.currentFontStyle = MyApplication.fontStyle;
+            getTheme().applyStyle(MyApplication.fontStyle, true);
             listFragment.redrawList();
         }
 
-        if(!nightThemeEnabled && currentColor != colorPrimary) {
-            currentColor = colorPrimary;
-            linkColor = colorPrimary;
-            toolbar.setBackgroundColor(colorPrimary);
-            colorPrimaryDark = getPrimaryDarkColor();
-            drawerLayout.setStatusBarBackgroundColor(colorPrimaryDark);
+        if(!MyApplication.nightThemeEnabled && MyApplication.currentColor != MyApplication.colorPrimary) {
+            MyApplication.currentColor = MyApplication.colorPrimary;
+            MyApplication.linkColor = MyApplication.colorPrimary;
+            toolbar.setBackgroundColor(MyApplication.colorPrimary);
+            MyApplication.colorPrimaryDark = MyApplication.getPrimaryDarkColor(getResources().getStringArray(R.array.colorPrimaryValues), getResources().getStringArray(R.array.colorPrimaryDarkValues));
+            drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
             listFragment.colorSchemeChanged();
             adapter.notifyDataSetChanged();
             //Log.d("geo test", "main color changed");
         }
 
         //final int gravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
-        if(drawerGravity != drawerParams.gravity) {
+        if(MyApplication.drawerGravity != drawerParams.gravity) {
             //Log.d("geo test", "drawer gravity changed");
-            drawerParams.gravity = drawerGravity;
+            drawerParams.gravity = MyApplication.drawerGravity;
             scrimInsetsFrameLayout.setLayoutParams(drawerParams);
             drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
                 @Override
                 public boolean onOptionsItemSelected(MenuItem item) {
                     if (item != null && item.getItemId() == android.R.id.home) {
-                        if (drawerLayout.isDrawerOpen(drawerGravity)) {
-                            drawerLayout.closeDrawer(drawerGravity);
+                        if (drawerLayout.isDrawerOpen(MyApplication.drawerGravity)) {
+                            drawerLayout.closeDrawer(MyApplication.drawerGravity);
                         } else {
-                            drawerLayout.openDrawer(drawerGravity);
+                            drawerLayout.openDrawer(MyApplication.drawerGravity);
                         }
                     }
                     return false;
@@ -385,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         int menuResource;
-        if(offlineModeEnabled) menuResource = R.menu.menu_main_offline;
+        if(MyApplication.offlineModeEnabled) menuResource = R.menu.menu_main_offline;
         else menuResource = R.menu.menu_main;
         getMenuInflater().inflate(menuResource, menu);
         //toggleHiddenMenuItem = (MenuItem) findViewById(R.id.action_toggle_hidden);
@@ -397,11 +401,11 @@ public class MainActivity extends AppCompatActivity {
         if(dualPaneActive) {
             switch (item.getItemId()) {
                 case R.id.action_sort:
-                    actionSort = true;
+                    MyApplication.actionSort = true;
                     showPostsOrCommentsPopup(findViewById(R.id.action_sort));
                     return true;
                 case R.id.action_refresh:
-                    actionSort = false;
+                    MyApplication.actionSort = false;
                     showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
                     return true;
             }
@@ -417,13 +421,13 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_posts:
-                        if (actionSort) listFragment.showSortPopup(v);
+                        if (MyApplication.actionSort) listFragment.showSortPopup(v);
                         else listFragment.refreshList();
                         return true;
                     case R.id.action_comments:
                         PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
                         if (postFragment != null) {
-                            if (actionSort) postFragment.showSortPopup(v);
+                            if (MyApplication.actionSort) postFragment.showSortPopup(v);
                             else postFragment.refreshComments();
                         }
                         return true;
@@ -446,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
 
-        if(dualPane) {
+        if(MyApplication.dualPane) {
             container.removeViewAt(1);
             fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
             listFragment = recreateListFragment(listFragment);
@@ -477,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
             fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
             listFragment = recreateListFragment(listFragment);
             int resource;
-            if(dualPane) {
+            if(MyApplication.dualPane) {
                 dualPaneActive = true;
                 View.inflate(this, R.layout.activity_main_dual_panel, container);
                 resource = R.id.listFragmentHolder;
@@ -502,10 +506,10 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         scrimInsetsFrameLayout = (NavigationView) findViewById(R.id.scrimInsetsFrameLayout);
-        drawerLayout.setStatusBarBackgroundColor(colorPrimaryDark);
+        drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
 
         drawerParams = new DrawerLayout.LayoutParams(calculateDrawerWidth(), ViewGroup.LayoutParams.MATCH_PARENT);
-        final int gravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
+        final int gravity = (MyApplication.prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         drawerParams.gravity = gravity;
         scrimInsetsFrameLayout.setLayoutParams(drawerParams);
 
@@ -556,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
     private List<NavDrawerItem> getDefaultSubredditItems() {
         List<NavDrawerItem> subredditItems = new ArrayList<>();
         subredditItems.add(new NavDrawerSubredditItem());
-        for (String subreddit : defaultSubredditStrings) {
+        for (String subreddit : MyApplication.defaultSubredditStrings) {
             subredditItems.add(new NavDrawerSubredditItem(subreddit));
         }
 
@@ -593,7 +597,7 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
         }
         else {
-            MainActivity.currentUser = null; //user connects every time main activity is started
+            //MyApplication.currentUser = null; //user connects every time main activity is started - RE-ENABLE THIS IF NEEDED
             super.onBackPressed();
         }
     }

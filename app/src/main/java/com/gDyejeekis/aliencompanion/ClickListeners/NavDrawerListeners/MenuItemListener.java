@@ -13,6 +13,7 @@ import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.EnterUserDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 
 /**
  * Created by George on 6/26/2015.
@@ -34,10 +35,10 @@ public class MenuItemListener extends NavDrawerListener {
                     @Override
                     public void run() {
                         Intent intent = new Intent(getActivity(), UserActivity.class);
-                        intent.putExtra("username", MainActivity.currentUser.getUsername());
+                        intent.putExtra("username", MyApplication.currentUser.getUsername());
                         getActivity().startActivity(intent);
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
             case messages:
                 new Handler().postDelayed(new Runnable() {
@@ -47,7 +48,7 @@ public class MenuItemListener extends NavDrawerListener {
                         Intent intent = new Intent(getActivity(), MessageActivity.class);
                         getActivity().startActivity(intent);
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
             case user:
                 new Handler().postDelayed(new Runnable() {
@@ -55,7 +56,7 @@ public class MenuItemListener extends NavDrawerListener {
                     public void run() {
                         showDialogFragment(new EnterUserDialogFragment());
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
             case subreddit:
                 new Handler().postDelayed(new Runnable() {
@@ -63,7 +64,7 @@ public class MenuItemListener extends NavDrawerListener {
                     public void run() {
                         showDialogFragment(new EnterRedditDialogFragment());
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
             case settings:
                 new Handler().postDelayed(new Runnable() {
@@ -72,7 +73,7 @@ public class MenuItemListener extends NavDrawerListener {
                         Intent intent = new Intent(getActivity(), SettingsActivity.class);
                         getActivity().startActivity(intent);
                     }
-                }, MainActivity.NAV_DRAWER_CLOSE_TIME);
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
             case cached:
                 break;

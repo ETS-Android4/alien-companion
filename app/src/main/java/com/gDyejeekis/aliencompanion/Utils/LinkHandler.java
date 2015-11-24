@@ -12,6 +12,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
@@ -67,7 +68,7 @@ public class LinkHandler {
             } else {
                 //Log.d("Link Domain", domain);
                 if ((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
-                    if (MainActivity.prefs.getBoolean("handleYoutube", true)) {
+                    if (MyApplication.prefs.getBoolean("handleYoutube", true)) {
                         String videoId = getYoutubeVideoId(url);
                         int time = getYoutubeVideoTime(url);
                         //Log.d("youtube video id", videoId);
@@ -86,7 +87,7 @@ public class LinkHandler {
                 } else if (domain.equals("redd.it")) {
                     intent = new Intent(activity, PostActivity.class);
                     intent.putExtra("postId", url.substring(15));
-                } else if (MainActivity.prefs.getBoolean("handleOther", true) && !domain.equals("play.google.com")) {
+                } else if (MyApplication.prefs.getBoolean("handleOther", true) && !domain.equals("play.google.com")) {
                     intent = new Intent(activity, BrowserActivity.class);
                     if (post != null) {
                         intent.putExtra("post", post);

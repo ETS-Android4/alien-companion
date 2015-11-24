@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
@@ -26,7 +27,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private int mOrientation;
 
     public DividerItemDecoration(Context context, int orientation) {
-        if(MainActivity.nightThemeEnabled) mDivider = ContextCompat.getDrawable(context, R.drawable.divider_dark_theme);
+        if(MyApplication.nightThemeEnabled) mDivider = ContextCompat.getDrawable(context, R.drawable.divider_dark_theme);
         else {
             final TypedArray a = context.obtainStyledAttributes(ATTRS);
             mDivider = a.getDrawable(0);

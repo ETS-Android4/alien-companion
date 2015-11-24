@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.gDyejeekis.aliencompanion.LoadTasks.AddAccountTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.AddAccountTask;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 

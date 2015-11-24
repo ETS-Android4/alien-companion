@@ -22,8 +22,9 @@ import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -74,15 +75,17 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        loadMore = MainActivity.endlessPosts;
+        loadMore = MyApplication.endlessPosts;
         if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
+        if(submissionSort==null) submissionSort = (SubmissionSort) activity.getIntent().getSerializableExtra("sort");
+        if(timeSpan==null) timeSpan = (TimeSpan) activity.getIntent().getSerializableExtra("time");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         //loadMore = MainActivity.endlessPosts;
-        if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }
 
@@ -94,7 +97,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
@@ -106,7 +109,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
                     swipeRefreshLayout.setEnabled(true);
                 else swipeRefreshLayout.setEnabled(false);
 
@@ -132,7 +135,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             if (postListAdapter == null) {
                 //Log.d("geo test", "postListAdapter is null");
                 currentLoadType = LoadType.init;
-                setSubmissionSort(SubmissionSort.HOT);
+                //setSubmissionSort(SubmissionSort.HOT);
+                if(submissionSort==null) submissionSort = SubmissionSort.HOT;
+                setActionBarSubtitle();
                 task = new LoadPostsTask(activity, this, LoadType.init);
                 task.execute();
             } else {
@@ -169,7 +174,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void colorSchemeChanged() {
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.colorPrimary);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorPrimary);
         if(postListAdapter!=null) postListAdapter.notifyDataSetChanged();
     }
 
@@ -194,7 +199,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 searchDialog.show(activity.getFragmentManager(), "dialog");
                 return true;
             case R.id.action_switch_view:
-                showViewsPopup(activity.findViewById(R.id.action_refresh));
+                try {
+                    showViewsPopup(activity.findViewById(R.id.action_sort));
+                } catch (Exception e) {
+                    showViewsPopup(activity.findViewById(R.id.action_refresh));
+                } //TODO: find a more suitable anchor
                 return true;
             //case R.id.action_toggle_hidden:
             //    MainActivity.showHiddenPosts = !MainActivity.showHiddenPosts;
@@ -220,7 +229,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ToastUtils.displayShortToast(activity, toastMessage);
                 return true;
             case R.id.action_submit_post:
-                showSubmitPopup(activity.findViewById(R.id.action_refresh)); //TODO: put correct anchor
+                try {
+                    showSubmitPopup(activity.findViewById(R.id.action_sort));
+                } catch (Exception e) {
+                    showSubmitPopup(activity.findViewById(R.id.action_refresh));
+                } //TODO: find a more suitable anchor
                 return true;
         }
 
@@ -231,7 +244,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_post_views);
         int index;
-        switch (MainActivity.currentPostListView) {
+        switch (MyApplication.currentPostListView) {
             case R.layout.post_list_item_reversed:
                 index = 1;
                 break;
@@ -264,9 +277,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         resource = R.layout.post_list_item_card;
                         break;
                 }
-                if (resource != -1 && resource != MainActivity.currentPostListView) {
-                    SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                    MainActivity.currentPostListView = resource;
+                if (resource != -1 && resource != MyApplication.currentPostListView) {
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    MyApplication.currentPostListView = resource;
                     editor.putInt("postListView", resource);
                     editor.apply();
                     if(currentLoadType==null) redrawList();
@@ -459,7 +472,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void setActionBarSubtitle() {
         String subtitle;
-        if(MainActivity.offlineModeEnabled) {
+        if(MyApplication.offlineModeEnabled) {
             subtitle = "offline";
         }
         else {

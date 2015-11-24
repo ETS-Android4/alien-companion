@@ -18,7 +18,8 @@ import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -55,7 +56,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             case R.id.btn_upvote:
                 UserActionType actionType;
                 LoadUserActionTask task;
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     if (comment.getLikes().equals("true")) {
                         comment.setLikes("null");
                         comment.setScore(comment.getScore() - 1);
@@ -77,7 +78,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote:
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     if (comment.getLikes().equals("false")) {
                         comment.setLikes("null");
                         comment.setScore(comment.getScore() + 1);
@@ -99,7 +100,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_reply:
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     Intent intent = new Intent(context, SubmitActivity.class);
                     intent.putExtra("submitType", SubmitType.comment);
                     intent.putExtra("originalComment", comment);
@@ -120,7 +121,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
 
     private void showMoreOptionsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(context, v);
-        if(MainActivity.currentUser!=null && comment.getAuthor().equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_comment_more_options_account);
+        if(MyApplication.currentUser!=null && comment.getAuthor().equals(MyApplication.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_comment_more_options_account);
         else popupMenu.inflate(R.menu.menu_comment_more_options);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -165,7 +166,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         context.startActivity(intent);
                         return true;
                     case R.id.action_save: //TODO: show proper user action
-                        if(MainActivity.currentUser!=null) {
+                        if(MyApplication.currentUser!=null) {
                             UserActionType actionType;
                             if(comment.isSaved()) actionType = UserActionType.unsave;
                             else actionType = UserActionType.save;
@@ -175,7 +176,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         else ToastUtils.displayShortToast(context, "Must be logged in to save");
                         return true;
                     case R.id.action_report:
-                        if(MainActivity.currentUser!=null) {
+                        if(MyApplication.currentUser!=null) {
                             ReportDialogFragment dialog = new ReportDialogFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString("postId", comment.getFullName());

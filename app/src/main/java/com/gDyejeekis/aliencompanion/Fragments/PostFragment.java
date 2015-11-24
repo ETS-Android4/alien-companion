@@ -21,7 +21,8 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadCommentsTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadCommentsTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -119,14 +120,14 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                     post = new Submission(activity.getIntent().getStringExtra("postId"));
                 }
             }
-            if(MainActivity.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) MainActivity.dualPaneActive = true;
+            if(MyApplication.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) MainActivity.dualPaneActive = true;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0){
+        if(MyApplication.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0){
             swipeRefreshLayout.setEnabled(true);
         }
         else swipeRefreshLayout.setEnabled(false);
@@ -232,7 +233,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
@@ -243,7 +244,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (MainActivity.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0) {
+                if (MyApplication.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0) {
                     swipeRefreshLayout.setEnabled(true);
                 }
                 else swipeRefreshLayout.setEnabled(false);
@@ -341,7 +342,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public void setActionBarSubtitle() {
         if(!MainActivity.dualPaneActive) {
             String subtitle;
-            if (MainActivity.offlineModeEnabled) subtitle = "offline";
+            if (MyApplication.offlineModeEnabled) subtitle = "offline";
             else {
                 if(commentSort==null) commentSort = CommentSort.TOP;
                 subtitle = commentSort.value();

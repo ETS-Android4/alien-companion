@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.EditSubredditsActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
@@ -41,13 +42,13 @@ public class AddSubredditDialogFragment extends ScalableDialogFragment implement
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_subreddit, container, false);
 
-        int dropdownResource = (MainActivity.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
+        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, dropdownResource, RedditConstants.popularSubreddits);
 
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);
         subscribeCheckbox = (CheckBox) view.findViewById(R.id.checkBox_subscribe);
-        if(MainActivity.currentUser==null) subscribeCheckbox.setVisibility(View.GONE);
+        if(MyApplication.currentUser==null) subscribeCheckbox.setVisibility(View.GONE);
         subredditField = (AutoCompleteTextView) view.findViewById(R.id.editText_subreddit);
         subredditField.setAdapter(adapter);
         subredditField.requestFocus();

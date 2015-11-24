@@ -9,6 +9,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -53,7 +54,7 @@ public class DownloaderService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        MAX_PROGRESS = MainActivity.syncPostCount + 1;
+        MAX_PROGRESS = MyApplication.syncPostCount + 1;
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -75,15 +76,15 @@ public class DownloaderService extends IntentService {
 
         //HttpClient httpClient = new RedditHttpClient();
 
-        Submissions submissions = new Submissions(httpClient, MainActivity.currentUser);
-        Comments cmntsRetrieval = new Comments(httpClient, MainActivity.currentUser);
+        Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
+        Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
         List<RedditItem> posts = null;
 
         try {
             if (subreddit == null)
-                posts = submissions.frontpage(submissionSort, timeSpan, -1, MainActivity.syncPostCount, null, null, MainActivity.showHiddenPosts);
+                posts = submissions.frontpage(submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
             else
-                posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MainActivity.syncPostCount, null, null, MainActivity.showHiddenPosts);
+                posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
 
             if(posts!=null) {
                 deletePreviousComments(filename);
@@ -91,7 +92,7 @@ public class DownloaderService extends IntentService {
                 for (RedditItem post : posts) {
                     increaseProgress(builder);
                     Submission submission = (Submission) post;
-                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MainActivity.syncCommentDepth, MainActivity.syncCommentCount, CommentSort.TOP);
+                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, CommentSort.TOP);
                     submission.setSyncedComments(comments);
                     writePostToFile(submission, filename + submission.getIdentifier());
                 }

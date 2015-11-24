@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.api.entity.User;
@@ -62,7 +63,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private List<SavedAccount> readFromFile() {
         try {
-            FileInputStream fis = context.openFileInput(MainActivity.SAVED_ACCOUNTS_FILENAME);
+            FileInputStream fis = context.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
             is.close();
@@ -76,7 +77,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private void writeToFile(List<SavedAccount> updatedAccounts) {
         try {
-            FileOutputStream fos = context.openFileOutput(MainActivity.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(MyApplication.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(updatedAccounts);
             os.close();
@@ -117,7 +118,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 writeToFile(accounts);
 
                 currentAccountName = newAccount.getUsername();
-                SharedPreferences.Editor editor = MainActivity.prefs.edit();
+                SharedPreferences.Editor editor = MyApplication.prefs.edit();
                 editor.putString("currentAccountName", currentAccountName);
                 editor.apply();
 

@@ -11,6 +11,7 @@ import com.gDyejeekis.aliencompanion.Fragments.SubmitCommentFragment;
 import com.gDyejeekis.aliencompanion.Fragments.SubmitImageFragment;
 import com.gDyejeekis.aliencompanion.Fragments.SubmitLinkFragment;
 import com.gDyejeekis.aliencompanion.Fragments.SubmitTextFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
@@ -18,16 +19,16 @@ public class SubmitActivity extends BackNavActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MainActivity.nightThemeEnabled) getTheme().applyStyle(R.style.selectedTheme_night, true);
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        if(MyApplication.nightThemeEnabled) getTheme().applyStyle(R.style.selectedTheme_night, true);
         else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(MainActivity.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
-        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
+        toolbar.setBackgroundColor(MyApplication.currentColor);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
+        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

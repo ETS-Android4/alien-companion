@@ -13,7 +13,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
@@ -34,7 +35,7 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
         super.onCreate(bundle);
 
         Resources resources = getActivity().getResources();
-        if(MainActivity.nightThemeEnabled) {
+        if(MyApplication.nightThemeEnabled) {
             textColor = Color.WHITE;
             hintColor = resources.getColor(R.color.hint_dark);
         }

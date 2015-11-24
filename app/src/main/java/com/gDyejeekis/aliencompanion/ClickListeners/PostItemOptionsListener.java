@@ -21,7 +21,8 @@ import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.TwoOptionDialogFragment;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -69,7 +70,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             case R.id.btn_upvote:
                 UserActionType actionType;
                 LoadUserActionTask task;
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     if (post.getLikes().equals("true")) {
                         post.setLikes("null");
                         post.setScore(post.getScore() - 1);
@@ -90,7 +91,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote:
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     if (post.getLikes().equals("false")) {
                         post.setLikes("null");
                         post.setScore(post.getScore() + 1);
@@ -111,7 +112,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_save:
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     if (post.isSaved()) {
                         post.setSaved(false);
                         actionType = UserActionType.unsave;
@@ -129,7 +130,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 else ToastUtils.displayShortToast(context, "Must be logged in to save");
                 break;
             case R.id.btn_hide:
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     if (post.isHidden()) {
                         post.setHidden(false);
                         actionType = UserActionType.unhide;
@@ -165,27 +166,27 @@ public class PostItemOptionsListener implements View.OnClickListener {
         //inflate the right menu layout
         int resource;
         int labelNSFWindex = -1;
-        String currentUser = (MainActivity.currentUser!=null) ? MainActivity.currentUser.getUsername() : "";
+        String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
         if(post.getAuthor().equals(currentUser)) {
             if(post.isSelf()) {
                 labelNSFWindex = 2;
-                if(MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card
+                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card
                         || recyclerAdapter instanceof PostAdapter) resource = R.menu.menu_self_post_card_more_options_account;
                 else resource = R.menu.menu_self_post_more_options_account;
             //resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options_account : R.menu.menu_self_post_more_options_account;
             }
             else {
                 labelNSFWindex = 1;
-                if(MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card)
+                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card)
                     resource = R.menu.menu_post_card_more_options_account;
                 else resource = R.menu.menu_post_more_options_account;
             //resource = (MainActivity.currentPostListView == R.layout.post_list_item_card) ? R.menu.menu_post_card_more_options_account : R.menu.menu_post_more_options_account;
             }
         }
         else {
-            if(post.isSelf()) resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card
+            if(post.isSelf()) resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card
                     || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
-            else resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || MainActivity.currentPostListView == R.layout.post_list_item_small_card || recyclerAdapter instanceof PostAdapter)
+            else resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card || recyclerAdapter instanceof PostAdapter)
                     ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
         }
         popupMenu.inflate(resource);
@@ -296,7 +297,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     //case R.id.action_download_comments:
                     //    return true;
                     case R.id.action_report:
-                        if (MainActivity.currentUser != null) {
+                        if (MyApplication.currentUser != null) {
                             ReportDialogFragment dialog = new ReportDialogFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString("postId", post.getFullName());

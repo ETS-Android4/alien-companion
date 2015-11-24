@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Kind;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.entity.User;
@@ -129,7 +130,7 @@ public class Submissions implements ActorDriven {
 							submissions.add(submission);
 						}
 						else {
-							if(!MainActivity.hideNSFW) {
+							if(!MyApplication.hideNSFW) {
 								submission.setUser(user);
 								submissions.add(submission);
 							}

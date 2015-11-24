@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;

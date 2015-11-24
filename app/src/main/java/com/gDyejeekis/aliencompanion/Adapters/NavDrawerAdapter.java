@@ -28,6 +28,7 @@ import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubredditItem;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
 
@@ -123,7 +124,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void importAccounts() {
-        currentAccountName = MainActivity.prefs.getString("currentAccountName", "Logged out");
+        currentAccountName = MyApplication.prefs.getString("currentAccountName", "Logged out");
         List<SavedAccount> savedAccounts = readAccounts();
 
         SavedAccount currentAccount = null;
@@ -138,7 +139,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
         else {
             List<String> subreddits = new ArrayList<>();
-            Collections.addAll(subreddits, MainActivity.defaultSubredditStrings);
+            Collections.addAll(subreddits, MyApplication.defaultSubredditStrings);
             SavedAccount loggedOut = new SavedAccount(subreddits);
             accountItems.add(new NavDrawerAccount(loggedOut, true));
             currentAccount = loggedOut;
@@ -178,7 +179,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public List<SavedAccount> readAccounts() {
         try {
-            FileInputStream fis = activity.openFileInput(MainActivity.SAVED_ACCOUNTS_FILENAME);
+            FileInputStream fis = activity.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
             is.close();
@@ -192,7 +193,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public void saveAccounts(List<SavedAccount> updatedAccounts) {
         try {
-            FileOutputStream fos = activity.openFileOutput(MainActivity.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = activity.openFileOutput(MyApplication.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(updatedAccounts);
             os.close();
@@ -226,7 +227,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             }
             i++;
         }
-        SharedPreferences.Editor editor = MainActivity.prefs.edit();
+        SharedPreferences.Editor editor = MyApplication.prefs.edit();
         editor.putString("currentAccountName", currentAccountName);
         editor.apply();
         if(justRemove) notifyItemRemoved(i+1);
@@ -365,19 +366,19 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
-                headerViewHolder.headerLayout.setBackgroundColor(MainActivity.currentColor);
+                headerViewHolder.headerLayout.setBackgroundColor(MyApplication.currentColor);
                 headerViewHolder.currentAccount.setText(currentAccountName);
                 headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String text = (MainActivity.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
+                        String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
                         text += " (App will restart)";
                         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
-                                SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                                editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
+                                MyApplication.nightThemeEnabled = !MyApplication.nightThemeEnabled;
+                                SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                                editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
                                 editor.apply();
                                 restartApp();
                             }
@@ -401,14 +402,14 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String text = (MainActivity.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
+                        String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
                         text += " (App will restart)";
                         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
-                                SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                                editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
+                                MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
+                                SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                                editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
                                 editor.apply();
                                 restartApp();
                             }
@@ -431,7 +432,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 //});
                 //if(MainActivity.nightThemeEnabled) {
                     headerViewHolder.themeSwitch.setImageResource(R.drawable.ic_action_theme_switch);
-                    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
+                    if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
                     else headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_online);
                 //}
                 //else {
@@ -448,26 +449,26 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 menuRowViewHolder.name.setText(menuItem.getMenuType().value());
                 switch (menuItem.getMenuType()) {
                     case profile:
-                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_white);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_white);
                         else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
                         break;
                     case messages:
-                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_white);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_white);
                         else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_grey);
                         break;
                     case user:
-                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_white);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_white);
                         else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_grey);
                         break;
                     case subreddit:
                         menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_subreddit);
                         break;
                     case settings:
-                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_white);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_white);
                         else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_grey);
                         break;
                     case cached:
-                        if(MainActivity.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
                         else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
                         break;
                 }
@@ -490,15 +491,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 String currentSubreddit = activity.getListFragment().subreddit;
                 if(subreddit.toLowerCase().equals(currentSubreddit) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
-                    if(MainActivity.nightThemeEnabled) subredditRowViewHolder.name.setTextColor(Color.WHITE);
-                    else subredditRowViewHolder.name.setTextColor(MainActivity.colorPrimary);
-                    if(MainActivity.nightThemeEnabled) subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.name.setTextColor(Color.WHITE);
+                    else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
                     else subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
                 }
                 else {
-                    subredditRowViewHolder.name.setTextColor(MainActivity.textColor);
+                    subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
                     //subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
-                    if(MainActivity.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
                     else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                 }
                 break;
@@ -521,6 +522,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("subreddit", activity.getListFragment().subreddit);
+        i.putExtra("sort", activity.getListFragment().submissionSort);
+        i.putExtra("time", activity.getListFragment().timeSpan);
         activity.finish();
         activity.startActivity(i);
     }

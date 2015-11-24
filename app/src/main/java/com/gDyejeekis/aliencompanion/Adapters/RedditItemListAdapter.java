@@ -27,6 +27,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.ShowMore;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.R;
@@ -84,7 +85,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         showMoreButton = new ShowMore();
         redditItems.addAll(items);
         //if(items.size() == RedditConstants.DEFAULT_LIMIT)
-        if(!MainActivity.offlineModeEnabled) redditItems.add(showMoreButton);
+        if(!MyApplication.offlineModeEnabled) redditItems.add(showMoreButton);
     }
 
     public void add(RedditItem item) {
@@ -150,7 +151,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType) {
             case VIEW_TYPE_POST:
-                int resource = MainActivity.currentPostListView;
+                int resource = MyApplication.currentPostListView;
                 if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
@@ -317,7 +318,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             body.setMovementMethod(MyLinkMovementMethod.getInstance());
             age.setText(message.agePrepared);
 
-            if(message.author.equals(MainActivity.currentUser.getUsername()) && !message.destination.equals(MainActivity.currentUser.getUsername())) {
+            if(message.author.equals(MyApplication.currentUser.getUsername()) && !message.destination.equals(MyApplication.currentUser.getUsername())) {
                 dest.setText("to ");
                 author.setText(message.destination);
             }
@@ -380,9 +381,9 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
             layoutComment.setOnClickListener(new CommentLinkListener(context, comment));
 
-            layoutCommentOptions.setBackgroundColor(MainActivity.currentColor);
+            layoutCommentOptions.setBackgroundColor(MyApplication.currentColor);
             //user logged in
-            if(MainActivity.currentUser != null) {
+            if(MyApplication.currentUser != null) {
                 //check user vote
                 if (comment.getLikes().equals("true")) {
                     commentScore.setTextColor(upvoteColor);
@@ -393,7 +394,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                 } else {
-                    commentScore.setTextColor(MainActivity.textHintColor);
+                    commentScore.setTextColor(MyApplication.textHintColor);
                     upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                     downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                 }

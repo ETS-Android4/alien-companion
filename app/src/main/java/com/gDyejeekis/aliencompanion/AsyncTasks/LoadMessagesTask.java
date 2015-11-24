@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.MessageFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Message;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -62,7 +63,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
     public List<RedditItem> doInBackground(Void... unused) {
         try {
             List<RedditItem> messages;
-            Messages msgRetrieval = new Messages(httpClient, MainActivity.currentUser);
+            Messages msgRetrieval = new Messages(httpClient, MyApplication.currentUser);
             if(loadType == LoadType.extend) {
                 messages = msgRetrieval.ofUser(this.category, this.sort, -1, RedditConstants.DEFAULT_LIMIT, (Message) mf.adapter.getLastItem(), null, true);
                 adapter = mf.adapter;
@@ -84,7 +85,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
     protected void onCancelled(List<RedditItem> messages) {
         try {
             MessageFragment fragment = (MessageFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
-            fragment.loadMore = MainActivity.endlessPosts;
+            fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
 
@@ -129,7 +130,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case extend:
                         mf.adapter.setLoadingMoreItems(false);
                         mf.adapter.addAll(messages);
-                        mf.loadMore = MainActivity.endlessPosts;
+                        mf.loadMore = MyApplication.endlessPosts;
                         break;
                 }
             }

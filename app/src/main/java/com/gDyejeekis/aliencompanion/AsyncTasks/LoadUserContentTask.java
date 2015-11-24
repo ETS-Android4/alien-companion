@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -8,6 +8,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
@@ -72,14 +73,14 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             List<RedditItem> userContent = null;
             switch (this.userCategory) {
                 case OVERVIEW: case GILDED: case SAVED:
-                    UserMixed userMixed = new UserMixed(httpClient, MainActivity.currentUser);
+                    UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
                         RedditItem lastItem = uf.userAdapter.getLastItem();
                         userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastItem, null, false);
                         adapter = uf.userAdapter;
                     }
                     else {
-                        UserDetails userDetails = new UserDetails(httpClient, MainActivity.currentUser);
+                        UserDetails userDetails = new UserDetails(httpClient, MyApplication.currentUser);
                         UserInfo userInfo = userDetails.ofUser(uf.username);
                         userInfo.retrieveTrophies(activity, httpClient);
 
@@ -91,7 +92,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     //ImageLoader.preloadUserImages(userContent, activity);
                     break;
                 case COMMENTS:
-                    Comments comments = new Comments(httpClient, MainActivity.currentUser);
+                    Comments comments = new Comments(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
                         Comment lastComment = (Comment) uf.userAdapter.getLastItem();
                         userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
@@ -104,7 +105,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     }
                     break;
                 case SUBMITTED: case LIKED: case DISLIKED: case HIDDEN:
-                    Submissions submissions = new Submissions(httpClient, MainActivity.currentUser);
+                    Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
                         Submission lastPost = (Submission) uf.userAdapter.getLastItem();
                         userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, false);
@@ -131,7 +132,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     protected void onCancelled(List<RedditItem> submissions) {
         try {
             UserFragment fragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
-            fragment.loadMore = MainActivity.endlessPosts;
+            fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
 
@@ -179,7 +180,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     case extend:
                         uf.userAdapter.setLoadingMoreItems(false);
                         uf.userAdapter.addAll(things);
-                        uf.loadMore = MainActivity.endlessPosts;
+                        uf.loadMore = MyApplication.endlessPosts;
                         break;
                 }
             }

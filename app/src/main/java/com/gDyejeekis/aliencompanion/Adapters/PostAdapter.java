@@ -17,6 +17,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -112,7 +113,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 //Comment permalink case
                 if(comment.getIdentifier().equals(postFragment.commentLinkId))
-                    cvh.commentLayout.setBackgroundColor(MainActivity.commentPermaLinkBackgroundColor);
+                    cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
                 else cvh.commentLayout.setBackground(null);
 
                 //Author textview
@@ -172,10 +173,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
 
-                cvh.commentOptionsLayout.setBackgroundColor(MainActivity.currentColor);
+                cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
 
                 //user logged in
-                if(MainActivity.currentUser != null) {
+                if(MyApplication.currentUser != null) {
                     //check user vote
                     if (comment.getLikes().equals("true")) {
                         cvh.score.setTextColor(CommentViewHolder.upvoteColor);
@@ -186,7 +187,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
                     } else {
-                        cvh.score.setTextColor(MainActivity.textHintColor);
+                        cvh.score.setTextColor(MyApplication.textHintColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
                         cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
                     }

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -15,8 +16,8 @@ public class BrowserActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MainActivity.nightThemeEnabled) {
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
         }
@@ -25,15 +26,15 @@ public class BrowserActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_browser);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MainActivity.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MainActivity.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
-        toolbar.setNavigationIcon(MainActivity.homeAsUpIndicator);
+        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
+        toolbar.setBackgroundColor(MyApplication.currentColor);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
+        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
-        swipeBackLayout.setEdgeTrackingEnabled(MainActivity.swipeSetting);
+        swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 import java.io.UnsupportedEncodingException;
@@ -138,7 +139,7 @@ public class ConvertUtils {
 
                     @Override
                     public void updateDrawState(TextPaint ds) {
-                        int backgroundColor = (MainActivity.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
+                        int backgroundColor = (MyApplication.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
                         super.updateDrawState(ds);
                         ds.setUnderlineText(false);
                         ds.bgColor = backgroundColor;
@@ -170,7 +171,7 @@ public class ConvertUtils {
                     @Override
                     public void updateDrawState(TextPaint ds) {
                         super.updateDrawState(ds);
-                        ds.setColor(MainActivity.linkColor);
+                        ds.setColor(MyApplication.linkColor);
                     }
                 };
             }

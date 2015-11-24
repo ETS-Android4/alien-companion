@@ -22,8 +22,9 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadSearchTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadSearchTask;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
@@ -69,7 +70,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        loadMore = MainActivity.endlessPosts;
+        loadMore = MyApplication.endlessPosts;
         if(searchQuery==null) searchQuery = activity.getIntent().getStringExtra("query");
         subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
@@ -79,7 +80,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onResume() {
         super.onResume();
         //loadMore = MainActivity.endlessPosts;
-        if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }
 
@@ -115,7 +116,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
@@ -127,7 +128,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
                     swipeRefreshLayout.setEnabled(true);
                 else swipeRefreshLayout.setEnabled(false);
 
@@ -332,7 +333,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_post_views);
         int index;
-        switch (MainActivity.currentPostListView) {
+        switch (MyApplication.currentPostListView) {
             case R.layout.post_list_item_reversed:
                 index = 1;
                 break;
@@ -365,9 +366,9 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         resource = R.layout.post_list_item_card;
                         break;
                 }
-                if (resource != -1 && resource != MainActivity.currentPostListView) {
-                    SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                    MainActivity.currentPostListView = resource;
+                if (resource != -1 && resource != MyApplication.currentPostListView) {
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    MyApplication.currentPostListView = resource;
                     editor.putInt("postListView", resource);
                     editor.apply();
                     if(currentLoadType==null) redrawList();

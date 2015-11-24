@@ -19,8 +19,9 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserContentTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserContentTask;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
@@ -66,7 +67,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        loadMore = MainActivity.endlessPosts;
+        loadMore = MyApplication.endlessPosts;
         if(username==null) username = activity.getIntent().getStringExtra("username");
     }
 
@@ -74,7 +75,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onResume() {
         super.onResume();
         //loadMore = MainActivity.endlessPosts;
-        if(MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
+        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }
 
@@ -82,7 +83,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(!MainActivity.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
+        if(!MyApplication.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
             userAdapter.notifyItemChanged(0);
     }
 
@@ -119,7 +120,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MainActivity.currentColor);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
@@ -131,7 +132,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (MainActivity.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
+                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
                     swipeRefreshLayout.setEnabled(true);
                 else swipeRefreshLayout.setEnabled(false);
 
@@ -266,7 +267,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void showContentPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(activity, view);
-        if(MainActivity.currentUser!=null && username.equals(MainActivity.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
+        if(MyApplication.currentUser!=null && username.equals(MyApplication.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
         else popupMenu.inflate(R.menu.menu_user_content);
         //popupMenu.inflate(R.menu.menu_user_content_public);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

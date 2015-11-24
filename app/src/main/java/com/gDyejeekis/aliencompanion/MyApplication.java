@@ -1,0 +1,191 @@
+package com.gDyejeekis.aliencompanion;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.Gravity;
+
+import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.api.entity.User;
+
+import java.util.UUID;
+
+import me.imid.swipebacklayout.lib.ViewDragHelper;
+
+/**
+ * Created by sound on 11/23/2015.
+ */
+public class MyApplication extends Application {
+
+    public static final String currentVersion = "0.1.1";
+
+    public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
+
+    public static final int NAV_DRAWER_CLOSE_TIME = 200;
+
+    public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
+
+    public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+
+    public static int textHintDark;
+
+    public static int textHintLight;
+
+    public static String[] primaryColors;
+
+    public static String[] primaryDarkColors;
+
+    public static boolean actionSort = false;
+
+    public static boolean showHiddenPosts = false;
+
+    public static SharedPreferences prefs;
+    public static String deviceID;
+    public static boolean nightThemeEnabled;
+    public static boolean offlineModeEnabled;
+    public static boolean dualPane;
+    public static boolean dualPaneCurrent;
+    public static boolean dualPaneActive;
+    public static int screenOrientation;
+    public static int currentOrientation;
+    public static int fontStyle;
+    public static int currentFontStyle;
+    public static int colorPrimary;
+    public static int colorPrimaryDark;
+    public static int currentColor;
+    public static int swipeSetting;
+    public static boolean swipeRefresh;
+    public static int drawerGravity;
+    public static boolean endlessPosts;
+    public static boolean showNSFWpreview;
+    public static boolean hideNSFW;
+    public static int initialCommentCount;
+    public static int initialCommentDepth;
+    public static int textColor;
+    public static int textHintColor;
+    public static int linkColor;
+    public static int commentPermaLinkBackgroundColor;
+    public static int syncPostCount;
+    public static int syncCommentCount;
+    public static int syncCommentDepth;
+    public static int currentPostListView;
+
+    public static SavedAccount currentAccount;
+    public static User currentUser;
+    public static String currentAccessToken;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initStaticFields();
+    }
+
+    private void initStaticFields() {
+        textHintDark = getResources().getColor(R.color.hint_dark);
+        textHintLight = getResources().getColor(R.color.hint_light);
+        primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
+        primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        getDeviceId();
+        getCurrentSettings();
+        dualPaneCurrent = dualPane;
+        //currentOrientation = screenOrientation;
+        currentFontStyle = fontStyle;
+        //setThemeRelatedFields();
+    }
+
+    public static void setThemeRelatedFields() {
+        if(nightThemeEnabled) {
+            currentColor = Color.parseColor("#181818");
+            colorPrimaryDark = Color.BLACK;
+            textColor = Color.WHITE;
+            textHintColor = textHintDark;
+            linkColor = Color.parseColor("#0080FF");
+            commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+        }
+        else {
+            currentColor = colorPrimary;
+            colorPrimaryDark = getPrimaryDarkColor(primaryColors, primaryDarkColors);
+            textColor = Color.BLACK;
+            textHintColor = textHintLight;
+            linkColor = MyApplication.colorPrimary;
+            commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+        }
+        //currentColor = colorPrimary;
+    }
+
+    private void getDeviceId() {
+        deviceID = prefs.getString("deviceID", "null");
+        if(deviceID.equals("null")) {
+            deviceID = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("deviceID", deviceID);
+            editor.apply();
+        }
+    }
+
+    public static void getCurrentSettings() {
+        currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
+        //Log.d("geo test", "settings saved");
+        dualPane = prefs.getBoolean("dualPane", false);
+        //dualPane = true;
+        screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
+        nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+        offlineModeEnabled = prefs.getBoolean("offlineMode", false);
+        fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
+        switch (fontStyle) {
+            case 0:
+                fontStyle = R.style.FontStyle_Small;
+                break;
+            case 1:
+                fontStyle = R.style.FontStyle_Medium;
+                break;
+            case 2:
+                fontStyle = R.style.FontStyle_Large;
+                break;
+            case 3:
+                fontStyle = R.style.FontStyle_ExtraLarge;
+                break;
+        }
+        colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
+        swipeRefresh = prefs.getBoolean("swipeRefresh", true);
+        drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
+        endlessPosts = prefs.getBoolean("endlessPosts", true);
+        showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
+        hideNSFW = prefs.getBoolean("hideNSFW", false);
+        swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
+        switch (swipeSetting) {
+            case 0:
+                swipeSetting = ViewDragHelper.EDGE_LEFT;
+                break;
+            case 1:
+                swipeSetting = ViewDragHelper.EDGE_RIGHT;
+                break;
+            case 2:
+                swipeSetting = ViewDragHelper.EDGE_LEFT | ViewDragHelper.EDGE_RIGHT;
+                break;
+            case 3:
+                swipeSetting = ViewDragHelper.STATE_IDLE;
+        }
+        initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
+        initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
+        syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
+        syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
+        syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
+    }
+
+    public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {
+        //String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
+        int index = 0;
+        for(String color : primaryColors) {
+            if(Color.parseColor(color)==MyApplication.colorPrimary) break;
+            index++;
+        }
+        //String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
+        return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
+    }
+}

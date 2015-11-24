@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 
@@ -41,7 +42,7 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_reddit, container, false);
 
-        int dropdownResource = (MainActivity.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
+        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, dropdownResource, RedditConstants.popularSubreddits);
 
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
@@ -97,7 +98,7 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
                 dismiss();
                 subreddit = subreddit.toLowerCase();
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
-                if(MainActivity.prefs.getBoolean("newSubredditWindow", false)) {
+                if(MyApplication.prefs.getBoolean("newSubredditWindow", false)) {
                     Intent intent = new Intent(activity, SubredditActivity.class);
                     intent.putExtra("subreddit", subreddit);
                     startActivity(intent);

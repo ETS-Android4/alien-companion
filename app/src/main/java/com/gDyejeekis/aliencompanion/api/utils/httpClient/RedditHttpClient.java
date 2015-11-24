@@ -4,6 +4,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
@@ -26,7 +27,7 @@ import java.net.URL;
  */
 public class RedditHttpClient implements HttpClient, Serializable {
 
-    private String userAgent = "android:com.dyejeekis.aliencompanion:v0.2 (by /u/alien_companion)";
+    private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/alien_companion)";
 
     public Response get(String urlPath, String cookie) throws RetrievalFailedException {
 
@@ -83,7 +84,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
         HttpURLConnection connection = null;
         //OutputStream outputStream = null;
         //InputStream inputStream = null;
-        String baseUrl = (MainActivity.currentAccessToken == null) ? "http://www.reddit.com" : ApiEndpointUtils.REDDIT_BASE_URL;
+        String baseUrl = (MyApplication.currentAccessToken == null) ? "http://www.reddit.com" : ApiEndpointUtils.REDDIT_BASE_URL;
         try {
             URL url = new URL(baseUrl + urlPath);
             connection = (HttpURLConnection) url.openConnection();
@@ -91,7 +92,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", userAgent);
             if(RedditOAuth.useOAuth2 && cookie == null) {
-                if(MainActivity.currentAccessToken!=null) connection.setRequestProperty("Authorization", "bearer " + MainActivity.currentAccessToken);
+                if(MyApplication.currentAccessToken!=null) connection.setRequestProperty("Authorization", "bearer " + MyApplication.currentAccessToken);
                 else {
                     String userCredentials = RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET;
                     String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));

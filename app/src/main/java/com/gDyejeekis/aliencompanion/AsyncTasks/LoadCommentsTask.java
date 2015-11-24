@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.LoadTasks;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -57,17 +58,17 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     protected List<Comment> doInBackground(Void... unused) {
         try {
             List<Comment> comments;
-            if(MainActivity.offlineModeEnabled) {
+            if(MyApplication.offlineModeEnabled) {
                 String postId = postFragment.post.getIdentifier();
                 String filename = postFragment.post.getSubreddit().toLowerCase() + postId;
                 comments = readCommentsFromFile(filename);
                 if(exception != null) comments = readCommentsFromFile("frontpage" + postId);
             }
             else {
-                Comments cmnts = new Comments(httpClient, MainActivity.currentUser);
-                int depth = (postFragment.commentLinkId!=null) ? 999 : MainActivity.initialCommentDepth;
+                Comments cmnts = new Comments(httpClient, MyApplication.currentUser);
+                int depth = (postFragment.commentLinkId!=null) ? 999 : MyApplication.initialCommentDepth;
                 comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, depth,
-                        MainActivity.initialCommentCount, postFragment.commentSort);
+                        MyApplication.initialCommentCount, postFragment.commentSort);
 
                 //if (postFragment.post.getThumbnailObject() == null) {
                 //    ImageLoader.preloadThumbnail(postFragment.post, context);

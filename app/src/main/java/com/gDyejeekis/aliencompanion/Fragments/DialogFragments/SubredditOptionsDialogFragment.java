@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.EditSubredditsActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
@@ -54,7 +55,7 @@ public class SubredditOptionsDialogFragment extends ScalableDialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.subscribe, subreddit);
                     task.execute();
                 }
@@ -66,7 +67,7 @@ public class SubredditOptionsDialogFragment extends ScalableDialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.unsubscribe, subreddit);
                     task.execute();
                 }
@@ -79,7 +80,7 @@ public class SubredditOptionsDialogFragment extends ScalableDialogFragment {
             public void onClick(View v) {
                 dismiss();
                 activity.removeSubreddit(subreddit);
-                if(MainActivity.currentUser!=null) {
+                if(MyApplication.currentUser!=null) {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.unsubscribe, subreddit);
                     task.execute();
                 }

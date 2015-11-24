@@ -9,10 +9,10 @@ import com.gDyejeekis.aliencompanion.Fragments.MessageFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.Fragments.UserFragment;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadMessagesTask;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadPostsTask;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadSearchTask;
-import com.gDyejeekis.aliencompanion.LoadTasks.LoadUserContentTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadMessagesTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadSearchTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserContentTask;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 
 /**
