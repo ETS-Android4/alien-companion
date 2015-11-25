@@ -21,7 +21,7 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  */
 public class MyApplication extends Application {
 
-    public static final String currentVersion = "0.1.1";
+    public static final String currentVersion = "0.1.2";
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 

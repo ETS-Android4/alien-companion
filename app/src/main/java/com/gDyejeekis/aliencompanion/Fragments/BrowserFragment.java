@@ -19,6 +19,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.R;
@@ -34,7 +35,7 @@ public class BrowserFragment extends Fragment {
     private WebView webView;
     private ProgressBar progressBar;
     private Submission post;
-    private AppCompatActivity activity;
+    private BrowserActivity activity;
     private Bundle webViewBundle;
     private String url;
     private String domain;
@@ -97,22 +98,20 @@ public class BrowserFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        //if(!MainActivity.dualPaneActive) {
-            post = (Submission) activity.getIntent().getSerializableExtra("post");
-            if (post != null) {
-                url = post.getUrl();
-                domain = post.getDomain();
-            } else {
-                url = activity.getIntent().getStringExtra("url");
-                domain = activity.getIntent().getStringExtra("domain");
-            }
-        //}
+        post = (Submission) activity.getIntent().getSerializableExtra("post");
+        if (post != null) {
+            url = post.getUrl();
+            domain = post.getDomain();
+        } else {
+            url = activity.getIntent().getStringExtra("url");
+            domain = activity.getIntent().getStringExtra("domain");
+        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
+        this.activity = (BrowserActivity) activity;
     }
 
     @Override
@@ -204,9 +203,29 @@ public class BrowserFragment extends Fragment {
                 intent.putExtra("post", post);
                 startActivity(intent);
                 return true;
+            case R.id.action_load_from_cache:
+                loadCachedCopy();
+                return true;
+            case R.id.action_load_live:
+                loadLiveVersion();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadCachedCopy() {
+        activity.loadFromCache = true;
+        activity.invalidateOptionsMenu();
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+        webView.reload();
+    }
+
+    private void loadLiveVersion() {
+        activity.loadFromCache = false;
+        activity.invalidateOptionsMenu();
+        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        webView.reload();
     }
 
 }

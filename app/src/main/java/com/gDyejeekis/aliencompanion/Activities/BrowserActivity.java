@@ -14,6 +14,8 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class BrowserActivity extends SwipeBackActivity {
 
+    public boolean loadFromCache = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getTheme().applyStyle(MyApplication.fontStyle, true);
@@ -40,7 +42,8 @@ public class BrowserActivity extends SwipeBackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_browser, menu);
+        int resource = (loadFromCache) ? R.menu.menu_browser_alt : R.menu.menu_browser;
+        getMenuInflater().inflate(resource, menu);
 
         if(getIntent().getSerializableExtra("post") == null)
             menu.findItem(R.id.action_comments).setVisible(false);

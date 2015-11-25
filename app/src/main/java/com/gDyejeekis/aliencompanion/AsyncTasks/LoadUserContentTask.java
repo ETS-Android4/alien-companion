@@ -12,6 +12,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Utils.ImageLoader;
@@ -41,7 +42,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     //private UserSubmissionsCategory userContent;
     private Activity activity;
     private UserFragment uf;
-    private HttpClient httpClient = new PoliteRedditHttpClient();
+    private HttpClient httpClient = new RedditHttpClient();
     private RedditItemListAdapter adapter;
     private UserSubmissionsCategory userCategory;
     private UserOverviewSort userSort;
@@ -53,7 +54,6 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         mLoadType = loadType;
         this.userCategory = uf.userContent;
         this.userSort = uf.userOverviewSort;
-        //httpClient = new RedditHttpClient();
         changedSort = false;
     }
 
@@ -63,7 +63,6 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         mLoadType = loadType;
         this.userCategory = category;
         this.userSort = sort;
-        //httpClient = new RedditHttpClient();
         changedSort = true;
     }
 
@@ -165,7 +164,6 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 switch (mLoadType) {
                     case init:
                         uf.contentView.setAdapter(uf.userAdapter);
-                        //if(things.size() == 0) ToastUtils.displayShortToast(activity, "User not found");
                         break;
                     case refresh:
                         if (things.size() != 0) {

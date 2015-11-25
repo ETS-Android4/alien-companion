@@ -49,18 +49,6 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    //public static final String currentVersion = "0.1.1";
-
-    //public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
-
-    //public static final int NAV_DRAWER_CLOSE_TIME = 200;
-
-    //public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
-
-    //public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
-
-    //public static boolean initialized;
-
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -73,84 +61,25 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private LinearLayout container;
 
-    //public static boolean actionSort = false;
-
-    //public static boolean showHiddenPosts;
-
-    //public static SharedPreferences prefs;
-    //public static String deviceID;
-    //public static boolean nightThemeEnabled;
-    //public static boolean offlineModeEnabled;
-    //public static boolean dualPane;
-    //public static boolean dualPaneCurrent;
     public static boolean dualPaneActive;
-    //public static int screenOrientation;
-    //public static int currentOrientation;
-    //public static int fontStyle;
-    //public static int currentFontStyle;
-    //public static int colorPrimary;
-    //public static int colorPrimaryDark;
-    //public static int currentColor;
-    //public static int swipeSetting;
-    //public static boolean swipeRefresh;
-    //public static int drawerGravity;
-    //public static boolean endlessPosts;
-    //public static boolean showNSFWpreview;
-    //public static boolean hideNSFW;
-    //public static int initialCommentCount;
-    //public static int initialCommentDepth;
-    //public static int textColor;
-    //public static int textHintColor;
-    //public static int linkColor;
-    //public static int backgroundColor;
-    //public static int commentPermaLinkBackgroundColor;
-    //public static int syncPostCount;
-    //public static int syncCommentCount;
-    //public static int syncCommentDepth;
-    //public static int currentPostListView;
-
-    //public static SavedAccount currentAccount;
-    //public static User currentUser;
-    //public static String currentAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //getDeviceId();
-        //getCurrentSettings();
-        //dualPaneCurrent = MyApplication.dualPane;
         setOrientation();
         MyApplication.setThemeRelatedFields();
         getTheme().applyStyle(MyApplication.fontStyle, true);
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
-            //MyApplication.colorPrimary = Color.parseColor("#181818");
-            //colorPrimaryDark = Color.BLACK;
-            //textColor = Color.WHITE;
-            //textHintColor = getResources().getColor(R.color.hint_dark);
-            //linkColor = Color.parseColor("#0080FF");
-            //backgroundColor = Color.BLACK;
-            //commentPermaLinkBackgroundColor = Color.parseColor("#545454");
         }
         else {
             getTheme().applyStyle(R.style.selectedTheme_day, true);
-            //colorPrimaryDark = getPrimaryDarkColor();
-            //textColor = Color.BLACK;
-            //textHintColor = getResources().getColor(R.color.hint_light);
-            //linkColor = MyApplication.colorPrimary;
-            //backgroundColor = Color.WHITE;
-            //commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plus);
 
         container = (LinearLayout) findViewById(R.id.container);
-        //initialized = true;
-        //showHiddenPosts = false;
-        //currentFontStyle = MyApplication.fontStyle;
-        //currentColor = MyApplication.colorPrimary;
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
@@ -159,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setBackgroundColor(MyApplication.currentColor);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setHomeButtonEnabled(true);
 
         fm = getFragmentManager();
 
@@ -204,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupMainFragment(int containerRes) {
         listFragment = (PostListFragment) fm.findFragmentById(containerRes);
         if(listFragment == null) {
-            //Log.d("MainActivity", "Creating new fragment...");
             listFragment = new PostListFragment();
             fm.beginTransaction().add(containerRes, listFragment, "listFragment").commit();
         }
@@ -213,18 +139,16 @@ public class MainActivity extends AppCompatActivity {
     public void changeCurrentUser(SavedAccount account) {
         MyApplication.currentAccount = account;
         MyApplication.currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
-        //initNavDrawerContent();
+
         if(MyApplication.currentUser!=null) {
             adapter.showUserMenuItems();
-            adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
+            //adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         }
         else {
             adapter.hideUserMenuItems();
-            adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
-            //List<String> subreddits = new ArrayList<>();
-            //Collections.addAll(subreddits, defaultSubredditStrings);
-            //adapter.updateSubredditItems(subreddits);
+            //adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         }
+        adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         //homePage();
         try {
             listFragment.changeSubreddit(listFragment.subreddit);
@@ -236,77 +160,6 @@ public class MainActivity extends AppCompatActivity {
     public void homePage() {
         if(listFragment!=null) listFragment.changeSubreddit(null);
     }
-
-    //private void getDeviceId() {
-    //    deviceID = prefs.getString("deviceID", "null");
-    //    if(deviceID.equals("null")) {
-    //        deviceID = UUID.randomUUID().toString();
-    //        SharedPreferences.Editor editor = prefs.edit();
-    //        editor.putString("deviceID", deviceID);
-    //        editor.apply();
-    //    }
-    //}
-
-    //public static void getCurrentSettings() {
-    //    currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
-    //    //Log.d("geo test", "settings saved");
-    //    dualPane = prefs.getBoolean("dualPane", false);
-    //    //dualPane = true;
-    //    screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
-    //    nightThemeEnabled = prefs.getBoolean("nightTheme", false);
-    //    offlineModeEnabled = prefs.getBoolean("offlineMode", false);
-    //    fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
-    //    switch (fontStyle) {
-    //        case 0:
-    //            fontStyle = R.style.FontStyle_Small;
-    //            break;
-    //        case 1:
-    //            fontStyle = R.style.FontStyle_Medium;
-    //            break;
-    //        case 2:
-    //            fontStyle = R.style.FontStyle_Large;
-    //            break;
-    //        case 3:
-    //            fontStyle = R.style.FontStyle_ExtraLarge;
-    //            break;
-    //    }
-    //    colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
-    //    swipeRefresh = prefs.getBoolean("swipeRefresh", true);
-    //    drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
-    //    endlessPosts = prefs.getBoolean("endlessPosts", true);
-    //    showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
-    //    hideNSFW = prefs.getBoolean("hideNSFW", false);
-    //    swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
-    //    switch (swipeSetting) {
-    //        case 0:
-    //            swipeSetting = ViewDragHelper.EDGE_LEFT;
-    //            break;
-    //        case 1:
-    //            swipeSetting = ViewDragHelper.EDGE_RIGHT;
-    //            break;
-    //        case 2:
-    //            swipeSetting = ViewDragHelper.EDGE_LEFT | ViewDragHelper.EDGE_RIGHT;
-    //            break;
-    //        case 3:
-    //            swipeSetting = ViewDragHelper.STATE_IDLE;
-    //    }
-    //    initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
-    //    initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
-    //    syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
-    //    syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
-    //    syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
-    //}
-
-    //private int getPrimaryDarkColor() {
-    //    String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
-    //    int index = 0;
-    //    for(String color : primaryColors) {
-    //        if(Color.parseColor(color)==MyApplication.colorPrimary) break;
-    //        index++;
-    //    }
-    //    String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
-    //    return Color.parseColor(primaryDarkColors[index]);
-    //}
 
     @Override
     public void onResume() {
@@ -360,12 +213,9 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
             listFragment.colorSchemeChanged();
             adapter.notifyDataSetChanged();
-            //Log.d("geo test", "main color changed");
         }
 
-        //final int gravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         if(MyApplication.drawerGravity != drawerParams.gravity) {
-            //Log.d("geo test", "drawer gravity changed");
             drawerParams.gravity = MyApplication.drawerGravity;
             scrimInsetsFrameLayout.setLayoutParams(drawerParams);
             drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
@@ -387,12 +237,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         int menuResource;
         if(MyApplication.offlineModeEnabled) menuResource = R.menu.menu_main_offline;
         else menuResource = R.menu.menu_main;
         getMenuInflater().inflate(menuResource, menu);
-        //toggleHiddenMenuItem = (MenuItem) findViewById(R.id.action_toggle_hidden);
         return true;
     }
 
@@ -556,7 +404,6 @@ public class MainActivity extends AppCompatActivity {
         menuItems.add(new NavDrawerMenuItem(MenuType.user));
         menuItems.add(new NavDrawerMenuItem(MenuType.subreddit));
         menuItems.add(new NavDrawerMenuItem(MenuType.settings));
-        //menuItems.add(new NavDrawerMenuItem(MenuType.cached));
 
         return menuItems;
     }
@@ -623,17 +470,5 @@ public class MainActivity extends AppCompatActivity {
 
         return newInstance;
     }
-
-    //@Override
-    //public void onStop() {
-    //    super.onStop();
-    //    Log.d("geo test", "on stop called");
-    //}
-
-    //@Override
-    //public void onDestroy() {
-    //    super.onDestroy();
-    //    Log.d("geo debug", "MainActivity onDestroy called");
-    //}
 
 }
