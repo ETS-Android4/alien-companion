@@ -32,6 +32,7 @@ public class VerifyAccountDialogFragment extends DialogFragment {
         else task =  new AddAccountTask(this, username, password);
         task.execute();
 
+        getDialog().setCanceledOnTouchOutside(false);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         return inflater.inflate(R.layout.fragment_verify_account_dialog, container, false);

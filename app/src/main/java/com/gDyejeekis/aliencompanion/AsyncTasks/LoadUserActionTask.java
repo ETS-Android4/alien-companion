@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.action.MarkActions;
 import com.gDyejeekis.aliencompanion.api.action.ProfileActions;
@@ -168,6 +169,10 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void unused) {
+        if(MyApplication.accountChanges) {
+            MyApplication.accountChanges = false;
+            GeneralUtils.saveAccountChanges(context);
+        }
         if(exception != null) {
             ToastUtils.displayShortToast(context, "Error completing user action");
         }

@@ -84,7 +84,7 @@ public class Subreddits implements ActorDriven {
         List<Subreddit> subreddits = new LinkedList<Subreddit>();
         
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
         
         if (response instanceof JSONObject) {
         	

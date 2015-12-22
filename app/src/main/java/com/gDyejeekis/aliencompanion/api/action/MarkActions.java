@@ -53,7 +53,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean markNSFW(String fullName) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.SUBMISSION_MARK_AS_NSFW,
                 user.getCookie()
@@ -71,7 +71,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean unmarkNSFW(String fullName) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.SUBMISSION_UNMARK_AS_NSFW,
                 user.getCookie()
@@ -90,7 +90,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean save(String fullName, String category) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "category=" + category + "&id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.SAVE, user.getCookie()
         ).getResponseObject();
@@ -108,7 +108,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean report(String fullName, String reason) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "thing_id=" + fullName + "&reason=" + reason + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.REPORT, user.getCookie()
         ).getResponseObject();
@@ -125,7 +125,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean save(String fullName) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.SAVE,
                 user.getCookie()
@@ -142,7 +142,7 @@ public class MarkActions implements ActorDriven {
      * @throws ActionFailedException If the action failed
      */
     public boolean unsave(String fullName) throws ActionFailedException {
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.UNSAVE,
                 user.getCookie()
@@ -159,7 +159,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean hide(String fullName) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.HIDE,
                 user.getCookie()
@@ -176,7 +176,7 @@ public class MarkActions implements ActorDriven {
      * @throws ActionFailedException If the action failed
      */
     public boolean unhide(String fullName) throws ActionFailedException {
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.UNHIDE,
                 user.getCookie()
@@ -197,7 +197,7 @@ public class MarkActions implements ActorDriven {
             throw new IllegalArgumentException("Vote direction needs to be -1 or 1.");
         }
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" 		+ fullName +
                         "&dir=" 	+ dir +
                         "&uh=" 		+ user.getModhash(),

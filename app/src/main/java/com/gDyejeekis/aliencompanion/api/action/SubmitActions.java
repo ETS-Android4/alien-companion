@@ -54,7 +54,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean delete(String fullName) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "id=" + fullName + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.DELETE, user.getCookie()
         ).getResponseObject();
@@ -71,7 +71,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean comment(String fullname, String text) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "thing_id=" + fullname + "&text=" + text + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.COMMENT,
                 user.getCookie()
@@ -98,7 +98,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean createLive(String title, String description) {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "api_type=json&title=" + title + "&description=" + description + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.LIVE_THREAD_CREATE,
                 user.getCookie()
@@ -120,7 +120,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean updateLive(String liveThread, String message) {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "api_type=json&body=" + message + "&uh=" + user.getModhash(),
                 String.format(ApiEndpointUtils.LIVE_THREAD_UPDATE, liveThread),
                 user.getCookie()
@@ -189,7 +189,7 @@ public class SubmitActions implements ActorDriven {
                         "&Captcha=" 						+ captcha_sol;
 
         // Make the request
-        JSONObject object = (JSONObject) httpClient.post(params,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
 
         String responseAsString = object.toJSONString();
 
@@ -235,7 +235,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean editUserText(String fullname, String text) throws ActionFailedException {
 
-        JSONObject object = (JSONObject) httpClient.post(
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 "thing_id=" + fullname + "&text=" + text + "&uh=" + user.getModhash(),
                 ApiEndpointUtils.EDITUSERTEXT,
                 user.getCookie()
@@ -263,7 +263,7 @@ public class SubmitActions implements ActorDriven {
     }
 
     public boolean compose(String recipient, String subject, String message, String iden, String captcha) throws ActionFailedException {
-        JSONObject object = (JSONObject) httpClient.post("api_type=json&to=" + recipient + "&subject=" + subject + "&text=" + message + "&iden=" + iden + "&captcha=" + captcha
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, "api_type=json&to=" + recipient + "&subject=" + subject + "&text=" + message + "&iden=" + iden + "&captcha=" + captcha
         + "&uh=" + user.getModhash(), ApiEndpointUtils.MESSAGE_COMPOSE, user.getCookie()).getResponseObject();
 
         String responseAsString = object.toJSONString();

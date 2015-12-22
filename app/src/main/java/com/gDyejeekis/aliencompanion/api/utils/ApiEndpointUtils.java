@@ -10,9 +10,13 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
  */
 public class ApiEndpointUtils {
 
+    public static final String REDDIT_BASE_URL = "http://www.reddit.com";
+
+    public static final String REDDIT_BASE_URL_SECURE = "https://www.reddit.com";
+
     public static final String REDDIT_BASE_URL_OAUTH = "https://oauth.reddit.com";
 
-    public static final String REDDIT_BASE_URL = (RedditOAuth.useOAuth2) ? REDDIT_BASE_URL_OAUTH : "http://www.reddit.com";
+    public static final String REDDIT_CURRENT_BASE_URL = (RedditOAuth.useOAuth2) ? REDDIT_BASE_URL_OAUTH : REDDIT_BASE_URL;
 
     public static final String REDDIT_BASE_API_ENDPOINT = "/api";
 
@@ -112,7 +116,7 @@ public class ApiEndpointUtils {
 
     public static final String USER_ABOUT = "/user/%s/about.json";
 
-    public static final String USER_TROPHIES = "/user/%s/trophies.json";
+    public static final String USER_TROPHIES = (RedditOAuth.useOAuth2) ? "/api/v1/user/%s/trophies.json": "/user/%s/trophies.json";
 
     //public static final String USER_OVERVIEW = "/user/%s/overview.json?%s";
     //
@@ -132,7 +136,7 @@ public class ApiEndpointUtils {
 
     public static final String USER_SUBMISSIONS = "/user/%s/submitted.json";
 
-    public static final String USER_INFO = REDDIT_BASE_API_ENDPOINT + "/me.json";
+    public static final String USER_INFO = (RedditOAuth.useOAuth2) ? REDDIT_BASE_API_ENDPOINT + "/v1/me.json" : REDDIT_BASE_API_ENDPOINT + "/me.json";
     
     public static final String USER_UPDATE = REDDIT_BASE_API_ENDPOINT + "/update";
 	

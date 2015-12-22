@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.api.entity;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
@@ -132,7 +133,7 @@ public class Subreddit extends Thing {
 
         String cookie = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getCookie() : null;
 
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
 
         if(response instanceof JSONObject) {
             JSONObject object = (JSONObject) response;

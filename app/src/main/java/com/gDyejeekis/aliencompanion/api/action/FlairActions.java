@@ -75,7 +75,7 @@ public class FlairActions {
                 + "&name=" + username;
 
         //Then run the post request.
-        return httpClient.post(params, String.format(ApiEndpointUtils.USER_DELETE_SUBREDDIT_FLAIR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.USER_DELETE_SUBREDDIT_FLAIR, subreddit), user.getCookie());
     }
 
     /**
@@ -130,7 +130,7 @@ public class FlairActions {
                 + "&flair_type=" + type;
 
         //Run the post requests.
-        return httpClient.post(params, String.format(ApiEndpointUtils.CLEAR_SUBREDDIT_FLAIR_TEMPLATES, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.CLEAR_SUBREDDIT_FLAIR_TEMPLATES, subreddit), user.getCookie());
     }
 
     /**
@@ -170,7 +170,7 @@ public class FlairActions {
                 + "&flair_template_id=" + flairTemplateID;
 
         //Run the post requests.
-        return httpClient.post(params, String.format(ApiEndpointUtils.DELETE_SUBREDDIT_FLAIR_TEMPLATE, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.DELETE_SUBREDDIT_FLAIR_TEMPLATE, subreddit), user.getCookie());
     }
 
     /**
@@ -246,7 +246,7 @@ public class FlairActions {
                 + (name != null ? "&name=" + name : "")
                 + "&text=" + text;
 
-        return httpClient.post(params, String.format(ApiEndpointUtils.FLAIR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR, subreddit), user.getCookie());
     }
 
     /**
@@ -323,7 +323,7 @@ public class FlairActions {
                 + "&link_flair_position=" + linkFlairPosition
                 + "&link_flair_self_assign_enabled=" + linkFlairSelfAssignEnabled;
 
-        return httpClient.post(params, String.format(ApiEndpointUtils.FLAIR_CONFIG, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_CONFIG, subreddit), user.getCookie());
     }
 
     /**
@@ -421,7 +421,7 @@ public class FlairActions {
                 + (username != null ? "&name=" + username : "");
         if (show) params = params + "&show=all";
 
-        return httpClient.get(String.format(ApiEndpointUtils.FLAIR_LIST, subreddit) + "?" + params, user.getCookie());
+        return httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, String.format(ApiEndpointUtils.FLAIR_LIST, subreddit) + "?" + params, user.getCookie());
     }
 
     /**
@@ -485,7 +485,7 @@ public class FlairActions {
                 + (link != null ? "&link=" + link : "")
                 + (username != null ? "&name=" + username : "");
 
-        return httpClient.post(params, String.format(ApiEndpointUtils.FLAIR_SELECTOR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_SELECTOR, subreddit), user.getCookie());
     }
 
     /**
@@ -568,7 +568,7 @@ public class FlairActions {
                 + "&text=" + text
                 + "&text_editable=" + textEditable;
 
-        return httpClient.post(params, String.format(ApiEndpointUtils.FLAIR_TEMPLATE, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_TEMPLATE, subreddit), user.getCookie());
     }
 
     /**
@@ -629,7 +629,7 @@ public class FlairActions {
                 + "&name=" + username
                 + "&text=" + text;
 
-        return httpClient.post(params, String.format(ApiEndpointUtils.SELECT_FLAIR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.SELECT_FLAIR, subreddit), user.getCookie());
     }
 
     /**
@@ -663,7 +663,7 @@ public class FlairActions {
                 + "&uh=" + user.getModhash()
                 + "&flair_enabled=" + flairEnabled;
 
-        return httpClient.post(params, String.format(ApiEndpointUtils.FLAIR_ENABLED, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_ENABLED, subreddit), user.getCookie());
     }
 
 }

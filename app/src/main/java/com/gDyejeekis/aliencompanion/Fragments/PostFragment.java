@@ -251,7 +251,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             }
         });
 
-        setCommentSort(CommentSort.TOP); //TODO: change this for orientation changes
+        setCommentSort(MyApplication.defaultCommentSort); //TODO: change this for orientation changes
         //if(!currentlyLoading) {
             if (postAdapter == null) {
                 //currentlyLoading = true;

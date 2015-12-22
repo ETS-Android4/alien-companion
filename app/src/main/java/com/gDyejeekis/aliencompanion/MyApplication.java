@@ -1,17 +1,20 @@
 package com.gDyejeekis.aliencompanion;
 
 import android.app.Application;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.api.entity.User;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.List;
 import java.util.UUID;
 
 import me.imid.swipebacklayout.lib.ViewDragHelper;
@@ -21,7 +24,9 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  */
 public class MyApplication extends Application {
 
-    public static final String currentVersion = "0.1.2";
+    public static final String lastKnownVersion = "0.1.2";
+
+    public static final String currentVersion = "0.2.0";
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -73,10 +78,15 @@ public class MyApplication extends Application {
     public static int syncCommentCount;
     public static int syncCommentDepth;
     public static int currentPostListView;
+    public static CommentSort defaultCommentSort;
+    public static CommentSort syncCommentSort;
 
+    //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
     public static User currentUser;
     public static String currentAccessToken;
+    public static boolean renewingToken = false;
+    public static boolean accountChanges = false;
 
     @Override
     public void onCreate() {
@@ -93,9 +103,9 @@ public class MyApplication extends Application {
         getDeviceId();
         getCurrentSettings();
         dualPaneCurrent = dualPane;
-        //currentOrientation = screenOrientation;
         currentFontStyle = fontStyle;
-        //setThemeRelatedFields();
+
+        //savedAccounts = readAccounts();
     }
 
     public static void setThemeRelatedFields() {
@@ -173,9 +183,45 @@ public class MyApplication extends Application {
         }
         initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
         initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
+        int index = Integer.parseInt(prefs.getString("defaultCommentSort", "1"));
+        switch (index) {
+            case 1:
+                defaultCommentSort = CommentSort.TOP;
+                break;
+            case 2:
+                defaultCommentSort = CommentSort.BEST;
+                break;
+            case 3:
+                defaultCommentSort = CommentSort.NEW;
+                break;
+            case 4:
+                defaultCommentSort = CommentSort.OLD;
+                break;
+            case 5:
+                defaultCommentSort = CommentSort.CONTROVERSIAL;
+                break;
+        }
         syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
         syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
         syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
+        index = Integer.parseInt(prefs.getString("syncCommentSort", "1"));
+        switch (index) {
+            case 1:
+                syncCommentSort = CommentSort.TOP;
+                break;
+            case 2:
+                syncCommentSort = CommentSort.BEST;
+                break;
+            case 3:
+                syncCommentSort = CommentSort.NEW;
+                break;
+            case 4:
+                syncCommentSort = CommentSort.OLD;
+                break;
+            case 5:
+                syncCommentSort = CommentSort.CONTROVERSIAL;
+                break;
+        }
     }
 
     public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {
@@ -188,4 +234,18 @@ public class MyApplication extends Application {
         //String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
         return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
     }
+
+    //private List<SavedAccount> readAccounts() {
+    //    try {
+    //        FileInputStream fis = openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+    //        ObjectInputStream is = new ObjectInputStream(fis);
+    //        List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
+    //        is.close();
+    //        fis.close();
+    //        return savedAccounts;
+    //    } catch (IOException | ClassNotFoundException e) {
+    //        e.printStackTrace();
+    //    }
+    //    return null;
+    //}
 }

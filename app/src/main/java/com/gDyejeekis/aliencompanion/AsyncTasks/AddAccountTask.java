@@ -10,13 +10,17 @@ import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.api.action.ProfileActions;
+import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.api.entity.User;
+import com.gDyejeekis.aliencompanion.api.entity.UserInfo;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 import org.json.simple.parser.ParseException;
@@ -36,7 +40,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private DialogFragment dialogFragment;
     private Context context;
-    private HttpClient httpClient = new PoliteRedditHttpClient();
+    private HttpClient httpClient = new RedditHttpClient();
     private String username;
     private String password;
     private String oauthCode;
@@ -87,44 +91,59 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         }
     }
 
+    private List<String> getUserSubreddits(User user) { //only run on backround thread
+        List<String> subredditNames = new ArrayList<>();
+
+        subredditNames.add("All");
+        try {
+            List<Subreddit> subreddits = user.getSubscribed(0);
+            for (Subreddit subreddit : subreddits) {
+                subredditNames.add(subreddit.getDisplayName());
+            }
+        } catch (RetrievalFailedException | NullPointerException | RedditError e) {
+            e.printStackTrace();
+            //Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
+        }
+
+        return subredditNames;
+    }
+
     @Override
     protected SavedAccount doInBackground(Void... unused) {
         try {
+            MyApplication.renewingToken = true;
+            MyApplication.currentAccessToken = null;
+            SavedAccount newAccount;
             if(RedditOAuth.useOAuth2) {
-                RedditOAuth.getOAuthToken(httpClient, oauthCode);
+                OAuthToken token = RedditOAuth.getOAuthToken(httpClient, oauthCode);
+                MyApplication.currentAccessToken = token.accessToken;
+                ProfileActions profileActions = new ProfileActions(httpClient, token.accessToken);
+                UserInfo userInfo = profileActions.getUserInformation();
+                User user = new User(httpClient, userInfo.getName(), token);
+                List<String> subredditList = getUserSubreddits(user);
+
+                newAccount = new SavedAccount(user.getUsername(), token, subredditList);
             }
             else {
                 User user = new User(httpClient, username, password);
                 user.connect();
-                List<String> subredditNames = new ArrayList<>();
 
-                subredditNames.add("All");
-                try {
-                    List<Subreddit> subreddits = user.getSubscribed(0);
-                    for (Subreddit subreddit : subreddits) {
-                        subredditNames.add(subreddit.getDisplayName());
-                    }
-                } catch (RetrievalFailedException | NullPointerException | RedditError e) {
-                    e.printStackTrace();
-                    //Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
-                }
-
-                SavedAccount newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), subredditNames);
-
-                List<SavedAccount> accounts = readFromFile();
-                //if(accounts == null) accounts = new ArrayList<>();
-                assert accounts != null;
-                accounts.add(newAccount);
-                writeToFile(accounts);
-
-                currentAccountName = newAccount.getUsername();
-                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                editor.putString("currentAccountName", currentAccountName);
-                editor.apply();
-
-                return newAccount;
+                newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), getUserSubreddits(user));
             }
-        } catch (ActionFailedException | IOException | ParseException | NullPointerException e) {
+            List<SavedAccount> accounts = readFromFile();
+            assert accounts != null;
+            accounts.add(newAccount);
+            writeToFile(accounts);
+
+            currentAccountName = newAccount.getUsername();
+            SharedPreferences.Editor editor = MyApplication.prefs.edit();
+            editor.putString("currentAccountName", currentAccountName);
+            editor.apply();
+
+            //MyApplication.savedAccounts = accounts;
+
+            return newAccount;
+        } catch (RetrievalFailedException | ActionFailedException | IOException | ParseException | NullPointerException e) {
             e.printStackTrace();
             exception = e;
         }
@@ -136,6 +155,8 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         dialogFragment.dismiss();
         if(exception != null || account == null) {
             ToastUtils.displayShortToast(context, "Failed to verify account");
+            MyApplication.renewingToken = false;
+            MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
         }
         else {
             //ToastUtils.displayShortToast(context, "Logged in as " + username);

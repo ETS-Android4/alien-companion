@@ -33,7 +33,7 @@ public class ComposeMessageFragment extends Fragment {
         replyingToUser = getActivity().getIntent().getStringExtra("recipient");
         replyingToSubject = getActivity().getIntent().getStringExtra("subject");
         if(replyingToSubject!=null) {
-            if(!replyingToSubject.substring(0,3).equals("re:")) replyingToSubject = "re: " + replyingToSubject;
+            if(!replyingToSubject.substring(0,3).equalsIgnoreCase("re:")) replyingToSubject = "re: " + replyingToSubject;
         }
     }
 

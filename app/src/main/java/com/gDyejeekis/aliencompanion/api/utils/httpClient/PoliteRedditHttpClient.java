@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 
+import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+
 /**
  * Created by sound on 11/10/2015.
  */
@@ -29,14 +31,14 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
 
     public Response get(String urlPath, String cookie) {
         waitIfNeeded();
-        Response resp = super.get(urlPath, cookie);
+        Response resp = super.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, urlPath, cookie);
         noteTime();
         return resp;
     }
 
     public Response post(String apiParams, String urlPath, String cookie) {
         waitIfNeeded();
-        Response resp = super.post(apiParams, urlPath, cookie);
+        Response resp = super.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, apiParams, urlPath, cookie);
         noteTime();
         return resp;
     }

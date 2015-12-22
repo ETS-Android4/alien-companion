@@ -119,6 +119,13 @@
             android:entryValues="@array/commentDepth"
             android:defaultValue="5"/>
 
+        <ListPreference
+            android:key="defaultCommentSort"
+            android:title="Default comment sort"
+            android:entries="@array/commentSortEntries"
+            android:entryValues="@array/commentSortValues"
+            android:defaultValue="1"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="sync"
@@ -147,6 +154,13 @@
             android:entries="@array/commentDepth"
             android:entryValues="@array/commentDepth"
             android:defaultValue="5"/>
+
+        <ListPreference
+            android:key="syncCommentSort"
+            android:title="Sync comment sort"
+            android:entries="@array/commentSortEntries"
+            android:entryValues="@array/commentSortValues"
+            android:defaultValue="1"/>
 
         <Preference
             android:key="clearSynced"

@@ -133,6 +133,16 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     }
 
+    public Comment(Message message) {
+        super(message.getFullName());
+
+        author = message.author;
+        body = message.body;
+        bodyHTML = message.bodyHTML;
+        created = message.created;
+        createdUTC = message.createdUTC;
+    }
+
     public List<? extends MultiLevelExpIndListAdapter.ExpIndData> getChildren() {
         return mChildren;
     }

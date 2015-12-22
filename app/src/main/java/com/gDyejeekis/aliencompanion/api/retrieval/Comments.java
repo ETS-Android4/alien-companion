@@ -90,7 +90,7 @@ public class Comments implements ActorDriven {
         List<RedditItem> comments = new LinkedList<>();
         
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
 
         if (response instanceof JSONObject) {
         	
@@ -150,7 +150,7 @@ public class Comments implements ActorDriven {
         List<Comment> comments = new LinkedList<>();
         
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
         
         if (response instanceof JSONArray) {
         	
@@ -174,7 +174,7 @@ public class Comments implements ActorDriven {
 		List<Comment> comments = new LinkedList<>();
 
 		// Send request to reddit server via REST client
-		Object response = httpClient.get(url, cookie).getResponseObject();
+		Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
 
 		if (response instanceof JSONArray) {
 

@@ -74,7 +74,7 @@ public class Messages implements ActorDriven {
         List<RedditItem> messages = new LinkedList<>();
 
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
 
         if(response instanceof JSONObject) {
             JSONObject object = (JSONObject) response;

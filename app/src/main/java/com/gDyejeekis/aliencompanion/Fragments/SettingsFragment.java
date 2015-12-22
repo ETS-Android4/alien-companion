@@ -1,11 +1,13 @@
 package com.gDyejeekis.aliencompanion.Fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -30,14 +32,7 @@ public class SettingsFragment extends PreferenceFragment {
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        File dir = getActivity().getFilesDir();
-                        File[] files = dir.listFiles();
-                        for (File file : files) {
-                            //Log.d("geo test", file.getName());
-                            if (!file.getName().equals("SavedAccounts")) file.delete();
-                        }
-
-                        ToastUtils.displayShortToast(getActivity(), "Synced posts cleared");
+                        clearSyncedPosts(getActivity());
                     }
                 };
 
@@ -55,6 +50,17 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
+    }
+
+    private void clearSyncedPosts(Context context) {
+        File dir = context.getFilesDir();
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            //Log.d("geo test", file.getName());
+            if (!file.getName().equals(MyApplication.SAVED_ACCOUNTS_FILENAME)) file.delete();
+        }
+
+        ToastUtils.displayShortToast(context, "Synced posts cleared");
     }
 
 }

@@ -6,6 +6,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.RandomString;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
+import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 
 import org.json.simple.JSONObject;
 
@@ -17,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class RedditOAuth {
 
-    public static final boolean useOAuth2 = false;
+    public static final boolean useOAuth2 = true;
 
     // This line is GAE specific!  for detecting when running on local admin
     public static final boolean production = false;
@@ -35,7 +36,7 @@ public class RedditOAuth {
     public static final String OAUTH_TOKEN_URL = "/api/v1/access_token";
 
     // I think it is easier to create 2 reddit apps (one with 127.0.0.1 redirect URI)
-    public static final String MY_APP_ID = production ? "EqvEgtbyQOaAZw" : "EqvEgtbyQOaAZw";
+    public static final String MY_APP_ID = production ? "lcU1R9fVYfdiMA" : "lcU1R9fVYfdiMA";
     public static final String MY_APP_SECRET = production ? "" : ""; //installed apps can't keep a secret
 
     public static final boolean USE_IMPLICIT_GRANT_FLOW = false;
@@ -92,7 +93,8 @@ public class RedditOAuth {
 
     public static final String SCOPE_WIKI_READ = "wikiread";
 
-    public static final String SCOPES = SCOPE_ID + "," + SCOPE_MY_SUBREDDITS;
+    public static final String SCOPES = SCOPE_ID + "," + SCOPE_MY_SUBREDDITS + "," + SCOPE_EDIT + "," + SCOPE_FLAIR  + "," + SCOPE_HISTORY + "," + SCOPE_PRIVATE_MESSAGES + "," +
+            SCOPE_READ + "," + SCOPE_REPORT + "," + SCOPE_SAVE + "," + SCOPE_SUBMIT + "," + SCOPE_SUBSCRIBE + "," + SCOPE_VOTE;
 
     // Field name in responses
     public static final String ACCESS_TOKEN_NAME = "access_token";
@@ -113,23 +115,37 @@ public class RedditOAuth {
         if(matcher.find()) {
             code = matcher.group(1);
         }
-        Log.d("geotest", "code: " + code);
+        //Log.d("geotest", "code: " + code);
 
         return code;
     }
 
     public static OAuthToken getOAuthToken(HttpClient httpClient, String oauthCode) {
-        JSONObject jsonObject = (JSONObject) httpClient.post("grant_type=authorization_code&code=" + oauthCode +"&redirect_uri=" + REDIRECT_URI, OAUTH_TOKEN_URL, null);
-        return new OAuthToken(jsonObject);
+        Log.d("geotest", "retrieving account token..");
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=authorization_code&code=" + oauthCode +"&redirect_uri="
+                + REDIRECT_URI, OAUTH_TOKEN_URL, null).getResponseObject();
+        return new OAuthToken(jsonObject, true);
     }
 
-    public static OAuthToken getOAuthToken(String url) {
-        return null;
+    public static void refreshToken(HttpClient httpClient, OAuthToken token) {
+        Log.d("geotest", "refreshing token..");
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=refresh_token&refresh_token=" + token.refreshToken, OAUTH_TOKEN_URL,
+                null).getResponseObject();
+        OAuthToken refreshedToken = new OAuthToken(jsonObject, false);
+        token.accessToken = refreshedToken.accessToken;
+        token.expiresIn = refreshedToken.expiresIn;
+        token.setExpiration(refreshedToken.expiresIn);
     }
+
+    //public static OAuthToken getOAuthToken(String url) {
+    //    return null;
+    //}
 
     public static OAuthToken getApplicationToken(HttpClient httpClient) {
-        JSONObject jsonObject = (JSONObject) httpClient.post("grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MyApplication.deviceID, OAUTH_TOKEN_URL, null);
-        return new OAuthToken(jsonObject);
+        Log.d("geotest", "retrieving application token..");
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=https://oauth.reddit.com/grants/installed_client&device_id="
+                + MyApplication.deviceID, OAUTH_TOKEN_URL, null).getResponseObject();
+        return new OAuthToken(jsonObject, false);
     }
 
 }

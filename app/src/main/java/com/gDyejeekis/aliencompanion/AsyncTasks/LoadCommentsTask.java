@@ -8,6 +8,7 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -86,13 +87,17 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
 
     @Override
     protected void onPostExecute(List<Comment> comments) {
+        if(MyApplication.accountChanges) {
+            MyApplication.accountChanges = false;
+            GeneralUtils.saveAccountChanges(context);
+        }
         //PostFragment.currentlyLoading = false;
         try {
             PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
             postFragment = fragment;
             postFragment.progressBar.setVisibility(View.GONE);
             postFragment.commentsLoaded = true;
-            if (postFragment.post.getThumbnailObject() == null) {
+            if (!MyApplication.offlineModeEnabled && postFragment.post.getThumbnailObject() == null) {
                 ImageLoader.preloadThumbnail(postFragment.post, context);
             }
 

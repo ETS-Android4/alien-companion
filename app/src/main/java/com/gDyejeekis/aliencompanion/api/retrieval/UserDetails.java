@@ -66,7 +66,7 @@ public class UserDetails implements ActorDriven {
 
         UserInfo userInfo = null;
 
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
 
         if(response instanceof JSONObject) {
 

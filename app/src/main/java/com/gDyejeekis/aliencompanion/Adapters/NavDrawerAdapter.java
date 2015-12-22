@@ -30,6 +30,7 @@ import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubredditItem;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
 
 import java.io.FileInputStream;
@@ -148,25 +149,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             saveAccounts(accounts);
         }
         accountItems.add(new NavDrawerAccount(0));
-        //notifyDataSetChanged();
+
         activity.changeCurrentUser(currentAccount);
-        //if(currentAccount!=null) activity.changeCurrentUser(currentAccount);
-        //else if(RedditOAuth.useOAuth2){
-        //    MainActivity.currentAccessToken = MainActivity.prefs.getString("appAccessToken", "null");
-        //    if(MainActivity.currentAccessToken.equals("null")) {
-        //        AsyncTask.execute(new Runnable() {
-        //            @Override
-        //            public void run() {
-        //                try {
-        //                    OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
-        //                    SharedPreferences.Editor editor = MainActivity.prefs.edit();
-        //                    editor.putString("appAccessToken", token.accessToken);
-        //                    editor.apply();
-        //                } catch (Exception e) {e.printStackTrace();}
-        //            }
-        //        });
-        //    }
-        //}
     }
 
     public void accountAdded(NavDrawerAccount accountItem, String name) {
@@ -186,6 +170,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             fis.close();
             return savedAccounts;
         } catch (IOException | ClassNotFoundException e) {
+            if(e instanceof ClassNotFoundException) {
+                Log.d("geotest", "account data deprecated or corrupt, clearing account data...");
+                GeneralUtils.deleteAccountData(activity);
+            }
             e.printStackTrace();
         }
         return null;

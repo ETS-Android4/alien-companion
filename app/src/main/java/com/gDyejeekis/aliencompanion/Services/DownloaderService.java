@@ -92,7 +92,7 @@ public class DownloaderService extends IntentService {
                 for (RedditItem post : posts) {
                     increaseProgress(builder);
                     Submission submission = (Submission) post;
-                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, CommentSort.TOP);
+                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
                     writePostToFile(submission, filename + submission.getIdentifier());
                 }

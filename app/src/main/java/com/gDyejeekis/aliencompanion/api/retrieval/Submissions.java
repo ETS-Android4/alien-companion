@@ -101,7 +101,7 @@ public class Submissions implements ActorDriven {
         List<RedditItem> submissions = new LinkedList<>();
         
         // Send request to reddit server via REST client
-        Object response = httpClient.get(url, cookie).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, cookie).getResponseObject();
         
         if (response instanceof JSONObject) {
         	

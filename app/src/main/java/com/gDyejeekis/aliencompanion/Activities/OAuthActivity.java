@@ -14,13 +14,13 @@ public class OAuthActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        GeneralUtils.clearCookies(this);
         setContentView(R.layout.activity_oauth);
     }
 
-    @Override
-    public void onDestroy() {
-        GeneralUtils.clearCookies(this);
-        super.onDestroy();
-    }
+    //@Override
+    //public void onDestroy() {
+    //    super.onDestroy();
+    //}
 
 }

@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
@@ -35,7 +36,7 @@ public class BrowserFragment extends Fragment {
     private WebView webView;
     private ProgressBar progressBar;
     private Submission post;
-    private BrowserActivity activity;
+    private AppCompatActivity activity;
     private Bundle webViewBundle;
     private String url;
     private String domain;
@@ -52,18 +53,19 @@ public class BrowserFragment extends Fragment {
             //startActivity(intent);
             //return true;
             if(url.substring(0, 15).equals("redditoauthtest")) {
-                Log.d("geotest", url);
+                //Log.d("geotest", url);
+                MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
+                if(MainActivity.oauthCode != null) MainActivity.setupAccount = true;
                 activity.finish();
-                final String code = RedditOAuth.getAuthorizationCode(url);
 
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), code);
-                        } catch (Exception e) {e.printStackTrace();}
-                    }
-                });
+                //AsyncTask.execute(new Runnable() {
+                //    @Override
+                //    public void run() {
+                //        try {
+                //            RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), code);
+                //        } catch (Exception e) {e.printStackTrace();}
+                //    }
+                //});
 
             }
             return false;
@@ -111,7 +113,7 @@ public class BrowserFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (BrowserActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override
@@ -215,14 +217,14 @@ public class BrowserFragment extends Fragment {
     }
 
     private void loadCachedCopy() {
-        activity.loadFromCache = true;
+        ((BrowserActivity) activity).loadFromCache = true;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
         webView.reload();
     }
 
     private void loadLiveVersion() {
-        activity.loadFromCache = false;
+        ((BrowserActivity) activity).loadFromCache = false;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.reload();

@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
@@ -137,6 +138,10 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
 
     @Override
     protected void onPostExecute(List<RedditItem> things) {
+        if(MyApplication.accountChanges) {
+            MyApplication.accountChanges = false;
+            GeneralUtils.saveAccountChanges(activity);
+        }
         try {
             UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
             uf = userFragment;

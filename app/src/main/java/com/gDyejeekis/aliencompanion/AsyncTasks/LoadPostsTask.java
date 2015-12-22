@@ -10,11 +10,15 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.Utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -129,6 +133,10 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
+        if(MyApplication.accountChanges) {
+            MyApplication.accountChanges = false;
+            GeneralUtils.saveAccountChanges(context);
+        }
         try {
             PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             plf = fragment;

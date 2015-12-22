@@ -8,6 +8,7 @@ import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.api.retrieval.Trophies;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;
@@ -58,6 +59,9 @@ public class UserInfo implements RedditItem {
     // Karma points for all the submitted links
     private long linkKarma;
 
+    //number of messages in the user's inbox
+    private long inboxCount;
+
     // Whether the user is a moderator
     private boolean isMod;
 
@@ -94,20 +98,26 @@ public class UserInfo implements RedditItem {
     }
 
     public UserInfo(JSONObject info) {
-        setHasMail((Boolean) info.get("has_mail"));
-        setHasModMail((Boolean) info.get("has_mod_mail"));
+
         setCreatedUTC((Double) info.get("created_utc"));
         setGold((Boolean) info.get("is_gold"));
         setLinkKarma((Long) info.get("link_karma"));
         setCommentKarma((Long) info.get("comment_karma"));
         setMod((Boolean) info.get("is_mod"));
-        setFriend((Boolean) info.get("is_friend"));
         setModhash((String) info.get("modhash"));
         setHasVerifiedEmail((Boolean) info.get("has_verified_email"));
         setId((String) info.get("id"));
         setOver18((Boolean) info.get("over_18"));
         setCreated((Double) info.get("created"));
         setName((String) info.get("name"));
+        //if(RedditOAuth.useOAuth2 && name.equals(~current account name here~) {
+        //    setInboxCount((Long) info.get("inbox_count"));
+        //}
+        //else if(!RedditOAuth.useOAuth2){
+        //    setHasMail((Boolean) info.get("has_mail"));
+        //    setHasModMail((Boolean) info.get("has_mod_mail"));
+        //    setFriend((Boolean) info.get("is_friend"));
+        //}
     }
 
     public void retrieveTrophies(Context context, HttpClient httpClient) {
@@ -116,6 +126,14 @@ public class UserInfo implements RedditItem {
         for(Trophy trophy : trophyList) {
             Picasso.with(context).load(trophy.getIcon70url()).fetch();
         }
+    }
+
+    public long getInboxCount() {
+        return inboxCount;
+    }
+
+    public void setInboxCount(long inboxCount) {
+        this.inboxCount = inboxCount;
     }
 
     public void setTrophyList(List<Trophy> trophyList) {

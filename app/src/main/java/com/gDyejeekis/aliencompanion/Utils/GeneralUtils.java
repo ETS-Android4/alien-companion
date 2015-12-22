@@ -3,14 +3,28 @@ package com.gDyejeekis.aliencompanion.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
+import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
+import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.MyApplication;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sound on 10/5/2015.
@@ -21,6 +35,14 @@ public class GeneralUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static void deleteAccountData(Context context) {
+        context.deleteFile(MyApplication.SAVED_ACCOUNTS_FILENAME);
+        SharedPreferences.Editor editor = MyApplication.prefs.edit();
+        editor.putString("currentAccountName", "Logged out");
+        editor.apply();
+        NavDrawerAdapter.currentAccountName = "Logged out";
     }
 
     @SuppressWarnings("deprecation")
@@ -89,5 +111,54 @@ public class GeneralUtils {
         else portraitHeightPixels = activity.getResources().getDisplayMetrics().widthPixels;
 
         return portraitHeightPixels;
+    }
+
+    public static void saveAccountChanges(final Context context) {
+        Log.d("geotest", "saving account changes..");
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<SavedAccount> oldAccounts = readAccounts(context);
+                    List<SavedAccount> updatedAccounts = new ArrayList<>();
+                    for (SavedAccount account : oldAccounts) {
+                        if (MyApplication.currentAccount.getUsername().equals(account.getUsername())) {
+                            updatedAccounts.add(MyApplication.currentAccount);
+                        } else updatedAccounts.add(account);
+                    }
+                    saveAccounts(context, updatedAccounts);
+                } catch (Exception e) {
+                    Log.d("geotest", "Failed to save account data");
+                    e.printStackTrace();
+                }
+            }
+        });
+        Log.d("geotest", "account changes saved");
+    }
+
+    public static List<SavedAccount> readAccounts(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
+            is.close();
+            fis.close();
+            return savedAccounts;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void saveAccounts(Context context, List<SavedAccount> updatedAccounts) {
+        try {
+            FileOutputStream fos = context.openFileOutput(MyApplication.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(updatedAccounts);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

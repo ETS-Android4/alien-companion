@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout container;
 
     public static boolean dualPaneActive;
+
+    public static boolean setupAccount = false;
+    public static String oauthCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,15 +143,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeCurrentUser(SavedAccount account) {
         MyApplication.currentAccount = account;
-        MyApplication.currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        //MyApplication.currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
+        if(account.loggedIn) {
+            if(account.oauth2) {
+                MyApplication.currentUser = new User(null, account.getUsername(), account.getToken());
+                MyApplication.currentAccessToken = account.getToken().accessToken;
+            }
+            else {
+                MyApplication.currentUser = new User(null, account.getUsername(), account.getModhash(), account.getCookie());
+                MyApplication.currentAccessToken = null;
+            }
+        }
+        else {
+            MyApplication.currentUser = null;
+            try {
+                MyApplication.currentAccessToken = account.getToken().accessToken;
+            } catch (NullPointerException e) {
+                MyApplication.currentAccessToken = null;
+            }
+        }
 
         if(MyApplication.currentUser!=null) {
             adapter.showUserMenuItems();
-            //adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         }
         else {
             adapter.hideUserMenuItems();
-            //adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         }
         adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         //homePage();
@@ -166,6 +187,18 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         listFragment.loadMore = MyApplication.endlessPosts;
+
+        if(setupAccount) {
+            setupAccount = false;
+
+            VerifyAccountDialogFragment dialog = new VerifyAccountDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("code", oauthCode);
+            dialog.setArguments(bundle);
+            dialog.show(getFragmentManager(), "dialog");
+
+            oauthCode = null;
+        }
 
         if(EditSubredditsActivity.changesMade) {
             EditSubredditsActivity.changesMade = false;

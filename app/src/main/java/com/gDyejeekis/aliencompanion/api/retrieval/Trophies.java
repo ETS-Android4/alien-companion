@@ -32,7 +32,7 @@ public class Trophies {
 
         List<Trophy> trophies = new ArrayList<>();
 
-        Object response = httpClient.get(url, null).getResponseObject();
+        Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, null).getResponseObject();
 
         if(response instanceof JSONObject) {
 

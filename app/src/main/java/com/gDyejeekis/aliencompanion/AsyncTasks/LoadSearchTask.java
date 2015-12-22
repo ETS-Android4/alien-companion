@@ -10,6 +10,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SearchSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
@@ -97,6 +98,10 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected void onPostExecute(List<RedditItem> submissions) {
+        if(MyApplication.accountChanges) {
+            MyApplication.accountChanges = false;
+            GeneralUtils.saveAccountChanges(context);
+        }
         try {
             SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             sf = fragment;

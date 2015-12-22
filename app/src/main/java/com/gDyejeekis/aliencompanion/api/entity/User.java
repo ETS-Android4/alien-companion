@@ -32,7 +32,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
  */
 public class User implements Serializable {
 
-    private String username;
+    private final String username;
     private final HttpClient httpClient;
     private String modhash, cookie, password;
     private OAuthToken tokenObject;
@@ -56,17 +56,14 @@ public class User implements Serializable {
         this.cookie = cookie;
     }
 
-    public User(HttpClient httpClient, OAuthToken tokenObject) {
+    public User(HttpClient httpClient, String username, OAuthToken tokenObject) {
         this.httpClient = httpClient;
+        this.username = username;
         this.tokenObject = tokenObject;
     }
 
     public OAuthToken getTokenObject() {
         return tokenObject;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     /**
@@ -110,10 +107,7 @@ public class User implements Serializable {
      * @throws ParseException If parsing JSON fails.
      */
     public void connect() throws IOException, ParseException {
-        if(RedditOAuth.useOAuth2) {
-
-        }
-        else {
+        if(!RedditOAuth.useOAuth2) {
             ArrayList<String> hashCookiePair = hashCookiePair(ConvertUtils.URLEncodeString(username), ConvertUtils.URLEncodeString(password));
             this.modhash = hashCookiePair.get(0);
             this.cookie = hashCookiePair.get(1);
@@ -132,7 +126,8 @@ public class User implements Serializable {
      */
     private ArrayList<String> hashCookiePair(String username, String password) throws IOException, ParseException {
         ArrayList<String> values = new ArrayList<String>();
-        JSONObject jsonObject = (JSONObject) httpClient.post("api_type=json&user=" + username + "&passwd=" + password, String.format(ApiEndpointUtils.USER_LOGIN, username), getCookie()).getResponseObject();
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
+                "api_type=json&user=" + username + "&passwd=" + password, String.format(ApiEndpointUtils.USER_LOGIN, username), getCookie()).getResponseObject();
         JSONObject valuePair = (JSONObject) ((JSONObject) jsonObject.get("json")).get("data");
 
         values.add(valuePair.get("modhash").toString());
@@ -150,7 +145,7 @@ public class User implements Serializable {
      * @throws RedditError
      */
     public List<Subreddit> getSubscribed(int limit) throws RetrievalFailedException, RedditError {
-        if (this.getCookie() == null || this.getModhash() == null) {
+        if (tokenObject == null && modhash == null) {
             System.err.printf("Please invoke the connect method in order to login the user");
             return null;
         }

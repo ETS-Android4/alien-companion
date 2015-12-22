@@ -5,23 +5,25 @@ public interface HttpClient {
     /**
      * Perform a get request to the Url specified using the cookie specified
      *
+     * @param baseUrl The base url
      * @param urlPath The url to make a get request to
      * @param cookie The cookie to use when making the request
      *
      * @return <code>Response</code> an object conforming to the Response interface
      */
-    Response get(String urlPath, String cookie);
+    Response get(String baseUrl, String urlPath, String cookie);
 
     /**
      * Perform a post request to the Url specified using the cookie specified
      *
+     * @param baseUrl The base url
      * @param apiParams Name value pairs to be posted to the url
      * @param urlPath The url to make a get request to
      * @param cookie The cookie to use when making the request
      *
      * @return <code>Response</code> an object conforming to the Response interface
      */
-    Response post(String apiParams, String urlPath, String cookie);
+    Response post(String baseUrl, String apiParams, String urlPath, String cookie);
 
 
     /**

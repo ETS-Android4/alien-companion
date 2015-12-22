@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
@@ -29,43 +30,43 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/alien_companion)";
 
-    public Response get(String urlPath, String cookie) throws RetrievalFailedException {
+    public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException {
+        tokenCheck();
 
         HttpURLConnection connection = null;
-        //InputStream inputStream = null;
-
         try {
-            URL url = new URL(ApiEndpointUtils.REDDIT_BASE_URL + urlPath);
+            URL url = new URL(baseUrl + urlPath);
             connection = (HttpURLConnection) url.openConnection();
             connection.setUseCaches(false);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", userAgent);
-            connection.setRequestProperty("Cookie", "reddit_session=" + cookie);
+            if(RedditOAuth.useOAuth2) connection.setRequestProperty("Authorization", "bearer " + MyApplication.currentAccessToken);
+            else connection.setRequestProperty("Cookie", "reddit_session=" + cookie);
             connection.setDoInput(true);
             //connection.setDoOutput(true);
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
-            //printRequestProperties(connection);
+            printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
 
             String content = IOUtils.toString(inputStream, "UTF-8");
             IOUtils.closeQuietly(inputStream);
 
-            //Log.d("inputstream object: ", content);
+            Log.d("inputstream object: ", content);
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
-            //printHeaderFields(connection);
+            printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
-                throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + urlPath);
+                throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + baseUrl + urlPath);
             } else {
                 return result;
             }
         } catch (IOException e) {
-            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + urlPath);
+            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
         } catch (org.json.simple.parser.ParseException e) {
             e.printStackTrace();
         } finally {
@@ -80,11 +81,10 @@ public class RedditHttpClient implements HttpClient, Serializable {
         return null;
     }
 
-    public Response post(String apiParams, String urlPath, String cookie) {
+    public Response post(String baseUrl, String apiParams, String urlPath, String cookie) {
+        tokenCheck();
+
         HttpURLConnection connection = null;
-        //OutputStream outputStream = null;
-        //InputStream inputStream = null;
-        String baseUrl = (MyApplication.currentAccessToken == null) ? "http://www.reddit.com" : ApiEndpointUtils.REDDIT_BASE_URL;
         try {
             URL url = new URL(baseUrl + urlPath);
             connection = (HttpURLConnection) url.openConnection();
@@ -152,27 +152,25 @@ public class RedditHttpClient implements HttpClient, Serializable {
         this.userAgent = agent;
     }
 
-    ///**
-    // * Convert a API parameters to a appropriate list.
-    // *
-    // * @param apiParams Input string, for example 'a=2894&b=194'
-    // * @return List of name value pairs to pass with the POST request
-    // */
-    //private List<StringPair> convertRequestStringToList(String apiParams) {
-    //    List<StringPair> values = new ArrayList<>();
-    //    if (apiParams != null && !apiParams.isEmpty()) {
-    //        String[] valuePairs = apiParams.split("&");
-    //        for (String valuePair : valuePairs) {
-    //            String[] nameValue = valuePair.split("=");
-    //            if (nameValue.length == 1) { //there is no cookie if we are not signed in
-    //                values.add(new StringPair(nameValue[0], ""));
-    //            } else {
-    //                values.add(new StringPair(nameValue[0], nameValue[1]));
-    //            }
-    //        }
-    //    }
-    //    return values;
-    //}
+
+    private void tokenCheck() {
+        try {
+            if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
+                if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
+                    MyApplication.renewingToken = true;
+                    OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
+                    MyApplication.currentAccount.setToken(token);
+                    MyApplication.currentAccessToken = token.accessToken;
+                    MyApplication.renewingToken = false;
+                    MyApplication.accountChanges = true;
+                } else MyApplication.currentAccount.getToken().checkToken();
+            }
+        } catch (ActionFailedException e) {
+            MyApplication.renewingToken = false;
+            Log.e("geotest", "Error renewing oauth token");
+            e.printStackTrace();
+        }
+    }
 
     private void printRequestProperties(HttpURLConnection connection) {
         Log.d("Request properties", "Request method: " + connection.getRequestMethod());

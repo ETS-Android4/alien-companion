@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.ActorDriven;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.Response;
 
 import org.json.simple.JSONObject;
@@ -22,13 +23,15 @@ public class ProfileActions implements ActorDriven {
 
     private HttpClient httpClient;
     private User user;
+    private String accessToken;
 
     /**
      * Constructor. Global default user (null) is used.
      * @param httpClient HTTP Client instance
      */
-    public ProfileActions(HttpClient httpClient) {
+    public ProfileActions(HttpClient httpClient, String accessToken) {
         this.httpClient = httpClient;
+        this.accessToken = accessToken;
         this.user = null;
     }
 
@@ -106,7 +109,7 @@ public class ProfileActions implements ActorDriven {
                         + "&uh=" + user.getModhash();
 
         // Post request
-        return httpClient.post(params, ApiEndpointUtils.USER_UPDATE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_UPDATE, user.getCookie());
 
     }
 
@@ -119,15 +122,21 @@ public class ProfileActions implements ActorDriven {
      * @throws ActionFailedException    	If the action failed
      */
     public UserInfo getUserInformation() throws ActionFailedException {
-        if (user.getCookie() == null || user.getModhash() == null) {
+        if (accessToken == null && user == null) {
             System.err.printf("Please invoke the connect method in order to login the user");
             return null;
         }
 
-        JSONObject jsonObject = (JSONObject) httpClient.get(ApiEndpointUtils.USER_INFO, user.getCookie()).getResponseObject();
-        JSONObject info = (JSONObject) jsonObject.get("data");
+        String cookie = (user == null) ? null : user.getCookie();
 
-        return new UserInfo(info);
+        JSONObject jsonObject = (JSONObject) httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, ApiEndpointUtils.USER_INFO, cookie).getResponseObject();
+        if(RedditOAuth.useOAuth2) {
+            return new UserInfo(jsonObject);
+        }
+        else {
+            JSONObject info = (JSONObject) jsonObject.get("data");
+            return new UserInfo(info);
+        }
     }
 
     /**
@@ -146,7 +155,7 @@ public class ProfileActions implements ActorDriven {
             throw new ActionFailedException("There is no information associated with the username [deleted]");
         }
 
-        JSONObject object = (JSONObject) httpClient.get(String.format(ApiEndpointUtils.USER_ABOUT, username), null).getResponseObject();
+        JSONObject object = (JSONObject) httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, String.format(ApiEndpointUtils.USER_ABOUT, username), null).getResponseObject();
         JSONObject data = (JSONObject) object.get("data");
 
         // Init account info wrapper
@@ -174,19 +183,19 @@ public class ProfileActions implements ActorDriven {
                         + "&user=" + user.getUsername();
 
         // Post request
-        return httpClient.post(params, ApiEndpointUtils.USER_DELETE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_DELETE, user.getCookie());
     }
 
     public Response subscribe(String subreddit) throws ActionFailedException {
         String params = "action=sub&sr=" + subreddit + "&uh=" + user.getModhash();
 
-        return httpClient.post(params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
     public Response unsubscribe(String subreddit) throws ActionFailedException {
         String params = "action=unsub&sr=" + subreddit + "&uh=" + user.getModhash();
 
-        return httpClient.post(params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
     /**
@@ -215,7 +224,7 @@ public class ProfileActions implements ActorDriven {
         // Post request
 
 
-        Response result = httpClient.post(params, ApiEndpointUtils.USER_REGISTER, "");//no user, no cookie
+        Response result = httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_REGISTER, "");//no user, no cookie
         JSONObject object = (JSONObject) result.getResponseObject();
 
 

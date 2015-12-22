@@ -10,6 +10,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.MessageFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Message;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -91,6 +92,10 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     public void onPostExecute(List<RedditItem> messages) {
+        if(MyApplication.accountChanges) {
+            MyApplication.accountChanges = false;
+            GeneralUtils.saveAccountChanges(context);
+        }
         try {
             MessageFragment fragment = (MessageFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
             mf = fragment;

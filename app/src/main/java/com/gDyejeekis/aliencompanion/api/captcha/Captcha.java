@@ -29,7 +29,7 @@ public class Captcha {
      * @return the iden of the generated captcha as a String
      */
     public String newCaptcha(User user) {
-        JSONObject obj = (JSONObject) httpClient.post(null, ApiEndpointUtils.CAPTCHA_NEW, user.getCookie()).getResponseObject();
+        JSONObject obj = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, ApiEndpointUtils.CAPTCHA_NEW, user.getCookie()).getResponseObject();
         String iden = (String) ((JSONArray) ((JSONArray) ((JSONArray) obj.get("jquery")).get(11)).get(3)).get(0);
         return iden;
     }
@@ -42,7 +42,7 @@ public class Captcha {
      */
     public boolean needsCaptcha(User user) {
         // TODO: Object comparison or responsetext comparison?
-        return httpClient.get(ApiEndpointUtils.CAPTCHA_NEEDS, user.getCookie()).getResponseText().equals("true");
+        return httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, ApiEndpointUtils.CAPTCHA_NEEDS, user.getCookie()).getResponseText().equals("true");
     }
 
 }
