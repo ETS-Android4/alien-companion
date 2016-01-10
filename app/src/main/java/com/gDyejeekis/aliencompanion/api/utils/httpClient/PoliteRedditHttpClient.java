@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
 /**
  * Created by sound on 11/10/2015.

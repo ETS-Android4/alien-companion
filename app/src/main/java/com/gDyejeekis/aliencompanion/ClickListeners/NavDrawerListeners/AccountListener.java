@@ -12,7 +12,7 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AccountOptionsDia
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
 /**
  * Created by George on 6/26/2015.

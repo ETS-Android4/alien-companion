@@ -1,7 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.retrieval;
 
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

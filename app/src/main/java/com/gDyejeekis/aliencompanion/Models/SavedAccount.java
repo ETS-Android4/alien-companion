@@ -1,10 +1,7 @@
 package com.gDyejeekis.aliencompanion.Models;
 
-import android.os.AsyncTask;
-
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.entity.User;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 
 import java.io.Serializable;
 import java.util.ArrayList;

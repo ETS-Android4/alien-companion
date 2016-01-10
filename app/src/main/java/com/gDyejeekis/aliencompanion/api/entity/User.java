@@ -14,7 +14,7 @@ import org.json.simple.parser.ParseException;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.retrieval.Subreddits;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
 /**
  * This class represents a user connected to Reddit.

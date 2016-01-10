@@ -80,6 +80,11 @@ public class MyApplication extends Application {
     public static int currentPostListView;
     public static CommentSort defaultCommentSort;
     public static CommentSort syncCommentSort;
+    public static boolean useCCT;
+    public static boolean handleYouTube;
+    public static boolean handleImgur;
+    public static boolean handleTwitter;
+    public static boolean handleOtherLinks;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -222,6 +227,11 @@ public class MyApplication extends Application {
                 syncCommentSort = CommentSort.CONTROVERSIAL;
                 break;
         }
+        handleYouTube = prefs.getBoolean("handleYoutube", true);
+        handleImgur = prefs.getBoolean("handleImgur", true);
+        handleTwitter = prefs.getBoolean("handleTwitter", true);
+        handleOtherLinks = prefs.getBoolean("handleOther", true);
+        useCCT = prefs.getBoolean("useCCT", false);
     }
 
     public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {

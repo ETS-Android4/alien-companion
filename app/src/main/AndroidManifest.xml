@@ -80,6 +80,11 @@
             android:configChanges="orientation|screenSize"
             android:label="Edit" >
         </activity>
+        <activity
+            android:name="com.gDyejeekis.aliencompanion.Activities.ImgurActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Imgur" >
+        </activity>
     </application>
 
 </manifest>

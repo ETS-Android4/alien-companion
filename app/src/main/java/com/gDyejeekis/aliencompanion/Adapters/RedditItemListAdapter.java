@@ -69,6 +69,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     private boolean loadingMoreItems;
 
+    private PostViewType postViewType;
+
     public RedditItemListAdapter(Context context) {
         this.context = context;
         selectedPosition = -1;
@@ -155,19 +157,19 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                PostViewType type;
+                //PostViewType postViewType;
                 switch (resource) {
                     case R.layout.post_list_item_small_card:
-                        type = PostViewType.smallCards;
+                        postViewType = PostViewType.smallCards;
                         break;
                     case R.layout.post_list_item_card:
-                        type = PostViewType.cards;
+                        postViewType = PostViewType.cards;
                         break;
                     default:
-                        type = PostViewType.listItem;
+                        postViewType = PostViewType.listItem;
                         break;
                 }
-                viewHolder = new PostViewHolder(v, type);
+                viewHolder = new PostViewHolder(v, postViewType);
                 break;
             case VIEW_TYPE_USER_COMMENT:
                 resource = R.layout.user_comment;
@@ -219,7 +221,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 postViewHolder.bindModel(context, post);
 
                 PostItemListener listener = new PostItemListener(context, post, this, position);
-                postViewHolder.linkButton.setOnClickListener(listener);
+                if(postViewType == PostViewType.cards && post.hasImageButton && post.getThumbnailObject().hasThumbnail()) postViewHolder.imageButton.setOnClickListener(listener);
+                else postViewHolder.linkButton.setOnClickListener(listener);
                 postViewHolder.commentsButton.setOnClickListener(listener);
 
                 PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);

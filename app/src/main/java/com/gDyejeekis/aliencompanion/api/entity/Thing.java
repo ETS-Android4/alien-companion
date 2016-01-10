@@ -2,7 +2,7 @@ package com.gDyejeekis.aliencompanion.api.entity;
 
 import org.json.simple.JSONObject;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * This class represents a reddit "thing"

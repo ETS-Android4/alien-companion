@@ -19,9 +19,8 @@ import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
 import org.json.simple.parser.ParseException;
 

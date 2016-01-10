@@ -1,8 +1,6 @@
 package com.gDyejeekis.aliencompanion.api.utils;
 
 
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
-
 /**
  * Some constants that are used for specifying Reddit API endpoints (example: /api/new_captcha)
  *

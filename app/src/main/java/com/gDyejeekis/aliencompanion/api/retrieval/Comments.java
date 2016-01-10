@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -9,7 +9,7 @@ import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.ActorDriven;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.Response;
 
 import org.json.simple.JSONObject;

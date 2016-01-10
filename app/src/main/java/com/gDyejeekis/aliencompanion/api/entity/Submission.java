@@ -3,10 +3,10 @@ package com.gDyejeekis.aliencompanion.api.entity;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToDouble;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToLong;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToLong;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
@@ -14,7 +14,9 @@ import org.json.simple.JSONObject;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.api.imgur.Image;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
@@ -94,6 +96,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	private Thumbnail thumbnailObject;
 
 	private List<Comment> syncedComments;
+
+	public boolean hasImageButton;
+
+	private List<Image> imgurs;
     
     // 
     private String likes;
@@ -108,6 +114,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	public List<Comment> getSyncedComments() {
 		if(syncedComments!=null) return syncedComments;
 		return null;
+	}
+
+	public List<Image> getImgurUrls() {
+		return imgurs;
+	}
+
+	public void setImgurUrls(List<Image> images) {
+		this.imgurs = images;
 	}
 
     /**
@@ -170,7 +184,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 		updateSubmission(obj);
 
-        //restClient = new RedditHttpClient();
+		hasImageButton = !thumbnail.equals("") && (domain.equals("imgur.com") || domain.equals("i.imgur.com") || domain.equals("youtube.com") || domain.equals("youtu.be"));
+		if(nsfw) hasImageButton = (MyApplication.showNSFWpreview);
     }
 
 	public void updateSubmission(JSONObject obj) {

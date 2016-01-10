@@ -5,10 +5,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
@@ -58,6 +58,7 @@ public class LinkHandler {
     }
 
     public void handleIt() {
+        boolean setImplicitIntent = false;
         try {
             Intent intent = null;
             Activity activity = (Activity) context;
@@ -68,13 +69,27 @@ public class LinkHandler {
             } else {
                 //Log.d("Link Domain", domain);
                 if ((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
-                    if (MyApplication.prefs.getBoolean("handleYoutube", true)) {
+                    if (MyApplication.handleYouTube) {
                         String videoId = getYoutubeVideoId(url);
                         int time = getYoutubeVideoTime(url);
                         //Log.d("youtube video id", videoId);
                         intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
                     }
-                } else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
+                    else setImplicitIntent = true;
+                } else if(domain.equals("imgur.com") || domain.equals("i.imgur.com")) {
+                    if(MyApplication.handleImgur) {
+                        //startInAppBrowser(activity, post, url, domain);
+                        ImgurLinkHandler.handleGifv(activity, post, url, domain);
+                    }
+                    else setImplicitIntent = true;
+                }
+                else if(domain.equals("twitter.com")) {
+                    if(MyApplication.handleTwitter) {
+                        startInAppBrowser(activity, post, url, domain);
+                    }
+                    else setImplicitIntent = true;
+                }
+                else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
                     String postInfo[] = getRedditPostInfo(url);
                     if (postInfo != null) { //case url of reddit post
                         intent = new Intent(activity, PostActivity.class);
@@ -87,24 +102,42 @@ public class LinkHandler {
                 } else if (domain.equals("redd.it")) {
                     intent = new Intent(activity, PostActivity.class);
                     intent.putExtra("postId", url.substring(15));
-                } else if (MyApplication.prefs.getBoolean("handleOther", true) && !domain.equals("play.google.com")) {
-                    intent = new Intent(activity, BrowserActivity.class);
-                    if (post != null) {
-                        intent.putExtra("post", post);
-                    } else {
-                        intent.putExtra("url", url);
-                        intent.putExtra("domain", domain);
-                    }
+                } else if (MyApplication.handleOtherLinks && !domain.equals("play.google.com")) {
+                    startInAppBrowser(activity, post, url, domain);
+                }
+                else {
+                    setImplicitIntent = true;
                 }
             }
 
-            //if(intent != null) activity.startActivity(intent);
-            //else ToastUtils.displayShortToast(context, "Could not resolve hyperlink");
-            if (intent == null) intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            activity.startActivity(intent);
+            if(setImplicitIntent) intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if(intent!=null) activity.startActivity(intent);
+
         } catch (ActivityNotFoundException e) {
             ToastUtils.displayShortToast(context, "No activity found to handle Intent");
             e.printStackTrace();
+        }
+    }
+
+    public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {
+        if(MyApplication.useCCT) {
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            builder.setToolbarColor(MyApplication.currentColor);
+            builder.setStartAnimations(activity, -1, -1);
+            builder.setExitAnimations(activity, -1, -1);
+
+            CustomTabsIntent customTabsIntent = builder.build();
+            customTabsIntent.launchUrl(activity, Uri.parse(url));
+        }
+        else {
+            Intent intent = new Intent(activity, BrowserActivity.class);
+            if (post != null) {
+                intent.putExtra("post", post);
+            } else {
+                intent.putExtra("url", url);
+                intent.putExtra("domain", domain);
+            }
+            activity.startActivity(intent);
         }
     }
 

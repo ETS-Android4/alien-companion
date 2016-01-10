@@ -3,12 +3,11 @@ package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 import android.util.Base64;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
-import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.JSONParser;
@@ -47,7 +46,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
-            printRequestProperties(connection);
+            //printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
 
@@ -58,7 +57,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
-            printHeaderFields(connection);
+            //printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + baseUrl + urlPath);
@@ -104,7 +103,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setDoInput(true);
             connection.setChunkedStreamingMode(1000);
 
-            printRequestProperties(connection);
+            //printRequestProperties(connection);
 
             OutputStream outputStream = connection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
@@ -125,7 +124,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
             Response result = new HttpResponse(content, responseObject, connection);
 
-            printHeaderFields(connection);
+            //printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);

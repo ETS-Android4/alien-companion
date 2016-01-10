@@ -206,6 +206,10 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                         setCommentSort(CommentSort.CONTROVERSIAL);
                         refreshComments();
                         return true;
+                    case R.id.action_sort_comments_qa:
+                        setCommentSort(CommentSort.QA);
+                        refreshComments();
+                        return true;
                     //case R.id.action_sort_comments_random:
                     //    setCommentSort(CommentSort.RANDOM);
                     //    refreshComments();

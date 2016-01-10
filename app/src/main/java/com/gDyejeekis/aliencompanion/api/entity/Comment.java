@@ -8,10 +8,10 @@ import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToInteger;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToInteger;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -39,6 +39,10 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     public void setThumbnailObject(Thumbnail thumbnailObject) {
 
+    }
+
+    public Thumbnail getThumbnailObject() {
+        return null;
     }
 
     public String getMainText() {

@@ -15,7 +15,8 @@ public enum CommentSort {
     CONTROVERSIAL("controversial"), 
     OLD("old"), 
     RANDOM("random"), 
-    CONFIDENCE("confidence");
+    CONFIDENCE("confidence"),
+    QA("qa");
 
     private final String value;
 

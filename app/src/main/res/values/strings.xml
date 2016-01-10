@@ -127,5 +127,6 @@
     <string name="add">Add</string>
     <string name="load_cached_copy">Load cached copy</string>
     <string name="load_live_version">Load live version</string>
+    <string name="sort_comments_qa"><![CDATA[Q&A]]></string>
 
 </resources>

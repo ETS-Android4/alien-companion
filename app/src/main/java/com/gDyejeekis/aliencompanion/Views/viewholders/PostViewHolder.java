@@ -9,12 +9,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -42,6 +42,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView commentsText;
     public ImageView postImage;
     public ImageView commentsIcon;
+    public ImageButton imageButton;
     public LinearLayout layoutSelfTextPreview;
     public LinearLayout commentsButton;
     public LinearLayout linkButton;
@@ -124,6 +125,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
                 selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
                 scoreText = (TextView) itemView.findViewById(R.id.textView_score);
+                imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
                 break;
             case cardDetails:
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
@@ -134,6 +136,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
                 selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
                 scoreText = (TextView) itemView.findViewById(R.id.textView_score);
+                imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
                 break;
         }
     }
@@ -152,7 +155,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             if(post.isSelf()) linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
             else {
                 linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-                if (post.isNSFW() && !MyApplication.prefs.getBoolean("showNSFWthumb", false)) {
+                if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                     postImage.setImageResource(R.drawable.nsfw2);
                 }
                 else if(postThumbnail.hasThumbnail()){
@@ -164,13 +167,13 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 else postImage.setImageResource(R.drawable.noimage);
             }
         }
-        else {
+        else if (viewType == PostViewType.listItem || !post.hasImageButton) {
             if (postThumbnail.hasThumbnail()) {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                 if (postThumbnail.isSelf()) {
                     postImage.setImageResource(R.drawable.self_default2);
                     //postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                } else if (post.isNSFW() && !MyApplication.prefs.getBoolean("showNSFWthumb", false)) {
+                } else if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                     //postImage.setImageResource(R.drawable.nsfw2);
                     postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 } else {
@@ -183,7 +186,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             else postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
         }
 
-        if(viewType == PostViewType.listItem || viewType == PostViewType.cards || viewType == PostViewType.smallCards) {
+        if(viewType != PostViewType.cardDetails /*viewType == PostViewType.listItem || viewType == PostViewType.cards || viewType == PostViewType.smallCards*/) {
             if(post.isClicked()) {
                 title.setTextColor(clickedColor);
                 if(viewType == PostViewType.listItem) commentsText.setTextColor(clickedColor);
@@ -209,6 +212,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 bindPostCards(context, post);
                 if(post.isSelf()) {
                     linkButton.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.GONE);
                     try {
                         String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
                         if(text.length()>200) text = text.substring(0, 200) + " ...";
@@ -218,12 +222,26 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                         layoutSelfTextPreview.setVisibility(View.GONE);
                     }
                 }
+                else if(post.hasImageButton && postThumbnail.hasThumbnail()) {
+                    layoutSelfTextPreview.setVisibility(View.GONE);
+                    linkButton.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.VISIBLE);
+                    try {
+                        Picasso.with(context).load(postThumbnail.getUrl()).centerCrop().resize(1000, 300).into(imageButton);
+                    } catch (IllegalArgumentException e) {e.printStackTrace();}
+                }
                 else {
                     layoutSelfTextPreview.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.GONE);
                     linkButton.setVisibility(View.VISIBLE);
                     domain2.setText(post.getDomain());
                     domain2.setTextColor(MyApplication.linkColor);
                     fullUrl.setText(post.getURL());
+                    if(postThumbnail.hasThumbnail()) {
+                        if(post.isNSFW() && !MyApplication.showNSFWpreview) postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                        else postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+                    }
+                    else postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 }
                 break;
             case cardDetails:
@@ -231,6 +249,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 bindPostCards(context, post);
                 if(post.isSelf()) {
                     linkButton.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.GONE);
                     if(post.getSelftextHTML()!=null) {
                         layoutSelfTextPreview.setVisibility(View.VISIBLE);
                         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
@@ -240,12 +259,26 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     }
                     else layoutSelfTextPreview.setVisibility(View.GONE);
                 }
+                else if(post.hasImageButton && postThumbnail.hasThumbnail()) {
+                    layoutSelfTextPreview.setVisibility(View.GONE);
+                    linkButton.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.VISIBLE);
+                    try {
+                        Picasso.with(context).load(postThumbnail.getUrl()).centerCrop().resize(1000, 300).into(imageButton);
+                    } catch (IllegalArgumentException e) {e.printStackTrace();}
+                }
                 else {
                     layoutSelfTextPreview.setVisibility(View.GONE);
+                    imageButton.setVisibility(View.GONE);
                     linkButton.setVisibility(View.VISIBLE);
                     domain2.setText(post.getDomain());
                     domain2.setTextColor(MyApplication.linkColor);
                     fullUrl.setText(post.getURL());
+                    if(postThumbnail.hasThumbnail()) {
+                        if(post.isNSFW() && !MyApplication.showNSFWpreview) postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                        else postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+                    }
+                    else postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 }
                 break;
         }

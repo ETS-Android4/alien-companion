@@ -15,6 +15,8 @@ public interface RedditItem {
 
     public void setThumbnailObject(Thumbnail thumbnailedObject);
 
+    public Thumbnail getThumbnailObject();
+
     public String getMainText();
 
     public SpannableStringBuilder getPreparedText();

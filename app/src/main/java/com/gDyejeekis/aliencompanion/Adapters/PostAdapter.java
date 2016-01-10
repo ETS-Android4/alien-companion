@@ -201,7 +201,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 postViewHolder.bindModel(activity, post);
 
                 PostItemListener listener = new PostItemListener(activity, post, this, position);
-                postViewHolder.linkButton.setOnClickListener(listener);
+                if(post.hasImageButton && post.getThumbnailObject().hasThumbnail()) postViewHolder.imageButton.setOnClickListener(listener);
+                else postViewHolder.linkButton.setOnClickListener(listener);
                 PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
                 postViewHolder.setCardButtonsListener(optionsListener);
 

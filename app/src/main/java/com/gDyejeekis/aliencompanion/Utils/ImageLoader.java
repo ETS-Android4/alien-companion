@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.squareup.picasso.Picasso;
 
@@ -60,6 +61,31 @@ public class ImageLoader {
         //    Picasso.with(activity).setLoggingEnabled(true);
         //}
         for(RedditItem submission : posts) {
+            if(submission.getThumbnailObject()==null) {
+                if(MyApplication.offlineModeEnabled) { //TODO: handle offline thumbnails case
+                    submission.setThumbnailObject(new Thumbnail());
+                }
+                else {
+                    Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
+                    try {
+                        Picasso.with(context).load(thumbnail.getUrl()).fetch();
+                        thumbnail.setHasThumbnail(true);
+                    } catch (IllegalArgumentException e) {
+                        thumbnail.setHasThumbnail(false);
+                    }
+                    submission.setThumbnailObject(thumbnail);
+                }
+            }
+            else {
+                try {
+                    Picasso.with(context).load(submission.getThumbnailObject().getUrl()).fetch();
+                } catch (Exception e) {}
+            }
+        }
+    }
+
+    public static void preloadThumbnail(Submission submission, Context context) {
+        if(submission.getThumbnailObject()==null) {
             Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
             try {
                 Picasso.with(context).load(thumbnail.getUrl()).fetch();
@@ -69,16 +95,5 @@ public class ImageLoader {
             }
             submission.setThumbnailObject(thumbnail);
         }
-    }
-
-    public static void preloadThumbnail(Submission submission, Context context) {
-        Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
-        try {
-            Picasso.with(context).load(thumbnail.getUrl()).fetch();
-            thumbnail.setHasThumbnail(true);
-        } catch (IllegalArgumentException e) {
-            thumbnail.setHasThumbnail(false);
-        }
-        submission.setThumbnailObject(thumbnail);
     }
 }

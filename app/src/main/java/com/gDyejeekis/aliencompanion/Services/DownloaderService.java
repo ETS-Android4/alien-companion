@@ -34,9 +34,6 @@ import java.util.List;
  */
 public class DownloaderService extends IntentService {
 
-    //private static final int postsToDownload = 25;
-    //private static final int commentsToDownload = 100;
-
     private static final int FOREGROUND_ID = 574974;
 
     private int MAX_PROGRESS;
@@ -63,9 +60,9 @@ public class DownloaderService extends IntentService {
         //Log.d("geo test", "downloading posts...");
         progress = 0;
         String subreddit = i.getStringExtra("subreddit");
-        String filename;
-        if (subreddit != null) filename = subreddit.toLowerCase();
-        else filename = "frontpage";
+        String filename = (subreddit!=null) ? subreddit.toLowerCase() : "frontpage";
+        //if (subreddit != null) filename = subreddit.toLowerCase();
+        //else filename = "frontpage";
 
         NotificationCompat.Builder builder =new NotificationCompat.Builder(this);
         startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
@@ -96,7 +93,6 @@ public class DownloaderService extends IntentService {
                     submission.setSyncedComments(comments);
                     writePostToFile(submission, filename + submission.getIdentifier());
                 }
-                //writePostsToFile(posts, filename + "Comments");
             }
 
         } catch (RetrievalFailedException | RedditError e) {

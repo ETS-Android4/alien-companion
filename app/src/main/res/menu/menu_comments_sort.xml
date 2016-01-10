@@ -11,6 +11,8 @@
         android:orderInCategory="4" />
     <item android:id="@+id/action_sort_comments_controversial" android:title="@string/sort_comments_controversial"
         android:orderInCategory="5" />
+    <item android:id="@+id/action_sort_comments_qa" android:title="@string/sort_comments_qa"
+        android:orderInCategory="6" />
     <!-- <item android:id="@+id/action_sort_comments_random" android:title="@string/sort_comments_random"
         android:orderInCategory="6" /> -->
     <!-- <item android:id="@+id/action_sort_comments_confidence" android:title="@string/sort_comments_confidence"

@@ -11,7 +11,7 @@ import android.view.Window;
 
 import com.gDyejeekis.aliencompanion.AsyncTasks.AddAccountTask;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
 /**
  * A simple {@link Fragment} subclass.

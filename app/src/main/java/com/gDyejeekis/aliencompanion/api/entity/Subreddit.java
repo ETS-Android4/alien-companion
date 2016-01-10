@@ -1,14 +1,13 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToDouble;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToLong;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToLong;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 import org.json.simple.JSONObject;
 

@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.api.utils.httpClient;
+package com.gDyejeekis.aliencompanion.api.utils;
 
 import android.util.Log;
 
@@ -7,6 +7,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.RandomString;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONObject;
 

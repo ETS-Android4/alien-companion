@@ -8,7 +8,6 @@ import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.api.retrieval.Trophies;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 import com.squareup.picasso.Picasso;
 
 import org.json.simple.JSONObject;
@@ -32,6 +31,10 @@ public class UserInfo implements RedditItem {
 
     public void setThumbnailObject(Thumbnail thumbnailObject) {
 
+    }
+
+    public Thumbnail getThumbnailObject() {
+        return null;
     }
 
     public String getMainText() {

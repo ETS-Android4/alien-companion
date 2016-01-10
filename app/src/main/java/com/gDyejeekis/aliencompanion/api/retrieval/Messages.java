@@ -20,7 +20,7 @@ import org.json.simple.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/11/2015.

@@ -25,6 +25,10 @@ public class ShowMore implements RedditItem {
 
     }
 
+    public Thumbnail getThumbnailObject() {
+        return null;
+    }
+
     public String getMainText() {
         return "SHOW MORE";
     }

@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.api.utils.httpClient;
+package com.gDyejeekis.aliencompanion.Utils;
 
 public final class JsonUtils {
 

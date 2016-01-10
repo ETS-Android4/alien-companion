@@ -10,9 +10,9 @@ import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToDouble;
-import static com.gDyejeekis.aliencompanion.api.utils.httpClient.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/10/2015.
@@ -28,6 +28,10 @@ public class Message extends Thing implements RedditItem {
     }
 
     public void setThumbnailObject(Thumbnail thumbnail) {}
+
+    public Thumbnail getThumbnailObject() {
+        return null;
+    }
 
     public String getThumbnail() {
         return null;

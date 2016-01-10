@@ -5,20 +5,16 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditOAuth;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.Utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -157,7 +153,8 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 else ToastUtils.postsLoadError(context);
             } else {
                 if(submissions.size()>0) {
-                    if(!MyApplication.offlineModeEnabled) ImageLoader.preloadThumbnails(submissions, context); //TODO: throws indexoutofboundsexception in offline mode
+                    //if(!MyApplication.offlineModeEnabled)
+                        ImageLoader.preloadThumbnails(submissions, context); //TODO: throws indexoutofboundsexception in offline mode
                     plf.postListAdapter = adapter;
                 }
                 plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
