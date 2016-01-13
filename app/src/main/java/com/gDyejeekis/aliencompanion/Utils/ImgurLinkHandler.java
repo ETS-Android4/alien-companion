@@ -27,17 +27,32 @@ public class ImgurLinkHandler {
         this.domain = post.getDomain();
     }
 
-    public static String modifyGifvUrl(String url) {
-        return url.replaceFirst("\\.gifv", ".gif");
+    public static void handleUrl(Activity activity, Submission post, String url, String domain) {
+        if(!url.contains("/a/") || !url.contains("/gallery/")) { //Single image case
+            if(post!=null) {
+                post.setURL("http://i.imgur.com/" + LinkHandler.getImgurImgId(post.getURL()) + ".jpg");
+            }
+            else {
+                url = "http://i.imgur.com/" + LinkHandler.getImgurImgId(url) + ".jpg";
+            }
+            LinkHandler.startInAppBrowser(activity, post, url, domain);
+        }
+        //else { //Album/gallery case
+        //    //handle albums/galleries here
+        //}
     }
 
-    public static void handleGifv(Activity activity, Submission post, String url, String domain) {
-        if(post!=null) {
-            post.setURL(modifyGifvUrl(post.getURL()));
-            LinkHandler.startInAppBrowser(activity, post, null, null);
-        }
-        else {
-            LinkHandler.startInAppBrowser(activity, null, modifyGifvUrl(url), domain);
-        }
-    }
+    //public static String modifyGifvUrl(String url) {
+    //    return url.replaceFirst("\\.gifv", ".gif");
+    //}
+//
+    //public static void handleGifv(Activity activity, Submission post, String url, String domain) {
+    //    if(post!=null) {
+    //        post.setURL(modifyGifvUrl(post.getURL()));
+    //        LinkHandler.startInAppBrowser(activity, post, null, null);
+    //    }
+    //    else {
+    //        LinkHandler.startInAppBrowser(activity, null, modifyGifvUrl(url), domain);
+    //    }
+    //}
 }

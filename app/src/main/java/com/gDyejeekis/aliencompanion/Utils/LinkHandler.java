@@ -78,8 +78,7 @@ public class LinkHandler {
                     else setImplicitIntent = true;
                 } else if(domain.equals("imgur.com") || domain.equals("i.imgur.com")) {
                     if(MyApplication.handleImgur) {
-                        //startInAppBrowser(activity, post, url, domain);
-                        ImgurLinkHandler.handleGifv(activity, post, url, domain);
+                        ImgurLinkHandler.handleUrl(activity, post, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
@@ -181,7 +180,18 @@ public class LinkHandler {
         return postInfo;
     }
 
-    private String getYoutubeVideoId(String youtubeURL) {
+    public static String getImgurImgId(String url) {
+        String pattern = "imgur\\.com\\/(\\w+)";
+        Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = compiledPattern.matcher(url);
+
+        if(matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    public static String getYoutubeVideoId(String youtubeURL) {
         String pattern = "(youtu(?:\\.be|be\\.com)\\/(?:.*v(?:\\/|=)|(?:.*\\/)?)([\\w'-]+))";
 
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
@@ -193,7 +203,7 @@ public class LinkHandler {
         return "";
     }
 
-    private String decodeURL(String url) {
+    public static String decodeURL(String url) {
         try {
             String decodedurl = URLDecoder.decode(url, "UTF-8");
             //Log.d("url decoder", decodedurl);

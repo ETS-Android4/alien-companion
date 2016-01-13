@@ -1,14 +1,10 @@
 package com.gDyejeekis.aliencompanion.api.imgur;
 
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
-import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.enums.ThumbnailSize;
+import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
 
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class ImgurRetrieval {
 
-    public static final ThumbnailSize DEFAULT_THUMBNAIL_SIZE = ThumbnailSize.SMALL_THUMBNAIL;
+    public static final ImgurThumbnailSize DEFAULT_THUMBNAIL_SIZE = ImgurThumbnailSize.SMALL_THUMBNAIL;
 
     private ImgurHttpClient httpClient;
     private String id;
@@ -52,7 +48,7 @@ public class ImgurRetrieval {
         }
     }
 
-    public static String getThumbnailUrl(String id, ThumbnailSize size) {
+    public static String getThumbnailUrl(String id, ImgurThumbnailSize size) {
         return "i.imgur.com/" + id + size.value() + ".png";
     }
 

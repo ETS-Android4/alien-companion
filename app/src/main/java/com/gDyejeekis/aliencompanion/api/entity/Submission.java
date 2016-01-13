@@ -16,7 +16,10 @@ import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.Utils.ThumbnailUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.Image;
+import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
+import com.gDyejeekis.aliencompanion.enums.YoutubeThumbnailSize;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
@@ -184,9 +187,29 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 		updateSubmission(obj);
 
-		hasImageButton = !thumbnail.equals("") && (domain.equals("imgur.com") || domain.equals("i.imgur.com") || domain.equals("youtube.com") || domain.equals("youtu.be"));
-		if(nsfw) hasImageButton = (MyApplication.showNSFWpreview);
+		handleThumbnail();
+		//hasImageButton = !thumbnail.equals("") && (domain.equals("imgur.com") || domain.equals("i.imgur.com") || domain.equals("youtube.com") || domain.equals("youtu.be"));
+		//if(nsfw) hasImageButton = (MyApplication.showNSFWpreview);
     }
+
+	private void handleThumbnail() {
+		if(!(nsfw && !MyApplication.showNSFWpreview)) {
+			if((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
+				hasImageButton = true;
+				thumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);
+			}
+			else if(domain.equals("imgur.com") || domain.equals("i.imgur.com")) {
+				if(url.contains("/a/") || url.contains("/gallery/")) hasImageButton = false;
+				else {
+					hasImageButton = true;
+					thumbnail = ThumbnailUtils.getImgurThumbnail(url, ImgurThumbnailSize.MEDIUM_THUMBNAIL);
+				}
+			}
+		}
+		else hasImageButton = false;
+
+		Log.d("geotest", thumbnail);
+	}
 
 	public void updateSubmission(JSONObject obj) {
 		try {

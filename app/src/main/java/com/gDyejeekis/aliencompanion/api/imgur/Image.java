@@ -1,6 +1,6 @@
 package com.gDyejeekis.aliencompanion.api.imgur;
 
-import com.gDyejeekis.aliencompanion.enums.ThumbnailSize;
+import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
 
 import org.json.simple.JSONObject;
 
@@ -168,7 +168,7 @@ public class Image implements Serializable {
         this.nsfw = nsfw;
     }
 
-    public String getThumbnailId(ThumbnailSize size) {
+    public String getThumbnailId(ImgurThumbnailSize size) {
         return id + size.value();
     }
 

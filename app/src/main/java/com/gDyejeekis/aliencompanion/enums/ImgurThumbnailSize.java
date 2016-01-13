@@ -3,7 +3,7 @@ package com.gDyejeekis.aliencompanion.enums;
 /**
  * Created by George on 1/5/2016.
  */
-public enum ThumbnailSize {
+public enum ImgurThumbnailSize {
 
     SMALL_SQUARE("s"),
     BIG_SQUARE("b"),
@@ -14,7 +14,7 @@ public enum ThumbnailSize {
 
     private final String value;
 
-    ThumbnailSize(String value) {
+    ImgurThumbnailSize(String value) {
         this.value = value;
     }
 
