@@ -28,18 +28,18 @@ public class ImgurLinkHandler {
     }
 
     public static void handleUrl(Activity activity, Submission post, String url, String domain) {
-        if(!url.contains("/a/") || !url.contains("/gallery/")) { //Single image case
+        if(!url.contains("/a/") && !url.contains("/gallery/")) { //Single image case
             if(post!=null) {
                 post.setURL("http://i.imgur.com/" + LinkHandler.getImgurImgId(post.getURL()) + ".jpg");
             }
             else {
                 url = "http://i.imgur.com/" + LinkHandler.getImgurImgId(url) + ".jpg";
             }
-            LinkHandler.startInAppBrowser(activity, post, url, domain);
         }
         //else { //Album/gallery case
         //    //handle albums/galleries here
         //}
+        LinkHandler.startInAppBrowser(activity, post, url, domain);
     }
 
     //public static String modifyGifvUrl(String url) {
