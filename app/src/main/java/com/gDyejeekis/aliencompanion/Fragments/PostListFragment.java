@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
@@ -75,10 +76,24 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        if(savedInstanceState!=null) {
+            subreddit = savedInstanceState.getString("subreddit");
+            submissionSort = (SubmissionSort) savedInstanceState.getSerializable("sort");
+            timeSpan = (TimeSpan) savedInstanceState.getSerializable("time");
+        }
+
         loadMore = MyApplication.endlessPosts;
         if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
         if(submissionSort==null) submissionSort = (SubmissionSort) activity.getIntent().getSerializableExtra("sort");
         if(timeSpan==null) timeSpan = (TimeSpan) activity.getIntent().getSerializableExtra("time");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("subreddit", subreddit);
+        outState.putSerializable("sort", submissionSort);
+        outState.putSerializable("time", timeSpan);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

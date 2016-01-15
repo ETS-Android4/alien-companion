@@ -98,6 +98,12 @@
             android:summary="Load more posts automatically when scrolling"
             android:defaultValue="true"/>
 
+        <CheckBoxPreference
+            android:key="hqThumb"
+            android:title="Higher quality thumbnails"
+            android:summary="Only applies to imgur and youtube posts - mainly used in Cards layout"
+            android:defaultValue="true"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="comments"

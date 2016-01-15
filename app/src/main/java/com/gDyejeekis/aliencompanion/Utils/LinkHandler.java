@@ -68,7 +68,7 @@ public class LinkHandler {
                 intent = getNoDomainIntent(activity, url);
             } else {
                 //Log.d("Link Domain", domain);
-                if ((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
+                if (domain.contains("youtube.com") || domain.equals("youtu.be") /*(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))*/) {
                     if (MyApplication.handleYouTube) {
                         String videoId = getYoutubeVideoId(url);
                         int time = getYoutubeVideoTime(url);
@@ -76,27 +76,34 @@ public class LinkHandler {
                         intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
                     }
                     else setImplicitIntent = true;
-                } else if(domain.equals("imgur.com") || domain.equals("i.imgur.com")) {
+                } else if(domain.contains("imgur.com")) {
                     if(MyApplication.handleImgur) {
                         ImgurLinkHandler.handleUrl(activity, post, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
-                else if(domain.equals("twitter.com")) {
+                else if(domain.contains("twitter.com")) {
                     if(MyApplication.handleTwitter) {
                         startInAppBrowser(activity, post, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
-                else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
-                    String postInfo[] = getRedditPostInfo(url);
-                    if (postInfo != null) { //case url of reddit post
-                        intent = new Intent(activity, PostActivity.class);
-                        intent.putExtra("postInfo", postInfo);
-                    } else { //case url of subreddit/user
-                        Pattern pattern = Pattern.compile("/(r|u|user)/[\\w\\.]+", Pattern.CASE_INSENSITIVE);
-                        Matcher matcher = pattern.matcher(url);
-                        if (matcher.find()) intent = getNoDomainIntent(activity, matcher.group());
+                else if (domain.contains("reddit.com") /*domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")*/) {
+                    if(url.contains("/wiki/")) {
+                        if (MyApplication.handleOtherLinks) startInAppBrowser(activity, post, url, domain);
+                        else setImplicitIntent = true;
+                    }
+                    else { // prepare explicit intent for reddit link
+                        String postInfo[] = getRedditPostInfo(url);
+                        if (postInfo != null) { //case url of reddit post
+                            intent = new Intent(activity, PostActivity.class);
+                            intent.putExtra("postInfo", postInfo);
+                        } else { //case url of subreddit/user
+                            Pattern pattern = Pattern.compile("/(r|u|user)/[\\w\\.]+", Pattern.CASE_INSENSITIVE);
+                            Matcher matcher = pattern.matcher(url);
+                            if (matcher.find())
+                                intent = getNoDomainIntent(activity, matcher.group());
+                        }
                     }
                 } else if (domain.equals("redd.it")) {
                     intent = new Intent(activity, PostActivity.class);

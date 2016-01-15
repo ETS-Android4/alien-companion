@@ -67,8 +67,22 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        if(bundle!=null) {
+            username = bundle.getString("username");
+            userOverviewSort = (UserOverviewSort) bundle.getSerializable("sort");
+            userContent = (UserSubmissionsCategory) bundle.getSerializable("category");
+        }
+
         loadMore = MyApplication.endlessPosts;
         if(username==null) username = activity.getIntent().getStringExtra("username");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("username", username);
+        outState.putSerializable("sort", userOverviewSort);
+        outState.putSerializable("category", userContent);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -156,8 +170,8 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             if (userAdapter == null) {
                 //currentlyLoading = true;
                 currentLoadType = LoadType.init;
-                userContent = UserSubmissionsCategory.OVERVIEW;
-                userOverviewSort = UserOverviewSort.NEW;
+                if(userContent==null) userContent = UserSubmissionsCategory.OVERVIEW;
+                if(userOverviewSort==null) userOverviewSort = UserOverviewSort.NEW;
                 task = new LoadUserContentTask(activity, this, LoadType.init);
                 task.execute();
             } else {

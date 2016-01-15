@@ -38,6 +38,7 @@ public class UserActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_subreddit);
         container = (LinearLayout) findViewById(R.id.container);
 
+        if(MyApplication.currentColor==0) MyApplication.setThemeRelatedFields();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(MyApplication.currentColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);

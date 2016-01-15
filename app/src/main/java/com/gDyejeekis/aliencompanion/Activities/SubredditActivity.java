@@ -39,6 +39,7 @@ public class SubredditActivity extends SwipeBackActivity {
         setContentView(R.layout.activity_subreddit);
         container = (LinearLayout) findViewById(R.id.container);
 
+        if(MyApplication.currentColor==0) MyApplication.setThemeRelatedFields();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
         toolbar.setBackgroundColor(MyApplication.currentColor);

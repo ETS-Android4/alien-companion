@@ -70,10 +70,26 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        if(bundle!=null) {
+            subreddit = bundle.getString("subreddit");
+            searchQuery = bundle.getString("query");
+            searchSort = (SearchSort) bundle.getSerializable("sort");
+            timeSpan = (TimeSpan) bundle.getSerializable("time");
+        }
+
         loadMore = MyApplication.endlessPosts;
         if(searchQuery==null) searchQuery = activity.getIntent().getStringExtra("query");
-        subreddit = activity.getIntent().getStringExtra("subreddit");
+        if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
         //if(subreddit!=null) Log.d("subreddit extra value", subreddit);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("subreddit", subreddit);
+        outState.putString("query", searchQuery);
+        outState.putSerializable("sort", searchSort);
+        outState.putSerializable("time", timeSpan);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -151,8 +167,8 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         if(currentLoadType == null) {
             if (postListAdapter == null) {
                 currentLoadType = LoadType.init;
-                setSearchSort(SearchSort.RELEVANCE);
-                setTimeSpan(TimeSpan.ALL);
+                if(searchSort==null) setSearchSort(SearchSort.RELEVANCE);
+                if(timeSpan == null) setTimeSpan(TimeSpan.ALL);
                 task = new LoadSearchTask(activity, this, LoadType.init);
                 task.execute();
             } else {

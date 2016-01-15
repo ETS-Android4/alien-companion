@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 
+import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
 
@@ -155,6 +156,9 @@ public class RedditHttpClient implements HttpClient, Serializable {
     private void tokenCheck() {
         try {
             if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
+                while(MyApplication.currentAccount==null) {
+                    SystemClock.sleep(100);
+                }
                 if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
                     MyApplication.renewingToken = true;
                     OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());

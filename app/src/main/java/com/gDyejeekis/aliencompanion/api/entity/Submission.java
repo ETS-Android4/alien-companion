@@ -187,18 +187,16 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 		updateSubmission(obj);
 
-		handleThumbnail();
-		//hasImageButton = !thumbnail.equals("") && (domain.equals("imgur.com") || domain.equals("i.imgur.com") || domain.equals("youtube.com") || domain.equals("youtu.be"));
-		//if(nsfw) hasImageButton = (MyApplication.showNSFWpreview);
+		if(MyApplication.hqThumbnails) handleThumbnail();
     }
 
 	private void handleThumbnail() {
 		if(!(nsfw && !MyApplication.showNSFWpreview)) {
-			if((domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))) {
+			if(domain.contains("youtube.com") || domain.equals("youtu.be") /*(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))*/) {
 				hasImageButton = true;
 				thumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);
 			}
-			else if(domain.equals("imgur.com") || domain.equals("i.imgur.com")) {
+			else if(domain.contains("imgur.com")) {
 				if(url.contains("/a/") || url.contains("/gallery/")) hasImageButton = false;
 				else {
 					hasImageButton = true;
@@ -208,7 +206,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 		}
 		else hasImageButton = false;
 
-		Log.d("geotest", thumbnail);
+		//Log.d("geotest", thumbnail);
 	}
 
 	public void updateSubmission(JSONObject obj) {

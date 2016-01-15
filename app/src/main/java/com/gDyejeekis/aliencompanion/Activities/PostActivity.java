@@ -26,6 +26,8 @@ public class PostActivity extends SwipeBackActivity {
         else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
+
+        if(MyApplication.currentColor==0) MyApplication.setThemeRelatedFields();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(MyApplication.currentColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);

@@ -166,4 +166,20 @@ public class DownloaderService extends IntentService {
             file.delete();
         }
     }
+
+    private void downloadaImage(Submission post) {
+        String domain = post.getDomain();
+        String url = post.getURL();
+        if(domain.contains("imgur.com")) {
+            if(url.contains("/a/")) { //imgur album
+
+            }
+            else if(domain.contains("/gallery/")) { //imgur gallery
+
+            }
+            else { //imgur single image
+
+            }
+        }
+    }
 }

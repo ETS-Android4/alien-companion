@@ -5,5 +5,5 @@ package com.gDyejeekis.aliencompanion.enums;
  */
 public enum ThumbnailType {
 
-    imgur, youtube, other
+    video, image, gif
 }

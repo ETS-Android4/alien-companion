@@ -85,6 +85,7 @@ public class MyApplication extends Application {
     public static boolean handleImgur;
     public static boolean handleTwitter;
     public static boolean handleOtherLinks;
+    public static boolean hqThumbnails;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -170,6 +171,7 @@ public class MyApplication extends Application {
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);
+        hqThumbnails = prefs.getBoolean("hqThumb", true);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
         hideNSFW = prefs.getBoolean("hideNSFW", false);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
