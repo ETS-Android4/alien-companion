@@ -14,12 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
+
+import in.uncod.android.bypass.Bypass;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,8 +77,8 @@ public class SubmitCommentFragment extends Fragment {
             }
         }
         else {
-            originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null, new MyHtmlTagHandler())));
-            //originalCommentTextView.setText(originalComment.bodyPrepared);
+            if(MyApplication.useBypassParsing) originalCommentTextView.setText(new Bypass().markdownToSpannable(originalComment.getBody()));
+            else originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null, new MyHtmlTagHandler())));
         }
 
         return view;

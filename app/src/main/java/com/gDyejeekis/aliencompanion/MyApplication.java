@@ -48,6 +48,8 @@ public class MyApplication extends Application {
 
     public static boolean showHiddenPosts = false;
 
+    public static final boolean useBypassParsing = false;
+
     public static SharedPreferences prefs;
     public static String deviceID;
     public static boolean nightThemeEnabled;
@@ -86,6 +88,7 @@ public class MyApplication extends Application {
     public static boolean handleTwitter;
     public static boolean handleOtherLinks;
     public static boolean hqThumbnails;
+    public static boolean noThumbnails;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -172,6 +175,7 @@ public class MyApplication extends Application {
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         hqThumbnails = prefs.getBoolean("hqThumb", true);
+        noThumbnails = prefs.getBoolean("noThumb", false);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
         hideNSFW = prefs.getBoolean("hideNSFW", false);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));

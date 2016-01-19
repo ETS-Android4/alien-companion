@@ -432,8 +432,8 @@ public class Comments implements ActorDriven {
 		}
 	}
 
-	public static void prepareCommentBody(Context context, Comment comment) {
-		comment.bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
+	public static void prepareCommentBody(Context context, Comment comment) { //TODO: deleted everything related to 'preparedBody'
+		//comment.bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
 		comment.bodyPrepared = ConvertUtils.modifyURLSpan(context, comment.bodyPrepared);
 	}
 	

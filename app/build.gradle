@@ -44,4 +44,6 @@ dependencies {
     compile 'com.android.support:customtabs:23.1.1'
     //compile group: 'com.mobeta.android.dslv', name: 'drag-sort-listview', version: '0.6.1-SNAPSHOT'
     compile 'org.apmem.tools:layouts:1.10@aar'
+    compile 'com.commit451:bypasses:1.0.1'
+    compile 'com.makeramen:roundedimageview:2.2.1'
 }

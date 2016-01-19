@@ -24,7 +24,10 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
+
+import in.uncod.android.bypass.Bypass;
 
 /**
  * Created by sound on 8/28/2015.
@@ -42,7 +45,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public TextView commentsText;
     public ImageView postImage;
     public ImageView commentsIcon;
-    public ImageButton imageButton;
+    public RoundedImageView imageButton;
     public LinearLayout layoutSelfTextPreview;
     public LinearLayout commentsButton;
     public LinearLayout linkButton;
@@ -125,7 +128,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
                 selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
                 scoreText = (TextView) itemView.findViewById(R.id.textView_score);
-                imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
+                imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
                 break;
             case cardDetails:
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
@@ -136,7 +139,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
                 selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
                 scoreText = (TextView) itemView.findViewById(R.id.textView_score);
-                imageButton = (ImageButton) itemView.findViewById(R.id.imageButton);
+                imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
                 break;
         }
     }
@@ -213,13 +216,31 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 if(post.isSelf()) {
                     linkButton.setVisibility(View.GONE);
                     imageButton.setVisibility(View.GONE);
-                    try {
-                        String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
-                        if(text.length()>200) text = text.substring(0, 200) + " ...";
-                        selfTextCard.setText(text);
-                        layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                    } catch (NullPointerException e) {
-                        layoutSelfTextPreview.setVisibility(View.GONE);
+
+                    if(MyApplication.useBypassParsing) {
+                        try {
+                            String selfText = new Bypass().markdownToSpannable(post.getSelftext()).toString();
+                            if (selfText.length() == 0)
+                                layoutSelfTextPreview.setVisibility(View.GONE);
+                            else {
+                                if (selfText.length() > 200)
+                                    selfText = selfText.substring(0, 200) + " ...";
+                                selfTextCard.setText(selfText);
+                                layoutSelfTextPreview.setVisibility(View.VISIBLE);
+                            }
+                        } catch (Exception e) {
+                            layoutSelfTextPreview.setVisibility(View.GONE);
+                        }
+                    }
+                    else {
+                        try {
+                            String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
+                            if(text.length()>200) text = text.substring(0, 200) + " ...";
+                            selfTextCard.setText(text);
+                            layoutSelfTextPreview.setVisibility(View.VISIBLE);
+                        } catch (NullPointerException  e) {
+                            layoutSelfTextPreview.setVisibility(View.GONE);
+                        }
                     }
                 }
                 else if(post.hasImageButton && postThumbnail.hasThumbnail()) {
@@ -227,7 +248,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     linkButton.setVisibility(View.GONE);
                     imageButton.setVisibility(View.VISIBLE);
                     try {
-                        Picasso.with(context).load(postThumbnail.getUrl()).centerCrop().resize(1000, 300).into(imageButton);
+                        Picasso.with(context).load(postThumbnail.getUrl())/*.centerCrop().resize(1000, 300)*/.into(imageButton);
                     } catch (IllegalArgumentException e) {e.printStackTrace();}
                 }
                 else {
@@ -252,10 +273,22 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     imageButton.setVisibility(View.GONE);
                     if(post.getSelftextHTML()!=null) {
                         layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
-                        stringBuilder = ConvertUtils.modifyURLSpan(context, stringBuilder);
-                        selfTextCard.setText(stringBuilder);
-                        selfTextCard.setMovementMethod(MyLinkMovementMethod.getInstance());
+
+                        if(MyApplication.useBypassParsing) {
+                            //parse markdown body with bypass
+                            Bypass bypass = new Bypass();
+                            CharSequence spannable = bypass.markdownToSpannable(post.getSelftext());
+                            spannable = ConvertUtils.modifyURLSpan(context, spannable);
+                            selfTextCard.setText(spannable);
+                            selfTextCard.setMovementMethod(MyLinkMovementMethod.getInstance());
+                        }
+                        else {
+                            //parse body using fromHTML
+                            SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
+                            stringBuilder = ConvertUtils.modifyURLSpan(context, stringBuilder);
+                            selfTextCard.setText(stringBuilder);
+                            selfTextCard.setMovementMethod(MyLinkMovementMethod.getInstance());
+                        }
                     }
                     else layoutSelfTextPreview.setVisibility(View.GONE);
                 }
@@ -264,7 +297,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     linkButton.setVisibility(View.GONE);
                     imageButton.setVisibility(View.VISIBLE);
                     try {
-                        Picasso.with(context).load(postThumbnail.getUrl()).centerCrop().resize(1000, 300).into(imageButton);
+                        Picasso.with(context).load(postThumbnail.getUrl())/*.centerCrop().resize(1000, 300)*/.into(imageButton);
                     } catch (IllegalArgumentException e) {e.printStackTrace();}
                 }
                 else {

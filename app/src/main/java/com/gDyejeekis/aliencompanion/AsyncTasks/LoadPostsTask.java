@@ -153,8 +153,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 else ToastUtils.postsLoadError(context);
             } else {
                 if(submissions.size()>0) {
-                    //if(!MyApplication.offlineModeEnabled)
-                        ImageLoader.preloadThumbnails(submissions, context); //TODO: throws indexoutofboundsexception in offline mode
+                    if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
                     plf.postListAdapter = adapter;
                 }
                 plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;

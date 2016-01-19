@@ -104,6 +104,12 @@
             android:summary="Only applies to imgur and youtube posts - mainly used in Cards layout"
             android:defaultValue="true"/>
 
+        <CheckBoxPreference
+            android:key="noThumb"
+            android:title="Never load thumbnails"
+            android:summary="Enable this to save data if you're on a limited data plan"
+            android:defaultValue="false"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="comments"

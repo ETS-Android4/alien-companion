@@ -187,7 +187,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 		updateSubmission(obj);
 
-		if(MyApplication.hqThumbnails) handleThumbnail();
+		if(MyApplication.hqThumbnails && !MyApplication.noThumbnails) handleThumbnail();
     }
 
 	private void handleThumbnail() {
@@ -247,7 +247,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setLikes(safeJsonToString(obj.get("likes")));
 
 			title = StringEscapeUtils.unescapeHtml(title);
-			selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
+			if(!MyApplication.useBypassParsing) selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
 
 			//if(selftextHTML!=null) {
 			//	SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(selftextHTML, null, new MyHtmlTagHandler()));

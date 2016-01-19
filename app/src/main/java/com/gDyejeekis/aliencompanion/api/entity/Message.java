@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -81,7 +82,7 @@ public class Message extends Thing implements RedditItem {
             this.isNew = safeJsonToBoolean(obj.get("new"));
             this.wasComment = safeJsonToBoolean(obj.get("was_comment"));
 
-            bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+            if(!MyApplication.useBypassParsing) bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
 
             //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);

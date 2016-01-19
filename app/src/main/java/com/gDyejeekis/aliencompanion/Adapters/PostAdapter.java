@@ -29,6 +29,8 @@ import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.Utils;
 
+import in.uncod.android.bypass.Bypass;
+
 /**
  * Created by George on 5/17/2015.
  */
@@ -127,13 +129,24 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                //Comment textview
-                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
-                        Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-                strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
-                cvh.commentTextView.setText(strBuilder);
-                //cvh.commentTextView.setText(comment.bodyPrepared);
-                cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
+                if(MyApplication.useBypassParsing) {
+                    //parse markdown body with bypass
+                    Bypass bypass = new Bypass();
+                    CharSequence spannable = bypass.markdownToSpannable(comment.getBody());
+                    spannable = ConvertUtils.modifyURLSpan(activity, spannable);
+                    cvh.commentTextView.setText(spannable);
+                    cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
+                }
+                else {
+                    //Comment textview
+                    //parse html body using fromHTML
+                    SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
+                            Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
+                    strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
+                    cvh.commentTextView.setText(strBuilder);
+                    //cvh.commentTextView.setText(comment.bodyPrepared);
+                    cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
+                }
 
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);

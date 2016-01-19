@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
@@ -122,7 +123,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             setLikes(safeJsonToString(obj.get("likes")));
 
             linkTitle = StringEscapeUtils.unescapeHtml(linkTitle);
-            bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+            if(!MyApplication.useBypassParsing) bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
 
             //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);

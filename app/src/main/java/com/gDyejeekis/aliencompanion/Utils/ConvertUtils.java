@@ -93,11 +93,11 @@ public class ConvertUtils {
         return string;
     }
 
-    public static void preparePostsText(Context context, List<RedditItem> items) {
+    public static void preparePostsText(Context context, List<RedditItem> items) { //TODO: delete this shit
         try {
             for (RedditItem item : items) {
                 if (item.getMainText() != null) {
-                    item.storePreparedText((SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(item.getMainText(), null, new MyHtmlTagHandler())));
+                    //item.storePreparedText((SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(item.getMainText(), null, new MyHtmlTagHandler())));
                     item.storePreparedText(ConvertUtils.modifyURLSpan(context, item.getPreparedText()));
                 }
             }
@@ -119,63 +119,63 @@ public class ConvertUtils {
 
             MyClickableSpan myClickableSpan;
 
-            if(span.getURL().substring(0,2).equals("/s") || span.getURL().equals("#s")) {
-                myClickableSpan = new MyClickableSpan() {
+            if(span.getURL()!=null) {
+                if (span.getURL().substring(0, 2).equals("/s") || span.getURL().equals("#s")) {
+                    myClickableSpan = new MyClickableSpan() {
 
-                    boolean spoilerHidden = true;
-                    TextPaint textPaint;
+                        boolean spoilerHidden = true;
+                        TextPaint textPaint;
 
-                    @Override
-                    public boolean onLongClick(View widget) {
-                        return false;
-                    }
+                        @Override
+                        public boolean onLongClick(View widget) {
+                            return false;
+                        }
 
-                    @Override
-                    public void onClick(View widget) {
-                        spoilerHidden = !spoilerHidden;
-                        updateDrawState(textPaint);
-                        widget.invalidate();
-                    }
+                        @Override
+                        public void onClick(View widget) {
+                            spoilerHidden = !spoilerHidden;
+                            updateDrawState(textPaint);
+                            widget.invalidate();
+                        }
 
-                    @Override
-                    public void updateDrawState(TextPaint ds) {
-                        int backgroundColor = (MyApplication.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
-                        super.updateDrawState(ds);
-                        ds.setUnderlineText(false);
-                        ds.bgColor = backgroundColor;
-                        if(spoilerHidden) ds.setColor(backgroundColor);
-                        else ds.setColor(Color.WHITE);
-                        textPaint = ds;
-                    }
-                };
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            int backgroundColor = (MyApplication.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
+                            super.updateDrawState(ds);
+                            ds.setUnderlineText(false);
+                            ds.bgColor = backgroundColor;
+                            if (spoilerHidden) ds.setColor(backgroundColor);
+                            else ds.setColor(Color.WHITE);
+                            textPaint = ds;
+                        }
+                    };
+                } else {
+                    myClickableSpan = new MyClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            LinkHandler linkHandler = new LinkHandler(context, span.getURL());
+                            linkHandler.handleIt();
+                        }
+
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Bundle args = new Bundle();
+                            args.putString("url", span.getURL());
+                            UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
+                            dialogFragment.setArguments(args);
+                            dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                            return true;
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(MyApplication.linkColor);
+                        }
+                    };
+                }
+                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            else {
-                myClickableSpan = new MyClickableSpan()
-                {
-                    @Override
-                    public void onClick(View widget) {
-                        LinkHandler linkHandler = new LinkHandler(context, span.getURL());
-                        linkHandler.handleIt();
-                    }
-
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Bundle args = new Bundle();
-                        args.putString("url", span.getURL());
-                        UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
-                        dialogFragment.setArguments(args);
-                        dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
-                        return true;
-                    }
-
-                    @Override
-                    public void updateDrawState(TextPaint ds) {
-                        super.updateDrawState(ds);
-                        ds.setColor(MyApplication.linkColor);
-                    }
-                };
-            }
-            strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return strBuilder;
     }

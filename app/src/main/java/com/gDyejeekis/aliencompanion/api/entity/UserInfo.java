@@ -123,9 +123,12 @@ public class UserInfo implements RedditItem {
         //}
     }
 
-    public void retrieveTrophies(Context context, HttpClient httpClient) {
+    public void retrieveTrophyInfo(HttpClient httpClient) {
         Trophies trophies = new Trophies(httpClient);
         trophyList = trophies.ofUser(name);
+    }
+
+    public void preleoadTrophyImages(Context context, List<Trophy> trophyList) {
         for(Trophy trophy : trophyList) {
             Picasso.with(context).load(trophy.getIcon70url()).fetch();
         }

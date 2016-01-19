@@ -82,13 +82,13 @@ public class LinkHandler {
                     }
                     else setImplicitIntent = true;
                 }
-                else if(domain.contains("twitter.com")) {
+                else if(domain.equals("twitter.com")) {
                     if(MyApplication.handleTwitter) {
                         startInAppBrowser(activity, post, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
-                else if (domain.contains("reddit.com") /*domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")*/) {
+                else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
                     if(url.contains("/wiki/")) {
                         if (MyApplication.handleOtherLinks) startInAppBrowser(activity, post, url, domain);
                         else setImplicitIntent = true;

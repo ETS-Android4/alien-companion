@@ -82,7 +82,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     else {
                         UserDetails userDetails = new UserDetails(httpClient, MyApplication.currentUser);
                         UserInfo userInfo = userDetails.ofUser(uf.username);
-                        userInfo.retrieveTrophies(activity, httpClient);
+                        userInfo.retrieveTrophyInfo(httpClient); //retrieves trophy info
 
                         userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
                         adapter = new RedditItemListAdapter(activity);
@@ -161,7 +161,8 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 }
             } else {
                 if(things.size()>0) {
-                    ImageLoader.preloadUserImages(things, activity);
+                    //load trophy images here
+                    if(!MyApplication.noThumbnails) ImageLoader.preloadUserImages(things, activity);
                     uf.userAdapter = adapter;
                 }
                 else ToastUtils.displayShortToast(activity, "No posts found");

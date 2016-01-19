@@ -44,6 +44,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.uncod.android.bypass.Bypass;
+
 /**
  * Created by sound on 8/28/2015.
  */
@@ -314,11 +316,23 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
-            SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
-            strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
-            body.setText(strBuilder);
-            //body.setText(message.bodyPrepared);
-            body.setMovementMethod(MyLinkMovementMethod.getInstance());
+
+            if(MyApplication.useBypassParsing) {
+                //parse markdown body with bypass
+                Bypass bypass = new Bypass();
+                CharSequence spannable = bypass.markdownToSpannable(message.body);
+                spannable = ConvertUtils.modifyURLSpan(context, spannable);
+                body.setText(spannable);
+                body.setMovementMethod(MyLinkMovementMethod.getInstance());
+            }
+            else {
+                //parse body with fromHtml
+                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
+                strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+                body.setText(strBuilder);
+                body.setMovementMethod(MyLinkMovementMethod.getInstance());
+            }
+
             age.setText(message.agePrepared);
 
             if(message.author.equals(MyApplication.currentUser.getUsername()) && !message.destination.equals(MyApplication.currentUser.getUsername())) {
@@ -373,12 +387,23 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public void bindModel(Context context, Comment comment) {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
-            SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-            strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
-            commentBody.setText(strBuilder);
-            //commentBody.setText(ConvertUtils.modifyURLSpan(context, comment.bodyPrepared));
-            commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
-            //commentBody.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML())));
+
+            if(MyApplication.useBypassParsing) {
+                //parse markdown body with bypass
+                Bypass bypass = new Bypass();
+                CharSequence spannable = bypass.markdownToSpannable(comment.getBody());
+                spannable = ConvertUtils.modifyURLSpan(context, spannable);
+                commentBody.setText(spannable);
+                commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
+            }
+            else {
+                //parse html body using fromHTML
+                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
+                strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+                commentBody.setText(strBuilder);
+                commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
+            }
+
             commentScore.setText(Long.toString(comment.getScore()));
             commentAge.setText(comment.agePrepared);
 
