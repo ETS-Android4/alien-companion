@@ -231,5 +231,10 @@
             android:key="clearCache"
             android:title="Clear cache"/>
 
+        <Preference
+            android:key="changelog"
+            android:title="View changelog"
+            android:summary="Current version: 0.2" />
+
     </PreferenceCategory>
 </PreferenceScreen>

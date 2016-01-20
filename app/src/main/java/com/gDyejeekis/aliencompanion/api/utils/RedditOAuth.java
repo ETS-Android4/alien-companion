@@ -144,6 +144,7 @@ public class RedditOAuth {
 
     public static OAuthToken getApplicationToken(HttpClient httpClient) {
         Log.d("geotest", "retrieving application token..");
+        //Log.d("geotest", "post data: " + "grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MyApplication.deviceID);
         JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=https://oauth.reddit.com/grants/installed_client&device_id="
                 + MyApplication.deviceID, OAUTH_TOKEN_URL, null).getResponseObject();
         return new OAuthToken(jsonObject, false);

@@ -157,6 +157,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
         try {
             if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
                 while(MyApplication.currentAccount==null) {
+                    Log.d("geotest", "currentAccount is null, waiting 100ms..");
                     SystemClock.sleep(100);
                 }
                 if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {

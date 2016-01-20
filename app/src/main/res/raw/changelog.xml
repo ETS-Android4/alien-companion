@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="true">
+
+    <changelogversion versionName="0.2" changeDate="Aug 26,2013">
+        <changelogtext>OAuth2 authentication and API requests. All previous account data will be cleared and you will need to re-authenticate (sorry!)</changelogtext>
+        <changelogtext>Added 'Chrome custom tabs' support (enable in settings)</changelogtext>
+        <changelogtext>Higher resolution thumbnails for imgur and youtube links (can be disabled in settings)</changelogtext>
+        <changelogtext>Changed cards layout for imgur and youtube links (larger thumbnail)</changelogtext>
+        <changelogtext>Added Q&amp;A sort for comments</changelogtext>
+        <changelogtext>Added 'default comment sort' and 'sync comment sort' options</changelogtext>
+        <changelogtext>Added option to completely disable thumbnails</changelogtext>
+        <changelogtext>Added Imgur and Twitter link-handling options</changelogtext>
+        <changelogtext>Implemented replying to private messages and comments in the messages screen</changelogtext>
+        <changelogtext>Ordered (numbered) and unordered (bulleted) lists now display properly</changelogtext>
+        <changelogtext>Imgur .gifv links will display as .gif for the time being (proper .gifv support coming soon)</changelogtext>
+        <changelogtext>App will no longer crash and will properly recreate activities when its process is killed</changelogtext>
+    </changelogversion>
+
+</changelog>

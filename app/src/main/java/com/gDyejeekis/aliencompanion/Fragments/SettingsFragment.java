@@ -7,6 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -26,6 +27,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         Preference clearSynced = findPreference("clearSynced");
         Preference clearCache = findPreference("clearCache");
+        Preference viewChangeLog = findPreference("changelog");
         clearSynced.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -47,6 +49,13 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 GeneralUtils.deleteCache(getActivity());
                 ToastUtils.displayShortToast(getActivity(), "Cache cleared");
+                return false;
+            }
+        });
+        viewChangeLog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                GeneralUtils.showChangeLog(getActivity());
                 return false;
             }
         });

@@ -46,4 +46,5 @@ dependencies {
     compile 'org.apmem.tools:layouts:1.10@aar'
     compile 'com.commit451:bypasses:1.0.1'
     compile 'com.makeramen:roundedimageview:2.2.1'
+    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
 }

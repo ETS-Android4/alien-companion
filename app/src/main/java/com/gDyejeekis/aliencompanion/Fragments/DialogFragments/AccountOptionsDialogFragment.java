@@ -21,8 +21,7 @@ public class AccountOptionsDialogFragment extends ScalableDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account_options, container, false);
         final String accountName = getArguments().getString("accountName");
         TextView title = (TextView) view.findViewById(R.id.textView_title);

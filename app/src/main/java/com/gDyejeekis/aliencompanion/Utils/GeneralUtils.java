@@ -14,6 +14,7 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 
@@ -30,6 +31,11 @@ import java.util.List;
  * Created by sound on 10/5/2015.
  */
 public class GeneralUtils {
+
+    public static void showChangeLog(Activity activity) {
+        ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
+        dialog.show(activity.getFragmentManager(), "dialog");
+    }
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
