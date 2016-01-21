@@ -10,6 +10,7 @@ import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SearchActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
+import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.R;
@@ -40,10 +41,13 @@ public class PostItemListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         if(!post.isClicked() && position != -1) {
+            //if(adapter instanceof RedditItemListAdapter)
             post.setClicked(true);
-            adapter.notifyItemChanged(position); //TODO: write clicked post name to a file (maybe)
+            adapter.notifyItemChanged(position);
         }
+
         if(v.getId() == R.id.layout_postCommentsButton || post.isSelf()) {
             if(MainActivity.dualPaneActive) {
                 PostFragment fragment = PostFragment.newInstance(post);

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,24 +109,20 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     public void addAll(List<RedditItem> items) {
         redditItems.remove(showMoreButton);
         redditItems.addAll(items);
-        //if(items.size() >= RedditConstants.DEFAULT_LIMIT)
             redditItems.add(showMoreButton);
         notifyItemRangeInserted(redditItems.size(), items.size());
     }
 
-    public void remove(RedditItem item) {
-        redditItems.remove(item);
-        selectedPosition = -1;
-        notifyDataSetChanged();
-    }
+    //public void remove(RedditItem item) {
+    //    redditItems.remove(item);
+    //    selectedPosition = -1;
+    //    notifyDataSetChanged();
+    //}
 
-    private int getItemPosition(RedditItem item) {
-        int i=0;
-        for(RedditItem anItem : redditItems) {
-            if(item == anItem) return i;
-            i++;
-        }
-        return -1;
+    public void remove(RedditItem item) {
+        selectedPosition = -1;
+        redditItems.remove(item);
+        notifyItemRemoved(redditItems.indexOf(item));
     }
 
     public RedditItem getLastItem() { //TODO: check out of bounds index exception, probably related to load task
@@ -138,14 +135,13 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     }
 
     public void hideReadPosts() {
-        for(int i = redditItems.size()-1;i>=0;i--) {
-            if(redditItems.get(i) instanceof Submission) {
-                Submission post = (Submission) redditItems.get(i);
-                if(post.isClicked()) redditItems.remove(i);
-            }
-        }
-        selectedPosition = -1;
-        notifyDataSetChanged();
+        //List<RedditItem> nonClicked = new ArrayList<>();
+
+
+        //redditItems = nonClicked;
+//
+        //selectedPosition = -1;
+        //notifyDataSetChanged();
     }
 
 

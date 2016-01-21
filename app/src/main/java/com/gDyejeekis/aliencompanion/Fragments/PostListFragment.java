@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -133,7 +134,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 totalItemCount = layoutManager.getItemCount();
                 pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
 
-                if (loadMore && hasMore) {
+                if (!MyApplication.offlineModeEnabled && loadMore && hasMore) {
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
                         loadMore = false;
                         //Log.d("scroll listener", "load more now");

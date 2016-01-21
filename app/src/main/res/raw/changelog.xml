@@ -2,7 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="0.2" changeDate="Aug 26,2013">
-        <changelogtext>OAuth2 authentication and API requests. All previous account data will be cleared and you will need to re-authenticate (sorry!)</changelogtext>
+        <changelogtext>OAuth2 authentication and API requests. All previous account data has been cleared and you will need to re-authenticate (sorry!)</changelogtext>
         <changelogtext>Added 'Chrome custom tabs' support (enable in settings)</changelogtext>
         <changelogtext>Higher resolution thumbnails for imgur and youtube links (can be disabled in settings)</changelogtext>
         <changelogtext>Changed cards layout for imgur and youtube links (larger thumbnail)</changelogtext>

@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.AsyncTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
@@ -41,7 +42,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     }
 
     private List<Comment> readCommentsFromFile(String filename) {
-        //Log.d("Geo test", "reading comments from " + filename);
+        Log.d("Geo test", "reading comments from " + filename);
         try {
             exception = null;
             FileInputStream fis = context.openFileInput(filename);
@@ -62,8 +63,16 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             if(MyApplication.offlineModeEnabled) {
                 String postId = postFragment.post.getIdentifier();
                 String filename = postFragment.post.getSubreddit().toLowerCase() + postId;
-                comments = readCommentsFromFile(filename);
-                if(exception != null) comments = readCommentsFromFile("frontpage" + postId);
+                comments = readCommentsFromFile(filename); //TODO: in case of duplicate posts load the latest synced
+
+                String temp;
+                for(int i=0; i<2;i++) {
+                    if (exception != null) {
+                        temp = (i==0) ? "frontpage" : "all";
+                        comments = readCommentsFromFile(temp + postId);
+                    }
+                    else break;
+                }
             }
             else {
                 Comments cmnts = new Comments(httpClient, MyApplication.currentUser);

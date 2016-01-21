@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
@@ -91,7 +92,7 @@ public class DownloaderService extends IntentService {
                     Submission submission = (Submission) post;
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
-                    writePostToFile(submission, filename + submission.getIdentifier());
+                    writePostToFile(submission, filename + submission.getIdentifier()); //TODO: change filename to exclude subreddit and change deletePreviousComments method
                 }
             }
 
@@ -138,7 +139,7 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
-            //Log.d("Geo test", "writing comments to " + filename);
+            Log.d("Geo test", "writing comments to " + filename);
             FileOutputStream fos;
             ObjectOutputStream oos;
             fos = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -162,7 +163,7 @@ public class DownloaderService extends IntentService {
         };
         File[] files = dir.listFiles(filenameFilter);
         for(File file : files) {
-            //Log.d("Geo test", "Deleting " + file.getName());
+            Log.d("Geo test", "Deleting " + file.getName());
             file.delete();
         }
     }
