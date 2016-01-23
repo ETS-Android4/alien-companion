@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.ClickListeners;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Fragments.MessageFragment;
@@ -48,7 +49,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 postListFragment.currentLoadType = LoadType.extend;
                 postListFragment.postListAdapter.setLoadingMoreItems(true);
                 postListFragment.task = new LoadPostsTask(context, postListFragment, LoadType.extend);
-                postListFragment.task.execute();
+                postListFragment.task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
             case user:
                 UserFragment userFragment = (UserFragment) fragment;
@@ -56,7 +57,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 userFragment.currentLoadType = LoadType.extend;
                 userFragment.userAdapter.setLoadingMoreItems(true);
                 userFragment.task = new LoadUserContentTask((Activity) context, userFragment, LoadType.extend);
-                userFragment.task.execute();
+                userFragment.task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
             case search:
                 SearchFragment searchFragment = (SearchFragment) fragment;
@@ -64,7 +65,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 searchFragment.currentLoadType = LoadType.extend;
                 searchFragment.postListAdapter.setLoadingMoreItems(true);
                 searchFragment.task = new LoadSearchTask(context, searchFragment, LoadType.extend);
-                searchFragment.task.execute();
+                searchFragment.task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
             case message:
                 MessageFragment messageFragment = (MessageFragment) fragment;
@@ -72,7 +73,7 @@ public class ShowMoreListener implements View.OnClickListener {
                 messageFragment.currentLoadType = LoadType.extend;
                 messageFragment.adapter.setLoadingMoreItems(true);
                 messageFragment.task = new LoadMessagesTask(context, messageFragment, LoadType.extend);
-                messageFragment.task.execute();
+                messageFragment.task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 }

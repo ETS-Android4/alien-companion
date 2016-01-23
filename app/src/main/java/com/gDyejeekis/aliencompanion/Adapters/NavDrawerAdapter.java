@@ -20,13 +20,18 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.AccountListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.HeaderListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.MenuItemListener;
+import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.MultiredditItemListener;
+import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.MultisListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.NavDrawerListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditsListener;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubredditItem;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubreddits;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -59,7 +64,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public static final int VIEW_TYPE_ACCOUNT = 4;
 
-    //public static final int VIEW_TYPE_SEPARATOR = 5;
+    public static final int VIEW_TYPE_MULTIS = 5;
+
+    public static final int VIEW_TYPE_MULTIREDDIT_ITEM = 6;
 
     private final MainActivity activity;
 
@@ -67,8 +74,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private boolean accountItemsVisible;
     private boolean subredditItemsVisible;
+    private boolean multiredditItemsVisible;
 
     private List<NavDrawerItem> subredditItems;
+    private List<NavDrawerItem> multiredditItems;
     public List<NavDrawerAccount> accountItems;
 
     public static String currentAccountName;
@@ -81,6 +90,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         items = new ArrayList<>();
         this.activity = activity;
         subredditItemsVisible = true;
+        multiredditItemsVisible = true;
+        subredditItems = new ArrayList<>();
+        multiredditItems = new ArrayList<>();
         accountItemsVisible = false;
         currentAccountName = "Logged out";
         profile = new NavDrawerMenuItem(MenuType.profile);
@@ -110,7 +122,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void updateSubredditItems(List<String> subredditNames) {
-        subredditItems = new ArrayList<>();
+        //subredditItems = new ArrayList<>();
+        subredditItems.clear();
         for(NavDrawerItem item : items) {
             if(item instanceof NavDrawerSubredditItem) subredditItems.add(item);
         }
@@ -227,15 +240,27 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void add(NavDrawerItem item) {
-        items.add(item);
+        this.items.add(item);
     }
 
     public void add(int location, NavDrawerItem item) {
-        items.add(location, item);
+        this.items.add(location, item);
     }
 
     public void addAll(List<NavDrawerItem> items) {
         this.items.addAll(items);
+    }
+
+    public void addAll(int position, List<NavDrawerItem> items) {
+        this.items.addAll(position, items);
+    }
+
+    public void remove(NavDrawerItem item) {
+        this.items.remove(item);
+    }
+
+    public void removeAll(List<NavDrawerItem> items) {
+        this.items.removeAll(items);
     }
 
     public NavDrawerItem getItemAt(int position) {
@@ -250,7 +275,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     private void collapseAccountItems() {
         items.removeAll(accountItems);
         accountItemsVisible = false;
-        //notifyDataSetChanged();
+
         notifyItemChanged(0);
         notifyItemRangeRemoved(1, accountItems.size());
     }
@@ -262,7 +287,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             i++;
         }
         accountItemsVisible = true;
-        //notifyDataSetChanged();
+
         notifyItemChanged(0);
         notifyItemRangeInserted(1, accountItems.size());
     }
@@ -273,24 +298,78 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     private void collapseSubredditItems() {
-        subredditItems = new ArrayList<>();
+        subredditItems.clear();
+        int i = 0;
+        int subredditsIndex = -1;
+        int start = -1;
+        int end = -1;
         for(NavDrawerItem item : items) {
-            if(item instanceof NavDrawerSubredditItem) subredditItems.add(item);
+            if(item instanceof NavDrawerSubredditItem) {
+                if(start == -1) start = i;
+                subredditItems.add(item);
+                end = i;
+            }
+            else if(item instanceof NavDrawerSubreddits) subredditsIndex = i;
+            i++;
         }
-        items.removeAll(subredditItems);
+        removeAll(subredditItems);
         subredditItemsVisible = false;
-        //notifyDataSetChanged();
-        notifyItemChanged(items.size()-1);
-        notifyItemRangeRemoved(items.size(), subredditItems.size());
+
+        notifyItemRangeRemoved(start, end);
+        notifyItemChanged(subredditsIndex);
     }
 
     private void expandSubredditItems() {
-        int position = items.size();
-        items.addAll(subredditItems);
+        int position = -1;
+        int i = 0;
+        for(NavDrawerItem item : items) {
+            if(item instanceof NavDrawerSubreddits) {
+                position = i+1;
+                break;
+            }
+            i++;
+        }
+        addAll(position, subredditItems);
         subredditItemsVisible = true;
-        //notifyDataSetChanged();
-        notifyItemChanged(position-1);
+
         notifyItemRangeInserted(position, subredditItems.size());
+        notifyItemChanged(position - 1);
+    }
+
+    public void toggleMultiredditItems() {
+        if(multiredditItemsVisible) collapseMultiredditItems();
+        else expandMultiredditItems();
+    }
+
+    private void collapseMultiredditItems() {
+        multiredditItems.clear();
+        int i = 0;
+        int multisIndex = -1;
+        int start = -1;
+        int end = -1;
+        for(NavDrawerItem item : items) {
+            if(item instanceof NavDrawerMutliredditItem) {
+                if(start == -1) start = i;
+                multiredditItems.add(item);
+                end = i;
+            }
+            else if(item instanceof NavDrawerMultis) multisIndex = i;
+            i++;
+        }
+        removeAll(multiredditItems);
+        multiredditItemsVisible = false;
+
+        notifyItemRangeRemoved(start, end);
+        notifyItemChanged(multisIndex);
+    }
+
+    private void expandMultiredditItems() {
+        int position = items.size();
+        addAll(multiredditItems);
+        multiredditItemsVisible = true;
+
+        notifyItemRangeInserted(position, multiredditItems.size());
+        notifyItemChanged(position - 1);
     }
 
     @Override
@@ -304,7 +383,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 v.setOnClickListener(listener);
-                //v.setOnClickListener(new HeaderListener(activity));
                 viewHolder = new HeaderViewHolder(v);
                 break;
             case VIEW_TYPE_MENU_ITEM:
@@ -313,7 +391,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 v.setOnClickListener(listener);
-                //v.setOnClickListener(new MenuItemListener(activity));
                 viewHolder = new MenuRowViewHolder(v);
                 break;
             case VIEW_TYPE_SUBREDDITS:
@@ -328,7 +405,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 v.setOnClickListener(listener);
-                //v.setOnClickListener(new SubredditItemListener(activity));
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_ACCOUNT:
@@ -338,7 +414,18 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         .inflate(resource, parent, false);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
-                //v.setOnClickListener(new AccountListener(activity));
+                viewHolder = new SubredditRowViewHolder(v);
+                break;
+            case VIEW_TYPE_MULTIS:
+                resource = R.layout.drawer_multis;
+                v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+                viewHolder = new SubredditsViewHolder(v);
+                break;
+            case VIEW_TYPE_MULTIREDDIT_ITEM:
+                resource = R.layout.drawer_subreddit_row;
+                listener = new MultiredditItemListener(activity);
+                v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+                v.setOnClickListener(listener);
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             default:
@@ -373,20 +460,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         };
                         new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
                                 .setNegativeButton("No", null).show();
-                        //ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
-                        //dialog.show(activity.getFragmentManager(), "dialog");
                     }
                 });
-                //headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View v) {
-                //        MainActivity.nightThemeEnabled = !MainActivity.nightThemeEnabled;
-                //        SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                //        editor.putBoolean("nightTheme", MainActivity.nightThemeEnabled);
-                //        editor.apply();
-                //        restartApp();
-                //    }
-                //});
                 headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -404,30 +479,13 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         };
                         new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
                                 .setNegativeButton("No", null).show();
-                        //ConfirmationDialogFragment dialog = ConfirmationDialogFragment.newInstance(text, listener);
-                        //dialog.show(activity.getFragmentManager(), "dialog");
                     }
                 });
-                //headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View v) {
-                //        MainActivity.offlineModeEnabled = !MainActivity.offlineModeEnabled;
-                //        SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                //        editor.putBoolean("offlineMode", MainActivity.offlineModeEnabled);
-                //        editor.apply();
-                //        restartApp();
-                //    }
-                //});
-                //if(MainActivity.nightThemeEnabled) {
-                    headerViewHolder.themeSwitch.setImageResource(R.drawable.ic_action_theme_switch);
-                    if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
-                    else headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_online);
-                //}
-                //else {
-                //    headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_action_night_switch_grey);
-                //    if(MainActivity.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_offline_mode_grey);
-                //    else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_action_online_mode_grey);
-                //}
+                headerViewHolder.themeSwitch.setImageResource(R.drawable.ic_action_theme_switch);
+
+                if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
+                else headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_online);
+
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse_white);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand_white);
                 break;
@@ -463,7 +521,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                //NavDrawerSubreddits subreddits = (NavDrawerSubreddits) getItemAt(position);
                 if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse_grey);
                 else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand_grey);
                 SubredditsListener listener = new SubredditsListener(activity);
@@ -486,7 +543,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
-                    //subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                     if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
                     else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                 }
@@ -495,10 +551,21 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 SubredditRowViewHolder accountViewHolder = (SubredditRowViewHolder) viewHolder;
                 NavDrawerAccount account = (NavDrawerAccount) getItemAt(position);
                 accountViewHolder.name.setText(account.getName());
-                //if(account == accountItems.get(currentAccountName)) accountViewHolder.name.setTextColor(Color.parseColor("#C2C2FF"));
-                //else accountViewHolder.name.setTextColor(Color.WHITE);
                 if(currentAccountName.equals(account.getName())) accountViewHolder.name.setTextColor(Color.parseColor("#C2C2FF"));
                 else accountViewHolder.name.setTextColor(Color.WHITE);
+                break;
+            case VIEW_TYPE_MULTIS:
+                subredditsViewHolder = (SubredditsViewHolder) viewHolder;
+                if(multiredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse_grey);
+                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand_grey);
+                MultisListener multisListener = new MultisListener(activity);
+                subredditsViewHolder.layoutToggle.setOnClickListener(multisListener);
+                subredditsViewHolder.layoutEdit.setOnClickListener(multisListener);
+                break;
+            case VIEW_TYPE_MULTIREDDIT_ITEM:
+                subredditRowViewHolder = (SubredditRowViewHolder) viewHolder;
+                NavDrawerMutliredditItem multireddit = (NavDrawerMutliredditItem) getItemAt(position);
+                subredditRowViewHolder.name.setText(multireddit.getName());
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
