@@ -47,6 +47,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
+            Log.d("geotest", "retrieving from " + baseUrl + urlPath);
             //printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
@@ -104,6 +105,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setDoInput(true);
             connection.setChunkedStreamingMode(1000);
 
+            Log.d("geotest", "posting to " + baseUrl + urlPath);
             //printRequestProperties(connection);
 
             OutputStream outputStream = connection.getOutputStream();

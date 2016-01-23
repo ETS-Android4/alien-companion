@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -79,7 +80,7 @@ public class SubmitLinkFragment extends Fragment {
             else {
                 ToastUtils.displayShortToast(getActivity(), "Submitting..");
                 LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.submitLink, title, link, subreddit);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }
 

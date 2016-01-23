@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 import android.app.Fragment;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -83,7 +84,7 @@ public class ComposeMessageFragment extends Fragment {
                 //ToastUtils.displayShortToast(getActivity(), "message ready for delivery");
                 ToastUtils.displayShortToast(getActivity(), "Sending message...");
                 LoadUserActionTask task = new LoadUserActionTask(getActivity(), recipient, subject, message);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 //getActivity().finish();
             }

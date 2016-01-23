@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -124,7 +125,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 category = MessageCategory.INBOX;
                 sort = MessageCategorySort.ALL;
                 task = new LoadMessagesTask(activity, this, LoadType.init);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 setActionBarSubtitle();
                 mainProgressBar.setVisibility(View.GONE);
@@ -186,7 +187,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadMessagesTask(activity, this, LoadType.refresh);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void refreshList(MessageCategory category, MessageCategorySort sort) {
@@ -194,7 +195,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadMessagesTask(activity, this, LoadType.refresh, category, sort);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void redrawList() {

@@ -4,6 +4,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -155,7 +156,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if(submissionSort==null) submissionSort = SubmissionSort.HOT;
                 setActionBarSubtitle();
                 task = new LoadPostsTask(activity, this, LoadType.init);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 setActionBarSubtitle();
                 mainProgressBar.setVisibility(View.GONE);
@@ -430,7 +431,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadPostsTask(activity, this, LoadType.refresh);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void refreshList(SubmissionSort sort, TimeSpan time) {

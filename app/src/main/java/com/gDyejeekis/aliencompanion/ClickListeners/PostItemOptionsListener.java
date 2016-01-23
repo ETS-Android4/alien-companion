@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -86,7 +87,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     else recyclerAdapter.notifyDataSetChanged();
 
                     task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.execute();
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -107,7 +108,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     else recyclerAdapter.notifyDataSetChanged();
 
                     task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.execute();
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -145,7 +146,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     else recyclerAdapter.notifyDataSetChanged();
 
                     task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.execute();
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to hide");
                 break;
@@ -228,7 +229,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         if (recyclerAdapter instanceof RedditItemListAdapter)
                             ((RedditItemListAdapter) recyclerAdapter).remove(post);
                         LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
-                        task.execute();
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         return true;
                     case R.id.action_mark_nsfw:
                         UserActionType actionType;
@@ -242,7 +243,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         }
                         recyclerAdapter.notifyDataSetChanged();
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                        task.execute();
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         return true;
                     case R.id.action_copy_link:
                         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);

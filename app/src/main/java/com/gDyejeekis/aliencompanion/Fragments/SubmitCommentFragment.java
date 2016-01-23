@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.Fragments;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -94,7 +95,7 @@ public class SubmitCommentFragment extends Fragment {
 
             ToastUtils.displayShortToast(getActivity(), "Submitting..");
             LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, replyField.getText().toString());
-            task.execute();
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             //getActivity().finish();
         }

@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -173,7 +174,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if(userContent==null) userContent = UserSubmissionsCategory.OVERVIEW;
                 if(userOverviewSort==null) userOverviewSort = UserOverviewSort.NEW;
                 task = new LoadUserContentTask(activity, this, LoadType.init);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 setActionBarSubtitle();
                 progressBar.setVisibility(View.GONE);
@@ -219,7 +220,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadUserContentTask(activity, this, LoadType.refresh);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void refreshUser(UserSubmissionsCategory category, UserOverviewSort sort) {
@@ -227,7 +228,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadUserContentTask(activity, this, LoadType.refresh, category, sort);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void changeUser(String username) {
@@ -241,7 +242,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         contentView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         task = new LoadUserContentTask(activity, this, LoadType.init);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void redrawList() {

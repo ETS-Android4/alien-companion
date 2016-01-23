@@ -4,6 +4,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -267,7 +268,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 mRecyclerView.setAdapter(postAdapter);
 
                 task = new LoadCommentsTask(activity, this);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 mRecyclerView.setAdapter(postAdapter);
             }
@@ -322,7 +323,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
 
         setActionBarSubtitle();
         task = new LoadCommentsTask(activity, this);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void setCommentSort(CommentSort sort) {

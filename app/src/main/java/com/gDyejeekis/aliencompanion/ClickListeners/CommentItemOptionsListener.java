@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -73,7 +74,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     else recyclerAdapter.notifyDataSetChanged();
 
                     task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                    task.execute();
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -95,7 +96,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     else recyclerAdapter.notifyDataSetChanged();
 
                     task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                    task.execute();
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -130,7 +131,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     case R.id.action_delete:
                         if(recyclerAdapter instanceof RedditItemListAdapter) ((RedditItemListAdapter) recyclerAdapter).remove(comment);
                         LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), UserActionType.delete);
-                        task.execute();
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         return true;
                     case R.id.action_edit:
                         Intent intent = new Intent(context, SubmitActivity.class);
@@ -171,7 +172,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                             if(comment.isSaved()) actionType = UserActionType.unsave;
                             else actionType = UserActionType.save;
                             task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                            task.execute();
+                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                         else ToastUtils.displayShortToast(context, "Must be logged in to save");
                         return true;

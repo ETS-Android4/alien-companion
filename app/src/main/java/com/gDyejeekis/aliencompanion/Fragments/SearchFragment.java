@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -170,7 +171,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 if(searchSort==null) setSearchSort(SearchSort.RELEVANCE);
                 if(timeSpan == null) setTimeSpan(TimeSpan.ALL);
                 task = new LoadSearchTask(activity, this, LoadType.init);
-                task.execute();
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 setActionBarSubtitle();
                 mainProgressBar.setVisibility(View.GONE);
@@ -210,7 +211,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadSearchTask(activity, this, LoadType.refresh);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void refreshList(SearchSort sort, TimeSpan time) {
@@ -218,7 +219,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadSearchTask(activity, this, LoadType.refresh, sort, time);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void changeQuery(String newQuery) {
@@ -232,7 +233,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadSearchTask(activity, this, LoadType.init);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void redrawList() {
