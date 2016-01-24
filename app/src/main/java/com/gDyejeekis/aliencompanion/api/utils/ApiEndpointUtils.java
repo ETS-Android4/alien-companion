@@ -158,4 +158,15 @@ public class ApiEndpointUtils {
     
     public static final String LIVE_THREAD_UPDATE = REDDIT_BASE_API_ENDPOINT + "/live/%s/update";
 
+    /* Multireddit specific constants */
+
+    public static final String MULTIREDDITS_USER = REDDIT_BASE_API_ENDPOINT + "/multi/mine.json";
+
+    public static final String MULTIREDDIT_COPY = REDDIT_BASE_API_ENDPOINT + "/multi/copy";
+
+    public static final String MULTIREDDIT_RENAME = REDDIT_BASE_API_ENDPOINT + "/multi/rename";
+
+    public static final String MULTIREDDITS_USERNAME = REDDIT_BASE_API_ENDPOINT + "/multi/user/%s.json";
+
+    public static final String MULTIREDDIT_MODIFY = REDDIT_BASE_API_ENDPOINT + "/multi/%s";
 }
