@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +50,7 @@ public class BrowserFragment extends Fragment {
             //startActivity(intent);
             //return true;
             if(url.substring(0, 15).equals("redditoauthtest")) {
-                //Log.d("geotest", url);
+                Log.d("geotest", "redirect url: " + url);
                 MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
                 if(MainActivity.oauthCode != null) MainActivity.setupAccount = true;
                 activity.finish();

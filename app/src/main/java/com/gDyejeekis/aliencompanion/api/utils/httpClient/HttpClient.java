@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 
+import okhttp3.RequestBody;
+
 public interface HttpClient {
 
     /**
@@ -23,7 +25,7 @@ public interface HttpClient {
      *
      * @return <code>Response</code> an object conforming to the Response interface
      */
-    Response post(String baseUrl, String apiParams, String urlPath, String cookie);
+    Response post(String baseUrl, RequestBody body, String urlPath, String cookie);
 
 
     /**

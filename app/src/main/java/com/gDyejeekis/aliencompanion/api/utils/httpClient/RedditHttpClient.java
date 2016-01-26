@@ -23,6 +23,13 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import okhttp3.Credentials;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 /**
  * Created by George on 5/27/2015.
  */
@@ -30,7 +37,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/alien_companion)";
 
-    public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException {
+    public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException { //TODO: re-write with okhttp
         tokenCheck();
 
         HttpURLConnection connection = null;
@@ -47,10 +54,11 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
-            Log.d("geotest", "retrieving from " + baseUrl + urlPath);
+            Log.d("geotest", "GET request to  " + baseUrl + urlPath);
             //printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
+            //Log.d("geotest", "response code: " + connection.getResponseCode());
 
             String content = IOUtils.toString(inputStream, "UTF-8");
             IOUtils.closeQuietly(inputStream);
@@ -82,52 +90,107 @@ public class RedditHttpClient implements HttpClient, Serializable {
         return null;
     }
 
-    public Response post(String baseUrl, String apiParams, String urlPath, String cookie) {
+    //public Response post(String baseUrl, String apiParams, String urlPath, String cookie) {
+    //    tokenCheck();
+//
+    //    HttpURLConnection connection = null;
+    //    try {
+    //        URL url = new URL(baseUrl + urlPath);
+    //        connection = (HttpURLConnection) url.openConnection();
+    //        connection.setUseCaches(false);
+    //        connection.setRequestMethod("POST");
+    //        connection.setRequestProperty("User-Agent", userAgent);
+    //        //byte[] utf8Bytes = apiParams.getBytes("UTF-8");
+    //        //connection.setRequestProperty("Content-Length", String.valueOf(utf8Bytes.length));
+    //        if(RedditOAuth.useOAuth2 && cookie == null) {
+    //            if(MyApplication.currentAccessToken!=null) connection.setRequestProperty("Authorization", "bearer " + MyApplication.currentAccessToken);
+    //            else {
+    //                String userCredentials = RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET;
+    //                String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
+    //                connection.setRequestProperty("Authorization", basicAuth);
+    //            }
+    //        }
+    //        else connection.setRequestProperty("Cookie", "reddit_session="+cookie);
+    //        connection.setDoOutput(true);
+    //        connection.setDoInput(true);
+    //        connection.setChunkedStreamingMode(1000);
+//
+    //        Log.d("geotest", "POST request to  " + baseUrl + urlPath);
+    //        printRequestProperties(connection);
+//
+    //        OutputStream outputStream = connection.getOutputStream();
+    //        //Log.d("geotest", "response code: " + connection.getResponseCode());
+//
+    //        BufferedWriter writer = new BufferedWriter(
+    //                new OutputStreamWriter(outputStream, "UTF-8"));
+    //        writer.write(apiParams);
+//
+    //        writer.flush();
+    //        writer.close();
+    //        outputStream.close();
+//
+    //        InputStream inputStream = connection.getInputStream();
+//
+    //        String content = IOUtils.toString(inputStream, "UTF-8");
+    //        IOUtils.closeQuietly(inputStream);
+//
+    //        Log.d("inputstream object: ", content);
+    //        Object responseObject = new JSONParser().parse(content);
+//
+    //        Response result = new HttpResponse(content, responseObject, connection);
+//
+    //        printHeaderFields(connection);
+//
+    //        if (result.getResponseObject() == null) {
+    //            throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
+    //        } else {
+    //            return result;
+    //        }
+    //    } catch (IOException e) {
+    //        throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
+    //    } catch (ParseException e) {
+    //        throw new ActionFailedException("Failed to parse the response from POST request to URI path: " + baseUrl + urlPath);
+    //    } finally {
+    //        //if(outputStream != null) {
+    //        //    IOUtils.closeQuietly(outputStream);
+    //        //    IOUtils.closeQuietly(inputStream);
+    //        //}
+    //        if(connection != null) {
+    //            connection.disconnect();
+    //        }
+    //    }
+    //    //return null;
+    //}
+
+    public Response post(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
-
-        HttpURLConnection connection = null;
+        Log.d("geotest", "POST request to " + baseUrl + urlPath);
         try {
-            URL url = new URL(baseUrl + urlPath);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setUseCaches(false);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("User-Agent", userAgent);
-            if(RedditOAuth.useOAuth2 && cookie == null) {
-                if(MyApplication.currentAccessToken!=null) connection.setRequestProperty("Authorization", "bearer " + MyApplication.currentAccessToken);
-                else {
-                    String userCredentials = RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET;
-                    String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
-                    connection.setRequestProperty("Authorization", basicAuth);
+            OkHttpClient client = new OkHttpClient();
+            Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).post(body);
+            if (RedditOAuth.useOAuth2 && cookie == null) {
+                String authHeader;
+                if (MyApplication.currentAccessToken != null) {
+                    authHeader = "bearer " + MyApplication.currentAccessToken;
+                } else {
+                    authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
                 }
+                builder.addHeader("Authorization", authHeader);
+            } else {
+                builder.addHeader("Cookie", "reddit_session=" + cookie);
             }
-            else connection.setRequestProperty("Cookie", "reddit_session="+cookie);
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setChunkedStreamingMode(1000);
+            builder.addHeader("User-Agent", userAgent);
+            Request request = builder.build();
+            okhttp3.Response response = client.newCall(request).execute();
+            String content = response.body().string();
+            Log.d("geotest", "request body: " + request.body());
+            Log.d("geotest", "request headers: " + request.headers());
+            Log.d("geotest", "response code: " + response.code());
+            Log.d("geotest", "response headers: " + response.headers());
+            Log.d("geotest", "inputstream: " + content);
 
-            Log.d("geotest", "posting to " + baseUrl + urlPath);
-            //printRequestProperties(connection);
-
-            OutputStream outputStream = connection.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(outputStream, "UTF-8"));
-            writer.write(apiParams);
-
-            writer.flush();
-            writer.close();
-            outputStream.close();
-
-            InputStream inputStream = connection.getInputStream();
-
-            String content = IOUtils.toString(inputStream, "UTF-8");
-            IOUtils.closeQuietly(inputStream);
-
-            Log.d("inputstream object: ", content);
-            Object responseObject = new JSONParser().parse(content);
-
-            Response result = new HttpResponse(content, responseObject, connection);
-
-            //printHeaderFields(connection);
+            Object parsedObject = new JSONParser().parse(content);
+            Response result = new HttpResponse(content, parsedObject, null);
 
             if (result.getResponseObject() == null) {
                 throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
@@ -137,17 +200,8 @@ public class RedditHttpClient implements HttpClient, Serializable {
         } catch (IOException e) {
             throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
         } catch (ParseException e) {
-            throw new ActionFailedException("Failed to parse the response from GET request to URI path: " + baseUrl + urlPath);
-        } finally {
-            //if(outputStream != null) {
-            //    IOUtils.closeQuietly(outputStream);
-            //    IOUtils.closeQuietly(inputStream);
-            //}
-            if(connection != null) {
-                connection.disconnect();
-            }
+            throw new ActionFailedException("Failed to parse the response from POST request to URI path: " + baseUrl + urlPath);
         }
-        //return null;
     }
 
     public void setUserAgent(String agent) {

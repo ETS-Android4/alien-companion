@@ -124,16 +124,19 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     public void updateSubredditItems(List<String> subredditNames) {
         //subredditItems = new ArrayList<>();
         subredditItems.clear();
+        int index = -1;
         for(NavDrawerItem item : items) {
             if(item instanceof NavDrawerSubredditItem) subredditItems.add(item);
+            else if(item instanceof NavDrawerSubreddits) index = items.indexOf(item);
         }
         items.removeAll(subredditItems);
         subredditItems.clear();
+
         subredditItems.add(new NavDrawerSubredditItem());
         for(String name : subredditNames) {
             subredditItems.add(new NavDrawerSubredditItem(name));
         }
-        items.addAll(subredditItems);
+        addAll(index+1, subredditItems);
         notifyDataSetChanged();
     }
 

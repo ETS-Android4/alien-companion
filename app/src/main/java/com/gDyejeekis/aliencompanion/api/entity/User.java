@@ -16,6 +16,9 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.retrieval.Subreddits;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * This class represents a user connected to Reddit.
  *
@@ -126,8 +129,9 @@ public class User implements Serializable {
      */
     private ArrayList<String> hashCookiePair(String username, String password) throws IOException, ParseException {
         ArrayList<String> values = new ArrayList<String>();
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("user", username).add("passwd", password).build();
         JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "api_type=json&user=" + username + "&passwd=" + password, String.format(ApiEndpointUtils.USER_LOGIN, username), getCookie()).getResponseObject();
+                body, String.format(ApiEndpointUtils.USER_LOGIN, username), getCookie()).getResponseObject();
         JSONObject valuePair = (JSONObject) ((JSONObject) jsonObject.get("json")).get("data");
 
         values.add(valuePair.get("modhash").toString());

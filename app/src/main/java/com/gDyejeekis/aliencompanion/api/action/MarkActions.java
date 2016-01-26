@@ -8,6 +8,9 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONObject;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by George on 8/10/2015.
  */
@@ -53,8 +56,9 @@ public class MarkActions implements ActorDriven {
      */
     public boolean markNSFW(String fullName) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("id", fullName).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.SUBMISSION_MARK_AS_NSFW,
                 user.getCookie()
         ).getResponseObject();
@@ -71,8 +75,9 @@ public class MarkActions implements ActorDriven {
      */
     public boolean unmarkNSFW(String fullName) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("id", fullName).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.SUBMISSION_UNMARK_AS_NSFW,
                 user.getCookie()
         ).getResponseObject();
@@ -90,8 +95,9 @@ public class MarkActions implements ActorDriven {
      */
     public boolean save(String fullName, String category) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("category", category).add("id", fullName).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "category=" + category + "&id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.SAVE, user.getCookie()
         ).getResponseObject();
 
@@ -108,8 +114,9 @@ public class MarkActions implements ActorDriven {
      */
     public boolean report(String fullName, String reason) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("thing_id", fullName).add("reason", reason).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "thing_id=" + fullName + "&reason=" + reason + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.REPORT, user.getCookie()
         ).getResponseObject();
 
@@ -125,8 +132,9 @@ public class MarkActions implements ActorDriven {
      */
     public boolean save(String fullName) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("id", fullName)/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.SAVE,
                 user.getCookie()
         ).getResponseObject();
@@ -142,8 +150,10 @@ public class MarkActions implements ActorDriven {
      * @throws ActionFailedException If the action failed
      */
     public boolean unsave(String fullName) throws ActionFailedException {
+
+        RequestBody body = new FormBody.Builder().add("id", fullName)/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.UNSAVE,
                 user.getCookie()
         ).getResponseObject();
@@ -159,8 +169,9 @@ public class MarkActions implements ActorDriven {
      */
     public boolean hide(String fullName) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("id", fullName)/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.HIDE,
                 user.getCookie()
         ).getResponseObject();
@@ -176,8 +187,10 @@ public class MarkActions implements ActorDriven {
      * @throws ActionFailedException If the action failed
      */
     public boolean unhide(String fullName) throws ActionFailedException {
+
+        RequestBody body = new FormBody.Builder().add("id", fullName)/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.UNHIDE,
                 user.getCookie()
         ).getResponseObject();
@@ -197,10 +210,9 @@ public class MarkActions implements ActorDriven {
             throw new IllegalArgumentException("Vote direction needs to be -1 or 1.");
         }
 
+        RequestBody body = new FormBody.Builder().add("id", fullName).add("dir", String.valueOf(dir))/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" 		+ fullName +
-                        "&dir=" 	+ dir +
-                        "&uh=" 		+ user.getModhash(),
+                body,
                 ApiEndpointUtils.VOTE,
                 user.getCookie()
         ).getResponseObject();

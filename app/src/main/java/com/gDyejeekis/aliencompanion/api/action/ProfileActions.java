@@ -14,6 +14,9 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.Response;
 
 import org.json.simple.JSONObject;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by George on 8/10/2015.
  */
@@ -101,15 +104,22 @@ public class ProfileActions implements ActorDriven {
     public Response update(String currentPassword, String email, String newPassword) throws ActionFailedException {
 
         // Format parameters
-        String params =
-                "api_type=json"
-                        + "&curpass=" + currentPassword +
-                        "&dest=http://reddit.com/" + (!email.equals("") ? "&email=" + email : "") +
-                        (!newPassword.equals("") ? "&newpass=" + newPassword + "&verpass=" + newPassword : "")
-                        + "&uh=" + user.getModhash();
+        //String params =
+        //        "api_type=json"
+        //                + "&curpass=" + currentPassword +
+        //                "&dest=http://reddit.com/" + (!email.equals("") ? "&email=" + email : "") +
+        //                (!newPassword.equals("") ? "&newpass=" + newPassword + "&verpass=" + newPassword : "")
+        //                + "&uh=" + user.getModhash();
+        FormBody.Builder builder = new FormBody.Builder().add("api_type", "json").add("curpass", currentPassword).add("dest", "http://reddit.com/");
+        if(!email.equals("")) builder.add("email", email);
+        if(!newPassword.equals("")) {
+            builder.add("newpass", newPassword);
+            builder.add("verpass", newPassword);
+        }
+        RequestBody body = builder.build();
 
         // Post request
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_UPDATE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_UPDATE, user.getCookie());
 
     }
 
@@ -174,28 +184,32 @@ public class ProfileActions implements ActorDriven {
     public Response delete(Boolean confirm, String message, String password) throws ActionFailedException {
 
         // Format parameters
-        String params =
-                "api_type=json"
-                        + "&confirm=" + confirm +
-                        "&delete_message=" + message
-                        + "&passwd=" + password
-                        + "&uh=" + user.getModhash()
-                        + "&user=" + user.getUsername();
+        //String params =
+        //        "api_type=json"
+        //                + "&confirm=" + confirm +
+        //                "&delete_message=" + message
+        //                + "&passwd=" + password
+        //                + "&uh=" + user.getModhash()
+        //                + "&user=" + user.getUsername();
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("confirm", String.valueOf(confirm)).add("delete_message", message).add("passwd", password)
+                /*.add("uh", user.getModhash())*/.add("user", user.getUsername()).build();
 
         // Post request
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_DELETE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_DELETE, user.getCookie());
     }
 
     public Response subscribe(String subreddit) throws ActionFailedException {
-        String params = "action=sub&sr=" + subreddit + "&uh=" + user.getModhash();
+        //String params = "action=sub&sr=" + subreddit + "&uh=" + user.getModhash();
+        RequestBody body = new FormBody.Builder().add("action", "sub").add("sr", subreddit)/*.add("uh", user.getModhash())*/.build();
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
     public Response unsubscribe(String subreddit) throws ActionFailedException {
-        String params = "action=unsub&sr=" + subreddit + "&uh=" + user.getModhash();
+        //String params = "action=unsub&sr=" + subreddit + "&uh=" + user.getModhash();
+        RequestBody body = new FormBody.Builder().add("action", "unsub").add("sr", subreddit)/*.add("uh", user.getModhash())*/.build();
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
     /**
@@ -212,19 +226,21 @@ public class ProfileActions implements ActorDriven {
     public Response register(String username, String email, String newPassword, String copyPassword, String captcha_iden, String captcha_sol) throws ActionFailedException {
 
         // Format parameters
-        String params =
-                "api_type=json"
-                        + "&captcha=" + captcha_sol
-                        +"&email=" + email
-                        + "&iden=" + captcha_iden
-                        + "&passwd=" + newPassword
-                        + "&passwd2=" + copyPassword
-                        + "&user=" + username;
+        //String params =
+        //        "api_type=json"
+        //                + "&captcha=" + captcha_sol
+        //                +"&email=" + email
+        //                + "&iden=" + captcha_iden
+        //                + "&passwd=" + newPassword
+        //                + "&passwd2=" + copyPassword
+        //                + "&user=" + username;
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("captcha", captcha_sol).add("email", email).add("iden", captcha_iden).add("passwd", newPassword)
+                .add("passwd2", copyPassword).add("user", username).build();
 
         // Post request
 
 
-        Response result = httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, ApiEndpointUtils.USER_REGISTER, "");//no user, no cookie
+        Response result = httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_REGISTER, "");//no user, no cookie
         JSONObject object = (JSONObject) result.getResponseObject();
 
 

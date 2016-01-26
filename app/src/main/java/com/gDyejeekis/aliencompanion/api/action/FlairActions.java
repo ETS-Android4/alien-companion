@@ -5,6 +5,9 @@ import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.Response;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by George on 8/10/2015.
  */
@@ -69,13 +72,14 @@ public class FlairActions {
      */
     public Response deleteFlair(String username, String subreddit) {
         //Format the required parameters
-        String params = ""
-                + "api_type=json"
-                + "&uh=" + user.getModhash()
-                + "&name=" + username;
+        //String params = ""
+        //        + "api_type=json"
+        //        + "&uh=" + user.getModhash()
+        //        + "&name=" + username;
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("uh", user.getModhash()).add("name", username).build();
 
         //Then run the post request.
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.USER_DELETE_SUBREDDIT_FLAIR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, String.format(ApiEndpointUtils.USER_DELETE_SUBREDDIT_FLAIR, subreddit), user.getCookie());
     }
 
     /**
@@ -124,13 +128,14 @@ public class FlairActions {
             return response;
         }
         //Format the required parameters
-        String params = ""
-                + "api_type=json"
-                + "&uh=" + user.getModhash()
-                + "&flair_type=" + type;
+        //String params = ""
+        //        + "api_type=json"
+        //        + "&uh=" + user.getModhash()
+        //        + "&flair_type=" + type;
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("uh", user.getModhash()).add("flair_type", type).build();
 
         //Run the post requests.
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.CLEAR_SUBREDDIT_FLAIR_TEMPLATES, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, String.format(ApiEndpointUtils.CLEAR_SUBREDDIT_FLAIR_TEMPLATES, subreddit), user.getCookie());
     }
 
     /**
@@ -164,13 +169,14 @@ public class FlairActions {
     @Deprecated
     private Response deleteFlairTemplate(String flairTemplateID, String subreddit) {
         //Format the required parameters
-        String params = ""
-                + "api_type=json"
-                + "&uh=" + user.getModhash()
-                + "&flair_template_id=" + flairTemplateID;
+        //String params = ""
+        //        + "api_type=json"
+        //        + "&uh=" + user.getModhash()
+        //        + "&flair_template_id=" + flairTemplateID;
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("uh", user.getModhash()).add("flair_template_id", flairTemplateID).build();
 
         //Run the post requests.
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.DELETE_SUBREDDIT_FLAIR_TEMPLATE, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, String.format(ApiEndpointUtils.DELETE_SUBREDDIT_FLAIR_TEMPLATE, subreddit), user.getCookie());
     }
 
     /**
@@ -238,15 +244,20 @@ public class FlairActions {
             text = text.substring(0, 64);
         }
 
-        String params = ""
-                + "api_type=json"
-                + "&uh=" + user.getModhash()
-                + (cssClass != null ? "&css_class=" + cssClass : "")
-                + (link != null ? "&link=" + link : "")
-                + (name != null ? "&name=" + name : "")
-                + "&text=" + text;
+        //String params = ""
+        //        + "api_type=json"
+        //        + "&uh=" + user.getModhash()
+        //        + (cssClass != null ? "&css_class=" + cssClass : "")
+        //        + (link != null ? "&link=" + link : "")
+        //        + (name != null ? "&name=" + name : "")
+        //        + "&text=" + text;
+        FormBody.Builder builder = new FormBody.Builder().add("api_type", "json").add("uh", user.getModhash()).add("text", text);
+        if(cssClass!=null) builder.add("css_class", cssClass);
+        if(link!=null) builder.add("link", link);
+        if(name!=null) builder.add("name", name);
+        RequestBody body = builder.build();
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, String.format(ApiEndpointUtils.FLAIR, subreddit), user.getCookie());
     }
 
     /**
@@ -314,16 +325,19 @@ public class FlairActions {
             };
             return response;
         }
-        String params = ""
-                + "api_type=json"
-                + "&uh=" + user.getModhash()
-                + "&flair_enabled=" + flairEnabled
-                + "&flair_position=" + flairPosition
-                + "&flair_self_assign_enabled=" + flairSelfAssignEnabled
-                + "&link_flair_position=" + linkFlairPosition
-                + "&link_flair_self_assign_enabled=" + linkFlairSelfAssignEnabled;
+        //String params = ""
+        //        + "api_type=json"
+        //        + "&uh=" + user.getModhash()
+        //        + "&flair_enabled=" + flairEnabled
+        //        + "&flair_position=" + flairPosition
+        //        + "&flair_self_assign_enabled=" + flairSelfAssignEnabled
+        //        + "&link_flair_position=" + linkFlairPosition
+        //        + "&link_flair_self_assign_enabled=" + linkFlairSelfAssignEnabled;
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("uh", user.getModhash()).add("flair_enabled", String.valueOf(flairEnabled)).add("flair_position", flairPosition)
+                .add("flair_self_assign_enabled", String.valueOf(flairSelfAssignEnabled)).add("link_flair_position", linkFlairPosition)
+                .add("link_flair_self_assign_enabled", String.valueOf(linkFlairSelfAssignEnabled)).build();
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_CONFIG, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, String.format(ApiEndpointUtils.FLAIR_CONFIG, subreddit), user.getCookie());
     }
 
     /**
@@ -484,8 +498,12 @@ public class FlairActions {
                 + "&uh=" + user.getModhash()
                 + (link != null ? "&link=" + link : "")
                 + (username != null ? "&name=" + username : "");
+        FormBody.Builder builder = new FormBody.Builder().add("api_type", "json").add("uh", user.getModhash());
+        if(link!=null) builder.add("link", link);
+        if(username!=null) builder.add("name", username);
+        RequestBody body = builder.build();
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_SELECTOR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, String.format(ApiEndpointUtils.FLAIR_SELECTOR, subreddit), user.getCookie());
     }
 
     /**
@@ -559,6 +577,7 @@ public class FlairActions {
             System.err.println("The given flair is too long (" + text.length() + "/64) Flair has been cut to " + text.substring(0, 64));
             text = text.substring(0, 64);
         }
+        //TODO: change params to RequestBody
         String params = ""
                 + "api_type=json"
                 + "&uh=" + user.getModhash()
@@ -568,7 +587,7 @@ public class FlairActions {
                 + "&text=" + text
                 + "&text_editable=" + textEditable;
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_TEMPLATE, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, String.format(ApiEndpointUtils.FLAIR_TEMPLATE, subreddit), user.getCookie());
     }
 
     /**
@@ -621,6 +640,7 @@ public class FlairActions {
             System.err.println("The given flair is too long (" + text.length() + "/64) Flair has been cut to " + text.substring(0, 64));
             text = text.substring(0, 64);
         }
+        //TODO: change params to RequestBody
         String params = ""
                 + "api_type=json"
                 + "&uh=" + user.getModhash()
@@ -629,7 +649,7 @@ public class FlairActions {
                 + "&name=" + username
                 + "&text=" + text;
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.SELECT_FLAIR, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, String.format(ApiEndpointUtils.SELECT_FLAIR, subreddit), user.getCookie());
     }
 
     /**
@@ -658,12 +678,13 @@ public class FlairActions {
      * @return Response The response of the request
      */
     public Response setFlairEnabled(boolean flairEnabled, String subreddit) {
+        //TODO: change params to RequestBody
         String params = ""
                 + "api_type=json"
                 + "&uh=" + user.getModhash()
                 + "&flair_enabled=" + flairEnabled;
 
-        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params, String.format(ApiEndpointUtils.FLAIR_ENABLED, subreddit), user.getCookie());
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, String.format(ApiEndpointUtils.FLAIR_ENABLED, subreddit), user.getCookie());
     }
 
 }

@@ -1,7 +1,11 @@
 package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 
+import android.util.Log;
+
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+
+import okhttp3.RequestBody;
 
 /**
  * Created by sound on 11/10/2015.
@@ -30,16 +34,16 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
     //    super(httpClient, responseHandler);
     //}
 
-    public Response get(String urlPath, String cookie) {
+    public Response get(String baseUrl, String urlPath, String cookie) {
         waitIfNeeded();
-        Response resp = super.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, urlPath, cookie);
+        Response resp = super.get(baseUrl, urlPath, cookie);
         noteTime();
         return resp;
     }
 
-    public Response post(String apiParams, String urlPath, String cookie) {
+    public Response post(String baseUrl, RequestBody apiParams, String urlPath, String cookie) {
         waitIfNeeded();
-        Response resp = super.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, apiParams, urlPath, cookie);
+        Response resp = super.post(baseUrl, apiParams, urlPath, cookie);
         noteTime();
         return resp;
     }
@@ -60,6 +64,7 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
 
         long toWait = WAIT_TIME - elapsed;
         try {
+            //Log.d("Polite http requests", "waiting for " + toWait);
             Thread.sleep(toWait);
         } catch (InterruptedException e) {
             e.printStackTrace();

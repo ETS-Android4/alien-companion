@@ -14,6 +14,9 @@ import org.json.simple.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by sound on 10/22/2015.
  */
@@ -37,7 +40,7 @@ public class RedditOAuth {
     public static final String OAUTH_TOKEN_URL = "/api/v1/access_token";
 
     // I think it is easier to create 2 reddit apps (one with 127.0.0.1 redirect URI)
-    public static final String MY_APP_ID = production ? "lcU1R9fVYfdiMA" : "lcU1R9fVYfdiMA";
+    public static final String MY_APP_ID = production ? "u4geEADEYRqWUw" : "u4geEADEYRqWUw";
     public static final String MY_APP_SECRET = production ? "" : ""; //installed apps can't keep a secret
 
     public static final boolean USE_IMPLICIT_GRANT_FLOW = false;
@@ -116,21 +119,24 @@ public class RedditOAuth {
         if(matcher.find()) {
             code = matcher.group(1);
         }
-        //Log.d("geotest", "code: " + code);
+        Log.d("geotest", "auth code: " + code);
 
         return code;
     }
 
     public static OAuthToken getOAuthToken(HttpClient httpClient, String oauthCode) {
         Log.d("geotest", "retrieving account token..");
-        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=authorization_code&code=" + oauthCode +"&redirect_uri="
-                + REDIRECT_URI, OAUTH_TOKEN_URL, null).getResponseObject();
+        RequestBody body = new FormBody.Builder().add("grant_type", "authorization_code").add("code", oauthCode).add("redirect_uri", REDIRECT_URI).build();
+        //JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=authorization_code&code=" + oauthCode +"&redirect_uri="
+        //        + REDIRECT_URI, OAUTH_TOKEN_URL, null).getResponseObject();
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, body, OAUTH_TOKEN_URL, null).getResponseObject();
         return new OAuthToken(jsonObject, true);
     }
 
     public static void refreshToken(HttpClient httpClient, OAuthToken token) {
         Log.d("geotest", "refreshing token..");
-        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=refresh_token&refresh_token=" + token.refreshToken, OAUTH_TOKEN_URL,
+        RequestBody body = new FormBody.Builder().add("grant_type", "refresh_token").add("refresh_token", token.refreshToken).build();
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, body, OAUTH_TOKEN_URL,
                 null).getResponseObject();
         OAuthToken refreshedToken = new OAuthToken(jsonObject, false);
         token.accessToken = refreshedToken.accessToken;
@@ -145,8 +151,8 @@ public class RedditOAuth {
     public static OAuthToken getApplicationToken(HttpClient httpClient) {
         Log.d("geotest", "retrieving application token..");
         //Log.d("geotest", "post data: " + "grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MyApplication.deviceID);
-        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=https://oauth.reddit.com/grants/installed_client&device_id="
-                + MyApplication.deviceID, OAUTH_TOKEN_URL, null).getResponseObject();
+        RequestBody body = new FormBody.Builder().add("grant_type", "https://oauth.reddit.com/grants/installed_client").add("device_id", MyApplication.deviceID).build();
+        JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, body, OAUTH_TOKEN_URL, null).getResponseObject();
         return new OAuthToken(jsonObject, false);
     }
 

@@ -8,6 +8,9 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONObject;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * Created by George on 8/10/2015.
  */
@@ -54,8 +57,9 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean delete(String fullName) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("id", fullName).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "id=" + fullName + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.DELETE, user.getCookie()
         ).getResponseObject();
 
@@ -71,8 +75,9 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean comment(String fullname, String text) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "thing_id=" + fullname + "&text=" + text + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.COMMENT,
                 user.getCookie()
         ).getResponseObject();
@@ -98,8 +103,9 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean createLive(String title, String description) {
 
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("title", title).add("description", description).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "api_type=json&title=" + title + "&description=" + description + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.LIVE_THREAD_CREATE,
                 user.getCookie()
         ).getResponseObject();
@@ -120,8 +126,9 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean updateLive(String liveThread, String message) {
 
+        RequestBody body = new FormBody.Builder().add("json_type", "json").add("body", message).add("uh", user.getModhash()).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "api_type=json&body=" + message + "&uh=" + user.getModhash(),
+                body,
                 String.format(ApiEndpointUtils.LIVE_THREAD_UPDATE, liveThread),
                 user.getCookie()
         ).getResponseObject();
@@ -179,17 +186,19 @@ public class SubmitActions implements ActorDriven {
     private boolean submit(String title, String linkOrText, boolean selfPost, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
 
         // Parameters
-        String params =
-                "title=" 							+ title 							+
-                        (selfPost ? "&text=" : "&url=") 	+ linkOrText 						+
-                        "&sr=" 								+ subreddit 						+
-                        "&kind=" 							+ (selfPost ? "self" : "link") 		+
-                        "&uh=" 								+ user.getModhash() 				+
-                        "&iden=" 							+ captcha_iden						+
-                        "&Captcha=" 						+ captcha_sol;
+        //String params =
+        //        "title=" 							+ title 							+
+        //                (selfPost ? "&text=" : "&url=") 	+ linkOrText 						+
+        //                "&sr=" 								+ subreddit 						+
+        //                "&kind=" 							+ (selfPost ? "self" : "link") 		+
+        //                "&uh=" 								+ user.getModhash() 				+
+        //                "&iden=" 							+ captcha_iden						+
+        //                "&Captcha=" 						+ captcha_sol;
+        RequestBody body = new FormBody.Builder().add("title", title).add((selfPost ? "text" : "url"), linkOrText).add("sr", subreddit).add("kind", (selfPost ? "self" : "link"))
+                /*.add("uh", user.getModhash())*/.add("iden", captcha_iden).add("Captcha", captcha_sol).build();
 
         // Make the request
-        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, params,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
 
         String responseAsString = object.toJSONString();
 
@@ -235,8 +244,9 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean editUserText(String fullname, String text) throws ActionFailedException {
 
+        RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text)/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-                "thing_id=" + fullname + "&text=" + text + "&uh=" + user.getModhash(),
+                body,
                 ApiEndpointUtils.EDITUSERTEXT,
                 user.getCookie()
         ).getResponseObject();
@@ -263,8 +273,10 @@ public class SubmitActions implements ActorDriven {
     }
 
     public boolean compose(String recipient, String subject, String message, String iden, String captcha) throws ActionFailedException {
-        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, "api_type=json&to=" + recipient + "&subject=" + subject + "&text=" + message + "&iden=" + iden + "&captcha=" + captcha
-        + "&uh=" + user.getModhash(), ApiEndpointUtils.MESSAGE_COMPOSE, user.getCookie()).getResponseObject();
+
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("to", recipient).add("subject", subject).add("text", message).add("iden", iden)
+                .add("captcha", captcha)/*.add("uh", user.getModhash())*/.build();
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.MESSAGE_COMPOSE, user.getCookie()).getResponseObject();
 
         String responseAsString = object.toJSONString();
 

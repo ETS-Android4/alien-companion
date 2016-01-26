@@ -155,7 +155,9 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         if(exception != null || account == null) {
             ToastUtils.displayShortToast(context, "Failed to verify account");
             MyApplication.renewingToken = false;
-            MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
+            try {
+                MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
+            } catch (NullPointerException e) {}
         }
         else {
             //ToastUtils.displayShortToast(context, "Logged in as " + username);
