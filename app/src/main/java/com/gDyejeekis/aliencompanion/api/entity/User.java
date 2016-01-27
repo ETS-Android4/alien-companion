@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
+import android.os.SystemClock;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.gDyejeekis.aliencompanion.api.retrieval.Multireddits;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.retrieval.Subreddits;
@@ -156,6 +159,24 @@ public class User implements Serializable {
         Subreddits sub = new Subreddits(httpClient, this);
 
         return sub.parse(ApiEndpointUtils.USER_GET_SUBSCRIBED + (limit == 0 ? "?&limit=100" : "?&limit=" + limit));
+    }
+
+    /**
+     * This function returns all the multireddits belonging to the user.
+     * @param expand_srs true for detailed info for each subreddit, false for subreddit name only
+     * @return A list of multireddit objects
+     * @throws RetrievalFailedException if retrieval of multireddits fails
+     * @throws RedditError
+     */
+
+    public List<Multireddit> getMultis(boolean expand_srs) {
+        if(tokenObject == null) {
+            System.err.printf("Please invoke the connect method in order to login the user");
+            return null;
+        }
+
+        Multireddits mult = new Multireddits(httpClient, this);
+        return mult.parse(ApiEndpointUtils.MULTIREDDITS_USER + "?expand_srs=" + expand_srs);
     }
 
     /**

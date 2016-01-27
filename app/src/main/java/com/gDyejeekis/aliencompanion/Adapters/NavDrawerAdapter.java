@@ -122,7 +122,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void updateSubredditItems(List<String> subredditNames) {
-        //subredditItems = new ArrayList<>();
+        subredditItemsVisible = true;
         subredditItems.clear();
         int index = -1;
         for(NavDrawerItem item : items) {
@@ -136,7 +136,25 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         for(String name : subredditNames) {
             subredditItems.add(new NavDrawerSubredditItem(name));
         }
-        addAll(index+1, subredditItems);
+        addAll(index + 1, subredditItems);
+        notifyDataSetChanged();
+    }
+
+    public void updateMultiredditItems(List<String> multiNames) {
+        multiredditItemsVisible = true;
+        multiredditItems.clear();
+        for(NavDrawerItem item : items) {
+            if(item instanceof NavDrawerMutliredditItem) {
+                multiredditItems.add(item);
+            }
+        }
+        items.removeAll(multiredditItems);
+        multiredditItems.clear();
+
+        for(String name : multiNames) {
+            multiredditItems.add(new NavDrawerMutliredditItem(name));
+        }
+        addAll(multiredditItems);
         notifyDataSetChanged();
     }
 

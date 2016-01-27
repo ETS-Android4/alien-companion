@@ -17,6 +17,7 @@ public class SavedAccount implements Serializable {
     private String cookie;
     private OAuthToken token;
     private List<String> subreddits;
+    private List<String> multireddits;
     public boolean loggedIn;
     public boolean oauth2;
 
@@ -25,6 +26,7 @@ public class SavedAccount implements Serializable {
         this.modhash = modhash;
         this.cookie = cookie;
         this.subreddits = subreddits;
+        this.multireddits = new ArrayList<>();
         loggedIn = true;
         oauth2 = false;
     }
@@ -34,6 +36,7 @@ public class SavedAccount implements Serializable {
         this.modhash = user.getModhash();
         this.cookie = user.getCookie();
         this.subreddits = subreddits;
+        this.multireddits = new ArrayList<>();
         loggedIn = true;
         oauth2 = false;
     }
@@ -42,6 +45,16 @@ public class SavedAccount implements Serializable {
         this.username = username;
         this.token = token;
         this.subreddits = subreddits;
+        this.multireddits = new ArrayList<>();
+        loggedIn = true;
+        oauth2 = true;
+    }
+
+    public SavedAccount(String username, OAuthToken token, List<String> subreddits, List<String> multireddits) {
+        this.username = username;
+        this.token = token;
+        this.subreddits = subreddits;
+        this.multireddits = multireddits;
         loggedIn = true;
         oauth2 = true;
     }
@@ -49,6 +62,7 @@ public class SavedAccount implements Serializable {
     public SavedAccount(List<String> subreddits) {
         this.username = "Logged out";
         this.subreddits = subreddits;
+        this.multireddits = new ArrayList<>();
         loggedIn = false;
         oauth2 = false;
     }
@@ -91,6 +105,14 @@ public class SavedAccount implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public List<String> getMultireddits() {
+        return multireddits;
+    }
+
+    public void setMultireddits(List<String> multireddits) {
+        this.multireddits = multireddits;
     }
 
 }

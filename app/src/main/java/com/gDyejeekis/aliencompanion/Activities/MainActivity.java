@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             adapter.hideUserMenuItems();
         }
         adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
+        adapter.updateMultiredditItems(MyApplication.currentAccount.getMultireddits());
         //homePage();
         try {
             listFragment.changeSubreddit(listFragment.subreddit);
@@ -226,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        //TODO: check and apply multireddit list changes
 
         if(MyApplication.currentOrientation != MyApplication.screenOrientation) setOrientation();
 
@@ -428,16 +431,16 @@ public class MainActivity extends AppCompatActivity {
         adapter.addAll(getMenuItems());
         adapter.add(new NavDrawerSubreddits());
         adapter.addAll(getDefaultSubredditItems());
+        adapter.add(new NavDrawerMultis());
 
         drawerContent.setAdapter(adapter);
 
         adapter.importAccounts();
 
-        adapter.add(new NavDrawerMultis());
-        adapter.add(new NavDrawerMutliredditItem("multi 1"));
-        adapter.add(new NavDrawerMutliredditItem("multi 2"));
-        adapter.add(new NavDrawerMutliredditItem("multi 3"));
-        adapter.add(new NavDrawerMutliredditItem("multi 4"));
+        //adapter.add(new NavDrawerMutliredditItem("multi 1"));
+        //adapter.add(new NavDrawerMutliredditItem("multi 2"));
+        //adapter.add(new NavDrawerMutliredditItem("multi 3"));
+        //adapter.add(new NavDrawerMutliredditItem("multi 4"));
     }
 
     private List<NavDrawerItem> getMenuItems() {

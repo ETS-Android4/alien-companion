@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
@@ -11,6 +12,7 @@ import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.action.ProfileActions;
+import com.gDyejeekis.aliencompanion.api.entity.Multireddit;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.api.entity.User;
@@ -22,6 +24,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileInputStream;
@@ -100,11 +103,27 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 subredditNames.add(subreddit.getDisplayName());
             }
         } catch (RetrievalFailedException | NullPointerException | RedditError e) {
+            Log.e("Api error", "Error retrieving user subreddits");
             e.printStackTrace();
-            //Collections.addAll(subredditNames, RedditConstants.defaultSubscribed);
         }
 
         return subredditNames;
+    }
+
+    private List<String> getUserMultis(User user) { //only run on backround thread
+        List<String> multiNames = new ArrayList<>();
+
+        try {
+            List<Multireddit> multireddits = user.getMultis(false);
+            for (Multireddit multireddit : multireddits) {
+                multiNames.add(multireddit.getDisplayName());
+            }
+        } catch (RetrievalFailedException | NullPointerException | RedditError e) {
+            Log.e("Api error", "Error retrieving user multis");
+            e.printStackTrace();
+        }
+
+        return multiNames;
     }
 
     @Override
@@ -120,8 +139,9 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 UserInfo userInfo = profileActions.getUserInformation();
                 User user = new User(httpClient, userInfo.getName(), token);
                 List<String> subredditList = getUserSubreddits(user);
+                List<String> multiList = getUserMultis(user);
 
-                newAccount = new SavedAccount(user.getUsername(), token, subredditList);
+                newAccount = new SavedAccount(user.getUsername(), token, subredditList, multiList);
             }
             else {
                 User user = new User(httpClient, username, password);
