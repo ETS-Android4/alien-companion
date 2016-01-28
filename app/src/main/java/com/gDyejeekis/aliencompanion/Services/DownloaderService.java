@@ -23,8 +23,10 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -61,9 +63,10 @@ public class DownloaderService extends IntentService {
         //Log.d("geo test", "downloading posts...");
         progress = 0;
         String subreddit = i.getStringExtra("subreddit");
-        String filename = (subreddit!=null) ? subreddit.toLowerCase() : "frontpage";
-        //if (subreddit != null) filename = subreddit.toLowerCase();
-        //else filename = "frontpage";
+        boolean isMulti = i.getBooleanExtra("isMulti", false);
+        String filename = "";
+        if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
+        filename = filename + ((subreddit!=null) ? subreddit.toLowerCase() : "frontpage");
 
         NotificationCompat.Builder builder =new NotificationCompat.Builder(this);
         startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
@@ -72,17 +75,17 @@ public class DownloaderService extends IntentService {
         TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
         assert submissionSort!=null && timeSpan!=null;
 
-        //HttpClient httpClient = new RedditHttpClient();
-
         Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
         Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
-        List<RedditItem> posts = null;
+        List<RedditItem> posts;
 
         try {
             if (subreddit == null)
                 posts = submissions.frontpage(submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
-            else
-                posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
+            else {
+                if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
+                else posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
+            }
 
             if(posts!=null) {
                 deletePreviousComments(filename);
@@ -92,7 +95,7 @@ public class DownloaderService extends IntentService {
                     Submission submission = (Submission) post;
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
-                    writePostToFile(submission, filename + submission.getIdentifier()); //TODO: change filename to exclude subreddit and change deletePreviousComments method
+                    writePostToFile(submission, submission.getIdentifier()); //TODO: change filename to exclude subreddit and change deletePreviousComments method
                 }
             }
 
@@ -125,6 +128,10 @@ public class DownloaderService extends IntentService {
 
     private void writePostsToFile(List<RedditItem> posts, String filename) {
         try {
+            Log.d("Geo test", "writing posts to " + filename);
+            //File dir = new File(getFilesDir(), filename + "_posts");
+            //dir.mkdirs();
+
             FileOutputStream fos;
             ObjectOutputStream oos;
             fos = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -140,6 +147,8 @@ public class DownloaderService extends IntentService {
     private void writePostToFile(Submission post, String filename) {
         try {
             Log.d("Geo test", "writing comments to " + filename);
+            //File path = new File(directoryName, filename);
+
             FileOutputStream fos;
             ObjectOutputStream oos;
             fos = openFileOutput(filename, Context.MODE_PRIVATE);
@@ -168,7 +177,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadaImage(Submission post) {
+    private void downloadImage(Submission post) {
         String domain = post.getDomain();
         String url = post.getURL();
         if(domain.contains("imgur.com")) {

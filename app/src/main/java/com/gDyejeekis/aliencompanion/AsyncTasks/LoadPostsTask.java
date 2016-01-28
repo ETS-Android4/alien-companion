@@ -80,31 +80,35 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
-        //SystemClock.sleep(5000);
         try {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
-                String filename;
+                String filename = "";
                 if(plf.subreddit == null) filename = "frontpage";
-                else filename = plf.subreddit.toLowerCase();
+                else {
+                    if(plf.isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
+                    filename = filename + plf.subreddit.toLowerCase();
+                }
                 submissions = readPostsFromFile(filename);
-                if(submissions!=null) adapter = new RedditItemListAdapter(context, submissions);//plf.postListAdapter = new RedditItemListAdapter(context, submissions);
+                if(submissions!=null) adapter = new RedditItemListAdapter(context, submissions);
             }
             else {
                 Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
 
-                if (loadType == LoadType.extend) {
+                if (loadType == LoadType.extend) { //extend case
                     if (plf.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     } else {
-                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     }
                     adapter = plf.postListAdapter;
-                } else {
+                } else { //init or refresh case
                     if (plf.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     } else {
-                        submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
+                        if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
+                        else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     }
                     adapter = new RedditItemListAdapter(context, submissions);
                 }

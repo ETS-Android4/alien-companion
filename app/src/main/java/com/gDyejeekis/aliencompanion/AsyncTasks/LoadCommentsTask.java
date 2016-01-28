@@ -61,18 +61,18 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         try {
             List<Comment> comments;
             if(MyApplication.offlineModeEnabled) {
-                String postId = postFragment.post.getIdentifier();
-                String filename = postFragment.post.getSubreddit().toLowerCase() + postId;
-                comments = readCommentsFromFile(filename); //TODO: in case of duplicate posts load the latest synced
+                //String postId = postFragment.post.getIdentifier();
+                //String filename = /*postFragment.post.getSubreddit().toLowerCase() + */postId;
+                comments = readCommentsFromFile(postFragment.post.getIdentifier()); //TODO: in case of duplicate posts load the latest synced
 
-                String temp;
-                for(int i=0; i<2;i++) {
-                    if (exception != null) {
-                        temp = (i==0) ? "frontpage" : "all";
-                        comments = readCommentsFromFile(temp + postId);
-                    }
-                    else break;
-                }
+                //String temp;
+                //for(int i=0; i<2;i++) {
+                //    if (exception != null) {
+                //        temp = (i==0) ? "frontpage" : "all";
+                //        comments = readCommentsFromFile(temp + postId);
+                //    }
+                //    else break;
+                //}
             }
             else {
                 Comments cmnts = new Comments(httpClient, MyApplication.currentUser);

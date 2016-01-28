@@ -173,16 +173,18 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
         adapter.updateMultiredditItems(MyApplication.currentAccount.getMultireddits());
-        //homePage();
+
         try {
-            listFragment.changeSubreddit(listFragment.subreddit);
+            if(listFragment.isMulti) homePage();
+            else listFragment.changeSubreddit(listFragment.subreddit);
             String message = (MyApplication.currentUser==null) ? "Logged out" : "Logged in as " + account.getUsername();
             ToastUtils.displayShortToast(this, message);
         } catch (NullPointerException e) {}
     }
 
     public void homePage() {
-        if(listFragment!=null) listFragment.changeSubreddit(null);
+        listFragment.isMulti = false;
+        listFragment.changeSubreddit(null);
     }
 
     @Override
@@ -500,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
     private PostListFragment recreateListFragment(PostListFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.submissionSort, f.timeSpan, f.currentLoadType, f.hasMore);
+        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.isMulti, f.submissionSort, f.timeSpan, f.currentLoadType, f.hasMore);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

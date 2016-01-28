@@ -52,6 +52,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private LinearLayoutManager layoutManager;
     public SwipeRefreshLayout swipeRefreshLayout;
     public String subreddit;
+    public boolean isMulti = false;
     private AppCompatActivity activity;
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
@@ -61,10 +62,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public LoadType currentLoadType;
     public LoadPostsTask task;
 
-    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
+    public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, boolean isMulti, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
         listFragment.postListAdapter = adapter;
         listFragment.subreddit = subreddit;
+        listFragment.isMulti = isMulti;
         listFragment.submissionSort = sort;
         listFragment.timeSpan = time;
         listFragment.currentLoadType = currentLoadType;
@@ -80,12 +82,14 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         if(savedInstanceState!=null) {
             subreddit = savedInstanceState.getString("subreddit");
+            isMulti = savedInstanceState.getBoolean("isMulti");
             submissionSort = (SubmissionSort) savedInstanceState.getSerializable("sort");
             timeSpan = (TimeSpan) savedInstanceState.getSerializable("time");
         }
 
         loadMore = MyApplication.endlessPosts;
         if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
+        if(!isMulti) isMulti = activity.getIntent().getBooleanExtra("isMulti", false);
         if(submissionSort==null) submissionSort = (SubmissionSort) activity.getIntent().getSerializableExtra("sort");
         if(timeSpan==null) timeSpan = (TimeSpan) activity.getIntent().getSerializableExtra("time");
     }
@@ -93,6 +97,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("subreddit", subreddit);
+        outState.putBoolean("isMulti", isMulti);
         outState.putSerializable("sort", submissionSort);
         outState.putSerializable("time", timeSpan);
         super.onSaveInstanceState(outState);
@@ -240,6 +245,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     intent.putExtra("sort", submissionSort);
                     intent.putExtra("time", timeSpan);
                     intent.putExtra("subreddit", subreddit);
+                    intent.putExtra("isMulti", isMulti);
                     activity.startService(intent);
                 }
                 else toastMessage = "Check your connection and try again";
@@ -484,6 +490,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void setActionBarTitle() {
         String title = (subreddit == null) ? "frontpage" : subreddit;
+        if(isMulti) title  = title.concat(" (multi)");
         activity.getSupportActionBar().setTitle(title);
     }
 

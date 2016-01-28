@@ -587,6 +587,19 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 subredditRowViewHolder = (SubredditRowViewHolder) viewHolder;
                 NavDrawerMutliredditItem multireddit = (NavDrawerMutliredditItem) getItemAt(position);
                 subredditRowViewHolder.name.setText(multireddit.getName());
+
+                currentSubreddit = activity.getListFragment().subreddit;
+                if(multireddit.getName().toLowerCase().equals(currentSubreddit)) {
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.name.setTextColor(Color.WHITE);
+                    else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                    else subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
+                }
+                else {
+                    subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
+                    else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                }
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -598,6 +611,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra("subreddit", activity.getListFragment().subreddit);
+        i.putExtra("isMulti", activity.getListFragment().isMulti);
         i.putExtra("sort", activity.getListFragment().submissionSort);
         i.putExtra("time", activity.getListFragment().timeSpan);
         activity.finish();

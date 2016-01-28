@@ -160,6 +160,8 @@ public class ApiEndpointUtils {
 
     /* Multireddit specific constants */
 
+    public static final String MULTIREDDIT_SUBMISSIONS_GET = "/me/m/%s/%s.json?%s";
+
     public static final String MULTIREDDITS_USER = REDDIT_BASE_API_ENDPOINT + "/multi/mine.json";
 
     public static final String MULTIREDDIT_COPY = REDDIT_BASE_API_ENDPOINT + "/multi/copy";

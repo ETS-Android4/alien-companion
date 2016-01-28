@@ -168,7 +168,7 @@ public class Submissions implements ActorDriven {
 
 		return frontpage(
 				(sort != null) ? sort.value() : "hot",
-				(timeSpan !=null) ? timeSpan.value() : "",
+				(timeSpan != null) ? timeSpan.value() : "",
 				String.valueOf(count),
 				String.valueOf(limit),
 				(after != null) ? after.getFullName() : "",
@@ -246,6 +246,66 @@ public class Submissions implements ActorDriven {
     			(show_all) ? "all" : ""	
     	);
     }
+
+	/**
+	 * Gets all the submissions of a particular mutlireddit using the given parameters.
+	 *
+	 * @param multireddit			Name of the multireddit
+	 * @param sort				Sorting method, hot default
+	 * @param timeSpan			sorting timespan, null default
+	 * @param count				Count at which the submissions are started being numbered
+	 * @param limit				Maximum amount of submissions that can be returned (0-100, 25 default (see Reddit API))
+	 * @param after				The submission after which needs to be retrieved
+	 * @param before			The submission before which needs to be retrieved
+	 * @param show_all			Show all (disables filters such as "hide links that I have voted on")
+	 * @return 					The linked list containing submissions
+	 */
+	protected List<RedditItem> ofMultireddit(String multireddit, String sort, String timeSpan, String count, String limit, String after, String before, String show_all ) throws RetrievalFailedException, RedditError {
+
+		// Format parameters
+		String params = "";
+
+		params = ParamFormatter.addParameter(params, "t", timeSpan);
+		params = ParamFormatter.addParameter(params, "count", count);
+		params = ParamFormatter.addParameter(params, "limit", limit);
+		params = ParamFormatter.addParameter(params, "after", after);
+		params = ParamFormatter.addParameter(params, "before", before);
+		params = ParamFormatter.addParameter(params, "show", show_all);
+
+		// Retrieve submissions from the given URL
+		return parse(String.format(ApiEndpointUtils.MULTIREDDIT_SUBMISSIONS_GET, multireddit, sort, params));
+	}
+
+	/**
+	 * Gets all the submissions of a particular mutlireddit using the given parameters.
+	 *
+	 * @param multireddit			Name of the multireddit
+	 * @param sort				Sorting method, hot default
+	 * @param timeSpan			sorting timespan, null default
+	 * @param count				Count at which the submissions are started being numbered
+	 * @param limit				Maximum amount of submissions that can be returned (0-100, 25 default (see Reddit API))
+	 * @param after				The submission after which needs to be retrieved
+	 * @param before			The submission before which needs to be retrieved
+	 * @param show_all			Show all (disables filters such as "hide links that I have voted on")
+	 * @return 					The linked list containing submissions
+	 */
+	public List<RedditItem> ofMultireddit(String multireddit, SubmissionSort sort, TimeSpan timeSpan, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, RedditError {
+
+		if(multireddit == null || multireddit.isEmpty()) {
+			throw new IllegalArgumentException("The subreddit must be defined.");
+		}
+
+		return ofMultireddit(
+				multireddit,
+				(sort != null) ? sort.value() : "hot",
+				(timeSpan != null) ? timeSpan.value() : "",
+				String.valueOf(count),
+				String.valueOf(limit),
+				(after != null) ? after.getFullName() : "",
+				(before != null) ? before.getFullName() : "",
+				(show_all) ? "all" : ""
+		);
+	}
     
     /**
      * Searches with the given query using the constraints given as parameters.
