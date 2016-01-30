@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/themeDialogBackgroundColor">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(multireddit)"
+        android:id="@+id/textView_title"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="20sp"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View subreddits"
+        android:id="@+id/textView_view_subreddits"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:background="?attr/themeSelector"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add subreddit"
+        android:id="@+id/textView_add_subreddit"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:background="?attr/themeSelector"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove subreddit"
+        android:id="@+id/textView_remove_subreddit"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:background="?attr/themeSelector"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rename"
+        android:id="@+id/textView_rename"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:background="?attr/themeSelector"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        android:id="@+id/textView_remove"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:background="?attr/themeSelector"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/textView_delete"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="15sp"
+        android:background="?attr/themeSelector"
+        android:padding="10dp" />
+
+</LinearLayout>

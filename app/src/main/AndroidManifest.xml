@@ -78,7 +78,12 @@
         <activity
             android:name="com.gDyejeekis.aliencompanion.Activities.EditSubredditsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="Edit" >
+            android:label="Edit subreddits" >
+        </activity>
+        <activity
+            android:name="com.gDyejeekis.aliencompanion.Activities.EditMultisActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Edit multireddits" >
         </activity>
         <activity
             android:name="com.gDyejeekis.aliencompanion.Activities.ImgurActivity"
