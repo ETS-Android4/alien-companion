@@ -34,6 +34,7 @@ import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
@@ -210,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             getNavDrawerAdapter().updateSubredditItems(MyApplication.currentAccount.getSubreddits());
             AsyncTask.execute(new Runnable() {
                 @Override
-                public void run() {
+                public void run() { //TODO: use generalutils method (saveAccountChanges)
                     List<SavedAccount> accounts = new ArrayList<SavedAccount>();
                     boolean check = true;
                     //if(currentAccount != null) {
@@ -230,7 +231,11 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        //TODO: check and apply multireddit list changes
+        if(EditMultisActivity.changesMade) {
+            EditMultisActivity.changesMade = false;
+            getNavDrawerAdapter().updateMultiredditItems(MyApplication.currentAccount.getMultireddits());
+            GeneralUtils.saveAccountChanges(this);
+        }
 
         if(MyApplication.currentOrientation != MyApplication.screenOrientation) setOrientation();
 

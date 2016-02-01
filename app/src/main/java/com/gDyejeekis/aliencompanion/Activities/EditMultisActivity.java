@@ -107,7 +107,7 @@ public class EditMultisActivity extends BackNavActivity {
 
     @Override
     public void onBackPressed() {
-        if(changesMade && MyApplication.currentAccount!=null) MyApplication.currentAccount.setSubreddits(multireddits);
+        if(changesMade && MyApplication.currentAccount!=null) MyApplication.currentAccount.setMultireddits(multireddits);
         super.onBackPressed();
     }
 

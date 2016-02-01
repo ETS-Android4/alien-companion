@@ -212,6 +212,30 @@ public class ProfileActions implements ActorDriven {
         return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
+    public Response createMulti() {
+        return null;
+    }
+
+    public Response renameMulti(String newDisplayName, String fromMultipath, String toMultipath) {
+        RequestBody body = new FormBody.Builder().add("display_name", newDisplayName).add("from", fromMultipath).add("to", toMultipath).build();
+        return null;
+    }
+
+    public Response deleteMulti(String multipath) {
+        RequestBody body = new FormBody.Builder().add("multipath", multipath).build();
+        return null;
+    }
+
+    public Response addSubToMulti(String multipath, String subreddit) {
+        RequestBody body = new FormBody.Builder().add("multipath", multipath).add("srname", subreddit).build();
+        return null;
+    }
+
+    public Response removeSubFromMulti(String multipath, String subreddit) {
+        RequestBody body = new FormBody.Builder().add("multipath", multipath).add("srname", subreddit).build();
+        return null;
+    }
+
     /**
      * Creates a new account.
      *

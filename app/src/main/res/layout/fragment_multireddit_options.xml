@@ -16,36 +16,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View subreddits"
-        android:id="@+id/textView_view_subreddits"
-        android:textColor="?attr/themeTextColor"
-        android:textSize="15sp"
-        android:background="?attr/themeSelector"
-        android:padding="10dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add subreddit"
-        android:id="@+id/textView_add_subreddit"
-        android:textColor="?attr/themeTextColor"
-        android:textSize="15sp"
-        android:background="?attr/themeSelector"
-        android:padding="10dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Remove subreddit"
-        android:id="@+id/textView_remove_subreddit"
-        android:textColor="?attr/themeTextColor"
-        android:textSize="15sp"
-        android:background="?attr/themeSelector"
-        android:padding="10dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="Rename"
         android:id="@+id/textView_rename"
         android:textColor="?attr/themeTextColor"

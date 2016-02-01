@@ -1,9 +1,15 @@
 package com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners;
 
+import android.content.Intent;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.Activities.EditMultisActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sound on 1/23/2016.
@@ -20,7 +26,11 @@ public class MultisListener extends NavDrawerListener {
             getAdapter().toggleMultiredditItems();
         }
         else if(v.getId() == R.id.layoutEdit) {
-            //TODO: start multi edit activity
+            Intent intent = new Intent(getActivity(), EditMultisActivity.class);
+            ArrayList<String> multireddits = (ArrayList) MyApplication.currentAccount.getMultireddits();
+
+            intent.putStringArrayListExtra("multis", multireddits);
+            getActivity().startActivity(intent);
         }
     }
 

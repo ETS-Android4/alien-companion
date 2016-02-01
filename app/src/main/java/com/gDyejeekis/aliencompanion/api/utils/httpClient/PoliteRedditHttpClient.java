@@ -48,6 +48,20 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
         return resp;
     }
 
+    public Response put(String baseUrl, RequestBody apiParams, String urlPath, String cookie) {
+        waitIfNeeded();
+        Response resp = super.put(baseUrl, apiParams, urlPath, cookie);
+        noteTime();
+        return resp;
+    }
+
+    public Response delete(String baseUrl, RequestBody apiParams, String urlPath, String cookie) {
+        waitIfNeeded();
+        Response resp = super.delete(baseUrl, apiParams, urlPath, cookie);
+        noteTime();
+        return resp;
+    }
+
     private void noteTime() {
         lastReqTime = System.currentTimeMillis();
         //Log.d("geotest", String.valueOf(lastReqTime));

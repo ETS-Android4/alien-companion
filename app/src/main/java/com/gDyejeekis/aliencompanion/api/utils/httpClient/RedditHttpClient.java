@@ -204,6 +204,90 @@ public class RedditHttpClient implements HttpClient, Serializable {
         }
     }
 
+    public Response put(String baseUrl, RequestBody body, String urlPath, String cookie) {
+        tokenCheck();
+        Log.d("geotest", "PUT request to " + baseUrl + urlPath);
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).put(body);
+            if (RedditOAuth.useOAuth2 && cookie == null) {
+                String authHeader;
+                if (MyApplication.currentAccessToken != null) {
+                    authHeader = "bearer " + MyApplication.currentAccessToken;
+                } else {
+                    authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
+                }
+                builder.addHeader("Authorization", authHeader);
+            } else {
+                builder.addHeader("Cookie", "reddit_session=" + cookie);
+            }
+            builder.addHeader("User-Agent", userAgent);
+            Request request = builder.build();
+            okhttp3.Response response = client.newCall(request).execute();
+            String content = response.body().string();
+            Log.d("geotest", "request body: " + request.body());
+            Log.d("geotest", "request headers: " + request.headers());
+            Log.d("geotest", "response code: " + response.code());
+            Log.d("geotest", "response headers: " + response.headers());
+            Log.d("geotest", "inputstream: " + content);
+
+            Object parsedObject = new JSONParser().parse(content);
+            Response result = new HttpResponse(content, parsedObject, null);
+
+            if (result.getResponseObject() == null) {
+                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
+            } else {
+                return result;
+            }
+        } catch (IOException e) {
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
+        } catch (ParseException e) {
+            throw new ActionFailedException("Failed to parse the response from PUT request to URI path: " + baseUrl + urlPath);
+        }
+    }
+
+    public Response delete(String baseUrl, RequestBody body, String urlPath, String cookie) {
+        tokenCheck();
+        Log.d("geotest", "DELETE request to " + baseUrl + urlPath);
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).delete(body);
+            if (RedditOAuth.useOAuth2 && cookie == null) {
+                String authHeader;
+                if (MyApplication.currentAccessToken != null) {
+                    authHeader = "bearer " + MyApplication.currentAccessToken;
+                } else {
+                    authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
+                }
+                builder.addHeader("Authorization", authHeader);
+            } else {
+                builder.addHeader("Cookie", "reddit_session=" + cookie);
+            }
+            builder.addHeader("User-Agent", userAgent);
+            Request request = builder.build();
+            okhttp3.Response response = client.newCall(request).execute();
+            String content = response.body().string();
+            Log.d("geotest", "request body: " + request.body());
+            Log.d("geotest", "request headers: " + request.headers());
+            Log.d("geotest", "response code: " + response.code());
+            Log.d("geotest", "response headers: " + response.headers());
+            Log.d("geotest", "inputstream: " + content);
+
+            Object parsedObject = new JSONParser().parse(content);
+            Response result = new HttpResponse(content, parsedObject, null);
+
+            if (result.getResponseObject() == null) {
+                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
+            } else {
+                return result;
+            }
+        } catch (IOException e) {
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
+        } catch (ParseException e) {
+            throw new ActionFailedException("Failed to parse the response from DELETE request to URI path: " + baseUrl + urlPath);
+        }
+    }
+
     public void setUserAgent(String agent) {
         this.userAgent = agent;
     }

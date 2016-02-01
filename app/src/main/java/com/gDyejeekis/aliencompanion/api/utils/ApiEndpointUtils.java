@@ -168,7 +168,11 @@ public class ApiEndpointUtils {
 
     public static final String MULTIREDDIT_RENAME = REDDIT_BASE_API_ENDPOINT + "/multi/rename";
 
-    public static final String MULTIREDDITS_USERNAME = REDDIT_BASE_API_ENDPOINT + "/multi/user/%s.json";
+    public static final String MULTIREDDITS_USERNAME = REDDIT_BASE_API_ENDPOINT + "/multi/user/%s.json?%s";
 
     public static final String MULTIREDDIT_MODIFY = REDDIT_BASE_API_ENDPOINT + "/multi/%s";
+
+    public static final String MULTIREDDIT_ABOUT = REDDIT_BASE_API_ENDPOINT + "/multi/%s.json?%s";
+
+    public static final String MULTIREDDIT_SUBREDDIT = REDDIT_BASE_API_ENDPOINT + "/multi/%s/r/%s";
 }

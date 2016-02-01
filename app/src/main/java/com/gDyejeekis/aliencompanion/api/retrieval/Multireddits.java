@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.retrieval;
 
+import android.text.method.MultiTapKeyListener;
+
 import com.gDyejeekis.aliencompanion.api.entity.Multireddit;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -87,6 +89,24 @@ public class Multireddits implements ActorDriven {
         }
 
         return multireddits;
+    }
+
+    public List<Multireddit> ofUsername(String username, boolean expand_srs) {
+        return parse(String.format(ApiEndpointUtils.MULTIREDDITS_USERNAME, username, "expand_srs="+String.valueOf(expand_srs)));
+    }
+
+    public Multireddit ofMultipath(String multipath, boolean expand_srs) {
+        String url = String.format(ApiEndpointUtils.MULTIREDDIT_ABOUT, multipath, "expand_srs="+String.valueOf(expand_srs));
+
+        JSONObject object = (JSONObject) httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, url, null).getResponseObject();
+
+        return new Multireddit(object);
+    }
+
+    public List<String> getSubredditsOfMulti(String multipath) {
+        Multireddit multireddit = ofMultipath(multipath, false);
+
+        return multireddit.getSubreddits();
     }
 
 }
