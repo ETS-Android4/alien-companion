@@ -27,6 +27,9 @@ public interface HttpClient {
      */
     Response post(String baseUrl, RequestBody body, String urlPath, String cookie);
 
+    Response delete(String baseUrl, RequestBody body, String urlPath, String cookie);
+
+    Response put(String baseUrl, RequestBody body, String urlPath, String cookie);
 
     /**
      * Set the userAgent to be used when making http requests

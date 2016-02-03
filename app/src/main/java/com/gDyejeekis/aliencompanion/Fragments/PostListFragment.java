@@ -490,7 +490,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void setActionBarTitle() {
         String title = (subreddit == null) ? "frontpage" : subreddit;
-        if(isMulti) title  = title.concat(" (multi)");
+        if(isMulti) title  = title.concat(" multi");
         activity.getSupportActionBar().setTitle(title);
     }
 

@@ -12,6 +12,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.Response;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import okhttp3.FormBody;
@@ -212,28 +213,32 @@ public class ProfileActions implements ActorDriven {
         return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
-    public Response createMulti() {
+    public Response createMulti(String display_name, JSONArray subreddits, String visibility, String weighting_scheme) { //TODO: finish method
+        RequestBody body = new FormBody.Builder().add("display_name", display_name).add("subreddits", null).add("visibility", visibility).add("weighting_scheme", weighting_scheme).build();
         return null;
     }
 
     public Response renameMulti(String newDisplayName, String fromMultipath, String toMultipath) {
         RequestBody body = new FormBody.Builder().add("display_name", newDisplayName).add("from", fromMultipath).add("to", toMultipath).build();
-        return null;
+        return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.MULTIREDDIT_RENAME, null);
     }
 
     public Response deleteMulti(String multipath) {
-        RequestBody body = new FormBody.Builder().add("multipath", multipath).build();
-        return null;
+        //RequestBody body = new FormBody.Builder().add("multipath", multipath).build();
+        String urlPath = String.format(ApiEndpointUtils.MULTIREDDIT_MODIFY, multipath);
+        return httpClient.delete(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, urlPath, null);
     }
 
     public Response addSubToMulti(String multipath, String subreddit) {
-        RequestBody body = new FormBody.Builder().add("multipath", multipath).add("srname", subreddit).build();
-        return null;
+        RequestBody body = new FormBody.Builder().add("name", subreddit).build();
+        String urlPath = String.format(ApiEndpointUtils.MULTIREDDIT_SUBREDDIT, multipath, subreddit);
+        return httpClient.put(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, urlPath, null);
     }
 
     public Response removeSubFromMulti(String multipath, String subreddit) {
-        RequestBody body = new FormBody.Builder().add("multipath", multipath).add("srname", subreddit).build();
-        return null;
+        //RequestBody body = new FormBody.Builder().add("multipath", multipath).add("srname", subreddit).build();
+        String urlPath = String.format(ApiEndpointUtils.MULTIREDDIT_SUBREDDIT, multipath, subreddit);
+        return httpClient.delete(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, urlPath, null);
     }
 
     /**

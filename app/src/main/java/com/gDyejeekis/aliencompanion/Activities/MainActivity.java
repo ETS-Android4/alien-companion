@@ -37,6 +37,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerHeader;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
@@ -149,11 +150,11 @@ public class MainActivity extends AppCompatActivity {
         //MyApplication.currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
         if(account.loggedIn) {
             if(account.oauth2) {
-                MyApplication.currentUser = new User(null, account.getUsername(), account.getToken());
+                MyApplication.currentUser = new User(new PoliteRedditHttpClient(), account.getUsername(), account.getToken());
                 MyApplication.currentAccessToken = account.getToken().accessToken;
             }
             else {
-                MyApplication.currentUser = new User(null, account.getUsername(), account.getModhash(), account.getCookie());
+                MyApplication.currentUser = new User(new PoliteRedditHttpClient(), account.getUsername(), account.getModhash(), account.getCookie());
                 MyApplication.currentAccessToken = null;
             }
         }

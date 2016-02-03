@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/layoutToggle"
         android:layout_weight="5"
@@ -30,7 +30,7 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/layoutEdit"
         android:layout_weight="2"
@@ -45,7 +45,7 @@
             android:id="@+id/txtView_edit"
             android:textColor="#7a7a7a"
             android:textSize="20sp"
-            android:text="edit" />
+            android:text="refresh" />
     </LinearLayout>
 
 </LinearLayout>
