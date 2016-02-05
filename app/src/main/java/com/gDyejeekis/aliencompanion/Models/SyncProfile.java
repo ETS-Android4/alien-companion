@@ -17,6 +17,10 @@ public class SyncProfile implements Serializable {
     private List<String> subreddits;
     private double executeTime;
 
+    public SyncProfile() {
+
+    }
+
     public SyncProfile(String name, List<String> subreddits, double executeTime) {
         this.name = name;
         this.subreddits = subreddits;
@@ -30,5 +34,29 @@ public class SyncProfile implements Serializable {
         else {
             //raise a notification, network unavailable
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSubreddits(List<String> subreddits) {
+        this.subreddits = subreddits;
+    }
+
+    public void setExecuteTime(double time) {
+        this.executeTime = time;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getSubreddits() {
+        return subreddits;
+    }
+
+    public double getExecuteTime() {
+        return executeTime;
     }
 }

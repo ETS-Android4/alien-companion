@@ -20,7 +20,9 @@ import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
@@ -38,18 +40,31 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     public LoadCommentsTask(Context context, PostFragment postFragment) {
         this.context = context;
         this.postFragment = postFragment;
-        //this.httpClient = new PoliteRedditHttpClient();
     }
 
-    private List<Comment> readCommentsFromFile(String filename) {
-        Log.d("Geo test", "reading comments from " + filename);
+    private List<Comment> readCommentsFromFile(final String postId) {
+        File postFile = null;
+
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if(filename.endsWith(postId)) return true;
+                return false;
+            }
+        };
+        File[] files = context.getFilesDir().listFiles(filenameFilter);
+        for(File file : files) {
+            if(postFile == null) postFile = file;
+            else if(file.lastModified() > postFile.lastModified()) postFile = file;
+        }
+
         try {
-            exception = null;
-            FileInputStream fis = context.openFileInput(filename);
+            Log.d("Geo test", "reading comments from " + postFile.getAbsolutePath());
+            FileInputStream fis = new FileInputStream(postFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Submission post = (Submission) ois.readObject();
             return post.getSyncedComments();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | NullPointerException e) {
             e.printStackTrace();
             exception = e;
         }
@@ -61,28 +76,13 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         try {
             List<Comment> comments;
             if(MyApplication.offlineModeEnabled) {
-                //String postId = postFragment.post.getIdentifier();
-                //String filename = /*postFragment.post.getSubreddit().toLowerCase() + */postId;
-                comments = readCommentsFromFile(postFragment.post.getIdentifier()); //TODO: in case of duplicate posts load the latest synced
-
-                //String temp;
-                //for(int i=0; i<2;i++) {
-                //    if (exception != null) {
-                //        temp = (i==0) ? "frontpage" : "all";
-                //        comments = readCommentsFromFile(temp + postId);
-                //    }
-                //    else break;
-                //}
+                comments = readCommentsFromFile(postFragment.post.getIdentifier());
             }
             else {
                 Comments cmnts = new Comments(httpClient, MyApplication.currentUser);
                 int depth = (postFragment.commentLinkId!=null) ? 999 : MyApplication.initialCommentDepth;
                 comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, depth,
                         MyApplication.initialCommentCount, postFragment.commentSort);
-
-                //if (postFragment.post.getThumbnailObject() == null) {
-                //    ImageLoader.preloadThumbnail(postFragment.post, context);
-                //}
             }
             Comments.indentCommentTree(context, comments);
 

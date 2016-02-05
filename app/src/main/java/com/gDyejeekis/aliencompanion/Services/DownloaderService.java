@@ -95,21 +95,13 @@ public class DownloaderService extends IntentService {
                     Submission submission = (Submission) post;
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
-                    writePostToFile(submission, submission.getIdentifier()); //TODO: change filename to exclude subreddit and change deletePreviousComments method
+                    writePostToFile(submission, filename + submission.getIdentifier());
                 }
             }
 
         } catch (RetrievalFailedException | RedditError e) {
             e.printStackTrace();
         }
-
-        //if(posts!=null) {
-        //    writePostsToFile(posts, filename);
-        //    Log.d("geo test", "download complete");
-        //}
-        //else {
-        //    Log.d("geo test", "download failed");
-        //}
     }
 
     private Notification buildForegroundNotification(NotificationCompat.Builder b, String filename) {
@@ -162,7 +154,7 @@ public class DownloaderService extends IntentService {
     }
 
     private void deletePreviousComments(final String subreddit) {
-        File dir = getFilesDir();
+        //File dir = getFilesDir();
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
@@ -170,7 +162,7 @@ public class DownloaderService extends IntentService {
                 return false;
             }
         };
-        File[] files = dir.listFiles(filenameFilter);
+        File[] files = getFilesDir().listFiles(filenameFilter);
         for(File file : files) {
             Log.d("Geo test", "Deleting " + file.getName());
             file.delete();

@@ -86,6 +86,11 @@
             android:label="My multireddits" >
         </activity>
         <activity
+            android:name=".Activities.SyncProfilesActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Sync profiles" >
+        </activity>
+        <activity
             android:name="com.gDyejeekis.aliencompanion.Activities.ImgurActivity"
             android:configChanges="orientation|screenSize"
             android:label="Imgur" >
