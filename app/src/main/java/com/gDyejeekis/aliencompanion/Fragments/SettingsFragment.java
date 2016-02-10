@@ -76,7 +76,8 @@ public class SettingsFragment extends PreferenceFragment {
         File[] files = dir.listFiles();
         for (File file : files) {
             //Log.d("geo test", file.getName());
-            if (!file.getName().equals(MyApplication.SAVED_ACCOUNTS_FILENAME)) file.delete();
+            String filename = file.getName();
+            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) || !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)) file.delete();
         }
 
         ToastUtils.displayShortToast(context, "Synced posts cleared");

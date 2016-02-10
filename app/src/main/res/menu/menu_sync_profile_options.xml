@@ -7,5 +7,7 @@
 
     <item android:id="@+id/action_rename_profile" android:title="@string/rename_profile" android:orderInCategory="110"/>
 
-    <item android:id="@+id/action_sync_now" android:title="@string/sync_now" android:orderInCategory="120"/>
+    <item android:id="@+id/action_delete_profile" android:title="@string/delete_profile" android:orderInCategory="120"/>
+
+    <item android:id="@+id/action_sync_now" android:title="@string/sync_now" android:orderInCategory="80"/>
 </menu>

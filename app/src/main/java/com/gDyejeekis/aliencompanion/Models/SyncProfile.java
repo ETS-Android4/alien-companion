@@ -38,7 +38,7 @@ public class SyncProfile implements Serializable {
         this.subreddits = subreddits;
         this.executeTime = executeTime;
         this.hasTime = true;
-        this.isActive = false;
+        this.isActive = true;
     }
 
     public void startSync(Context context) {

@@ -132,5 +132,6 @@
     <string name="edit_schedule">Edit schedule</string>
     <string name="rename_profile">Rename profile</string>
     <string name="sync_now">Sync now</string>
+    <string name="delete_profile">Delete profile</string>
 
 </resources>

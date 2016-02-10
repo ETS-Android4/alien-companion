@@ -2,31 +2,30 @@ package com.gDyejeekis.aliencompanion.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,11 +58,46 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     public SyncProfileListAdapter(SyncProfilesActivity activity) {
         this.activity = activity;
         this.profiles = new ArrayList<>();
+        loadSyncProfiles();
     }
 
     public SyncProfileListAdapter(SyncProfilesActivity activity, List<SyncProfile> profiles) {
         this.activity = activity;
         this.profiles = profiles;
+    }
+
+    private void loadSyncProfiles() {
+        List<SyncProfile> savedProfiles = null;
+        try {
+            FileInputStream fis = activity.openFileInput(MyApplication.SYNC_PROFILES_FILENAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            savedProfiles = (List<SyncProfile>) is.readObject();
+            is.close();
+            fis.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        if(savedProfiles != null) {
+            this.profiles = savedProfiles;
+        }
+    }
+
+    public void saveSyncProfiles() {
+        try {
+            FileOutputStream fos = activity.openFileOutput(MyApplication.SYNC_PROFILES_FILENAME, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            List<SyncProfile> toSave = new ArrayList<>();
+            for(SyncProfile profile : profiles) {
+                if(profile.getViewType() == VIEW_TYPE_PROFILE_ITEM) {
+                    toSave.add(profile);
+                }
+            }
+            os.writeObject(toSave);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addNewProfile(SyncProfile profile) {
@@ -111,15 +145,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             case VIEW_TYPE_PROFILE_ITEM:
                 SyncProfileViewHolder spv = (SyncProfileViewHolder) viewHolder;
                 final SyncProfile profile = getItemAt(position);
-                spv.bindModel(activity, profile);
-                spv.state.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        profile.setActive(!profile.isActive());
-                        notifyItemChanged(position);
-                        //todo: save changes maybe
-                    }
-                });
+                spv.bindModel(activity, this, profile, position);
                 break;
             case VIEW_TYPE_TEMP_PROFILE:
                 TempProfileViewHolder tpv = (TempProfileViewHolder) viewHolder;
@@ -158,6 +184,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         public ImageView moreButton;
         public Button state;
 
+        public static final int moreButtonResource = (MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp;
+
         public SyncProfileViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.textView_profile_name);
@@ -165,16 +193,16 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             state = (Button) itemView.findViewById(R.id.button_state);
         }
 
-        public void bindModel(final Activity activity, final SyncProfile profile) {
+        public void bindModel(final Activity activity, final SyncProfileListAdapter adapter, final SyncProfile profile, final int position) {
             name.setText(profile.getName());
-            int moreButtonResource = (MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp;
+            name.setTextColor((profile.isActive()) ? MyApplication.textColor : MyApplication.textHintColor);
             moreButton.setImageResource(moreButtonResource);
             moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //show popup menu
                     PopupMenu popupMenu = new PopupMenu(activity, view);
-                    popupMenu.inflate(R.menu.menu_profile_options);
+                    popupMenu.inflate(R.menu.menu_sync_profile_options);
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
@@ -186,6 +214,9 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                                     //todo
                                     return true;
                                 case R.id.action_rename_profile:
+                                    //todo
+                                    return true;
+                                case R.id.action_delete_profile:
                                     //todo
                                     return true;
                                 case R.id.action_sync_now:
@@ -201,6 +232,14 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             });
             String stateText = (profile.isActive()) ? "ENABLED" : "DISABLED";
             state.setText(stateText);
+            state.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    profile.setActive(!profile.isActive());
+                    adapter.notifyItemChanged(position);
+                    //todo: save changes maybe
+                }
+            });
         }
     }
 

@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,8 @@ import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +32,7 @@ import java.util.List;
  */
 public class SyncProfilesActivity extends BackNavActivity {
 
-    private boolean changesMade;
+    //private boolean changesMade;
     private RecyclerView profilesView;
     private SyncProfileListAdapter adapter;
 
@@ -52,9 +56,10 @@ public class SyncProfilesActivity extends BackNavActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         profilesView = (RecyclerView) findViewById(R.id.recyclerView_sync_profiles);
-        adapter = new SyncProfileListAdapter(this, getSavedSyncProfiles());
+        adapter = new SyncProfileListAdapter(this);
         profilesView.setLayoutManager(new LinearLayoutManager(this));
         profilesView.setAdapter(adapter);
+        profilesView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 
     @Override
@@ -72,10 +77,10 @@ public class SyncProfilesActivity extends BackNavActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private List<SyncProfile> getSavedSyncProfiles() {
-        List<SyncProfile> profiles = new ArrayList<>();
-        //TODO
-        return profiles;
+    @Override
+    public void onStop() {
+        adapter.saveSyncProfiles();
+        super.onStop();
     }
 
     private void showReccurenceDialog() {

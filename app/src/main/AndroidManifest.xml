@@ -47,7 +47,8 @@
         <activity
             android:name="com.gDyejeekis.aliencompanion.Activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_edit_prefs" >
+            android:label="@string/title_activity_edit_prefs"
+            android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity
             android:name="com.gDyejeekis.aliencompanion.Activities.SubredditActivity"
