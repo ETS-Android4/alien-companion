@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Models;
 
 import android.content.Context;
 
+import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 
 import java.io.Serializable;
@@ -16,15 +17,28 @@ public class SyncProfile implements Serializable {
     private String name;
     private List<String> subreddits;
     private double executeTime;
+    private boolean hasTime;
+    private boolean isActive;
 
     public SyncProfile() {
+        executeTime = -1;
+        this.hasTime = false;
+        this.isActive = false;
+    }
 
+    public SyncProfile(String name) {
+        this.name = name;
+        executeTime = -1;
+        this.hasTime = false;
+        this.isActive = false;
     }
 
     public SyncProfile(String name, List<String> subreddits, double executeTime) {
         this.name = name;
         this.subreddits = subreddits;
         this.executeTime = executeTime;
+        this.hasTime = true;
+        this.isActive = false;
     }
 
     public void startSync(Context context) {
@@ -46,6 +60,7 @@ public class SyncProfile implements Serializable {
 
     public void setExecuteTime(double time) {
         this.executeTime = time;
+        this.hasTime = true;
     }
 
     public String getName() {
@@ -58,5 +73,29 @@ public class SyncProfile implements Serializable {
 
     public double getExecuteTime() {
         return executeTime;
+    }
+
+    public boolean isComplete() {
+        if(name==null || subreddits == null || executeTime==-1) {
+            return false;
+        }
+        return true;
+    }
+
+    public int getViewType() {
+        return SyncProfileListAdapter.VIEW_TYPE_PROFILE_ITEM;
+    }
+
+    public boolean hasTime() {
+        return hasTime;
+    }
+
+    public void setActive(boolean active) {
+        this.isActive = active;
+    }
+
+    public boolean isActive() {
+        //if(!hasTime) return false;
+        return isActive;
     }
 }

@@ -2,11 +2,13 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -28,6 +30,14 @@ public class SettingsFragment extends PreferenceFragment {
         Preference clearSynced = findPreference("clearSynced");
         Preference clearCache = findPreference("clearCache");
         Preference viewChangeLog = findPreference("changelog");
+        Preference profiles = findPreference("profiles");
+        profiles.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                getActivity().startActivity(new Intent(getActivity(), SyncProfilesActivity.class));
+                return false;
+            }
+        });
         clearSynced.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

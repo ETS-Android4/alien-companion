@@ -128,5 +128,9 @@
     <string name="load_cached_copy">Load cached copy</string>
     <string name="load_live_version">Load live version</string>
     <string name="sort_comments_qa"><![CDATA[Q&A]]></string>
+    <string name="edit_subreddits">Edit subreddits</string>
+    <string name="edit_schedule">Edit schedule</string>
+    <string name="rename_profile">Rename profile</string>
+    <string name="sync_now">Sync now</string>
 
 </resources>

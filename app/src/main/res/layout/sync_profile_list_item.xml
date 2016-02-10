@@ -4,19 +4,37 @@
     android:layout_height="match_parent"
     android:padding="15dp">
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_profile_name"
-        android:text="New profile"
+        android:text="(profile name)"
+        android:id="@+id/textView_profile_name"
+        android:textSize="20sp"
         android:textColor="?attr/themeTextColor"
-        android:textSize="20sp" />
+        android:padding="5dp" />
 
-    <Switch
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/switch_profile_item"
-        android:textColor="?attr/themeTextColor"
-        android:checked="false"
-        android:textSize="20sp" />
+        android:layout_height="match_parent"
+        android:gravity="right">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView_profile_more"
+            android:src="@mipmap/ic_more_vert_white_24dp"
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DISABLED"
+            android:id="@+id/button_state"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
 </LinearLayout>

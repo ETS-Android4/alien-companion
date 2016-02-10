@@ -143,6 +143,10 @@
         android:key="sync"
         android:title="@string/sync_options">
 
+        <Preference
+            android:key="profiles"
+            android:title="Sync profiles"/>
+
         <ListPreference
             android:key="syncPostCount"
             android:title="Sync post count"
