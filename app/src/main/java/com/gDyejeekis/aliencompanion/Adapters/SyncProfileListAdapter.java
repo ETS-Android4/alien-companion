@@ -2,7 +2,10 @@ package com.gDyejeekis.aliencompanion.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.Time;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -121,6 +124,14 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
+    private void showSubredditsDialog(int profilePosition) {
+
+    }
+
+    private void showScheduleDialog(int profilePosition) {
+
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -145,11 +156,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             case VIEW_TYPE_PROFILE_ITEM:
                 SyncProfileViewHolder spv = (SyncProfileViewHolder) viewHolder;
                 final SyncProfile profile = getItemAt(position);
-                spv.bindModel(activity, this, profile, position);
+                spv.bindModel(activity, profile, position);
                 break;
             case VIEW_TYPE_TEMP_PROFILE:
                 TempProfileViewHolder tpv = (TempProfileViewHolder) viewHolder;
-                tpv.bindModel(activity, this);
+                tpv.bindModel(activity);
                 break;
         }
     }
@@ -184,50 +195,24 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         public ImageView moreButton;
         public Button state;
 
-        public static final int moreButtonResource = (MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp;
+        public static int moreButtonResource;
 
         public SyncProfileViewHolder(View itemView) {
             super(itemView);
+            moreButtonResource = (MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp;
             name = (TextView) itemView.findViewById(R.id.textView_profile_name);
             moreButton = (ImageView) itemView.findViewById(R.id.imageView_profile_more);
             state = (Button) itemView.findViewById(R.id.button_state);
         }
 
-        public void bindModel(final Activity activity, final SyncProfileListAdapter adapter, final SyncProfile profile, final int position) {
+        public void bindModel(final SyncProfilesActivity activity, final SyncProfile profile, final int position) {
             name.setText(profile.getName());
             name.setTextColor((profile.isActive()) ? MyApplication.textColor : MyApplication.textHintColor);
             moreButton.setImageResource(moreButtonResource);
             moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //show popup menu
-                    PopupMenu popupMenu = new PopupMenu(activity, view);
-                    popupMenu.inflate(R.menu.menu_sync_profile_options);
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            switch (menuItem.getItemId()) {
-                                case R.id.action_edi_subreddits:
-                                    //todo
-                                    return true;
-                                case R.id.edit_schedule:
-                                    //todo
-                                    return true;
-                                case R.id.action_rename_profile:
-                                    //todo
-                                    return true;
-                                case R.id.action_delete_profile:
-                                    //todo
-                                    return true;
-                                case R.id.action_sync_now:
-                                    //todo
-                                    return true;
-                                default:
-                                    return false;
-                            }
-                        }
-                    });
-                    popupMenu.show();
+                    showPopupMenu(activity, view);
                 }
             });
             String stateText = (profile.isActive()) ? "ENABLED" : "DISABLED";
@@ -236,10 +221,39 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 @Override
                 public void onClick(View view) {
                     profile.setActive(!profile.isActive());
-                    adapter.notifyItemChanged(position);
-                    //todo: save changes maybe
+                    activity.getAdapter().notifyItemChanged(position);
                 }
             });
+        }
+
+        private void showPopupMenu(SyncProfilesActivity activity, View view) {
+            PopupMenu popupMenu = new PopupMenu(activity, view);
+            popupMenu.inflate(R.menu.menu_sync_profile_options);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.action_edi_subreddits:
+                            //todo
+                            return true;
+                        case R.id.edit_schedule:
+                            //todo
+                            return true;
+                        case R.id.action_rename_profile:
+                            //todo
+                            return true;
+                        case R.id.action_delete_profile:
+                            //todo
+                            return true;
+                        case R.id.action_sync_now:
+                            //todo
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popupMenu.show();
         }
     }
 
@@ -252,15 +266,15 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             nameField = (EditText) itemView.findViewById(R.id.editText_profile_name_temp);
         }
 
-        public void bindModel(Activity activity, final SyncProfileListAdapter adapter) {
+        public void bindModel(final SyncProfilesActivity activity) {
             nameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    adapter.addNewProfile(new SyncProfile(textView.getText().toString()));
+                    activity.getAdapter().addNewProfile(new SyncProfile(textView.getText().toString()));
                     return true;
                 }
             });
-            nameField.setText("Profile " + adapter.getItemCount());
+            nameField.setText("Profile " + activity.getAdapter().getItemCount());
             nameField.requestFocus();
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);

@@ -50,6 +50,14 @@
         android:textColor="?attr/themeTextColor"
         android:textColorHint="?attr/themeTextHintColor" />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="is multireddit"
+        android:id="@+id/checkBox_isMulti"
+        android:checked="false"
+        android:textColor="?attr/themeTextColor" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

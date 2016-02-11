@@ -10,29 +10,18 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by sound on 2/4/2016.
  */
 public class SyncProfilesActivity extends BackNavActivity {
 
-    //private boolean changesMade;
     private RecyclerView profilesView;
     private SyncProfileListAdapter adapter;
 
@@ -83,23 +72,8 @@ public class SyncProfilesActivity extends BackNavActivity {
         super.onStop();
     }
 
-    private void showReccurenceDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        Bundle bundle = new Bundle();
-        Time time = new Time();
-        time.setToNow();
-        bundle.putLong(RecurrencePickerDialogFragment.BUNDLE_START_TIME_MILLIS, time.toMillis(false));
-        bundle.putString(RecurrencePickerDialogFragment.BUNDLE_TIME_ZONE, time.timezone);
-        bundle.putString(RecurrencePickerDialogFragment.BUNDLE_RRULE, "");
-        bundle.putBoolean(RecurrencePickerDialogFragment.BUNDLE_HIDE_SWITCH_BUTTON, true);
-
-        RecurrencePickerDialogFragment rpd = new RecurrencePickerDialogFragment();
-        rpd.setArguments(bundle);
-        //rpd.setOnRecurrenceSetListener(SampleRecurrenceBasicUsage.this);
-        rpd.show(fm, "reccurence_dialog");
+    public SyncProfileListAdapter getAdapter() {
+        return adapter;
     }
 
-    private void showSubredditsDialog() {
-
-    }
 }
