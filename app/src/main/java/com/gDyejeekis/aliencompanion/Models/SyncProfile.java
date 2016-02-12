@@ -21,6 +21,8 @@ public class SyncProfile implements Serializable {
     private boolean isActive;
 
     public SyncProfile() {
+        this.name = "";
+        this.subreddits = new ArrayList<>();
         executeTime = -1;
         this.hasTime = false;
         this.isActive = false;
@@ -28,6 +30,7 @@ public class SyncProfile implements Serializable {
 
     public SyncProfile(String name) {
         this.name = name;
+        this.subreddits = new ArrayList<>();
         executeTime = -1;
         this.hasTime = false;
         this.isActive = false;

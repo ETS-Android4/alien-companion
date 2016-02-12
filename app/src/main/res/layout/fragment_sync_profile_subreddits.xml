@@ -9,27 +9,34 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subreddits"
-        android:id="@+id/textView_title"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="?attr/themeTextColor"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tap to remove"
-        android:id="@+id/textView7"
+    <org.apmem.tools.layouts.FlowLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
-        android:textColor="?attr/themeTextColor"
-        android:textSize="15sp"
-        android:textStyle="italic" />
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(profile name)"
+            android:id="@+id/textView_title"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="?attr/themeTextColor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Tap to remove)"
+            android:id="@+id/textView7"
+            android:textColor="?attr/themeTextColor"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
+    </org.apmem.tools.layouts.FlowLayout>
 
     <com.gDyejeekis.aliencompanion.Views.ListViewMaxHeight
         android:layout_width="match_parent"

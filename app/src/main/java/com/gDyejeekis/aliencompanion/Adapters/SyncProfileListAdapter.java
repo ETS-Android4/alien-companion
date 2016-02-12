@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileSubredditsDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -86,6 +88,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     public void saveSyncProfiles() {
+        Log.d("geotest", "Saving sync profiles");
         try {
             FileOutputStream fos = activity.openFileOutput(MyApplication.SYNC_PROFILES_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -125,7 +128,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void showSubredditsDialog(int profilePosition) {
-
+        SyncProfileSubredditsDialogFragment dialog = new SyncProfileSubredditsDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("profile", getItemAt(profilePosition));
+        dialog.setArguments(bundle);
+        dialog.show(activity.getFragmentManager(), "dialog");
     }
 
     private void showScheduleDialog(int profilePosition) {
@@ -212,7 +219,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showPopupMenu(activity, view);
+                    showPopupMenu(activity, view, position);
                 }
             });
             String stateText = (profile.isActive()) ? "ENABLED" : "DISABLED";
@@ -226,7 +233,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             });
         }
 
-        private void showPopupMenu(SyncProfilesActivity activity, View view) {
+        private void showPopupMenu(final SyncProfilesActivity activity, View view, final int position) {
             PopupMenu popupMenu = new PopupMenu(activity, view);
             popupMenu.inflate(R.menu.menu_sync_profile_options);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -234,7 +241,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
                         case R.id.action_edi_subreddits:
-                            //todo
+                            activity.getAdapter().showSubredditsDialog(position);
                             return true;
                         case R.id.edit_schedule:
                             //todo
