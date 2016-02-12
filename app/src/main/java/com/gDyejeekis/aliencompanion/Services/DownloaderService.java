@@ -73,7 +73,7 @@ public class DownloaderService extends IntentService {
 
         SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
         TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
-        assert submissionSort!=null && timeSpan!=null;
+        //assert submissionSort!=null && timeSpan!=null;
 
         Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
         Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);

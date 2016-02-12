@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp">
 
@@ -22,9 +22,10 @@
             android:layout_height="wrap_content"
             android:text="(profile name)"
             android:id="@+id/textView_title"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="?attr/themeTextColor" />
+            android:textColor="?attr/themeTextColor"
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
             android:text="(Tap to remove)"
             android:id="@+id/textView7"
             android:textColor="?attr/themeTextColor"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:textStyle="italic"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp" />
@@ -43,7 +44,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView_subreddits"
         android:layout_margin="5dp"
-        app:listViewMaxHeight="250dp"/>
+        app:listViewMaxHeight="250dp"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"/>
 
     <AutoCompleteTextView
         android:layout_width="match_parent"

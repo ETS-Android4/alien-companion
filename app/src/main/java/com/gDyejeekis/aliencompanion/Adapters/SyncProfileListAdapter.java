@@ -127,6 +127,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
+    public void deleteProfileAt(int position) {
+        profiles.remove(position);
+        notifyItemRemoved(position);
+    }
+
     private void showSubredditsDialog(int profilePosition) {
         SyncProfileSubredditsDialogFragment dialog = new SyncProfileSubredditsDialogFragment();
         Bundle bundle = new Bundle();
@@ -219,7 +224,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showPopupMenu(activity, view, position);
+                    showPopupMenu(activity, view, profile, position);
                 }
             });
             String stateText = (profile.isActive()) ? "ENABLED" : "DISABLED";
@@ -233,7 +238,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             });
         }
 
-        private void showPopupMenu(final SyncProfilesActivity activity, View view, final int position) {
+        private void showPopupMenu(final SyncProfilesActivity activity, View view, final SyncProfile profile, final int position) {
             PopupMenu popupMenu = new PopupMenu(activity, view);
             popupMenu.inflate(R.menu.menu_sync_profile_options);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -250,10 +255,10 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                             //todo
                             return true;
                         case R.id.action_delete_profile:
-                            //todo
+                            activity.getAdapter().deleteProfileAt(position);
                             return true;
                         case R.id.action_sync_now:
-                            //todo
+                            profile.startSync(activity);
                             return true;
                         default:
                             return false;

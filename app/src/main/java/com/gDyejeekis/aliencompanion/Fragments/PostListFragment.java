@@ -248,7 +248,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     intent.putExtra("isMulti", isMulti);
                     activity.startService(intent);
                 }
-                else toastMessage = "Check your connection and try again";
+                else toastMessage = "Network connection unavailable";
                 ToastUtils.displayShortToast(activity, toastMessage);
                 return true;
             case R.id.action_submit_post:

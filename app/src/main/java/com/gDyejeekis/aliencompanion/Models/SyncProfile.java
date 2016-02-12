@@ -1,9 +1,14 @@
 package com.gDyejeekis.aliencompanion.Models;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
+import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,10 +51,26 @@ public class SyncProfile implements Serializable {
 
     public void startSync(Context context) {
         if(GeneralUtils.isNetworkAvailable(context)) {
-            //start syncing
+            for(String subreddit : subreddits) {
+                Intent intent = new Intent(context, DownloaderService.class);
+                intent.putExtra("sort", SubmissionSort.HOT);
+                boolean isMulti = false;
+                if(subreddit.contains(" ")) {
+                    isMulti = true;
+                    subreddit = subreddit.split("\\s")[0];
+                }
+                intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
+                intent.putExtra("isMulti", isMulti);
+                context.startService(intent);
+            }
         }
         else {
-            //raise a notification, network unavailable
+            if(context instanceof Activity) {
+                ToastUtils.displayShortToast(context, "Network connection unavailable");
+            }
+            //else {
+            //    //raise notification
+            //}
         }
     }
 

@@ -13,7 +13,7 @@ import com.gDyejeekis.aliencompanion.R;
  */
 public class ListViewMaxHeight extends ListView {
 
-    private final int maxHeight;
+    private int maxHeight;
 
     public ListViewMaxHeight(Context context) {
         this(context, null);
@@ -32,6 +32,10 @@ public class ListViewMaxHeight extends ListView {
         } else {
             maxHeight = 0;
         }
+    }
+
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
     }
 
     @Override

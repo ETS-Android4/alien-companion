@@ -20,6 +20,7 @@ import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Views.ListViewMaxHeight;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 
@@ -32,7 +33,7 @@ import java.util.List;
 public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private SyncProfile syncProfile;
-    private ListView subredditsList;
+    private ListViewMaxHeight subredditsList;
     private ArrayAdapter<String> adapter;
     private List<String> subreddits;
     private List<String> oldSubreddits;
@@ -69,6 +70,8 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
         subredditField.requestFocus();
 
         title.setText(syncProfile.getName());
+        int listViewmaxHeight = GeneralUtils.getPortraitHeight(getActivity()) / 5;
+        subredditsList.setMaxHeight(listViewmaxHeight);
         subredditsList.setAdapter(adapter);
         subredditsList.setOnItemClickListener(this);
         cancelButton.setOnClickListener(this);
