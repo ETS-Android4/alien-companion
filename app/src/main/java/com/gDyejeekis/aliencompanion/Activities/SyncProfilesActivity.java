@@ -72,6 +72,17 @@ public class SyncProfilesActivity extends BackNavActivity {
         super.onStop();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(adapter.renamingProfilePosition != -1) {
+            SyncProfile profile = new SyncProfile(adapter.getItemAt(adapter.renamingProfilePosition));
+            adapter.profileRenamedAt(adapter.renamingProfilePosition, profile, false);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
     public SyncProfileListAdapter getAdapter() {
         return adapter;
     }

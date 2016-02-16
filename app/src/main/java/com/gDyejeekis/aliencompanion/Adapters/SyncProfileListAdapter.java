@@ -20,6 +20,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileScheduleDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileSubredditsDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -41,6 +42,14 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
 
     public class TempProfile extends SyncProfile {
 
+        public TempProfile() {
+            super();
+        }
+
+        public TempProfile(SyncProfile profile) {
+            super(profile);
+        }
+
         public int getViewType() {
             return VIEW_TYPE_TEMP_PROFILE;
         }
@@ -59,6 +68,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     public static final int TEMP_PROFILE_LAYOUT_RESOURCE = R.layout.sync_profile_temp_list_item;
 
     private boolean addingNewProfile = false;
+
+    public int renamingProfilePosition = -1;
 
     public SyncProfileListAdapter(SyncProfilesActivity activity) {
         this.activity = activity;
@@ -106,7 +117,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
-    public void addNewProfile(SyncProfile profile) {
+    private void addNewProfile(SyncProfile profile) {
         try {
             addingNewProfile = false;
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -127,7 +138,22 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
-    public void deleteProfileAt(int position) {
+    private void renameProfileAt(int position) {
+        profiles.set(position, new TempProfile(getItemAt(position)));
+        notifyItemChanged(position);
+    }
+
+    public void profileRenamedAt(int position, SyncProfile profile, boolean toggleKeyboard) {
+        if(toggleKeyboard) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        profiles.set(position, profile);
+        notifyItemChanged(position);
+        renamingProfilePosition = -1;
+    }
+
+    private void deleteProfileAt(int position) {
         profiles.remove(position);
         notifyItemRemoved(position);
     }
@@ -141,7 +167,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void showScheduleDialog(int profilePosition) {
-
+        SyncProfileScheduleDialogFragment dialog = new SyncProfileScheduleDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("profile", getItemAt(profilePosition));
+        dialog.setArguments(bundle);
+        dialog.show(activity.getFragmentManager(), "dialog");
     }
 
     @Override
@@ -172,7 +202,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 break;
             case VIEW_TYPE_TEMP_PROFILE:
                 TempProfileViewHolder tpv = (TempProfileViewHolder) viewHolder;
-                tpv.bindModel(activity);
+                tpv.bindModel(activity, getItemAt(position), position);
                 break;
         }
     }
@@ -249,10 +279,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                             activity.getAdapter().showSubredditsDialog(position);
                             return true;
                         case R.id.edit_schedule:
-                            //todo
+                            activity.getAdapter().showScheduleDialog(position);
                             return true;
                         case R.id.action_rename_profile:
-                            //todo
+                            activity.getAdapter().renamingProfilePosition = position;
+                            activity.getAdapter().renameProfileAt(position);
                             return true;
                         case R.id.action_delete_profile:
                             activity.getAdapter().deleteProfileAt(position);
@@ -278,15 +309,28 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             nameField = (EditText) itemView.findViewById(R.id.editText_profile_name_temp);
         }
 
-        public void bindModel(final SyncProfilesActivity activity) {
+        public void bindModel(final SyncProfilesActivity activity, final SyncProfile profile, final int position) {
             nameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    activity.getAdapter().addNewProfile(new SyncProfile(textView.getText().toString()));
+                    String profileName = textView.getText().toString();
+                    if(profile.getName().length()==0) {
+                        activity.getAdapter().addNewProfile(new SyncProfile(profileName));
+                    }
+                    else {
+                        profile.setName(profileName);
+                        SyncProfile renamedProfile = new SyncProfile(profile);
+                        activity.getAdapter().profileRenamedAt(position, renamedProfile, true);
+                    }
                     return true;
                 }
             });
-            nameField.setText("Profile " + activity.getAdapter().getItemCount());
+            if(profile.getName().length()==0) {
+                nameField.setText("Profile " + activity.getAdapter().getItemCount());
+            }
+            else {
+                nameField.setText(profile.getName());
+            }
             nameField.requestFocus();
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);

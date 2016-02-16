@@ -101,13 +101,14 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
             case R.id.button_addSubreddit:
                 String subreddit = subredditField.getText().toString();
                 subreddit = subreddit.replaceAll("\\s","");
-                if(isMulti.isChecked()) {
-                    isMulti.setChecked(false);
-                    subreddit = subreddit.concat(" (multi)");
-                }
+
                 if(!subreddit.equals("")) {
+                    if(isMulti.isChecked()) {
+                        isMulti.setChecked(false);
+                        subreddit = subreddit.concat(" (multi)");
+                    }
                     subredditField.setText("");
-                    subreddits.add(subreddit);
+                    subreddits.add(subreddit); //todo: check if subreddit is already in the list before adding it
                     adapter.notifyDataSetChanged();
                     subredditsList.setSelection(adapter.getCount() - 1);
                 }

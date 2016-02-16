@@ -33,6 +33,14 @@ public class SyncProfile implements Serializable {
         this.isActive = false;
     }
 
+    public SyncProfile(SyncProfile profile) {
+        this.name = profile.getName();
+        this.subreddits = profile.getSubreddits();
+        this.executeTime = profile.getExecuteTime();
+        this.hasTime = profile.hasTime();
+        this.isActive = profile.isActive();
+    }
+
     public SyncProfile(String name) {
         this.name = name;
         this.subreddits = new ArrayList<>();

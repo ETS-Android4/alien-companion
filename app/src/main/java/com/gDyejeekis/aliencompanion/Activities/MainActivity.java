@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setOrientation();
         MyApplication.setThemeRelatedFields();
         getTheme().applyStyle(MyApplication.fontStyle, true);
@@ -86,6 +88,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            // Activity was brought to front and not created,
+            // Thus finishing this will get us to the last viewed activity
+            Log.d("geotest", "killing main activity that was brought to front");
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_main_plus);
 
         container = (LinearLayout) findViewById(R.id.container);
