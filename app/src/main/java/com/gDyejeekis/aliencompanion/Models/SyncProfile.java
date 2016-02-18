@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
+import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,40 +22,50 @@ public class SyncProfile implements Serializable {
 
     private String name;
     private List<String> subreddits;
-    private double executeTime;
+    private int fromTime;
+    private int toTime;
     private boolean hasTime;
     private boolean isActive;
+    private String days;
 
     public SyncProfile() {
         this.name = "";
         this.subreddits = new ArrayList<>();
-        executeTime = -1;
+        this.fromTime = -1;
+        this.toTime = -1;
         this.hasTime = false;
         this.isActive = false;
+        days = "";
     }
 
     public SyncProfile(SyncProfile profile) {
         this.name = profile.getName();
         this.subreddits = profile.getSubreddits();
-        this.executeTime = profile.getExecuteTime();
+        this.fromTime = profile.getFromTime();
+        this.toTime = profile.getToTime();
         this.hasTime = profile.hasTime();
         this.isActive = profile.isActive();
+        this.days = profile.getDaysString();
     }
 
     public SyncProfile(String name) {
         this.name = name;
         this.subreddits = new ArrayList<>();
-        executeTime = -1;
+        this.fromTime = -1;
+        this.toTime = -1;
         this.hasTime = false;
         this.isActive = false;
+        days = "";
     }
 
-    public SyncProfile(String name, List<String> subreddits, double executeTime) {
+    public SyncProfile(String name, List<String> subreddits, int fromTime, int toTime, String days) {
         this.name = name;
         this.subreddits = subreddits;
-        this.executeTime = executeTime;
+        this.fromTime = fromTime;
+        this.toTime = toTime;
         this.hasTime = true;
         this.isActive = true;
+        this.days = days;
     }
 
     public void startSync(Context context) {
@@ -76,9 +87,6 @@ public class SyncProfile implements Serializable {
             if(context instanceof Activity) {
                 ToastUtils.displayShortToast(context, "Network connection unavailable");
             }
-            //else {
-            //    //raise notification
-            //}
         }
     }
 
@@ -90,9 +98,20 @@ public class SyncProfile implements Serializable {
         this.subreddits = subreddits;
     }
 
-    public void setExecuteTime(double time) {
-        this.executeTime = time;
-        this.hasTime = true;
+    public void setFromTime(int fromTime) {
+        this.fromTime = fromTime;
+    }
+
+    public void setToTime(int toTime) {
+        this.toTime = toTime;
+    }
+
+    public int getFromTime() {
+        return fromTime;
+    }
+
+    public int getToTime() {
+        return toTime;
     }
 
     public String getName() {
@@ -103,12 +122,8 @@ public class SyncProfile implements Serializable {
         return subreddits;
     }
 
-    public double getExecuteTime() {
-        return executeTime;
-    }
-
     public boolean isComplete() {
-        if(name==null || subreddits == null || executeTime==-1) {
+        if(name==null || subreddits == null || fromTime==-1 || toTime==-1) {
             return false;
         }
         return true;
@@ -129,5 +144,34 @@ public class SyncProfile implements Serializable {
     public boolean isActive() {
         //if(!hasTime) return false;
         return isActive;
+    }
+
+    public String getDaysString() {
+        return days;
+    }
+
+    public void setDaysString(String days) {
+        this.days = days;
+    }
+
+    public void setActiveDay(DaysEnum day, boolean flag) {
+        if(flag) {
+            if(!days.contains(day.value())) {
+                days = days.concat(day.value());
+            }
+        }
+        else {
+            days = days.replace(day.value(), "");
+        }
+    }
+
+    public boolean isActiveDay(DaysEnum day) {
+        return days.contains(day.value());
+    }
+
+    public boolean toggleActiveDay(DaysEnum day) {
+        boolean activeState = isActiveDay(day);
+        setActiveDay(day, !activeState);
+        return !activeState;
     }
 }

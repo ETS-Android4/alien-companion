@@ -169,7 +169,6 @@
     <style name="nsfwLabel">
         <item name="android:textColor">#d81d1b</item>
         <item name="android:textSize">?attr/font_small</item>
-        <!--<item name="android:background">@drawable/round_corner_nsfw</item>--> <!-- TODO: look into applying background for this style -->
     </style>
 
     <style name="upvotedStyle">

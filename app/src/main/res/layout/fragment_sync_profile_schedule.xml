@@ -38,12 +38,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinner_from1"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_from2" />
+            android:id="@+id/spinner_from2"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,17 +55,19 @@
             android:textColor="?attr/themeTextColor"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:paddingTop="10dp" />
+            android:paddingTop="20dp" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_to1" />
+            android:id="@+id/spinner_to1"
+            android:spinnerMode="dropdown" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_to2" />
+            android:id="@+id/spinner_to2"
+            android:spinnerMode="dropdown" />
     </org.apmem.tools.layouts.FlowLayout>
 
     <TextView
@@ -92,7 +95,9 @@
             android:text="Mon"
             android:id="@+id/button_mon"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -101,7 +106,9 @@
             android:text="Tue"
             android:id="@+id/button_tue"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -110,7 +117,9 @@
             android:text="Wed"
             android:id="@+id/button_wed"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -119,7 +128,9 @@
             android:text="Thu"
             android:id="@+id/button_thu"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -128,7 +139,9 @@
             android:text="Fri"
             android:id="@+id/button_fri"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -137,7 +150,9 @@
             android:text="Sat"
             android:id="@+id/button_sat"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -146,16 +161,16 @@
             android:text="Sun"
             android:id="@+id/button_sun"
             android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"/>
     </org.apmem.tools.layouts.FlowLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp" >
+        android:layout_margin="5dp">
 
         <Button
             android:layout_width="wrap_content"

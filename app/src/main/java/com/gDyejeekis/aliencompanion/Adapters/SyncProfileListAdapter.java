@@ -107,6 +107,9 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             for(SyncProfile profile : profiles) {
                 if(profile.getViewType() == VIEW_TYPE_PROFILE_ITEM) {
                     toSave.add(profile);
+                    if(profile.isActive()) {
+                        setProfileWakelock(profile);
+                    }
                 }
             }
             os.writeObject(toSave);
@@ -115,6 +118,10 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setProfileWakelock(SyncProfile profile) {
+
     }
 
     private void addNewProfile(SyncProfile profile) {

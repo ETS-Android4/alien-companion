@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.2" changeDate="Aug 26,2013">
+    <changelogversion versionName="0.2" changeDate="Feb 18,2016">
         <changelogtext>OAuth2 authentication and API requests. All previous account data has been cleared and you will need to re-authenticate (sorry!)</changelogtext>
+        <changelogtext>Multireddit support</changelogtext>
         <changelogtext>Added 'Chrome custom tabs' support (enable in settings)</changelogtext>
         <changelogtext>Higher resolution thumbnails for imgur and youtube links (can be disabled in settings)</changelogtext>
         <changelogtext>Changed cards layout for imgur and youtube links (larger thumbnail)</changelogtext>
@@ -14,6 +15,11 @@
         <changelogtext>Ordered (numbered) and unordered (bulleted) lists now display properly</changelogtext>
         <changelogtext>Imgur .gifv links will display as .gif for the time being (proper .gifv support coming soon)</changelogtext>
         <changelogtext>App will no longer crash and will properly recreate activities when its process is killed</changelogtext>
+        <changelogtext>Network requests now execute in parallel whenever possible</changelogtext>
+        <changelogtext>Comments in offline mode will now load from the most recent file if a post has been synced from multiple reddits (e.g. a post synced from the frontpage,
+            /r/technology and a multireddit)</changelogtext>
+        <changelogtext>Comments now properly load for /r/all in offline mode</changelogtext>
+        <changelogtext>Fixed an issue where duplicate posts would appear in offline mode when switching between portrait and dual pane view</changelogtext>
     </changelogversion>
 
 </changelog>
