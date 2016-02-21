@@ -1,7 +1,9 @@
 package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
     private static int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
 
     private SyncProfile profile;
+    private String oldDaysString;
     private Spinner from1;
     private Spinner from2;
     private Spinner to1;
@@ -51,6 +54,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         super.onCreate(savedInstanceState);
 
         profile = (SyncProfile) getArguments().getSerializable("profile");
+        oldDaysString = new String(profile.getDaysString());
     }
 
     @Override
@@ -70,6 +74,41 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         to1.setAdapter(numbersAdapter);
         from2.setAdapter(periodsAdapter);
         to2.setAdapter(periodsAdapter);
+        if(profile.hasTime()) {
+            if(profile.getFromTime()==12) {
+                from1.setSelection(11);
+                from2.setSelection(1);
+            }
+            else if (profile.getFromTime()==24) {
+                from1.setSelection(11);
+                from2.setSelection(0);
+            }
+            else if(profile.getFromTime() > 12) {
+                from1.setSelection(profile.getFromTime() - 13);
+                from2.setSelection(1);
+            }
+            else {
+                from1.setSelection(profile.getFromTime() - 1);
+                from2.setSelection(0);
+            }
+
+            if(profile.getToTime()==12) {
+                to1.setSelection(11);
+                to2.setSelection(1);
+            }
+            else if (profile.getToTime()==24) {
+                to1.setSelection(11);
+                to2.setSelection(0);
+            }
+            else if(profile.getToTime() > 12) {
+                to1.setSelection(profile.getToTime() - 13);
+                to2.setSelection(1);
+            }
+            else {
+                to1.setSelection(profile.getToTime() - 1);
+                to2.setSelection(0);
+            }
+        }
 
         button_mon = (Button) view.findViewById(R.id.button_mon);
         button_tue = (Button) view.findViewById(R.id.button_tue);
@@ -128,11 +167,62 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
                 button_sun.setBackgroundColor((profile.toggleActiveDay(DaysEnum.SUNDAY)) ? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_cancel:
+                profile.setDaysString(oldDaysString);
                 dismiss();
                 break;
             case R.id.button_done:
+                setProfileTimes();
                 dismiss();
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+
+                if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
+                    setProfileTimes();
+                    dismiss();
+                    return true; // pretend we've processed it
+                } else
+                    return false; // pass on to be processed as normal
+            }
+        });
+    }
+
+    private void setProfileTimes() {
+        int fromTime = Integer.valueOf(from1.getSelectedItem().toString());
+        int toTime = Integer.valueOf(to1.getSelectedItem().toString());
+        if(from2.getSelectedItemPosition()==0) {
+            if(fromTime == 12) {
+                fromTime = 24;
+            }
+        }
+        else {
+            if(fromTime != 12) {
+                fromTime = fromTime + 12;
+            }
+        }
+
+        if(to2.getSelectedItemPosition()==0) {
+            if(toTime == 12) {
+                toTime = 24;
+            }
+        }
+        else {
+            if(toTime != 12) {
+                toTime = toTime + 12;
+            }
+        }
+        profile.setFromTime(fromTime);
+        profile.setToTime(toTime);
+        profile.setHasTime(true);
+        //Log.d("schedule test", "from time: " + fromTime);
+        //Log.d("schedule test", "to time: " + toTime);
     }
 }

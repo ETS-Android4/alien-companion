@@ -78,6 +78,9 @@ public class SyncProfilesActivity extends BackNavActivity {
             SyncProfile profile = new SyncProfile(adapter.getItemAt(adapter.renamingProfilePosition));
             adapter.profileRenamedAt(adapter.renamingProfilePosition, profile, false);
         }
+        else if(adapter.addingNewProfile) {
+            adapter.removeTempProfile();
+        }
         else {
             super.onBackPressed();
         }

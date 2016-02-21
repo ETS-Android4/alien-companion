@@ -233,9 +233,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             //    else item.setChecked(false);
             //    refreshList();
             //    return true;
-            case R.id.action_hide_read:
-                postListAdapter.hideReadPosts();
-                return true;
+            //case R.id.action_hide_read:
+            //    postListAdapter.hideReadPosts();
+            //    return true;
             case R.id.action_sync_posts:
                 String toastMessage;
                 if(GeneralUtils.isNetworkAvailable(activity)) {

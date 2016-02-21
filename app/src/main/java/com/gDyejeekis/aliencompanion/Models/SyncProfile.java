@@ -70,23 +70,31 @@ public class SyncProfile implements Serializable {
 
     public void startSync(Context context) {
         if(GeneralUtils.isNetworkAvailable(context)) {
-            for(String subreddit : subreddits) {
-                Intent intent = new Intent(context, DownloaderService.class);
-                intent.putExtra("sort", SubmissionSort.HOT);
-                boolean isMulti = false;
-                if(subreddit.contains(" ")) {
-                    isMulti = true;
-                    subreddit = subreddit.split("\\s")[0];
-                }
-                intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
-                intent.putExtra("isMulti", isMulti);
-                context.startService(intent);
-            }
+            syncSubreddits(context);
         }
         else {
             if(context instanceof Activity) {
                 ToastUtils.displayShortToast(context, "Network connection unavailable");
             }
+        }
+    }
+
+    public void scheduleSync(Context context) {
+
+    }
+
+    private void syncSubreddits(Context context) {
+        for(String subreddit : subreddits) {
+            Intent intent = new Intent(context, DownloaderService.class);
+            intent.putExtra("sort", SubmissionSort.HOT);
+            boolean isMulti = false;
+            if(subreddit.contains(" ")) {
+                isMulti = true;
+                subreddit = subreddit.split("\\s")[0];
+            }
+            intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
+            intent.putExtra("isMulti", isMulti);
+            context.startService(intent);
         }
     }
 
@@ -131,6 +139,10 @@ public class SyncProfile implements Serializable {
 
     public int getViewType() {
         return SyncProfileListAdapter.VIEW_TYPE_PROFILE_ITEM;
+    }
+
+    public void setHasTime(boolean flag) {
+        this.hasTime = flag;
     }
 
     public boolean hasTime() {

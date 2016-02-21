@@ -67,7 +67,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
 
     public static final int TEMP_PROFILE_LAYOUT_RESOURCE = R.layout.sync_profile_temp_list_item;
 
-    private boolean addingNewProfile = false;
+    public boolean addingNewProfile = false;
 
     public int renamingProfilePosition = -1;
 
@@ -108,7 +108,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 if(profile.getViewType() == VIEW_TYPE_PROFILE_ITEM) {
                     toSave.add(profile);
                     if(profile.isActive()) {
-                        setProfileWakelock(profile);
+                        profile.scheduleSync(activity);
                     }
                 }
             }
@@ -120,10 +120,6 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
-    private void setProfileWakelock(SyncProfile profile) {
-
-    }
-
     private void addNewProfile(SyncProfile profile) {
         try {
             addingNewProfile = false;
@@ -132,6 +128,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             profiles.remove(profiles.size() - 1);
             profiles.add(profile);
             notifyDataSetChanged();
+            showScheduleDialog(profiles.indexOf(profile));
+            showSubredditsDialog(profiles.indexOf(profile));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,6 +141,13 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             profiles.add(new TempProfile());
             notifyDataSetChanged();
         }
+    }
+
+    public void removeTempProfile() {
+        addingNewProfile = false;
+        int index = profiles.size() -1;
+        profiles.remove(index);
+        notifyItemRemoved(index);
     }
 
     private void renameProfileAt(int position) {
@@ -161,8 +166,22 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void deleteProfileAt(int position) {
-        profiles.remove(position);
-        notifyItemRemoved(position);
+        try {
+            profiles.remove(position);
+            notifyItemRemoved(position);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteProfile(SyncProfile profile) {
+        try {
+            int index = profiles.indexOf(profile);
+            profiles.remove(index);
+            notifyItemRemoved(index);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showSubredditsDialog(int profilePosition) {
@@ -293,7 +312,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                             activity.getAdapter().renameProfileAt(position);
                             return true;
                         case R.id.action_delete_profile:
-                            activity.getAdapter().deleteProfileAt(position);
+                            //activity.getAdapter().deleteProfileAt(position);
+                            activity.getAdapter().deleteProfile(profile);
                             return true;
                         case R.id.action_sync_now:
                             profile.startSync(activity);
