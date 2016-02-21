@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -31,6 +32,18 @@ public class SettingsFragment extends PreferenceFragment {
         Preference clearCache = findPreference("clearCache");
         Preference viewChangeLog = findPreference("changelog");
         Preference profiles = findPreference("profiles");
+        Preference feedback = findPreference("feedback");
+        feedback.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", "alien.companion@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Alien Companion app feedback");
+                //emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+                getActivity().startActivity(emailIntent);
+                return false;
+            }
+        });
         profiles.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

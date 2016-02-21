@@ -233,12 +233,16 @@
 
         <Preference
             android:key="clearCache"
-            android:title="Clear cache"/>
+            android:title="Clear app cache"/>
 
         <Preference
             android:key="changelog"
             android:title="View changelog"
             android:summary="Current version: 0.2" />
+
+        <Preference
+            android:key="feedback"
+            android:title="Send feedback"/>
 
     </PreferenceCategory>
 </PreferenceScreen>

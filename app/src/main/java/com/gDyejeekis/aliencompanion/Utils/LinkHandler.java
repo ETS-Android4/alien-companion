@@ -78,7 +78,8 @@ public class LinkHandler {
                     else setImplicitIntent = true;
                 } else if(domain.contains("imgur.com")) {
                     if(MyApplication.handleImgur) {
-                        ImgurLinkHandler.handleUrl(activity, post, url, domain);
+                        //ImgurLinkHandler.handleUrl(activity, post, url, domain);
+                        startInAppBrowser(activity, post, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
