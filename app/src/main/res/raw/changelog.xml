@@ -3,8 +3,8 @@
 
     <changelogversion versionName="0.2" changeDate="Feb 18,2016">
         <changelogtext>OAuth2 authentication and API requests. All previous account data has been cleared and you will need to re-authenticate (sorry!)</changelogtext>
-        <changelogtext>Multireddit support</changelogtext>
-        <changelogtext>Sync profiles and sync scheduling</changelogtext>
+        <changelogtext>Added a 'Multireddits' section in the navigation drawer</changelogtext>
+        <changelogtext>Sync profiles and scheduled syncing</changelogtext>
         <changelogtext>Added 'Chrome custom tabs' support (enable in settings)</changelogtext>
         <changelogtext>Higher resolution thumbnails for imgur and youtube links (can be disabled in settings)</changelogtext>
         <changelogtext>Changed cards layout for imgur and youtube links (larger thumbnail)</changelogtext>

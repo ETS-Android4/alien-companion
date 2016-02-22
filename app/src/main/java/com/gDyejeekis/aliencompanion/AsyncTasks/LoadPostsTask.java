@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.AsyncTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
@@ -83,6 +84,9 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         try {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
+                //wait until nav drawer is closed to start
+                SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 20);
+
                 String filename = "";
                 if(plf.subreddit == null) filename = "frontpage";
                 else {

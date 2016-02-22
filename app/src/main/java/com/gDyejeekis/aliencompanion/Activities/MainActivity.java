@@ -198,6 +198,10 @@ public class MainActivity extends AppCompatActivity {
         listFragment.changeSubreddit(null);
     }
 
+    public boolean isDrawerVisible() {
+        return drawerLayout.isDrawerVisible(MyApplication.drawerGravity);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
