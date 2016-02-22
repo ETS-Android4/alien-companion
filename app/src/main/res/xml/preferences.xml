@@ -178,6 +178,12 @@
             android:entryValues="@array/commentSortValues"
             android:defaultValue="1"/>
 
+        <CheckBoxPreference
+            android:key="syncThumb"
+            android:title="Sync thumbnails"
+            android:defaultValue="false"
+            />
+
         <Preference
             android:key="clearSynced"
             android:title="Clear all synced posts" />

@@ -5,11 +5,15 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -22,6 +26,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,7 +34,10 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -38,6 +46,8 @@ import java.util.List;
 public class DownloaderService extends IntentService {
 
     private static final int FOREGROUND_ID = 574974;
+
+    public static final String LOCAL_THUMNAIL_SUFFIX = "thumb";
 
     private int MAX_PROGRESS;
 
@@ -93,6 +103,9 @@ public class DownloaderService extends IntentService {
                 for (RedditItem post : posts) {
                     increaseProgress(builder);
                     Submission submission = (Submission) post;
+                    if(MyApplication.syncThumbnails) {
+                        downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
+                    }
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
                     writePostToFile(submission, filename + submission.getIdentifier());
@@ -153,6 +166,65 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    private void downloadPostThumbnail(Submission post, String filename) {
+
+        if(!post.isSelf()) {
+            saveBitmapToDisk(getBitmapFromURL(post.getThumbnail()), filename);
+        }
+    }
+
+    private void saveBitmapToDisk(Bitmap bmp, String filename) {
+        FileOutputStream out = null;
+        try {
+            out = openFileOutput(filename, Context.MODE_PRIVATE);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Bitmap getBitmapFromURL(String src) {
+        try {
+            java.net.URL url = new java.net.URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
+                matrix, false);
+
+        return resizedBitmap;
+    }
+
     private void deletePreviousComments(final String subreddit) {
         //File dir = getFilesDir();
         FilenameFilter filenameFilter = new FilenameFilter() {
@@ -169,19 +241,4 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadImage(Submission post) {
-        String domain = post.getDomain();
-        String url = post.getURL();
-        if(domain.contains("imgur.com")) {
-            if(url.contains("/a/")) { //imgur album
-
-            }
-            else if(domain.contains("/gallery/")) { //imgur gallery
-
-            }
-            else { //imgur single image
-
-            }
-        }
-    }
 }

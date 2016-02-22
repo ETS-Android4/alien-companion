@@ -4,12 +4,14 @@
     <changelogversion versionName="0.2" changeDate="Feb 18,2016">
         <changelogtext>OAuth2 authentication and API requests. All previous account data has been cleared and you will need to re-authenticate (sorry!)</changelogtext>
         <changelogtext>Multireddit support</changelogtext>
+        <changelogtext>Sync profiles and sync scheduling</changelogtext>
         <changelogtext>Added 'Chrome custom tabs' support (enable in settings)</changelogtext>
         <changelogtext>Higher resolution thumbnails for imgur and youtube links (can be disabled in settings)</changelogtext>
         <changelogtext>Changed cards layout for imgur and youtube links (larger thumbnail)</changelogtext>
         <changelogtext>Added Q&amp;A sort for comments</changelogtext>
         <changelogtext>Added 'default comment sort' and 'sync comment sort' options</changelogtext>
         <changelogtext>Added option to completely disable thumbnails</changelogtext>
+        <changelogtext>Added 'Sync thumbnails' option</changelogtext>
         <changelogtext>Added Imgur and Twitter link-handling options</changelogtext>
         <changelogtext>Added 'Send feedback' option</changelogtext>
         <changelogtext>Implemented replying to private messages and comments in the messages screen</changelogtext>

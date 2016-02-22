@@ -128,8 +128,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             profiles.remove(profiles.size() - 1);
             profiles.add(profile);
             notifyDataSetChanged();
-            showScheduleDialog(profiles.indexOf(profile));
-            showSubredditsDialog(profiles.indexOf(profile));
+            showSubredditsDialog(profiles.indexOf(profile), true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,10 +183,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
-    private void showSubredditsDialog(int profilePosition) {
+    private void showSubredditsDialog(int profilePosition, boolean showSchedule) {
         SyncProfileSubredditsDialogFragment dialog = new SyncProfileSubredditsDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
+        bundle.putBoolean("showSchedule", showSchedule);
         dialog.setArguments(bundle);
         dialog.show(activity.getFragmentManager(), "dialog");
     }
@@ -198,6 +198,10 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         bundle.putSerializable("profile", getItemAt(profilePosition));
         dialog.setArguments(bundle);
         dialog.show(activity.getFragmentManager(), "dialog");
+    }
+
+    public void showScheduleDialog(SyncProfile profile) {
+        showScheduleDialog(profiles.indexOf(profile));
     }
 
     @Override
@@ -302,7 +306,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
                         case R.id.action_edi_subreddits:
-                            activity.getAdapter().showSubredditsDialog(position);
+                            activity.getAdapter().showSubredditsDialog(position, false);
                             return true;
                         case R.id.edit_schedule:
                             activity.getAdapter().showScheduleDialog(position);

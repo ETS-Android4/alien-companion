@@ -93,6 +93,7 @@ public class MyApplication extends Application {
     public static boolean handleOtherLinks;
     public static boolean hqThumbnails;
     public static boolean noThumbnails;
+    public static boolean syncThumbnails;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -219,6 +220,7 @@ public class MyApplication extends Application {
         syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
         syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
         syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
+        syncThumbnails = prefs.getBoolean("syncThumb", false);
         index = Integer.parseInt(prefs.getString("syncCommentSort", "1"));
         switch (index) {
             case 1:

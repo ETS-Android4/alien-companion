@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.Utils;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
@@ -8,6 +10,10 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -16,24 +22,6 @@ import java.util.List;
 public class ImageLoader {
 
     //TODO: Load and Cache Images with Universal Image Loader instead of Picasso
-    //public static List<Thumbnail> preloadThumbnails(List<Submission> posts, Context context) {
-    //    //if (BuildConfig.DEBUG) {
-    //    //    Picasso.with(activity).setIndicatorsEnabled(true);
-    //    //    Picasso.with(activity).setLoggingEnabled(true);
-    //    //}
-    //    List<Thumbnail> thumbnails = new ArrayList<>();
-    //    for(Submission post : posts) {
-    //        Thumbnail thumbnail = new Thumbnail(post.getThumbnail());
-    //        try {
-    //            Picasso.with(context).load(post.getThumbnail()).fetch();
-    //            thumbnail.setHasThumbnail(true);
-    //        } catch (IllegalArgumentException e) {
-    //            thumbnail.setHasThumbnail(false);
-    //        }
-    //        thumbnails.add(thumbnail);
-    //    }
-    //    return  thumbnails;
-    //}
 
     public static void preloadUserImages(List<RedditItem> posts, Context context) {
         //if (BuildConfig.DEBUG) {
@@ -62,38 +50,82 @@ public class ImageLoader {
         //}
         for(RedditItem submission : posts) {
             if(submission.getThumbnailObject()==null) {
-                if(MyApplication.offlineModeEnabled) { //TODO: handle offline thumbnails case
-                    submission.setThumbnailObject(new Thumbnail());
+                Thumbnail thumbnail;
+                if(MyApplication.offlineModeEnabled) { //load thumbnail from disk
+                    thumbnail = getOfflineThumbnailObject(context, (Submission) submission);
                 }
                 else {
-                    Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
+                    thumbnail = new Thumbnail(submission.getThumbnail());
                     try {
                         Picasso.with(context).load(thumbnail.getUrl()).fetch();
                         thumbnail.setHasThumbnail(true);
                     } catch (IllegalArgumentException e) {
                         thumbnail.setHasThumbnail(false);
                     }
-                    submission.setThumbnailObject(thumbnail);
                 }
+                submission.setThumbnailObject(thumbnail);
             }
-            else {
+            else { //thumbnail object already exists?
                 try {
                     Picasso.with(context).load(submission.getThumbnailObject().getUrl()).fetch();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
+    public static Thumbnail getOfflineThumbnailObject(Context context, final Submission post) {
+        Thumbnail thumbnail;
+        if(post.isSelf()) {
+            thumbnail = new Thumbnail("self");
+        }
+        else if(post.isNSFW() && !MyApplication.showNSFWpreview) {
+            thumbnail = new Thumbnail("nsfw");
+        }
+        else {
+            FilenameFilter filenameFilter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    if (filename.endsWith("thumb") && filename.contains(post.getIdentifier()))
+                        return true;
+                    return false;
+                }
+            };
+            File[] files = context.getFilesDir().listFiles(filenameFilter);
+            if(files.length!=0) {
+                thumbnail = new Thumbnail("file:" + files[0].getAbsolutePath());
+                boolean hasThumbnail = false;
+                try {
+                    hasThumbnail = !ConvertUtils.getDomainName(post.getThumbnail()).equals("null");
+                } catch (Exception e) {}
+                thumbnail.setHasThumbnail(hasThumbnail);
+            }
+            else thumbnail = new Thumbnail();
+        }
+        return thumbnail;
+    }
+
     public static void preloadThumbnail(Submission submission, Context context) {
         if(submission.getThumbnailObject()==null) {
-            Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
-            try {
-                Picasso.with(context).load(thumbnail.getUrl()).fetch();
-                thumbnail.setHasThumbnail(true);
-            } catch (IllegalArgumentException e) {
-                thumbnail.setHasThumbnail(false);
+            //Log.d("geotest", "thumbnail object null");
+            if(MyApplication.offlineModeEnabled) {
+                submission.setThumbnailObject(getOfflineThumbnailObject(context, submission));
             }
-            submission.setThumbnailObject(thumbnail);
+            else {
+                Thumbnail thumbnail = new Thumbnail(submission.getThumbnail());
+                try {
+                    Picasso.with(context).load(thumbnail.getUrl()).fetch();
+                    thumbnail.setHasThumbnail(true);
+                } catch (IllegalArgumentException e) {
+                    thumbnail.setHasThumbnail(false);
+                }
+                submission.setThumbnailObject(thumbnail);
+            }
         }
+        //else {
+        //    Log.d("geotest", "thumbnail object exists");
+        //}
     }
+
 }
