@@ -1,8 +1,12 @@
 package com.gDyejeekis.aliencompanion.Models;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
@@ -12,6 +16,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +24,17 @@ import java.util.List;
  * Created by sound on 1/21/2016.
  */
 public class SyncProfile implements Serializable {
+
+    static class TimeWindow {
+
+        long windowStart;
+        long windowLength;
+
+        TimeWindow(long startTime, long windowLength) {
+            this.windowStart = startTime;
+            this.windowLength = windowLength;
+        }
+    }
 
     private String name;
     private List<String> subreddits;
@@ -70,7 +86,9 @@ public class SyncProfile implements Serializable {
 
     public void startSync(Context context) {
         if(GeneralUtils.isNetworkAvailable(context)) {
-            syncSubreddits(context);
+            for(String subreddit : subreddits) {
+                context.startService(getSubredditSyncIntent(context, subreddit));
+            }
         }
         else {
             if(context instanceof Activity) {
@@ -80,22 +98,66 @@ public class SyncProfile implements Serializable {
     }
 
     public void scheduleSync(Context context) {
+        Log.d("geotest", "Scheduling sync services...");
+        //todo: unschedule previous alarms for this profile
+        int ALARM_ID = 34352;
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
+        for(String subreddit : subreddits) {
+            PendingIntent pendingIntent = PendingIntent.getService(context, ALARM_ID, getSubredditSyncIntent(context, subreddit), 0);
+
+            for(TimeWindow timeWindow : getSyncTimeWindows()) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+                    mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
+                }
+                else {
+                    mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
+                }
+            }
+        }
+        Log.d("geotest", "finished scheduling");
     }
 
-    private void syncSubreddits(Context context) {
-        for(String subreddit : subreddits) {
-            Intent intent = new Intent(context, DownloaderService.class);
-            intent.putExtra("sort", SubmissionSort.HOT);
-            boolean isMulti = false;
-            if(subreddit.contains(" ")) {
-                isMulti = true;
-                subreddit = subreddit.split("\\s")[0];
-            }
-            intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
-            intent.putExtra("isMulti", isMulti);
-            context.startService(intent);
+    private List<TimeWindow> getSyncTimeWindows() {
+        List<TimeWindow> timeWindows = new ArrayList<>();
+
+        if(days.contains("mon")) {
+
         }
+        if(days.contains("tue")) {
+
+        }
+        if(days.contains("wed")) {
+
+        }
+        if(days.contains("thu")) {
+
+        }
+        if(days.contains("fri")) {
+
+        }
+        if(days.contains("sat")) {
+
+        }
+        if(days.contains("sun")) {
+
+        }
+
+        return timeWindows;
+    }
+
+    private Intent getSubredditSyncIntent(Context context, String subreddit) {
+        Intent intent = new Intent(context, DownloaderService.class);
+        intent.putExtra("sort", SubmissionSort.HOT);
+        boolean isMulti = false;
+        if(subreddit.contains(" ")) {
+            isMulti = true;
+            subreddit = subreddit.split("\\s")[0];
+        }
+        intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
+        intent.putExtra("isMulti", isMulti);
+
+        return intent;
     }
 
     public void setName(String name) {
