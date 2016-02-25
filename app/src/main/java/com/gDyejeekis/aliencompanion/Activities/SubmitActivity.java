@@ -31,6 +31,8 @@ public class SubmitActivity extends BackNavActivity implements DialogInterface.O
         else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
+        if(MyApplication.nightThemeEnabled)
+            getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(MyApplication.currentColor);

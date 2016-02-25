@@ -104,7 +104,7 @@ public class SubmitCommentFragment extends Fragment {
     }
 
     public boolean displayConfirmDialog() {
-        return replyField.getText().length() > 0;
+        return replyField.getText().toString().replaceAll("\\s", "").length() > 0;
     }
 
 }

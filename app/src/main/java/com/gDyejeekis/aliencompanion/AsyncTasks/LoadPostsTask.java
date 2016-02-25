@@ -181,6 +181,9 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                                 plf.timeSpan = time;
                                 plf.setActionBarSubtitle();
                             }
+                            else if(MyApplication.offlineModeEnabled) {
+                                plf.setActionBarSubtitle();
+                            }
                             plf.contentView.setAdapter(plf.postListAdapter);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");

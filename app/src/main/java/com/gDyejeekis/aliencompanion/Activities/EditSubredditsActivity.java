@@ -16,6 +16,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.mobeta.android.dslv.DragSortListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by sound on 10/29/2015.
@@ -97,6 +98,9 @@ public class EditSubredditsActivity extends BackNavActivity {
                 AddSubredditDialogFragment dialog = new AddSubredditDialogFragment();
                 dialog.show(getFragmentManager(), "dialog");
                 return true;
+            case R.id.action_sort_by_alpha:
+                sortByAlpha();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -116,6 +120,12 @@ public class EditSubredditsActivity extends BackNavActivity {
     public void removeSubreddit(String subreddit) {
         changesMade = true;
         subreddits.remove(subreddit);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void sortByAlpha() {
+        changesMade = true;
+        Collections.sort(subreddits, String.CASE_INSENSITIVE_ORDER);
         adapter.notifyDataSetChanged();
     }
 

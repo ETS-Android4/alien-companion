@@ -88,7 +88,7 @@ public class SubmitLinkFragment extends Fragment {
     }
 
     public boolean displayConfirmDialog() {
-        return titleField.getText().length() > 0;
+        return titleField.getText().toString().replaceAll("\\s", "").length() > 0;
     }
 
 }

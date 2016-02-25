@@ -104,8 +104,8 @@ public class SyncProfile implements Serializable {
 
     public void scheduleSync(Context context) {
         Log.d("geotest", "Scheduling sync services...");
-        unscheduleSync(context);
-        
+        //unscheduleSync(context);
+
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         for(String subreddit : subreddits) {
@@ -124,7 +124,7 @@ public class SyncProfile implements Serializable {
     }
 
     public void unscheduleSync(Context context) {
-
+        // TODO: 2/25/2016
     }
 
     private List<TimeWindow> getSyncTimeWindows() {

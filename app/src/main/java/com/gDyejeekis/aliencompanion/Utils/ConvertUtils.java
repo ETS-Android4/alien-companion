@@ -63,6 +63,14 @@ public class ConvertUtils {
         }
     }
 
+    //public static String getFileAge(long lastModified) {
+    //    String lastSync = "";
+//
+//
+//
+    //    return lastSync;
+    //}
+
     public static CharSequence noTrailingwhiteLines(CharSequence text) {
         //fromHtmlCount++;
         //Log.d("geotest", "fromhtml() executed " + fromHtmlCount + " times");

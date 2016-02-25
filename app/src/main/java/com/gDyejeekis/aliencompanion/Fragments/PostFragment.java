@@ -25,13 +25,17 @@ import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -347,13 +351,36 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public void setActionBarSubtitle() {
         if(!MainActivity.dualPaneActive) {
             String subtitle;
-            if (MyApplication.offlineModeEnabled) subtitle = "offline";
+            if (MyApplication.offlineModeEnabled) subtitle = getOfflineSubtitle();
             else {
                 if(commentSort==null) commentSort = CommentSort.TOP;
                 subtitle = commentSort.value();
             }
             activity.getSupportActionBar().setSubtitle(subtitle);
         }
+    }
+
+    private String getOfflineSubtitle() {
+        File postFile = null;
+
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if(filename.endsWith(post.getIdentifier())) return true;
+                return false;
+            }
+        };
+        File[] files = activity.getFilesDir().listFiles(filenameFilter);
+        for(File file : files) {
+            if(postFile == null) postFile = file;
+            else if(file.lastModified() > postFile.lastModified()) postFile = file;
+        }
+
+        if(postFile!=null) {
+            //return new Date(postFile.lastModified()).toString();
+            return "synced " + ConvertUtils.getSubmissionAge((double) postFile.lastModified() / 1000);
+        }
+        return "not synced";
     }
 
 }

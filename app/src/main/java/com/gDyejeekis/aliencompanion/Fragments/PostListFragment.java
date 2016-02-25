@@ -28,6 +28,7 @@ import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
+import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
@@ -38,6 +39,8 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 
@@ -497,13 +500,29 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void setActionBarSubtitle() {
         String subtitle;
         if(MyApplication.offlineModeEnabled) {
-            subtitle = "offline";
+            subtitle = getOfflineSubtitle();
         }
         else {
             if (timeSpan == null) subtitle = submissionSort.value();
             else subtitle = submissionSort.value() + ": " + timeSpan.value();
         }
         activity.getSupportActionBar().setSubtitle(subtitle);
+    }
+
+    private String getOfflineSubtitle() {
+        try {
+            String filename = (subreddit == null) ? "frontpage" : subreddit;
+            File file = new File(activity.getFilesDir(), filename);
+            //double lastModified = (double) file.lastModified();
+            //return ConvertUtils.getSubmissionAge(lastModified);
+            if(file.exists()) {
+                //return new Date(file.lastModified()).toString();
+                return "synced " + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "not synced";
     }
 
 }
