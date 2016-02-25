@@ -80,4 +80,8 @@ public class SubmitTextFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean displayConfirmDialog() {
+        return titleField.getText().length() > 0 || textField.getText().length() > 0;
+    }
+
 }

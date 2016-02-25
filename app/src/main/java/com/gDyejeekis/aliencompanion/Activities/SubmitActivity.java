@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +17,17 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
-public class SubmitActivity extends BackNavActivity {
+public class SubmitActivity extends BackNavActivity implements DialogInterface.OnClickListener {
+
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getTheme().applyStyle(MyApplication.fontStyle, true);
-        if(MyApplication.nightThemeEnabled) getTheme().applyStyle(R.style.selectedTheme_night, true);
+        if(MyApplication.nightThemeEnabled) {
+            getTheme().applyStyle(R.style.PopupDarkTheme, true);
+            getTheme().applyStyle(R.style.selectedTheme_night, true);
+        }
         else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
@@ -38,7 +45,7 @@ public class SubmitActivity extends BackNavActivity {
     private void setupFragment() {
         if(getFragmentManager().findFragmentByTag("submitFragment") == null) {
             SubmitType submitType = (SubmitType) getIntent().getSerializableExtra("submitType");
-            Fragment fragment = null;
+            //Fragment fragment = null;
             switch (submitType) {
                 case link:
                     getSupportActionBar().setTitle("Submit link");
@@ -70,6 +77,36 @@ public class SubmitActivity extends BackNavActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_submit_post, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        String message = "";
+        boolean showDialog = false;
+        if(fragment instanceof SubmitCommentFragment) {
+            message = "Discard comment?";
+            showDialog = ((SubmitCommentFragment) fragment).displayConfirmDialog();
+        }
+        else if(fragment instanceof SubmitLinkFragment) {
+            message = "Discard post?";
+            showDialog = ((SubmitLinkFragment) fragment).displayConfirmDialog();
+        }
+        else if(fragment instanceof SubmitTextFragment) {
+            message = "Discard post?";
+            showDialog = ((SubmitTextFragment) fragment).displayConfirmDialog();
+        }
+
+        if(showDialog) {
+            new AlertDialog.Builder(this).setMessage(message).setPositiveButton("Yes", this).setNegativeButton("No", null).show();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+        super.onBackPressed();
     }
 
 }

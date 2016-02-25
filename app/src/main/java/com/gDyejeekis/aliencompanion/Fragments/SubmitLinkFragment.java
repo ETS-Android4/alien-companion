@@ -87,4 +87,8 @@ public class SubmitLinkFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean displayConfirmDialog() {
+        return titleField.getText().length() > 0;
+    }
+
 }

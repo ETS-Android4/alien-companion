@@ -103,4 +103,8 @@ public class SubmitCommentFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean displayConfirmDialog() {
+        return replyField.getText().length() > 0;
+    }
+
 }
