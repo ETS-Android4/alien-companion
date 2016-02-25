@@ -10,14 +10,17 @@
         <changelogtext>Changed cards layout for imgur and youtube links (larger thumbnail)</changelogtext>
         <changelogtext>Added Q&amp;A sort for comments</changelogtext>
         <changelogtext>Added 'default comment sort' and 'sync comment sort' options</changelogtext>
+        <changelogtext>Added option to sort the subreddits list by alphabetical order</changelogtext>
         <changelogtext>Added option to completely disable thumbnails</changelogtext>
         <changelogtext>Added 'Sync thumbnails' option</changelogtext>
         <changelogtext>Added Imgur and Twitter link-handling options</changelogtext>
         <changelogtext>Added 'Send feedback' option</changelogtext>
+        <changelogtext>A confirmation dialog will now display on exiting the post/comment submission screens</changelogtext>
         <changelogtext>Implemented replying to private messages and comments in the messages screen</changelogtext>
         <changelogtext>Ordered (numbered) and unordered (bulleted) lists now display properly</changelogtext>
         <changelogtext>App will no longer crash and will properly recreate activities when its process is killed</changelogtext>
         <changelogtext>Network requests now execute in parallel whenever possible</changelogtext>
+        <changelogtext>Toolbar subtitle in offline mode now indicates when the last sync occured (e.g. "synced 2 days ago")</changelogtext>
         <changelogtext>Comments in offline mode will now load from the most recent file if a post has been synced from multiple reddits (e.g. a post synced from the frontpage,
             /r/technology and a multireddit)</changelogtext>
         <changelogtext>Comments now properly load for /r/all in offline mode</changelogtext>
