@@ -16,9 +16,9 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by sound on 1/21/2016.
@@ -36,6 +36,7 @@ public class SyncProfile implements Serializable {
         }
     }
 
+    private int profileId;
     private String name;
     private List<String> subreddits;
     private int fromTime;
@@ -45,6 +46,7 @@ public class SyncProfile implements Serializable {
     private String days;
 
     public SyncProfile() {
+        profileId = UUID.randomUUID().hashCode();
         this.name = "";
         this.subreddits = new ArrayList<>();
         this.fromTime = -1;
@@ -55,6 +57,7 @@ public class SyncProfile implements Serializable {
     }
 
     public SyncProfile(SyncProfile profile) {
+        profileId = UUID.randomUUID().hashCode();
         this.name = profile.getName();
         this.subreddits = profile.getSubreddits();
         this.fromTime = profile.getFromTime();
@@ -65,6 +68,7 @@ public class SyncProfile implements Serializable {
     }
 
     public SyncProfile(String name) {
+        profileId = UUID.randomUUID().hashCode();
         this.name = name;
         this.subreddits = new ArrayList<>();
         this.fromTime = -1;
@@ -75,6 +79,7 @@ public class SyncProfile implements Serializable {
     }
 
     public SyncProfile(String name, List<String> subreddits, int fromTime, int toTime, String days) {
+        profileId = UUID.randomUUID().hashCode();
         this.name = name;
         this.subreddits = subreddits;
         this.fromTime = fromTime;
@@ -99,12 +104,12 @@ public class SyncProfile implements Serializable {
 
     public void scheduleSync(Context context) {
         Log.d("geotest", "Scheduling sync services...");
-        //todo: unschedule previous alarms for this profile
-        int ALARM_ID = 34352;
+        unscheduleSync(context);
+        
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         for(String subreddit : subreddits) {
-            PendingIntent pendingIntent = PendingIntent.getService(context, ALARM_ID, getSubredditSyncIntent(context, subreddit), 0);
+            PendingIntent pendingIntent = PendingIntent.getService(context, profileId, getSubredditSyncIntent(context, subreddit), 0);
 
             for(TimeWindow timeWindow : getSyncTimeWindows()) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
@@ -116,6 +121,10 @@ public class SyncProfile implements Serializable {
             }
         }
         Log.d("geotest", "finished scheduling");
+    }
+
+    public void unscheduleSync(Context context) {
+
     }
 
     private List<TimeWindow> getSyncTimeWindows() {
@@ -237,6 +246,10 @@ public class SyncProfile implements Serializable {
         else {
             days = days.replace(day.value(), "");
         }
+    }
+
+    public int getProfileId() {
+        return profileId;
     }
 
     public boolean isActiveDay(DaysEnum day) {
