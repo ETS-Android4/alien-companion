@@ -18,6 +18,7 @@ import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
@@ -94,9 +95,12 @@ public class SyncProfile implements Serializable {
 
     public void startSync(Context context) {
         if(GeneralUtils.isNetworkAvailable(context)) {
-            for(String subreddit : subreddits) {
-                context.startService(getSubredditSyncIntent(context, subreddit));
-            }
+            //for(String subreddit : subreddits) {
+            //    context.startService(getSubredditSyncIntent(context, subreddit));
+            //}
+            Intent intent = new Intent(context, DownloaderService.class);
+            intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
+            context.startService(intent);
         }
         else {
             if(context instanceof Activity) {
@@ -112,10 +116,10 @@ public class SyncProfile implements Serializable {
 
         Intent intent = new Intent(context, DownloaderService.class);
         intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
-        PendingIntent pendingIntent = PendingIntent.getService(context, profileId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mgr.cancel(pendingIntent); //cancel previous pending intent for this profile
+        PendingIntent pendingIntent = PendingIntent.getService(context, profileId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         for(TimeWindow timeWindow : getSyncTimeWindows()) {
+            Log.d("SCHEDULE_DEBUG", name + " - start time: " + new Date(timeWindow.windowStart).toString() + " - time window: "  + timeWindow.windowLength);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
                 mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
             }
@@ -146,72 +150,101 @@ public class SyncProfile implements Serializable {
 
         Calendar cur_cal = new GregorianCalendar();
         cur_cal.setTimeInMillis(System.currentTimeMillis());
+        int currentDay = cur_cal.get(Calendar.DAY_OF_WEEK);
 
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.WEEK_OF_MONTH, cur_cal.get(Calendar.WEEK_OF_MONTH));
+        //calendar.set(Calendar.WEEK_OF_MONTH, cur_cal.get(Calendar.WEEK_OF_MONTH));
 
         if(days.contains("mon")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.MONDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
         if(days.contains("tue")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.TUESDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
         if(days.contains("wed")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.WEDNESDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
         if(days.contains("thu")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.THURSDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
         if(days.contains("fri")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.FRIDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
         if(days.contains("sat")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.SATURDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
         if(days.contains("sun")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
+            long timeStamp = calendar.getTimeInMillis();
+            if(currentDay >= Calendar.SUNDAY) {
+                timeStamp += TimeUnit.DAYS.toMillis(7);
+            }
 
-            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(timeStamp, windowLength));
         }
 
         return timeWindows;
     }
 
-    private Intent getSubredditSyncIntent(Context context, String subreddit) {
-        Intent intent = new Intent(context, DownloaderService.class);
-        intent.putExtra("sort", SubmissionSort.HOT);
-        boolean isMulti = false;
-        if(subreddit.contains(" ")) {
-            isMulti = true;
-            subreddit = subreddit.split("\\s")[0];
-        }
-        intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
-        intent.putExtra("isMulti", isMulti);
-
-        return intent;
-    }
+    //private Intent getSubredditSyncIntent(Context context, String subreddit) {
+    //    Intent intent = new Intent(context, DownloaderService.class);
+    //    intent.putExtra("sort", SubmissionSort.HOT);
+    //    boolean isMulti = false;
+    //    if(subreddit.contains(" ")) {
+    //        isMulti = true;
+    //        subreddit = subreddit.split("\\s")[0];
+    //    }
+    //    intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
+    //    intent.putExtra("isMulti", isMulti);
+//
+    //    return intent;
+    //}
 
     public void setName(String name) {
         this.name = name;
