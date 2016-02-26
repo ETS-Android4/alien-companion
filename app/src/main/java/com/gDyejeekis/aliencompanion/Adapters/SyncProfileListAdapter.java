@@ -296,6 +296,12 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 @Override
                 public void onClick(View view) {
                     profile.setActive(!profile.isActive());
+                    //if(profile.isActive()) {
+                    //    profile.scheduleSync(activity);
+                    //}
+                    //else {
+                    //    profile.unscheduleSync(activity);
+                    //}
                     activity.getAdapter().notifyItemChanged(position);
                 }
             });

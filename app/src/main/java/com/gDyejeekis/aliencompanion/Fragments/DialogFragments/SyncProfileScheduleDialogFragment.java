@@ -30,7 +30,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
 
     public static final int inactiveDayColor = Color.parseColor("#d9d9d9");
 
-    private static int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
+    private int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
 
     private SyncProfile profile;
     private String oldDaysString;

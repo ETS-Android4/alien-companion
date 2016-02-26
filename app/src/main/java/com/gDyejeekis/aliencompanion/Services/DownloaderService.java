@@ -70,7 +70,7 @@ public class DownloaderService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent i) {
-        //Log.d("geo test", "downloading posts...");
+        //Log.d("SYNC_DEBUG", "DownloaderService onHandleIntent...");
         List<String> subreddits = i.getStringArrayListExtra("subreddits");
         if(subreddits != null) {
             for(String subreddit : subreddits) {
@@ -78,11 +78,11 @@ public class DownloaderService extends IntentService {
                 String filename;
                 boolean isMulti = false;
                 if(subreddit.endsWith(" (multi)")) {
-                    filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subreddit;
+                    filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subreddit.toLowerCase();
                     isMulti = true;
                 }
                 else {
-                    filename = subreddit;
+                    filename = subreddit.toLowerCase();
                 }
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                 startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));

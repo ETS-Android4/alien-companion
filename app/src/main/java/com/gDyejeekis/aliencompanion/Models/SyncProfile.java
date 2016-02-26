@@ -106,34 +106,34 @@ public class SyncProfile implements Serializable {
     }
 
     public void scheduleSync(Context context) {
-        Log.d("geotest", "Scheduling sync services...");
+        Log.d("SCHEDULE_DEBUG", "Scheduling sync services...");
 
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        //for(String subreddit : subreddits) {
-        //    PendingIntent pendingIntent = PendingIntent.getService(context, profileId, getSubredditSyncIntent(context, subreddit), 0);
-        //    mgr.cancel(pendingIntent); //cancel previous pending intents for this profile
-//
-        //    for(TimeWindow timeWindow : getSyncTimeWindows()) {
-        //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
-        //            mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
-        //        }
-        //        else {
-        //            mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
-        //        }
-        //    }
-        //}
-        Log.d("geotest", "finished scheduling");
+        Intent intent = new Intent(context, DownloaderService.class);
+        intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
+        PendingIntent pendingIntent = PendingIntent.getService(context, profileId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mgr.cancel(pendingIntent); //cancel previous pending intent for this profile
+
+        for(TimeWindow timeWindow : getSyncTimeWindows()) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+                mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
+            }
+            else {
+                mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
+            }
+        }
+
+        Log.d("SCHEDULE_DEBUG", "finished scheduling");
     }
 
     public void unscheduleSync(Context context) {
-        //for(String subreddit : subreddits) {
-        //    PendingIntent pendingIntent = PendingIntent.getService(context, profileId, getSubredditSyncIntent(context, subreddit), PendingIntent.FLAG_NO_CREATE);
-        //    if(pendingIntent != null) {
-        //        pendingIntent.cancel();
-        //    }
-        //}
-
+        Intent intent = new Intent(context, DownloaderService.class);
+        intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
+        PendingIntent pendingIntent = PendingIntent.getService(context, profileId, intent, PendingIntent.FLAG_NO_CREATE);
+        if(pendingIntent != null) {
+            pendingIntent.cancel();
+        }
     }
 
     private List<TimeWindow> getSyncTimeWindows() {
@@ -142,78 +142,58 @@ public class SyncProfile implements Serializable {
         int windowStart = (fromTime > toTime) ? toTime : fromTime;
         long windowLength = Math.abs(fromTime - toTime);
         //TimeUnit.MILLISECONDS.convert(windowLength, TimeUnit.HOURS);
-        TimeUnit.HOURS.toMillis(windowLength);
-        Log.d("geotest", "windowLength: " + windowLength);
+        windowLength = TimeUnit.HOURS.toMillis(windowLength);
+
+        Calendar cur_cal = new GregorianCalendar();
+        cur_cal.setTimeInMillis(System.currentTimeMillis());
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.WEEK_OF_MONTH, cur_cal.get(Calendar.WEEK_OF_MONTH));
 
         if(days.contains("mon")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
         if(days.contains("tue")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
         if(days.contains("wed")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
         if(days.contains("thu")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
         if(days.contains("fri")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
         if(days.contains("sat")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
         if(days.contains("sun")) {
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-            cal.set(Calendar.HOUR_OF_DAY, windowStart);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            calendar.set(Calendar.HOUR_OF_DAY, windowStart);
 
-            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
+            timeWindows.add(new TimeWindow(calendar.getTimeInMillis(), windowLength));
         }
 
         return timeWindows;
