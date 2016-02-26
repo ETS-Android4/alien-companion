@@ -71,26 +71,50 @@ public class DownloaderService extends IntentService {
     @Override
     public void onHandleIntent(Intent i) {
         //Log.d("geo test", "downloading posts...");
-        progress = 0;
-        String subreddit = i.getStringExtra("subreddit");
-        boolean isMulti = i.getBooleanExtra("isMulti", false);
-        String filename = "";
-        if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
-        filename = filename + ((subreddit!=null) ? subreddit.toLowerCase() : "frontpage");
+        List<String> subreddits = i.getStringArrayListExtra("subreddits");
+        if(subreddits != null) {
+            for(String subreddit : subreddits) {
+                progress = 0;
+                String filename;
+                boolean isMulti = false;
+                if(subreddit.endsWith(" (multi)")) {
+                    filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subreddit;
+                    isMulti = true;
+                }
+                else {
+                    filename = subreddit;
+                }
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
 
-        NotificationCompat.Builder builder =new NotificationCompat.Builder(this);
-        startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
+                syncSubreddit(filename, builder, subreddit, SubmissionSort.HOT, null, isMulti);
+            }
+        }
+        else {
+            progress = 0;
+            String subreddit = i.getStringExtra("subreddit");
+            boolean isMulti = i.getBooleanExtra("isMulti", false);
+            String filename = "";
+            if (isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
+            filename = filename + ((subreddit != null) ? subreddit.toLowerCase() : "frontpage");
 
-        SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
-        TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
-        //assert submissionSort!=null && timeSpan!=null;
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
 
-        Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
-        Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
-        List<RedditItem> posts;
+            SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
+            TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
 
+            syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti);
+        }
+    }
+
+    private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti) {
         try {
-            if (subreddit == null)
+            Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
+            Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
+            List<RedditItem> posts;
+
+            if (subreddit == null || subreddit.equals("frontpage"))
                 posts = submissions.frontpage(submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
             else {
                 if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);

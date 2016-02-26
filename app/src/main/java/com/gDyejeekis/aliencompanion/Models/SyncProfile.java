@@ -17,8 +17,11 @@ import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by sound on 1/21/2016.
@@ -104,52 +107,113 @@ public class SyncProfile implements Serializable {
 
     public void scheduleSync(Context context) {
         Log.d("geotest", "Scheduling sync services...");
-        //unscheduleSync(context);
 
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        for(String subreddit : subreddits) {
-            PendingIntent pendingIntent = PendingIntent.getService(context, profileId, getSubredditSyncIntent(context, subreddit), 0);
-
-            for(TimeWindow timeWindow : getSyncTimeWindows()) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
-                    mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
-                }
-                else {
-                    mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
-                }
-            }
-        }
+        //for(String subreddit : subreddits) {
+        //    PendingIntent pendingIntent = PendingIntent.getService(context, profileId, getSubredditSyncIntent(context, subreddit), 0);
+        //    mgr.cancel(pendingIntent); //cancel previous pending intents for this profile
+//
+        //    for(TimeWindow timeWindow : getSyncTimeWindows()) {
+        //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+        //            mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
+        //        }
+        //        else {
+        //            mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
+        //        }
+        //    }
+        //}
         Log.d("geotest", "finished scheduling");
     }
 
     public void unscheduleSync(Context context) {
-        // TODO: 2/25/2016
+        //for(String subreddit : subreddits) {
+        //    PendingIntent pendingIntent = PendingIntent.getService(context, profileId, getSubredditSyncIntent(context, subreddit), PendingIntent.FLAG_NO_CREATE);
+        //    if(pendingIntent != null) {
+        //        pendingIntent.cancel();
+        //    }
+        //}
+
     }
 
     private List<TimeWindow> getSyncTimeWindows() {
         List<TimeWindow> timeWindows = new ArrayList<>();
 
-        if(days.contains("mon")) {
+        int windowStart = (fromTime > toTime) ? toTime : fromTime;
+        long windowLength = Math.abs(fromTime - toTime);
+        //TimeUnit.MILLISECONDS.convert(windowLength, TimeUnit.HOURS);
+        TimeUnit.HOURS.toMillis(windowLength);
+        Log.d("geotest", "windowLength: " + windowLength);
 
+        if(days.contains("mon")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
         if(days.contains("tue")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
 
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
         if(days.contains("wed")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
 
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
         if(days.contains("thu")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
 
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
         if(days.contains("fri")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
 
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
         if(days.contains("sat")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
 
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
         if(days.contains("sun")) {
+            Calendar cal = new GregorianCalendar();
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            cal.set(Calendar.HOUR_OF_DAY, windowStart);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
 
+            timeWindows.add(new TimeWindow(cal.getTimeInMillis(), windowLength));
         }
 
         return timeWindows;

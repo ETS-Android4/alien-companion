@@ -110,6 +110,9 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                     if(profile.isActive()) {
                         profile.scheduleSync(activity);
                     }
+                    else {
+                        profile.unscheduleSync(activity);
+                    }
                 }
             }
             os.writeObject(toSave);
