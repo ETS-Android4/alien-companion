@@ -63,6 +63,10 @@ public class SyncProfilesActivity extends BackNavActivity {
             adapter.newProfile();
             return true;
         }
+        else if(item.getItemId() == R.id.action_sort_by_alpha) {
+            adapter.sortProfilesByAlpha();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

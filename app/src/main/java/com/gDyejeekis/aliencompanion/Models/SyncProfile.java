@@ -109,35 +109,37 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    public void scheduleSync(Context context) {
+    public void schedulePendingIntents(Context context) {
         Log.d("SCHEDULE_DEBUG", "Scheduling sync services...");
-
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         Intent intent = new Intent(context, DownloaderService.class);
         intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
-        PendingIntent pendingIntent = PendingIntent.getService(context, profileId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        for(TimeWindow timeWindow : getSyncTimeWindows()) {
-            Log.d("SCHEDULE_DEBUG", name + " - start time: " + new Date(timeWindow.windowStart).toString() + " - time window: "  + timeWindow.windowLength);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
-                mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
-            }
-            else {
-                mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
+        //first cancel any previous pending intents for this profile
+        for(int i=0;i<7;i++) {
+            PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_ONE_SHOT);
+            mgr.cancel(pendingIntent);
+        }
+
+        //Then schedule new pending intents for this profile (if the profile is active)
+
+        if(isActive()) {
+            int i = 0;
+            for(TimeWindow timeWindow : getSyncTimeWindows()) {
+                Log.d("SCHEDULE_DEBUG", name + " - start time: " + new Date(timeWindow.windowStart).toString() + " - time window: "  + timeWindow.windowLength);
+
+                PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_ONE_SHOT);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
+                    mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
+                }
+                else {
+                    mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
+                }
+                i++;
             }
         }
 
         Log.d("SCHEDULE_DEBUG", "finished scheduling");
-    }
-
-    public void unscheduleSync(Context context) {
-        Intent intent = new Intent(context, DownloaderService.class);
-        intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
-        PendingIntent pendingIntent = PendingIntent.getService(context, profileId, intent, PendingIntent.FLAG_NO_CREATE);
-        if(pendingIntent != null) {
-            pendingIntent.cancel();
-        }
     }
 
     private List<TimeWindow> getSyncTimeWindows() {
@@ -146,11 +148,12 @@ public class SyncProfile implements Serializable {
         int windowStart = (fromTime > toTime) ? toTime : fromTime;
         long windowLength = Math.abs(fromTime - toTime);
         //TimeUnit.MILLISECONDS.convert(windowLength, TimeUnit.HOURS);
-        windowLength = TimeUnit.HOURS.toMillis(windowLength);
+        long windowLengthMillis = TimeUnit.HOURS.toMillis(windowLength);
 
         Calendar cur_cal = new GregorianCalendar();
         cur_cal.setTimeInMillis(System.currentTimeMillis());
         int currentDay = cur_cal.get(Calendar.DAY_OF_WEEK);
+        int currentHour = cur_cal.get(Calendar.HOUR_OF_DAY);
 
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.MINUTE, 0);
@@ -161,90 +164,76 @@ public class SyncProfile implements Serializable {
         if(days.contains("mon")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.MONDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.MONDAY || (currentDay == Calendar.MONDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
         if(days.contains("tue")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.TUESDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.TUESDAY || (currentDay == Calendar.TUESDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
         if(days.contains("wed")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.WEDNESDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.WEDNESDAY || (currentDay == Calendar.WEDNESDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
         if(days.contains("thu")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.THURSDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.THURSDAY || (currentDay == Calendar.THURSDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
         if(days.contains("fri")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.FRIDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.FRIDAY || (currentDay == Calendar.FRIDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
         if(days.contains("sat")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.SATURDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.SATURDAY || (currentDay == Calendar.SATURDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
         if(days.contains("sun")) {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
             calendar.set(Calendar.HOUR_OF_DAY, windowStart);
-            long timeStamp = calendar.getTimeInMillis();
-            if(currentDay >= Calendar.SUNDAY) {
-                timeStamp += TimeUnit.DAYS.toMillis(7);
+            long windowStartMillis = calendar.getTimeInMillis();
+            if(currentDay > Calendar.SUNDAY || (currentDay == Calendar.SUNDAY && currentHour >= windowStart)) {
+                windowStartMillis += TimeUnit.DAYS.toMillis(7);
             }
 
-            timeWindows.add(new TimeWindow(timeStamp, windowLength));
+            timeWindows.add(new TimeWindow(windowStartMillis, windowLengthMillis));
         }
 
         return timeWindows;
     }
-
-    //private Intent getSubredditSyncIntent(Context context, String subreddit) {
-    //    Intent intent = new Intent(context, DownloaderService.class);
-    //    intent.putExtra("sort", SubmissionSort.HOT);
-    //    boolean isMulti = false;
-    //    if(subreddit.contains(" ")) {
-    //        isMulti = true;
-    //        subreddit = subreddit.split("\\s")[0];
-    //    }
-    //    intent.putExtra("subreddit", (subreddit.equalsIgnoreCase("frontpage")) ? null : subreddit);
-    //    intent.putExtra("isMulti", isMulti);
-//
-    //    return intent;
-    //}
 
     public void setName(String name) {
         this.name = name;

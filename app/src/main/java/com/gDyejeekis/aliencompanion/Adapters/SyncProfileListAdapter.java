@@ -33,12 +33,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by sound on 2/5/2016.
  */
 public class SyncProfileListAdapter extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
+
+    static class SyncProfileComparator implements Comparator<SyncProfile> {
+
+        public int compare(SyncProfile p1, SyncProfile p2) {
+            return p1.getName().compareToIgnoreCase(p2.getName());
+        }
+    }
 
     public class TempProfile extends SyncProfile {
 
@@ -107,12 +116,13 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             for(SyncProfile profile : profiles) {
                 if(profile.getViewType() == VIEW_TYPE_PROFILE_ITEM) {
                     toSave.add(profile);
-                    if(profile.isActive()) {
-                        profile.scheduleSync(activity);
-                    }
-                    else {
-                        profile.unscheduleSync(activity);
-                    }
+                    profile.schedulePendingIntents(activity);
+                    //if(profile.isActive()) {
+                    //    profile.scheduleSync(activity);
+                    //}
+                    //else {
+                    //    profile.unscheduleSync(activity);
+                    //}
                 }
             }
             os.writeObject(toSave);
@@ -147,7 +157,13 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
 
     public void removeTempProfile() {
         addingNewProfile = false;
-        int index = profiles.size() -1;
+        int index = -1;
+        for(SyncProfile profile : profiles) {
+            if(profile instanceof TempProfile) {
+                index = profiles.indexOf(profile);
+                break;
+            }
+        }
         profiles.remove(index);
         notifyItemRemoved(index);
     }
@@ -207,6 +223,11 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         showScheduleDialog(profiles.indexOf(profile));
     }
 
+    public void sortProfilesByAlpha() {
+        Collections.sort(profiles, new SyncProfileComparator());
+        notifyDataSetChanged();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -250,8 +271,13 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         return getItemAt(position).getViewType();
     }
 
-    public SyncProfile getItemAt(int position) {
-        return profiles.get(position);
+    public SyncProfile getItemAt(int position) { //todo: sometimes throws indexoutofboundsexception after sorting profiles, fix may be unreliable
+        try {
+            return profiles.get(position);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return getItemAt(position - 1);
+        }
     }
 
     @Override
@@ -290,7 +316,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                     showPopupMenu(activity, view, profile, position);
                 }
             });
-            String stateText = (profile.isActive()) ? "ENABLED" : "DISABLED";
+            String stateText = (profile.isActive()) ? "ACTIVE" : "INACTIVE";
             state.setText(stateText);
             state.setOnClickListener(new View.OnClickListener() {
                 @Override
