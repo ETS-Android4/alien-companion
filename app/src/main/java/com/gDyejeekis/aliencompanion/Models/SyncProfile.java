@@ -95,11 +95,9 @@ public class SyncProfile implements Serializable {
 
     public void startSync(Context context) {
         if(GeneralUtils.isNetworkAvailable(context)) {
-            //for(String subreddit : subreddits) {
-            //    context.startService(getSubredditSyncIntent(context, subreddit));
-            //}
             Intent intent = new Intent(context, DownloaderService.class);
-            intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
+            //intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
+            intent.putExtra("profile", this);
             context.startService(intent);
         }
         else {
@@ -113,7 +111,9 @@ public class SyncProfile implements Serializable {
         Log.d("SCHEDULE_DEBUG", "Scheduling sync services...");
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DownloaderService.class);
-        intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
+        intent.putExtra("profile", this);
+        intent.putExtra("reschedule", true);
+        //intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
 
         //first cancel any previous pending intents for this profile
         for(int i=0;i<7;i++) {

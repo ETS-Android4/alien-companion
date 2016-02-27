@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -71,9 +72,11 @@ public class DownloaderService extends IntentService {
     @Override
     public void onHandleIntent(Intent i) {
         //Log.d("SYNC_DEBUG", "DownloaderService onHandleIntent...");
-        List<String> subreddits = i.getStringArrayListExtra("subreddits");
-        if(subreddits != null) {
-            for(String subreddit : subreddits) {
+
+        //List<String> subreddits = i.getStringArrayListExtra("subreddits");
+        SyncProfile profile = (SyncProfile) i.getSerializableExtra("profile");
+        if(profile != null) {
+            for(String subreddit : profile.getSubreddits()) {
                 progress = 0;
                 String filename;
                 boolean isMulti = false;
@@ -88,6 +91,10 @@ public class DownloaderService extends IntentService {
                 startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
 
                 syncSubreddit(filename, builder, subreddit, SubmissionSort.HOT, null, isMulti);
+            }
+
+            if(i.getBooleanExtra("reschedule", false)) {
+                profile.schedulePendingIntents(this);
             }
         }
         else {
