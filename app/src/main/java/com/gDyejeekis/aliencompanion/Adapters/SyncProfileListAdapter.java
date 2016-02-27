@@ -183,17 +183,21 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         renamingProfilePosition = -1;
     }
 
-    private void deleteProfileAt(int position) {
-        try {
-            profiles.remove(position);
-            notifyItemRemoved(position);
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-    }
+    //private void deleteProfileAt(int position) {
+    //    try {
+    //        profiles.remove(position);
+    //        notifyItemRemoved(position);
+    //    } catch (IndexOutOfBoundsException e) {
+    //        e.printStackTrace();
+    //    }
+    //}
 
     private void deleteProfile(SyncProfile profile) {
         try {
+            //set profile inactive and call schedule method to cancel any existing pending intents
+            profile.setActive(false);
+            profile.schedulePendingIntents(activity);
+            //delete profile
             int index = profiles.indexOf(profile);
             profiles.remove(index);
             notifyItemRemoved(index);
