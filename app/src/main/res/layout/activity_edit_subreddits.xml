@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/my_toolbar"/>
-
-    <com.mobeta.android.dslv.DragSortListView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/dslv"
-        app:drag_handle_id="@id/drag_handle"
-        app:click_remove_id="@id/click_remove"
-        app:remove_mode="clickRemove"
-        app:remove_enabled="true"
-        android:divider="?attr/themeDivider">
+        android:layout_height="match_parent">
 
-    </com.mobeta.android.dslv.DragSortListView>
+        <include layout="@layout/my_toolbar"/>
 
-</LinearLayout>
+        <com.mobeta.android.dslv.DragSortListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dslv"
+            app:drag_handle_id="@id/drag_handle"
+            app:click_remove_id="@id/click_remove"
+            app:remove_mode="clickRemove"
+            app:remove_enabled="true"
+            android:divider="?attr/themeDivider">
+
+        </com.mobeta.android.dslv.DragSortListView>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@mipmap/ic_add_white_24dp"
+        app:layout_anchor="@id/dslv"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>

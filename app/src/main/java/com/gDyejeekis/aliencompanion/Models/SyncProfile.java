@@ -49,6 +49,16 @@ public class SyncProfile implements Serializable {
     private boolean isActive;
     private String days;
 
+    //@Override
+    //public boolean equals(Object obj) {
+    //    if(obj instanceof SyncProfile) {
+    //        SyncProfile p2 = (SyncProfile) obj;
+    //        return (profileId == p2.getProfileId() && name.equals(p2.getName()) && fromTime == p2.getFromTime() && toTime == p2.getToTime()
+    //                && hasTime == p2.hasTime() && isActive == p2.isActive && days.equals(p2.getDaysString()));
+    //    }
+    //    return false;
+    //}
+
     public SyncProfile() {
         profileId = UUID.randomUUID().hashCode();
         this.name = "";

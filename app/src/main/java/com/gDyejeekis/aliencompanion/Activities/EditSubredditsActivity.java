@@ -1,7 +1,12 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
+import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,10 +26,11 @@ import java.util.Collections;
 /**
  * Created by sound on 10/29/2015.
  */
-public class EditSubredditsActivity extends BackNavActivity {
+public class EditSubredditsActivity extends BackNavActivity implements DialogInterface.OnClickListener {
 
     private ArrayList<String> subreddits;
     private DragSortListView dslv;
+    private FloatingActionButton fab;
     private ArrayAdapter adapter;
     public static boolean changesMade;
 
@@ -38,6 +44,8 @@ public class EditSubredditsActivity extends BackNavActivity {
         else getTheme().applyStyle(R.style.selectedTheme_day, true);
         super.onCreate(bundle);
         setContentView(R.layout.activity_edit_subreddits);
+        if(MyApplication.nightThemeEnabled)
+            getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
@@ -49,6 +57,15 @@ public class EditSubredditsActivity extends BackNavActivity {
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF9800")));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddSubredditDialogFragment dialog = new AddSubredditDialogFragment();
+                dialog.show(getFragmentManager(), "dialog");
+            }
+        });
         subreddits = getIntent().getStringArrayListExtra("subreddits");
         adapter = new ArrayAdapter(this, R.layout.draggable_subreddit_item, R.id.subreddit_text, subreddits);
         dslv.setAdapter(adapter);
@@ -107,7 +124,28 @@ public class EditSubredditsActivity extends BackNavActivity {
 
     @Override
     public void onBackPressed() {
-        if(changesMade && MyApplication.currentAccount!=null) MyApplication.currentAccount.setSubreddits(subreddits);
+        if(changesMade && MyApplication.currentAccount!=null) {
+            showSaveChangesDialog();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showSaveChangesDialog() {
+        new AlertDialog.Builder(this).setMessage("Save changes?").setPositiveButton("Yes", this).setNegativeButton("No", this).show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                MyApplication.currentAccount.setSubreddits(subreddits);
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+                changesMade = false;
+                break;
+        }
         super.onBackPressed();
     }
 

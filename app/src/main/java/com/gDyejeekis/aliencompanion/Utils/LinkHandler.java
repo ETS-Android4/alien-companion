@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
@@ -19,6 +22,7 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -134,6 +138,15 @@ public class LinkHandler {
             builder.setExitAnimations(activity, -1, -1);
 
             CustomTabsIntent customTabsIntent = builder.build();
+
+            //PackageManager packageManager = activity.getPackageManager();
+            //List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(customTabsIntent.intent, PackageManager.MATCH_DEFAULT_ONLY);
+            //for (ResolveInfo resolveInfo : resolveInfoList) {
+            //    String packageName = resolveInfo.activityInfo.packageName;
+            //    if (TextUtils.equals(packageName, "com.android.chrome"))
+            //        customTabsIntent.intent.setPackage("com.android.chrome");
+            //}
+
             customTabsIntent.launchUrl(activity, Uri.parse(url));
         }
         else {

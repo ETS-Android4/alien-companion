@@ -52,7 +52,7 @@ public class MyApplication extends Application {
 
     public static boolean showHiddenPosts = false;
 
-    public static final boolean useBypassParsing = false;
+    public static final boolean useMarkdownParsing = false; //only enable this if/when markdown parsing is ready
 
     public static SharedPreferences prefs;
     public static String deviceID;

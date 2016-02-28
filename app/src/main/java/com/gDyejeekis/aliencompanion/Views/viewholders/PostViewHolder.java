@@ -9,7 +9,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,8 +25,6 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
-
-import in.uncod.android.bypass.Bypass;
 
 /**
  * Created by sound on 8/28/2015.
@@ -109,11 +106,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
                 postDets2 = (TextView) itemView.findViewById(R.id.textView_dets2);
-                break;
-            case details:
-                selfText = (TextView) itemView.findViewById(R.id.txtView_selfText);
-                fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
-                commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
                 break;
             case smallCards:
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
@@ -217,20 +209,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     linkButton.setVisibility(View.GONE);
                     imageButton.setVisibility(View.GONE);
 
-                    if(MyApplication.useBypassParsing) {
-                        try {
-                            String selfText = new Bypass().markdownToSpannable(post.getSelftext()).toString();
-                            if (selfText.length() == 0)
-                                layoutSelfTextPreview.setVisibility(View.GONE);
-                            else {
-                                if (selfText.length() > 200)
-                                    selfText = selfText.substring(0, 200) + " ...";
-                                selfTextCard.setText(selfText);
-                                layoutSelfTextPreview.setVisibility(View.VISIBLE);
-                            }
-                        } catch (Exception e) {
-                            layoutSelfTextPreview.setVisibility(View.GONE);
-                        }
+                    if(MyApplication.useMarkdownParsing) {
+
                     }
                     else {
                         try {
@@ -274,13 +254,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     if(post.getSelftextHTML()!=null) {
                         layoutSelfTextPreview.setVisibility(View.VISIBLE);
 
-                        if(MyApplication.useBypassParsing) {
-                            //parse markdown body with bypass
-                            Bypass bypass = new Bypass();
-                            CharSequence spannable = bypass.markdownToSpannable(post.getSelftext());
-                            spannable = ConvertUtils.modifyURLSpan(context, spannable);
-                            selfTextCard.setText(spannable);
-                            selfTextCard.setMovementMethod(MyLinkMovementMethod.getInstance());
+                        if(MyApplication.useMarkdownParsing) {
+
                         }
                         else {
                             //parse body using fromHTML

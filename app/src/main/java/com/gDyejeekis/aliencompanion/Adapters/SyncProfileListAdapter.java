@@ -1,11 +1,8 @@
 package com.gDyejeekis.aliencompanion.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,7 +22,6 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileSubred
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -80,6 +76,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
 
     public int renamingProfilePosition = -1;
 
+    private List<SyncProfile> deletedProfiles = new ArrayList<>();
+
     public SyncProfileListAdapter(SyncProfilesActivity activity) {
         this.activity = activity;
         this.profiles = new ArrayList<>();
@@ -117,12 +115,6 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 if(profile.getViewType() == VIEW_TYPE_PROFILE_ITEM) {
                     toSave.add(profile);
                     profile.schedulePendingIntents(activity);
-                    //if(profile.isActive()) {
-                    //    profile.scheduleSync(activity);
-                    //}
-                    //else {
-                    //    profile.unscheduleSync(activity);
-                    //}
                 }
             }
             os.writeObject(toSave);
@@ -133,8 +125,9 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
-    private void addNewProfile(SyncProfile profile) {
+    private void newProfileAdded(SyncProfile profile) {
         try {
+            activity.changesMade = true;
             addingNewProfile = false;
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
@@ -174,6 +167,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     public void profileRenamedAt(int position, SyncProfile profile, boolean toggleKeyboard) {
+        activity.changesMade = true;
         if(toggleKeyboard) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -194,10 +188,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
 
     private void deleteProfile(SyncProfile profile) {
         try {
-            //set profile inactive and call schedule method to cancel any existing pending intents
-            profile.setActive(false);
-            profile.schedulePendingIntents(activity);
-            //delete profile
+            activity.changesMade = true;
+            deletedProfiles.add(profile);
             int index = profiles.indexOf(profile);
             profiles.remove(index);
             notifyItemRemoved(index);
@@ -206,7 +198,15 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         }
     }
 
+    public void unscheduleDeletedProfiles() {
+        for(SyncProfile profile : deletedProfiles) {
+            profile.setActive(false);
+            profile.schedulePendingIntents(activity);
+        }
+    }
+
     private void showSubredditsDialog(int profilePosition, boolean showSchedule) {
+        activity.changesMade = true;
         SyncProfileSubredditsDialogFragment dialog = new SyncProfileSubredditsDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
@@ -216,6 +216,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void showScheduleDialog(int profilePosition) {
+        activity.changesMade = true;
         SyncProfileScheduleDialogFragment dialog = new SyncProfileScheduleDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
@@ -228,6 +229,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     public void sortProfilesByAlpha() {
+        activity.changesMade = true;
         Collections.sort(profiles, new SyncProfileComparator());
         notifyDataSetChanged();
     }
@@ -325,13 +327,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             state.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    activity.changesMade = true;
                     profile.setActive(!profile.isActive());
-                    //if(profile.isActive()) {
-                    //    profile.scheduleSync(activity);
-                    //}
-                    //else {
-                    //    profile.unscheduleSync(activity);
-                    //}
                     activity.getAdapter().notifyItemChanged(position);
                 }
             });
@@ -385,7 +382,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                     String profileName = textView.getText().toString();
                     if(profile.getName().length()==0) {
-                        activity.getAdapter().addNewProfile(new SyncProfile(profileName));
+                        activity.getAdapter().newProfileAdded(new SyncProfile(profileName));
                     }
                     else {
                         profile.setName(profileName);

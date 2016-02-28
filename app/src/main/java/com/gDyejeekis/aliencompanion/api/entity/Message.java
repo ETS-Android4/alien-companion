@@ -82,7 +82,7 @@ public class Message extends Thing implements RedditItem {
             this.isNew = safeJsonToBoolean(obj.get("new"));
             this.wasComment = safeJsonToBoolean(obj.get("was_comment"));
 
-            if(!MyApplication.useBypassParsing) bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+            if(!MyApplication.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
 
             //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);

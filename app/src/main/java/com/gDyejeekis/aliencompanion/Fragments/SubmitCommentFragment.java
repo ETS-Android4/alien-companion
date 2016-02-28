@@ -23,8 +23,6 @@ import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
 
-import in.uncod.android.bypass.Bypass;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -78,8 +76,12 @@ public class SubmitCommentFragment extends Fragment {
             }
         }
         else {
-            if(MyApplication.useBypassParsing) originalCommentTextView.setText(new Bypass().markdownToSpannable(originalComment.getBody()));
-            else originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null, new MyHtmlTagHandler())));
+            if(MyApplication.useMarkdownParsing) {
+
+            }
+            else {
+                originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null, new MyHtmlTagHandler())));
+            }
         }
 
         return view;

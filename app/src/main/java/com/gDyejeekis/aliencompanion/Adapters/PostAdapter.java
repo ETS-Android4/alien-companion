@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
@@ -28,8 +27,6 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.Utils;
-
-import in.uncod.android.bypass.Bypass;
 
 /**
  * Created by George on 5/17/2015.
@@ -129,13 +126,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                if(MyApplication.useBypassParsing) {
-                    //parse markdown body with bypass
-                    Bypass bypass = new Bypass();
-                    CharSequence spannable = bypass.markdownToSpannable(comment.getBody());
-                    spannable = ConvertUtils.modifyURLSpan(activity, spannable);
-                    cvh.commentTextView.setText(spannable);
-                    cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
+                if(MyApplication.useMarkdownParsing) {
+
                 }
                 else {
                     //Comment textview

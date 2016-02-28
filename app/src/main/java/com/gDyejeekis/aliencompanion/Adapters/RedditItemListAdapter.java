@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +43,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import in.uncod.android.bypass.Bypass;
 
 /**
  * Created by sound on 8/28/2015.
@@ -313,13 +310,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
 
-            if(MyApplication.useBypassParsing) {
-                //parse markdown body with bypass
-                Bypass bypass = new Bypass();
-                CharSequence spannable = bypass.markdownToSpannable(message.body);
-                spannable = ConvertUtils.modifyURLSpan(context, spannable);
-                body.setText(spannable);
-                body.setMovementMethod(MyLinkMovementMethod.getInstance());
+            if(MyApplication.useMarkdownParsing) {
+
             }
             else {
                 //parse body with fromHtml
@@ -384,13 +376,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
 
-            if(MyApplication.useBypassParsing) {
-                //parse markdown body with bypass
-                Bypass bypass = new Bypass();
-                CharSequence spannable = bypass.markdownToSpannable(comment.getBody());
-                spannable = ConvertUtils.modifyURLSpan(context, spannable);
-                commentBody.setText(spannable);
-                commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
+            if(MyApplication.useMarkdownParsing) {
+
             }
             else {
                 //parse html body using fromHTML
