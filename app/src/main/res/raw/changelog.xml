@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.2" changeDate="Feb 18,2016">
+    <changelogversion versionName="0.2" changeDate="Feb 29,2016">
         <changelogtext>OAuth2 authentication and API requests. All previous account data has been cleared and you will need to re-authenticate (sorry!)</changelogtext>
         <changelogtext>Added a 'Multireddits' section in the navigation drawer</changelogtext>
         <changelogtext>Sync profiles and scheduled syncing</changelogtext>

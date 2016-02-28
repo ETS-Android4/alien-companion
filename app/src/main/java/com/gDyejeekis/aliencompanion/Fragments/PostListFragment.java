@@ -25,6 +25,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
@@ -239,6 +240,19 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             //case R.id.action_hide_read:
             //    postListAdapter.hideReadPosts();
             //    return true;
+            case R.id.action_view_sidebar:
+                if(subreddit == null || subreddit.equalsIgnoreCase("all")) {
+                    String string = (subreddit==null) ? "frontpage" : "/r/all";
+                    ToastUtils.displayShortToast(activity, "No sidebar for " + string);
+                }
+                else {
+                    SubredditSidebarDialogFragment dialog = new SubredditSidebarDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("subreddit", subreddit);
+                    dialog.setArguments(bundle);
+                    dialog.show(activity.getFragmentManager(), "dialog");
+                }
+                return true;
             case R.id.action_sync_posts:
                 String toastMessage;
                 if(GeneralUtils.isNetworkAvailable(activity)) {

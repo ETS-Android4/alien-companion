@@ -20,9 +20,12 @@
     <!--<item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
         android:orderInCategory="102" app:showAsAction="never" />-->
 
+    <item android:id="@+id/action_view_sidebar" android:title="@string/view_sidebar"
+        android:orderInCategory="105" app:showAsAction="never" />
+
     <item android:id="@+id/action_sync_posts" android:title="@string/sync_posts"
-        android:orderInCategory="103" app:showAsAction="never" />
+        android:orderInCategory="120" app:showAsAction="never" />
 
     <item android:id="@+id/action_submit_post" android:title="@string/action_submit_post"
-        android:orderInCategory="104" app:showAsAction="never" />
+        android:orderInCategory="110" app:showAsAction="never" />
 </menu>

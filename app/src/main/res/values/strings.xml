@@ -134,5 +134,6 @@
     <string name="sync_now">Sync now</string>
     <string name="delete_profile">Delete profile</string>
     <string name="action_sort_by_alpha">Sort by alpha</string>
+    <string name="view_sidebar">View sidebar</string>
 
 </resources>
