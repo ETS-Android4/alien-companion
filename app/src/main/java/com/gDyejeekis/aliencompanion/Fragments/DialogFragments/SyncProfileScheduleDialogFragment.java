@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -171,6 +172,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
                 dismiss();
                 break;
             case R.id.button_done:
+                ((SyncProfilesActivity) getActivity()).changesMade = true;
                 setProfileTimes();
                 dismiss();
                 break;
@@ -186,6 +188,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
             public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
 
                 if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
+                    ((SyncProfilesActivity) getActivity()).changesMade = true;
                     setProfileTimes();
                     dismiss();
                     return true; // pretend we've processed it

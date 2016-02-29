@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -91,6 +92,26 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
+
+                if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
+                    if(!oldSubreddits.equals(subreddits)) {
+                        ((SyncProfilesActivity) getActivity()).changesMade = true;
+                    }
+                    dismiss();
+                    return true; // pretend we've processed it
+                } else
+                    return false; // pass on to be processed as normal
+            }
+        });
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_cancel:
@@ -114,6 +135,9 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
                 }
                 break;
             case R.id.button_done:
+                if(!oldSubreddits.equals(subreddits)) {
+                    ((SyncProfilesActivity) getActivity()).changesMade = true;
+                }
                 dismiss();
                 if(getArguments().getBoolean("showSchedule") && subreddits.size() > 0) {
                     ((SyncProfilesActivity) getActivity()).getAdapter().showScheduleDialog(syncProfile);

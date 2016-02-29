@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.gDyejeekis.aliencompanion.R;
 
@@ -12,9 +14,13 @@ import com.gDyejeekis.aliencompanion.R;
  */
 public class SubredditSidebarDialogFragment extends ScalableDialogFragment {
 
+    private String subreddit;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        subreddit = getArguments().getString("subreddit");
     }
 
     @Override
@@ -22,6 +28,8 @@ public class SubredditSidebarDialogFragment extends ScalableDialogFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_subreddit_sidebar, container, false);
 
+        getDialog().setCanceledOnTouchOutside(false);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         return view;
     }
 

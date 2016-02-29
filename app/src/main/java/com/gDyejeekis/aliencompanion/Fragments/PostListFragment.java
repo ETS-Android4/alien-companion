@@ -242,7 +242,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             //    return true;
             case R.id.action_view_sidebar:
                 if(subreddit == null || subreddit.equalsIgnoreCase("all")) {
-                    String string = (subreddit==null) ? "frontpage" : "/r/all";
+                    String string = (subreddit==null) ? "the front page" : "/r/all";
                     ToastUtils.displayShortToast(activity, "No sidebar for " + string);
                 }
                 else {

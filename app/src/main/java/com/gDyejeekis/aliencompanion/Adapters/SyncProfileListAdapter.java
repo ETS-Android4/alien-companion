@@ -206,7 +206,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void showSubredditsDialog(int profilePosition, boolean showSchedule) {
-        activity.changesMade = true;
+        //activity.changesMade = true;
         SyncProfileSubredditsDialogFragment dialog = new SyncProfileSubredditsDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
@@ -216,7 +216,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void showScheduleDialog(int profilePosition) {
-        activity.changesMade = true;
+        //activity.changesMade = true;
         SyncProfileScheduleDialogFragment dialog = new SyncProfileScheduleDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
