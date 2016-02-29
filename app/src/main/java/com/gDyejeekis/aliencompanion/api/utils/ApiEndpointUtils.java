@@ -151,6 +151,8 @@ public class ApiEndpointUtils {
     public static final String SUBREDDITS_GET = "/subreddits/%s.json?%s";
     
     public static final String SUBREDDITS_SEARCH = "/subreddits/search.json?%s";
+
+    public static final String SUBREDDIT_ABOUT = "/r/%s/about.json";
     
     /* Live Thread specific constants */
     
