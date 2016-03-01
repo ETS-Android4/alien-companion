@@ -22,10 +22,12 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadSubredditSidebarTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.SubredditInfo;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
 
@@ -91,19 +93,23 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
 
     @Override
     public void onClick(View view) {
-        if(buttonSubUnsub.getText().equals(SUB_TEXT)) {
-            buttonSubUnsub.setEnabled(false);
-            buttonSubUnsub.setText(SUBBING_TEXT);
-            //start unsub task
-            LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.subscribe, subreddit, this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if(MyApplication.currentUser != null) {
+            if (buttonSubUnsub.getText().equals(SUB_TEXT)) {
+                buttonSubUnsub.setEnabled(false);
+                buttonSubUnsub.setText(SUBBING_TEXT);
+                //start unsub task
+                LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.subscribe, subreddit, this);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                buttonSubUnsub.setEnabled(false);
+                buttonSubUnsub.setText(UNSUBBING_TEXT);
+                //start unsub task
+                LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.unsubscribe, subreddit, this);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
         }
         else {
-            buttonSubUnsub.setEnabled(false);
-            buttonSubUnsub.setText(UNSUBBING_TEXT);
-            //start unsub task
-            LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.unsubscribe, subreddit, this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            ToastUtils.displayShortToast(getActivity(), "Must be logged in to do that");
         }
     }
 
