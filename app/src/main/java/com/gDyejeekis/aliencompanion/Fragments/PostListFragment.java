@@ -2,6 +2,8 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -447,6 +449,14 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setActionBarTitle();
         if(submissionSort == null) submissionSort = SubmissionSort.HOT;
         setActionBarSubtitle();
+    }
+
+    public DialogFragment getCurrentDialogFragment() {
+        try {
+            return (DialogFragment) activity.getFragmentManager().findFragmentByTag("dialog");
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void refreshList() {

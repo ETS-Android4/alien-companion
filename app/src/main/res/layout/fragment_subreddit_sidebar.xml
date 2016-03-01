@@ -4,18 +4,129 @@
     android:layout_height="match_parent"
     android:background="?attr/themeDialogBackgroundColor">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/layout_content">
 
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="5"
+                android:layout_marginBottom="5dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp">
+
+                    <org.apmem.tools.layouts.FlowLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="##############"
+                            android:id="@+id/textView_subs"
+                            android:textSize="18sp"
+                            android:textColor="?attr/themeTextColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" readers"
+                            android:id="@+id/textView4"
+                            android:textSize="18sp"
+                            android:textColor="?attr/themeTextColor" />
+                    </org.apmem.tools.layouts.FlowLayout>
+
+                    <org.apmem.tools.layouts.FlowLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="##############"
+                            android:id="@+id/textView_active_accounts"
+                            android:textSize="18sp"
+                            android:textColor="?attr/themeTextColor"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" here now"
+                            android:id="@+id/textView5"
+                            android:textSize="18sp"
+                            android:textColor="?attr/themeTextColor" />
+                    </org.apmem.tools.layouts.FlowLayout>
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:text="UNSUBSCRIBE"
+                    android:id="@+id/button_sub_unsub"
+                    android:layout_weight="2"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:background="#de3838" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(public description)"
+                android:id="@+id/textView_public_descr"
+                android:textSize="16sp"
+                android:textColor="?attr/themeTextColor"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(submit text)"
+                android:id="@+id/textView_submit_text"
+                android:textSize="16sp"
+                android:textColor="?attr/themeTextColor"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(description)"
+                android:id="@+id/textView_description"
+                android:textSize="16sp"
+                android:textColor="?attr/themeTextColor"
+                android:padding="5dp" />
+        </LinearLayout>
+
+    </ScrollView>
 
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar3"
         android:layout_gravity="center_horizontal"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp" />
 
 </RelativeLayout>

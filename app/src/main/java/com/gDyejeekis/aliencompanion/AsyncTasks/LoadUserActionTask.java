@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -36,6 +37,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private String currentPass, newPass;
     private String title, linkOrText, subreddit, captcha_iden, captcha_sol;
     private String recipient, subject, message;
+    private SubredditSidebarDialogFragment dialogSidebar;
 
     public LoadUserActionTask(Context context, String recipient, String subject, String message) {
         this.context = context;
@@ -85,6 +87,13 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.context = context;
         this.userActionType = type;
         this.subreddit = subreddit;
+    }
+
+    public LoadUserActionTask(Context context, UserActionType type, String subreddit, SubredditSidebarDialogFragment dialog) {
+        this.context = context;
+        this.userActionType = type;
+        this.subreddit = subreddit;
+        this.dialogSidebar = dialog;
     }
 
     @Override
@@ -173,7 +182,11 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             MyApplication.accountChanges = false;
             GeneralUtils.saveAccountChanges(context);
         }
+
         if(exception != null) {
+            if(dialogSidebar !=null) {
+                dialogSidebar.updateSubUnsubButton(false);
+            }
             ToastUtils.displayShortToast(context, "Error completing user action");
         }
         else {
@@ -205,9 +218,15 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     ToastUtils.displayShortToast(context, "Report sent");
                     break;
                 case subscribe:
+                    if(dialogSidebar !=null) {
+                        dialogSidebar.updateSubUnsubButton(true);
+                    }
                     ToastUtils.displayShortToast(context, "Subscribed to " + subreddit);
                     break;
                 case unsubscribe:
+                    if(dialogSidebar !=null) {
+                        dialogSidebar.updateSubUnsubButton(true);
+                    }
                     ToastUtils.displayShortToast(context, "Unsubscribed from " + subreddit);
                     break;
                 case sendMessage:
