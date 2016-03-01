@@ -128,21 +128,37 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         textViewActiveCount.setText(String.valueOf(info.activeAccounts));
 
         Html.TagHandler tagHandler = new MyHtmlTagHandler();
+        SpannableStringBuilder stringBuilder;
         //submit text
-        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.submitTextHtml, null, tagHandler));
-        stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
-        textViewSubmitText.setText(stringBuilder);
-        textViewSubmitText.setMovementMethod(MyLinkMovementMethod.getInstance());
+        try {
+            stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.submitTextHtml, null, tagHandler));
+            stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
+            textViewSubmitText.setText(stringBuilder);
+            textViewSubmitText.setMovementMethod(MyLinkMovementMethod.getInstance());
+        } catch (Exception e) {
+            textViewSubmitText.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
         //public description
-        stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.publicDescriptionHtml, null, tagHandler));
-        stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
-        textViewPublicDescription.setText(stringBuilder);
-        textViewPublicDescription.setMovementMethod(MyLinkMovementMethod.getInstance());
+        try {
+            stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.publicDescriptionHtml, null, tagHandler));
+            stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
+            textViewPublicDescription.setText(stringBuilder);
+            textViewPublicDescription.setMovementMethod(MyLinkMovementMethod.getInstance());
+        } catch (Exception e) {
+            textViewPublicDescription.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
         //description
-        stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.descriptionHtml, null, tagHandler));
-        stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
-        textViewDescription.setText(stringBuilder);
-        textViewDescription.setMovementMethod(MyLinkMovementMethod.getInstance());
+        try {
+            stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.descriptionHtml, null, tagHandler));
+            stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
+            textViewDescription.setText(stringBuilder);
+            textViewDescription.setMovementMethod(MyLinkMovementMethod.getInstance());
+        } catch (Exception e) {
+            textViewDescription.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
 
         progressBar.setVisibility(View.GONE);
         layoutContent.setVisibility(View.VISIBLE);

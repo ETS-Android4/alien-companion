@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
@@ -22,7 +19,6 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +51,7 @@ public class LinkHandler {
         this.context = context;
         this.url = url;
         try {
-            domain = ConvertUtils.getDomainName(url);
+            this.domain = ConvertUtils.getDomainName(url);
         } catch (URISyntaxException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -94,7 +90,7 @@ public class LinkHandler {
                     else setImplicitIntent = true;
                 }
                 else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
-                    if(url.contains("/wiki/")) {
+                    if(url.contains("/wiki/") || url.contains("/about/")) {
                         if (MyApplication.handleOtherLinks) startInAppBrowser(activity, post, url, domain);
                         else setImplicitIntent = true;
                     }
@@ -139,14 +135,6 @@ public class LinkHandler {
 
             CustomTabsIntent customTabsIntent = builder.build();
 
-            //PackageManager packageManager = activity.getPackageManager();
-            //List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(customTabsIntent.intent, PackageManager.MATCH_DEFAULT_ONLY);
-            //for (ResolveInfo resolveInfo : resolveInfoList) {
-            //    String packageName = resolveInfo.activityInfo.packageName;
-            //    if (TextUtils.equals(packageName, "com.android.chrome"))
-            //        customTabsIntent.intent.setPackage("com.android.chrome");
-            //}
-
             customTabsIntent.launchUrl(activity, Uri.parse(url));
         }
         else {
@@ -161,8 +149,45 @@ public class LinkHandler {
         }
     }
 
-    //Get an intent for links like '/r/movies' or '/u/someuser' //TODO: maybe use regex here
-    private Intent getNoDomainIntent(Activity activity, String link) {
+    //Get an intent for links like '/r/movies' or '/u/someuser' or /r/games/about/sidebar
+    private Intent getNoDomainIntent(Activity activity, String url) {
+        Intent intent = null;
+
+        String pattern = "/(\\w)/(\\w+)/?(.*)";
+        Pattern compiledPattern = Pattern.compile(pattern);
+        Matcher matcher = compiledPattern.matcher(url);
+        if(matcher.find()) {
+            String type = matcher.group(1);
+            String name = matcher.group(2);
+            String more = matcher.group(3);
+            if(more.length()>0) {
+                this.url = "http://reddit.com" + url;
+                this.domain = "reddit.com";
+                if(MyApplication.handleOtherLinks) {
+                    startInAppBrowser(activity, post, this.url, domain);
+                }
+                else {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.url));
+                }
+            }
+            else if(type.equals("r")) {
+                intent = new Intent(activity, SubredditActivity.class);
+                intent.putExtra("subreddit", name);
+            }
+            else if(type.equals("u") || type.equals("user")) {
+                intent = new Intent(activity, UserActivity.class);
+                intent.putExtra("username", name);
+            }
+        }
+        else {
+            ToastUtils.displayShortToast(activity, "Url not supported");
+        }
+
+        return intent;
+    }
+
+    //Get an intent for links like '/r/movies' or '/u/someuser' (old method)
+    private Intent getNoDomainIntentOld(Activity activity, String link) {
         Intent intent = null;
         link = link.toLowerCase();
         if(link.charAt(1) == 'r') {
@@ -183,7 +208,7 @@ public class LinkHandler {
 
         String[] postInfo = new String[4];
 
-        String pattern = "/r/(.*)/comments/(\\w+)/?(?:\\w+)?/?(\\w+)?(?:.*context=(\\d+))?";
+        String pattern = "/r/(.*)/(?:comments|duplicates)/(\\w+)/?(?:\\w+)?/?(\\w+)?(?:.*context=(\\d+))?";
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(url);
         if(matcher.find()) {

@@ -209,6 +209,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     ToastUtils.displayShortToast(context, "Deleted");
                     break;
                 case edit:
+                    ((Activity) context).finish();
                     ToastUtils.displayShortToast(context, "Edit successful");
                     break;
                 case changePassword:
