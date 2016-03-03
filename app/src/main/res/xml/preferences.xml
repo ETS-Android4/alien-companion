@@ -244,7 +244,7 @@
         <Preference
             android:key="changelog"
             android:title="View changelog"
-            android:summary="Current version: 0.2.1" />
+            android:summary="Current version: 0.2.2" />
 
         <Preference
             android:key="feedback"

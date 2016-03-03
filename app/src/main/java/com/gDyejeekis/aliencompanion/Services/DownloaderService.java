@@ -71,6 +71,9 @@ public class DownloaderService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent i) {
+        if(MyApplication.currentAccount == null) {
+            MyApplication.currentAccount = MyApplication.getCurrentAccount(this);
+        }
         //Log.d("SYNC_DEBUG", "DownloaderService onHandleIntent...");
 
         //List<String> subreddits = i.getStringArrayListExtra("subreddits");

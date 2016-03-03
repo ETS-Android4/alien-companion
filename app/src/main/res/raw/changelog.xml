@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.2.2" changeDate="Mar 3, 2016">
+        <changelogtext>Fixed scheduled syncs sometimes not progressing unless app is in memory</changelogtext>
+        <changelogtext>Fixed not being able to send/delete comments</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.2.1" changeDate="Mar 2,2016">
         <changelogtext>Fixed default values for 'Initial comment depth' and 'Sync comment depth'</changelogtext>
         <changelogtext>Fixed handling for some reddit URLs</changelogtext>

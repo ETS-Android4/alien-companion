@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -24,9 +25,9 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  */
 public class MyApplication extends Application {
 
-    public static final String lastKnownVersion = "0.2.0";
+    public static final String lastKnownVersion = "0.2.1";
 
-    public static final String currentVersion = "0.2.1";
+    public static final String currentVersion = "0.2.2";
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -257,17 +258,36 @@ public class MyApplication extends Application {
         return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
     }
 
-    //private List<SavedAccount> readAccounts() {
-    //    try {
-    //        FileInputStream fis = openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
-    //        ObjectInputStream is = new ObjectInputStream(fis);
-    //        List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
-    //        is.close();
-    //        fis.close();
-    //        return savedAccounts;
-    //    } catch (IOException | ClassNotFoundException e) {
-    //        e.printStackTrace();
-    //    }
-    //    return null;
-    //}
+    public static SavedAccount getCurrentAccount(Context context) {
+        SavedAccount currentAccount = null;
+
+        String accountName = MyApplication.prefs.getString("currentAccountName", "Logged out");
+
+        List<SavedAccount> savedAccounts = readAccounts(context);
+
+        if(savedAccounts!=null) {
+            for(SavedAccount account : savedAccounts) {
+                if(account.getUsername().equals(accountName)) {
+                    currentAccount = account;
+                    break;
+                }
+            }
+        }
+
+        return currentAccount;
+    }
+
+    public static List<SavedAccount> readAccounts(Context context) {
+        try {
+            FileInputStream fis = context.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
+            is.close();
+            fis.close();
+            return savedAccounts;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

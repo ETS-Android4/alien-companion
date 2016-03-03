@@ -57,7 +57,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean delete(String fullName) throws ActionFailedException {
 
-        RequestBody body = new FormBody.Builder().add("id", fullName).add("uh", user.getModhash()).build();
+        RequestBody body = new FormBody.Builder().add("id", fullName).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 body,
                 ApiEndpointUtils.DELETE, user.getCookie()
@@ -75,7 +75,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean comment(String fullname, String text) throws ActionFailedException {
 
-        RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text).add("uh", user.getModhash()).build();
+        RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 body,
                 ApiEndpointUtils.COMMENT,
@@ -103,7 +103,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean createLive(String title, String description) {
 
-        RequestBody body = new FormBody.Builder().add("api_type", "json").add("title", title).add("description", description).add("uh", user.getModhash()).build();
+        RequestBody body = new FormBody.Builder().add("api_type", "json").add("title", title).add("description", description).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 body,
                 ApiEndpointUtils.LIVE_THREAD_CREATE,
@@ -126,7 +126,7 @@ public class SubmitActions implements ActorDriven {
      */
     public boolean updateLive(String liveThread, String message) {
 
-        RequestBody body = new FormBody.Builder().add("json_type", "json").add("body", message).add("uh", user.getModhash()).build();
+        RequestBody body = new FormBody.Builder().add("json_type", "json").add("body", message).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 body,
                 String.format(ApiEndpointUtils.LIVE_THREAD_UPDATE, liveThread),
