@@ -170,11 +170,11 @@ public class LinkHandler {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.url));
                 }
             }
-            else if(type.equals("r")) {
+            else if(type.equalsIgnoreCase("r")) {
                 intent = new Intent(activity, SubredditActivity.class);
                 intent.putExtra("subreddit", name);
             }
-            else if(type.equals("u") || type.equals("user")) {
+            else if(type.equalsIgnoreCase("u") || type.equalsIgnoreCase("user")) {
                 intent = new Intent(activity, UserActivity.class);
                 intent.putExtra("username", name);
             }

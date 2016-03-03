@@ -24,9 +24,9 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  */
 public class MyApplication extends Application {
 
-    public static final String lastKnownVersion = "0.1.2";
+    public static final String lastKnownVersion = "0.2.0";
 
-    public static final String currentVersion = "0.2.0";
+    public static final String currentVersion = "0.2.1";
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -198,7 +198,7 @@ public class MyApplication extends Application {
                 swipeSetting = ViewDragHelper.STATE_IDLE;
         }
         initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
-        initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "3")));
+        initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "5")));
         int index = Integer.parseInt(prefs.getString("defaultCommentSort", "1"));
         switch (index) {
             case 1:
@@ -219,7 +219,7 @@ public class MyApplication extends Application {
         }
         syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
         syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
-        syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "3"));
+        syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "5"));
         syncThumbnails = prefs.getBoolean("syncThumb", false);
         index = Integer.parseInt(prefs.getString("syncCommentSort", "1"));
         switch (index) {

@@ -65,7 +65,7 @@
 
         <CheckBoxPreference
             android:key="newSubredditWindow"
-            android:title="View new subreddits in a new window"
+            android:title="View subreddit in new window"
             android:summary="Subreddits you view via the 'Subreddit' option open in a new window"
             android:defaultValue="false"/>
 
@@ -229,7 +229,7 @@
 
         <CheckBoxPreference
             android:key="useCCT"
-            android:title="Use Chrome custom tabs for links"
+            android:title="Use Chrome custom tabs"
             android:defaultValue="false"/>
 
     </PreferenceCategory>
@@ -244,7 +244,7 @@
         <Preference
             android:key="changelog"
             android:title="View changelog"
-            android:summary="Current version: 0.2" />
+            android:summary="Current version: 0.2.1" />
 
         <Preference
             android:key="feedback"

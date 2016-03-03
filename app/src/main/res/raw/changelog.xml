@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.2.1" changeDate="Mar 2,2016">
+        <changelogtext>Fixed default values for 'Initial comment depth' and 'Sync comment depth'</changelogtext>
+        <changelogtext>Fixed handling for some reddit URLs</changelogtext>
+        <changelogtext>Changed some titles in the settings menu</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.2" changeDate="Mar 1,2016">
         <changelogtext>OAuth2 authentication and API requests. All previous account data has been cleared and you will need to re-authenticate (sorry!)</changelogtext>
         <changelogtext>Added a 'Multireddits' section in the navigation drawer</changelogtext>
