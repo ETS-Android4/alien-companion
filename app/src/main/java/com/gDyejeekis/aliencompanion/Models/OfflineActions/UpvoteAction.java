@@ -16,6 +16,7 @@ public class UpvoteAction extends OfflineUserAction implements Serializable {
     public UpvoteAction(String accountName, String fullname) {
         super(accountName);
         this.itemFullname = fullname;
+        this.actionName = "upvote " + itemFullname;
     }
 
     public String getItemFullname() {

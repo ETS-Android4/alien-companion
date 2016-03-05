@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -127,7 +128,11 @@ public class SyncProfile implements Serializable {
 
         //first cancel any previous pending intents for this profile
         for(int i=0;i<7;i++) {
-            PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mgr.cancel(pendingIntent);
+
+            //cancel pending intents with FLAG_ONE_SHOT (changed flag to FLAG_UPDATE_CURRENT after 0.2.2)
+            pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_ONE_SHOT);
             mgr.cancel(pendingIntent);
         }
 
@@ -138,7 +143,7 @@ public class SyncProfile implements Serializable {
             for(TimeWindow timeWindow : getSyncTimeWindows()) {
                 Log.d("SCHEDULE_DEBUG", name + " - start time: " + new Date(timeWindow.windowStart).toString() + " - time window: "  + timeWindow.windowLength);
 
-                PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ) {
                     mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
                 }

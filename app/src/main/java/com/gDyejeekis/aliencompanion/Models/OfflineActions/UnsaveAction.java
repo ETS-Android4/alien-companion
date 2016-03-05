@@ -12,6 +12,7 @@ public class UnsaveAction extends OfflineUserAction implements Serializable {
     public UnsaveAction(String accountName, String fullname) {
         super(accountName);
         this.itemFullname = fullname;
+        this.actionName = "unsave " + itemFullname;
     }
 
     public String getItemFullname() {

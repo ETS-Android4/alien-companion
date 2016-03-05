@@ -16,6 +16,7 @@ public class SaveAction extends OfflineUserAction implements Serializable {
     public SaveAction(String accountName, String fullname) {
         super(accountName);
         this.itemFullname = fullname;
+        this.actionName = "save " + itemFullname;
     }
 
     public String getItemFullname() {

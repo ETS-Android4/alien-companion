@@ -20,6 +20,7 @@ public class SubmitLinkAction extends OfflineUserAction implements Serializable 
         this.title = title;
         this.link = link;
         this.subreddit = subreddit;
+        this.actionName = "submit " + "\"" + title + "\"";
     }
 
     public void setTitle(String title) {

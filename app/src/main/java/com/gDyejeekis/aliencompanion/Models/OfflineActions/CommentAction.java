@@ -9,15 +9,17 @@ import java.io.Serializable;
 /**
  * Created by sound on 3/4/2016.
  */
-public class CommentAction extends OfflineUserAction implements Serializable{
+public class CommentAction extends OfflineUserAction implements Serializable {
 
     private String parentFullname;
     private String commentText;
+    //private String parentText;
 
     public CommentAction(String accountName, String fullname, String commentText) {
         super(accountName);
         this.parentFullname = fullname;
         this.commentText = commentText;
+        this.actionName = "reply to " + parentFullname;
     }
 
     public String getParentFullname() {

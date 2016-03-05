@@ -12,6 +12,7 @@ public class UnhideAction extends OfflineUserAction implements Serializable {
     public UnhideAction(String accountName, String fullname) {
         super(accountName);
         this.itemFullname = fullname;
+        this.actionName = "hide " + itemFullname;
     }
 
     public String getItemFullname() {

@@ -16,9 +16,15 @@ public abstract class OfflineUserAction implements Serializable {
 
     protected boolean actionCompleted;
 
+    protected String actionName;
+
     public OfflineUserAction(String accountName) {
         this.accountName = accountName;
         this.actionCompleted = false;
+    }
+
+    public String getActionName() {
+        return actionName;
     }
 
     public boolean isActionCompleted() {

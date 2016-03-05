@@ -18,6 +18,7 @@ public class ReportAction extends OfflineUserAction implements Serializable {
         super(accountName);
         this.itemFullname = fullname;
         this.reportReason = reportReason;
+        this.actionName = "report " + itemFullname;
     }
 
     public String getItemFullname() {

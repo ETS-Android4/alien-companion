@@ -3,6 +3,8 @@
 
     <changelogversion versionName="0.2.3" changeDate="Mar 4, 2016">
         <changelogtext>Fixed offline mode toolbar subtitle sometimes not displaying correct info</changelogtext>
+        <changelogtext>Fixed scheduled syncs not syncing the correct list of subreddits after an edit. Please reactivate your sync profiles for the fix to take effect</changelogtext>
+        <changelogtext>Added shortcut to 'Sync profiles' in the toolbar's overflow menu</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.2.2" changeDate="Mar 3, 2016">

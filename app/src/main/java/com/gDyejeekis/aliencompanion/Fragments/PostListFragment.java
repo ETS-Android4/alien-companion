@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
+import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
@@ -255,12 +256,16 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     dialog.show(activity.getFragmentManager(), "dialog");
                 }
                 return true;
+            case R.id.action_sync_profiles:
+                Intent intent = new Intent(activity, SyncProfilesActivity.class);
+                activity.startActivity(intent);
+                return true;
             case R.id.action_sync_posts:
                 String toastMessage;
                 if(GeneralUtils.isNetworkAvailable(activity)) {
                     String filename = (subreddit == null) ? "frontpage" : subreddit;
                     toastMessage = filename + " added to sync queue";
-                    Intent intent = new Intent(activity, DownloaderService.class);
+                    intent = new Intent(activity, DownloaderService.class);
                     intent.putExtra("sort", submissionSort);
                     intent.putExtra("time", timeSpan);
                     intent.putExtra("subreddit", subreddit);

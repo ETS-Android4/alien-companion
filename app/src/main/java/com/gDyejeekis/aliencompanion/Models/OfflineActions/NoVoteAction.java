@@ -12,6 +12,7 @@ public class NoVoteAction extends OfflineUserAction implements Serializable {
     public NoVoteAction(String accountName, String fullname) {
         super(accountName);
         this.itemFullname = fullname;
+        this.actionName = "no vote " + itemFullname;
     }
 
     public String getItemFullname() {
