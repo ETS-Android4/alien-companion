@@ -535,7 +535,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private String getOfflineSubtitle() {
         try {
-            String filename = (subreddit == null) ? "frontpage" : subreddit;
+            String filename = "";
+            if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
+            filename += (subreddit == null) ? "frontpage" : subreddit;
             File file = new File(activity.getFilesDir(), filename);
             //double lastModified = (double) file.lastModified();
             //return ConvertUtils.getSubmissionAge(lastModified);

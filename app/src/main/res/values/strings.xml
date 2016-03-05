@@ -135,5 +135,6 @@
     <string name="delete_profile">Delete profile</string>
     <string name="action_sort_by_alpha">Sort by alpha</string>
     <string name="view_sidebar">View sidebar</string>
+    <string name="save">Save</string>
 
 </resources>

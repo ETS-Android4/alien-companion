@@ -92,9 +92,8 @@
             android:label="Sync profiles" >
         </activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.ImgurActivity"
-            android:configChanges="orientation|screenSize"
-            android:label="Imgur" >
+            android:name=".Activities.ImageActivity"
+            android:configChanges="orientation|screenSize">
         </activity>
     </application>
 

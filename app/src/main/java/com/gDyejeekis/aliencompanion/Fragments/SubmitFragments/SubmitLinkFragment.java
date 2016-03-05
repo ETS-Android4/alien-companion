@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.Fragments.SubmitFragments;
 
 
 import android.graphics.Color;

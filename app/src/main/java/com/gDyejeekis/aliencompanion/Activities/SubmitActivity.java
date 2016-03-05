@@ -9,10 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.gDyejeekis.aliencompanion.Fragments.ComposeMessageFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitCommentFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitImageFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitLinkFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitTextFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitCommentFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitImageFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitLinkFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitTextFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;

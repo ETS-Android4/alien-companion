@@ -6,6 +6,18 @@ import android.os.AsyncTask;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditSidebarDialogFragment;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.CommentAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.DownvoteAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.HideAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.NoVoteAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.ReportAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.SaveAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.SubmitLinkAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.SubmitTextAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UnhideAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UnsaveAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UpvoteAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -38,6 +50,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private String title, linkOrText, subreddit, captcha_iden, captcha_sol;
     private String recipient, subject, message;
     private SubredditSidebarDialogFragment dialogSidebar;
+    private OfflineUserAction offlineUserAction;
 
     public LoadUserActionTask(Context context, String recipient, String subject, String message) {
         this.context = context;
@@ -94,6 +107,61 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.userActionType = type;
         this.subreddit = subreddit;
         this.dialogSidebar = dialog;
+    }
+
+    public LoadUserActionTask(Context context, OfflineUserAction offlineAction) {
+        this.context = context;
+        this.offlineUserAction = offlineAction;
+        if(offlineAction instanceof UpvoteAction) {
+            userActionType = UserActionType.upvote;
+            postName = ((UpvoteAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof DownvoteAction) {
+            userActionType = UserActionType.downvote;
+            postName = ((DownvoteAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof NoVoteAction) {
+            userActionType = UserActionType.novote;
+            postName = ((NoVoteAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof SaveAction) {
+            userActionType = UserActionType.save;
+            postName = ((SaveAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof UnsaveAction) {
+            userActionType = UserActionType.unsave;
+            postName = ((UnsaveAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof HideAction) {
+            userActionType = UserActionType.hide;
+            postName = ((HideAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof UnhideAction) {
+            userActionType = UserActionType.unhide;
+            postName = ((UnhideAction) offlineAction).getItemFullname();
+        }
+        else if(offlineAction instanceof CommentAction) {
+            userActionType = UserActionType.submitComment;
+            postName = ((CommentAction) offlineAction).getParentFullname();
+            text = ((CommentAction) offlineAction).getCommentText();
+        }
+        else if(offlineAction instanceof ReportAction) {
+            userActionType = UserActionType.report;
+            postName = ((ReportAction) offlineAction).getItemFullname();
+            text = ((ReportAction) offlineAction).getReportReason();
+        }
+        else if(offlineAction instanceof SubmitTextAction) {
+            userActionType = UserActionType.submitText;
+            title = ((SubmitTextAction) offlineAction).getTitle();
+            linkOrText = ((SubmitTextAction) offlineAction).getSelfText();
+            subreddit = ((SubmitTextAction) offlineAction).getSubreddit();
+        }
+        else if(offlineAction instanceof SubmitLinkAction) {
+            userActionType = UserActionType.submitLink;
+            title = ((SubmitLinkAction) offlineAction).getTitle();
+            linkOrText = ((SubmitLinkAction) offlineAction).getLink();
+            subreddit = ((SubmitLinkAction) offlineAction).getSubreddit();
+        }
     }
 
     @Override
@@ -187,54 +255,64 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             if(dialogSidebar !=null) {
                 dialogSidebar.updateSubUnsubButton(false);
             }
-            ToastUtils.displayShortToast(context, "Error completing user action");
+
+            if(context instanceof Activity) {
+                ToastUtils.displayShortToast(context, "Error completing user action");
+            }
         }
         else {
-            switch (userActionType) {
-                case submitText: case submitLink:
-                    ((Activity) context).finish();
-                    ToastUtils.displayShortToast(context, "Submission successful");
-                    break;
-                case submitComment:
-                    ((Activity) context).finish();
-                    ToastUtils.displayShortToast(context, "Reply sent");
-                    break;
-                case save:
-                    ToastUtils.displayShortToast(context, "Saved");
-                    break;
-                case unsave:
-                    ToastUtils.displayShortToast(context, "Unsaved");
-                    break;
-                case delete:
-                    ToastUtils.displayShortToast(context, "Deleted");
-                    break;
-                case edit:
-                    ((Activity) context).finish();
-                    ToastUtils.displayShortToast(context, "Edit successful");
-                    break;
-                case changePassword:
-                    ToastUtils.displayShortToast(context, "Password change successful");
-                    break;
-                case report:
-                    ToastUtils.displayShortToast(context, "Report sent");
-                    break;
-                case subscribe:
-                    if(dialogSidebar !=null) {
-                        dialogSidebar.updateSubUnsubButton(true);
-                    }
-                    ToastUtils.displayShortToast(context, "Subscribed to " + subreddit);
-                    break;
-                case unsubscribe:
-                    if(dialogSidebar !=null) {
-                        dialogSidebar.updateSubUnsubButton(true);
-                    }
-                    ToastUtils.displayShortToast(context, "Unsubscribed from " + subreddit);
-                    break;
-                case sendMessage:
-                    ((Activity) context).finish();
-                    ToastUtils.displayShortToast(context, "Message sent");
-                    break;
+            if(offlineUserAction != null) {
+                offlineUserAction.setActionCompleted(true);
+            }
+            else {
+                switch (userActionType) {
+                    case submitText:
+                    case submitLink:
+                        ((Activity) context).finish();
+                        ToastUtils.displayShortToast(context, "Submission successful");
+                        break;
+                    case submitComment:
+                        ((Activity) context).finish();
+                        ToastUtils.displayShortToast(context, "Reply sent");
+                        break;
+                    case save:
+                        ToastUtils.displayShortToast(context, "Saved");
+                        break;
+                    case unsave:
+                        ToastUtils.displayShortToast(context, "Unsaved");
+                        break;
+                    case delete:
+                        ToastUtils.displayShortToast(context, "Deleted");
+                        break;
+                    case edit:
+                        ((Activity) context).finish();
+                        ToastUtils.displayShortToast(context, "Edit successful");
+                        break;
+                    case changePassword:
+                        ToastUtils.displayShortToast(context, "Password change successful");
+                        break;
+                    case report:
+                        ToastUtils.displayShortToast(context, "Report sent");
+                        break;
+                    case subscribe:
+                        if (dialogSidebar != null) {
+                            dialogSidebar.updateSubUnsubButton(true);
+                        }
+                        ToastUtils.displayShortToast(context, "Subscribed to " + subreddit);
+                        break;
+                    case unsubscribe:
+                        if (dialogSidebar != null) {
+                            dialogSidebar.updateSubUnsubButton(true);
+                        }
+                        ToastUtils.displayShortToast(context, "Unsubscribed from " + subreddit);
+                        break;
+                    case sendMessage:
+                        ((Activity) context).finish();
+                        ToastUtils.displayShortToast(context, "Message sent");
+                        break;
+                }
             }
         }
     }
+
 }

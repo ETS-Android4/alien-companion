@@ -172,11 +172,11 @@ public class LinkHandler {
             }
             else if(type.equalsIgnoreCase("r")) {
                 intent = new Intent(activity, SubredditActivity.class);
-                intent.putExtra("subreddit", name);
+                intent.putExtra("subreddit", name.toLowerCase());
             }
             else if(type.equalsIgnoreCase("u") || type.equalsIgnoreCase("user")) {
                 intent = new Intent(activity, UserActivity.class);
-                intent.putExtra("username", name);
+                intent.putExtra("username", name.toLowerCase());
             }
         }
         else {
