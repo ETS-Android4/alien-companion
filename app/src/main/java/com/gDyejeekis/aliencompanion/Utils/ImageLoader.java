@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -25,8 +26,8 @@ public class ImageLoader {
 
     public static void preloadUserImages(List<RedditItem> posts, Context context) {
         //if (BuildConfig.DEBUG) {
-        //    Picasso.with(activity).setIndicatorsEnabled(true);
-        //    Picasso.with(activity).setLoggingEnabled(true);
+        //    Picasso.with(context).setIndicatorsEnabled(true);
+        //    Picasso.with(context).setLoggingEnabled(true);
         //}
         for(Object post : posts) {
             if(post instanceof Submission) {
@@ -45,8 +46,8 @@ public class ImageLoader {
 
     public static void preloadThumbnails(List<RedditItem> posts, Context context) {
         //if (BuildConfig.DEBUG) {
-        //    Picasso.with(activity).setIndicatorsEnabled(true);
-        //    Picasso.with(activity).setLoggingEnabled(true);
+        //    Picasso.with(context).setIndicatorsEnabled(true);
+        //    Picasso.with(context).setLoggingEnabled(true);
         //}
         for(RedditItem submission : posts) {
             if(submission.getThumbnailObject()==null) {

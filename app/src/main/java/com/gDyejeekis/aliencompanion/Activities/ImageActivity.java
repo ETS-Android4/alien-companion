@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -25,6 +28,10 @@ public class ImageActivity extends BackNavActivity {
 
     private String domain;
 
+    private ProgressBar progressBar;
+
+    private RelativeLayout fragmentHolder;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +43,9 @@ public class ImageActivity extends BackNavActivity {
         toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        fragmentHolder = (RelativeLayout) findViewById(R.id.layout_fragment_holder);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar5);
     }
 
     private void setupFragments() {
@@ -54,6 +64,15 @@ public class ImageActivity extends BackNavActivity {
         }
         else if(url.endsWith(".gifv") || url.endsWith(".gif")) {
 
+        }
+    }
+
+    private void setProgressBarVisible(boolean flag) {
+        if(flag) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        else {
+            progressBar.setVisibility(View.GONE);
         }
     }
 

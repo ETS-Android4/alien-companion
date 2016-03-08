@@ -69,7 +69,7 @@ public class LinkHandler {
                 intent = getNoDomainIntent(activity, url);
             } else {
                 //Log.d("Link Domain", domain);
-                if (domain.contains("youtube.com") || domain.equals("youtu.be") /*(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))*/) {
+                if ( ((domain.contains("youtube.com") || domain.equals("youtu.be")) && !(url.contains("playlist") || url.contains("user") || url.contains("channel"))) ) {
                     if (MyApplication.handleYouTube) {
                         String videoId = getYoutubeVideoId(url);
                         int time = getYoutubeVideoTime(url);

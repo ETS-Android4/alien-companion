@@ -17,7 +17,7 @@ public class Thumbnail implements Serializable {
 
     public Thumbnail(String url) {
         this.url = url;
-        if(url.equals("self")) {
+        if(url.equals("self") || url.equals("default")) {
             isSelf = true;
             isNSFW = false;
         }
@@ -30,7 +30,7 @@ public class Thumbnail implements Serializable {
     public Thumbnail(String url, boolean hasThumbnail) {
         this.url = url;
         this.hasThumbnail = hasThumbnail;
-        if(url.equals("self")) {
+        if(url.equals("self") || url.equals("default")) {
             isSelf = true;
             isNSFW = false;
         }

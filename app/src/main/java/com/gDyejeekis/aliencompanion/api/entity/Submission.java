@@ -193,8 +193,13 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	private void handleThumbnail() {
 		if(!(nsfw && !MyApplication.showNSFWpreview)) {
 			if(domain.contains("youtube.com") || domain.equals("youtu.be") /*(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))*/) {
-				hasImageButton = true;
-				thumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);
+				//hasImageButton = true;
+				//String newThumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);
+				//Log.d("GEOTEST", thumbnail);
+				if(!(url.contains("playlist") || url.contains("user") || url.contains("channel"))) {
+					hasImageButton = true;
+					thumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);;
+				}
 			}
 			else if(domain.contains("imgur.com")) {
 				if(url.contains("/a/") || url.contains("/gallery/")) hasImageButton = false;
