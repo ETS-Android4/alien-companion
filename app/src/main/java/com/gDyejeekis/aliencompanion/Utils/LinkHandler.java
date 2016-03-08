@@ -9,6 +9,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
+import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
@@ -76,10 +77,11 @@ public class LinkHandler {
                         intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
                     }
                     else setImplicitIntent = true;
-                } else if(domain.contains("imgur.com")) {
+                }
+                else if(domain.equals("imgur.com") || domain.equals("gfycat.com") || url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".gifv") || url.endsWith(".gifv")) {
                     if(MyApplication.handleImgur) {
-                        //ImgurLinkHandler.handleUrl(activity, post, url, domain);
                         startInAppBrowser(activity, post, url, domain);
+                        //intent = getImageActivityIntent(activity, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
@@ -147,6 +149,14 @@ public class LinkHandler {
             }
             activity.startActivity(intent);
         }
+    }
+
+    private Intent getImageActivityIntent(Activity activity, String url, String domain) {
+        Intent intent = new Intent(activity, ImageActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("domain", domain);
+
+        return intent;
     }
 
     //Get an intent for links like '/r/movies' or '/u/someuser' or /r/games/about/sidebar
