@@ -18,8 +18,8 @@ public class GifFragment extends Fragment {
 
     private String url;
 
-    public static ImageFragment newInstance(String url) {
-        ImageFragment fragment = new ImageFragment();
+    public static GifFragment newInstance(String url) {
+        GifFragment fragment = new GifFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("url", url);

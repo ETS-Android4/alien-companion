@@ -17,7 +17,6 @@ import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.ThumbnailUtils;
-import com.gDyejeekis.aliencompanion.api.imgur.Image;
 import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
 import com.gDyejeekis.aliencompanion.enums.YoutubeThumbnailSize;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
@@ -102,7 +101,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	public boolean hasImageButton;
 
-	//private List<Image> imgurs;
+	//private List<ImgurImage> imgurs;
     
     // 
     private String likes;

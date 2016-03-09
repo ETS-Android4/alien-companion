@@ -22,23 +22,30 @@ public class ImgurHttpClient {
 
     public static final String CLIENT_ID = "438a0d502455ec6";
 
+    private static final String DEBUG_STRING = "ImgurHttpClient";
+
     public Response get(String urlPath) {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(ImgurApiEndpoints.BASE_IMGUR_URL + urlPath);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setUseCaches(false);
+            connection.setUseCaches(true);
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Client-ID " + CLIENT_ID);
             connection.setDoInput(true);
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
+
+            //Log.d(DEBUG_STRING, "GET request to  " + ImgurApiEndpoints.BASE_IMGUR_URL + urlPath);
+            //printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
 
             String content = IOUtils.toString(inputStream, "UTF-8");
             IOUtils.closeQuietly(inputStream);
 
-            Log.d("inputstream imgur: ", content);
+            //Log.d(DEBUG_STRING, "INPUTSTREAM OBJECT");
+            Log.d(DEBUG_STRING, content);
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
@@ -58,5 +65,29 @@ public class ImgurHttpClient {
         }
 
         return null;
+    }
+
+    private void printRequestProperties(HttpURLConnection connection) {
+        Log.d(DEBUG_STRING, "REQUEST PROPERTIES");
+        Log.d(DEBUG_STRING, "Request method: " + connection.getRequestMethod());
+        for (String header : connection.getRequestProperties().keySet()) {
+            if (header != null) {
+                for (String value : connection.getRequestProperties().get(header)) {
+                    Log.d("Request properties", header + ":" + value);
+                }
+            }
+        }
+    }
+
+    private void printHeaderFields(HttpURLConnection connection) {
+        Log.d(DEBUG_STRING, "HEADER FIELDS");
+        for (String header : connection.getHeaderFields().keySet()) {
+            if (header != null) {
+                for (String value : connection.getHeaderFields().get(header)) {
+                    Log.d(DEBUG_STRING, header + ":" + value);
+                }
+            }
+        }
+        Log.d(DEBUG_STRING, "--------------------------------------------------------------------------------------------");
     }
 }

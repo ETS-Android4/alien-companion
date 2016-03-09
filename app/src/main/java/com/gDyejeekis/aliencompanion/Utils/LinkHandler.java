@@ -64,12 +64,15 @@ public class LinkHandler {
             Intent intent = null;
             Activity activity = (Activity) context;
 
+            String domainLC = domain.toLowerCase();
+            String urlLC = url.toLowerCase();
+
             Log.d("Link Full URL", url);
             if (domain == null) {
                 intent = getNoDomainIntent(activity, url);
             } else {
                 //Log.d("Link Domain", domain);
-                if ( ((domain.contains("youtube.com") || domain.equals("youtu.be")) && !(url.contains("playlist") || url.contains("user") || url.contains("channel"))) ) {
+                if ( ((domainLC.contains("youtube.com") || domainLC.equals("youtu.be")) && !(urlLC.contains("playlist") || urlLC.contains("user") || urlLC.contains("channel"))) ) {
                     if (MyApplication.handleYouTube) {
                         String videoId = getYoutubeVideoId(url);
                         int time = getYoutubeVideoTime(url);
@@ -78,20 +81,20 @@ public class LinkHandler {
                     }
                     else setImplicitIntent = true;
                 }
-                else if(domain.contains("imgur.com") || domain.equals("gfycat.com") || url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".gif") || url.endsWith(".gifv")) {
+                else if(domainLC.contains("imgur.com") || domainLC.equals("gfycat.com") || urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")) {
                     if(MyApplication.handleImgur) {
                         //startInAppBrowser(activity, post, url, domain);
                         intent = getImageActivityIntent(activity, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
-                else if(domain.equals("twitter.com")) {
+                else if(domainLC.equals("twitter.com")) {
                     if(MyApplication.handleTwitter) {
                         startInAppBrowser(activity, post, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
-                else if (domain.equals("reddit.com") || domain.substring(3).equals("reddit.com")) {
+                else if (domainLC.equals("reddit.com") || domainLC.substring(3).equals("reddit.com")) {
                     if(url.contains("/wiki/") || url.contains("/about/")) {
                         if (MyApplication.handleOtherLinks) startInAppBrowser(activity, post, url, domain);
                         else setImplicitIntent = true;
@@ -108,10 +111,10 @@ public class LinkHandler {
                                 intent = getNoDomainIntent(activity, matcher.group());
                         }
                     }
-                } else if (domain.equals("redd.it")) {
+                } else if (domainLC.equals("redd.it")) {
                     intent = new Intent(activity, PostActivity.class);
                     intent.putExtra("postId", url.substring(15));
-                } else if (MyApplication.handleOtherLinks && !domain.equals("play.google.com")) {
+                } else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com")) {
                     startInAppBrowser(activity, post, url, domain);
                 }
                 else {

@@ -1,10 +1,11 @@
 package com.gDyejeekis.aliencompanion.api.imgur;
 
-import org.json.simple.JSONArray;
+import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
+
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToInteger;
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
@@ -12,67 +13,39 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 /**
  * Created by George on 1/3/2016.
  */
-public class Album extends ImgurItem {
+public class ImgurImage extends ImgurItem {
 
-    private String layout;
     private boolean nsfw;
+    private String gifv;
     private String link;
     private String section;
     private int bandwidth;
     private int views;
-    private String cover;
-    private int coverHeight;
-    private int coverWidth;
+    private int size;
+    private int height;
+    private int width;
+    private boolean animated;
+    private String type;
     private int datetime;
     private String description;
     private String id;
     private String title;
-    private int imageCount;
-    private List<Image> images;
 
-    public Album(JSONObject obj) {
+    public ImgurImage(JSONObject obj) {
         setTitle(safeJsonToString(obj.get("title")));
         setId(safeJsonToString(obj.get("id")));
         setDescription(safeJsonToString(obj.get("description")));
         setDatetime(safeJsonToInteger(obj.get("datetime")));
-        setCoverWidth(safeJsonToInteger(obj.get("cover_width")));
-        setCoverHeight(safeJsonToInteger(obj.get("cover_height")));
-        setCover(safeJsonToString(obj.get("cover")));
+        setType(safeJsonToString(obj.get("type")));
+        setAnimated(safeJsonToBoolean(obj.get("animated")));
+        setWidth(safeJsonToInteger(obj.get("width")));
+        setHeight(safeJsonToInteger(obj.get("height")));
+        setSize(safeJsonToInteger(obj.get("size")));
         setViews(safeJsonToInteger(obj.get("views")));
-        setBandwidth(safeJsonToInteger(obj.get("bandwidth")));
+        //setBandwidth(safeJsonToInteger(obj.get("bandwidth")));
         setSection(safeJsonToString(obj.get("section")));
         setLink(safeJsonToString(obj.get("link")));
-        setNsfw(safeJsonToBoolean(obj.get("nsfw")));
-        setLayout(safeJsonToString(obj.get("layout")));
-        JSONArray jsonArray = (JSONArray) obj.get("images");
-        images = new ArrayList<>();
-        for(Object object : jsonArray) {
-            images.add(new Image((JSONObject) object));
-        }
-    }
-
-    public int getImageCount() {
-        return imageCount;
-    }
-
-    public void setImageCount(int imageCount) {
-        this.imageCount = imageCount;
-    }
-
-    public String getLayout() {
-        return layout;
-    }
-
-    public void setLayout(String layout) {
-        this.layout = layout;
-    }
-
-    public List<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Image> images) {
-        this.images = images;
+        if(animated) setGifv(safeJsonToString(obj.get("gifv")));
     }
 
     public String getId() {
@@ -107,20 +80,44 @@ public class Album extends ImgurItem {
         this.datetime = datetime;
     }
 
-    public int getCoverWidth() {
-        return coverWidth;
+    public String getType() {
+        return type;
     }
 
-    public void setCoverWidth(int width) {
-        this.coverWidth = width;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public int getCoverHeight() {
-        return coverHeight;
+    public boolean isAnimated() {
+        return animated;
     }
 
-    public void setCoverHeight(int height) {
-        this.coverHeight = height;
+    public void setAnimated(boolean animated) {
+        this.animated = animated;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public int getViews() {
@@ -155,6 +152,14 @@ public class Album extends ImgurItem {
         this.link = link;
     }
 
+    public String getGifv() {
+        return gifv;
+    }
+
+    public void setGifv(String gifv) {
+        this.gifv = gifv;
+    }
+
     public boolean isNsfw() {
         return nsfw;
     }
@@ -163,11 +168,8 @@ public class Album extends ImgurItem {
         this.nsfw = nsfw;
     }
 
-    public String getCover() {
-        return cover;
+    public String getThumbnailId(ImgurThumbnailSize size) {
+        return id + size.value();
     }
 
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
 }
