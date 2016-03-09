@@ -6,23 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
 
 /**
  * Created by sound on 3/8/2016.
  */
-public class GifFragment extends Fragment {
+public class AlbumFragment extends Fragment {
 
-    private ImageActivity activity;
+    private String[] urls;
 
-    private String url;
-
-    public static ImageFragment newInstance(String url) {
+    public static ImageFragment newInstance(String[] urls) {
         ImageFragment fragment = new ImageFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString("url", url);
+        bundle.putStringArray("url", urls);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -32,13 +29,12 @@ public class GifFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        activity = (ImageActivity) getActivity();
-        url = getArguments().getString("url");
+        urls = getArguments().getStringArray("url");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gif, container, false);
+        View view = inflater.inflate(R.layout.fragment_image, container, false);
 
         return view;
     }

@@ -3,15 +3,19 @@ package com.gDyejeekis.aliencompanion.Activities;
 import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 
 /**
  * Created by sound on 3/4/2016.
@@ -30,12 +34,17 @@ public class ImageActivity extends BackNavActivity {
 
     private ProgressBar progressBar;
 
+    private FragmentManager fragmentManager;
+
     private RelativeLayout fragmentHolder;
+
+    private ViewPager viewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
+        fragmentManager = getFragmentManager();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(Color.parseColor("#00000000"));
@@ -44,8 +53,9 @@ public class ImageActivity extends BackNavActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        fragmentHolder = (RelativeLayout) findViewById(R.id.layout_fragment_holder);
         progressBar = (ProgressBar) findViewById(R.id.progressBar5);
+
+        setupFragments();
     }
 
     private void setupFragments() {
@@ -53,21 +63,27 @@ public class ImageActivity extends BackNavActivity {
         domain = getIntent().getStringExtra("domain");
         FragmentManager fragmentManager = getFragmentManager();
 
-        if(domain.equals("imgur.com")) {
+        if(domain.equals("imgur.com") || domain.equals("m.imgur.com")) {
+            String imgurId = LinkHandler.getImgurImgId(url);
+            if(url.contains("/a/") || url.contains("/gallery")) {
+                viewPager = (ViewPager) findViewById(R.id.viewpager1);
+            }
+            else {
 
+            }
         }
         else if(domain.equals("gfycat.com")) {
 
         }
         else if(url.endsWith(".png") || url.endsWith(".jpg")) {
-
+            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
         }
         else if(url.endsWith(".gifv") || url.endsWith(".gif")) {
 
         }
     }
 
-    private void setProgressBarVisible(boolean flag) {
+    public void setMainProgressBarVisible(boolean flag) {
         if(flag) {
             progressBar.setVisibility(View.VISIBLE);
         }

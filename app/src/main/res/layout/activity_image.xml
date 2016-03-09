@@ -16,6 +16,12 @@
             android:id="@+id/progressBar5"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:id="@+id/viewpager1"></android.support.v4.view.ViewPager>
     </RelativeLayout>
 
 </LinearLayout>

@@ -78,10 +78,10 @@ public class LinkHandler {
                     }
                     else setImplicitIntent = true;
                 }
-                else if(domain.equals("imgur.com") || domain.equals("gfycat.com") || url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".gifv") || url.endsWith(".gifv")) {
+                else if(domain.equals("imgur.com") || domain.equals("m.imgur.com") || domain.equals("gfycat.com") || url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".gifv") || url.endsWith(".gifv")) {
                     if(MyApplication.handleImgur) {
-                        startInAppBrowser(activity, post, url, domain);
-                        //intent = getImageActivityIntent(activity, url, domain);
+                        //startInAppBrowser(activity, post, url, domain);
+                        intent = getImageActivityIntent(activity, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
