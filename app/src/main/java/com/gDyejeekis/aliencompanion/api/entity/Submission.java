@@ -102,7 +102,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	public boolean hasImageButton;
 
-	private List<Image> imgurs;
+	//private List<Image> imgurs;
     
     // 
     private String likes;
@@ -119,13 +119,13 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 		return null;
 	}
 
-	public List<Image> getImgurUrls() {
-		return imgurs;
-	}
-
-	public void setImgurUrls(List<Image> images) {
-		this.imgurs = images;
-	}
+	//public List<Image> getImgurUrls() {
+	//	return imgurs;
+	//}
+//
+	//public void setImgurUrls(List<Image> images) {
+	//	this.imgurs = images;
+	//}
 
     /**
 	 * @return the approvedBy

@@ -13,7 +13,7 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 /**
  * Created by George on 1/3/2016.
  */
-public class Image implements Serializable {
+public class Image extends ImgurItem {
 
     private boolean nsfw;
     private String gifv;

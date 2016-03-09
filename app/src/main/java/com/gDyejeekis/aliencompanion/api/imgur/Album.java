@@ -12,7 +12,7 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 /**
  * Created by George on 1/3/2016.
  */
-public class Album {
+public class Album extends ImgurItem {
 
     private String layout;
     private boolean nsfw;

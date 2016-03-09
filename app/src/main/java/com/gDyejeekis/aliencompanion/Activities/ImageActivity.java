@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -63,7 +64,14 @@ public class ImageActivity extends BackNavActivity {
         domain = getIntent().getStringExtra("domain");
         FragmentManager fragmentManager = getFragmentManager();
 
-        if(domain.equals("imgur.com") || domain.equals("m.imgur.com")) {
+
+        if(url.endsWith(".png") || url.endsWith(".jpg")) {
+            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
+        }
+        else if(url.endsWith(".gifv") || url.endsWith(".gif")) {
+            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url), "gifFragment").commit();
+        }
+        else if(domain.contains("imgur.com")) {
             String imgurId = LinkHandler.getImgurImgId(url);
             if(url.contains("/a/") || url.contains("/gallery")) {
                 viewPager = (ViewPager) findViewById(R.id.viewpager1);
@@ -73,12 +81,6 @@ public class ImageActivity extends BackNavActivity {
             }
         }
         else if(domain.equals("gfycat.com")) {
-
-        }
-        else if(url.endsWith(".png") || url.endsWith(".jpg")) {
-            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
-        }
-        else if(url.endsWith(".gifv") || url.endsWith(".gif")) {
 
         }
     }
