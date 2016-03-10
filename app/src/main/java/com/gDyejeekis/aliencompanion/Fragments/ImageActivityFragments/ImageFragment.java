@@ -22,8 +22,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class ImageFragment extends Fragment {
 
-    private static final int MAX_WIDTH = 1024;
-    private static final int MAX_HEIGHT = 768;
+    private static final int MAX_WIDTH = 1280;
+    private static final int MAX_HEIGHT = 1024;
 
     private static final int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT));
 
@@ -72,7 +72,7 @@ public class ImageFragment extends Fragment {
         loadImage();
 
         attacher = new PhotoViewAttacher(photoView);
-        if(true) {
+        if(true) { // TODO: 3/10/2016 add flag for dismissing image on single tap
             attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
                 @Override
                 public void onViewTap(View view, float x, float y) {

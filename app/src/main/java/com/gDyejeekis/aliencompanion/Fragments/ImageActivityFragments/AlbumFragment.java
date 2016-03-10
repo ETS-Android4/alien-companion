@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
 
 /**
  * Created by sound on 3/8/2016.
  */
 public class AlbumFragment extends Fragment {
+
+    private ImageActivity activity;
 
     private String[] urls;
 
@@ -29,6 +32,7 @@ public class AlbumFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        activity = (ImageActivity) getActivity();
         urls = getArguments().getStringArray("url");
     }
 

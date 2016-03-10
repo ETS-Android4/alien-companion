@@ -31,19 +31,19 @@ public class ImgurAlbum extends ImgurItem {
     private List<ImgurImage> images;
 
     public ImgurAlbum(JSONObject obj) {
-        setTitle(safeJsonToString(obj.get("title")));
-        setId(safeJsonToString(obj.get("id")));
-        setDescription(safeJsonToString(obj.get("description")));
-        setDatetime(safeJsonToInteger(obj.get("datetime")));
-        setCoverWidth(safeJsonToInteger(obj.get("cover_width")));
-        setCoverHeight(safeJsonToInteger(obj.get("cover_height")));
-        setCover(safeJsonToString(obj.get("cover")));
-        setViews(safeJsonToInteger(obj.get("views")));
-        setBandwidth(safeJsonToInteger(obj.get("bandwidth")));
-        setSection(safeJsonToString(obj.get("section")));
+        //setTitle(safeJsonToString(obj.get("title")));
+        //setId(safeJsonToString(obj.get("id")));
+        //setDescription(safeJsonToString(obj.get("description")));
+        //setDatetime(safeJsonToInteger(obj.get("datetime")));
+        //setCoverWidth(safeJsonToInteger(obj.get("cover_width")));
+        //setCoverHeight(safeJsonToInteger(obj.get("cover_height")));
+        //setCover(safeJsonToString(obj.get("cover")));
+        //setViews(safeJsonToInteger(obj.get("views")));
+        //setBandwidth(safeJsonToInteger(obj.get("bandwidth")));
+        //setSection(safeJsonToString(obj.get("section")));
         setLink(safeJsonToString(obj.get("link")));
-        setNsfw(safeJsonToBoolean(obj.get("nsfw")));
-        setLayout(safeJsonToString(obj.get("layout")));
+        //setNsfw(safeJsonToBoolean(obj.get("nsfw")));
+        //setLayout(safeJsonToString(obj.get("layout")));
         JSONArray jsonArray = (JSONArray) obj.get("images");
         images = new ArrayList<>();
         for(Object object : jsonArray) {

@@ -64,13 +64,12 @@ public class LinkHandler {
             Intent intent = null;
             Activity activity = (Activity) context;
 
-            String domainLC = domain.toLowerCase();
-            String urlLC = url.toLowerCase();
-
             Log.d("Link Full URL", url);
             if (domain == null) {
                 intent = getNoDomainIntent(activity, url);
             } else {
+                String domainLC = domain.toLowerCase();
+                String urlLC = url.toLowerCase();
                 //Log.d("Link Domain", domain);
                 if ( ((domainLC.contains("youtube.com") || domainLC.equals("youtu.be")) && !(urlLC.contains("playlist") || urlLC.contains("user") || urlLC.contains("channel"))) ) {
                     if (MyApplication.handleYouTube) {
@@ -91,7 +90,7 @@ public class LinkHandler {
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
-                else if(domainLC.equals("gfycat.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")) {
+                else if(domainLC.equals("gfycat.com") || urlLC.endsWith(".gifv") || urlLC.endsWith(".gif") || urlLC.endsWith(".webm")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.equals("twitter.com")) {

@@ -17,6 +17,8 @@ public class ImgurImage extends ImgurItem {
 
     private boolean nsfw;
     private String gifv;
+    private String mp4;
+    private String webm;
     private String link;
     private String section;
     private int bandwidth;
@@ -32,20 +34,41 @@ public class ImgurImage extends ImgurItem {
     private String title;
 
     public ImgurImage(JSONObject obj) {
-        setTitle(safeJsonToString(obj.get("title")));
-        setId(safeJsonToString(obj.get("id")));
-        setDescription(safeJsonToString(obj.get("description")));
-        setDatetime(safeJsonToInteger(obj.get("datetime")));
-        setType(safeJsonToString(obj.get("type")));
+        //setTitle(safeJsonToString(obj.get("title")));
+        //setId(safeJsonToString(obj.get("id")));
+        //setDescription(safeJsonToString(obj.get("description")));
+        //setDatetime(safeJsonToInteger(obj.get("datetime")));
+        //setType(safeJsonToString(obj.get("type")));
         setAnimated(safeJsonToBoolean(obj.get("animated")));
-        setWidth(safeJsonToInteger(obj.get("width")));
-        setHeight(safeJsonToInteger(obj.get("height")));
-        setSize(safeJsonToInteger(obj.get("size")));
-        setViews(safeJsonToInteger(obj.get("views")));
-        //setBandwidth(safeJsonToInteger(obj.get("bandwidth")));
-        setSection(safeJsonToString(obj.get("section")));
+        //setWidth(safeJsonToInteger(obj.get("width")));
+        //setHeight(safeJsonToInteger(obj.get("height")));
+        //setSize(safeJsonToInteger(obj.get("size")));
+        //setViews(safeJsonToInteger(obj.get("views")));
+        //setBandwidth(safeJsonToInteger(obj.get("bandwidth"))); // TODO: 3/10/2016 this throws exception
+        //setSection(safeJsonToString(obj.get("section")));
         setLink(safeJsonToString(obj.get("link")));
-        if(animated) setGifv(safeJsonToString(obj.get("gifv")));
+        setLink(link.replace("\\", ""));
+        if(animated) {
+            setGifv(safeJsonToString(obj.get("gifv")));
+            setMp4(safeJsonToString(obj.get("mp4")));
+            setWebm(safeJsonToString(obj.get("webm")));
+        }
+    }
+
+    public String getWebm() {
+        return webm;
+    }
+
+    public void setWebm(String webm) {
+        this.webm = webm;
+    }
+
+    public String getMp4() {
+        return mp4;
+    }
+
+    public void setMp4(String mp4) {
+        this.mp4 = mp4;
     }
 
     public String getId() {

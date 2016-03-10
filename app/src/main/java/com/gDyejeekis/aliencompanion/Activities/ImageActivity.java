@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -19,17 +20,16 @@ import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragm
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
 /**
  * Created by sound on 3/4/2016.
  */
 public class ImageActivity extends BackNavActivity {
-
-    public static final int TYPE_IMAGE = 1;
-
-    public static final int TYPE_GIF = 2;
-
-    public static final int TYPE_ALBUM = 3;
 
     private String url;
 
@@ -38,10 +38,6 @@ public class ImageActivity extends BackNavActivity {
     private ProgressBar progressBar;
 
     private FragmentManager fragmentManager;
-
-    private RelativeLayout fragmentHolder;
-
-    private ViewPager viewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,26 +61,61 @@ public class ImageActivity extends BackNavActivity {
     private void setupFragments() {
         url = getIntent().getStringExtra("url");
         domain = getIntent().getStringExtra("domain");
-        FragmentManager fragmentManager = getFragmentManager();
-
 
         if(url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
             url = url.replace("\\?(\\d+)?", "");
-            //Log.d("geotest", "image fragment url " + url);
-            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
+            //Log.d("ImageActivity", "image fragment url " + url);
+            addImageFragment(url);
         }
-        else if(url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
+        else if(url.matches("(?i).*\\.(gifv|gif|webm)\\??(\\d+)?")) {
             url = url.replace("\\?(\\d+)?", "");
-            //Log.d("geotest", "gif fragment url " + url);
-            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url), "gifFragment").commit();
+            //Log.d("ImageActivity", "gif fragment url " + url);
+            url = url.replace(".gifv", ".mp4");
+            addGifFragment(url);
         }
         else if(domain.contains("imgur.com")) {
-            ImgurTask task = new ImgurTask(this, url);
-            task.execute();
+            new ImgurTask(this) {
+                @Override protected void onPostExecute(ImgurItem item) {
+                    if(item==null) {
+                        ToastUtils.displayShortToast(getContext(), "Error retrieving imgur info");
+                    }
+                    else {
+                        if (item instanceof ImgurImage) {
+                            ImgurImage image = (ImgurImage) item;
+                            if (image.isAnimated()) {
+                                addGifFragment(image.getMp4());
+                            } else {
+                                addImageFragment(image.getLink());
+                            }
+                        }
+                        else if (item instanceof ImgurAlbum) {
+
+                        }
+                        else if (item instanceof ImgurGallery) {
+                            ImgurGallery gallery = (ImgurGallery) item;
+                            if (gallery.isAlbum()) {
+
+                            } else {
+                                addImageFragment(gallery.getLink());
+                            }
+                        }
+                    }
+                }
+            }.execute(url);
         }
         else if(domain.equals("gfycat.com")) {
-
+            url = url.replaceAll("https?://", "http://giant.");
+            url = url.concat(".mp4");
+            addGifFragment(url);
         }
+    }
+
+    public void addImageFragment(String url) {
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
+    }
+
+    public void addGifFragment(String url) {
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url), "gifFragment").commit();
     }
 
     public void setMainProgressBarVisible(boolean flag) {

@@ -3,7 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.felipecsl.gifimageview.library.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/gifView"/>
 
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/videoView"
+        android:layout_centerInParent="true" />
 
     <Button
         android:layout_width="wrap_content"
