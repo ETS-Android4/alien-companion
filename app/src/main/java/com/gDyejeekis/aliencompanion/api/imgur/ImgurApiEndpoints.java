@@ -11,5 +11,11 @@ public class ImgurApiEndpoints {
 
     public static final String ALBUM = "/album/%s";
 
-    public static final String ALBUM_IMAGES = "album/%s/images";
+    public static final String ALBUM_IMAGES = "/album/%s/images";
+
+    public static final String GALLERY = "/gallery/%s";
+
+    public static final String GALLERY_IMAGE = "/gallery/image/%s";
+
+    public static final String GALLERY_ALBUM = "/gallery/album/%s";
 }

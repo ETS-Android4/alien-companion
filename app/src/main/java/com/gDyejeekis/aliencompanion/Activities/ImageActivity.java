@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Activities;
 
 import android.app.FragmentManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +53,7 @@ public class ImageActivity extends BackNavActivity {
         toolbar.setBackgroundColor(Color.parseColor("#00000000"));
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -66,7 +68,7 @@ public class ImageActivity extends BackNavActivity {
         FragmentManager fragmentManager = getFragmentManager();
 
 
-        if(url.matches("(?i).*\\.(png|jpg)\\??(\\d+)?")) {
+        if(url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
             url = url.replace("\\?(\\d+)?", "");
             //Log.d("geotest", "image fragment url " + url);
             fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();

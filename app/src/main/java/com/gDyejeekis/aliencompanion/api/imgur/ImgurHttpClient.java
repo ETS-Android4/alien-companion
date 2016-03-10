@@ -36,7 +36,7 @@ public class ImgurHttpClient {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
-            //Log.d(DEBUG_STRING, "GET request to  " + ImgurApiEndpoints.BASE_IMGUR_URL + urlPath);
+            Log.d(DEBUG_STRING, "GET request to  " + ImgurApiEndpoints.BASE_IMGUR_URL + urlPath);
             //printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
