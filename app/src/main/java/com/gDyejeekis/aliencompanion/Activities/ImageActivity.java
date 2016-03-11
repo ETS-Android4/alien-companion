@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
@@ -67,7 +68,7 @@ public class ImageActivity extends BackNavActivity {
             //Log.d("ImageActivity", "image fragment url " + url);
             addImageFragment(url);
         }
-        else if(url.matches("(?i).*\\.(gifv|gif|webm)\\??(\\d+)?")) {
+        else if(url.matches("(?i).*\\.(gifv|gif|webm|mp4)\\??(\\d+)?")) {
             url = url.replace("\\?(\\d+)?", "");
             //Log.d("ImageActivity", "gif fragment url " + url);
             url = url.replace(".gifv", ".mp4");
@@ -104,9 +105,16 @@ public class ImageActivity extends BackNavActivity {
             }.execute(url);
         }
         else if(domain.equals("gfycat.com")) {
-            url = url.replaceAll("https?://", "http://giant.");
-            url = url.concat(".mp4");
-            addGifFragment(url);
+            new GfycatTask(this) {
+                @Override protected void onPostExecute(String url) {
+                    if(url==null) {
+                        ToastUtils.displayShortToast(getContext(), "Error retrieving gfycat info");
+                    }
+                    else {
+                        addGifFragment(url);
+                    }
+                }
+            }.execute(url);
         }
     }
 
