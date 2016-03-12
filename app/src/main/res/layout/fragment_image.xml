@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/frag_img_layout">
 
-    <uk.co.senab.photoview.PhotoView
+    <com.gDyejeekis.aliencompanion.Views.TouchImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

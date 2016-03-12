@@ -16,10 +16,9 @@ import android.widget.RelativeLayout;
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.BitmapTransform;
+import com.gDyejeekis.aliencompanion.Views.TouchImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by sound on 3/8/2016.
@@ -35,9 +34,7 @@ public class ImageFragment extends Fragment {
 
     private String url;
 
-    private ImageView photoView;
-
-    private PhotoViewAttacher attacher;
+    private TouchImageView imageView;
 
     private Button buttonRetry;
 
@@ -63,57 +60,48 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
 
-        photoView = (ImageView) view.findViewById(R.id.photoview);
+        imageView = (TouchImageView) view.findViewById(R.id.photoview);
+        if(true) { // TODO: 3/13/2016 create flag for dismiss on single tap
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.finish();
+                }
+            });
+        }
         buttonRetry = (Button) view.findViewById(R.id.button_retry);
         buttonRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loadImage();
-                attacher.update();
             }
         });
 
         loadImage();
 
-        attacher = new PhotoViewAttacher(photoView);
-        if(true) { // TODO: 3/10/2016 add flag for dismissing image on single tap
-            attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-                @Override
-                public void onViewTap(View view, float x, float y) {
-                    activity.finish();
-                }
-            });
-        }
-
         return view;
     }
 
     private void loadImage() {
-        photoView.setVisibility(View.GONE);
+        imageView.setVisibility(View.GONE);
         buttonRetry.setVisibility(View.GONE);
         activity.setMainProgressBarVisible(true);
 
-        Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).skipMemoryCache().resize(size, size).centerInside().into(photoView, new Callback() {
+        Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).skipMemoryCache().resize(size, size).centerInside().into(imageView, new Callback() {
             @Override
             public void onSuccess() {
                 activity.setMainProgressBarVisible(false);
-                photoView.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.VISIBLE);
                 buttonRetry.setVisibility(View.GONE);
             }
 
             @Override
             public void onError() {
                 activity.setMainProgressBarVisible(false);
-                photoView.setVisibility(View.GONE);
+                imageView.setVisibility(View.GONE);
                 buttonRetry.setVisibility(View.VISIBLE);
             }
         });
     }
-
-    //@Override
-    //public void onDestroy() {
-    //    Log.d("ImageFragment", "onDestroy() called");
-    //    super.onDestroy();
-    //}
 
 }
