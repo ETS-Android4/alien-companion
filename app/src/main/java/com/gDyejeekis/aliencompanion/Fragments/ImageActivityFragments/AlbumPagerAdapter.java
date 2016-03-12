@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by sound on 3/12/2016.
  */
-public class AlbumPagerAdapter extends FragmentPagerAdapter {
+public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
 
     //private ImageActivity activity;
 

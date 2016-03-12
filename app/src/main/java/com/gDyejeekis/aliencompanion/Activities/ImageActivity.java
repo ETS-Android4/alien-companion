@@ -124,6 +124,7 @@ public class ImageActivity extends BackNavActivity {
         getSupportActionBar().setSubtitle("1 of " + images.size());
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
         viewPager.setVisibility(View.VISIBLE);
+        viewPager.setOffscreenPageLimit(1);
         viewPager.setAdapter(new AlbumPagerAdapter(fragmentManager, images));
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -141,16 +142,6 @@ public class ImageActivity extends BackNavActivity {
 
             }
         });
-    }
-
-    private void preloadAlbumImages(List<ImgurImage> images) {
-        try {
-            for (ImgurImage image : images) {
-                Picasso.with(this).load(image.getLink()).fetch();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void addImageFragment(String url) {

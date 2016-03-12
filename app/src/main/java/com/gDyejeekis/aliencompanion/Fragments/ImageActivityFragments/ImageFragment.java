@@ -1,12 +1,17 @@
 package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
@@ -21,14 +26,16 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class ImageFragment extends Fragment {
 
-    private static final int MAX_WIDTH = 1280;
-    private static final int MAX_HEIGHT = 1024;
+    private static final int MAX_WIDTH = 1024;
+    private static final int MAX_HEIGHT = 768;
 
     private static final int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT));
 
     private ImageActivity activity;
 
     private String url;
+
+    //private RelativeLayout layout;
 
     private ImageView photoView;
 
@@ -58,6 +65,7 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
 
+        //layout = (RelativeLayout) view.findViewById(R.id.frag_img_layout);
         photoView = (ImageView) view.findViewById(R.id.photoview);
         buttonRetry = (Button) view.findViewById(R.id.button_retry);
         buttonRetry.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +96,7 @@ public class ImageFragment extends Fragment {
         buttonRetry.setVisibility(View.GONE);
         activity.setMainProgressBarVisible(true);
 
-        Picasso.with(getActivity()).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).skipMemoryCache().resize(size, size).centerInside().into(photoView, new Callback() {
+        Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).skipMemoryCache().resize(size, size).centerInside().into(photoView, new Callback() {
             @Override
             public void onSuccess() {
                 activity.setMainProgressBarVisible(false);
@@ -104,5 +112,11 @@ public class ImageFragment extends Fragment {
             }
         });
     }
+
+    //@Override
+    //public void onDestroy() {
+    //    Log.d("ImageFragment", "onDestroy() called");
+    //    super.onDestroy();
+    //}
 
 }
