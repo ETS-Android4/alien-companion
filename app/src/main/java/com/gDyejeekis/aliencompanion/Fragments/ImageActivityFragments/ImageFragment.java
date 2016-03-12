@@ -35,8 +35,6 @@ public class ImageFragment extends Fragment {
 
     private String url;
 
-    //private RelativeLayout layout;
-
     private ImageView photoView;
 
     private PhotoViewAttacher attacher;
@@ -65,7 +63,6 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
 
-        //layout = (RelativeLayout) view.findViewById(R.id.frag_img_layout);
         photoView = (ImageView) view.findViewById(R.id.photoview);
         buttonRetry = (Button) view.findViewById(R.id.button_retry);
         buttonRetry.setOnClickListener(new View.OnClickListener() {
