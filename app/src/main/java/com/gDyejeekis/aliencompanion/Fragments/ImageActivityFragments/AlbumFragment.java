@@ -1,13 +1,15 @@
 package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by sound on 3/8/2016.
@@ -16,13 +18,13 @@ public class AlbumFragment extends Fragment {
 
     private ImageActivity activity;
 
-    private String[] urls;
+    private ArrayList<String> urls;
 
-    public static ImageFragment newInstance(String[] urls) {
+    public static ImageFragment newInstance(ArrayList<String> urls) {
         ImageFragment fragment = new ImageFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putStringArray("url", urls);
+        bundle.putStringArrayList("urls", urls);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -33,12 +35,12 @@ public class AlbumFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         activity = (ImageActivity) getActivity();
-        urls = getArguments().getStringArray("url");
+        urls = getArguments().getStringArrayList("urls");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_image, container, false);
+        View view = inflater.inflate(R.layout.fragment_album, container, false);
 
         return view;
     }

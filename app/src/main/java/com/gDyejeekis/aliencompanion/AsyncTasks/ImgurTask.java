@@ -41,7 +41,9 @@ public class ImgurTask extends AsyncTask<String, Void, ImgurItem> {
             String urlLC = url.toLowerCase();
             String id = LinkHandler.getImgurImgId(url);
             if (urlLC.contains("/a/")) {
-
+                JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.ALBUM, id)).getResponseObject();
+                JSONObject object = (JSONObject) response.get("data");
+                item = new ImgurAlbum(object);
             } else if (urlLC.contains("/gallery/")) {
                 JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.GALLERY, id)).getResponseObject();
                 JSONObject object = (JSONObject) response.get("data");

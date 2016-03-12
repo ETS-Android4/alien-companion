@@ -90,7 +90,7 @@ public class LinkHandler {
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
-                else if(domainLC.equals("gfycat.com") || urlLC.endsWith(".gifv") || urlLC.endsWith(".gif") || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")) {
+                else if(domainLC.equals("gfycat.com") || urlLC.endsWith(".gifv") || urlLC.endsWith(".gif")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.equals("twitter.com")) {
@@ -245,7 +245,7 @@ public class LinkHandler {
     }
 
     public static String getImgurImgId(String url) {
-        String pattern = "imgur\\.com(?:/gallery)?/(\\w+)";
+        String pattern = "imgur\\.com(?:/gallery)?(?:/a)?/(\\w+)";
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = compiledPattern.matcher(url);
 

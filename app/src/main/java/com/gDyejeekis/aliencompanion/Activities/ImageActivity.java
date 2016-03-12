@@ -1,31 +1,29 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
-import android.app.Activity;
-import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
+import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
-import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
+
+import java.util.List;
 
 /**
  * Created by sound on 3/4/2016.
@@ -38,13 +36,15 @@ public class ImageActivity extends BackNavActivity {
 
     private ProgressBar progressBar;
 
+    private ViewPager viewPager;
+
     private FragmentManager fragmentManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(Color.parseColor("#00000000"));
@@ -68,7 +68,7 @@ public class ImageActivity extends BackNavActivity {
             //Log.d("ImageActivity", "image fragment url " + url);
             addImageFragment(url);
         }
-        else if(url.matches("(?i).*\\.(gifv|gif|webm|mp4)\\??(\\d+)?")) {
+        else if(url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
             url = url.replace("\\?(\\d+)?", "");
             //Log.d("ImageActivity", "gif fragment url " + url);
             url = url.replace(".gifv", ".mp4");
@@ -90,12 +90,12 @@ public class ImageActivity extends BackNavActivity {
                             }
                         }
                         else if (item instanceof ImgurAlbum) {
-
+                            setupAlbumView(((ImgurAlbum)item).getImages());
                         }
                         else if (item instanceof ImgurGallery) {
                             ImgurGallery gallery = (ImgurGallery) item;
                             if (gallery.isAlbum()) {
-
+                                setupAlbumView(gallery.getImages());
                             } else {
                                 addImageFragment(gallery.getLink());
                             }
@@ -116,6 +116,30 @@ public class ImageActivity extends BackNavActivity {
                 }
             }.execute(url);
         }
+    }
+
+    private void setupAlbumView(final List<ImgurImage> images) {
+        getSupportActionBar().setTitle("Album");
+        getSupportActionBar().setSubtitle("1 of " + images.size());
+        viewPager = (ViewPager) findViewById(R.id.viewpager1);
+        viewPager.setVisibility(View.VISIBLE);
+        viewPager.setAdapter(new AlbumPagerAdapter(fragmentManager, images));
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                getSupportActionBar().setSubtitle((position+1) + " of " + images.size());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public void addImageFragment(String url) {
