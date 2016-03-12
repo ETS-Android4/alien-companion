@@ -22,6 +22,7 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class ImageActivity extends BackNavActivity {
 
             @Override
             public void onPageSelected(int position) {
-                getSupportActionBar().setSubtitle((position+1) + " of " + images.size());
+                getSupportActionBar().setSubtitle((position + 1) + " of " + images.size());
             }
 
             @Override
@@ -140,6 +141,16 @@ public class ImageActivity extends BackNavActivity {
 
             }
         });
+    }
+
+    private void preloadAlbumImages(List<ImgurImage> images) {
+        try {
+            for (ImgurImage image : images) {
+                Picasso.with(this).load(image.getLink()).fetch();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addImageFragment(String url) {
