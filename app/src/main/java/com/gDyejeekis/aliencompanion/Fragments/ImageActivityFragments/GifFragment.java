@@ -5,16 +5,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.felipecsl.gifimageview.library.GifImageView;
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * Created by sound on 3/8/2016.
@@ -28,6 +31,8 @@ public class GifFragment extends Fragment {
     private VideoView videoView;
 
     private GifImageView gifView;
+
+    private GifDrawable gifDrawable;
 
     private Button buttonRetry;
 
@@ -79,6 +84,15 @@ public class GifFragment extends Fragment {
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     activity.setMainProgressBarVisible(false);
                     mediaPlayer.setLooping(true);
+                    if(true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
+                        videoView.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent motionEvent) {
+                                activity.finish();
+                                return false;
+                            }
+                        });
+                    }
                 }
             });
             videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -96,10 +110,15 @@ public class GifFragment extends Fragment {
             gifView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (gifView.isAnimating()) {
-                        gifView.stopAnimation();
-                    } else {
-                        gifView.startAnimation();
+                    if (true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
+                        activity.finish();
+                    }
+                    else {
+                        if (gifDrawable.isPlaying()) {
+                            gifDrawable.stop();
+                        } else {
+                            gifDrawable.start();
+                        }
                     }
                 }
             });
@@ -126,7 +145,9 @@ public class GifFragment extends Fragment {
         activity.setMainProgressBarVisible(true);
         buttonRetry.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
-        videoView.setMediaController(new MediaController(activity));
+        if(!true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
+            videoView.setMediaController(new MediaController(activity));
+        }
         videoView.setVideoURI(Uri.parse(url));
         videoView.requestFocus();
         videoView.start();
@@ -141,12 +162,11 @@ public class GifFragment extends Fragment {
             @Override protected void onPostExecute(final byte[] bytes) {
                 activity.setMainProgressBarVisible(false);
                 try {
-                    gifView.setBytes(bytes);
+                    if(bytes==null) throw new Exception();
+                    gifDrawable = new GifDrawable(bytes);
+                    gifView.setImageDrawable(gifDrawable);
                     gifView.setVisibility(View.VISIBLE);
                     buttonRetry.setVisibility(View.GONE);
-                    gifView.startAnimation();
-                    //Log.d("GifFragment", "GIF width is " + gifView.getGifWidth());
-                    //Log.d("GifFragment", "GIF height is " + gifView.getGifHeight());
                 } catch (Exception e) {
                     buttonRetry.setVisibility(View.VISIBLE);
                     gifView.setVisibility(View.GONE);

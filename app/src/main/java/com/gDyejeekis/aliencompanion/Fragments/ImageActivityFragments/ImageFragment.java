@@ -104,4 +104,10 @@ public class ImageFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Picasso.with(activity).cancelRequest(imageView);
+    }
+
 }

@@ -41,5 +41,5 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
-    compile 'com.felipecsl:gifimageview:2.0.0'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
 }
