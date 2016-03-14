@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -39,6 +40,10 @@ public class ImageActivity extends BackNavActivity {
     private ViewPager viewPager;
 
     private FragmentManager fragmentManager;
+
+    private int albumSize = -1;
+
+    private boolean showHqAction;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +124,8 @@ public class ImageActivity extends BackNavActivity {
     }
 
     private void setupAlbumView(final List<ImgurImage> images) {
+        albumSize = images.size();
+        setHqMenuItemVisible(!images.get(0).isAnimated());
         getSupportActionBar().setTitle("Album");
         getSupportActionBar().setSubtitle("1 of " + images.size());
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
@@ -133,7 +140,22 @@ public class ImageActivity extends BackNavActivity {
 
             @Override
             public void onPageSelected(int position) {
-                getSupportActionBar().setSubtitle((position + 1) + " of " + images.size());
+                String subtitle = "";
+                if(position==albumSize) {
+                    setMainProgressBarVisible(false);
+                    setHqMenuItemVisible(false);
+                    subtitle = "Gridview";
+                }
+                else {
+                    if(images.get(position).isAnimated()) {
+                        setHqMenuItemVisible(false);
+                    }
+                    else {
+                        setHqMenuItemVisible(true);
+                    }
+                    subtitle = (position + 1) + " of " + albumSize;
+                }
+                getSupportActionBar().setSubtitle(subtitle);
             }
 
             @Override
@@ -143,7 +165,12 @@ public class ImageActivity extends BackNavActivity {
         });
     }
 
+    public void setViewPagerPosition(int position) {
+        viewPager.setCurrentItem(position);
+    }
+
     public void addImageFragment(String url) {
+        setHqMenuItemVisible(true);
         fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
     }
 
@@ -163,18 +190,30 @@ public class ImageActivity extends BackNavActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_image, menu);
+        MenuItem hq_action = menu.findItem(R.id.action_high_quality);
+        MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
+        hq_action.setVisible(showHqAction);
+        gridview_action.setVisible(albumSize != -1);
         return true;
     }
 
-    //@Override
-    //public boolean onOptionsItemSelected(MenuItem item) {
-    //    switch (item.getItemId()) {
-    //        case R.id.action_save:
-    //            return true;
-    //        case R.id.action_share:
-    //            return true;
-    //        default:
-    //            return super.onOptionsItemSelected(item);
-    //    }
-    //}
+    public void setHqMenuItemVisible(boolean flag) {
+        showHqAction = flag;
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_album_gridview:
+                setViewPagerPosition(albumSize);
+                return true;
+            //case R.id.action_save:
+            //    return true;
+            //case R.id.action_share:
+            //    return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

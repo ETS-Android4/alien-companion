@@ -2,8 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_save" android:title="@string/save" android:icon="@mipmap/ic_save_white_24dp" app:showAsAction="always"/>
+    <item android:id="@+id/action_album_gridview" android:title="@string/gridview" android:icon="@mipmap/ic_view_module_white_24dp" app:showAsAction="always" />
 
-    <item android:id="@+id/action_share" android:title="@string/action_share" android:icon="@mipmap/ic_share_white_24dp" app:showAsAction="always"/>
+    <item android:id="@+id/action_high_quality" android:title="@string/high_quality" android:icon="@mipmap/ic_high_quality_white_24dp" app:showAsAction="always" />
 
+    <item android:id="@+id/action_save" android:title="@string/save" android:icon="@mipmap/ic_save_white_24dp" app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_share" android:title="@string/action_share" android:icon="@mipmap/ic_share_white_24dp" app:showAsAction="ifRoom"/>
 </menu>

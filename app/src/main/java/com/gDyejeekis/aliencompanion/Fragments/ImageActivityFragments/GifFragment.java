@@ -51,26 +51,13 @@ public class GifFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         activity = (ImageActivity) getActivity();
         url = getArguments().getString("url", "null");
 
         isGif = url.endsWith(".gif");
     }
-
-    //@Override
-    //public void onPause() {
-    //    super.onPause();
-    //    if(isGif) gifView.stopAnimation();
-    //    else videoView.suspend();
-    //}
-//
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    if(isGif) gifView.startAnimation();
-    //    else videoView.resume();
-    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

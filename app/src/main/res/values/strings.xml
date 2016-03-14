@@ -137,5 +137,7 @@
     <string name="view_sidebar">View sidebar</string>
     <string name="save">Save</string>
     <string name="sync_profiles">Sync profiles</string>
+    <string name="gridview">Gridview</string>
+    <string name="high_quality">High quality</string>
 
 </resources>
