@@ -52,7 +52,7 @@ public class ImageActivity extends BackNavActivity {
         fragmentManager = getSupportFragmentManager();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(Color.parseColor("#00000000"));
+        toolbar.setBackgroundColor(Color.parseColor("#78000000"));
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(Color.BLACK);

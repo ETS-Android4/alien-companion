@@ -1,7 +1,11 @@
 package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -10,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -29,9 +34,12 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by sound on 3/8/2016.
@@ -41,8 +49,8 @@ public class ImageFragment extends Fragment {
     private static final int MAX_WIDTH = 1024;
     private static final int MAX_HEIGHT = 768;
 
-    private static final int HQ_MAX_WIDTH = 2560;
-    private static final int HQ_MAX_HEIGHT = 1440;
+    private static final int HQ_MAX_WIDTH = 1920;
+    private static final int HQ_MAX_HEIGHT = 1200;
 
     private static final int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT));
 
@@ -55,6 +63,8 @@ public class ImageFragment extends Fragment {
     private TouchImageView imageView;
 
     private Button buttonRetry;
+
+    private boolean attemptSecondSave = true;
 
     public static ImageFragment newInstance(String url) {
         ImageFragment fragment = new ImageFragment();
@@ -174,6 +184,7 @@ public class ImageFragment extends Fragment {
 
                 @Override
                 public void run() {
+                    Log.d("ImageFragment", "Saving " + url + " to pictures directory");
                     String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
                     File appFolder = new File(dir + "/AlienCompanion");
@@ -182,7 +193,7 @@ public class ImageFragment extends Fragment {
                         appFolder.mkdir();
                     }
 
-                    String filename = url.replaceAll("https?://", "").replace("/", "-");
+                    String filename = url.replace("/", "(slash)"); //url.replaceAll("https?://", "").replace("/", "-");
                     File file = new File(appFolder.getAbsolutePath(), filename);
                     try {
                         file.createNewFile();
@@ -191,11 +202,12 @@ public class ImageFragment extends Fragment {
                         ostream.flush();
                         ostream.close();
 
-                        Log.d("ImageFragment", "Saved " + filename + " to pictures directory");
                         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         Uri contentUri = Uri.fromFile(file);
                         mediaScanIntent.setData(contentUri);
                         activity.sendBroadcast(mediaScanIntent);
+
+                        showImageSavedNotification(bitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -206,14 +218,39 @@ public class ImageFragment extends Fragment {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            ToastUtils.displayShortToast(activity, "Failed to save image");
+            if(attemptSecondSave) {
+                Log.d("ImageFragment", "onBitmapFailed, resizing image..");
+                attemptSecondSave = false;
+                Picasso.with(activity).load(url).transform(new BitmapTransform(HQ_MAX_WIDTH, HQ_MAX_HEIGHT)).resize(hqSize, hqSize).into(target);
+            }
+            else {
+                ToastUtils.displayShortToast(activity, "Failed to save image");
+            }
         }
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            ToastUtils.displayShortToast(activity, "Saving to photos..");
+            if(attemptSecondSave) {
+                ToastUtils.displayShortToast(activity, "Saving to photos..");
+            }
         }
     };
+
+    private void showImageSavedNotification(Bitmap bitmap) {
+        Bitmap decoded = new BitmapTransform(640, 480).transform(bitmap);
+
+        Notification notif = new Notification.Builder(activity)
+                .setContentTitle("Image saved")
+                //.setContentText(url)
+                .setSubText(url)
+                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
+                //.setLargeIcon(bitmap)
+                .setStyle(new Notification.BigPictureStyle().bigPicture(decoded))
+                .build();
+
+        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(UUID.randomUUID().hashCode(), notif);
+    }
 
     private void shareImage() {
         Intent intent = new Intent();
