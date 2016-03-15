@@ -144,7 +144,7 @@ public class ImageActivity extends BackNavActivity {
                 if(position==albumSize) {
                     setMainProgressBarVisible(false);
                     setHqMenuItemVisible(false);
-                    subtitle = "Gridview";
+                    subtitle = albumSize + " items";
                 }
                 else {
                     if(images.get(position).isAnimated()) {
@@ -202,16 +202,16 @@ public class ImageActivity extends BackNavActivity {
         invalidateOptionsMenu();
     }
 
+    public String getOriginalUrl() {
+        return url;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_album_gridview:
                 setViewPagerPosition(albumSize);
                 return true;
-            //case R.id.action_save:
-            //    return true;
-            //case R.id.action_share:
-            //    return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -1,10 +1,14 @@
 package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +79,16 @@ public class GifFragment extends Fragment {
                         videoView.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent motionEvent) {
-                                activity.finish();
-                                return false;
+
+                                switch (motionEvent.getAction()) {
+                                    case MotionEvent.ACTION_DOWN:
+                                        return true;
+                                    case MotionEvent.ACTION_UP:
+                                        activity.finish();
+                                        return true;
+                                    default:
+                                        return false;
+                                }
                             }
                         });
                     }
@@ -99,8 +111,7 @@ public class GifFragment extends Fragment {
                 public void onClick(View view) {
                     if (true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
                         activity.finish();
-                    }
-                    else {
+                    } else {
                         if (gifDrawable.isPlaying()) {
                             gifDrawable.stop();
                         } else {
@@ -161,6 +172,32 @@ public class GifFragment extends Fragment {
                 }
             }
         }.execute(url);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                saveGif();
+                return true;
+            case R.id.action_share:
+                shareGif();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void saveGif() {
+
+    }
+
+    private void shareGif() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        intent.setType("text/plain");
+        activity.startActivity(Intent.createChooser(intent, "Share gif to.."));
     }
 
 }
