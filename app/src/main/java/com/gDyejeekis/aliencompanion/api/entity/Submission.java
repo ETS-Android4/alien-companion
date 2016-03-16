@@ -192,9 +192,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	private void handleThumbnail() {
 		if(!(nsfw && !MyApplication.showNSFWpreview)) {
 			if(domain.contains("youtube.com") || domain.equals("youtu.be") /*(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))*/) {
-				//hasImageButton = true;
-				//String newThumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);
-				//Log.d("GEOTEST", thumbnail);
+
 				if(!(url.contains("playlist") || url.contains("user") || url.contains("channel"))) {
 					hasImageButton = true;
 					thumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);;
@@ -207,10 +205,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 					thumbnail = ThumbnailUtils.getImgurThumbnail(url, ImgurThumbnailSize.MEDIUM_THUMBNAIL);
 				}
 			}
+			else if(domain.equals("gfycat.com")) {
+				hasImageButton = true;
+				thumbnail = ThumbnailUtils.getGfycatThumbnail(url);
+			}
 		}
 		else hasImageButton = false;
 
-		//Log.d("geotest", thumbnail);
+		//Log.d("SubmissionDebug", thumbnail);
 	}
 
 	public void updateSubmission(JSONObject obj) {

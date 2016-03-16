@@ -244,6 +244,17 @@ public class LinkHandler {
         return postInfo;
     }
 
+    public static String getGfycatId(String url) {
+        String pattern = "gfycat\\.com/(\\w+)";
+        Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = compiledPattern.matcher(url);
+
+        if(matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
     public static String getImgurImgId(String url) {
         String pattern = "imgur\\.com(?:/gallery)?(?:/a)?/(\\w+)";
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);

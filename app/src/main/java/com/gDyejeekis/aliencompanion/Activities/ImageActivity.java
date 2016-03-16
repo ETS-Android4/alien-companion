@@ -45,6 +45,10 @@ public class ImageActivity extends BackNavActivity {
 
     private boolean showHqAction;
 
+    private boolean showGridviewAction;
+
+    private boolean showSaveAction = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +73,12 @@ public class ImageActivity extends BackNavActivity {
         domain = getIntent().getStringExtra("domain");
 
         if(url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
-            url = url.replace("\\?(\\d+)?", "");
+            url = url.replaceAll("\\?(\\d+)?", "");
             //Log.d("ImageActivity", "image fragment url " + url);
             addImageFragment(url);
         }
         else if(url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
-            url = url.replace("\\?(\\d+)?", "");
+            url = url.replaceAll("\\?(\\d+)?", "");
             //Log.d("ImageActivity", "gif fragment url " + url);
             url = url.replace(".gifv", ".mp4");
             addGifFragment(url);
@@ -125,6 +129,7 @@ public class ImageActivity extends BackNavActivity {
 
     private void setupAlbumView(final List<ImgurImage> images) {
         albumSize = images.size();
+        showGridviewAction = true;
         setHqMenuItemVisible(!images.get(0).isAnimated());
         getSupportActionBar().setTitle("Album");
         getSupportActionBar().setSubtitle("1 of " + images.size());
@@ -143,10 +148,14 @@ public class ImageActivity extends BackNavActivity {
                 String subtitle = "";
                 if(position==albumSize) {
                     setMainProgressBarVisible(false);
+                    showSaveAction = false;
+                    showGridviewAction = false;
                     setHqMenuItemVisible(false);
                     subtitle = albumSize + " items";
                 }
                 else {
+                    showSaveAction = true;
+                    showGridviewAction = true;
                     if(images.get(position).isAnimated()) {
                         setHqMenuItemVisible(false);
                     }
@@ -190,10 +199,13 @@ public class ImageActivity extends BackNavActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_image, menu);
+        MenuItem saveAction = menu.findItem(R.id.action_save);
         MenuItem hq_action = menu.findItem(R.id.action_high_quality);
         MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
+        saveAction.setVisible(showSaveAction);
         hq_action.setVisible(showHqAction);
-        gridview_action.setVisible(albumSize != -1);
+        gridview_action.setVisible(showGridviewAction);
+        //gridview_action.setVisible(albumSize != -1);
         return true;
     }
 

@@ -46,8 +46,8 @@ import java.util.UUID;
  */
 public class ImageFragment extends Fragment {
 
-    private static final int MAX_WIDTH = 1024;
-    private static final int MAX_HEIGHT = 768;
+    private static final int MAX_WIDTH = 1600;
+    private static final int MAX_HEIGHT = 900;
 
     private static final int HQ_MAX_WIDTH = 1920;
     private static final int HQ_MAX_HEIGHT = 1200;
@@ -144,7 +144,8 @@ public class ImageFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_high_quality:
-                loadHqImage();
+                //loadOriginalBitmap();
+                loadBitmapResized(2560, 1440);
                 return true;
             case R.id.action_save:
                 saveImageToPhotos();
@@ -157,17 +158,41 @@ public class ImageFragment extends Fragment {
         }
     }
 
-    private void loadHqImage() {
-        Picasso.with(activity).load(url).transform(new BitmapTransform(HQ_MAX_WIDTH, HQ_MAX_HEIGHT)).skipMemoryCache().resize(hqSize, hqSize).centerInside().into(imageView, new Callback() {
+    private void loadOriginalBitmap() {
+        imageView.setVisibility(View.GONE);
+        activity.setMainProgressBarVisible(true);
+        Picasso.with(activity).load(url).into(imageView, new Callback() {
             @Override
             public void onSuccess() {
-
+                Log.d("ImageFragment", "Loaded original size bitmap");
+                imageView.setVisibility(View.VISIBLE);
+                activity.setMainProgressBarVisible(false);
             }
 
             @Override
             public void onError() {
-                ToastUtils.displayShortToast(activity, "Failed to load high quality image");
-                loadImage();
+                loadBitmapResized(3840, 2160);
+            }
+        });
+    }
+
+    private void loadBitmapResized(final int width, final int height) {
+        int size = (int) Math.ceil(Math.sqrt(width * height));
+        Picasso.with(activity).load(url).transform(new BitmapTransform(width, height)).skipMemoryCache().resize(size, size).centerInside().into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                Log.d("ImageFragment", "Loaded bitmap with dimensions " + width + "x" + height);
+                imageView.setVisibility(View.VISIBLE);
+                activity.setMainProgressBarVisible(false);
+            }
+
+            @Override
+            public void onError() {
+                if(width <= 0 || height <= 0) {
+                    Log.d("ImageFragment", "Failed to load bitmap");
+                    return;
+                }
+                loadBitmapResized(width - 200, height - 200);
             }
         });
     }

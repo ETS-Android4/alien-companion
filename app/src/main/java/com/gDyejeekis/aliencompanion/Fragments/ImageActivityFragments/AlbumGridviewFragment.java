@@ -2,10 +2,12 @@ package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,12 +50,6 @@ public class AlbumGridviewFragment extends Fragment {
         urls = getArguments().getStringArrayList("urls");
     }
 
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    activity.setMainProgressBarVisible(false);
-    //}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_album, container, false);
@@ -70,47 +66,17 @@ public class AlbumGridviewFragment extends Fragment {
         return view;
     }
 
-    //static class ImageAdapter extends BaseAdapter {
-//
-    //    private Context mContext;
-//
-    //    private ArrayList<String> urls;
-//
-    //    public ImageAdapter(Context c, ArrayList<String> urls) {
-    //        mContext = c;
-    //        this.urls = urls;
-    //    }
-//
-    //    public int getCount() {
-    //        return urls.size();
-    //    }
-//
-    //    public Object getItem(int position) {
-    //        return null;
-    //    }
-//
-    //    public long getItemId(int position) {
-    //        return 0;
-    //    }
-//
-    //    // create a new ImageView for each item referenced by the Adapter
-    //    public View getView(int position, View convertView, ViewGroup parent) {
-    //        ImageView imageView;
-    //        if (convertView == null) {
-    //            // if it's not recycled, initialize some attributes
-    //            imageView = new ImageView(mContext);
-    //            imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    //            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    //            //imageView.setPadding(8, 8, 8, 8);
-    //        } else {
-    //            imageView = (ImageView) convertView;
-    //        }
-//
-    //        //imageView.setImageResource(mThumbIds[position]);
-    //        Picasso.with(mContext).load(urls.get(position)).placeholder(R.color.darker_gray).into(imageView);
-    //        return imageView;
-    //    }
-    //}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_share) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_TEXT, activity.getOriginalUrl());
+            intent.setType("text/plain");
+            activity.startActivity(Intent.createChooser(intent, "Share album to.."));
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     static class ImageAdapter extends ArrayAdapter<String> {
 

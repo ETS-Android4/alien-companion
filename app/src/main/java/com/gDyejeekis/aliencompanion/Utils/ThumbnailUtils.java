@@ -14,6 +14,8 @@ public class ThumbnailUtils {
 
     public static final String BASE_IMGUR_THUMB_URL = "http://i.imgur.com/";
 
+    public static final String BASE_GFYCAT_THUMB_URL = "http://thumbs.gfycat.com/";
+
     public static String getYoutubeThumbnail(String url, YoutubeThumbnailSize size) {
         String id = LinkHandler.getYoutubeVideoId(url);
 
@@ -24,5 +26,9 @@ public class ThumbnailUtils {
         String id = LinkHandler.getImgurImgId(url);
         if (!id.equals("")) return BASE_IMGUR_THUMB_URL + id + size.value() + ".jpg";
         return "";
+    }
+
+    public static String getGfycatThumbnail(String url) {
+        return BASE_GFYCAT_THUMB_URL + LinkHandler.getGfycatId(url) + "-thumb360.jpg";
     }
 }
