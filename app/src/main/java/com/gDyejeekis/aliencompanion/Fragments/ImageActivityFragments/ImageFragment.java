@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -91,7 +92,7 @@ public class ImageFragment extends Fragment {
 
         imageView = (TouchImageView) view.findViewById(R.id.photoview);
         //imageView.setTag(target); //this keeps reference to imageview, causes OOM issues
-        if(true) { // TODO: 3/13/2016 create flag for dismiss on single tap
+        if(MyApplication.dismissImageOnTap) {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

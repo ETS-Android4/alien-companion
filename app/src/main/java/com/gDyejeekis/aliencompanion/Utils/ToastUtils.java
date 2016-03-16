@@ -3,6 +3,8 @@ package com.gDyejeekis.aliencompanion.Utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
+
 /**
  * Created by George on 6/19/2015.
  */
@@ -44,7 +46,9 @@ public class ToastUtils {
 
     public static void noResults(Context context, String query) {
         try {
-            Toast toast = Toast.makeText(context, NO_RESULTS_FOUND + query, Toast.LENGTH_SHORT);
+            String message = NO_RESULTS_FOUND + "\'" + query + "\'";
+            if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
+            Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
             toast.show();
         } catch (NullPointerException e) {}
     }

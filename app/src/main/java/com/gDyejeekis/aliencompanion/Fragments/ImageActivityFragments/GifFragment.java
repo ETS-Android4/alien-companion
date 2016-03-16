@@ -17,6 +17,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
 
@@ -75,7 +76,7 @@ public class GifFragment extends Fragment {
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     activity.setMainProgressBarVisible(false);
                     mediaPlayer.setLooping(true);
-                    if(true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
+                    if(MyApplication.dismissGifOnTap) {
                         videoView.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -109,7 +110,7 @@ public class GifFragment extends Fragment {
             gifView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
+                    if (MyApplication.dismissGifOnTap) {
                         activity.finish();
                     } else {
                         if (gifDrawable.isPlaying()) {
@@ -143,7 +144,7 @@ public class GifFragment extends Fragment {
         activity.setMainProgressBarVisible(true);
         buttonRetry.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
-        if(!true) { // TODO: 3/13/2016 flag for dismiss gif on single tap here
+        if(!MyApplication.dismissGifOnTap) {
             videoView.setMediaController(new MediaController(activity));
         }
         videoView.setVideoURI(Uri.parse(url));

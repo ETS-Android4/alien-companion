@@ -20,8 +20,8 @@
             android:key="fontSize"
             android:title="Font size"
             android:entries="@array/fontSizes"
-            android:entryValues="@array/swipeValues"
-            android:defaultValue="1"/>
+            android:entryValues="@array/fontSizeValues"
+            android:defaultValue="3"/>
 
         <ListPreference
             android:key="toolbarColor"
@@ -58,6 +58,16 @@
             android:defaultValue="0"/>
 
         <CheckBoxPreference
+            android:key="imageTap"
+            android:title="Dismiss images on single tap"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="gifTap"
+            android:title="Dismiss GIF on single tap"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
             android:key="swipeRefresh"
             android:title="Swipe to refresh"
             android:summary="Pull down to refresh posts/comments"
@@ -90,7 +100,7 @@
         <CheckBoxPreference
             android:key="hideNSFW"
             android:title="Hide NSFW posts"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
 
         <CheckBoxPreference
             android:key="endlessPosts"
@@ -244,7 +254,7 @@
         <Preference
             android:key="changelog"
             android:title="View changelog"
-            android:summary="Current version: 0.2.3" />
+            android:summary="Current version: 0.3" />
 
         <Preference
             android:key="feedback"

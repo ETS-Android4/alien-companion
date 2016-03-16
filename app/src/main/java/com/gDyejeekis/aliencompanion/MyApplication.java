@@ -25,9 +25,9 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  */
 public class MyApplication extends Application {
 
-    public static final String lastKnownVersion = "0.2.2";
+    public static final String lastKnownVersion = "0.2.3";
 
-    public static final String currentVersion = "0.2.3";
+    public static final String currentVersion = "0.3";
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -95,6 +95,8 @@ public class MyApplication extends Application {
     public static boolean hqThumbnails;
     public static boolean noThumbnails;
     public static boolean syncThumbnails;
+    public static boolean dismissImageOnTap;
+    public static boolean dismissGifOnTap;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -154,6 +156,8 @@ public class MyApplication extends Application {
     }
 
     public static void getCurrentSettings() {
+        dismissImageOnTap = prefs.getBoolean("imageTap", true);
+        dismissGifOnTap = prefs.getBoolean("gifTap", true);
         currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
         //Log.d("geo test", "settings saved");
         dualPane = prefs.getBoolean("dualPane", false);
@@ -161,19 +165,28 @@ public class MyApplication extends Application {
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         nightThemeEnabled = prefs.getBoolean("nightTheme", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
-        fontStyle = Integer.parseInt(prefs.getString("fontSize", "1"));
+        fontStyle = Integer.parseInt(prefs.getString("fontSize", "3"));
         switch (fontStyle) {
             case 0:
-                fontStyle = R.style.FontStyle_Small;
+                fontStyle = R.style.FontStyle_Smallest;
                 break;
             case 1:
-                fontStyle = R.style.FontStyle_Medium;
+                fontStyle = R.style.FontStyle_Smaller;
                 break;
             case 2:
-                fontStyle = R.style.FontStyle_Large;
+                fontStyle = R.style.FontStyle_Small;
                 break;
             case 3:
-                fontStyle = R.style.FontStyle_ExtraLarge;
+                fontStyle = R.style.FontStyle_Medium;
+                break;
+            case 4:
+                fontStyle = R.style.FontStyle_Large;
+                break;
+            case 5:
+                fontStyle = R.style.FontStyle_Larger;
+                break;
+            case 6:
+                fontStyle = R.style.FontStyle_Largest;
                 break;
         }
         colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
@@ -183,7 +196,7 @@ public class MyApplication extends Application {
         hqThumbnails = prefs.getBoolean("hqThumb", true);
         noThumbnails = prefs.getBoolean("noThumb", false);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
-        hideNSFW = prefs.getBoolean("hideNSFW", false);
+        hideNSFW = prefs.getBoolean("hideNSFW", true);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
         switch (swipeSetting) {
             case 0:

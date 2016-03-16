@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.3" changeDate="Mar 31, 2016">
+
+    </changelogversion>
+
     <changelogversion versionName="0.2.3" changeDate="Mar 5, 2016">
         <changelogtext>Fixed offline mode toolbar subtitle sometimes not displaying correct info</changelogtext>
         <changelogtext>Fixed scheduled syncs not syncing the correct list of subreddits after an edit. Please reactivate your sync profiles for the fix to take effect</changelogtext>

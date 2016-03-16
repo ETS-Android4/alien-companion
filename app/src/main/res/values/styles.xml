@@ -111,12 +111,28 @@
     <style name="FontStyle">
     </style>
 
+    <style name="FontStyle.Smallest">
+        <item name="font_comments">13sp</item>
+        <item name="font_small">11sp</item>
+        <item name="font_medium">17sp</item>
+        <item name="font_large">22sp</item>
+        <item name="font_xlarge">27sp</item>
+    </style>
+
+    <style name="FontStyle.Smaller">
+        <item name="font_comments">14sp</item>
+        <item name="font_small">12sp</item>
+        <item name="font_medium">18sp</item>
+        <item name="font_large">23sp</item>
+        <item name="font_xlarge">28sp</item>
+    </style>
+
     <style name="FontStyle.Small">
-        <item name="font_comments">12sp</item>
-        <item name="font_small">10sp</item>
-        <item name="font_medium">16sp</item>
-        <item name="font_large">21sp</item>
-        <item name="font_xlarge">26sp</item>
+        <item name="font_comments">15sp</item>
+        <item name="font_small">13sp</item>
+        <item name="font_medium">19sp</item>
+        <item name="font_large">24sp</item>
+        <item name="font_xlarge">29sp</item>
     </style>
 
     <style name="FontStyle.Medium">
@@ -128,19 +144,27 @@
     </style>
 
     <style name="FontStyle.Large">
-        <item name="font_comments">20sp</item>
-        <item name="font_small">18sp</item>
-        <item name="font_medium">24sp</item>
-        <item name="font_large">29sp</item>
-        <item name="font_xlarge">34sp</item>
+        <item name="font_comments">17sp</item>
+        <item name="font_small">15sp</item>
+        <item name="font_medium">21sp</item>
+        <item name="font_large">26sp</item>
+        <item name="font_xlarge">31sp</item>
     </style>
 
-    <style name="FontStyle.ExtraLarge">
-        <item name="font_comments">24sp</item>
-        <item name="font_small">22sp</item>
-        <item name="font_medium">28sp</item>
-        <item name="font_large">33sp</item>
-        <item name="font_xlarge">38sp</item>
+    <style name="FontStyle.Larger">
+        <item name="font_comments">18sp</item>
+        <item name="font_small">16sp</item>
+        <item name="font_medium">22sp</item>
+        <item name="font_large">27sp</item>
+        <item name="font_xlarge">32sp</item>
+    </style>
+
+    <style name="FontStyle.Largest">
+        <item name="font_comments">19sp</item>
+        <item name="font_small">17sp</item>
+        <item name="font_medium">23sp</item>
+        <item name="font_large">28sp</item>
+        <item name="font_xlarge">33sp</item>
     </style>
 
     <style name="selectedTheme">

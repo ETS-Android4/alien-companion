@@ -170,7 +170,9 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case init:
                         if(submissions.size()==0) {
                             plf.contentView.setAdapter(new RedditItemListAdapter(context));
-                            ToastUtils.displayShortToast(context, "No posts found");
+                            String message = "No posts found";
+                            if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
+                            ToastUtils.displayShortToast(context, message);
                         }
                         else plf.contentView.setAdapter(plf.postListAdapter);
                         break;
