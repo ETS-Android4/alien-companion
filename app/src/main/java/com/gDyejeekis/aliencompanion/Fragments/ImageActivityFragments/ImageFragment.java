@@ -47,6 +47,8 @@ import java.util.UUID;
  */
 public class ImageFragment extends Fragment {
 
+    public static final String TAG = "ImageFragment";
+
     private static final int MAX_WIDTH = 1600;
     private static final int MAX_HEIGHT = 900;
 
@@ -165,7 +167,7 @@ public class ImageFragment extends Fragment {
         Picasso.with(activity).load(url).into(imageView, new Callback() {
             @Override
             public void onSuccess() {
-                Log.d("ImageFragment", "Loaded original size bitmap");
+                Log.d(TAG, "Loaded original size bitmap");
                 imageView.setVisibility(View.VISIBLE);
                 activity.setMainProgressBarVisible(false);
             }
@@ -182,7 +184,7 @@ public class ImageFragment extends Fragment {
         Picasso.with(activity).load(url).transform(new BitmapTransform(width, height)).skipMemoryCache().resize(size, size).centerInside().into(imageView, new Callback() {
             @Override
             public void onSuccess() {
-                Log.d("ImageFragment", "Loaded bitmap with dimensions " + width + "x" + height);
+                Log.d(TAG, "Loaded bitmap with dimensions " + width + "x" + height);
                 imageView.setVisibility(View.VISIBLE);
                 activity.setMainProgressBarVisible(false);
             }
@@ -190,7 +192,7 @@ public class ImageFragment extends Fragment {
             @Override
             public void onError() {
                 if(width <= 0 || height <= 0) {
-                    Log.d("ImageFragment", "Failed to load bitmap");
+                    Log.d(TAG, "Failed to load bitmap");
                     return;
                 }
                 loadBitmapResized(width - 200, height - 200);
@@ -210,7 +212,7 @@ public class ImageFragment extends Fragment {
 
                 @Override
                 public void run() {
-                    Log.d("ImageFragment", "Saving " + url + " to pictures directory");
+                    Log.d(TAG, "Saving " + url + " to pictures directory");
                     String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
                     File appFolder = new File(dir + "/AlienCompanion");
@@ -219,7 +221,7 @@ public class ImageFragment extends Fragment {
                         appFolder.mkdir();
                     }
 
-                    String filename = url.replace("/", "(slash)"); //url.replaceAll("https?://", "").replace("/", "-");
+                    String filename = url.replace("/", "(s)"); //url.replaceAll("https?://", "").replace("/", "-");
                     File file = new File(appFolder.getAbsolutePath(), filename);
                     try {
                         file.createNewFile();
@@ -245,7 +247,7 @@ public class ImageFragment extends Fragment {
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
             if(attemptSecondSave) {
-                Log.d("ImageFragment", "onBitmapFailed, resizing image..");
+                Log.d(TAG, "onBitmapFailed, resizing image..");
                 attemptSecondSave = false;
                 Picasso.with(activity).load(url).transform(new BitmapTransform(HQ_MAX_WIDTH, HQ_MAX_HEIGHT)).resize(hqSize, hqSize).into(target);
             }

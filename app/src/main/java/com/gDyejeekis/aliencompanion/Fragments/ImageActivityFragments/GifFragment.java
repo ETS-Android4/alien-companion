@@ -1,9 +1,14 @@
 package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -20,6 +25,16 @@ import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.UUID;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
@@ -28,6 +43,8 @@ import pl.droidsonroids.gif.GifImageView;
  * Created by sound on 3/8/2016.
  */
 public class GifFragment extends Fragment {
+
+    public static final String TAG = "GifFragment";
 
     private ImageActivity activity;
 
@@ -42,6 +59,8 @@ public class GifFragment extends Fragment {
     private Button buttonRetry;
 
     private boolean isGif;
+
+    private boolean gifSaved;
 
     public static GifFragment newInstance(String url) {
         GifFragment fragment = new GifFragment();
@@ -190,7 +209,101 @@ public class GifFragment extends Fragment {
     }
 
     private void saveGif() {
+        ToastUtils.displayShortToast(activity, "Saving to photos..");
+        Log.d(TAG, "Saving " + url + " to pictures directory");
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
+        final File appFolder = new File(dir + "/AlienCompanion");
+
+        if(!appFolder.exists()) {
+            appFolder.mkdir();
+        }
+
+        String filename = url.replace("/", "(s)"); //url.replaceAll("https?://", "").replace("/", "-");
+        final File file = new File(appFolder.getAbsolutePath(), filename);
+        if(isGif) {
+            new GifDataDownloader() {
+                @Override protected void onPostExecute(final byte[] bytes) {
+                    try {
+                        FileOutputStream os = new FileOutputStream(file);
+                        os.write(bytes);
+                        os.flush();
+                        os.close();
+                        gifSaved = true;
+                    } catch (Exception e) {
+                        gifSaved = false;
+                        e.printStackTrace();
+                    }
+                    onPostDownload(file);
+                }
+            }.execute(url);
+        }
+        else {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "mp4 downloader starting");
+                    try {
+                        //Open a connection to that URL.
+                        URLConnection ucon = new URL(url).openConnection();
+
+                        //this timeout affects how long it takes for the app to realize there's a connection problem
+                        ucon.setReadTimeout(5000);
+                        ucon.setConnectTimeout(30000);
+
+
+                        //Define InputStreams to read from the URLConnection.
+                        // uses 3KB download buffer
+                        InputStream is = ucon.getInputStream();
+                        BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
+                        FileOutputStream outStream = new FileOutputStream(file);
+                        byte[] buff = new byte[5 * 1024];
+
+                        //Read bytes (and store them) until there is nothing more to read(-1)
+                        int len;
+                        while ((len = inStream.read(buff)) != -1) {
+                            outStream.write(buff, 0, len);
+                            Log.d(TAG, "writing buffer to file..");
+                        }
+
+                        //clean up
+                        outStream.flush();
+                        outStream.close();
+                        inStream.close();
+                        gifSaved = true;
+                    } catch (Exception e) {
+                        gifSaved = false;
+                        e.printStackTrace();
+                    }
+
+                    onPostDownload(file);
+                }
+            });
+        }
+    }
+
+    private void onPostDownload(File file) {
+        if(gifSaved) {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            activity.sendBroadcast(mediaScanIntent);
+        }
+        showGifSavedNotification(gifSaved);
+    }
+
+    private void showGifSavedNotification(boolean success) {
+        String title = (success) ? "Gif saved" : "Failed to save gif";
+        int smallIcon = (success) ? R.mipmap.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
+        Notification notif = new Notification.Builder(activity)
+                .setContentTitle(title)
+                .setContentText(url)
+                //.setSubText(url)
+                .setSmallIcon(smallIcon)
+                .build();
+
+        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(UUID.randomUUID().hashCode(), notif);
     }
 
     private void shareGif() {
