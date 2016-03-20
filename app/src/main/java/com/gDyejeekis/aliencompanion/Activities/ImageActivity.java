@@ -105,19 +105,23 @@ public class ImageActivity extends BackNavActivity {
             }
         }
         if(!loadFromLocal) {
-            if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
+            if (domain.contains("gfycat.com")) {
+                addGifFragment(GeneralUtils.getGfycatMobileUrl(url));
+
+            }
+            else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 addImageFragment(url);
-            } else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
+            }
+            else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
-                    //url = url.replaceAll("\\.(gif|gifv)", ".mp4");
                     url = url.replace(".gifv", ".mp4");
                     url = url.replace(".gif", ".mp4");
                 }
-                //url = url.replace(".gifv", ".mp4");
                 addGifFragment(url);
-            } else if (domain.contains("imgur.com")) {
+            }
+            else if (domain.contains("imgur.com")) {
                 new ImgurTask(this) {
                     @Override
                     protected void onPostExecute(ImgurItem item) {
@@ -141,17 +145,6 @@ public class ImageActivity extends BackNavActivity {
                                     addImageFragment(gallery.getLink());
                                 }
                             }
-                        }
-                    }
-                }.execute(url);
-            } else if (domain.equals("gfycat.com")) {
-                new GfycatTask(this) {
-                    @Override
-                    protected void onPostExecute(String url) {
-                        if (url == null) {
-                            ToastUtils.displayShortToast(getContext(), "Error retrieving gfycat info");
-                        } else {
-                            addGifFragment(url);
                         }
                     }
                 }.execute(url);

@@ -90,7 +90,7 @@ public class LinkHandler {
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
-                else if(domainLC.equals("gfycat.com") || urlLC.endsWith(".gifv") || urlLC.endsWith(".gif")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
+                else if(domainLC.contains("gfycat.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.equals("twitter.com")) {

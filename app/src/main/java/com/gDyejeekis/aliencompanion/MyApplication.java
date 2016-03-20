@@ -193,7 +193,7 @@ public class MyApplication extends Application {
                 fontStyle = R.style.FontStyle_Largest;
                 break;
         }
-        colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#2196F3"));
+        colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#00BCD4"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);

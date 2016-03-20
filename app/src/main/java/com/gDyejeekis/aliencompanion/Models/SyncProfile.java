@@ -50,15 +50,25 @@ public class SyncProfile implements Serializable {
     private boolean isActive;
     private String days;
 
-    //@Override
-    //public boolean equals(Object obj) {
-    //    if(obj instanceof SyncProfile) {
-    //        SyncProfile p2 = (SyncProfile) obj;
-    //        return (profileId == p2.getProfileId() && name.equals(p2.getName()) && fromTime == p2.getFromTime() && toTime == p2.getToTime()
-    //                && hasTime == p2.hasTime() && isActive == p2.isActive && days.equals(p2.getDaysString()));
-    //    }
-    //    return false;
-    //}
+    public boolean isUseGlobalSyncOptions() {
+        return useGlobalSyncOptions;
+    }
+
+    public void setUseGlobalSyncOptions(boolean useGlobalSyncOptions) {
+        this.useGlobalSyncOptions = useGlobalSyncOptions;
+    }
+
+    private boolean useGlobalSyncOptions;
+
+    public SyncProfileOptions getSyncOptions() {
+        return syncOptions;
+    }
+
+    public void setSyncOptions(SyncProfileOptions syncOptions) {
+        this.syncOptions = syncOptions;
+    }
+
+    private SyncProfileOptions syncOptions;
 
     public SyncProfile() {
         profileId = UUID.randomUUID().hashCode();
@@ -69,6 +79,7 @@ public class SyncProfile implements Serializable {
         this.hasTime = false;
         this.isActive = false;
         days = "";
+        useGlobalSyncOptions = true;
     }
 
     public SyncProfile(SyncProfile profile) {
@@ -80,6 +91,7 @@ public class SyncProfile implements Serializable {
         this.hasTime = profile.hasTime();
         this.isActive = profile.isActive();
         this.days = profile.getDaysString();
+        useGlobalSyncOptions = true;
     }
 
     public SyncProfile(String name) {
@@ -91,6 +103,7 @@ public class SyncProfile implements Serializable {
         this.hasTime = false;
         this.isActive = false;
         days = "";
+        useGlobalSyncOptions = true;
     }
 
     public SyncProfile(String name, List<String> subreddits, int fromTime, int toTime, String days) {
@@ -102,6 +115,7 @@ public class SyncProfile implements Serializable {
         this.hasTime = true;
         this.isActive = true;
         this.days = days;
+        useGlobalSyncOptions = true;
     }
 
     public void startSync(Context context) {

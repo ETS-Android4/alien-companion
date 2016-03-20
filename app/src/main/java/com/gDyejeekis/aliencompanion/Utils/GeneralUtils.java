@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -54,6 +55,8 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
  */
 public class GeneralUtils {
 
+    public static final String TAG = "GeneralUtils";
+
     public static void showChangeLog(Activity activity) {
         ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
         dialog.show(activity.getFragmentManager(), "dialog");
@@ -88,6 +91,34 @@ public class GeneralUtils {
             if (!absolutePath.equals(canonicalPath)) {
                 contentResolver.delete(uri,
                         MediaStore.Files.FileColumns.DATA + "=?", new String[]{absolutePath});
+            }
+        }
+    }
+
+    public static void clearSyncedPostsAndComments(Context context, final String subreddit) {
+        FilenameFilter filenameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                if(filename.length()>=subreddit.length() && filename.substring(0, subreddit.length()).equals(subreddit)) return true;
+                return false;
+            }
+        };
+        File[] files = context.getFilesDir().listFiles(filenameFilter);
+        for(File file : files) {
+            Log.d(TAG, "Deleting " + file.getName());
+            file.delete();
+        }
+    }
+
+    public static void clearSyncedImages(Context context, final String subreddit) {
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        final File folder = new File(dir + "/AlienCompanion/" + subreddit);
+
+        if(folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            for(File file : files) {
+                file.delete();
+                deleteFileFromMediaStore(context.getContentResolver(), file);
             }
         }
     }
@@ -163,27 +194,33 @@ public class GeneralUtils {
         return item;
     }
 
-    public static String getGfycatMobileUrl(String desktopUrl) throws IOException, ParseException {
-        String url = desktopUrl.replaceAll("https?://(www.)?gfycat.com/", "http://gfycat.com/cajax/get/");
-        Log.d("Gfycat", "GET request to " + url);
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setUseCaches(true);
-        connection.setRequestMethod("GET");
-        connection.setDoInput(true);
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
+    //this method makes an API call to gfycat.com
+    //public static String getGfycatMobileUrl(String desktopUrl) throws IOException, ParseException {
+    //    String url = "http://gfycat.com/cajax/get/" + LinkHandler.getGfycatId(desktopUrl);
+    //    Log.d("Gfycat", "GET request to " + url);
+    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+    //    connection.setUseCaches(true);
+    //    connection.setRequestMethod("GET");
+    //    connection.setDoInput(true);
+    //    connection.setConnectTimeout(5000);
+    //    connection.setReadTimeout(5000);
+//
+    //    InputStream inputStream = connection.getInputStream();
+//
+    //    String content = IOUtils.toString(inputStream, "UTF-8");
+    //    IOUtils.closeQuietly(inputStream);
+//
+    //    Log.d("Gfycat", content);
+    //    Object responseObject = new JSONParser().parse(content);
+//
+    //    JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");
+//
+    //    return safeJsonToString(gfyItem.get("mobileUrl"));
+    //}
 
-        InputStream inputStream = connection.getInputStream();
-
-        String content = IOUtils.toString(inputStream, "UTF-8");
-        IOUtils.closeQuietly(inputStream);
-
-        Log.d("Gfycat", content);
-        Object responseObject = new JSONParser().parse(content);
-
-        JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");
-
-        return safeJsonToString(gfyItem.get("mobileUrl"));
+    public static String getGfycatMobileUrl(String desktopUrl) {
+        String id = LinkHandler.getGfycatId(desktopUrl);
+        return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
     }
 
     @SuppressWarnings("deprecation")

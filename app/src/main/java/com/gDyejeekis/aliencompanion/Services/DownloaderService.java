@@ -217,7 +217,7 @@ public class DownloaderService extends IntentService {
     private void downloadPostImage(Submission post, String filename) {
         String url = post.getURL();
         String domain = post.getDomain();
-        if(domain.contains("imgur.com") || domain.equals("gfycat.com") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) {
+        if(domain.contains("imgur.com") || domain.contains("gfycat.com") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) {
             String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             final File folder = new File(dir + "/AlienCompanion/" + filename);
             if(!folder.exists()) {
@@ -226,18 +226,27 @@ public class DownloaderService extends IntentService {
 
             final String folderPath = folder.getAbsolutePath();
 
-            if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
+            if (domain.contains("gfycat.com")) {
+                try {
+                    url = GeneralUtils.getGfycatMobileUrl(url);
+                    downloadPostImageToFile(url, folderPath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 downloadPostImageToFile(url, folderPath);
-            } else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
+            }
+            else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
-                    //url = url.replaceAll("\\.(gif|gifv)", ".mp4");
                     url = url.replace(".gifv", ".mp4");
                     url = url.replace(".gif", ".mp4");
                 }
                 downloadPostImageToFile(url, folderPath);
-            } else if (domain.contains("imgur.com")) {
+            }
+            else if (domain.contains("imgur.com")) {
                 ImgurItem item = null;
                 try {
                     item = GeneralUtils.getImgurDataFromUrl(new ImgurHttpClient(), url);
@@ -259,13 +268,6 @@ public class DownloaderService extends IntentService {
                     else {
                         downloadPostImageToFile(gallery.getLink(), folderPath);
                     }
-                }
-            } else if (domain.equals("gfycat.com")) {
-                try {
-                    url = GeneralUtils.getGfycatMobileUrl(url);
-                    downloadPostImageToFile(url, folderPath);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -347,32 +349,11 @@ public class DownloaderService extends IntentService {
     }
 
     private void deletePreviousImages(final String filename) {
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        final File folder = new File(dir + "/AlienCompanion/" + filename);
-
-        if(folder.isDirectory()) {
-            File[] files = folder.listFiles();
-            for(File file : files) {
-                file.delete();
-                GeneralUtils.deleteFileFromMediaStore(getContentResolver(), file);
-            }
-        }
+        GeneralUtils.clearSyncedImages(this, filename);
     }
 
     private void deletePreviousComments(final String subreddit) {
-        //File dir = getFilesDir();
-        FilenameFilter filenameFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                if(filename.length()>=subreddit.length() && filename.substring(0, subreddit.length()).equals(subreddit)) return true;
-                return false;
-            }
-        };
-        File[] files = getFilesDir().listFiles(filenameFilter);
-        for(File file : files) {
-            Log.d("Geo test", "Deleting " + file.getName());
-            file.delete();
-        }
+        GeneralUtils.clearSyncedPostsAndComments(this, subreddit);
     }
 
 }

@@ -29,7 +29,7 @@
             android:summary="Only applies to light mode"
             android:entries="@array/toolbarColors"
             android:entryValues="@array/colorPrimaryValues"
-            android:defaultValue="#2196F3"/>
+            android:defaultValue="#00BCD4"/>
 
         <ListPreference
             android:key="screenOrientation"
@@ -111,7 +111,7 @@
         <CheckBoxPreference
             android:key="hqThumb"
             android:title="Higher quality thumbnails"
-            android:summary="Only applies to imgur and youtube posts - mainly used in Cards layout"
+            android:summary="Only applies to imgur, gfycat and youtube posts - mainly used in Cards layout"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
@@ -195,12 +195,13 @@
 
         <CheckBoxPreference
             android:key="syncImg"
-            android:title="Sync post images and GIF"
+            android:title="Sync post images and GIFs"
             android:defaultValue="false" />
 
         <ListPreference
             android:key="syncAlbum"
-            android:title="Imgur album sync image count"
+            android:title="Imgur album limit"
+            android:summary="Number of images per imgur album that get saved locally"
             android:entries="@array/commentDepth"
             android:entryValues="@array/commentDepth"
             android:defaultValue="1"/>

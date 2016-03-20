@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
+package com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ScalableDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;

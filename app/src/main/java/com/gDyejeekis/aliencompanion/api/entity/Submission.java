@@ -202,7 +202,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 					thumbnail = ThumbnailUtils.getImgurThumbnail(url, ImgurThumbnailSize.MEDIUM_THUMBNAIL);
 				}
 			}
-			else if(domain.equals("gfycat.com")) {
+			else if(domain.contains("gfycat.com")) {
 				hasImageButton = true;
 				thumbnail = ThumbnailUtils.getGfycatThumbnail(url);
 			}

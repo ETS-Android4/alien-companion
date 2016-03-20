@@ -174,6 +174,7 @@ public class GifFragment extends Fragment {
     }
 
     private void loadGif() {
+        Log.d(TAG, "Loading gif from " + url);
         gifView.setVisibility(View.GONE);
         buttonRetry.setVisibility(View.GONE);
         activity.setMainProgressBarVisible(true);

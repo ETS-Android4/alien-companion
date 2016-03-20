@@ -17,8 +17,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileScheduleDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileSubredditsDialogFragment;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments.SyncProfileScheduleDialogFragment;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments.SyncProfileSubredditsDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
