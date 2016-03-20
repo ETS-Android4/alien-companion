@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -35,28 +36,13 @@ public class ImgurTask extends AsyncTask<String, Void, ImgurItem> {
 
     @Override
     protected ImgurItem doInBackground(String... params) {
-        ImgurItem item = null;
         final String url = params[0];
         try {
-            String urlLC = url.toLowerCase();
-            String id = LinkHandler.getImgurImgId(url);
-            if (urlLC.contains("/a/")) {
-                JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.ALBUM, id)).getResponseObject();
-                JSONObject object = (JSONObject) response.get("data");
-                item = new ImgurAlbum(object);
-            } else if (urlLC.contains("/gallery/")) {
-                JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.GALLERY, id)).getResponseObject();
-                JSONObject object = (JSONObject) response.get("data");
-                item = new ImgurGallery(object);
-            } else {
-                JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.IMAGE, id)).getResponseObject();
-                JSONObject object = (JSONObject) response.get("data");
-                item = new ImgurImage(object);
-            }
+            return GeneralUtils.getImgurDataFromUrl(httpClient, url);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return item;
+        return null;
     }
 
     public Context getContext() {

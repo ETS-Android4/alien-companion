@@ -99,11 +99,18 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	private List<Comment> syncedComments;
 
+	private String syncedImgPath;
+
+	public void setSyncedImgPath(String path) {
+		syncedImgPath = path;
+	}
+
+	public String getSyncedImgPath() {
+		return syncedImgPath;
+	}
+
 	public boolean hasImageButton;
 
-	//private List<ImgurImage> imgurs;
-    
-    // 
     private String likes;
     //private String authorFlairCSSClass;
     //private String linkFlairCSSClass;

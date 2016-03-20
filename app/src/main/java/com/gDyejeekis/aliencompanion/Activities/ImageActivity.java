@@ -17,6 +17,7 @@ import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -34,6 +35,8 @@ public class ImageActivity extends BackNavActivity {
     private String url;
 
     private String domain;
+
+    private String syncedImgPath;
 
     private ProgressBar progressBar;
 
@@ -71,59 +74,70 @@ public class ImageActivity extends BackNavActivity {
     private void setupFragments() {
         url = getIntent().getStringExtra("url");
         domain = getIntent().getStringExtra("domain");
+        syncedImgPath = getIntent().getStringExtra("syncedImg");
 
-        if(url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
-            url = url.replaceAll("\\?(\\d+)?", "");
-            //Log.d("ImageActivity", "image fragment url " + url);
-            addImageFragment(url);
+        if(syncedImgPath != null) {
+            Log.d("ImageActivity", "synced img path: " + url);
+            url = syncedImgPath;
+            if(url.endsWith(".mp4") || url.endsWith(".gif")) {
+                addGifFragment(url);
+            }
+            else {
+                addImageFragment(url);
+            }
         }
-        else if(url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
-            url = url.replaceAll("\\?(\\d+)?", "");
-            //Log.d("ImageActivity", "gif fragment url " + url);
-            url = url.replace(".gifv", ".mp4");
-            addGifFragment(url);
-        }
-        else if(domain.contains("imgur.com")) {
-            new ImgurTask(this) {
-                @Override protected void onPostExecute(ImgurItem item) {
-                    if(item==null) {
-                        ToastUtils.displayShortToast(getContext(), "Error retrieving imgur info");
-                    }
-                    else {
-                        if (item instanceof ImgurImage) {
-                            ImgurImage image = (ImgurImage) item;
-                            if (image.isAnimated()) {
-                                addGifFragment(image.getMp4());
-                            } else {
-                                addImageFragment(image.getLink());
+        else {
+            if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
+                url = url.replaceAll("\\?(\\d+)?", "");
+                addImageFragment(url);
+            } else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
+                url = url.replaceAll("\\?(\\d+)?", "");
+                if (domain.contains("imgur.com")) {
+                    //url = url.replaceAll("\\.(gif|gifv)", ".mp4");
+                    url = url.replace(".gifv", ".mp4");
+                    url = url.replace(".gif", ".mp4");
+                }
+                //url = url.replace(".gifv", ".mp4");
+                addGifFragment(url);
+            } else if (domain.contains("imgur.com")) {
+                new ImgurTask(this) {
+                    @Override
+                    protected void onPostExecute(ImgurItem item) {
+                        if (item == null) {
+                            ToastUtils.displayShortToast(getContext(), "Error retrieving imgur info");
+                        } else {
+                            if (item instanceof ImgurImage) {
+                                ImgurImage image = (ImgurImage) item;
+                                if (image.isAnimated()) {
+                                    addGifFragment(image.getMp4());
+                                } else {
+                                    addImageFragment(image.getLink());
+                                }
+                            } else if (item instanceof ImgurAlbum) {
+                                setupAlbumView(((ImgurAlbum) item).getImages());
+                            } else if (item instanceof ImgurGallery) {
+                                ImgurGallery gallery = (ImgurGallery) item;
+                                if (gallery.isAlbum()) {
+                                    setupAlbumView(gallery.getImages());
+                                } else {
+                                    addImageFragment(gallery.getLink());
+                                }
                             }
                         }
-                        else if (item instanceof ImgurAlbum) {
-                            setupAlbumView(((ImgurAlbum)item).getImages());
+                    }
+                }.execute(url);
+            } else if (domain.equals("gfycat.com")) {
+                new GfycatTask(this) {
+                    @Override
+                    protected void onPostExecute(String url) {
+                        if (url == null) {
+                            ToastUtils.displayShortToast(getContext(), "Error retrieving gfycat info");
+                        } else {
+                            addGifFragment(url);
                         }
-                        else if (item instanceof ImgurGallery) {
-                            ImgurGallery gallery = (ImgurGallery) item;
-                            if (gallery.isAlbum()) {
-                                setupAlbumView(gallery.getImages());
-                            } else {
-                                addImageFragment(gallery.getLink());
-                            }
-                        }
                     }
-                }
-            }.execute(url);
-        }
-        else if(domain.equals("gfycat.com")) {
-            new GfycatTask(this) {
-                @Override protected void onPostExecute(String url) {
-                    if(url==null) {
-                        ToastUtils.displayShortToast(getContext(), "Error retrieving gfycat info");
-                    }
-                    else {
-                        addGifFragment(url);
-                    }
-                }
-            }.execute(url);
+                }.execute(url);
+            }
         }
     }
 
@@ -202,7 +216,7 @@ public class ImageActivity extends BackNavActivity {
         MenuItem saveAction = menu.findItem(R.id.action_save);
         MenuItem hq_action = menu.findItem(R.id.action_high_quality);
         MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
-        saveAction.setVisible(showSaveAction);
+        saveAction.setVisible(showSaveAction && syncedImgPath==null);
         hq_action.setVisible(showHqAction);
         gridview_action.setVisible(showGridviewAction);
         //gridview_action.setVisible(albumSize != -1);

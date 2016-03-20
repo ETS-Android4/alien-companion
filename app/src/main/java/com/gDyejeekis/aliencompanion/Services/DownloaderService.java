@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -16,10 +18,16 @@ import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurHttpClient;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.retrieval.Submissions;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
@@ -140,6 +148,9 @@ public class DownloaderService extends IntentService {
                     if(MyApplication.syncThumbnails) {
                         downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
                     }
+                    if(MyApplication.syncImages) {
+                        downloadPostImage(submission, filename);
+                    }
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
                     writePostToFile(submission, filename + submission.getIdentifier());
@@ -196,6 +207,81 @@ public class DownloaderService extends IntentService {
             oos.close();
             fos.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void downloadPostImage(Submission post, String filename) {
+        String url = post.getURL().toLowerCase();
+        String domain = post.getDomain().toLowerCase();
+        if(domain.contains("imgur.com") || domain.equals("gfycat.com") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) {
+            String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+            final File folder = new File(dir + "/AlienCompanion/" + filename);
+            if(!folder.exists()) {
+                folder.mkdir();
+            }
+
+            final String folderPath = folder.getAbsolutePath();
+
+            if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
+                url = url.replaceAll("\\?(\\d+)?", "");
+                downloadPostImageToFile(post, url, folderPath);
+            } else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
+                url = url.replaceAll("\\?(\\d+)?", "");
+                if (domain.contains("imgur.com")) {
+                    //url = url.replaceAll("\\.(gif|gifv)", ".mp4");
+                    url = url.replace(".gifv", ".mp4");
+                    url = url.replace(".gif", ".mp4");
+                }
+                downloadPostImageToFile(post, url, folderPath);
+            } else if (domain.contains("imgur.com")) {
+                ImgurItem item = null;
+                try {
+                    item = GeneralUtils.getImgurDataFromUrl(new ImgurHttpClient(), url);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(item instanceof ImgurImage) {
+                    ImgurImage image = (ImgurImage) item;
+                    downloadPostImageToFile(post, image.getLink(), folderPath);
+                }
+                else if(item instanceof ImgurAlbum) {
+                    ImgurAlbum album = (ImgurAlbum) item;
+                }
+                else if(item instanceof ImgurGallery) {
+                    ImgurGallery gallery = (ImgurGallery) item;
+                    if(gallery.isAlbum()) {
+
+                    }
+                    else {
+                        downloadPostImageToFile(post, gallery.getLink(), folderPath);
+                    }
+                }
+            } else if (domain.equals("gfycat.com")) {
+                try {
+                    url = GeneralUtils.getGfycatMobileUrl(url);
+                    downloadPostImageToFile(post, url, folderPath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void downloadPostImageToFile(Submission post, String url, String dir) {
+        try {
+            final String imgFilename = url.replace("/", "(s)");
+            final File file = new File(dir, imgFilename);
+            post.setSyncedImgPath("file:" + file.getAbsolutePath());
+            Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
+            GeneralUtils.downloadMediaToFile(url, file);
+
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            sendBroadcast(mediaScanIntent);
+        } catch (Exception e) {
+            post.setSyncedImgPath(null);
             e.printStackTrace();
         }
     }

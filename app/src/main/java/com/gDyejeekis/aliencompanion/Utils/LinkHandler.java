@@ -163,6 +163,9 @@ public class LinkHandler {
         Intent intent = new Intent(activity, ImageActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("domain", domain);
+        if(post!=null && MyApplication.offlineModeEnabled) {
+            intent.putExtra("syncedImg", post.getSyncedImgPath());
+        }
 
         return intent;
     }

@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,27 +36,8 @@ public class GfycatTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String url = params[0].replaceAll("https?://(www.)?gfycat.com/", "http://gfycat.com/cajax/get/");
-        Log.d(TAG, "GET request to " + url);
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setUseCaches(true);
-            connection.setRequestMethod("GET");
-            connection.setDoInput(true);
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
-
-            InputStream inputStream = connection.getInputStream();
-
-            String content = IOUtils.toString(inputStream, "UTF-8");
-            IOUtils.closeQuietly(inputStream);
-
-            Log.d(TAG, content);
-            Object responseObject = new JSONParser().parse(content);
-
-            JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");
-
-            return safeJsonToString(gfyItem.get("mobileUrl"));
+            return GeneralUtils.getGfycatMobileUrl(params[0]);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -17,15 +17,33 @@ import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurApiEndpoints;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurHttpClient;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
+import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
+import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/5/2015.
@@ -49,6 +67,77 @@ public class GeneralUtils {
         editor.putString("currentAccountName", "Logged out");
         editor.apply();
         NavDrawerAdapter.currentAccountName = "Logged out";
+    }
+
+    public static void downloadMediaToFile(String url, File file) throws IOException {
+        //Open a connection to that URL.
+        URLConnection ucon = new URL(url).openConnection();
+
+        //this timeout affects how long it takes for the app to realize there's a connection problem
+        ucon.setReadTimeout(5000);
+        ucon.setConnectTimeout(30000);
+
+        //Define InputStreams to read from the URLConnection.
+        // uses 3KB download buffer
+        InputStream is = ucon.getInputStream();
+        BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
+        FileOutputStream outStream = new FileOutputStream(file);
+        byte[] buff = new byte[5 * 1024];
+
+        //Read bytes (and store them) until there is nothing more to read(-1)
+        int len;
+        while ((len = inStream.read(buff)) != -1) {
+            outStream.write(buff, 0, len);
+            //Log.d(TAG, "writing buffer to file..");
+        }
+
+        //clean up
+        outStream.flush();
+        outStream.close();
+        inStream.close();
+    }
+
+    public static ImgurItem getImgurDataFromUrl(ImgurHttpClient httpClient, String url) {
+        ImgurItem item;
+        String urlLC = url.toLowerCase();
+        String id = LinkHandler.getImgurImgId(url);
+        if (urlLC.contains("/a/")) {
+            JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.ALBUM, id)).getResponseObject();
+            JSONObject object = (JSONObject) response.get("data");
+            item = new ImgurAlbum(object);
+        } else if (urlLC.contains("/gallery/")) {
+            JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.GALLERY, id)).getResponseObject();
+            JSONObject object = (JSONObject) response.get("data");
+            item = new ImgurGallery(object);
+        } else {
+            JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.IMAGE, id)).getResponseObject();
+            JSONObject object = (JSONObject) response.get("data");
+            item = new ImgurImage(object);
+        }
+        return item;
+    }
+
+    public static String getGfycatMobileUrl(String desktopUrl) throws IOException, ParseException {
+        String url = desktopUrl.replaceAll("https?://(www.)?gfycat.com/", "http://gfycat.com/cajax/get/");
+        Log.d("Gfycat", "GET request to " + url);
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setUseCaches(true);
+        connection.setRequestMethod("GET");
+        connection.setDoInput(true);
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
+
+        InputStream inputStream = connection.getInputStream();
+
+        String content = IOUtils.toString(inputStream, "UTF-8");
+        IOUtils.closeQuietly(inputStream);
+
+        Log.d("Gfycat", content);
+        Object responseObject = new JSONParser().parse(content);
+
+        JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");
+
+        return safeJsonToString(gfyItem.get("mobileUrl"));
     }
 
     @SuppressWarnings("deprecation")

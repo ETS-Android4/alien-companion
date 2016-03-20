@@ -97,6 +97,8 @@ public class MyApplication extends Application {
     public static boolean syncThumbnails;
     public static boolean dismissImageOnTap;
     public static boolean dismissGifOnTap;
+    public static boolean syncImages;
+    public static int syncAlbumImgCount;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -156,6 +158,8 @@ public class MyApplication extends Application {
     }
 
     public static void getCurrentSettings() {
+        syncImages = prefs.getBoolean("syncImg", false);
+        syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
         currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);

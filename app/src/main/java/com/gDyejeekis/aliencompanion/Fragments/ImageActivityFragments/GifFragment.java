@@ -22,6 +22,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
@@ -219,80 +220,41 @@ public class GifFragment extends Fragment {
             appFolder.mkdir();
         }
 
-        String filename = url.replace("/", "(s)"); //url.replaceAll("https?://", "").replace("/", "-");
+        final int id = UUID.randomUUID().hashCode();
+        final String filename = url.replace("/", "(s)");
         final File file = new File(appFolder.getAbsolutePath(), filename);
-        if(isGif) {
-            new GifDataDownloader() {
-                @Override protected void onPostExecute(final byte[] bytes) {
-                    try {
-                        FileOutputStream os = new FileOutputStream(file);
-                        os.write(bytes);
-                        os.flush();
-                        os.close();
-                        gifSaved = true;
-                    } catch (Exception e) {
-                        gifSaved = false;
-                        e.printStackTrace();
-                    }
-                    onPostDownload(file);
+
+        showSavingGifNotif(id);
+
+        new MediaDownloadTask(url, file) {
+            @Override protected void onPostExecute(Boolean success) {
+                Log.d(TAG, "Gif downloaded to file");
+                gifSaved = success;
+                if(gifSaved) {
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(file);
+                    mediaScanIntent.setData(contentUri);
+                    activity.sendBroadcast(mediaScanIntent);
                 }
-            }.execute(url);
-        }
-        else {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(TAG, "mp4 downloader starting");
-                    try {
-                        //Open a connection to that URL.
-                        URLConnection ucon = new URL(url).openConnection();
+                showGifSavedNotification(id, gifSaved);
+            }
+        }.execute();
 
-                        //this timeout affects how long it takes for the app to realize there's a connection problem
-                        ucon.setReadTimeout(5000);
-                        ucon.setConnectTimeout(30000);
-
-
-                        //Define InputStreams to read from the URLConnection.
-                        // uses 3KB download buffer
-                        InputStream is = ucon.getInputStream();
-                        BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
-                        FileOutputStream outStream = new FileOutputStream(file);
-                        byte[] buff = new byte[5 * 1024];
-
-                        //Read bytes (and store them) until there is nothing more to read(-1)
-                        int len;
-                        while ((len = inStream.read(buff)) != -1) {
-                            outStream.write(buff, 0, len);
-                            Log.d(TAG, "writing buffer to file..");
-                        }
-
-                        //clean up
-                        outStream.flush();
-                        outStream.close();
-                        inStream.close();
-                        gifSaved = true;
-                    } catch (Exception e) {
-                        gifSaved = false;
-                        e.printStackTrace();
-                    }
-
-                    onPostDownload(file);
-                }
-            });
-        }
     }
 
-    private void onPostDownload(File file) {
-        if(gifSaved) {
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri contentUri = Uri.fromFile(file);
-            mediaScanIntent.setData(contentUri);
-            activity.sendBroadcast(mediaScanIntent);
-        }
-        showGifSavedNotification(gifSaved);
+    private void showSavingGifNotif(int id) {
+        Notification notif = new Notification.Builder(activity)
+                .setContentTitle("Saving gif..")
+                .setContentText(url)
+                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
+                .setProgress(1, 0, true)
+                .build();
+
+        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(id, notif);
     }
 
-    private void showGifSavedNotification(boolean success) {
+    private void showGifSavedNotification(int id, boolean success) {
         String title = (success) ? "Gif saved" : "Failed to save gif";
         int smallIcon = (success) ? R.mipmap.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
         Notification notif = new Notification.Builder(activity)
@@ -303,7 +265,7 @@ public class GifFragment extends Fragment {
                 .build();
 
         NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(UUID.randomUUID().hashCode(), notif);
+        nm.notify(id, notif);
     }
 
     private void shareGif() {

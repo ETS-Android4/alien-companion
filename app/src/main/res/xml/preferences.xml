@@ -191,8 +191,19 @@
         <CheckBoxPreference
             android:key="syncThumb"
             android:title="Sync thumbnails"
-            android:defaultValue="false"
-            />
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="syncImg"
+            android:title="Sync post images and GIF"
+            android:defaultValue="false" />
+
+        <ListPreference
+            android:key="syncAlbum"
+            android:title="Imgur album sync image count"
+            android:entries="@array/commentDepth"
+            android:entryValues="@array/commentDepth"
+            android:defaultValue="1"/>
 
         <Preference
             android:key="clearSynced"
