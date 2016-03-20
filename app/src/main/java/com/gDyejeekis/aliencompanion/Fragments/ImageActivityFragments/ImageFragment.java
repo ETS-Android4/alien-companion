@@ -116,6 +116,7 @@ public class ImageFragment extends Fragment {
     }
 
     private void loadImage() {
+        Log.d(TAG, "Loading image from " + url);
         imageView.setVisibility(View.GONE);
         buttonRetry.setVisibility(View.GONE);
         activity.setMainProgressBarVisible(true);
@@ -221,7 +222,7 @@ public class ImageFragment extends Fragment {
                         appFolder.mkdir();
                     }
 
-                    String filename = url.replace("/", "(s)"); //url.replaceAll("https?://", "").replace("/", "-");
+                    String filename = url.replace("/", "(s)").replaceAll("https?:", "");
                     File file = new File(appFolder.getAbsolutePath(), filename);
                     try {
                         file.createNewFile();

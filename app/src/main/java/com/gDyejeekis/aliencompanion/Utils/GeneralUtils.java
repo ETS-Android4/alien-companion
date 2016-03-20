@@ -1,14 +1,17 @@
 package com.gDyejeekis.aliencompanion.Utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -33,6 +36,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -68,6 +72,48 @@ public class GeneralUtils {
         editor.apply();
         NavDrawerAdapter.currentAccountName = "Logged out";
     }
+
+    public static void deleteFileFromMediaStore(final ContentResolver contentResolver, final File file) {
+        String canonicalPath;
+        try {
+            canonicalPath = file.getCanonicalPath();
+        } catch (IOException e) {
+            canonicalPath = file.getAbsolutePath();
+        }
+        final Uri uri = MediaStore.Files.getContentUri("external");
+        final int result = contentResolver.delete(uri,
+                MediaStore.Files.FileColumns.DATA + "=?", new String[] {canonicalPath});
+        if (result == 0) {
+            final String absolutePath = file.getAbsolutePath();
+            if (!absolutePath.equals(canonicalPath)) {
+                contentResolver.delete(uri,
+                        MediaStore.Files.FileColumns.DATA + "=?", new String[]{absolutePath});
+            }
+        }
+    }
+
+    /**
+     * Search file a file in a directory. Please comment more here, your method is not that standard.
+     * @param file the file / folder where to look our file for.
+     * @param sDir a directory that must be in the path of the file to find
+     * @param toFind the name of file we are looking for.
+     * @return the file we were looking for. Null if no such file could be found.
+     */
+    public static File findFile( File aFile, String sDir, String toFind ){
+        if( aFile.isFile() &&
+                aFile.getAbsolutePath().contains( sDir ) &&
+                aFile.getName().contains( toFind ) ) {
+            return aFile;
+        } else if( aFile.isDirectory() ) {
+            for( File child : aFile.listFiles() ){
+                File found = findFile( child, sDir, toFind );
+                if( found != null ) {
+                    return found;
+                }//if
+            }//for
+        }//else
+        return null;
+    }//met
 
     public static void downloadMediaToFile(String url, File file) throws IOException {
         //Open a connection to that URL.

@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.FileObserver;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -141,6 +143,7 @@ public class DownloaderService extends IntentService {
 
             if(posts!=null) {
                 deletePreviousComments(filename);
+                deletePreviousImages(filename);
                 writePostsToFile(posts, filename);
                 for (RedditItem post : posts) {
                     increaseProgress(builder);
@@ -148,11 +151,11 @@ public class DownloaderService extends IntentService {
                     if(MyApplication.syncThumbnails) {
                         downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
                     }
+                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
+                    submission.setSyncedComments(comments);
                     if(MyApplication.syncImages) {
                         downloadPostImage(submission, filename);
                     }
-                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
-                    submission.setSyncedComments(comments);
                     writePostToFile(submission, filename + submission.getIdentifier());
                 }
             }
@@ -212,8 +215,8 @@ public class DownloaderService extends IntentService {
     }
 
     private void downloadPostImage(Submission post, String filename) {
-        String url = post.getURL().toLowerCase();
-        String domain = post.getDomain().toLowerCase();
+        String url = post.getURL();
+        String domain = post.getDomain();
         if(domain.contains("imgur.com") || domain.equals("gfycat.com") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) {
             String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             final File folder = new File(dir + "/AlienCompanion/" + filename);
@@ -225,7 +228,7 @@ public class DownloaderService extends IntentService {
 
             if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
-                downloadPostImageToFile(post, url, folderPath);
+                downloadPostImageToFile(url, folderPath);
             } else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
@@ -233,7 +236,7 @@ public class DownloaderService extends IntentService {
                     url = url.replace(".gifv", ".mp4");
                     url = url.replace(".gif", ".mp4");
                 }
-                downloadPostImageToFile(post, url, folderPath);
+                downloadPostImageToFile(url, folderPath);
             } else if (domain.contains("imgur.com")) {
                 ImgurItem item = null;
                 try {
@@ -243,7 +246,7 @@ public class DownloaderService extends IntentService {
                 }
                 if(item instanceof ImgurImage) {
                     ImgurImage image = (ImgurImage) item;
-                    downloadPostImageToFile(post, image.getLink(), folderPath);
+                    downloadPostImageToFile(image.getLink(), folderPath);
                 }
                 else if(item instanceof ImgurAlbum) {
                     ImgurAlbum album = (ImgurAlbum) item;
@@ -254,13 +257,13 @@ public class DownloaderService extends IntentService {
 
                     }
                     else {
-                        downloadPostImageToFile(post, gallery.getLink(), folderPath);
+                        downloadPostImageToFile(gallery.getLink(), folderPath);
                     }
                 }
             } else if (domain.equals("gfycat.com")) {
                 try {
                     url = GeneralUtils.getGfycatMobileUrl(url);
-                    downloadPostImageToFile(post, url, folderPath);
+                    downloadPostImageToFile(url, folderPath);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -268,11 +271,10 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadPostImageToFile(Submission post, String url, String dir) {
+    private void downloadPostImageToFile(String url, String dir) {
         try {
-            final String imgFilename = url.replace("/", "(s)");
+            final String imgFilename = url.replace("/", "(s)").replaceAll("https?:", "");
             final File file = new File(dir, imgFilename);
-            post.setSyncedImgPath("file:" + file.getAbsolutePath());
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadMediaToFile(url, file);
 
@@ -281,7 +283,6 @@ public class DownloaderService extends IntentService {
             mediaScanIntent.setData(contentUri);
             sendBroadcast(mediaScanIntent);
         } catch (Exception e) {
-            post.setSyncedImgPath(null);
             e.printStackTrace();
         }
     }
@@ -343,6 +344,19 @@ public class DownloaderService extends IntentService {
                 matrix, false);
 
         return resizedBitmap;
+    }
+
+    private void deletePreviousImages(final String filename) {
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        final File folder = new File(dir + "/AlienCompanion/" + filename);
+
+        if(folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            for(File file : files) {
+                file.delete();
+                GeneralUtils.deleteFileFromMediaStore(getContentResolver(), file);
+            }
+        }
     }
 
     private void deletePreviousComments(final String subreddit) {

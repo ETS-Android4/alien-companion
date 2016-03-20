@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Activities;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -19,12 +20,15 @@ import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragmen
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -36,7 +40,7 @@ public class ImageActivity extends BackNavActivity {
 
     private String domain;
 
-    private String syncedImgPath;
+    private boolean loadFromLocal = false;
 
     private ProgressBar progressBar;
 
@@ -74,19 +78,33 @@ public class ImageActivity extends BackNavActivity {
     private void setupFragments() {
         url = getIntent().getStringExtra("url");
         domain = getIntent().getStringExtra("domain");
-        syncedImgPath = getIntent().getStringExtra("syncedImg");
 
-        if(syncedImgPath != null) {
-            Log.d("ImageActivity", "synced img path: " + url);
-            url = syncedImgPath;
-            if(url.endsWith(".mp4") || url.endsWith(".gif")) {
-                addGifFragment(url);
+        if(MyApplication.offlineModeEnabled) {
+            final File appFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
+
+            String toFind;
+            if(domain.equals("gfycat.com")) {
+                toFind = LinkHandler.getGfycatId(url);
+            }
+            else if(domain.contains("imgur.com")) {
+                toFind = LinkHandler.getImgurImgId(url);
             }
             else {
-                addImageFragment(url);
+                toFind = url.replace("/", "(s)").replaceAll("https?:", "");
+            }
+            File file = GeneralUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
+            if(file!=null) {
+                loadFromLocal = true;
+                String filename = file.getName();
+                if(filename.endsWith(".mp4") || filename.endsWith(".gif")) {
+                    addGifFragment(file.getAbsolutePath());
+                }
+                else {
+                    addImageFragment("file:" + file.getAbsolutePath());
+                }
             }
         }
-        else {
+        if(!loadFromLocal) {
             if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 addImageFragment(url);
@@ -216,7 +234,7 @@ public class ImageActivity extends BackNavActivity {
         MenuItem saveAction = menu.findItem(R.id.action_save);
         MenuItem hq_action = menu.findItem(R.id.action_high_quality);
         MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
-        saveAction.setVisible(showSaveAction && syncedImgPath==null);
+        saveAction.setVisible(showSaveAction && !loadFromLocal);
         hq_action.setVisible(showHqAction);
         gridview_action.setVisible(showGridviewAction);
         //gridview_action.setVisible(albumSize != -1);

@@ -161,6 +161,7 @@ public class GifFragment extends Fragment {
     }
 
     private void loadVideo() {
+        Log.d(TAG, "Loading video from " + url);
         activity.setMainProgressBarVisible(true);
         buttonRetry.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
@@ -221,7 +222,7 @@ public class GifFragment extends Fragment {
         }
 
         final int id = UUID.randomUUID().hashCode();
-        final String filename = url.replace("/", "(s)");
+        final String filename = url.replace("/", "(s)").replaceAll("https?:", "");
         final File file = new File(appFolder.getAbsolutePath(), filename);
 
         showSavingGifNotif(id);
