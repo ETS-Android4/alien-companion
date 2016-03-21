@@ -29,6 +29,8 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 /**
@@ -82,28 +84,54 @@ public class ImageActivity extends BackNavActivity {
         if(MyApplication.offlineModeEnabled) {
             final File appFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
 
-            String toFind;
-            if(domain.equals("gfycat.com")) {
+            String toFind = null;
+            if(domain.contains("gfycat.com")) {
                 toFind = LinkHandler.getGfycatId(url);
             }
             else if(domain.contains("imgur.com")) {
-                toFind = LinkHandler.getImgurImgId(url);
+                String id = LinkHandler.getImgurImgId(url);
+                if(url.contains("/a/")) {
+                    ImgurAlbum album = (ImgurAlbum) findImgurItemFromFile(id);
+                    if(album!=null) {
+                        loadFromLocal = true;
+                        setupAlbumView(album.getImages());
+                    }
+                }
+                else if(url.contains("/gallery/")) {
+                    ImgurGallery gallery = (ImgurGallery) findImgurItemFromFile(id);
+                    if(gallery!=null) {
+                        if(gallery.isAlbum()) {
+                            loadFromLocal = true;
+                            setupAlbumView(gallery.getImages());
+                        }
+                        else {
+                            toFind = id;
+                        }
+                    }
+                }
+                else {
+                    toFind = id;
+                }
             }
             else {
                 toFind = url.replace("/", "(s)").replaceAll("https?:", "");
             }
-            File file = GeneralUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
-            if(file!=null) {
-                loadFromLocal = true;
-                String filename = file.getName();
-                if(filename.endsWith(".mp4") || filename.endsWith(".gif")) {
-                    addGifFragment(file.getAbsolutePath());
-                }
-                else {
-                    addImageFragment("file:" + file.getAbsolutePath());
+
+            if(toFind!=null) {
+                File file = GeneralUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
+                if (file != null) {
+                    loadFromLocal = true;
+                    String filename = file.getName();
+                    if (filename.endsWith(".mp4") || filename.endsWith(".gif")) {
+                        addGifFragment(file.getAbsolutePath());
+                    } else {
+                        addImageFragment("file:" + file.getAbsolutePath());
+                    }
                 }
             }
+
         }
+
         if(!loadFromLocal) {
             if (domain.contains("gfycat.com")) {
                 addGifFragment(GeneralUtils.getGfycatMobileUrl(url));
@@ -152,6 +180,24 @@ public class ImageActivity extends BackNavActivity {
         }
     }
 
+    private ImgurItem findImgurItemFromFile(String id) {
+        File dir = getFilesDir();
+        File file = GeneralUtils.findFile(dir, dir.getAbsolutePath(), id + "-albumInfo");
+        if(file!=null) {
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                ImgurItem item = (ImgurItem) ois.readObject();
+                fis.close();
+                ois.close();
+                return item;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     private void setupAlbumView(final List<ImgurImage> images) {
         albumSize = images.size();
         showGridviewAction = true;
@@ -161,7 +207,7 @@ public class ImageActivity extends BackNavActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
         viewPager.setVisibility(View.VISIBLE);
         viewPager.setOffscreenPageLimit(1);
-        viewPager.setAdapter(new AlbumPagerAdapter(fragmentManager, images));
+        viewPager.setAdapter(new AlbumPagerAdapter(this, fragmentManager, images, loadFromLocal));
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -5,6 +5,7 @@ import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
 import org.json.simple.JSONObject;
 
 import java.io.Serializable;
+import java.util.List;
 
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToInteger;
@@ -13,7 +14,7 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 /**
  * Created by George on 1/3/2016.
  */
-public class ImgurImage extends ImgurItem {
+public class ImgurImage extends ImgurItem implements Serializable {
 
     private boolean nsfw;
     private String gifv;
@@ -35,7 +36,7 @@ public class ImgurImage extends ImgurItem {
 
     public ImgurImage(JSONObject obj) {
         //setTitle(safeJsonToString(obj.get("title")));
-        //setId(safeJsonToString(obj.get("id")));
+        setId(safeJsonToString(obj.get("id")));
         //setDescription(safeJsonToString(obj.get("description")));
         //setDatetime(safeJsonToInteger(obj.get("datetime")));
         //setType(safeJsonToString(obj.get("type")));
@@ -53,6 +54,18 @@ public class ImgurImage extends ImgurItem {
             setMp4(safeJsonToString(obj.get("mp4")));
             setWebm(safeJsonToString(obj.get("webm")));
         }
+    }
+
+    public void setImages(List<ImgurImage> images) {
+
+    }
+
+    public boolean isAlbum() {
+        return false;
+    }
+
+    public List<ImgurImage> getImages() {
+        return null;
     }
 
     public String getWebm() {

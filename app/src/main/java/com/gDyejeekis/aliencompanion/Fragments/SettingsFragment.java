@@ -57,11 +57,13 @@ public class SettingsFragment extends PreferenceFragment {
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        clearSyncedPosts(getActivity());
+                        GeneralUtils.clearSyncedPosts(getActivity());
+                        GeneralUtils.clearSyncedImages(getActivity());
+                        ToastUtils.displayShortToast(getActivity(), "All synced posts cleared");
                     }
                 };
 
-                new AlertDialog.Builder(getActivity()).setMessage("Delete all synced posts and comments?").setPositiveButton("Yes", listener)
+                new AlertDialog.Builder(getActivity()).setMessage("Delete all synced posts, comments and images?").setPositiveButton("Yes", listener)
                         .setNegativeButton("No", null).show();
                 return false;
             }
@@ -82,18 +84,6 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
-    }
-
-    private void clearSyncedPosts(Context context) {
-        File dir = context.getFilesDir();
-        File[] files = dir.listFiles();
-        for (File file : files) {
-            //Log.d("geo test", file.getName());
-            String filename = file.getName();
-            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)) file.delete();
-        }
-
-        ToastUtils.displayShortToast(context, "Synced posts cleared");
     }
 
 }

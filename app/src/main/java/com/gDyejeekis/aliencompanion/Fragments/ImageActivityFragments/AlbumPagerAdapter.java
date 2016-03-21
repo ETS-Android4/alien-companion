@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +29,24 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<String> thumbUrls = new ArrayList<>();
 
-    public AlbumPagerAdapter(FragmentManager fm, List<ImgurImage> images) {
+    public AlbumPagerAdapter(Activity activity, FragmentManager fm, List<ImgurImage> images, boolean loadFromLocal) {
         super(fm);
         //this.activity = activity;
         this.images = images;
 
         for(ImgurImage image : images) {
-            thumbUrls.add("http://i.imgur.com/" + LinkHandler.getImgurImgId(image.getLink()) + "s.jpg");
+            if(loadFromLocal) {
+                File file = GeneralUtils.findFile(activity.getFilesDir(), activity.getFilesDir().getAbsolutePath(), image.getId() + "-thumb");
+                if(file!=null) {
+                    thumbUrls.add("file:" + file.getAbsolutePath());
+                }
+                else {
+                    thumbUrls.add("null");
+                }
+            }
+            else {
+                thumbUrls.add("http://i.imgur.com/" + LinkHandler.getImgurImgId(image.getLink()) + "s.jpg");
+            }
         }
     }
 

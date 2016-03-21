@@ -139,5 +139,6 @@
     <string name="sync_profiles">Sync profiles</string>
     <string name="gridview">Gridview</string>
     <string name="high_quality">High quality</string>
+    <string name="clear_synced">Clear synced</string>
 
 </resources>

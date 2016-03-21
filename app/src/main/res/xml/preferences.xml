@@ -206,6 +206,11 @@
             android:entryValues="@array/commentDepth"
             android:defaultValue="1"/>
 
+        <CheckBoxPreference
+            android:key="syncWifi"
+            android:title="Sync over WiFi only"
+            android:defaultValue="true" />
+
         <Preference
             android:key="clearSynced"
             android:title="Clear all synced posts" />

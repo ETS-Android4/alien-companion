@@ -4,12 +4,14 @@ package com.gDyejeekis.aliencompanion.Fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -255,6 +257,21 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     dialog.setArguments(bundle);
                     dialog.show(activity.getFragmentManager(), "dialog");
                 }
+                return true;
+            case R.id.action_clear_synced:
+                String message = "Delete all synced posts, comments and images for this " + ((isMulti) ? "multireddit" : "subreddit") + "?";
+                new AlertDialog.Builder(activity).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String folderName = "";
+                        if(isMulti) folderName = "multi=";
+                        folderName = folderName.concat(subreddit);
+                        GeneralUtils.clearSyncedPostsAndComments(activity, folderName);
+                        GeneralUtils.clearSyncedImages(activity, folderName);
+                        String toastMessage = "Synced posts for " + subreddit + (isMulti ? " (multi)" : "") + " cleared";
+                        ToastUtils.displayShortToast(activity, toastMessage);
+                    }
+                }).show();
                 return true;
             case R.id.action_sync_profiles:
                 Intent intent = new Intent(activity, SyncProfilesActivity.class);

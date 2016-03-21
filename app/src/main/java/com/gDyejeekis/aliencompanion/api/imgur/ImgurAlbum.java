@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.api.imgur;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
@@ -12,7 +13,7 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 /**
  * Created by George on 1/3/2016.
  */
-public class ImgurAlbum extends ImgurItem {
+public class ImgurAlbum extends ImgurItem implements Serializable {
 
     private String layout;
     private boolean nsfw;
@@ -28,11 +29,16 @@ public class ImgurAlbum extends ImgurItem {
     private String id;
     private String title;
     private int imageCount;
+
+    public void setImages(List<ImgurImage> images) {
+        this.images = images;
+    }
+
     private List<ImgurImage> images;
 
     public ImgurAlbum(JSONObject obj) {
         //setTitle(safeJsonToString(obj.get("title")));
-        //setId(safeJsonToString(obj.get("id")));
+        setId(safeJsonToString(obj.get("id")));
         //setDescription(safeJsonToString(obj.get("description")));
         //setDatetime(safeJsonToInteger(obj.get("datetime")));
         //setCoverWidth(safeJsonToInteger(obj.get("cover_width")));
@@ -49,6 +55,10 @@ public class ImgurAlbum extends ImgurItem {
         for(Object object : jsonArray) {
             images.add(new ImgurImage((JSONObject) object));
         }
+    }
+
+    public boolean isAlbum() {
+        return true;
     }
 
     public int getImageCount() {

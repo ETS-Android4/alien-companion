@@ -97,6 +97,16 @@ public class SyncProfileOptions {
 
     private int syncImagesInCommentsCount;
 
+    public boolean isSyncOverWifiOnly() {
+        return syncOverWifiOnly;
+    }
+
+    public void setSyncOverWifiOnly(boolean syncOverWifiOnly) {
+        this.syncOverWifiOnly = syncOverWifiOnly;
+    }
+
+    private boolean syncOverWifiOnly;
+
     public SyncProfileOptions() {
         syncPostCount = 25;
         syncCommentCount = 100;
@@ -105,11 +115,12 @@ public class SyncProfileOptions {
         syncThumbs = false;
         syncImages = false;
         albumSyncLimit = 1;
+        syncOverWifiOnly = true;
         syncGif = false;
         syncImagesInCommentsCount = 0;
     }
 
-    public SyncProfileOptions(int syncPostCount, int syncCommentCount, int syncCommentDepth, CommentSort syncCommentSort, boolean syncThumbs, boolean syncImages, int syncAlbumLimit) {
+    public SyncProfileOptions(int syncPostCount, int syncCommentCount, int syncCommentDepth, CommentSort syncCommentSort, boolean syncThumbs, boolean syncImages, int syncAlbumLimit, boolean syncOverWifiOnly) {
         this.syncPostCount = syncPostCount;
         this.syncCommentCount = syncCommentCount;
         this.syncCommentDepth = syncCommentDepth;
@@ -117,6 +128,7 @@ public class SyncProfileOptions {
         this.syncThumbs = syncThumbs;
         this.syncImages = syncImages;
         this.albumSyncLimit = syncAlbumLimit;
+        this.syncOverWifiOnly = syncOverWifiOnly;
     }
 
 

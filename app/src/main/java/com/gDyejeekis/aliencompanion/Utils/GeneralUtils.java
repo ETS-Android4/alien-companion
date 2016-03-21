@@ -85,7 +85,7 @@ public class GeneralUtils {
         }
         final Uri uri = MediaStore.Files.getContentUri("external");
         final int result = contentResolver.delete(uri,
-                MediaStore.Files.FileColumns.DATA + "=?", new String[] {canonicalPath});
+                MediaStore.Files.FileColumns.DATA + "=?", new String[]{canonicalPath});
         if (result == 0) {
             final String absolutePath = file.getAbsolutePath();
             if (!absolutePath.equals(canonicalPath)) {
@@ -99,7 +99,7 @@ public class GeneralUtils {
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.length()>=subreddit.length() && filename.substring(0, subreddit.length()).equals(subreddit)) return true;
+                if(filename.startsWith(subreddit)/*filename.length()>=subreddit.length() && filename.substring(0, subreddit.length()).equals(subreddit)*/) return true;
                 return false;
             }
         };
@@ -107,6 +107,28 @@ public class GeneralUtils {
         for(File file : files) {
             Log.d(TAG, "Deleting " + file.getName());
             file.delete();
+        }
+    }
+
+    public static void clearSyncedPosts(Context context) {
+        File dir = context.getFilesDir();
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            //Log.d("geo test", file.getName());
+            String filename = file.getName();
+            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)) file.delete();
+        }
+    }
+
+    public static void clearSyncedImages(Context context) {
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        final File folder = new File(dir + "/AlienCompanion");
+
+        File[] files = folder.listFiles();
+        for(File file : files) {
+            if(file.isDirectory()) {
+                clearSyncedImages(context, file.getName());
+            }
         }
     }
 

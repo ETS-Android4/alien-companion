@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.api.imgur;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +14,15 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 /**
  * Created by sound on 3/10/2016.
  */
-public class ImgurGallery extends ImgurItem {
+public class ImgurGallery extends ImgurItem implements Serializable {
 
+    private String id;
     private boolean isAlbum;
     private String link;
     private List<ImgurImage> images;
 
     public ImgurGallery(JSONObject obj) {
+        id = safeJsonToString(obj.get("id"));
         isAlbum = safeJsonToBoolean(obj.get("is_album"));
         if(isAlbum) {
             images = new ArrayList<>();
@@ -32,6 +35,14 @@ public class ImgurGallery extends ImgurItem {
             link = safeJsonToString(obj.get("link"));
             link = link.replace("\\", "");
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setImages(List<ImgurImage> images) {
+        this.images = images;
     }
 
     public boolean isAlbum() {

@@ -99,6 +99,7 @@ public class MyApplication extends Application {
     public static boolean dismissGifOnTap;
     public static boolean syncImages;
     public static int syncAlbumImgCount;
+    public static boolean syncOverWifiOnly;
 
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
@@ -159,6 +160,7 @@ public class MyApplication extends Application {
 
     public static void getCurrentSettings() {
         syncImages = prefs.getBoolean("syncImg", false);
+        syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
         syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);

@@ -21,6 +21,7 @@ import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -49,12 +50,15 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by sound on 9/25/2015.
  */
 public class DownloaderService extends IntentService {
+
+    public static final String TAG = "DownloaderService";
 
     private static final int FOREGROUND_ID = 574974;
 
@@ -258,18 +262,51 @@ public class DownloaderService extends IntentService {
                     downloadPostImageToFile(image.getLink(), folderPath);
                 }
                 else if(item instanceof ImgurAlbum) {
-                    ImgurAlbum album = (ImgurAlbum) item;
+                    downloadAlbumImages(item, filename, folderPath);
                 }
                 else if(item instanceof ImgurGallery) {
                     ImgurGallery gallery = (ImgurGallery) item;
                     if(gallery.isAlbum()) {
-
+                        downloadAlbumImages(gallery, filename, folderPath);
                     }
                     else {
                         downloadPostImageToFile(gallery.getLink(), folderPath);
                     }
                 }
             }
+        }
+    }
+
+    private void downloadAlbumImages(ImgurItem item, String filename, String folderPath) {
+        int i = 0;
+        for(ImgurImage img : item.getImages()) {
+            if(i >= MyApplication.syncAlbumImgCount) break;
+            downloadPostImageToFile(img.getLink(), folderPath);
+            String imgId = LinkHandler.getImgurImgId(img.getLink());
+            try {
+                GeneralUtils.downloadMediaToFile("http://i.imgur.com/" + imgId + "s.jpg", new File(getFilesDir().getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            i++;
+        }
+        int indexExlusive = (MyApplication.syncAlbumImgCount > item.getImages().size()) ? item.getImages().size() : MyApplication.syncAlbumImgCount;
+        item.setImages(new ArrayList<ImgurImage>(item.getImages().subList(0, indexExlusive)));
+        for(ImgurImage img : item.getImages()) {
+            img.setLink("file:" + folderPath + "/" + img.getLink().replace("/", "(s)").replaceAll("https?:", ""));
+        }
+        saveAlbumInfoToFile(item, filename + "-" + item.getId() + "-albumInfo");
+    }
+
+    private void saveAlbumInfoToFile(ImgurItem item, final String filename) {
+        try {
+            FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(item);
+            oos.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
