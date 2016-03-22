@@ -94,7 +94,18 @@ public class ImageActivity extends BackNavActivity {
                     ImgurAlbum album = (ImgurAlbum) findImgurItemFromFile(id);
                     if(album!=null) {
                         loadFromLocal = true;
-                        setupAlbumView(album.getImages());
+                        if(album.getImages().size()==1) {
+                            String path = album.getImages().get(0).getLink();
+                            if(path.endsWith(".mp4") || path.endsWith(".gif")) {
+                                addGifFragment(path);
+                            }
+                            else {
+                                addImageFragment(path);
+                            }
+                        }
+                        else {
+                            setupAlbumView(album.getImages());
+                        }
                     }
                 }
                 else if(url.contains("/gallery/")) {
@@ -102,7 +113,18 @@ public class ImageActivity extends BackNavActivity {
                     if(gallery!=null) {
                         if(gallery.isAlbum()) {
                             loadFromLocal = true;
-                            setupAlbumView(gallery.getImages());
+                            if(gallery.getImages().size()==1) {
+                                String path = gallery.getImages().get(0).getLink();
+                                if(path.endsWith(".mp4") || path.endsWith(".gif")) {
+                                    addGifFragment(path);
+                                }
+                                else {
+                                    addImageFragment(path);
+                                }
+                            }
+                            else {
+                                setupAlbumView(gallery.getImages());
+                            }
                         }
                         else {
                             toFind = id;

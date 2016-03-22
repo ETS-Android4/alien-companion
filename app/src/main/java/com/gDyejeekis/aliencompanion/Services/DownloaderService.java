@@ -283,10 +283,12 @@ public class DownloaderService extends IntentService {
             if(i >= MyApplication.syncAlbumImgCount) break;
             downloadPostImageToFile(img.getLink(), folderPath);
             String imgId = LinkHandler.getImgurImgId(img.getLink());
-            try {
-                GeneralUtils.downloadMediaToFile("http://i.imgur.com/" + imgId + "s.jpg", new File(getFilesDir().getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(MyApplication.syncAlbumImgCount > 1) {
+                try {
+                    GeneralUtils.downloadMediaToFile("http://i.imgur.com/" + imgId + "s.jpg", new File(getFilesDir().getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             i++;
         }
