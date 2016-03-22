@@ -80,6 +80,7 @@ public class SyncProfile implements Serializable {
         this.isActive = false;
         days = "";
         useGlobalSyncOptions = true;
+        syncOptions = new SyncProfileOptions();
     }
 
     public SyncProfile(SyncProfile profile) {
@@ -91,7 +92,8 @@ public class SyncProfile implements Serializable {
         this.hasTime = profile.hasTime();
         this.isActive = profile.isActive();
         this.days = profile.getDaysString();
-        useGlobalSyncOptions = true;
+        useGlobalSyncOptions = profile.isUseGlobalSyncOptions();
+        syncOptions = profile.getSyncOptions();
     }
 
     public SyncProfile(String name) {
@@ -104,6 +106,7 @@ public class SyncProfile implements Serializable {
         this.isActive = false;
         days = "";
         useGlobalSyncOptions = true;
+        syncOptions = new SyncProfileOptions();
     }
 
     public SyncProfile(String name, List<String> subreddits, int fromTime, int toTime, String days) {
@@ -116,6 +119,7 @@ public class SyncProfile implements Serializable {
         this.isActive = true;
         this.days = days;
         useGlobalSyncOptions = true;
+        syncOptions = new SyncProfileOptions();
     }
 
     public void startSync(Context context) {
@@ -175,8 +179,9 @@ public class SyncProfile implements Serializable {
         List<TimeWindow> timeWindows = new ArrayList<>();
 
         int windowStart = (fromTime > toTime) ? toTime : fromTime;
-        long windowLength = Math.abs(fromTime - toTime);
-        //TimeUnit.MILLISECONDS.convert(windowLength, TimeUnit.HOURS);
+        int windowLength = Math.abs(fromTime - toTime);
+        if(windowLength==0) windowLength = 1;
+
         long windowLengthMillis = TimeUnit.HOURS.toMillis(windowLength);
 
         Calendar cur_cal = new GregorianCalendar();

@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.BitmapTransform;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Views.TouchImageView;
 import com.squareup.picasso.Callback;
@@ -222,7 +223,7 @@ public class ImageFragment extends Fragment {
                         appFolder.mkdir();
                     }
 
-                    String filename = url.replace("/", "(s)").replaceAll("https?:", "");
+                    String filename = url.replaceAll("https?://", "").replace("/", "(s)");
                     File file = new File(appFolder.getAbsolutePath(), filename);
                     try {
                         file.createNewFile();
@@ -282,11 +283,15 @@ public class ImageFragment extends Fragment {
     }
 
     private void shareImage() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        intent.setType("text/plain");
-        activity.startActivity(Intent.createChooser(intent, "Share image to.."));
+        String label = "Share image to..";
+        String link;
+        if(activity.loadedFromLocal()) {
+            link = "http://" + url.substring(url.lastIndexOf("/")+1).replace("(s)", "/");
+        }
+        else {
+            link = url;
+        }
+        GeneralUtils.shareUrl(activity, label, link);
     }
 
 }

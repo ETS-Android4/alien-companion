@@ -223,6 +223,12 @@ public class DownloaderService extends IntentService {
         String domain = post.getDomain();
         if(domain.contains("imgur.com") || domain.contains("gfycat.com") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) {
             String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+
+            final File appFolder = new File(dir + "/AlienCompanion");
+            if(!appFolder.exists()) {
+                appFolder.mkdir();
+            }
+
             final File folder = new File(dir + "/AlienCompanion/" + filename);
             if(!folder.exists()) {
                 folder.mkdir();
@@ -245,8 +251,8 @@ public class DownloaderService extends IntentService {
             else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
-                    url = url.replace(".gifv", ".mp4");
-                    url = url.replace(".gif", ".mp4");
+                    url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
+                    //url = url.replace(".gif", ".mp4");
                 }
                 downloadPostImageToFile(url, folderPath);
             }
@@ -259,7 +265,8 @@ public class DownloaderService extends IntentService {
                 }
                 if(item instanceof ImgurImage) {
                     ImgurImage image = (ImgurImage) item;
-                    downloadPostImageToFile(image.getLink(), folderPath);
+                    String link = (image.isAnimated()) ? image.getMp4() : image.getLink();
+                    downloadPostImageToFile(link, folderPath);
                 }
                 else if(item instanceof ImgurAlbum) {
                     downloadAlbumImages(item, filename, folderPath);
@@ -295,7 +302,7 @@ public class DownloaderService extends IntentService {
         int indexExlusive = (MyApplication.syncAlbumImgCount > item.getImages().size()) ? item.getImages().size() : MyApplication.syncAlbumImgCount;
         item.setImages(new ArrayList<ImgurImage>(item.getImages().subList(0, indexExlusive)));
         for(ImgurImage img : item.getImages()) {
-            img.setLink("file:" + folderPath + "/" + img.getLink().replace("/", "(s)").replaceAll("https?:", ""));
+            img.setLink("file:" + folderPath + "/" + img.getLink().replaceAll("https?://", "").replace("/", "(s)"));
         }
         saveAlbumInfoToFile(item, filename + "-" + item.getId() + "-albumInfo");
     }
@@ -314,7 +321,7 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostImageToFile(String url, String dir) {
         try {
-            final String imgFilename = url.replace("/", "(s)").replaceAll("https?:", "");
+            final String imgFilename = url.replaceAll("https?://", "").replace("/", "(s)");
             final File file = new File(dir, imgFilename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadMediaToFile(url, file);

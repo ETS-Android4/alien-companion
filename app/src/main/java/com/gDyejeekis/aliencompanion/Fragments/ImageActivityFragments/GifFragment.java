@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,12 +26,14 @@ import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -179,22 +182,38 @@ public class GifFragment extends Fragment {
         buttonRetry.setVisibility(View.GONE);
         activity.setMainProgressBarVisible(true);
 
-        new GifDataDownloader() {
-            @Override protected void onPostExecute(final byte[] bytes) {
-                activity.setMainProgressBarVisible(false);
-                try {
-                    if(bytes==null) throw new Exception();
-                    gifDrawable = new GifDrawable(bytes);
-                    gifView.setImageDrawable(gifDrawable);
-                    gifView.setVisibility(View.VISIBLE);
-                    buttonRetry.setVisibility(View.GONE);
-                } catch (Exception e) {
-                    buttonRetry.setVisibility(View.VISIBLE);
-                    gifView.setVisibility(View.GONE);
-                    e.printStackTrace();
-                }
+        if(activity.loadedFromLocal()) {
+            try {
+                //byte[] bytes = org.apache.commons.io.FileUtils.readFileToByteArray(new File(url));
+                gifDrawable = new GifDrawable(url);
+                gifView.setImageDrawable(gifDrawable);
+                gifView.setVisibility(View.VISIBLE);
+                buttonRetry.setVisibility(View.GONE);
+            } catch (IOException e) {
+                gifView.setVisibility(View.GONE);
+                buttonRetry.setVisibility(View.VISIBLE);
+                e.printStackTrace();
             }
-        }.execute(url);
+        }
+        else {
+            new GifDataDownloader() {
+                @Override
+                protected void onPostExecute(final byte[] bytes) {
+                    activity.setMainProgressBarVisible(false);
+                    try {
+                        if (bytes == null) throw new Exception();
+                        gifDrawable = new GifDrawable(bytes);
+                        gifView.setImageDrawable(gifDrawable);
+                        gifView.setVisibility(View.VISIBLE);
+                        buttonRetry.setVisibility(View.GONE);
+                    } catch (Exception e) {
+                        buttonRetry.setVisibility(View.VISIBLE);
+                        gifView.setVisibility(View.GONE);
+                        e.printStackTrace();
+                    }
+                }
+            }.execute(url);
+        }
     }
 
     @Override
@@ -223,7 +242,7 @@ public class GifFragment extends Fragment {
         }
 
         final int id = UUID.randomUUID().hashCode();
-        final String filename = url.replace("/", "(s)").replaceAll("https?:", "");
+        final String filename = url.replaceAll("https?://", "").replace("/", "(s)");
         final File file = new File(appFolder.getAbsolutePath(), filename);
 
         showSavingGifNotif(id);
@@ -271,11 +290,15 @@ public class GifFragment extends Fragment {
     }
 
     private void shareGif() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        intent.setType("text/plain");
-        activity.startActivity(Intent.createChooser(intent, "Share gif to.."));
+        String label = "Share gif to..";
+        String link;
+        if(activity.loadedFromLocal()) {
+            link = "http://" + url.substring(url.lastIndexOf("/")+1).replace("(s)", "/");
+        }
+        else {
+            link = url;
+        }
+        GeneralUtils.shareUrl(activity, label, link);
     }
 
 }

@@ -44,6 +44,10 @@ public class ImageActivity extends BackNavActivity {
 
     private boolean loadFromLocal = false;
 
+    public boolean loadedFromLocal() {
+        return loadFromLocal;
+    }
+
     private ProgressBar progressBar;
 
     private ViewPager viewPager;
@@ -136,7 +140,7 @@ public class ImageActivity extends BackNavActivity {
                 }
             }
             else {
-                toFind = url.replace("/", "(s)").replaceAll("https?:", "");
+                toFind = url.replaceAll("https?://", "").replace("/", "(s)");
             }
 
             if(toFind!=null) {
@@ -166,8 +170,8 @@ public class ImageActivity extends BackNavActivity {
             else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
-                    url = url.replace(".gifv", ".mp4");
-                    url = url.replace(".gif", ".mp4");
+                    url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
+                    //url = url.replace(".gif", ".mp4");
                 }
                 addGifFragment(url);
             }

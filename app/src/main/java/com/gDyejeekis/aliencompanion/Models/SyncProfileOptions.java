@@ -2,10 +2,12 @@ package com.gDyejeekis.aliencompanion.Models;
 
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 
+import java.io.Serializable;
+
 /**
  * Created by sound on 3/20/2016.
  */
-public class SyncProfileOptions {
+public class SyncProfileOptions implements Serializable {
 
     public int getSyncPostCount() {
         return syncPostCount;
@@ -107,6 +109,16 @@ public class SyncProfileOptions {
 
     private boolean syncOverWifiOnly;
 
+    public boolean isSyncWebpages() {
+        return syncWebpages;
+    }
+
+    public void setSyncWebpages(boolean syncWebpages) {
+        this.syncWebpages = syncWebpages;
+    }
+
+    private boolean syncWebpages;
+
     public SyncProfileOptions() {
         syncPostCount = 25;
         syncCommentCount = 100;
@@ -116,19 +128,9 @@ public class SyncProfileOptions {
         syncImages = false;
         albumSyncLimit = 1;
         syncOverWifiOnly = true;
+        syncWebpages = false;
         syncGif = false;
         syncImagesInCommentsCount = 0;
-    }
-
-    public SyncProfileOptions(int syncPostCount, int syncCommentCount, int syncCommentDepth, CommentSort syncCommentSort, boolean syncThumbs, boolean syncImages, int syncAlbumLimit, boolean syncOverWifiOnly) {
-        this.syncPostCount = syncPostCount;
-        this.syncCommentCount = syncCommentCount;
-        this.syncCommentDepth = syncCommentDepth;
-        this.syncCommentSort = syncCommentSort;
-        this.syncThumbs = syncThumbs;
-        this.syncImages = syncImages;
-        this.albumSyncLimit = syncAlbumLimit;
-        this.syncOverWifiOnly = syncOverWifiOnly;
     }
 
 
