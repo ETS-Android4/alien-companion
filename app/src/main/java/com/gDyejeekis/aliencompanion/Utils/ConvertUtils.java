@@ -39,10 +39,10 @@ public class ConvertUtils {
     public static String modifySpoilerHtml(String html) {
         String pattern = "<a href=\\\\?\"(?:#|\\/)s\\\\?\" title=\\\\?\"([\\w\\s.,/#!?$%\\^&\\*;:'{}=\\-_`~()\"]*)\\\\?\">([\\w\\s]*)<\\/a>";
 
-        Pattern compiledPatter = Pattern.compile(pattern);
-        Matcher matcher = compiledPatter.matcher(html);
-
         try {
+            Pattern compiledPatter = Pattern.compile(pattern);
+            Matcher matcher = compiledPatter.matcher(html);
+
             if (matcher.find()) {
                 Log.d(TAG, "MATCH FOUND FOR TITLED SPOILERS");
                 //Log.d(TAG, "Start index: " + matcher.start());

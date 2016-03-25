@@ -58,21 +58,21 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
 
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
-                    Log.d(TAG, "ACTION_UP");
+                    //Log.d(TAG, "ACTION_UP");
                     if (System.currentTimeMillis() - lastClickTime < 600) {
                         link[0].onClick(widget);
                         handler.removeCallbacks(mLongPressed);
                     }
                 }
                 else if(action == MotionEvent.ACTION_MOVE) {
-                    Log.d(TAG, "ACTION_MOVE");
+                    //Log.d(TAG, "ACTION_MOVE");
                     if(deltaX > 10 || deltaY > 10) {
-                        Log.d(TAG, "REMOVING LONG PRESS CALLBACK");
+                        //Log.d(TAG, "REMOVING LONG PRESS CALLBACK");
                         handler.removeCallbacks(mLongPressed);
                     }
                 }
                 else if (action == MotionEvent.ACTION_DOWN) {
-                    Log.d(TAG, "ACTION_DOWN");
+                    //Log.d(TAG, "ACTION_DOWN");
                     startX = x;
                     startY = y;
 

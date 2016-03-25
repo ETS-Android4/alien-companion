@@ -267,6 +267,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 		} catch (Exception e) {
 			Log.e("Api error", "Error creating Submission");
+			e.printStackTrace();
 		}
 	}
 

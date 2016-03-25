@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -12,12 +13,15 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,6 +35,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.Views.VideoSurfaceView;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -48,7 +53,7 @@ import pl.droidsonroids.gif.GifImageView;
 /**
  * Created by sound on 3/8/2016.
  */
-public class GifFragment extends Fragment {
+public class GifFragment extends Fragment implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
     public static final String TAG = "GifFragment";
 
@@ -56,7 +61,11 @@ public class GifFragment extends Fragment {
 
     private String url;
 
-    private VideoView videoView;
+    private SurfaceView videoView;
+
+    private SurfaceHolder sHolder;
+
+    private MediaPlayer mPlayer;
 
     private GifImageView gifView;
 
@@ -94,41 +103,8 @@ public class GifFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gif, container, false);
 
         if(!isGif) {
-            videoView = (VideoView) view.findViewById(R.id.videoView);
+            videoView = (SurfaceView) view.findViewById(R.id.videoView);
             videoView.setZOrderOnTop(true);
-            videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    activity.setMainProgressBarVisible(false);
-                    mediaPlayer.setLooping(true);
-                    if(MyApplication.dismissGifOnTap) {
-                        videoView.setOnTouchListener(new View.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                                switch (motionEvent.getAction()) {
-                                    case MotionEvent.ACTION_DOWN:
-                                        return true;
-                                    case MotionEvent.ACTION_UP:
-                                        activity.finish();
-                                        return true;
-                                    default:
-                                        return false;
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-            videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-                    activity.setMainProgressBarVisible(false);
-                    videoView.setVisibility(View.GONE);
-                    buttonRetry.setVisibility(View.VISIBLE);
-                    return false;
-                }
-            });
         }
         else {
             gifView = (GifImageView) view.findViewById(R.id.gifView);
@@ -170,12 +146,102 @@ public class GifFragment extends Fragment {
         activity.setMainProgressBarVisible(true);
         buttonRetry.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
-        if(!MyApplication.dismissGifOnTap) {
-            videoView.setMediaController(new MediaController(activity));
+
+        sHolder = videoView.getHolder();
+        sHolder.addCallback(this);
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        activity.setMainProgressBarVisible(false);
+        handleAspectRatio();
+        mPlayer.setLooping(true);
+        videoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (MyApplication.dismissGifOnTap) {
+                    activity.finish();
+                } else {
+                    if (mPlayer.isPlaying()) {
+                        mPlayer.pause();
+                    } else {
+                        mPlayer.start();
+                    }
+                }
+            }
+        });
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPlayer.start();
+            }
+        }, 10);
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+        activity.setMainProgressBarVisible(false);
+        buttonRetry.setVisibility(View.VISIBLE);
+        videoView.setVisibility(View.GONE);
+        return false;
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        loadVideoSource();
+    }
+
+    private void loadVideoSource() {
+        try {
+            mPlayer = new MediaPlayer();
+            mPlayer.setDataSource(url);
+            mPlayer.setDisplay(sHolder);
+            mPlayer.prepareAsync();
+            mPlayer.setOnPreparedListener(this);
+            mPlayer.setOnErrorListener(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+            buttonRetry.setVisibility(View.VISIBLE);
+            videoView.setVisibility(View.GONE);
         }
-        videoView.setVideoURI(Uri.parse(url));
-        videoView.requestFocus();
-        videoView.start();
+    }
+
+    private void handleAspectRatio() {
+        int surfaceView_Width = videoView.getWidth();
+        int surfaceView_Height = videoView.getHeight();
+
+        float video_Width = mPlayer.getVideoWidth();
+        float video_Height = mPlayer.getVideoHeight();
+
+        float ratio_width = surfaceView_Width/video_Width;
+        float ratio_height = surfaceView_Height/video_Height;
+        float aspectratio = video_Width/video_Height;
+
+        ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
+
+        if (ratio_width > ratio_height){
+            layoutParams.width = (int) (surfaceView_Height * aspectratio);
+            layoutParams.height = surfaceView_Height;
+        }else{
+            layoutParams.width = surfaceView_Width;
+            layoutParams.height = (int) (surfaceView_Width / aspectratio);
+        }
+
+        videoView.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        handleAspectRatio();
     }
 
     private void loadGif() {
