@@ -6,6 +6,7 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
@@ -14,12 +15,19 @@ import android.widget.TextView;
  */
 public class MyLinkMovementMethod extends LinkMovementMethod {
 
+    public static final String TAG = "MyLinkMovementMethod";
+
     private static MyLinkMovementMethod sInstance;
 
     private Long lastClickTime = 0l;
 
     private final Handler handler = new Handler();
     private Runnable mLongPressed;
+
+    private int startX;
+    private int startY;
+    //private int deltaX;
+    //private int deltaY;
     //private int lastX = 0;
     //private int lastY = 0;
 
@@ -33,10 +41,8 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             int x = (int) event.getX();
             int y = (int) event.getY();
 
-            int lastX = x;
-            int lastY = y;
-            //final int deltaX = Math.abs(x-lastX);
-            //final int deltaY = Math.abs(y-lastY);
+            int deltaX = Math.abs(x-startX);
+            int deltaY = Math.abs(y-startY);
 
             x -= widget.getTotalPaddingLeft();
             y -= widget.getTotalPaddingTop();
@@ -52,15 +58,24 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
 
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
+                    Log.d(TAG, "ACTION_UP");
                     if (System.currentTimeMillis() - lastClickTime < 600) {
                         link[0].onClick(widget);
                         handler.removeCallbacks(mLongPressed);
                     }
                 }
                 else if(action == MotionEvent.ACTION_MOVE) {
-                    handler.removeCallbacks(mLongPressed);
+                    Log.d(TAG, "ACTION_MOVE");
+                    if(deltaX > 10 || deltaY > 10) {
+                        Log.d(TAG, "REMOVING LONG PRESS CALLBACK");
+                        handler.removeCallbacks(mLongPressed);
+                    }
                 }
                 else if (action == MotionEvent.ACTION_DOWN) {
+                    Log.d(TAG, "ACTION_DOWN");
+                    startX = x;
+                    startY = y;
+
                     Selection.setSelection(buffer,
                             buffer.getSpanStart(link[0]),
                             buffer.getSpanEnd(link[0]));
