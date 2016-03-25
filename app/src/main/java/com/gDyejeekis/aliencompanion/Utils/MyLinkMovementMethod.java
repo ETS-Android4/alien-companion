@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.Utils;
 
+import android.os.Handler;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -16,11 +17,13 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
     private static MyLinkMovementMethod sInstance;
 
     private Long lastClickTime = 0l;
+
+    private boolean clicked;
     //private int lastX = 0;
     //private int lastY = 0;
 
     @Override
-    public boolean onTouchEvent(TextView widget, Spannable buffer,
+    public boolean onTouchEvent(final TextView widget, Spannable buffer,
                                 MotionEvent event) {
         int action = event.getAction();
 
@@ -31,8 +34,8 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
 
             int lastX = x;
             int lastY = y;
-            int deltaX = Math.abs(x-lastX);
-            int deltaY = Math.abs(y-lastY);
+            final int deltaX = Math.abs(x-lastX);
+            final int deltaY = Math.abs(y-lastY);
 
             x -= widget.getTotalPaddingLeft();
             y -= widget.getTotalPaddingTop();
@@ -44,17 +47,29 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
 
-            MyClickableSpan[] link = buffer.getSpans(off, off, MyClickableSpan.class);
+            final MyClickableSpan[] link = buffer.getSpans(off, off, MyClickableSpan.class);
 
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
-                    if (System.currentTimeMillis() - lastClickTime < 600) link[0].onClick(widget);
-                    else if (deltaX < 10 && deltaY < 10) link[0].onLongClick(widget);
-                } else if (action == MotionEvent.ACTION_DOWN) {
+                    if (System.currentTimeMillis() - lastClickTime < 600) {
+                        clicked = true;
+                        link[0].onClick(widget);
+                    }
+                }
+                else if (action == MotionEvent.ACTION_DOWN) {
                     Selection.setSelection(buffer,
                             buffer.getSpanStart(link[0]),
                             buffer.getSpanEnd(link[0]));
                     lastClickTime = System.currentTimeMillis();
+                    clicked = false;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(deltaX < 10 && deltaY < 10 && !clicked) {
+                                link[0].onLongClick(widget);
+                            }
+                        }
+                    }, 600);
                 }
 
                 return true;

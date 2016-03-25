@@ -45,9 +45,9 @@ public class ConvertUtils {
         try {
             if (matcher.find()) {
                 Log.d(TAG, "MATCH FOUND FOR TITLED SPOILERS");
-                Log.d(TAG, "Start index: " + matcher.start());
-                Log.d(TAG, " End index: " + matcher.end());
-                Log.d(TAG, " Found: " + matcher.group());
+                //Log.d(TAG, "Start index: " + matcher.start());
+                //Log.d(TAG, " End index: " + matcher.end());
+                //Log.d(TAG, " Found: " + matcher.group());
 
                 String start = html.substring(0, matcher.start());
                 String middle = html.substring(matcher.start(), matcher.end());
@@ -58,7 +58,7 @@ public class ConvertUtils {
                 String string = matcher.group(2) + "</a>";
                 middle = middle.replace(string, string + "<a href=\"#s\"> " + matcher.group(1) + "</a>");
 
-                Log.d(TAG, " Modified: " + middle);
+                //Log.d(TAG, " Modified: " + middle);
 
                 html = start + middle + end;
 
