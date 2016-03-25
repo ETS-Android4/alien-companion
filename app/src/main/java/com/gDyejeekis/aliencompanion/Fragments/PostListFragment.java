@@ -280,16 +280,23 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             case R.id.action_sync_posts:
                 String toastMessage;
                 if(GeneralUtils.isNetworkAvailable(activity)) {
-                    String filename = (subreddit == null) ? "frontpage" : subreddit;
-                    toastMessage = filename + " added to sync queue";
-                    intent = new Intent(activity, DownloaderService.class);
-                    intent.putExtra("sort", submissionSort);
-                    intent.putExtra("time", timeSpan);
-                    intent.putExtra("subreddit", subreddit);
-                    intent.putExtra("isMulti", isMulti);
-                    activity.startService(intent);
+                    if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
+                        toastMessage = "Syncing over mobile data connection is disabled";
+                    }
+                    else {
+                        String filename = (subreddit == null) ? "frontpage" : subreddit;
+                        toastMessage = filename + " added to sync queue";
+                        intent = new Intent(activity, DownloaderService.class);
+                        intent.putExtra("sort", submissionSort);
+                        intent.putExtra("time", timeSpan);
+                        intent.putExtra("subreddit", subreddit);
+                        intent.putExtra("isMulti", isMulti);
+                        activity.startService(intent);
+                    }
                 }
-                else toastMessage = "Network connection unavailable";
+                else {
+                    toastMessage = "Network connection unavailable";
+                }
                 ToastUtils.displayShortToast(activity, toastMessage);
                 return true;
             case R.id.action_submit_post:

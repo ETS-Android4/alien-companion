@@ -4,12 +4,14 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -41,7 +43,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Permission;
 import java.util.UUID;
+import java.util.jar.Manifest;
 
 /**
  * Created by sound on 3/8/2016.
@@ -153,13 +157,35 @@ public class ImageFragment extends Fragment {
                 loadBitmapResized(2560, 1440);
                 return true;
             case R.id.action_save:
-                saveImageToPhotos();
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        saveImageToPhotos();
+                    }
+                    else {
+                        requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
+                    }
+                }
+                else {
+                    saveImageToPhotos();
+                }
                 return true;
             case R.id.action_share:
                 shareImage();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        if(requestCode == 11) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                saveImageToPhotos();
+            }
+            else {
+                ToastUtils.displayShortToast(activity, "Failed to save image to photos (permission denied)");
+            }
         }
     }
 

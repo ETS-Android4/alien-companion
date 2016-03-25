@@ -157,7 +157,7 @@ public class DownloaderService extends IntentService {
                     }
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
                     submission.setSyncedComments(comments);
-                    if(MyApplication.syncImages) {
+                    if(MyApplication.syncImages && GeneralUtils.canAccessExternalStorage(this)) {
                         downloadPostImage(submission, filename);
                     }
                     writePostToFile(submission, filename + submission.getIdentifier());

@@ -171,7 +171,7 @@ public class MyApplication extends Application {
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         nightThemeEnabled = prefs.getBoolean("nightTheme", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
-        fontStyle = Integer.parseInt(prefs.getString("fontSize", "3"));
+        fontStyle = Integer.parseInt(prefs.getString("fontSize", "2"));
         switch (fontStyle) {
             case 0:
                 fontStyle = R.style.FontStyle_Smallest;
