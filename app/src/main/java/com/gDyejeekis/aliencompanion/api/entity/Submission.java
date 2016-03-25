@@ -250,7 +250,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setLikes(safeJsonToString(obj.get("likes")));
 
 			title = StringEscapeUtils.unescapeHtml(title);
-			if(!MyApplication.useMarkdownParsing) selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
+			if(!MyApplication.useMarkdownParsing) {
+				selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
+				selftextHTML = ConvertUtils.modifySpoilerHtml(selftextHTML);
+			}
 
 			//if(selftextHTML!=null) {
 			//	SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(selftextHTML, null, new MyHtmlTagHandler()));

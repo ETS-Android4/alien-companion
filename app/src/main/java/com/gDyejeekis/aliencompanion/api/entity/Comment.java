@@ -123,7 +123,10 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             setLikes(safeJsonToString(obj.get("likes")));
 
             linkTitle = StringEscapeUtils.unescapeHtml(linkTitle);
-            if(!MyApplication.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+            if(!MyApplication.useMarkdownParsing) {
+                bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+                bodyHTML = ConvertUtils.modifySpoilerHtml(bodyHTML);
+            }
 
             //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
