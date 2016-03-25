@@ -18,7 +18,8 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
 
     private Long lastClickTime = 0l;
 
-    private boolean clicked;
+    private final Handler handler = new Handler();
+    private Runnable mLongPressed;
     //private int lastX = 0;
     //private int lastY = 0;
 
@@ -28,14 +29,14 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
         int action = event.getAction();
 
         if (action == MotionEvent.ACTION_UP ||
-                action == MotionEvent.ACTION_DOWN) {
+                action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
             int x = (int) event.getX();
             int y = (int) event.getY();
 
             int lastX = x;
             int lastY = y;
-            final int deltaX = Math.abs(x-lastX);
-            final int deltaY = Math.abs(y-lastY);
+            //final int deltaX = Math.abs(x-lastX);
+            //final int deltaY = Math.abs(y-lastY);
 
             x -= widget.getTotalPaddingLeft();
             y -= widget.getTotalPaddingTop();
@@ -44,7 +45,7 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             y += widget.getScrollY();
 
             Layout layout = widget.getLayout();
-            int line = layout.getLineForVertical(y);
+            final int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
 
             final MyClickableSpan[] link = buffer.getSpans(off, off, MyClickableSpan.class);
@@ -52,24 +53,25 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
                     if (System.currentTimeMillis() - lastClickTime < 600) {
-                        clicked = true;
                         link[0].onClick(widget);
+                        handler.removeCallbacks(mLongPressed);
                     }
+                }
+                else if(action == MotionEvent.ACTION_MOVE) {
+                    handler.removeCallbacks(mLongPressed);
                 }
                 else if (action == MotionEvent.ACTION_DOWN) {
                     Selection.setSelection(buffer,
                             buffer.getSpanStart(link[0]),
                             buffer.getSpanEnd(link[0]));
                     lastClickTime = System.currentTimeMillis();
-                    clicked = false;
-                    new Handler().postDelayed(new Runnable() {
+                    mLongPressed = new Runnable() {
                         @Override
                         public void run() {
-                            if(deltaX < 10 && deltaY < 10 && !clicked) {
-                                link[0].onLongClick(widget);
-                            }
+                            link[0].onLongClick(widget);
                         }
-                    }, 600);
+                    };
+                    handler.postDelayed(mLongPressed, 600);
                 }
 
                 return true;
