@@ -80,7 +80,6 @@ public class SyncProfile implements Serializable {
         this.isActive = false;
         days = "";
         useGlobalSyncOptions = true;
-        syncOptions = new SyncProfileOptions();
     }
 
     public SyncProfile(SyncProfile profile) {
@@ -106,7 +105,6 @@ public class SyncProfile implements Serializable {
         this.isActive = false;
         days = "";
         useGlobalSyncOptions = true;
-        syncOptions = new SyncProfileOptions();
     }
 
     public SyncProfile(String name, List<String> subreddits, int fromTime, int toTime, String days) {
@@ -119,7 +117,6 @@ public class SyncProfile implements Serializable {
         this.isActive = true;
         this.days = days;
         useGlobalSyncOptions = true;
-        syncOptions = new SyncProfileOptions();
     }
 
     public void startSync(Context context) {

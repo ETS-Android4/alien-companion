@@ -101,6 +101,11 @@ public class MyApplication extends Application {
     public static int syncAlbumImgCount;
     public static boolean syncOverWifiOnly;
 
+    //not used
+    public static boolean syncWebpages = false;
+    public static boolean syncGif = false;
+    public static int syncImagesInCommentsCount = 0;
+
     //public static List<SavedAccount> savedAccounts;
     public static SavedAccount currentAccount;
     public static User currentUser;

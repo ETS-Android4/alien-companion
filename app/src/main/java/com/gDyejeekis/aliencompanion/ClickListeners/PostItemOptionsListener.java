@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
@@ -138,8 +139,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     } else {
                         post.setHidden(true);
                         actionType = UserActionType.hide;
-                        RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
-                        redditItemListAdapter.remove(post);
+                        if(!(context instanceof PostActivity)) {
+                            RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
+                            redditItemListAdapter.remove(post);
+                        }
                     }
 
                     if (adapter != null) adapter.notifyDataSetChanged();

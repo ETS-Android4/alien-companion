@@ -555,12 +555,16 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 subredditRowViewHolder.name.setText(subreddit);
                 //Highlight current subreddit
                 String currentSubreddit = activity.getListFragment().subreddit;
-                if(subreddit.toLowerCase().equals(currentSubreddit) ||
+                boolean isMulti = activity.getListFragment().isMulti;
+                if ((subreddit.toLowerCase().equals(currentSubreddit) && !isMulti) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.name.setTextColor(Color.WHITE);
+                    if (MyApplication.nightThemeEnabled)
+                        subredditRowViewHolder.name.setTextColor(Color.WHITE);
                     else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
-                    else subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
+                    if (MyApplication.nightThemeEnabled)
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                    else
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
@@ -589,11 +593,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 subredditRowViewHolder.name.setText(multireddit.getName());
 
                 currentSubreddit = activity.getListFragment().subreddit;
-                if(multireddit.getName().toLowerCase().equals(currentSubreddit)) {
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.name.setTextColor(Color.WHITE);
+                isMulti = activity.getListFragment().isMulti;
+                if (multireddit.getName().toLowerCase().equals(currentSubreddit) && isMulti) {
+                    if (MyApplication.nightThemeEnabled)
+                        subredditRowViewHolder.name.setTextColor(Color.WHITE);
                     else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
-                    else subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
+                    if (MyApplication.nightThemeEnabled)
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                    else
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);

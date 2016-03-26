@@ -17,6 +17,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments.SyncProfileOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments.SyncProfileScheduleDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments.SyncProfileSubredditsDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
@@ -224,6 +225,14 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         dialog.show(activity.getFragmentManager(), "dialog");
     }
 
+    private void showSyncOptionsDialog(int profilePosition) {
+        SyncProfileOptionsDialogFragment dialog = new SyncProfileOptionsDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("profile", getItemAt(profilePosition));
+        dialog.setArguments(bundle);
+        dialog.show(activity.getFragmentManager(), "dialog");
+    }
+
     public void showScheduleDialog(SyncProfile profile) {
         showScheduleDialog(profiles.indexOf(profile));
     }
@@ -343,6 +352,9 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                     switch (menuItem.getItemId()) {
                         case R.id.action_edi_subreddits:
                             activity.getAdapter().showSubredditsDialog(position, false);
+                            return true;
+                        case R.id.action_edit_sync_options:
+                            activity.getAdapter().showSyncOptionsDialog(position);
                             return true;
                         case R.id.edit_schedule:
                             activity.getAdapter().showScheduleDialog(position);

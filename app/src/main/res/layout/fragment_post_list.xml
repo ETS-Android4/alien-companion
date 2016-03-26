@@ -19,7 +19,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView_postList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
     </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,5 +1,8 @@
 package com.gDyejeekis.aliencompanion.Models;
 
+import android.util.Log;
+
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 
 import java.io.Serializable;
@@ -119,18 +122,47 @@ public class SyncProfileOptions implements Serializable {
 
     private boolean syncWebpages;
 
+    @Override
+    public boolean equals(Object obj) {
+        SyncProfileOptions other = (SyncProfileOptions) obj;
+        if(syncPostCount != other.getSyncPostCount()) return false;
+        else if(syncCommentCount != other.getSyncCommentCount()) return false;
+        else if(syncCommentDepth != other.getSyncCommentDepth()) return false;
+        else if(syncCommentSort != other.getSyncCommentSort()) return false;
+        else if(syncThumbs != other.isSyncThumbs()) return false;
+        else if(syncImages != other.isSyncImages()) return false;
+        else if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
+        else if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
+
+        return true;
+    }
+
+    public SyncProfileOptions(SyncProfileOptions other) {
+        this.syncPostCount = other.getSyncPostCount();
+        this.syncCommentCount = other.getSyncCommentCount();
+        this.syncCommentDepth = other.getSyncCommentDepth();
+        this.syncCommentSort = other.getSyncCommentSort();
+        this.syncThumbs = other.isSyncThumbs();
+        this.syncImages = other.isSyncImages();
+        this.albumSyncLimit = other.getAlbumSyncLimit();
+        this.syncOverWifiOnly = other.isSyncOverWifiOnly();
+        this.syncWebpages = other.isSyncWebpages();
+        this.syncGif = other.isSyncGif();
+        this.syncImagesInCommentsCount = other.getSyncImagesInCommentsCount();
+    }
+
     public SyncProfileOptions() {
-        syncPostCount = 25;
-        syncCommentCount = 100;
-        syncCommentDepth = 5;
-        syncCommentSort = CommentSort.TOP;
-        syncThumbs = false;
-        syncImages = false;
-        albumSyncLimit = 1;
-        syncOverWifiOnly = true;
-        syncWebpages = false;
-        syncGif = false;
-        syncImagesInCommentsCount = 0;
+        syncPostCount = MyApplication.syncPostCount;
+        syncCommentCount = MyApplication.syncCommentCount;
+        syncCommentDepth = MyApplication.syncCommentDepth;
+        syncCommentSort = MyApplication.syncCommentSort;
+        syncThumbs = MyApplication.syncThumbnails;
+        syncImages = MyApplication.syncImages;
+        albumSyncLimit = MyApplication.syncAlbumImgCount;
+        syncOverWifiOnly = MyApplication.syncOverWifiOnly;
+        syncWebpages = MyApplication.syncWebpages;
+        syncGif = MyApplication.syncGif;
+        syncImagesInCommentsCount = MyApplication.syncImagesInCommentsCount;
     }
 
 

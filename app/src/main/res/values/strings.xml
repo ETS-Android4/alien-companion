@@ -104,7 +104,7 @@
     <string name="action_reply">Reply</string>
     <string name="title_activity_offline">OfflineActivity</string>
     <string name="sync_posts">Sync posts</string>
-    <string name="sync_options">Sync Options</string>
+    <string name="sync_options">Sync options</string>
     <string name="title_activity_message">MessageActivity</string>
     <string name="action_compose">Compose</string>
     <string name="inbox">Inbox</string>
@@ -140,5 +140,9 @@
     <string name="gridview">Gridview</string>
     <string name="high_quality">High quality</string>
     <string name="clear_synced">Clear synced</string>
+    <string name="subreddits">Subreddits</string>
+    <string name="schedule">Schedule</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
 
 </resources>
