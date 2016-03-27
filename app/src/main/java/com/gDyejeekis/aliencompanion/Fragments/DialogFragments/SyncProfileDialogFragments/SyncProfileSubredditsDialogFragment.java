@@ -1,8 +1,10 @@
 package com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialogFragments;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Views.ListViewMaxHeight;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 
@@ -34,11 +37,27 @@ import java.util.List;
  */
 public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
 
+    static class SubredditsList extends ArrayList<String> {
+
+        public SubredditsList(List<String> list) {
+            super(list);
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            String paramStr = (String)o;
+            for (String s : this) {
+                if (paramStr.equalsIgnoreCase(s)) return true;
+            }
+            return false;
+        }
+    }
+
     private SyncProfile syncProfile;
     private ListViewMaxHeight subredditsList;
     private ArrayAdapter<String> adapter;
-    private List<String> subreddits;
-    private List<String> oldSubreddits;
+    private SubredditsList subreddits;
+    private SubredditsList oldSubreddits;
     private AutoCompleteTextView subredditField;
     private CheckBox isMulti;
 
@@ -48,8 +67,8 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
 
         syncProfile = (SyncProfile) getArguments().getSerializable("profile");
         if(syncProfile!=null) {
-            subreddits = syncProfile.getSubreddits();
-            oldSubreddits = new ArrayList<>(subreddits);
+            subreddits = new SubredditsList(syncProfile.getSubreddits());
+            oldSubreddits = new SubredditsList(subreddits);
             adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subreddits);
         }
     }
@@ -69,6 +88,13 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
         int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
         ArrayAdapter<String> fieldAdapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.popularSubreddits);
         subredditField.setAdapter(fieldAdapter);
+        subredditField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                addSubredditToList();
+                return true;
+            }
+        });
         subredditField.requestFocus();
 
         title.setText(syncProfile.getName());
@@ -93,57 +119,51 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
-
-                if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
-                    if(!oldSubreddits.equals(subreddits)) {
-                        ((SyncProfilesActivity) getActivity()).changesMade = true;
-                    }
-                    dismiss();
-                    return true; // pretend we've processed it
-                } else
-                    return false; // pass on to be processed as normal
-            }
-        });
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if(!oldSubreddits.equals(subreddits)) {
+            ((SyncProfilesActivity) getActivity()).changesMade = true;
+            syncProfile.setSubreddits(subreddits);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_cancel:
+                subreddits = oldSubreddits;
                 dismiss();
-                subreddits.clear();
-                subreddits.addAll(oldSubreddits);
                 break;
             case R.id.button_addSubreddit:
-                String subreddit = subredditField.getText().toString();
-                subreddit = subreddit.replaceAll("\\s","");
-
-                if(!subreddit.equals("")) {
-                    if(isMulti.isChecked()) {
-                        isMulti.setChecked(false);
-                        subreddit = subreddit.concat(" (multi)");
-                    }
-                    subredditField.setText("");
-                    subreddits.add(subreddit); //todo: check if subreddit is already in the list before adding it
-                    adapter.notifyDataSetChanged();
-                    subredditsList.setSelection(adapter.getCount() - 1);
-                }
+                addSubredditToList();
                 break;
             case R.id.button_done:
-                if(!oldSubreddits.equals(subreddits)) {
-                    ((SyncProfilesActivity) getActivity()).changesMade = true;
-                }
                 dismiss();
                 if(getArguments().getBoolean("showSchedule") && subreddits.size() > 0) {
                     ((SyncProfilesActivity) getActivity()).getAdapter().showScheduleDialog(syncProfile);
                 }
                 break;
+        }
+    }
+
+    private void addSubredditToList() {
+        String subreddit = subredditField.getText().toString();
+        subreddit = subreddit.replaceAll("\\s","");
+
+        if(!subreddit.equals("")) {
+            if(isMulti.isChecked()) {
+                isMulti.setChecked(false);
+                subreddit = subreddit.concat(" (multi)");
+            }
+            subredditField.setText("");
+            if(subreddits.contains(subreddit)) {
+                ToastUtils.displayShortToast(getActivity(), "Item already on the list");
+            }
+            else {
+                subreddits.add(subreddit);
+            }
+            adapter.notifyDataSetChanged();
+            subredditsList.setSelection(adapter.getCount() - 1);
         }
     }
 }

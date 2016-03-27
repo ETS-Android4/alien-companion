@@ -229,11 +229,15 @@ public class ConvertUtils {
 
                         @Override
                         public boolean onLongClick(View v) {
-                            Bundle args = new Bundle();
-                            args.putString("url", span.getURL());
-                            UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
-                            dialogFragment.setArguments(args);
-                            dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                            try { //illegalstateexception is thrown if the parent activity is destroyed before the dialog can be shown
+                                Bundle args = new Bundle();
+                                args.putString("url", span.getURL());
+                                UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
+                                dialogFragment.setArguments(args);
+                                dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             return true;
                         }
 

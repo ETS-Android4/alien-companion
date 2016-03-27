@@ -55,7 +55,7 @@
         android:hint="add subreddit"
         android:layout_margin="5dp"
         android:singleLine="true"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:completionThreshold="1"
         android:textColor="?attr/themeTextColor"
         android:textColorHint="?attr/themeTextHintColor" />

@@ -18,6 +18,7 @@ import android.util.Log;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
+import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -79,7 +80,7 @@ public class DownloaderService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        MAX_PROGRESS = MyApplication.syncPostCount + 1;
+        //MAX_PROGRESS = MyApplication.syncPostCount + 1;
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -93,21 +94,31 @@ public class DownloaderService extends IntentService {
         //List<String> subreddits = i.getStringArrayListExtra("subreddits");
         SyncProfile profile = (SyncProfile) i.getSerializableExtra("profile");
         if(profile != null) {
-            for(String subreddit : profile.getSubreddits()) {
-                progress = 0;
-                String filename;
-                boolean isMulti = false;
-                if(subreddit.endsWith(" (multi)")) {
-                    filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subreddit.toLowerCase();
-                    isMulti = true;
-                }
-                else {
-                    filename = subreddit.toLowerCase();
-                }
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-                startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
+            SyncProfileOptions syncOptions;
+            if(!profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null) {
+                syncOptions = profile.getSyncOptions();
+            }
+            else {
+                syncOptions = new SyncProfileOptions();
+            }
+            MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
 
-                syncSubreddit(filename, builder, subreddit, SubmissionSort.HOT, null, isMulti);
+            if(!(syncOptions.isSyncOverWifiOnly() && !GeneralUtils.isConnectedOverWifi(this))) {
+                for (String subreddit : profile.getSubreddits()) {
+                    progress = 0;
+                    String filename;
+                    boolean isMulti = false;
+                    if (subreddit.endsWith(" (multi)")) {
+                        filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subreddit.toLowerCase();
+                        isMulti = true;
+                    } else {
+                        filename = subreddit.toLowerCase();
+                    }
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                    startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
+
+                    syncSubreddit(filename, builder, subreddit, SubmissionSort.HOT, null, isMulti, syncOptions);
+                }
             }
 
             if(i.getBooleanExtra("reschedule", false)) {
@@ -115,6 +126,7 @@ public class DownloaderService extends IntentService {
             }
         }
         else {
+            MAX_PROGRESS = MyApplication.syncPostCount;
             progress = 0;
             String subreddit = i.getStringExtra("subreddit");
             boolean isMulti = i.getBooleanExtra("isMulti", false);
@@ -128,21 +140,21 @@ public class DownloaderService extends IntentService {
             SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
             TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
 
-            syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti);
+            syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti, new SyncProfileOptions());
         }
     }
 
-    private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti) {
+    private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
         try {
             Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             List<RedditItem> posts;
 
             if (subreddit == null || subreddit.equals("frontpage"))
-                posts = submissions.frontpage(submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
+                posts = submissions.frontpage(submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
             else {
-                if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
-                else posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, MyApplication.syncPostCount, null, null, MyApplication.showHiddenPosts);
+                if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
+                else posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
             }
 
             if(posts!=null) {
@@ -152,12 +164,12 @@ public class DownloaderService extends IntentService {
                 for (RedditItem post : posts) {
                     increaseProgress(builder);
                     Submission submission = (Submission) post;
-                    if(MyApplication.syncThumbnails) {
+                    if(syncOptions.isSyncThumbs()) {
                         downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
                     }
-                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, MyApplication.syncCommentDepth, MyApplication.syncCommentCount, MyApplication.syncCommentSort);
+                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
                     submission.setSyncedComments(comments);
-                    if(MyApplication.syncImages && GeneralUtils.canAccessExternalStorage(this)) {
+                    if(syncOptions.isSyncImages() && GeneralUtils.canAccessExternalStorage(this)) {
                         downloadPostImage(submission, filename);
                     }
                     writePostToFile(submission, filename + submission.getIdentifier());

@@ -59,7 +59,7 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
                     //Log.d(TAG, "ACTION_UP");
-                    if (System.currentTimeMillis() - lastClickTime < 600) {
+                    if (System.currentTimeMillis() - lastClickTime < 500) {
                         link[0].onClick(widget);
                         handler.removeCallbacks(mLongPressed);
                     }
@@ -86,7 +86,7 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
                             link[0].onLongClick(widget);
                         }
                     };
-                    handler.postDelayed(mLongPressed, 600);
+                    handler.postDelayed(mLongPressed, 1000);
                 }
 
                 return true;
