@@ -35,7 +35,10 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
     private int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
 
     private SyncProfile profile;
+    private boolean activateProfile;
     private String oldDaysString;
+    private int oldFromTime;
+    private int oldToTime;
     private Spinner from1;
     private Spinner from2;
     private Spinner to1;
@@ -56,7 +59,12 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         super.onCreate(savedInstanceState);
 
         profile = (SyncProfile) getArguments().getSerializable("profile");
-        oldDaysString = new String(profile.getDaysString());
+        activateProfile = getArguments().getBoolean("activate");
+        if(profile!=null) {
+            oldDaysString = new String(profile.getDaysString());
+            oldFromTime = new Integer(profile.getFromTime());
+            oldToTime = new Integer(profile.getToTime());
+        }
     }
 
     @Override
@@ -134,12 +142,12 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         button_sat.setBackgroundColor((profile.isActiveDay(DaysEnum.SATURDAY))? activeDayColor : inactiveDayColor);
         button_sun.setBackgroundColor((profile.isActiveDay(DaysEnum.SUNDAY))? activeDayColor : inactiveDayColor);
 
-        Button button_cancel = (Button) view.findViewById(R.id.button_cancel);
-        Button button_done = (Button) view.findViewById(R.id.button_done);
-        button_cancel.setOnClickListener(this);
-        button_done.setOnClickListener(this);
+        //Button button_cancel = (Button) view.findViewById(R.id.button_cancel);
+        //Button button_done = (Button) view.findViewById(R.id.button_done);
+        //button_cancel.setOnClickListener(this);
+        //button_done.setOnClickListener(this);
 
-        getDialog().setCanceledOnTouchOutside(false);
+        getDialog().setCanceledOnTouchOutside(true);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         return view;
     }
@@ -168,35 +176,28 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
             case R.id.button_sun:
                 button_sun.setBackgroundColor((profile.toggleActiveDay(DaysEnum.SUNDAY)) ? activeDayColor : inactiveDayColor);
                 break;
-            case R.id.button_cancel:
-                profile.setDaysString(oldDaysString);
-                dismiss();
-                break;
-            case R.id.button_done:
-                ((SyncProfilesActivity) getActivity()).changesMade = true;
-                setProfileTimes();
-                dismiss();
-                break;
+            //case R.id.button_cancel:
+            //    break;
+            //case R.id.button_done:
+            //    break;
         }
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(android.content.DialogInterface dialog, int keyCode, android.view.KeyEvent event) {
-
-                if ((keyCode == android.view.KeyEvent.KEYCODE_BACK)) {
-                    ((SyncProfilesActivity) getActivity()).changesMade = true;
-                    setProfileTimes();
-                    dismiss();
-                    return true; // pretend we've processed it
-                } else
-                    return false; // pass on to be processed as normal
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        setProfileTimes();
+        if(profile.getFromTime() != oldFromTime || profile.getToTime() != oldToTime || !profile.getDaysString().equals(oldDaysString)) {
+            if(activateProfile && profile.hasTime()) {
+                profile.setActive(true);
+                ((SyncProfilesActivity) getActivity()).getAdapter().notifyProfileChanged(profile);
             }
-        });
+            else if(!profile.hasTime() && profile.isActive()) {
+                profile.setActive(false);
+                ((SyncProfilesActivity) getActivity()).getAdapter().notifyProfileChanged(profile);
+            }
+            ((SyncProfilesActivity) getActivity()).changesMade = true;
+        }
     }
 
     private void setProfileTimes() {
@@ -225,7 +226,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         }
         profile.setFromTime(fromTime);
         profile.setToTime(toTime);
-        profile.setHasTime(true);
+        profile.setHasTime(!profile.getDaysString().equals(""));
         //Log.d("schedule test", "from time: " + fromTime);
         //Log.d("schedule test", "to time: " + toTime);
     }

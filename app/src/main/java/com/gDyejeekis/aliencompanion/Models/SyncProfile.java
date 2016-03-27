@@ -113,7 +113,7 @@ public class SyncProfile implements Serializable {
         this.subreddits = subreddits;
         this.fromTime = fromTime;
         this.toTime = toTime;
-        this.hasTime = true;
+        this.hasTime = !days.equals("");
         this.isActive = true;
         this.days = days;
         useGlobalSyncOptions = true;

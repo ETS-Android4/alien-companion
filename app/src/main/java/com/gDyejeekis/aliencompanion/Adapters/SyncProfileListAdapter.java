@@ -23,6 +23,7 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SyncProfileDialog
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -135,7 +136,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             profiles.remove(profiles.size() - 1);
             profiles.add(profile);
             notifyDataSetChanged();
-            showSubredditsDialog(profiles.indexOf(profile), true);
+            showSubredditsDialog(profiles.indexOf(profile), false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,6 +179,10 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         renamingProfilePosition = -1;
     }
 
+    public void notifyProfileChanged(SyncProfile profile) {
+        notifyItemChanged(profiles.indexOf(profile));
+    }
+
     //private void deleteProfileAt(int position) {
     //    try {
     //        profiles.remove(position);
@@ -216,11 +221,12 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         dialog.show(activity.getFragmentManager(), "dialog");
     }
 
-    private void showScheduleDialog(int profilePosition) {
+    private void showScheduleDialog(int profilePosition, boolean activateProfile) {
         //activity.changesMade = true;
         SyncProfileScheduleDialogFragment dialog = new SyncProfileScheduleDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
+        bundle.putBoolean("activate", activateProfile);
         dialog.setArguments(bundle);
         dialog.show(activity.getFragmentManager(), "dialog");
     }
@@ -233,8 +239,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         dialog.show(activity.getFragmentManager(), "dialog");
     }
 
-    public void showScheduleDialog(SyncProfile profile) {
-        showScheduleDialog(profiles.indexOf(profile));
+    public void showScheduleDialog(SyncProfile profile, boolean activateProfile) {
+        showScheduleDialog(profiles.indexOf(profile), activateProfile);
     }
 
     public void sortProfilesByAlpha() {
@@ -336,9 +342,14 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             state.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activity.changesMade = true;
-                    profile.setActive(!profile.isActive());
-                    activity.getAdapter().notifyItemChanged(position);
+                    if(profile.hasTime()) {
+                        activity.changesMade = true;
+                        profile.setActive(!profile.isActive());
+                        activity.getAdapter().notifyItemChanged(position);
+                    }
+                    else {
+                        activity.getAdapter().showScheduleDialog(position, true);
+                    }
                 }
             });
         }
@@ -357,7 +368,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                             activity.getAdapter().showSyncOptionsDialog(position);
                             return true;
                         case R.id.edit_schedule:
-                            activity.getAdapter().showScheduleDialog(position);
+                            activity.getAdapter().showScheduleDialog(position, false);
                             return true;
                         case R.id.action_rename_profile:
                             activity.getAdapter().renamingProfilePosition = position;
@@ -368,6 +379,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                             activity.getAdapter().deleteProfile(profile);
                             return true;
                         case R.id.action_sync_now:
+                            ToastUtils.displayShortToast(activity, profile.getName() + " added to sync queue");
                             profile.startSync(activity);
                             return true;
                         default:

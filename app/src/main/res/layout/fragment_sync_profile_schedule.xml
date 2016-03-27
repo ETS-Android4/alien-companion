@@ -86,7 +86,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:layout_marginBottom="5dp">
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -170,7 +171,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:visibility="gone">
 
         <Button
             android:layout_width="wrap_content"

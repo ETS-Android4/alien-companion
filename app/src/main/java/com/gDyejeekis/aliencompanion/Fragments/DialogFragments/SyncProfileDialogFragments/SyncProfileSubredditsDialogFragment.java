@@ -140,7 +140,7 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
             case R.id.button_done:
                 dismiss();
                 if(getArguments().getBoolean("showSchedule") && subreddits.size() > 0) {
-                    ((SyncProfilesActivity) getActivity()).getAdapter().showScheduleDialog(syncProfile);
+                    ((SyncProfilesActivity) getActivity()).getAdapter().showScheduleDialog(syncProfile, true);
                 }
                 break;
         }
