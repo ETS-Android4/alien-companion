@@ -55,6 +55,7 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             int off = layout.getOffsetForHorizontal(line, x);
 
             if(off >= widget.getText().length()) {
+                handler.removeCallbacks(mLongPressed);
                 return true;
             }
 
@@ -76,6 +77,7 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
                     }
                 }
                 else if (action == MotionEvent.ACTION_DOWN) {
+                    //Log.d(TAG, "--------------------------------------------------");
                     //Log.d(TAG, "ACTION_DOWN");
                     startX = x;
                     startY = y;
@@ -99,6 +101,8 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             }
         }
 
+        //Log.d(TAG, "REMOVING LONG PRESS CALLBACK ANYWAY");
+        handler.removeCallbacks(mLongPressed);
         return super.onTouchEvent(widget, buffer, event);
     }
 
