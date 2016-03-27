@@ -54,6 +54,10 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             final int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
 
+            if(off >= widget.getText().length()) {
+                return true;
+            }
+
             final MyClickableSpan[] link = buffer.getSpans(off, off, MyClickableSpan.class);
 
             if (link.length != 0) {
@@ -61,8 +65,8 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
                     //Log.d(TAG, "ACTION_UP");
                     if (System.currentTimeMillis() - lastClickTime < 500) {
                         link[0].onClick(widget);
-                        handler.removeCallbacks(mLongPressed);
                     }
+                    handler.removeCallbacks(mLongPressed);
                 }
                 else if(action == MotionEvent.ACTION_MOVE) {
                     //Log.d(TAG, "ACTION_MOVE");
