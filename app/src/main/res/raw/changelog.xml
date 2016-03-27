@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.3" changeDate="Mar 31, 2016">
-
+    <changelogversion versionName="0.3" changeDate="Mar 28, 2016">
+        <changelogtext>New image/GIF/album viewer (currently supports imgur, gfycat, .gif, .jpg, .png)</changelogtext>
+        <changelogtext>Sync profile specific sync options (all previous sync profiles have been erased, apologies!)</changelogtext>
+        <changelogtext>New launcher icon, courtesy of /u/NoBullet</changelogtext>
+        <changelogtext>Added 'Sync images and GIFs' in Sync options</changelogtext>
+        <changelogtext>Added 'Imgur album limit' in Sync options</changelogtext>
+        <changelogtext>Added 'Sync over WiFi only' in Sync options</changelogtext>
+        <changelogtext>Improved sync profile dialog functionality</changelogtext>
+        <changelogtext>Changed 'Font size' options to be more flexible</changelogtext>
+        <changelogtext>Changed default font size to be slightly smaller</changelogtext>
+        <changelogtext>Added two more options for 'Sync post count' (75, 100)</changelogtext>
+        <changelogtext>Added higher quality thumbnail support for gfycat posts</changelogtext>
+        <changelogtext>Added 'Dismiss images on single tap' option</changelogtext>
+        <changelogtext>Added 'Dismiss GIF on single tap' options (single tap pauses GIF when disabled)</changelogtext>
+        <changelogtext>Added 'Clear synced posts' option in the toolbar's overflow menu (offline mode)</changelogtext>
+        <changelogtext>All spoiler tagged text now displays correctly</changelogtext>
+        <changelogtext>YouTube links that don't contain videos now open in the in-app browser</changelogtext>
+        <changelogtext>Fixed some YouTube posts having empty thumbnails</changelogtext>
+        <changelogtext>Long tapping links in comments and self-text now triggers without lifting the finger (1sec long tap time)</changelogtext>
+        <changelogtext>Enabled vertical scrollbar for posts and comments</changelogtext>
+        <changelogtext>'Hide NSFW posts' option now enabled by default</changelogtext>
+        <changelogtext>Changed default toolbar color to cyan</changelogtext>
+        <changelogtext>Fixed subreddit and multireddit items that share the same name in the navigation drawer being highlighted at the same time</changelogtext>
+        <changelogtext>Fixed crash when hiding a post in the comments screen</changelogtext>
+        <changelogtext>READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE permissions now required (optional for android M or later)</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.2.3" changeDate="Mar 5, 2016">
