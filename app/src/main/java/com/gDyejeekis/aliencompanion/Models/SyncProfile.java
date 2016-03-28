@@ -74,8 +74,8 @@ public class SyncProfile implements Serializable {
         profileId = UUID.randomUUID().hashCode();
         this.name = "";
         this.subreddits = new ArrayList<>();
-        this.fromTime = -1;
-        this.toTime = -1;
+        this.fromTime = 1;
+        this.toTime = 1;
         this.hasTime = false;
         this.isActive = false;
         days = "";
@@ -99,8 +99,8 @@ public class SyncProfile implements Serializable {
         profileId = UUID.randomUUID().hashCode();
         this.name = name;
         this.subreddits = new ArrayList<>();
-        this.fromTime = -1;
-        this.toTime = -1;
+        this.fromTime = 1;
+        this.toTime = 1;
         this.hasTime = false;
         this.isActive = false;
         days = "";

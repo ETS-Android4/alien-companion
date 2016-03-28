@@ -1,223 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:background="?attr/themeDialogBackgroundColor"
-    android:padding="10dp">
-
-    <Switch
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Use global sync options"
-        android:id="@+id/switch_global_options"
-        android:checked="true"
-        android:textColor="?attr/themeTextColor"
-        android:layout_marginBottom="5dp"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
+    android:layout_width="match_parent">
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:layout_height="match_parent"
+        android:background="?attr/themeDialogBackgroundColor"
+        android:padding="10dp">
 
-        <TextView
-            android:layout_width="0dp"
+        <Switch
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sync post count"
-            android:id="@+id/textView6"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_syncPostCount"
-            android:spinnerMode="dropdown"
-            android:layout_gravity="right"
-            android:gravity="right" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sync comment count"
-            android:id="@+id/textView15"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_syncCommentCount"
-            android:spinnerMode="dropdown"
-            android:layout_gravity="right"
-            android:gravity="right" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sync comment depth"
-            android:id="@+id/textView16"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_syncCommentDepth"
-            android:spinnerMode="dropdown"
-            android:layout_gravity="right"
-            android:gravity="right" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sync comment sort"
-            android:id="@+id/textView18"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_syncCommentSort"
-            android:spinnerMode="dropdown"
-            android:layout_gravity="right"
-            android:gravity="right" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sync thumbnails"
-            android:id="@+id/textView22"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_weight="1"
-            android:labelFor="@+id/checkBox_syncThumbs" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox_syncThumbs"
-            android:checked="false"
-            android:layout_gravity="right" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sync post images and GIFs"
-            android:id="@+id/textView21"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_weight="1"
-            android:labelFor="@+id/checkBox_syncImages"/>
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox_syncImages"
-            android:checked="false"
-            android:layout_gravity="right" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Imgur album limit"
-            android:id="@+id/textView19"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_almumLimit"
-            android:spinnerMode="dropdown"
-            android:layout_gravity="right"
-            android:gravity="right" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Sync over WiFi only"
-            android:id="@+id/textView20"
-            android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
-            android:layout_weight="1"
-            android:labelFor="@+id/checkBox_syncWifiOnly"/>
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox_syncWifiOnly"
+            android:text="Use global sync options"
+            android:id="@+id/switch_global_options"
             android:checked="true"
-            android:layout_gravity="right" />
+            android:textColor="?attr/themeTextColor"
+            android:layout_marginBottom="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync post count"
+                android:id="@+id/textView6"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_syncPostCount"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="right"
+                android:gravity="right" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync comment count"
+                android:id="@+id/textView15"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_syncCommentCount"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="right"
+                android:gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync comment depth"
+                android:id="@+id/textView16"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_syncCommentDepth"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="right"
+                android:gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync comment sort"
+                android:id="@+id/textView18"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_syncCommentSort"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="right"
+                android:gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync thumbnails"
+                android:id="@+id/textView22"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_weight="1"
+                android:labelFor="@+id/checkBox_syncThumbs" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox_syncThumbs"
+                android:checked="false"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync post images and GIFs"
+                android:id="@+id/textView21"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_weight="1"
+                android:labelFor="@+id/checkBox_syncImages"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox_syncImages"
+                android:checked="false"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Imgur album limit"
+                android:id="@+id/textView19"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_almumLimit"
+                android:spinnerMode="dropdown"
+                android:layout_gravity="right"
+                android:gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync over WiFi only"
+                android:id="@+id/textView20"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_weight="1"
+                android:labelFor="@+id/checkBox_syncWifiOnly"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox_syncWifiOnly"
+                android:checked="true"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
