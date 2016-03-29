@@ -277,11 +277,11 @@ public class ImageActivity extends BackNavActivity {
 
     public void addImageFragment(String url) {
         setHqMenuItemVisible(true);
-        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commit();
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commitAllowingStateLoss();
     }
 
     public void addGifFragment(String url) {
-        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url), "gifFragment").commit();
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url), "gifFragment").commitAllowingStateLoss();
     }
 
     public void setMainProgressBarVisible(boolean flag) {
