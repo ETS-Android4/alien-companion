@@ -213,7 +213,13 @@ public class GeneralUtils {
             JSONObject object = (JSONObject) response.get("data");
             item = new ImgurAlbum(object);
         } else if (urlLC.contains("/gallery/")) {
-            JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.GALLERY, id)).getResponseObject();
+            JSONObject response;
+            try {
+                response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.GALLERY, id)).getResponseObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+                response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.IMAGE, id)).getResponseObject();
+            }
             JSONObject object = (JSONObject) response.get("data");
             item = new ImgurGallery(object);
         } else {
