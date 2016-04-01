@@ -259,16 +259,31 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
                 return true;
             case R.id.action_clear_synced:
-                String message = "Delete all synced posts, comments and images for this " + ((isMulti) ? "multireddit" : "subreddit") + "?";
+                String messageEnd;
+                if(subreddit==null) {
+                    messageEnd = " the frontpage?";
+                }
+                else {
+                    if(isMulti) {
+                        messageEnd = " this multireddit?";
+                    }
+                    else {
+                        messageEnd = " this subreddit?";
+                    }
+                }
+                String message = "Delete all synced posts, comments and images for" + messageEnd;
                 new AlertDialog.Builder(activity).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String folderName = "";
-                        if(isMulti) folderName = "multi=";
-                        folderName = folderName.concat(subreddit);
+                        String folderName = (subreddit==null) ? "frontpage" : subreddit;
+                        if(isMulti) {
+                            folderName = "multi=" + folderName;
+                        }
+                        //if(isMulti) folderName = "multi=";
+                        //folderName = folderName.concat(subreddit);
                         GeneralUtils.clearSyncedPostsAndComments(activity, folderName);
                         GeneralUtils.clearSyncedImages(activity, folderName);
-                        String toastMessage = "Synced posts for " + subreddit + (isMulti ? " (multi)" : "") + " cleared";
+                        String toastMessage = "Synced posts for " + ((subreddit==null) ? "the frontpage" : subreddit) + (isMulti ? " (multi)" : "") + " cleared";
                         ToastUtils.displayShortToast(activity, toastMessage);
                     }
                 }).show();

@@ -169,16 +169,22 @@ public class BrowserFragment extends Fragment {
 
     @Override
     public void onPause() {
-        super.onPause();
         webView.onPause();
         webViewBundle = new Bundle();
         webView.saveState(webViewBundle);
+        super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         webView.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        webView.destroy();
+        super.onDestroy();
     }
 
     @Override

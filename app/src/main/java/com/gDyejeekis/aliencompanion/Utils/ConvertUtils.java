@@ -37,7 +37,7 @@ public class ConvertUtils {
     private static int fromHtmlCount = 0;
 
     public static String modifySpoilerHtml(String html) {
-        String pattern = "<a href=\\\\?\"(?:#|\\/)s\\\\?\" title=\\\\?\"([\\w\\s.,/#!?$%\\^&\\*;:'{}=\\-_`~()\"]*)\\\\?\">([\\w\\s]*)<\\/a>";
+        String pattern = "<a href=\\\\?\"(?:#|\\/)(?:s|b|g|p|c|f|fear)\\\\?\" title=\\\\?\"([\\w\\s.,/#!?$%\\^&\\*;:'’\\[\\]\\{}+=\\-_`~()\"“”]*)\\\\?\">([\\w\\s.,/#!?$%\\^&\\*;:'’\\[\\]\\{}+=\\-_`~()\"“”]*)<\\/a>";
 
         try {
             Pattern compiledPatter = Pattern.compile(pattern);
