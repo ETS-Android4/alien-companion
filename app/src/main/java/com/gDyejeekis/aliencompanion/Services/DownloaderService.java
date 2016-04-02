@@ -289,7 +289,8 @@ public class DownloaderService extends IntentService {
                         downloadAlbumImages(gallery, filename, folderPath);
                     }
                     else {
-                        downloadPostImageToFile(gallery.getLink(), folderPath);
+                        String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
+                        downloadPostImageToFile(link, folderPath);
                     }
                 }
             }

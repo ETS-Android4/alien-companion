@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.4" changeDate="Apr 30, 2016">
-
+    <changelogversion versionName="0.3.3" changeDate="Apr 3, 2016">
+        <changelogtext>Fixed crash when manually clearing synced posts for the front page</changelogtext>
+        <changelogtext>Further improved spoiler tagged text support</changelogtext>
+        <changelogtext>Fixed handling of imgur gallery gif links</changelogtext>
+        <changelogtext>Fixed crash occurring on orientation change in the image viewer when playing .gif links</changelogtext>
+        <changelogtext>Fixed audio playing in webviews sometimes not stopping after exiting the in-app browser</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.3.2" changeDate="Mar 31, 2016">

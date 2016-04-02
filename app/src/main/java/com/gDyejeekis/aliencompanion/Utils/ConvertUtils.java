@@ -53,7 +53,7 @@ public class ConvertUtils {
                 String middle = html.substring(matcher.start(), matcher.end());
                 String end = html.substring(matcher.end());
 
-                middle = middle.replaceAll("href=\"(#|/)s\"", "href=\"#st\"");
+                middle = middle.replaceAll("href=\"(#|/)(s|b|g|p|c|f|fear)\"", "href=\"#st\"");
                 middle = middle.replace("title=\"" + matcher.group(1) + "\"", "");
                 String string = matcher.group(2) + "</a>";
                 middle = middle.replace(string, string + "<a href=\"#s\"> " + matcher.group(1) + "</a>");

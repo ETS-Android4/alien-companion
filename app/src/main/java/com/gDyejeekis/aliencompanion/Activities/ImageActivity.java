@@ -196,7 +196,12 @@ public class ImageActivity extends BackNavActivity {
                                 if (gallery.isAlbum()) {
                                     setupAlbumView(gallery.getImages());
                                 } else {
-                                    addImageFragment(gallery.getLink());
+                                    if(gallery.isAnimated()) {
+                                        addGifFragment(gallery.getMp4());
+                                    }
+                                    else {
+                                        addImageFragment(gallery.getLink());
+                                    }
                                 }
                             }
                         }

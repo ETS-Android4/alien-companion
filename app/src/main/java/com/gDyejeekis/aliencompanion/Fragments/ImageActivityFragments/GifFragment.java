@@ -228,6 +228,12 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         }
 
         videoView.setLayoutParams(layoutParams);
+
+        //Log.d(TAG, "-----------------------------------------------");
+        //Log.d(TAG, "SurfaceView width: " + videoView.getWidth());
+        //Log.d(TAG, "SurfaceView height: " + videoView.getHeight());
+        //Log.d(TAG, "MediaPlayer width: " + mPlayer.getVideoWidth());
+        //Log.d(TAG, "MediaPlayer height: " + mPlayer.getVideoHeight());
     }
 
     @Override
@@ -241,7 +247,9 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        handleAspectRatio();
+        try {
+            handleAspectRatio();
+        } catch (Exception e) {}
     }
 
     private void loadGif() {

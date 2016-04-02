@@ -18,6 +18,8 @@ public class ImgurGallery extends ImgurItem implements Serializable {
 
     private String id;
     private boolean isAlbum;
+    private boolean isAnimated;
+    private String mp4;
     private String link;
     private List<ImgurImage> images;
 
@@ -34,7 +36,19 @@ public class ImgurGallery extends ImgurItem implements Serializable {
         else {
             link = safeJsonToString(obj.get("link"));
             link = link.replace("\\", "");
+            isAnimated = safeJsonToBoolean(obj.get("animated"));
+            if(isAnimated) {
+                mp4 = safeJsonToString(obj.get("mp4"));
+            }
         }
+    }
+
+    public boolean isAnimated() {
+        return isAnimated;
+    }
+
+    public String getMp4() {
+        return mp4;
     }
 
     public String getId() {
