@@ -65,6 +65,8 @@ public class DownloaderService extends IntentService {
 
     public static final String LOCAL_THUMNAIL_SUFFIX = "thumb";
 
+    public static final String LOCAL_ARTICLE_SUFFIX = "-article.html";
+
     private int MAX_PROGRESS;
 
     private int progress;
@@ -169,8 +171,13 @@ public class DownloaderService extends IntentService {
                     }
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
                     submission.setSyncedComments(comments);
-                    if(syncOptions.isSyncImages() && GeneralUtils.canAccessExternalStorage(this)) {
-                        downloadPostImage(submission, filename);
+                    if(syncOptions.isSyncImages() && GeneralUtils.isImageLink(submission.getURL(), submission.getDomain())) {
+                        if(GeneralUtils.canAccessExternalStorage(this)) {
+                            downloadPostImage(submission, filename);
+                        }
+                    }
+                    else if(syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(submission.getURL(), submission.getDomain())) {
+                        downloadPostArticle(submission, filename);
                     }
                     writePostToFile(submission, filename + submission.getIdentifier());
                 }
@@ -226,6 +233,14 @@ public class DownloaderService extends IntentService {
             oos.close();
             fos.close();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void downloadPostArticle(Submission post, String filename) {
+        try {
+            GeneralUtils.downloadArticleToFile(post.getURL(), new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -206,6 +206,12 @@
             android:entryValues="@array/commentDepth"
             android:defaultValue="1"/>
 
+
+        <CheckBoxPreference
+            android:key="syncWeb"
+            android:title="Sync post articles"
+            android:defaultValue="false" />
+
         <CheckBoxPreference
             android:key="syncWifi"
             android:title="Sync over WiFi only"
@@ -271,7 +277,7 @@
         <Preference
             android:key="changelog"
             android:title="View changelog"
-            android:summary="Current version: 0.3.3" />
+            android:summary="Current version: 0.4" />
 
         <Preference
             android:key="feedback"

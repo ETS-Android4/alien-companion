@@ -25,9 +25,9 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  */
 public class MyApplication extends Application {
 
-    public static final String lastKnownVersion = "0.3.2";
+    public static final String lastKnownVersion = "0.3.3";
 
-    public static final String currentVersion = "0.3.3";
+    public static final String currentVersion = "0.4";
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -100,9 +100,9 @@ public class MyApplication extends Application {
     public static boolean syncImages;
     public static int syncAlbumImgCount;
     public static boolean syncOverWifiOnly;
+    public static boolean syncWebpages;
 
     //not used
-    public static boolean syncWebpages = false;
     public static boolean syncGif = false;
     public static int syncImagesInCommentsCount = 0;
 
@@ -165,6 +165,7 @@ public class MyApplication extends Application {
 
     public static void getCurrentSettings() {
         syncImages = prefs.getBoolean("syncImg", false);
+        syncWebpages = prefs.getBoolean("syncWeb", false);
         syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
         syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);

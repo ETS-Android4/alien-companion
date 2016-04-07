@@ -47,6 +47,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private Spinner albumImageLimitSpinner;
     private CheckBox syncThumbsCheckbox;
     private CheckBox syncImagesCheckbox;
+    private CheckBox syncArticlesCheckbox;
     private CheckBox syncWifiOnlyCheckbox;
 
     @Override
@@ -105,6 +106,10 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncWifiOnlyCheckbox.setChecked(syncOptions.isSyncOverWifiOnly());
         syncWifiOnlyCheckbox.setEnabled(!useGlobal);
 
+        syncArticlesCheckbox = (CheckBox) view.findViewById(R.id.checkBox_syncArticles);
+        syncArticlesCheckbox.setChecked(syncOptions.isSyncWebpages());
+        syncArticlesCheckbox.setEnabled(!useGlobal);
+
         useGlobalSwitch = (Switch) view.findViewById(R.id.switch_global_options);
         useGlobalSwitch.setChecked(useGlobal);
         useGlobalSwitch.setOnCheckedChangeListener(this);
@@ -129,6 +134,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncOptions.setAlbumSyncLimit(Integer.valueOf((String) albumImageLimitSpinner.getSelectedItem()));
             syncOptions.setSyncThumbs(syncThumbsCheckbox.isChecked());
             syncOptions.setSyncImages(syncImagesCheckbox.isChecked());
+            syncOptions.setSyncWebpages(syncArticlesCheckbox.isChecked());
             syncOptions.setSyncOverWifiOnly(syncWifiOnlyCheckbox.isChecked());
         }
 
@@ -155,6 +161,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncAlbumImgCount)));
             syncThumbsCheckbox.setChecked(MyApplication.syncThumbnails);
             syncImagesCheckbox.setChecked(MyApplication.syncImages);
+            syncArticlesCheckbox.setChecked(MyApplication.syncWebpages);
             syncWifiOnlyCheckbox.setChecked(MyApplication.syncOverWifiOnly);
         }
         syncPostCountSpinner.setEnabled(!b);
@@ -164,6 +171,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         albumImageLimitSpinner.setEnabled(!b);
         syncThumbsCheckbox.setEnabled(!b);
         syncImagesCheckbox.setEnabled(!b);
+        syncArticlesCheckbox.setEnabled(!b);
         syncWifiOnlyCheckbox.setEnabled(!b);
     }
 

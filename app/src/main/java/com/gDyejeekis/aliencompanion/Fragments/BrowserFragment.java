@@ -21,9 +21,14 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Services.DownloaderService;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+
+import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +42,9 @@ public class BrowserFragment extends Fragment {
     private Bundle webViewBundle;
     private String url;
     private String domain;
+
+    //private boolean isPageSynced;
+    private String syncedPagePath;
 
     private class MyWebViewClient extends WebViewClient {
         @Override
@@ -101,6 +109,15 @@ public class BrowserFragment extends Fragment {
         if (post != null) {
             url = post.getUrl();
             domain = post.getDomain();
+            if(MyApplication.offlineModeEnabled) {
+                File file = GeneralUtils.findFile(activity.getFilesDir(), activity.getFilesDir().getAbsolutePath(), post.getIdentifier() + DownloaderService.LOCAL_ARTICLE_SUFFIX);
+                if(file!=null) {
+                    //isPageSynced = true;
+                    syncedPagePath = file.getAbsolutePath();
+                    ((BrowserActivity) activity).loadFromCache = true;
+                    activity.invalidateOptionsMenu();
+                }
+            }
         } else {
             url = activity.getIntent().getStringExtra("url");
             domain = activity.getIntent().getStringExtra("domain");
@@ -159,7 +176,13 @@ public class BrowserFragment extends Fragment {
 
         if(webViewBundle == null) {
             webView.setWebChromeClient(new MyWebChromeClient());
-            webView.loadUrl(url);
+            if(MyApplication.offlineModeEnabled && syncedPagePath != null) {
+                settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+                webView.loadUrl("file:///" + syncedPagePath);
+            }
+            else {
+                webView.loadUrl(url);
+            }
         }
         else {
             webView.restoreState(webViewBundle);
@@ -223,14 +246,24 @@ public class BrowserFragment extends Fragment {
         ((BrowserActivity) activity).loadFromCache = true;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
-        webView.reload();
+        if(MyApplication.offlineModeEnabled && syncedPagePath !=null) {
+            webView.loadUrl("file:///" + syncedPagePath);
+        }
+        else {
+            webView.reload();
+        }
     }
 
     private void loadLiveVersion() {
         ((BrowserActivity) activity).loadFromCache = false;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        webView.reload();
+        if(MyApplication.offlineModeEnabled && syncedPagePath != null) {
+            webView.loadUrl(url);
+        }
+        else {
+            webView.reload();
+        }
     }
 
 }

@@ -271,7 +271,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         messageEnd = " this subreddit?";
                     }
                 }
-                String message = "Delete all synced posts, comments and images for" + messageEnd;
+                String message = "Delete all synced posts, comments, images and articles for" + messageEnd;
                 new AlertDialog.Builder(activity).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

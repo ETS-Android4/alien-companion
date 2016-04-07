@@ -126,6 +126,21 @@ public class GeneralUtils {
             String filename = file.getName();
             if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)) file.delete();
         }
+
+        //Log.d(TAG, "Remaining local app files AFTER delete:");
+        //listFilesInDir(dir);
+    }
+
+    public static void listFilesInDir(File dir) {
+        File[] files = dir.listFiles();
+        for(File file : files) {
+            if(file.isDirectory()) {
+                listFilesInDir(file);
+            }
+            else {
+                Log.d(TAG, file.getName() + " " + file.length());
+            }
+        }
     }
 
     public static void clearSyncedImages(Context context) {
@@ -176,13 +191,31 @@ public class GeneralUtils {
         return null;
     }//met
 
+    public static void downloadArticleToFile(String url, File file) throws IOException {
+        URLConnection conn = new URL(url).openConnection();
+        conn.setReadTimeout(5000);
+        conn.setConnectTimeout(10000);
+        conn.setRequestProperty("User-Agent", "Foo?");
+
+        InputStream inputStream = conn.getInputStream();
+        String html = IOUtils.toString(inputStream);
+        IOUtils.closeQuietly(inputStream);
+        //inputStream.close();
+
+        FileOutputStream  outStream = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(outStream);
+        oos.writeObject(html);
+        oos.close();
+        outStream.close();
+    }
+
     public static void downloadMediaToFile(String url, File file) throws IOException {
         //Open a connection to that URL.
         URLConnection ucon = new URL(url).openConnection();
 
         //this timeout affects how long it takes for the app to realize there's a connection problem
         ucon.setReadTimeout(5000);
-        ucon.setConnectTimeout(30000);
+        ucon.setConnectTimeout(10000);
 
         //Define InputStreams to read from the URLConnection.
         // uses 3KB download buffer
@@ -204,7 +237,7 @@ public class GeneralUtils {
         inStream.close();
     }
 
-    public static ImgurItem getImgurDataFromUrl(ImgurHttpClient httpClient, String url) {
+    public static ImgurItem getImgurDataFromUrl(ImgurHttpClient httpClient, String url) { //run on background thread
         ImgurItem item;
         String urlLC = url.toLowerCase();
         String id = LinkHandler.getImgurImgId(url);
@@ -381,6 +414,38 @@ public class GeneralUtils {
             return context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
+    }
+
+    public static boolean isImageLink(String url, String domain) {
+        if(domain.contains("imgur.com")) return true;
+        if(domain.contains("gfycat.com")) return true;
+        if(domain.contains("gyazo.com")) return true;
+        if(domain.contains("flickr.com")) return true;
+        String urlLc = url.toLowerCase();
+        if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif")) return true;
+        return false;
+    }
+
+    public static boolean isArticleLink(String url, String domain) {
+        if(isImageLink(url, domain)) return false;
+        if(isVideoLink(url, domain)) return false;
+        if(domain.contains("reddit.com") || domain.equals("redd.it")) return false;
+        if(domain.equals("twitter.com")) return false;
+        return true;
+    }
+
+    public static boolean isVideoLink(String url, String domain) {
+        if(domain.contains("youtube.com") || domain.equals("youtu.be")) return true;
+        if(domain.equals("dailymotion.com")) return true;
+        if(domain.equals("vimeo.com")) return true;
+        if(domain.equals("vid.me")) return true;
+        if(domain.equals("vine.co")) return true;
+        if(domain.equals("liveleak.com")) return true;
+        if(domain.equals("twitch.tv")) return true;
+        if(domain.equals("oddshot.tv")) return true;
+        String urlLc = url.toLowerCase();
+        if(urlLc.endsWith(".webm") || urlLc.endsWith(".mp4"))  return true;
+        return false;
     }
 
 }

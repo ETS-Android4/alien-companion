@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.4" changeDate="Apr 30, 2016">
+
+    </changelogversion>
+
     <changelogversion versionName="0.3.3" changeDate="Apr 3, 2016">
         <changelogtext>Fixed crash when manually clearing synced posts for the front page</changelogtext>
         <changelogtext>Further improved spoiler tagged text support</changelogtext>

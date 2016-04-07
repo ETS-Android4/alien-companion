@@ -12,6 +12,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
@@ -84,8 +85,10 @@ public class SettingsFragment extends PreferenceFragment {
                         ToastUtils.displayShortToast(getActivity(), "All synced posts cleared");
                     }
                 };
+                //Log.d(GeneralUtils.TAG, "Remaining local app files BEFORE delete:");
+                //GeneralUtils.listFilesInDir(getActivity().getFilesDir());
 
-                new AlertDialog.Builder(getActivity()).setMessage("Delete all synced posts, comments and images?").setPositiveButton("Yes", listener)
+                new AlertDialog.Builder(getActivity()).setMessage("Delete all synced posts, comments, images and articles?").setPositiveButton("Yes", listener)
                         .setNegativeButton("No", null).show();
                 return false;
             }
