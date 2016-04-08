@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "23.0.3"
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -42,4 +42,7 @@ dependencies {
     compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile files('libs/jsoup-1.8.3.jar')
+    compile files('libs/slf4j-simple-1.7.21.jar')
+    compile files('libs/slf4j-api-1.7.21.jar')
 }

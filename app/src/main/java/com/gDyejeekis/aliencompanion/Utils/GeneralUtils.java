@@ -34,6 +34,10 @@ import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -50,6 +54,9 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.jetwick.snacktory.HtmlFetcher;
+import de.jetwick.snacktory.JResult;
+
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
@@ -58,6 +65,8 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 public class GeneralUtils {
 
     public static final String TAG = "GeneralUtils";
+
+    public static final String MOBILE_USER_AGENT_STRING = "Mozilla/5.0 (Linux; U; Android 2.2.1; en-us; Nexus One Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
 
     public static void showChangeLog(Activity activity) {
         ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
@@ -122,7 +131,7 @@ public class GeneralUtils {
         File dir = context.getFilesDir();
         File[] files = dir.listFiles();
         for (File file : files) {
-            //Log.d("geo test", file.getName());
+            //Log.d(TAG, file.getName());
             String filename = file.getName();
             if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)) file.delete();
         }
@@ -191,20 +200,28 @@ public class GeneralUtils {
         return null;
     }//met
 
-    public static void downloadArticleToFile(String url, File file) throws IOException {
-        URLConnection conn = new URL(url).openConnection();
-        conn.setReadTimeout(5000);
-        conn.setConnectTimeout(10000);
-        conn.setRequestProperty("User-Agent", "Foo?");
+    public static void downloadArticleToFile(String url, File file) throws IOException, java.lang.Exception {
 
-        InputStream inputStream = conn.getInputStream();
-        String html = IOUtils.toString(inputStream);
-        IOUtils.closeQuietly(inputStream);
-        //inputStream.close();
+        HtmlFetcher fetcher = new HtmlFetcher();
+        // set cache. e.g. take the map implementation from google collections:
+        // fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
+        //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
+
+        JResult res = fetcher.fetchAndExtract(url, 10000, true);
+        String title = "<h1 style=\"font-size:300%;\"> " + res.getTitle() + "</h1>";
+
+        List<String> textList = res.getTextList();
+        String text = "";
+        for(String paragraph : textList) {
+            text = text.concat("<p style=\"font-size:200%;\">" + paragraph + "</p>");
+        }
+        //String imageUrl = res.getImageUrl();
+
+        String result = "<div style=\"padding-left: 10px; padding-right: 10px;\">" + title + "\n" + text + "</div>";
 
         FileOutputStream  outStream = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(outStream);
-        oos.writeObject(html);
+        oos.writeObject(result);
         oos.close();
         outStream.close();
     }
@@ -361,7 +378,7 @@ public class GeneralUtils {
     }
 
     public static void saveAccountChanges(final Context context) {
-        Log.d("geotest", "saving account changes..");
+        Log.d(TAG, "saving account changes..");
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -375,12 +392,12 @@ public class GeneralUtils {
                     }
                     saveAccounts(context, updatedAccounts);
                 } catch (Exception e) {
-                    Log.d("geotest", "Failed to save account data");
+                    Log.d(TAG, "Failed to save account data");
                     e.printStackTrace();
                 }
             }
         });
-        Log.d("geotest", "account changes saved");
+        Log.d(TAG, "account changes saved");
     }
 
     public static List<SavedAccount> readAccounts(Context context) {
@@ -422,7 +439,7 @@ public class GeneralUtils {
         if(domain.contains("gyazo.com")) return true;
         if(domain.contains("flickr.com")) return true;
         String urlLc = url.toLowerCase();
-        if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif")) return true;
+        if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif") || urlLc.endsWith(".jpeg")) return true;
         return false;
     }
 
