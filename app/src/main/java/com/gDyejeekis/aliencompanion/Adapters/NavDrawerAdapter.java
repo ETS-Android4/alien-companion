@@ -507,8 +507,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
                 else headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_online);
 
-                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_collapse_white);
-                else headerViewHolder.toggle.setImageResource(R.mipmap.ic_action_expand_white);
+                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_up_white_24dp);
+                else headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_down_white_24dp);
                 break;
             case VIEW_TYPE_MENU_ITEM:
                 MenuRowViewHolder menuRowViewHolder= (MenuRowViewHolder) viewHolder;
@@ -542,8 +542,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse_grey);
-                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand_grey);
+                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_less_grey_24dp);
+                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_more_grey_24dp);
                 SubredditsListener listener = new SubredditsListener(activity);
                 subredditsViewHolder.layoutToggle.setOnClickListener(listener);
                 subredditsViewHolder.layoutEdit.setOnClickListener(listener);
@@ -581,8 +581,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MULTIS:
                 subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                if(multiredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_collapse_grey);
-                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_action_expand_grey);
+                if(multiredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_less_grey_24dp);
+                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_more_grey_24dp);
                 MultisListener multisListener = new MultisListener(activity);
                 subredditsViewHolder.layoutToggle.setOnClickListener(multisListener);
                 subredditsViewHolder.layoutEdit.setOnClickListener(multisListener);

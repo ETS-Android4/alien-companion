@@ -27,8 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imgView_toggle"
-            android:src="@mipmap/ic_action_collapse_white"
-            android:paddingLeft="12dp" />
+            android:src="@mipmap/ic_expand_less_black_24dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="4dp" />
 
     </LinearLayout>
 
@@ -46,7 +47,7 @@
             android:textColor="#7a7a7a"
             android:text="edit"
             android:gravity="end"
-            android:paddingRight="8dp"
+            android:paddingRight="16dp"
             android:paddingTop="4dp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
