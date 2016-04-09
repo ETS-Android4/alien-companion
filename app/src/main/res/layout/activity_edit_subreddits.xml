@@ -21,7 +21,9 @@
             app:click_remove_id="@id/click_remove"
             app:remove_mode="clickRemove"
             app:remove_enabled="true"
-            android:divider="?attr/themeDivider">
+            android:divider="?attr/themeDivider"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
         </com.mobeta.android.dslv.DragSortListView>
 

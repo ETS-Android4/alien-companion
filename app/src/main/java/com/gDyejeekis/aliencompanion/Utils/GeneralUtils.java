@@ -15,7 +15,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -31,6 +33,7 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -200,7 +203,7 @@ public class GeneralUtils {
         return null;
     }//met
 
-    public static void downloadArticleToFile(String url, File file) throws IOException, java.lang.Exception {
+    public static void downloadArticleToFile(Context context, String url, File file) throws IOException, java.lang.Exception {
 
         HtmlFetcher fetcher = new HtmlFetcher();
         // set cache. e.g. take the map implementation from google collections:
@@ -208,12 +211,19 @@ public class GeneralUtils {
         //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
 
         JResult res = fetcher.fetchAndExtract(url, 10000, true);
-        String title = "<h1 style=\"font-size:300%;\"> " + res.getTitle() + "</h1>";
+        //float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        //float headerSize = scaledDensity * 24;
+        //float textSize = scaledDensity * 18;
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
+        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
+        String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
 
         List<String> textList = res.getTextList();
         String text = "";
         for(String paragraph : textList) {
-            text = text.concat("<p style=\"font-size:200%;\">" + paragraph + "</p>");
+            paragraph = StringEscapeUtils.escapeHtml(paragraph);
+            text = text.concat("<p style=\"font-size:" + textSize + "px;\">" + paragraph + "</p>");
         }
         //String imageUrl = res.getImageUrl();
 

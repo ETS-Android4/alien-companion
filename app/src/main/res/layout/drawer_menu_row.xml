@@ -4,15 +4,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:padding="20dp"
-    android:background="?attr/themeDrawerSelector">
+    android:background="?attr/themeDrawerSelector"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:id="@+id/imgView_option"
         android:layout_weight="1"
-        android:src="@android:drawable/ic_menu_info_details" />
+        android:src="@android:drawable/ic_menu_info_details"
+        android:paddingLeft="14dp" />
 
     <TextView
         android:layout_width="0dp"
@@ -20,10 +22,12 @@
         android:text="Sample Option"
         android:id="@+id/txtView_option"
         android:gravity="center|left"
-        android:textSize="20sp"
         android:textColor="?attr/themeTextColor"
         android:layout_weight="6"
         android:layout_gravity="center"
-        android:paddingLeft="15dp" />
+        android:paddingLeft="12dp"
+        android:paddingTop="4dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingBottom="4dp" />
 
 </LinearLayout>

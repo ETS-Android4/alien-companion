@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="178dp"
+    android:layout_height="145dp"
     android:orientation="vertical"
     android:weightSum="1"
     android:background="?android:attr/selectableItemBackground"
@@ -14,22 +14,27 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:padding="15dp"
-        android:id="@+id/layout_account">
+        android:id="@+id/layout_account"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(account name)"
             android:id="@+id/txtView_currentAccount"
-            android:textSize="20sp"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:paddingLeft="16dp"
+            android:paddingTop="4dp"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imgView_toggle"
-            android:layout_marginLeft="15dp" />
+            android:paddingLeft="12dp"
+            android:src="@mipmap/ic_action_expand_white" />
 
     </LinearLayout>
 
@@ -43,17 +48,17 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="38dp"
             android:src="@mipmap/ic_action_night_switch_grey"
-            android:id="@+id/themeSwitch" />
+            android:id="@+id/themeSwitch"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="30dp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="38dp"
             android:src="@mipmap/ic_action_online_mode_grey"
-            android:id="@+id/offlineSwitch" />
+            android:id="@+id/offlineSwitch"
+            android:layout_marginTop="30dp" />
     </LinearLayout>
 </RelativeLayout>

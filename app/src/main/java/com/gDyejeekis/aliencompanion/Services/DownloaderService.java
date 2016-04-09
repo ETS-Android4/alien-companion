@@ -239,7 +239,7 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostArticle(Submission post, String filename) {
         try {
-            GeneralUtils.downloadArticleToFile(post.getURL(), new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
+            GeneralUtils.downloadArticleToFile(this, post.getURL(), new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
         } catch (Exception e) {
             e.printStackTrace();
         }

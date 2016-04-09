@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -10,21 +12,23 @@
         android:layout_height="match_parent"
         android:id="@+id/layoutToggle"
         android:layout_weight="5"
-        android:padding="20dp">
+        android:paddingLeft="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/txtView_toggle"
             android:textColor="#7a7a7a"
-            android:textSize="20sp"
-            android:text="Multireddits" />
+            android:text="Multireddits"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingTop="4dp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imgView_toggle"
-            android:layout_marginLeft="15dp" />
+            android:src="@mipmap/ic_action_collapse_white"
+            android:paddingLeft="12dp" />
 
     </LinearLayout>
 
@@ -33,19 +37,18 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/layoutEdit"
-        android:layout_weight="2"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="10dp">
+        android:layout_weight="2">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/txtView_edit"
             android:textColor="#7a7a7a"
-            android:textSize="20sp"
-            android:text="refresh" />
+            android:text="refresh"
+            android:gravity="end"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp" />
     </LinearLayout>
 
 </LinearLayout>

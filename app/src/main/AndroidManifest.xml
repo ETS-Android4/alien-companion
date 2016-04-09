@@ -101,6 +101,11 @@
             android:label="Sync profiles" >
         </activity>
         <activity
+            android:name=".Activities.PendingUserActionsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Pending actions" >
+        </activity>
+        <activity
             android:name=".Activities.ImageActivity"
             android:theme="@style/Theme.Transparent"
             android:configChanges="orientation|screenSize">
