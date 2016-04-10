@@ -32,26 +32,22 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_height="52dp"
+        android:gravity="right">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CANCEL"
             android:id="@+id/button_cancel"
-            android:textColor="#03A9F4"
-            android:background="?attr/themeButtonSelector" />
+            style="@style/DialogButtonStyle" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="VIEW"
             android:id="@+id/button_view"
-            android:textColor="#03A9F4"
-            android:background="?attr/themeButtonSelector" />
+            style="@style/DialogButtonStyle" />
     </LinearLayout>
 
 </LinearLayout>

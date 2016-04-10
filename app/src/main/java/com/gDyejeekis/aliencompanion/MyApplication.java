@@ -102,6 +102,12 @@ public class MyApplication extends Application {
     public static boolean syncOverWifiOnly;
     public static boolean syncWebpages;
 
+    public static boolean messageServiceActive;
+    public static int messageCheckInterval;
+
+    public static boolean offlineActionsServiceActive;
+    public static int offlineActionsInterval;
+
     //not used
     public static boolean syncGif = false;
     public static int syncImagesInCommentsCount = 0;
@@ -270,6 +276,12 @@ public class MyApplication extends Application {
         handleTwitter = prefs.getBoolean("handleTwitter", true);
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
+
+        messageServiceActive = prefs.getBoolean("messageCheckActive", false);
+        messageCheckInterval = Integer.valueOf(prefs.getString("messageCheckInterval", "15"));
+
+        offlineActionsServiceActive = prefs.getBoolean("offlineActionsActive", false);
+        offlineActionsInterval = Integer.valueOf(prefs.getString("offlineActionsInterval", "15"));
     }
 
     public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {

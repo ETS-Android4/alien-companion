@@ -42,10 +42,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp">
+        android:layout_height="52dp">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -57,16 +54,14 @@
                 android:layout_height="wrap_content"
                 android:text="CANCEL"
                 android:id="@+id/button_cancel"
-                android:textColor="#03A9F4"
-                android:background="?attr/themeButtonSelector" />
+                style="@style/DialogButtonStyle" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ADD"
                 android:id="@+id/button_addSubreddit"
-                android:textColor="#03A9F4"
-                android:background="?attr/themeButtonSelector" />
+                style="@style/DialogButtonStyle" />
 
         </LinearLayout>
 
@@ -81,8 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="CREATE"
                 android:id="@+id/button_createMulti"
-                android:textColor="#03A9F4"
-                android:background="?attr/themeButtonSelector" />
+                style="@style/DialogButtonStyle" />
         </LinearLayout>
 
     </LinearLayout>

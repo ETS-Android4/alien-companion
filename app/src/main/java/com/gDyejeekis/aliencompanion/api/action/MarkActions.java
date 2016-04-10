@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.action;
 
+import android.content.pm.ApplicationInfo;
+
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.ActorDriven;
@@ -221,4 +223,17 @@ public class MarkActions implements ActorDriven {
 
     }
 
+    /**
+     * Marks all new messages as read.
+     *
+     */
+    public boolean readAllNewMessages() throws ActionFailedException {
+        try {
+            httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, ApiEndpointUtils.READ_ALL_MESSAGES, user.getCookie());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

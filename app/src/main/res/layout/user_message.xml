@@ -6,18 +6,36 @@
     <LinearLayout
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
         android:id="@+id/layout_message"
-        android:background="?attr/themeSelector">
+        android:background="?attr/themeSelector"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(Message Subject Here)"
-            android:id="@+id/txtView_msgSubject"
-            android:textSize="?attr/font_medium"
-            android:textStyle="bold"
-            android:textColor="?attr/themeTextColor" />
+        <org.apmem.tools.layouts.FlowLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(Message Subject Here)"
+                android:id="@+id/txtView_msgSubject"
+                android:textSize="?attr/font_medium"
+                android:textStyle="bold"
+                android:textColor="?attr/themeTextColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEW"
+                android:id="@+id/textView_new_message"
+                android:textSize="?attr/font_medium"
+                android:textColor="#ff4500"
+                android:paddingLeft="8dp" />
+        </org.apmem.tools.layouts.FlowLayout>
 
         <LinearLayout
             android:orientation="horizontal"

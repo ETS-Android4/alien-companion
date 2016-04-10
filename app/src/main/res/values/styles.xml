@@ -215,4 +215,14 @@
         <item name="android:textSize">?attr/font_small</item>
     </style>
 
+    <style name="DialogButtonStyle" parent="Widget.AppCompat.Button.Small">
+        <item name="android:textColor">#03A9F4</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:height">36dp</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:background">?attr/themeButtonSelector</item>
+    </style>
+
 </resources>

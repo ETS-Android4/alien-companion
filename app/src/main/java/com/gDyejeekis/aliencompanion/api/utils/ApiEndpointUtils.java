@@ -43,6 +43,8 @@ public class ApiEndpointUtils {
     public static final String MESSAGE_SENT = MESSAGE_API_ENDPOINT + "/sent.json?%s";
     
     public static final String MESSAGE_COMPOSE = REDDIT_BASE_API_ENDPOINT + "/compose";
+
+    public static final String READ_ALL_MESSAGES = REDDIT_BASE_API_ENDPOINT + "read_all_messages";
     //
     //public static final String MESSAGE_READ = REDDIT_BASE_API_ENDPOINT + "/read_message";
 //

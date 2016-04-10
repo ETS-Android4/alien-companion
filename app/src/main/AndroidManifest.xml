@@ -74,6 +74,8 @@
             android:name="com.gDyejeekis.aliencompanion.Services.DownloaderService"
             android:enabled="true" >
         </service>
+        <service android:name=".Services.MessageCheckService" android:enabled="true" />
+        <service android:name=".Services.PendingActionsService" android:enabled="true" />
 
         <activity
             android:name="com.gDyejeekis.aliencompanion.Activities.MessageActivity"

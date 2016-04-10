@@ -289,6 +289,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
 
         public TextView subject;
+        public TextView newMsg;
         public TextView body;
         public TextView age;
         public TextView author;
@@ -301,6 +302,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             layoutMessage = (LinearLayout) itemView.findViewById(R.id.layout_message);
             //layoutMessageOptions = (LinearLayout) itemView.findViewById(R.id.layout_messageOptions);
             subject = (TextView) itemView.findViewById(R.id.txtView_msgSubject);
+            newMsg = (TextView) itemView.findViewById(R.id.textView_new_message);
             body = (TextView) itemView.findViewById(R.id.txtView_messageBody);
             age = (TextView) itemView.findViewById(R.id.txtView_messageAge);
             author = (TextView) itemView.findViewById(R.id.textView_messageAuthor);
@@ -330,6 +332,13 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             else {
                 dest.setText("from ");
                 author.setText(message.author);
+            }
+
+            if(message.isNew) {
+                newMsg.setVisibility(View.VISIBLE);
+            }
+            else {
+                newMsg.setVisibility(View.GONE);
             }
 
             MessageItemListener listener = new MessageItemListener(context, message);

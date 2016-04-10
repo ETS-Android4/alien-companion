@@ -12,6 +12,7 @@ import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.api.action.MarkActions;
 import com.gDyejeekis.aliencompanion.api.entity.Message;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
@@ -119,6 +120,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 mf.hasMore = messages.size() == RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     case init:
+                        markNewMessagesRead((Message) messages.get(0));
                         mf.contentView.setAdapter(mf.adapter);
                         //if(messages.size()==0) ToastUtils.displayShortToast(context, "No messages found");
                         break;
@@ -140,5 +142,17 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
             }
         } catch (NullPointerException e) {}
+    }
+
+    private void markNewMessagesRead(Message message) {
+        if(message.isNew) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    MarkActions markActions = new MarkActions(httpClient);
+                    markActions.readAllNewMessages();
+                }
+            });
+        }
     }
 }
