@@ -71,6 +71,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public static final int VIEW_TYPE_EMPTY_SPACE = 7;
 
+    public static final int VIEW_TYPE_SEPARATOR = 8;
+
     private final MainActivity activity;
 
     private List<NavDrawerItem> items;
@@ -462,6 +464,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_EMPTY_SPACE:
                 viewHolder = new EmptySpaceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_empty_space, parent, false));
                 break;
+            case VIEW_TYPE_SEPARATOR:
+                viewHolder = new SeparatorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_separator, parent, false));
+                break;
             default:
                 throw new IllegalStateException("unknown viewType");
         }
@@ -624,6 +629,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 }
                 break;
             case VIEW_TYPE_EMPTY_SPACE:
+            case VIEW_TYPE_SEPARATOR:
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -708,6 +714,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public static class EmptySpaceViewHolder extends RecyclerView.ViewHolder {
         public EmptySpaceViewHolder(View convertView) {
+            super(convertView);
+        }
+    }
+
+    public static class SeparatorViewHolder extends RecyclerView.ViewHolder {
+        public SeparatorViewHolder(View convertView) {
             super(convertView);
         }
     }

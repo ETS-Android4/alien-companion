@@ -21,7 +21,8 @@
             android:textColor="#7a7a7a"
             android:text="Multireddits"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingTop="4dp" />
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -49,7 +50,8 @@
             android:gravity="end"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingTop="4dp"
-            android:paddingRight="16dp" />
+            android:paddingRight="16dp"
+            android:paddingBottom="4dp" />
     </LinearLayout>
 
 </LinearLayout>

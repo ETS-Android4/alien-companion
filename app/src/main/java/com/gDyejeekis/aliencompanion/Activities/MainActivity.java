@@ -34,6 +34,7 @@ import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSeparator;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -452,8 +453,14 @@ public class MainActivity extends AppCompatActivity {
         adapter.add(new NavDrawerHeader());
         adapter.add(new NavDrawerEmptySpace());
         adapter.addAll(getMenuItems());
+        adapter.add(new NavDrawerEmptySpace());
+        adapter.add(new NavDrawerSeparator());
+        adapter.add(new NavDrawerEmptySpace());
         adapter.add(new NavDrawerSubreddits());
         adapter.addAll(getDefaultSubredditItems());
+        adapter.add(new NavDrawerEmptySpace());
+        adapter.add(new NavDrawerSeparator());
+        adapter.add(new NavDrawerEmptySpace());
         adapter.add(new NavDrawerMultis());
 
         drawerContent.setAdapter(adapter);

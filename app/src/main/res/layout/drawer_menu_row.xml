@@ -25,7 +25,7 @@
         android:textColor="?attr/themeTextColor"
         android:layout_weight="6"
         android:layout_gravity="center"
-        android:paddingLeft="12dp"
+        android:paddingLeft="26dp"
         android:paddingTop="4dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:paddingBottom="4dp" />

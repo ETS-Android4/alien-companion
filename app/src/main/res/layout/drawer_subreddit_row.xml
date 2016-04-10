@@ -15,7 +15,7 @@
         android:layout_gravity="center_vertical"
         android:textColor="?attr/themeTextColor"
         android:paddingLeft="16dp"
-        android:paddingTop="4dp"
+        android:paddingTop="6dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingBottom="4dp" />
+        android:paddingBottom="6dp" />
 </LinearLayout>

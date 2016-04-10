@@ -5,5 +5,5 @@ package com.gDyejeekis.aliencompanion.Models.NavDrawer;
  */
 public interface NavDrawerItem {
 
-    public int getType();
+    int getType();
 }
