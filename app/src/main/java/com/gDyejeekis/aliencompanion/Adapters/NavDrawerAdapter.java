@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -482,48 +483,24 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 headerViewHolder.headerLayout.setBackgroundColor(MyApplication.currentColor);
                 headerViewHolder.currentAccount.setText(currentAccountName);
-                headerViewHolder.themeSwitch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
-                        //text += " (App will restart)";
-                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                MyApplication.nightThemeEnabled = !MyApplication.nightThemeEnabled;
-                                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                                editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
-                                editor.apply();
-                                restartApp();
-                            }
-                        };
-                        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
-                                .setNegativeButton("No", null).show();
-                    }
-                });
-                headerViewHolder.offlineSwitch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
-                        //text += " (App will restart)";
-                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
-                                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                                editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
-                                editor.apply();
-                                restartApp();
-                            }
-                        };
-                        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
-                                .setNegativeButton("No", null).show();
-                    }
-                });
-                headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_wb_incandescent_white_48dp);
 
-                if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_save_white_48dp);
-                else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_wifi_white_48dp);
+                String themeButtonText = (MyApplication.nightThemeEnabled) ? "Light theme" : "Dark theme";
+                headerViewHolder.themeButton.setText(themeButtonText);
+                headerViewHolder.themeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showThemeSwitchDialog();
+                    }
+                });
+
+                String offlineButtonText = (MyApplication.offlineModeEnabled) ? "Go online" : "Go offline";
+                headerViewHolder.offlineButton.setText(offlineButtonText);
+                headerViewHolder.offlineButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showOfflineSwitchDialog();
+                    }
+                });
 
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_up_white_24dp);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_down_white_24dp);
@@ -648,6 +625,40 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         activity.startActivity(i);
     }
 
+    private void showThemeSwitchDialog() {
+        String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
+        //text += " (App will restart)";
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyApplication.nightThemeEnabled = !MyApplication.nightThemeEnabled;
+                SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
+                editor.apply();
+                restartApp();
+            }
+        };
+        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+                .setNegativeButton("No", null).show();
+    }
+
+    private void showOfflineSwitchDialog() {
+        String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
+        //text += " (App will restart)";
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
+                SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
+                editor.apply();
+                restartApp();
+            }
+        };
+        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+                .setNegativeButton("No", null).show();
+    }
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -694,21 +705,21 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout headerLayout;
+        public LinearLayout headerLayout;
         public TextView currentAccount;
         public LinearLayout accountLayout;
         public ImageView toggle;
-        public CircleImageView themeSwitch;
-        public CircleImageView offlineSwitch;
+        public Button themeButton;
+        public Button offlineButton;
 
         public HeaderViewHolder(View row) {
             super(row);
-            headerLayout = (RelativeLayout) row.findViewById(R.id.layout_header);
+            headerLayout = (LinearLayout) row.findViewById(R.id.layout_header);
             currentAccount = (TextView) row.findViewById(R.id.txtView_currentAccount);
             accountLayout = (LinearLayout) row.findViewById(R.id.layout_account);
             toggle = (ImageView) row.findViewById(R.id.imgView_toggle);
-            themeSwitch = (CircleImageView) row.findViewById(R.id.themeSwitch);
-            offlineSwitch = (CircleImageView) row.findViewById(R.id.offlineSwitch);
+            themeButton = (Button) row.findViewById(R.id.button_theme_switch);
+            offlineButton = (Button) row.findViewById(R.id.button_offline_switch);
         }
     }
 

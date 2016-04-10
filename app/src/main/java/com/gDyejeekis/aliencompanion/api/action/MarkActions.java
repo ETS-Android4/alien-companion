@@ -229,7 +229,7 @@ public class MarkActions implements ActorDriven {
      */
     public boolean readAllNewMessages() throws ActionFailedException {
         try {
-            httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, null, ApiEndpointUtils.READ_ALL_MESSAGES, user.getCookie());
+            httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, new FormBody.Builder().build(), ApiEndpointUtils.READ_ALL_MESSAGES, null);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -208,13 +208,13 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     markActions.unmarkNSFW(postName);
                     break;
                 case submitLink:
-                    captcha_iden = null;
-                    captcha_sol = null;
+                    captcha_iden = "";
+                    captcha_sol = "";
                     submitActions.submitLink(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitText:
-                    captcha_iden = null;
-                    captcha_sol = null;
+                    captcha_iden = "";
+                    captcha_sol = "";
                     submitActions.submitSelfPost(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitComment:
@@ -232,8 +232,8 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     profileActions.unsubscribe(fullname);
                     break;
                 case sendMessage:
-                    captcha_iden = null;
-                    captcha_sol = null;
+                    captcha_iden = "";
+                    captcha_sol = "";
                     submitActions.compose(recipient, subject, message, captcha_iden, captcha_sol);
                     break;
             }
