@@ -203,31 +203,8 @@ public class GeneralUtils {
         return null;
     }//met
 
-    public static void downloadArticleToFile(Context context, String url, File file) throws IOException, java.lang.Exception {
-
-        HtmlFetcher fetcher = new HtmlFetcher();
-        // set cache. e.g. take the map implementation from google collections:
-        // fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
-        //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
-
-        JResult res = fetcher.fetchAndExtract(url, 10000, true);
-        //float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-        //float headerSize = scaledDensity * 24;
-        //float textSize = scaledDensity * 18;
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
-        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
-        String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
-
-        List<String> textList = res.getTextList();
-        String text = "";
-        for(String paragraph : textList) {
-            paragraph = StringEscapeUtils.escapeHtml(paragraph);
-            text = text.concat("<p style=\"font-size:" + textSize + "px;\">" + paragraph + "</p>");
-        }
-        //String imageUrl = res.getImageUrl();
-
-        String result = "<div style=\"padding-left: 10px; padding-right: 10px;\">" + title + "\n" + text + "</div>";
+    public static void downloadArticleToFile(Context context, String url, File file) throws java.lang.Exception {
+        String result = ConvertUtils.cleanHtmlFromUrlWithSnacktory(context, url);
 
         FileOutputStream  outStream = new FileOutputStream(file);
         ObjectOutputStream oos = new ObjectOutputStream(outStream);

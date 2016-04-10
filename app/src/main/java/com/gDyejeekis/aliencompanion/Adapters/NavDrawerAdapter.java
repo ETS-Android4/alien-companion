@@ -26,6 +26,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.NavDrawer
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditsListener;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
@@ -68,6 +69,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public static final int VIEW_TYPE_MULTIREDDIT_ITEM = 6;
 
+    public static final int VIEW_TYPE_EMPTY_SPACE = 7;
+
     private final MainActivity activity;
 
     private List<NavDrawerItem> items;
@@ -109,8 +112,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public void showUserMenuItems() {
         if(!userMenuItemsVisible) {
-            add(1, profile);
-            add(2, messages);
+            int pos = 0;
+            for(NavDrawerItem item : items) {
+                if(item instanceof NavDrawerEmptySpace) {
+                    pos = items.indexOf(item);
+                    break;
+                }
+            }
+            add(pos+1, profile);
+            add(pos+2, messages);
             userMenuItemsVisible = true;
         }
     }
@@ -449,6 +459,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v.setOnClickListener(listener);
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
+            case VIEW_TYPE_EMPTY_SPACE:
+                viewHolder = new EmptySpaceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_empty_space, parent, false));
+                break;
             default:
                 throw new IllegalStateException("unknown viewType");
         }
@@ -468,7 +481,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
-                        text += " (App will restart)";
+                        //text += " (App will restart)";
                         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -487,7 +500,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
-                        text += " (App will restart)";
+                        //text += " (App will restart)";
                         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -502,10 +515,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                                 .setNegativeButton("No", null).show();
                     }
                 });
-                headerViewHolder.themeSwitch.setImageResource(R.drawable.ic_action_theme_switch);
+                headerViewHolder.themeSwitch.setImageResource(R.mipmap.ic_wb_incandescent_white_48dp);
 
-                if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_offline);
-                else headerViewHolder.offlineSwitch.setImageResource(R.drawable.ic_action_online);
+                if(MyApplication.offlineModeEnabled) headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_save_white_48dp);
+                else headerViewHolder.offlineSwitch.setImageResource(R.mipmap.ic_wifi_white_48dp);
 
                 if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_up_white_24dp);
                 else headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_down_white_24dp);
@@ -516,23 +529,24 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 menuRowViewHolder.name.setText(menuItem.getMenuType().value());
                 switch (menuItem.getMenuType()) {
                     case profile:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_white);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_white_48dp);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_grey_48dp);
                         break;
                     case messages:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_white);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_messages_grey);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_white_48dp);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_grey_48dp);
                         break;
                     case user:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_white);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_user_grey);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_white_48dp);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_grey_48dp);
                         break;
                     case subreddit:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_subreddit);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_white_48dp);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_grey_48dp);
                         break;
                     case settings:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_white);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_settings_grey);
+                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_white_48dp);
+                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_grey_48dp);
                         break;
                     case cached:
                         if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
@@ -608,6 +622,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
                     else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                 }
+                break;
+            case VIEW_TYPE_EMPTY_SPACE:
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -687,6 +703,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             toggle = (ImageView) row.findViewById(R.id.imgView_toggle);
             themeSwitch = (CircleImageView) row.findViewById(R.id.themeSwitch);
             offlineSwitch = (CircleImageView) row.findViewById(R.id.offlineSwitch);
+        }
+    }
+
+    public static class EmptySpaceViewHolder extends RecyclerView.ViewHolder {
+        public EmptySpaceViewHolder(View convertView) {
+            super(convertView);
         }
     }
 }

@@ -85,19 +85,19 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(viewType == PostViewType.listItem || viewType == PostViewType.details || MyApplication.nightThemeEnabled) {
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
-            upvoteResource = R.mipmap.ic_action_upvote_white;
-            downvoteResource = R.mipmap.ic_action_downvote_white;
-            saveResource = R.mipmap.ic_action_save_white;
-            hideResource = R.mipmap.ic_action_hide_white;
-            moreResource = R.mipmap.ic_action_more_vertical_white;
+            upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
+            downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
+            saveResource = R.mipmap.ic_star_border_white_48dp;
+            hideResource = R.mipmap.ic_close_white_48dp;
+            moreResource = R.mipmap.ic_more_vert_white_48dp;
             commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
         }
         else {
-            upvoteResource = R.mipmap.ic_action_upvote_grey;
-            downvoteResource = R.mipmap.ic_action_downvote_grey;
-            saveResource = R.mipmap.ic_action_save_grey;
-            hideResource = R.mipmap.ic_action_hide_grey;
-            moreResource = R.mipmap.ic_action_more_vertical_grey;
+            upvoteResource = R.mipmap.ic_arrow_upward_grey_48dp;
+            downvoteResource = R.mipmap.ic_arrow_downward_grey_48dp;
+            saveResource = R.mipmap.ic_star_border_grey_48dp;
+            hideResource = R.mipmap.ic_close_grey_48dp;
+            moreResource = R.mipmap.ic_more_vert_grey_48dp;
             commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
         }
         switch (viewType) {
@@ -328,7 +328,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 SpannableString spannable = new SpannableString(text);
                 spannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 textView.setText(spannable);
-                upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
+                upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
                 downvote.setImageResource(downvoteResource);
             } else if (post.getLikes().equals("false")) {
                 int index = text.indexOf(" ");
@@ -336,7 +336,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 spannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 textView.setText(spannable);
                 upvote.setImageResource(upvoteResource);
-                downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+                downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
             } else {
                 textView.setText(text);
                 textView.setTextColor(MyApplication.textHintColor);
@@ -344,10 +344,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 downvote.setImageResource(downvoteResource);
             }
             //check saved post
-            if(post.isSaved()) save.setImageResource(R.mipmap.ic_action_save_yellow);
+            if(post.isSaved()) save.setImageResource(R.mipmap.ic_star_border_yellow_500_48dp);
             else save.setImageResource(saveResource);
             //check hidden post
-            if(post.isHidden()) hide.setImageResource(R.mipmap.ic_action_hide_red);
+            if(post.isHidden()) hide.setImageResource(R.mipmap.ic_close_red_800_48dp);
             else hide.setImageResource(hideResource);
         }
         else {

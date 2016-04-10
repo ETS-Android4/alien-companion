@@ -7,41 +7,41 @@
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/btn_upvote"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_upvote_white"
+        android:src="@mipmap/ic_arrow_upward_white_48dp"
         android:padding="5dp" />
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/btn_downvote"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_downvote_white"
+        android:src="@mipmap/ic_arrow_downward_white_48dp"
         android:padding="5dp" />
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/btn_reply"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_reply"
+        android:src="@mipmap/ic_reply_white_48dp"
         android:padding="5dp" />
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/btn_view_user"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_user_white"
+        android:src="@mipmap/ic_person_white_48dp"
         android:padding="5dp" />
 
     <ImageView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/btn_more"
         android:layout_weight="1"
-        android:src="@mipmap/ic_action_more_vertical_white"
+        android:src="@mipmap/ic_more_vert_white_48dp"
         android:padding="5dp" />
 </LinearLayout>

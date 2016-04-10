@@ -398,16 +398,16 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 //check user vote
                 if (comment.getLikes().equals("true")) {
                     commentScore.setTextColor(upvoteColor);
-                    upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                    downvote.setImageResource(R.mipmap.ic_action_downvote_white);
+                    upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
+                    downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
                 } else if (comment.getLikes().equals("false")) {
                     commentScore.setTextColor(downvoteColor);
-                    upvote.setImageResource(R.mipmap.ic_action_upvote_white);
-                    downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+                    upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                    downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
                 } else {
                     commentScore.setTextColor(MyApplication.textHintColor);
-                    upvote.setImageResource(R.mipmap.ic_action_upvote_white);
-                    downvote.setImageResource(R.mipmap.ic_action_downvote_white);
+                    upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                    downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
                 }
             }
         }

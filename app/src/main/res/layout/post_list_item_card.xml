@@ -173,38 +173,43 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:id="@+id/btn_upvote"
-                android:src="@mipmap/ic_action_upvote_grey"
-                android:padding="10dp" />
+                android:src="@mipmap/ic_arrow_upward_white_48dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:id="@+id/btn_downvote"
-                android:src="@mipmap/ic_action_downvote_grey"
-                android:padding="10dp" />
+                android:src="@mipmap/ic_arrow_downward_white_48dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:id="@+id/btn_save"
-                android:src="@mipmap/ic_action_save_grey"
-                android:padding="10dp" />
+                android:src="@mipmap/ic_star_border_white_48dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:id="@+id/btn_hide"
-                android:src="@mipmap/ic_action_hide_grey"
-                android:padding="10dp" />
+                android:src="@mipmap/ic_close_white_48dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:id="@+id/btn_more"
-                android:src="@mipmap/ic_action_more_vertical_grey"
-                android:padding="10dp" />
+                android:src="@mipmap/ic_more_vert_white_48dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="5dp" />
 
         </LinearLayout>
 

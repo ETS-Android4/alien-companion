@@ -185,16 +185,16 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     //check user vote
                     if (comment.getLikes().equals("true")) {
                         cvh.score.setTextColor(CommentViewHolder.upvoteColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_orange);
-                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
+                        cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
+                        cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
                     } else if (comment.getLikes().equals("false")) {
                         cvh.score.setTextColor(CommentViewHolder.downvoteColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
-                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_blue);
+                        cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                        cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
                     } else {
                         cvh.score.setTextColor(MyApplication.textHintColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_action_upvote_white);
-                        cvh.downvote.setImageResource(R.mipmap.ic_action_downvote_white);
+                        cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                        cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
                     }
                 }
 

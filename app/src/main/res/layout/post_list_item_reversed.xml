@@ -53,13 +53,6 @@
             android:paddingBottom="5dp"
             android:background="?attr/themeSelector">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/imgView_postImage"
-                android:src="@mipmap/ic_launcher"
-                android:layout_weight="1" />
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="0dp"
@@ -94,6 +87,13 @@
                     android:textColor="?attr/themeTextHintColor" />
 
             </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgView_postImage"
+                android:src="@mipmap/ic_launcher"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>

@@ -9,7 +9,9 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
@@ -17,6 +19,8 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogF
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -27,6 +31,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.jetwick.snacktory.HtmlFetcher;
+import de.jetwick.snacktory.JResult;
+
 /**
  * Created by George on 6/19/2015.
  */
@@ -35,6 +42,30 @@ public class ConvertUtils {
     public static final String TAG = "ConvertUtils";
 
     private static int fromHtmlCount = 0;
+
+    public static String cleanHtmlFromUrlWithSnacktory(Context context, String url) throws Exception { //run on background
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
+        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
+
+        HtmlFetcher fetcher = new HtmlFetcher();
+        // set cache. e.g. take the map implementation from google collections:
+        // fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
+        //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
+        JResult res = fetcher.fetchAndExtract(url, 10000, true);
+
+        String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
+
+        List<String> textList = res.getTextList();
+        String text = "";
+        for(String paragraph : textList) {
+            paragraph = StringEscapeUtils.escapeHtml(paragraph);
+            text = text.concat("<p style=\"font-size:" + textSize + "px;\">" + paragraph + "</p>");
+        }
+        //String imageUrl = res.getImageUrl();
+
+        return "<div style=\"padding-left: 10px; padding-right: 10px;\">" + title + "\n" + text + "</div>";
+    }
 
     public static String modifySpoilerHtml(String html) {
         String pattern = "<a href=\\\\?\"(?:#|\\/)(?:s|b|g|p|c|f|fear)\\\\?\" title=\\\\?\"([\\w\\s.,/#!?$%\\^&\\*;:'’\\[\\]\\{}+=\\-_`~()\"“”]*)\\\\?\">([\\w\\s.,/#!?$%\\^&\\*;:'’\\[\\]\\{}+=\\-_`~()\"“”]*)<\\/a>";

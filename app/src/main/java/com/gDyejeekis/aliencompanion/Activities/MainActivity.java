@@ -31,6 +31,7 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDial
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
@@ -449,6 +450,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new NavDrawerAdapter(this);
         adapter.add(new NavDrawerHeader());
+        adapter.add(new NavDrawerEmptySpace());
         adapter.addAll(getMenuItems());
         adapter.add(new NavDrawerSubreddits());
         adapter.addAll(getDefaultSubredditItems());
@@ -457,11 +459,6 @@ public class MainActivity extends AppCompatActivity {
         drawerContent.setAdapter(adapter);
 
         adapter.importAccounts();
-
-        //adapter.add(new NavDrawerMutliredditItem("multi 1"));
-        //adapter.add(new NavDrawerMutliredditItem("multi 2"));
-        //adapter.add(new NavDrawerMutliredditItem("multi 3"));
-        //adapter.add(new NavDrawerMutliredditItem("multi 4"));
     }
 
     private List<NavDrawerItem> getMenuItems() {
