@@ -614,9 +614,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     private void restartApp() {
-        Intent i = activity.getBaseContext().getPackageManager()
-                .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //Intent i = activity.getBaseContext().getPackageManager()
+        //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
+        //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent i = activity.getIntent();
         i.putExtra("subreddit", activity.getListFragment().subreddit);
         i.putExtra("isMulti", activity.getListFragment().isMulti);
         i.putExtra("sort", activity.getListFragment().submissionSort);
