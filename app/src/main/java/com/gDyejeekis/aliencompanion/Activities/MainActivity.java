@@ -58,6 +58,8 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MainActivity";
+
     private FragmentManager fm;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -90,13 +92,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-            // Activity was brought to front and not created,
-            // Thus finishing this will get us to the last viewed activity
-            Log.d("geotest", "killing main activity that was brought to front");
-            finish();
-            return;
-        }
+        //if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+        //    // Activity was brought to front and not created,
+        //    // Thus finishing this will get us to the last viewed activity
+        //    Log.d(TAG, "Killing additional MainActivity that was brought to front");
+        //    finish();
+        //    return;
+        //}
         setContentView(R.layout.activity_main_plus);
 
         container = (LinearLayout) findViewById(R.id.container);
