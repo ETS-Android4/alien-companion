@@ -10,6 +10,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
@@ -93,7 +94,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     if(plf.isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
                     filename = filename + plf.subreddit.toLowerCase();
                 }
-                submissions = readPostsFromFile(filename);
+                submissions = readPostsFromFile(filename + DownloaderService.LOCA_POST_LIST_SUFFIX);
                 if(submissions!=null) adapter = new RedditItemListAdapter(context, submissions);
             }
             else {

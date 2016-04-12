@@ -66,6 +66,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
 
     List<SyncProfile> profiles;
 
+    public static final String MODIFY_LIST_ERROR_MESSAGE = "Error modifying profiles list";
+
     public static final int VIEW_TYPE_PROFILE_ITEM = 0;
 
     public static final int VIEW_TYPE_TEMP_PROFILE = 1;
@@ -164,8 +166,13 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     }
 
     private void renameProfileAt(int position) {
-        profiles.set(position, new TempProfile(getItemAt(position)));
-        notifyItemChanged(position);
+        try {
+            profiles.set(position, new TempProfile(getItemAt(position)));
+            notifyItemChanged(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.displayShortToast(activity, MODIFY_LIST_ERROR_MESSAGE);
+        }
     }
 
     public void profileRenamedAt(int position, SyncProfile profile, boolean toggleKeyboard) {
@@ -201,6 +208,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             notifyItemRemoved(index);
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
+            ToastUtils.displayShortToast(activity, MODIFY_LIST_ERROR_MESSAGE);
         }
     }
 

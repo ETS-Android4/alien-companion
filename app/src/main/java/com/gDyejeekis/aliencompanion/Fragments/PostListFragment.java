@@ -30,6 +30,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ShowSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -258,6 +259,10 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     dialog.show(activity.getFragmentManager(), "dialog");
                 }
                 return true;
+            case R.id.action_view_synced:
+                ShowSyncedDialogFragment syncedDialog = new ShowSyncedDialogFragment();
+                syncedDialog.show(activity.getFragmentManager(), "dialog");
+                break;
             case R.id.action_clear_synced:
                 String messageEnd;
                 if(subreddit==null) {
@@ -582,6 +587,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             String filename = "";
             if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
             filename += (subreddit == null) ? "frontpage" : subreddit;
+            filename = filename.concat(DownloaderService.LOCA_POST_LIST_SUFFIX);
             File file = new File(activity.getFilesDir(), filename);
             //double lastModified = (double) file.lastModified();
             //return ConvertUtils.getSubmissionAge(lastModified);

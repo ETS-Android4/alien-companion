@@ -63,6 +63,8 @@ public class DownloaderService extends IntentService {
 
     private static final int FOREGROUND_ID = 574974;
 
+    public static final String LOCA_POST_LIST_SUFFIX = "-posts";
+
     public static final String LOCAL_THUMNAIL_SUFFIX = "thumb";
 
     public static final String LOCAL_ARTICLE_SUFFIX = "-article.html";
@@ -162,7 +164,7 @@ public class DownloaderService extends IntentService {
             if(posts!=null) {
                 deletePreviousComments(filename);
                 deletePreviousImages(filename);
-                writePostsToFile(posts, filename);
+                writePostsToFile(posts, filename + LOCA_POST_LIST_SUFFIX);
                 for (RedditItem post : posts) {
                     increaseProgress(builder);
                     Submission submission = (Submission) post;
@@ -179,7 +181,7 @@ public class DownloaderService extends IntentService {
                     else if(syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(submission.getURL(), submission.getDomain())) {
                         downloadPostArticle(submission, filename);
                     }
-                    writePostToFile(submission, filename + submission.getIdentifier());
+                    writePostToFile(submission, filename + "-" + submission.getIdentifier());
                 }
             }
 

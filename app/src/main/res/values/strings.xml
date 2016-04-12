@@ -144,5 +144,6 @@
     <string name="schedule">Schedule</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
+    <string name="view_synced">View synced</string>
 
 </resources>
