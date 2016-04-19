@@ -7,12 +7,18 @@ import java.io.Serializable;
  */
 public class UnhideAction extends OfflineUserAction implements Serializable {
 
+    public static final String ACTION_NAME = "Unhide";
+
+    public static final int ACTION_TYPE = 6;
+
     private String itemFullname;
 
     public UnhideAction(String accountName, String fullname) {
         super(accountName);
+        this.actionName = ACTION_NAME;
+        this.actionType = ACTION_TYPE;
         this.itemFullname = fullname;
-        this.actionName = "hide " + itemFullname;
+        this.actionId = ACTION_NAME + "-" + itemFullname;
     }
 
     public String getItemFullname() {

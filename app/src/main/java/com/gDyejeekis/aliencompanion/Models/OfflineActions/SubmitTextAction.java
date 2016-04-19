@@ -5,11 +5,16 @@ import android.content.Context;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by sound on 3/4/2016.
  */
 public class SubmitTextAction extends OfflineUserAction implements Serializable {
+
+    public static final String ACTION_NAME = "Submit text";
+
+    public static final int ACTION_TYPE = 3;
 
     private String title;
     private String selfText;
@@ -17,10 +22,12 @@ public class SubmitTextAction extends OfflineUserAction implements Serializable 
 
     public SubmitTextAction(String accountName, String title, String selfText, String subreddit) {
         super(accountName);
+        this.actionName = ACTION_NAME;
+        this.actionType = ACTION_TYPE;
         this.title = title;
         this.selfText = selfText;
         this.subreddit = subreddit;
-        this.actionName = "submit " + "\"" + title + "\"";
+        this.actionId = ACTION_NAME + "-" + UUID.randomUUID();
     }
 
     public void setTitle(String title) {

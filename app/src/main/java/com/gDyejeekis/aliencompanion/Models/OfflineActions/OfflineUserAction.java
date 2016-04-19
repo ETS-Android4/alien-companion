@@ -12,19 +12,31 @@ import java.io.Serializable;
  */
 public abstract class OfflineUserAction implements Serializable {
 
+    public String actionName;
+
+    public int actionType;
+
     protected String accountName;
 
-    protected boolean actionCompleted;
+    public boolean actionCompleted;
 
-    protected String actionName;
+    public String actionId;
 
     public OfflineUserAction(String accountName) {
         this.accountName = accountName;
         this.actionCompleted = false;
     }
 
+    public int getActionType() {
+        return actionType;
+    }
+
     public String getActionName() {
         return actionName;
+    }
+
+    public String getActionId() {
+        return actionId;
     }
 
     public boolean isActionCompleted() {
@@ -40,4 +52,12 @@ public abstract class OfflineUserAction implements Serializable {
         task.execute();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof OfflineUserAction) {
+            OfflineUserAction action = (OfflineUserAction) obj;
+            return this.actionId.equals(action.getActionId());
+        }
+        return false;
+    }
 }

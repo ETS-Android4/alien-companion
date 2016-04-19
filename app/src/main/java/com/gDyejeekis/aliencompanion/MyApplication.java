@@ -37,6 +37,8 @@ public class MyApplication extends Application {
 
     public static final String SYNC_PROFILES_FILENAME = "SyncProfiles";
 
+    public static final String OFFLINE_USER_ACTIONS_FILENAME = "OfflineActions";
+
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
 
     public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;

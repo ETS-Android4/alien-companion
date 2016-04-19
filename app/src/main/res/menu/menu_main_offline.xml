@@ -3,19 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"/>
+        android:orderInCategory="101" android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"/>
 
     <!--<item android:id="@+id/action_search" android:title="@string/action_search"
         android:orderInCategory="100" app:showAsAction="never" />-->
 
     <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
-        android:orderInCategory="101" app:showAsAction="never" />
+        android:orderInCategory="105" app:showAsAction="never" />
 
     <!--<item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
         android:orderInCategory="102" app:showAsAction="never" />-->
 
     <item android:id="@+id/action_view_synced" android:title="@string/view_synced"
-        android:orderInCategory="105" app:showAsAction="never" />
+        android:orderInCategory="100" android:icon="@mipmap/ic_list_white_24dp" app:showAsAction="always" />
 
     <item android:id="@+id/action_clear_synced" android:title="@string/clear_synced"
         android:orderInCategory="110" app:showAsAction="never"/>

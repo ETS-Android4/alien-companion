@@ -45,6 +45,7 @@ import org.jsoup.select.Elements;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -136,7 +137,8 @@ public class GeneralUtils {
         for (File file : files) {
             //Log.d(TAG, file.getName());
             String filename = file.getName();
-            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)) file.delete();
+            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)
+                    && !filename.equals(MyApplication.OFFLINE_USER_ACTIONS_FILENAME)) file.delete();
         }
 
         //Log.d(TAG, "Remaining local app files AFTER delete:");
@@ -178,6 +180,23 @@ public class GeneralUtils {
                 deleteFileFromMediaStore(context.getContentResolver(), file);
             }
         }
+    }
+
+    public static Object readObjectFromFile(File file) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object object = ois.readObject();
+        fis.close();
+        ois.close();
+        return object;
+    }
+
+    public static void writeObjectToFile(Object object, File file) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(object);
+        fos.close();
+        oos.close();
     }
 
     /**

@@ -11,14 +11,20 @@ import java.io.Serializable;
  */
 public class ReportAction extends OfflineUserAction implements Serializable {
 
+    public static final String ACTION_NAME = "Report";
+
+    public static final int ACTION_TYPE = 1;
+
     private String itemFullname;
     private String reportReason;
 
     public ReportAction(String accountName, String fullname, String reportReason) {
         super(accountName);
+        this.actionName = ACTION_NAME;
+        this.actionType = ACTION_TYPE;
         this.itemFullname = fullname;
         this.reportReason = reportReason;
-        this.actionName = "report " + itemFullname;
+        this.actionId = ACTION_NAME + "-" + itemFullname;
     }
 
     public String getItemFullname() {

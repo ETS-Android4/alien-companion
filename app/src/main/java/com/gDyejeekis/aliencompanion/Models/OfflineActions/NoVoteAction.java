@@ -7,12 +7,18 @@ import java.io.Serializable;
  */
 public class NoVoteAction extends OfflineUserAction implements Serializable {
 
+    public static final String ACTION_NAME = "No vote";
+
+    public static final int ACTION_TYPE = 1;
+
     private String itemFullname;
 
     public NoVoteAction(String accountName, String fullname) {
         super(accountName);
+        this.actionName = ACTION_NAME;
+        this.actionType = ACTION_TYPE;
         this.itemFullname = fullname;
-        this.actionName = "no vote " + itemFullname;
+        this.actionId = ACTION_NAME + "-" + itemFullname;
     }
 
     public String getItemFullname() {

@@ -4,8 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,10 +18,17 @@ import java.util.List;
  */
 public class PendingActionsAdapter extends RecyclerView.Adapter {
 
+    private PendingUserActionsActivity activity;
+
     private List<OfflineUserAction> pendingActions;
 
-    public PendingActionsAdapter() {
-
+    public PendingActionsAdapter(PendingUserActionsActivity activity) {
+        this.activity = activity;
+        try {
+            pendingActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(new File(activity.getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME));
+        } catch (Exception e) {
+            pendingActions = new ArrayList<>();
+        }
     }
 
     @Override

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.gDyejeekis.aliencompanion.Adapters.PendingActionsAdapter;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -40,9 +42,21 @@ public class PendingUserActionsActivity extends BackNavActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pendingActionsView = (RecyclerView) findViewById(R.id.recyclerView_pendingActions);
-        adapter = new PendingActionsAdapter();
+        adapter = new PendingActionsAdapter(this);
         pendingActionsView.setLayoutManager(new LinearLayoutManager(this));
         pendingActionsView.setAdapter(adapter);
         pendingActionsView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_pending_actions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO: 4/18/2016
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -11,12 +11,18 @@ import java.io.Serializable;
  */
 public class DownvoteAction extends OfflineUserAction implements Serializable {
 
+    public static final String ACTION_NAME = "Downvote";
+
+    public static final int ACTION_TYPE = 4;
+
     private String itemFullname;
 
     public DownvoteAction(String accountName, String fullname) {
         super(accountName);
+        this.actionName = ACTION_NAME;
+        this.actionType = ACTION_TYPE;
         this.itemFullname = fullname;
-        this.actionName = "downvote " + itemFullname;
+        this.actionId = ACTION_NAME + "-" + itemFullname;
     }
 
     public String getItemFullname() {
