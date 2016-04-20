@@ -127,6 +127,26 @@
         <item>Controversial</item>
     </string-array>
 
+    <string-array name="timeIntervalsValues">
+        <item>-1</item>
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>360</item>
+        <item>1440</item>
+    </string-array>
+
+    <string-array name="timeIntervals">
+        <item>Disabled</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>6 hours</item>
+        <item>24 hours</item>
+    </string-array>
+
     <array name="toolbarColors">
         <item>@string/Red</item>
         <item>@string/Pink</item>

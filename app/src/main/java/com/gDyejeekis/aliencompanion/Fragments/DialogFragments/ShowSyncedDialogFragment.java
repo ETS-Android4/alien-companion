@@ -74,6 +74,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         String subreddit = (filename.equals("frontpage")) ? null : filename;
         if(getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit);
+            ((MainActivity) getActivity()).getNavDrawerAdapter().notifyDataSetChanged();
         }
         else {
             ((SubredditActivity) getActivity()).getListFragment().changeSubreddit(subreddit);

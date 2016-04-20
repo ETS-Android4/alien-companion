@@ -20,9 +20,11 @@ public class PendingUserActionsActivity extends BackNavActivity {
 
     private RecyclerView pendingActionsView;
     private PendingActionsAdapter adapter;
+    public static boolean isActive;
 
     @Override
     public void onCreate(Bundle bundle) {
+        isActive = true;
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
@@ -58,5 +60,11 @@ public class PendingUserActionsActivity extends BackNavActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO: 4/18/2016
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        isActive = false;
+        super.onDestroy();
     }
 }

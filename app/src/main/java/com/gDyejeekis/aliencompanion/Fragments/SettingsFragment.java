@@ -40,6 +40,31 @@ public class SettingsFragment extends PreferenceFragment {
         Preference viewChangeLog = findPreference("changelog");
         Preference profiles = findPreference("profiles");
         Preference feedback = findPreference("feedback");
+
+        Preference messageCheckInterval = findPreference("messageCheckInterval");
+        messageCheckInterval.setSummary(getTimeIntervalString(MyApplication.messageCheckInterval));
+        messageCheckInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                MyApplication.messageCheckInterval = Integer.valueOf((String) o);
+                preference.setSummary(getTimeIntervalString(MyApplication.messageCheckInterval));
+                MyApplication.scheduleMessageCheckService(getActivity());
+                return true;
+            }
+        });
+
+        Preference pendingActionsInterval = findPreference("offlineActionsInterval");
+        pendingActionsInterval.setSummary(getTimeIntervalString(MyApplication.offlineActionsInterval));
+        pendingActionsInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                MyApplication.offlineActionsInterval = Integer.valueOf((String) o);
+                preference.setSummary(getTimeIntervalString(MyApplication.offlineActionsInterval));
+                MyApplication.scheduleOfflineActionsService(getActivity());
+                return true;
+            }
+        });
+
         syncImages = (CheckBoxPreference) findPreference("syncImg");
         syncImages.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -126,6 +151,19 @@ public class SettingsFragment extends PreferenceFragment {
             editor.apply();
             syncImages.setChecked(flag);
         }
+    }
+
+    private String getTimeIntervalString(int minutes) {
+        if(minutes == -1) {
+            return "Disabled";
+        }
+        else if(minutes == 60) {
+            return "Every 1 hour";
+        }
+        else if(minutes > 60) {
+            return "Every " + minutes/60 + " hours";
+        }
+        return "Every " + minutes + " minutes";
     }
 
 }

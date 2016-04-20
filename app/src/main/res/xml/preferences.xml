@@ -270,6 +270,20 @@
         android:key="other"
         android:title="@string/options_other">
 
+        <ListPreference
+            android:key="messageCheckInterval"
+            android:title="Check for new messages"
+            android:entries="@array/timeIntervals"
+            android:entryValues="@array/timeIntervalsValues"
+            android:defaultValue="15" />
+
+        <ListPreference
+            android:key="offlineActionsInterval"
+            android:title="Execute pending offline actions"
+            android:entries="@array/timeIntervals"
+            android:entryValues="@array/timeIntervalsValues"
+            android:defaultValue="15" />
+
         <Preference
             android:key="clearCache"
             android:title="Clear app cache"/>

@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +11,8 @@ import android.preference.PreferenceManager;
 import android.view.Gravity;
 
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.Services.MessageCheckService;
+import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 
@@ -104,10 +108,12 @@ public class MyApplication extends Application {
     public static boolean syncOverWifiOnly;
     public static boolean syncWebpages;
 
-    public static boolean messageServiceActive;
+    public static boolean newMessages;
+    //public static boolean messageServiceActive;
     public static int messageCheckInterval;
 
-    public static boolean offlineActionsServiceActive;
+    public static boolean pendingOfflineActions;
+    //public static boolean offlineActionsServiceActive;
     public static int offlineActionsInterval;
 
     //not used
@@ -125,6 +131,9 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initStaticFields();
+
+        scheduleMessageCheckService(getApplicationContext());
+        scheduleOfflineActionsService(getApplicationContext());
     }
 
     private void initStaticFields() {
@@ -279,10 +288,12 @@ public class MyApplication extends Application {
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
 
-        messageServiceActive = prefs.getBoolean("messageCheckActive", false);
+        //messageServiceActive = prefs.getBoolean("messageCheckActive", false);
+        newMessages = prefs.getBoolean("newMessages", false);
         messageCheckInterval = Integer.valueOf(prefs.getString("messageCheckInterval", "15"));
 
-        offlineActionsServiceActive = prefs.getBoolean("offlineActionsActive", false);
+        //offlineActionsServiceActive = prefs.getBoolean("offlineActionsActive", false);
+        pendingOfflineActions = prefs.getBoolean("pendingActions", false);
         offlineActionsInterval = Integer.valueOf(prefs.getString("offlineActionsInterval", "15"));
     }
 
@@ -295,6 +306,30 @@ public class MyApplication extends Application {
         }
         //String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
         return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
+    }
+
+    public static void scheduleMessageCheckService(Context context) {
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, MessageCheckService.class);
+        PendingIntent pIntent = PendingIntent.getService(context, MessageCheckService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if(messageCheckInterval != -1) {
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30 * 1000, 60 * 1000 * messageCheckInterval, pIntent);
+        }
+        else {
+            manager.cancel(pIntent);
+        }
+    }
+
+    public static void scheduleOfflineActionsService(Context context) {
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, PendingActionsService.class);
+        PendingIntent pIntent = PendingIntent.getService(context, PendingActionsService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        if(offlineActionsInterval != -1) {
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, 60 * 1000 * offlineActionsInterval, pIntent);
+        }
+        else {
+            manager.cancel(pIntent);
+        }
     }
 
     public static SavedAccount getCurrentAccount(Context context) {

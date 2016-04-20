@@ -9,6 +9,8 @@ import android.os.IBinder;
  */
 public class MessageCheckService extends Service {
 
+    public static final int SERVICE_ID = 5311;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;

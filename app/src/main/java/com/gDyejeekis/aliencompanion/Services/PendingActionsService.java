@@ -9,6 +9,8 @@ import android.os.IBinder;
  */
 public class PendingActionsService extends Service {
 
+    public static final int SERVICE_ID = 5312;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
