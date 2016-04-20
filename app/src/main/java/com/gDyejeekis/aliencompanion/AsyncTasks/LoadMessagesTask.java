@@ -2,7 +2,9 @@ package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
@@ -30,6 +32,8 @@ import java.util.List;
  * Created by sound on 10/10/2015.
  */
 public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
+
+    public static final String TAG = "LoadMessagesTask";
 
     private Exception exception;
     private Context context;
@@ -146,9 +150,16 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     private void markNewMessagesRead(Message message) {
         if(message.isNew) {
+            Log.d(TAG, "Marking new messages as read..");
+            MyApplication.newMessages = false;
+            MainActivity.notifyDrawerChanged = true;
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putBoolean("newMessages", MyApplication.newMessages);
+                    editor.commit();
+
                     MarkActions markActions = new MarkActions(httpClient);
                     markActions.readAllNewMessages();
                 }

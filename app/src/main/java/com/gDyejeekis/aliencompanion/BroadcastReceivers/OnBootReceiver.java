@@ -22,6 +22,8 @@ public class OnBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Scheduling sync profiles..");
+        MyApplication.scheduleMessageCheckService(context);
+        MyApplication.scheduleOfflineActionsService(context);
         scheduleSyncProfiles(context);
     }
 

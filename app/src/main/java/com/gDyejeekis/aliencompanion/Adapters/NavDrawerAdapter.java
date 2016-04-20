@@ -515,8 +515,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         else menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_grey_48dp);
                         break;
                     case messages:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_white_48dp);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_grey_48dp);
+                        if(MyApplication.newMessages) {
+                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_orange_48dp);
+                        }
+                        else {
+                            if (MyApplication.nightThemeEnabled)
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_white_48dp);
+                            else
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_grey_48dp);
+                        }
                         break;
                     case user:
                         if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_white_48dp);

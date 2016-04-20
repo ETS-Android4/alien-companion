@@ -158,7 +158,7 @@ public class SettingsFragment extends PreferenceFragment {
             return "Disabled";
         }
         else if(minutes == 60) {
-            return "Every 1 hour";
+            return "Every hour";
         }
         else if(minutes > 60) {
             return "Every " + minutes/60 + " hours";

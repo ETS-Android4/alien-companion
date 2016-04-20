@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean dualPaneActive;
 
     public static boolean setupAccount = false;
+    public static boolean notifyDrawerChanged = false;
     public static String oauthCode;
 
     @Override
@@ -211,6 +212,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         listFragment.loadMore = MyApplication.endlessPosts;
+
+        if(notifyDrawerChanged) {
+            Log.d(TAG, "Notifying navigation drawer changed..");
+            notifyDrawerChanged = false;
+            getNavDrawerAdapter().notifyDataSetChanged();
+        }
 
         if(setupAccount) {
             setupAccount = false;

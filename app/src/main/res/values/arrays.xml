@@ -139,12 +139,12 @@
 
     <string-array name="timeIntervals">
         <item>Disabled</item>
-        <item>5 minutes</item>
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>6 hours</item>
-        <item>24 hours</item>
+        <item>Every 5 minutes</item>
+        <item>Every 15 minutes</item>
+        <item>Every 30 minutes</item>
+        <item>Every hour</item>
+        <item>Every 6 hours</item>
+        <item>Every 24 hours</item>
     </string-array>
 
     <array name="toolbarColors">
