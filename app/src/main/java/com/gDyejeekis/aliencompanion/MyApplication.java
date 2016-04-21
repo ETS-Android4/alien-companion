@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
@@ -28,6 +31,8 @@ import me.imid.swipebacklayout.lib.ViewDragHelper;
  * Created by sound on 11/23/2015.
  */
 public class MyApplication extends Application {
+
+    public static final String TAG = "MyApplication";
 
     public static final String lastKnownVersion = "0.3.3";
 
@@ -134,7 +139,6 @@ public class MyApplication extends Application {
         super.onCreate();
         initStaticFields();
 
-        scheduleMessageCheckService(getApplicationContext());
         scheduleOfflineActionsService(getApplicationContext());
     }
 
@@ -326,31 +330,47 @@ public class MyApplication extends Application {
         return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
     }
 
-    public static void scheduleMessageCheckService(Context context) {
+    public static void scheduleMessageCheckService(final Context context) {
+        Log.d(TAG, "Scheduling MessageCheckService..");
         if(MyApplication.currentAccount == null) {
             MyApplication.currentAccount = getCurrentAccount(context);
         }
+
+        //int timer = 0;
+        //while(MyApplication.currentAccount==null) {
+        //    if(timer >= 5000) {
+        //        Log.d(TAG, "Scheduling of MessageCheckService failed");
+        //        return;
+        //    }
+        //    timer += 100;
+        //    SystemClock.sleep(100);
+        //}
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MessageCheckService.class);
         PendingIntent pIntent = PendingIntent.getService(context, MessageCheckService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if(MyApplication.currentAccount.loggedIn && messageCheckInterval != -1) {
             manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15 * 1000, 60 * 1000 * messageCheckInterval, pIntent);
+            Log.d(TAG, "MessegeCheckService scheduled to run every " + messageCheckInterval + " minutes");
         }
         else {
             manager.cancel(pIntent);
+            Log.d(TAG, "MessageCheckService unscheduled");
         }
     }
 
-    public static void scheduleOfflineActionsService(Context context) {
+    public static void scheduleOfflineActionsService(final Context context) {
+        Log.d(TAG, "Scheduling OfflineActionsService..");
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, PendingActionsService.class);
         PendingIntent pIntent = PendingIntent.getService(context, PendingActionsService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if(offlineActionsInterval != -1) {
             manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, 60 * 1000 * offlineActionsInterval, pIntent);
+            Log.d(TAG, "OfflineActionsService scheduled to run every " + offlineActionsInterval + " minutes");
         }
         else {
             manager.cancel(pIntent);
+            Log.d(TAG, "OfflineActionsService unscheduled");
         }
     }
 
