@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Alien Companion</string>
 
-    <string name="hello_world">Hello world!</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_title">
+        Alien Companion v0.4
+    </string>
+    <string name="welcome_message">
+        Greetings!\n\nThis is the welcome message for the app! Blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah ..\n\nThanks!
+    </string>
 <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
     <string name="title_activity_options">SettingsActivity</string>

@@ -1,11 +1,15 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 /**
@@ -19,6 +23,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        getTheme().applyStyle(MyApplication.fontFamily, true);
         super.onCreate(bundle);
         //if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
         //    // Activity was brought to front and not created,
@@ -27,16 +33,36 @@ public class SplashActivity extends AppCompatActivity {
         //    finish();
         //    return;
         //}
-        setContentView(R.layout.splash_screen);
+        if(MyApplication.showedWelcomeMessage) {
+            setContentView(R.layout.splash_screen);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-                SplashActivity.this.startActivity(mainIntent);
-                SplashActivity.this.finish();
-                SplashActivity.this.overridePendingTransition(0, android.R.anim.fade_in);
-            }
-        }, SPLASH_DISPLAY_LENGTH);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startMainActivity();
+                }
+            }, SPLASH_DISPLAY_LENGTH);
+        }
+        else {
+            setContentView(R.layout.spash_screen_welcome);
+
+            Button button = (Button) findViewById(R.id.button_welcome_done);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putBoolean("welcomeMsg", true);
+                    editor.commit();
+                    startMainActivity();
+                }
+            });
+        }
+    }
+
+    private void startMainActivity() {
+        Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+        SplashActivity.this.startActivity(mainIntent);
+        SplashActivity.this.finish();
+        SplashActivity.this.overridePendingTransition(0, android.R.anim.fade_in);
     }
 }

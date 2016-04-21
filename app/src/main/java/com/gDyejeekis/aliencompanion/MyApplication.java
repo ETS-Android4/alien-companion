@@ -68,6 +68,7 @@ public class MyApplication extends Application {
 
     public static SharedPreferences prefs;
     public static String deviceID;
+    public static boolean showedWelcomeMessage;
     public static boolean nightThemeEnabled;
     public static boolean offlineModeEnabled;
     public static boolean dualPane;
@@ -188,6 +189,7 @@ public class MyApplication extends Application {
     }
 
     public static void getCurrentSettings() {
+        showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);
         syncImages = prefs.getBoolean("syncImg", false);
         syncWebpages = prefs.getBoolean("syncWeb", false);
         syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
