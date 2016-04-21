@@ -24,6 +24,13 @@
             android:defaultValue="2"/>
 
         <ListPreference
+            android:key="fontFamily"
+            android:title="Font family"
+            android:entries="@array/fontFamily"
+            android:entryValues="@array/fontFamilyValues"
+            android:defaultValue="0" />
+
+        <ListPreference
             android:key="toolbarColor"
             android:title="Toolbar color"
             android:summary="Only applies to light mode"

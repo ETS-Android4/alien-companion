@@ -90,6 +90,20 @@
         <item>6</item>
     </string-array>
 
+    <string-array name="fontFamily">
+        <item>Regular</item>
+        <item>Light</item>
+        <item>Condensed</item>
+        <item>Condensed Light</item>
+    </string-array>
+
+    <string-array name="fontFamilyValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <string-array name="syncPostCount">
         <item>10</item>
         <item>25</item>

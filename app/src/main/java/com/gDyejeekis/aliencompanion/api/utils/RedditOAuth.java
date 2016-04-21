@@ -22,6 +22,8 @@ import okhttp3.RequestBody;
  */
 public class RedditOAuth {
 
+    public static final String TAG = "RedditOAuth";
+
     public static final boolean useOAuth2 = true;
 
     // This line is GAE specific!  for detecting when running on local admin
@@ -119,13 +121,13 @@ public class RedditOAuth {
         if(matcher.find()) {
             code = matcher.group(1);
         }
-        Log.d("geotest", "auth code: " + code);
+        Log.d(TAG, "auth code: " + code);
 
         return code;
     }
 
     public static OAuthToken getOAuthToken(HttpClient httpClient, String oauthCode) {
-        Log.d("geotest", "retrieving account token..");
+        Log.d(TAG, "retrieving account token..");
         RequestBody body = new FormBody.Builder().add("grant_type", "authorization_code").add("code", oauthCode).add("redirect_uri", REDIRECT_URI).build();
         //JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, "grant_type=authorization_code&code=" + oauthCode +"&redirect_uri="
         //        + REDIRECT_URI, OAUTH_TOKEN_URL, null).getResponseObject();
@@ -134,7 +136,7 @@ public class RedditOAuth {
     }
 
     public static void refreshToken(HttpClient httpClient, OAuthToken token) {
-        Log.d("geotest", "refreshing token..");
+        Log.d(TAG, "refreshing token..");
         RequestBody body = new FormBody.Builder().add("grant_type", "refresh_token").add("refresh_token", token.refreshToken).build();
         JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, body, OAUTH_TOKEN_URL,
                 null).getResponseObject();
@@ -149,8 +151,8 @@ public class RedditOAuth {
     //}
 
     public static OAuthToken getApplicationToken(HttpClient httpClient) {
-        Log.d("geotest", "retrieving application token..");
-        //Log.d("geotest", "post data: " + "grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MyApplication.deviceID);
+        Log.d(TAG, "retrieving application token..");
+        //Log.d(TAG, "post data: " + "grant_type=https://oauth.reddit.com/grants/installed_client&device_id=" + MyApplication.deviceID);
         RequestBody body = new FormBody.Builder().add("grant_type", "https://oauth.reddit.com/grants/installed_client").add("device_id", MyApplication.deviceID).build();
         JSONObject jsonObject = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_BASE_URL_SECURE, body, OAUTH_TOKEN_URL, null).getResponseObject();
         return new OAuthToken(jsonObject, false);

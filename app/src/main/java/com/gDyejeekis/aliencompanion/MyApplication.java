@@ -71,7 +71,9 @@ public class MyApplication extends Application {
     public static int screenOrientation;
     public static int currentOrientation;
     public static int fontStyle;
+    public static int fontFamily;
     public static int currentFontStyle;
+    public static int currentFontFamily;
     public static int colorPrimary;
     public static int colorPrimaryDark;
     public static int currentColor;
@@ -146,6 +148,7 @@ public class MyApplication extends Application {
         getCurrentSettings();
         dualPaneCurrent = dualPane;
         currentFontStyle = fontStyle;
+        currentFontFamily = fontFamily;
 
         //savedAccounts = readAccounts();
     }
@@ -216,6 +219,21 @@ public class MyApplication extends Application {
                 break;
             case 6:
                 fontStyle = R.style.FontStyle_Largest;
+                break;
+        }
+        fontFamily = Integer.parseInt(prefs.getString("fontFamily", "0"));
+        switch (fontFamily) {
+            case 0:
+                fontFamily = R.style.FontFamily_SansSerifRegular;
+                break;
+            case 1:
+                fontFamily = R.style.FontFamily_SansSerifLight;
+                break;
+            case 2:
+                fontFamily = R.style.FontFamily_SansSerifCondensed;
+                break;
+            case 3:
+                fontFamily = R.style.FontFamily_SansSerifCondensedLight;
                 break;
         }
         colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#00BCD4"));
@@ -309,11 +327,15 @@ public class MyApplication extends Application {
     }
 
     public static void scheduleMessageCheckService(Context context) {
+        if(MyApplication.currentAccount == null) {
+            MyApplication.currentAccount = getCurrentAccount(context);
+        }
+
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MessageCheckService.class);
         PendingIntent pIntent = PendingIntent.getService(context, MessageCheckService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        if(messageCheckInterval != -1) {
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30 * 1000, 60 * 1000 * messageCheckInterval, pIntent);
+        if(MyApplication.currentAccount.loggedIn && messageCheckInterval != -1) {
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15 * 1000, 60 * 1000 * messageCheckInterval, pIntent);
         }
         else {
             manager.cancel(pIntent);

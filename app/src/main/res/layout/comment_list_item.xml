@@ -36,7 +36,8 @@
                     android:text="[+] "
                     android:id="@+id/txtView_commentHidden"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextHintColor" />
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:id="@+id/author_textview"
@@ -45,7 +46,8 @@
                     android:textColor="#5972ff"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="author"
-                    android:textSize="?attr/font_small"/>
+                    android:textSize="?attr/font_small"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,7 +55,8 @@
                     android:text=" "
                     android:id="@+id/textView10"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextColor" />
+                    android:textColor="?attr/themeTextColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -61,7 +64,8 @@
                     android:text="(score)"
                     android:id="@+id/txtView_score"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextHintColor" />
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +73,8 @@
                     android:text=" · (age) "
                     android:id="@+id/txtView_age"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextHintColor" />
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:id="@+id/hidden_comments_count_textview"
@@ -81,7 +86,8 @@
                     android:padding="5dp"
                     android:text="10 hidden"
                     android:layout_marginLeft="5dp"
-                    android:textSize="?attr/font_small" />
+                    android:textSize="?attr/font_small"
+                    android:fontFamily="?attr/defaultFontFamily" />
             </org.apmem.tools.layouts.FlowLayout>
 
             <TextView
@@ -94,7 +100,8 @@
                 android:text="comment"
                 android:paddingBottom="16dp"
                 android:textSize="?attr/font_comments"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
         </LinearLayout>
     </LinearLayout>

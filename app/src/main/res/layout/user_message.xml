@@ -27,7 +27,8 @@
                 android:textColor="#ff4500"
                 android:gravity="center_vertical"
                 android:paddingRight="8dp"
-                android:paddingTop="6dp" />
+                android:paddingTop="6dp"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -36,7 +37,8 @@
                 android:id="@+id/txtView_msgSubject"
                 android:textSize="?attr/font_medium"
                 android:textStyle="bold"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
         </org.apmem.tools.layouts.FlowLayout>
 
@@ -51,7 +53,8 @@
                 android:text="from "
                 android:id="@+id/textView_dest"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +62,8 @@
                 android:text="(author)"
                 android:id="@+id/textView_messageAuthor"
                 android:textSize="?attr/font_small"
-                android:textColor="#5972ff" />
+                android:textColor="#5972ff"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,7 +71,8 @@
                 android:text=" · sent "
                 android:id="@+id/textView17"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,7 +80,8 @@
                 android:text="(age)"
                 android:id="@+id/txtView_messageAge"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
         </LinearLayout>
 
@@ -85,7 +91,8 @@
             android:text="(Message body here)"
             android:id="@+id/txtView_messageBody"
             android:textSize="?attr/font_small"
-            android:textColor="?attr/themeTextColor" />
+            android:textColor="?attr/themeTextColor"
+            android:fontFamily="?attr/defaultFontFamily" />
 
     </LinearLayout>
 

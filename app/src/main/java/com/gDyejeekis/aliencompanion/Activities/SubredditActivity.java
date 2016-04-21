@@ -34,6 +34,7 @@ public class SubredditActivity extends SwipeBackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getTheme().applyStyle(MyApplication.fontStyle, true);
+        getTheme().applyStyle(MyApplication.fontFamily, true);
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);

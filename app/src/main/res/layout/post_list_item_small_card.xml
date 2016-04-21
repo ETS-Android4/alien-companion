@@ -28,7 +28,8 @@
                 android:textSize="?attr/font_medium"
                 android:textColor="?attr/themeTextColor"
                 android:padding="10dp"
-                android:layout_weight="5" />
+                android:layout_weight="5"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -55,7 +56,8 @@
             android:textColor="?attr/themeTextHintColor"
             android:longClickable="false"
             android:paddingLeft="10dp"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:fontFamily="?attr/defaultFontFamily" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -81,7 +83,8 @@
                     android:textColor="?attr/themeTextHintColor"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,7 +95,8 @@
                     android:textColor="?attr/themeTextHintColor"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
             </LinearLayout>
 

@@ -33,6 +33,10 @@
         <attr name="font_xlarge" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="FontFamily">
+        <attr name="defaultFontFamily" format="string"/>
+    </declare-styleable>
+
     <declare-styleable name="selectedTheme">
         <attr name="themeTextColor" format="color"/>
         <attr name="themeTextHintColor" format="color"/>

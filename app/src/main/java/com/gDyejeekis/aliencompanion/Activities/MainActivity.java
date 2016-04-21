@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         setOrientation();
         MyApplication.setThemeRelatedFields();
         getTheme().applyStyle(MyApplication.fontStyle, true);
+        getTheme().applyStyle(MyApplication.fontFamily, true);
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.PopupDarkTheme, true);
             getTheme().applyStyle(R.style.selectedTheme_night, true);
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeCurrentUser(SavedAccount account) {
         MyApplication.currentAccount = account;
+
+        MyApplication.scheduleMessageCheckService(this);
         //MyApplication.currentUser = (account.loggedIn) ? new User(null, account.getUsername(), account.getModhash(), account.getCookie()) : null;
         if(account.loggedIn) {
             if(account.oauth2) {
@@ -269,9 +272,11 @@ public class MainActivity extends AppCompatActivity {
             toggleDualPane();
         }
 
-        if(MyApplication.currentFontStyle != MyApplication.fontStyle) {
+        if(MyApplication.currentFontStyle != MyApplication.fontStyle || MyApplication.currentFontFamily != MyApplication.fontFamily) {
             MyApplication.currentFontStyle = MyApplication.fontStyle;
+            MyApplication.currentFontFamily = MyApplication.fontFamily;
             getTheme().applyStyle(MyApplication.fontStyle, true);
+            getTheme().applyStyle(MyApplication.fontFamily, true);
             listFragment.redrawList();
         }
 

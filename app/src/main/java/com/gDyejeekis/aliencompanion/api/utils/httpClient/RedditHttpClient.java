@@ -35,6 +35,8 @@ import okhttp3.RequestBody;
  */
 public class RedditHttpClient implements HttpClient, Serializable {
 
+    public static final String TAG = "RedditHttpClient";
+
     private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/alien_companion)";
 
     public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException { //TODO: re-write with okhttp
@@ -54,16 +56,16 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
 
-            Log.d("geotest", "GET request to  " + baseUrl + urlPath);
+            Log.d(TAG, "GET request to  " + baseUrl + urlPath);
             //printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
-            //Log.d("geotest", "response code: " + connection.getResponseCode());
+            //Log.d(TAG, "response code: " + connection.getResponseCode());
 
             String content = IOUtils.toString(inputStream, "UTF-8");
             IOUtils.closeQuietly(inputStream);
 
-            Log.d("inputstream object: ", content);
+            Log.d(TAG, "inputstream object: " + content);
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
@@ -164,7 +166,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     public Response post(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
-        Log.d("geotest", "POST request to " + baseUrl + urlPath);
+        Log.d(TAG, "POST request to " + baseUrl + urlPath);
         try {
             OkHttpClient client = new OkHttpClient();
             Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).post(body);
@@ -183,11 +185,11 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Request request = builder.build();
             okhttp3.Response response = client.newCall(request).execute();
             String content = response.body().string();
-            Log.d("geotest", "request body: " + request.body());
-            Log.d("geotest", "request headers: " + request.headers());
-            Log.d("geotest", "response code: " + response.code());
-            Log.d("geotest", "response headers: " + response.headers());
-            Log.d("geotest", "inputstream: " + content);
+            Log.d(TAG, "request body: " + request.body());
+            Log.d(TAG, "request headers: " + request.headers());
+            Log.d(TAG, "response code: " + response.code());
+            Log.d(TAG, "response headers: " + response.headers());
+            Log.d(TAG, "inputstream: " + content);
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -206,7 +208,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     public Response put(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
-        Log.d("geotest", "PUT request to " + baseUrl + urlPath);
+        Log.d(TAG, "PUT request to " + baseUrl + urlPath);
         try {
             OkHttpClient client = new OkHttpClient();
             Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).put(body);
@@ -225,11 +227,11 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Request request = builder.build();
             okhttp3.Response response = client.newCall(request).execute();
             String content = response.body().string();
-            Log.d("geotest", "request body: " + request.body());
-            Log.d("geotest", "request headers: " + request.headers());
-            Log.d("geotest", "response code: " + response.code());
-            Log.d("geotest", "response headers: " + response.headers());
-            Log.d("geotest", "inputstream: " + content);
+            Log.d(TAG, "request body: " + request.body());
+            Log.d(TAG, "request headers: " + request.headers());
+            Log.d(TAG, "response code: " + response.code());
+            Log.d(TAG, "response headers: " + response.headers());
+            Log.d(TAG, "inputstream: " + content);
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -248,7 +250,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     public Response delete(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
-        Log.d("geotest", "DELETE request to " + baseUrl + urlPath);
+        Log.d(TAG, "DELETE request to " + baseUrl + urlPath);
         try {
             OkHttpClient client = new OkHttpClient();
             Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).delete(body);
@@ -267,11 +269,11 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Request request = builder.build();
             okhttp3.Response response = client.newCall(request).execute();
             String content = response.body().string();
-            Log.d("geotest", "request body: " + request.body());
-            Log.d("geotest", "request headers: " + request.headers());
-            Log.d("geotest", "response code: " + response.code());
-            Log.d("geotest", "response headers: " + response.headers());
-            Log.d("geotest", "inputstream: " + content);
+            Log.d(TAG, "request body: " + request.body());
+            Log.d(TAG, "request headers: " + request.headers());
+            Log.d(TAG, "response code: " + response.code());
+            Log.d(TAG, "response headers: " + response.headers());
+            Log.d(TAG, "inputstream: " + content);
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -297,7 +299,10 @@ public class RedditHttpClient implements HttpClient, Serializable {
         try {
             if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
                 while(MyApplication.currentAccount==null) {
-                    Log.d("geotest", "currentAccount is null, waiting 100ms..");
+                    //String message = (MyApplication.currentAccount==null) ? "currentAccount is null" : "oauth token is being renewed";
+                    String message = "currentAccoutn is null";
+                    message = message.concat(", waiting 100ms..");
+                    Log.d(TAG, message);
                     SystemClock.sleep(100);
                 }
                 if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
@@ -307,21 +312,23 @@ public class RedditHttpClient implements HttpClient, Serializable {
                     MyApplication.currentAccessToken = token.accessToken;
                     MyApplication.renewingToken = false;
                     MyApplication.accountChanges = true;
-                } else MyApplication.currentAccount.getToken().checkToken();
+                } else {
+                    MyApplication.currentAccount.getToken().checkToken();
+                }
             }
         } catch (ActionFailedException e) {
             MyApplication.renewingToken = false;
-            Log.e("geotest", "Error renewing oauth token");
+            Log.e(RedditOAuth.TAG, "Error renewing oauth token");
             e.printStackTrace();
         }
     }
 
     private void printRequestProperties(HttpURLConnection connection) {
-        Log.d("Request properties", "Request method: " + connection.getRequestMethod());
+        Log.d(TAG, "Request Properties: Request method: " + connection.getRequestMethod());
         for (String header : connection.getRequestProperties().keySet()) {
             if (header != null) {
                 for (String value : connection.getRequestProperties().get(header)) {
-                    Log.d("Request properties", header + ":" + value);
+                    Log.d(TAG, "Request properties: " + header + ":" + value);
                 }
             }
         }
@@ -331,10 +338,10 @@ public class RedditHttpClient implements HttpClient, Serializable {
         for (String header : connection.getHeaderFields().keySet()) {
             if (header != null) {
                 for (String value : connection.getHeaderFields().get(header)) {
-                    Log.d("Header fields", header + ":" + value);
+                    Log.d(TAG, "Header fields: " + header + ":" + value);
                 }
             }
         }
-        Log.d("Header fields", "--------------------------------------------------------------------------------------------");
+        Log.d(TAG, "--------------------------------------------------------------------------------------------");
     }
 }

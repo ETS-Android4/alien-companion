@@ -108,6 +108,25 @@
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
 
+    <style name="FontFamily">
+    </style>
+
+    <style name="FontFamily.SansSerifRegular">
+        <item name="defaultFontFamily">sans-serif</item>
+    </style>
+
+    <style name="FontFamily.SansSerifLight">
+        <item name="defaultFontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="FontFamily.SansSerifCondensed">
+        <item name="defaultFontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="FontFamily.SansSerifCondensedLight">
+        <item name="defaultFontFamily">sans-serif-condensed-light</item>
+    </style>
+
     <style name="FontStyle">
     </style>
 
@@ -203,6 +222,7 @@
     <style name="nsfwLabel">
         <item name="android:textColor">#d81d1b</item>
         <item name="android:textSize">?attr/font_small</item>
+        <item name="android:fontFamily">?attr/defaultFontFamily</item>
     </style>
 
     <style name="upvotedStyle">

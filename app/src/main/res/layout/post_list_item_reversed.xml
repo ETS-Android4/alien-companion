@@ -32,7 +32,8 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -68,7 +69,8 @@
                     android:id="@+id/txtView_postTitle"
                     android:textStyle="bold"
                     android:textSize="?attr/font_medium"
-                    android:textColor="?attr/themeTextColor" />
+                    android:textColor="?attr/themeTextColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -76,7 +78,8 @@
                     android:text="(score) · (age) · (author)"
                     android:id="@+id/textView_dets1"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextHintColor" />
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,7 +87,8 @@
                     android:text="(subreddit) · (domain) · NSFW"
                     android:id="@+id/textView_dets2"
                     android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextHintColor" />
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
 
             </LinearLayout>
 

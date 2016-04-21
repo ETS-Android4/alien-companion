@@ -20,7 +20,8 @@
             android:id="@+id/txtView_postTitle"
             android:textSize="?attr/font_medium"
             android:textStyle="bold"
-            android:textColor="?attr/themeTextColor" />
+            android:textColor="?attr/themeTextColor"
+            android:fontFamily="?attr/defaultFontFamily" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -33,7 +34,8 @@
                 android:text="(subreddit)"
                 android:id="@+id/txtView_commentSubreddit"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
+                android:textColor="?attr/themeTextHintColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,7 +43,8 @@
                 android:text=" · "
                 android:id="@+id/textView9"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
+                android:textColor="?attr/themeTextHintColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +52,8 @@
                 android:text="(score)"
                 android:id="@+id/txtView_commentScore"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
+                android:textColor="?attr/themeTextHintColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,7 +61,8 @@
                 android:text=" pts · "
                 android:id="@+id/textView11"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
+                android:textColor="?attr/themeTextHintColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,7 +70,8 @@
                 android:text="(age)"
                 android:id="@+id/txtView_commentAge"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor" />
+                android:textColor="?attr/themeTextHintColor"
+                android:fontFamily="?attr/defaultFontFamily" />
 
         </LinearLayout>
 
@@ -75,7 +81,8 @@
             android:text="(Comment body here)"
             android:id="@+id/txtView_commentBody"
             android:textSize="?attr/font_medium"
-            android:textColor="?attr/themeTextColor" />
+            android:textColor="?attr/themeTextColor"
+            android:fontFamily="?attr/defaultFontFamily" />
 
     </LinearLayout>
 
