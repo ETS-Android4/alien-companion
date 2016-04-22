@@ -35,4 +35,8 @@ public class ReportAction extends OfflineUserAction implements Serializable {
         return reportReason;
     }
 
+    public void executeAction() {
+
+    }
+
 }

@@ -2,6 +2,8 @@ package com.gDyejeekis.aliencompanion.Models.OfflineActions;
 
 import android.content.Context;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.api.action.MarkActions;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import java.io.Serializable;
@@ -27,6 +29,10 @@ public class DownvoteAction extends OfflineUserAction implements Serializable {
 
     public String getItemFullname() {
         return itemFullname;
+    }
+
+    public void executeAction() {
+
     }
 
 }

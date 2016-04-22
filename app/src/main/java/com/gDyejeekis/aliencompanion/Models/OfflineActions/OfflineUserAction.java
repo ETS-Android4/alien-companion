@@ -1,10 +1,5 @@
 package com.gDyejeekis.aliencompanion.Models.OfflineActions;
 
-import android.content.Context;
-
-import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
-
 import java.io.Serializable;
 
 /**
@@ -47,10 +42,12 @@ public abstract class OfflineUserAction implements Serializable {
         this.actionCompleted = flag;
     }
 
-    public void executeAction(Context context) {
-        LoadUserActionTask task = new LoadUserActionTask(context, this);
-        task.execute();
-    }
+    //public void executeAction(Context context) {
+    //    LoadUserActionTask task = new LoadUserActionTask(context, this);
+    //    task.execute();
+    //}
+
+    public abstract void executeAction(); //run on background thread
 
     @Override
     public boolean equals(Object obj) {

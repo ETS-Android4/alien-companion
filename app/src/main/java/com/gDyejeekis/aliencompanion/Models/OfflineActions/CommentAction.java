@@ -41,4 +41,8 @@ public class CommentAction extends OfflineUserAction implements Serializable {
         this.commentText = commentText;
     }
 
+    public void executeAction() {
+
+    }
+
 }

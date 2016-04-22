@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.Models.OfflineActions;
 
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+
 import java.io.Serializable;
 
 /**
@@ -23,5 +25,9 @@ public class UnsaveAction extends OfflineUserAction implements Serializable {
 
     public String getItemFullname() {
         return itemFullname;
+    }
+
+    public void executeAction() {
+
     }
 }

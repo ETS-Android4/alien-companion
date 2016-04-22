@@ -29,4 +29,8 @@ public class SaveAction extends OfflineUserAction implements Serializable {
         return itemFullname;
     }
 
+    public void executeAction() {
+
+    }
+
 }

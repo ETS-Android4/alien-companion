@@ -29,4 +29,8 @@ public class UpvoteAction extends OfflineUserAction implements Serializable {
         return itemFullname;
     }
 
+    public void executeAction() {
+
+    }
+
 }

@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
@@ -28,6 +29,10 @@ public class PoliteRedditHttpClient extends RedditHttpClient {
 
     public PoliteRedditHttpClient() {
         super();
+    }
+
+    public PoliteRedditHttpClient(User user) {
+        super(user);
     }
 
     //public PoliteHttpRestClient(HttpClient httpClient, ResponseHandler<Response> responseHandler) {

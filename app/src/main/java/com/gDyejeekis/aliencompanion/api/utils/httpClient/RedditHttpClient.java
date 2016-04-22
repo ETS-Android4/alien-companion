@@ -5,7 +5,9 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
+import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
@@ -39,6 +41,20 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/alien_companion)";
 
+    private String accessToken;
+
+    private User user;
+
+    public RedditHttpClient() {
+        accessToken = MyApplication.currentAccessToken;
+        this.user = null;
+    }
+
+    public RedditHttpClient(User user) {
+        accessToken = user.getTokenObject().accessToken;
+        this.user = user;
+    }
+
     public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException { //TODO: re-write with okhttp
         tokenCheck();
 
@@ -49,7 +65,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setUseCaches(false);
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", userAgent);
-            if(RedditOAuth.useOAuth2) connection.setRequestProperty("Authorization", "bearer " + MyApplication.currentAccessToken);
+            if(RedditOAuth.useOAuth2) connection.setRequestProperty("Authorization", "bearer " + accessToken);
             else connection.setRequestProperty("Cookie", "reddit_session=" + cookie);
             connection.setDoInput(true);
             //connection.setDoOutput(true);
@@ -172,8 +188,8 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).post(body);
             if (RedditOAuth.useOAuth2 && cookie == null) {
                 String authHeader;
-                if (MyApplication.currentAccessToken != null) {
-                    authHeader = "bearer " + MyApplication.currentAccessToken;
+                if (accessToken != null) {
+                    authHeader = "bearer " + accessToken;
                 } else {
                     authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
                 }
@@ -214,8 +230,8 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).put(body);
             if (RedditOAuth.useOAuth2 && cookie == null) {
                 String authHeader;
-                if (MyApplication.currentAccessToken != null) {
-                    authHeader = "bearer " + MyApplication.currentAccessToken;
+                if (accessToken != null) {
+                    authHeader = "bearer " + accessToken;
                 } else {
                     authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
                 }
@@ -256,8 +272,8 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).delete(body);
             if (RedditOAuth.useOAuth2 && cookie == null) {
                 String authHeader;
-                if (MyApplication.currentAccessToken != null) {
-                    authHeader = "bearer " + MyApplication.currentAccessToken;
+                if (accessToken != null) {
+                    authHeader = "bearer " + accessToken;
                 } else {
                     authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
                 }
@@ -295,28 +311,57 @@ public class RedditHttpClient implements HttpClient, Serializable {
     }
 
 
+    //private void tokenCheck() {
+    //    try {
+    //        if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
+    //            while(MyApplication.currentAccount==null) {
+    //                Log.d(TAG, "MyApplication.currentAccount is null, waiting..");
+    //                SystemClock.sleep(100);
+    //            }
+    //            if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
+    //                MyApplication.renewingToken = true;
+    //                OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
+    //                MyApplication.currentAccount.setToken(token);
+    //                MyApplication.currentAccessToken = token.accessToken;
+    //                MyApplication.renewingToken = false;
+    //                MyApplication.accountChanges = true;
+    //            } else {
+    //                MyApplication.currentAccount.getToken().checkToken();
+    //            }
+    //        }
+    //    } catch (ActionFailedException e) {
+    //        MyApplication.renewingToken = false;
+    //        Log.e(RedditOAuth.TAG, "Error renewing oauth token");
+    //        e.printStackTrace();
+    //    }
+    //}
+
     private void tokenCheck() {
         try {
-            if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
-                while(MyApplication.currentAccount==null) {
-                    //String message = (MyApplication.currentAccount==null) ? "currentAccount is null" : "oauth token is being renewed";
-                    String message = "currentAccoutn is null";
-                    message = message.concat(", waiting 100ms..");
-                    Log.d(TAG, message);
-                    SystemClock.sleep(100);
+            if(RedditOAuth.useOAuth2) {
+                if(user == null) {
+                    if(!MyApplication.renewingToken) {
+                        while(MyApplication.currentAccount==null) {
+                            Log.d(TAG, "MyApplication.currentAccount is null, waiting..");
+                            SystemClock.sleep(100);
+                        }
+                        if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
+                            MyApplication.renewingToken = true;
+                            OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
+                            MyApplication.currentAccount.setToken(token);
+                            MyApplication.currentAccessToken = token.accessToken;
+                            MyApplication.renewingToken = false;
+                            MyApplication.accountChanges = true;
+                        } else {
+                            MyApplication.currentAccount.getToken().checkToken();
+                        }
+                    }
                 }
-                if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
-                    MyApplication.renewingToken = true;
-                    OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
-                    MyApplication.currentAccount.setToken(token);
-                    MyApplication.currentAccessToken = token.accessToken;
-                    MyApplication.renewingToken = false;
-                    MyApplication.accountChanges = true;
-                } else {
-                    MyApplication.currentAccount.getToken().checkToken();
+                else if(!MyApplication.renewingUserToken) {
+                    user.getTokenObject().checkToken(user);
                 }
             }
-        } catch (ActionFailedException e) {
+        } catch (Exception e) {
             MyApplication.renewingToken = false;
             Log.e(RedditOAuth.TAG, "Error renewing oauth token");
             e.printStackTrace();

@@ -64,6 +64,10 @@ public class OAuthToken implements Serializable {
         }
     }
 
+    public void checkToken(User user) { //run on background thread
+        // TODO: 4/22/2016
+    }
+
     //public OAuthToken(String accessToken, String tokenType, long expiresIn, String scope, String state) {
     //    this.accessToken = accessToken;
     //    this.tokenType = tokenType;

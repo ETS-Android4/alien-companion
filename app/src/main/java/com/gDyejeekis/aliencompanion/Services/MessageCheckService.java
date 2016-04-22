@@ -19,9 +19,11 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Message;
+import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.Messages;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.MessageCategory;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.MessageCategorySort;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 
@@ -49,9 +51,13 @@ public class MessageCheckService extends IntentService {
             MyApplication.currentAccount = MyApplication.getCurrentAccount(this);
         }
 
-        if(MyApplication.currentAccount.loggedIn) {
-            try {
-                Messages msgRetrieval = new Messages(new PoliteRedditHttpClient());
+        try {
+            if (MyApplication.currentAccount.loggedIn) {
+                HttpClient httpClient = new PoliteRedditHttpClient();
+                MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
+                MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
+
+                Messages msgRetrieval = new Messages(httpClient, MyApplication.currentUser);
                 List<RedditItem> messages = msgRetrieval.ofUser(MessageCategory.INBOX, MessageCategorySort.UNREAD, -1, 1000, null, null, true);
                 SharedPreferences.Editor editor = MyApplication.prefs.edit();
                 editor.putBoolean("newMessages", messages.size() > 0);
@@ -62,13 +68,12 @@ public class MessageCheckService extends IntentService {
                     MainActivity.notifyDrawerChanged = true;
                     Message lastMessage = (Message) messages.get(0);
                     showNewMessagesNotif(messages.size(), lastMessage.createdUTC);
-                }
-                else {
+                } else {
                     Log.d(TAG, "No new messages");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

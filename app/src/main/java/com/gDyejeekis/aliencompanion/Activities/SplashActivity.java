@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        getTheme().applyStyle(MyApplication.fontStyle, true);
+        //getTheme().applyStyle(MyApplication.fontStyle, true);
         getTheme().applyStyle(MyApplication.fontFamily, true);
         super.onCreate(bundle);
         //if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
@@ -44,7 +43,7 @@ public class SplashActivity extends AppCompatActivity {
             }, SPLASH_DISPLAY_LENGTH);
         }
         else {
-            setContentView(R.layout.spash_screen_welcome);
+            setContentView(R.layout.splash_screen_welcome);
 
             Button button = (Button) findViewById(R.id.button_welcome_done);
             button.setOnClickListener(new View.OnClickListener() {

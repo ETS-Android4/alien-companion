@@ -16,9 +16,11 @@ import android.view.Gravity;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.Services.MessageCheckService;
 import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -133,6 +135,7 @@ public class MyApplication extends Application {
     public static User currentUser;
     public static String currentAccessToken;
     public static boolean renewingToken = false;
+    public static boolean renewingUserToken = false;
     public static boolean accountChanges = false;
 
     @Override
@@ -393,6 +396,20 @@ public class MyApplication extends Application {
         }
 
         return currentAccount;
+    }
+
+    public static SavedAccount getSavedAccountByName(Context context, String accountName) {
+        try {
+            List<SavedAccount> savedAccounts = (List<SavedAccount>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.SAVED_ACCOUNTS_FILENAME));
+            for(SavedAccount account : savedAccounts) {
+                if(account.getUsername().equals(accountName)) {
+                    return account;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static List<SavedAccount> readAccounts(Context context) {

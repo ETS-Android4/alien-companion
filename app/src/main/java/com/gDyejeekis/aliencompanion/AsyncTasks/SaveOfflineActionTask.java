@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
@@ -72,6 +73,12 @@ public class SaveOfflineActionTask extends AsyncTask<Void, Void, Boolean> {
             }
             else {
                 ToastUtils.displayShortToast(context, offlineAction.getActionName() + " queued");
+                if(!MyApplication.pendingOfflineActions) {
+                    MyApplication.pendingOfflineActions = true;
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putBoolean("pendingActions", MyApplication.pendingOfflineActions);
+                    editor.commit();
+                }
             }
         }
     }

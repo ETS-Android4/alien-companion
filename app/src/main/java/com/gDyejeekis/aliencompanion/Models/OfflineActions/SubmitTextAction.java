@@ -54,4 +54,8 @@ public class SubmitTextAction extends OfflineUserAction implements Serializable 
         return subreddit;
     }
 
+    public void executeAction() {
+
+    }
+
 }
