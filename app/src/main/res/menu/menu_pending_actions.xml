@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_execute_all_offline_actions" android:title="@string/execute_all_pending"
+        android:orderInCategory="10" app:showAsAction="never" />
+
+    <item android:id="@+id/action_cancel_all_offline_actions" android:title="@string/cancel_all_pending"
+        android:orderInCategory="20" app:showAsAction="never" />
 
 </menu>

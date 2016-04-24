@@ -42,6 +42,7 @@ public class UnsaveAction extends OfflineUserAction implements Serializable {
                 actionCompleted = true;
                 saveAnyAccountChanges(context);
             } catch (Exception e) {
+                actionFailed = true;
                 actionCompleted = false;
                 e.printStackTrace();
             }

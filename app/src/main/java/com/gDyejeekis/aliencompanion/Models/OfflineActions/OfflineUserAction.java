@@ -17,19 +17,28 @@ import java.util.List;
  */
 public abstract class OfflineUserAction implements Serializable {
 
-    public String actionName;
+    protected String actionName;
 
-    public int actionType;
+    protected int actionType;
 
     protected String accountName;
 
-    public boolean actionCompleted;
+    protected boolean actionCompleted;
 
-    public String actionId;
+    protected boolean actionFailed;
+
+    //protected String actionFailedReason;
+
+    protected String actionId;
 
     public OfflineUserAction(String accountName) {
         this.accountName = accountName;
         this.actionCompleted = false;
+        this.actionFailed = false;
+    }
+
+    public boolean isActionFailed() {
+        return actionFailed;
     }
 
     public int getActionType() {

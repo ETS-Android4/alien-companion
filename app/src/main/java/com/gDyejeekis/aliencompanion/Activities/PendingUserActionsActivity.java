@@ -50,6 +50,10 @@ public class PendingUserActionsActivity extends BackNavActivity {
         pendingActionsView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
     }
 
+    public PendingActionsAdapter getAdapter() {
+        return adapter;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_pending_actions, menu);

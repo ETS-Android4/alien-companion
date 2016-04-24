@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_execute_offline_action" android:title="@string/execute"
+        android:orderInCategory="10" />
+
+    <item android:id="@+id/action_edit_offline_action" android:title="@string/edit"
+        android:orderInCategory="20" />
+
+    <item android:id="@+id/action_cancel_offline_action" android:title="@string/execute"
+        android:orderInCategory="30" />
+
+</menu>
