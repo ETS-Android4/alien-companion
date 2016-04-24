@@ -2,7 +2,11 @@ package com.gDyejeekis.aliencompanion.Models.OfflineActions;
 
 import android.content.Context;
 
+import com.gDyejeekis.aliencompanion.api.action.MarkActions;
+import com.gDyejeekis.aliencompanion.api.action.SubmitActions;
+import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -54,8 +58,20 @@ public class SubmitTextAction extends OfflineUserAction implements Serializable 
         return subreddit;
     }
 
-    public void executeAction() {
+    public void executeAction(Context context) {
+        User user = getUserByAccountName(context);
 
+        if(user != null) {
+            try {
+                SubmitActions submitActions = new SubmitActions(new PoliteRedditHttpClient(user), user);
+                submitActions.submitSelfPost(title, selfText, subreddit, "", "");
+                actionCompleted = true;
+                saveAnyAccountChanges(context);
+            } catch (Exception e) {
+                actionCompleted = false;
+                e.printStackTrace();
+            }
+        }
     }
 
 }

@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.MessageActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -46,34 +47,36 @@ public class MessageCheckService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent i) {
-        Log.d(TAG, "Checking for new messages..");
-        if(MyApplication.currentAccount == null) {
-            MyApplication.currentAccount = MyApplication.getCurrentAccount(this);
-        }
-
-        try {
-            if (MyApplication.currentAccount.loggedIn) {
-                HttpClient httpClient = new PoliteRedditHttpClient();
-                MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
-                MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
-
-                Messages msgRetrieval = new Messages(httpClient, MyApplication.currentUser);
-                List<RedditItem> messages = msgRetrieval.ofUser(MessageCategory.INBOX, MessageCategorySort.UNREAD, -1, 1000, null, null, true);
-                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                editor.putBoolean("newMessages", messages.size() > 0);
-                editor.commit();
-
-                if (messages.size() > 0) {
-                    Log.d(TAG, messages.size() + " new messages");
-                    MainActivity.notifyDrawerChanged = true;
-                    Message lastMessage = (Message) messages.get(0);
-                    showNewMessagesNotif(messages.size(), lastMessage.createdUTC);
-                } else {
-                    Log.d(TAG, "No new messages");
-                }
+        if(!MessageActivity.isActive) {
+            Log.d(TAG, "Checking for new messages..");
+            if (MyApplication.currentAccount == null) {
+                MyApplication.currentAccount = MyApplication.getCurrentAccount(this);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            try {
+                if (MyApplication.currentAccount.loggedIn) {
+                    HttpClient httpClient = new PoliteRedditHttpClient();
+                    MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
+                    MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
+
+                    Messages msgRetrieval = new Messages(httpClient, MyApplication.currentUser);
+                    List<RedditItem> messages = msgRetrieval.ofUser(MessageCategory.INBOX, MessageCategorySort.UNREAD, -1, 1000, null, null, true);
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putBoolean("newMessages", messages.size() > 0);
+                    editor.commit();
+
+                    if (messages.size() > 0) {
+                        Log.d(TAG, messages.size() + " new messages");
+                        MainActivity.notifyDrawerChanged = true;
+                        Message lastMessage = (Message) messages.get(0);
+                        showNewMessagesNotif(messages.size(), lastMessage.createdUTC);
+                    } else {
+                        Log.d(TAG, "No new messages");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

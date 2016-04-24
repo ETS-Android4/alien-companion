@@ -131,12 +131,16 @@ public class MyApplication extends Application {
     public static int syncImagesInCommentsCount = 0;
 
     //public static List<SavedAccount> savedAccounts;
+
+    //this is horrible
     public static SavedAccount currentAccount;
     public static User currentUser;
     public static String currentAccessToken;
     public static boolean renewingToken = false;
     public static boolean renewingUserToken = false;
     public static boolean accountChanges = false;
+    public static String accountUsernameChanged;
+    public static String newAccountAccessToken;
 
     @Override
     public void onCreate() {
@@ -410,6 +414,14 @@ public class MyApplication extends Application {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void saveAccountChanges(Context context, String accountName) {
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static List<SavedAccount> readAccounts(Context context) {

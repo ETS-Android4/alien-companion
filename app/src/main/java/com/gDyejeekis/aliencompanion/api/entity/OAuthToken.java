@@ -65,7 +65,16 @@ public class OAuthToken implements Serializable {
     }
 
     public void checkToken(User user) { //run on background thread
-        // TODO: 4/22/2016
+        if(new Date().getTime()/1000 >= expiration) {
+            MyApplication.renewingUserToken = true;
+            accessToken = null;
+            RedditOAuth.refreshToken(new RedditHttpClient(user), this);
+            MyApplication.renewingUserToken = false;
+
+            MyApplication.accountUsernameChanged = user.getUsername();
+            MyApplication.newAccountAccessToken = accessToken;
+            MyApplication.accountChanges = true;
+        }
     }
 
     //public OAuthToken(String accessToken, String tokenType, long expiresIn, String scope, String state) {

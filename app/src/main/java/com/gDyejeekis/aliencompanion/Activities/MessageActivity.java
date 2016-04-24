@@ -22,12 +22,15 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class MessageActivity extends SwipeBackActivity {
 
+    public static boolean isActive = false;
+
     private MessageFragment messageFragment;
     private FragmentManager fm;
     private LinearLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        isActive = true;
         getTheme().applyStyle(MyApplication.fontStyle, true);
         getTheme().applyStyle(MyApplication.fontFamily, true);
         if(MyApplication.nightThemeEnabled) {
@@ -173,6 +176,24 @@ public class MessageActivity extends SwipeBackActivity {
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;
+    }
+
+    //@Override
+    //public void onResume() {
+    //    isActive = true;
+    //    super.onResume();
+    //}
+//
+    //@Override
+    //public void onStop() {
+    //    isActive = false;
+    //    super.onStop();
+    //}
+
+    @Override
+    public void onDestroy() {
+        isActive = false;
+        super.onDestroy();
     }
 
 }
