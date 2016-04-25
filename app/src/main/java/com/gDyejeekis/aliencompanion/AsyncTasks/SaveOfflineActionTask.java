@@ -1,9 +1,11 @@
 package com.gDyejeekis.aliencompanion.AsyncTasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -72,6 +74,9 @@ public class SaveOfflineActionTask extends AsyncTask<Void, Void, Boolean> {
                 ToastUtils.displayShortToast(context, "Action already queued");
             }
             else {
+                if(context instanceof SubmitActivity) {
+                    ((Activity) context).finish();
+                }
                 ToastUtils.displayShortToast(context, offlineAction.getActionName() + " queued");
                 if(!MyApplication.pendingOfflineActions) {
                     MyApplication.pendingOfflineActions = true;

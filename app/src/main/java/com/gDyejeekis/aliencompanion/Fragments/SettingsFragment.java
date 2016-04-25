@@ -14,6 +14,7 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -40,6 +41,16 @@ public class SettingsFragment extends PreferenceFragment {
         Preference viewChangeLog = findPreference("changelog");
         Preference profiles = findPreference("profiles");
         Preference feedback = findPreference("feedback");
+
+        Preference pendingActions = findPreference("offlineActions");
+        pendingActions.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), PendingUserActionsActivity.class);
+                getActivity().startActivity(intent);
+                return false;
+            }
+        });
 
         Preference messageCheckInterval = findPreference("messageCheckInterval");
         messageCheckInterval.setSummary(getTimeIntervalString(MyApplication.messageCheckInterval));

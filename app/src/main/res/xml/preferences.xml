@@ -284,6 +284,10 @@
             android:entryValues="@array/timeIntervalsValues"
             android:defaultValue="15" />
 
+        <Preference
+            android:key="offlineActions"
+            android:title="Pending offline actions" />
+
         <ListPreference
             android:key="offlineActionsInterval"
             android:title="Execute pending offline actions"

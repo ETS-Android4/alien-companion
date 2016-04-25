@@ -7,7 +7,7 @@
     <item android:id="@+id/action_edit_offline_action" android:title="@string/edit"
         android:orderInCategory="20" />
 
-    <item android:id="@+id/action_cancel_offline_action" android:title="@string/execute"
+    <item android:id="@+id/action_cancel_offline_action" android:title="@string/cancel"
         android:orderInCategory="30" />
 
 </menu>

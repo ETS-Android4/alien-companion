@@ -14,8 +14,12 @@ import android.widget.RadioGroup;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.ReportAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
 
@@ -103,8 +107,15 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
             }
             if(reason!=null) {
                 //ToastUtils.displayShortToast(getActivity(), reason);
-                LoadUserActionTask task = new LoadUserActionTask(getActivity(), postId, UserActionType.report, reason);
-                task.execute();
+                if(GeneralUtils.isNetworkAvailable(getActivity())) {
+                    LoadUserActionTask task = new LoadUserActionTask(getActivity(), postId, UserActionType.report, reason);
+                    task.execute();
+                }
+                else {
+                    OfflineUserAction action = new ReportAction(MyApplication.currentAccount.getUsername(), postId, reason);
+                    SaveOfflineActionTask task = new SaveOfflineActionTask(getActivity(), action);
+                    task.execute();
+                }
             }
             else if(selected!=R.id.radioButton_other) ToastUtils.displayShortToast(getActivity(), "Please select a reason");
         }

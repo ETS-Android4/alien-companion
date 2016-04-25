@@ -21,6 +21,7 @@ import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
@@ -42,7 +43,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private DialogFragment dialogFragment;
     private Context context;
-    private HttpClient httpClient = new RedditHttpClient();
+    //private HttpClient httpClient; //= new RedditHttpClient();
     private String username;
     private String password;
     private String oauthCode;
@@ -133,8 +134,9 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             MyApplication.currentAccessToken = null;
             SavedAccount newAccount;
             if(RedditOAuth.useOAuth2) {
-                OAuthToken token = RedditOAuth.getOAuthToken(httpClient, oauthCode);
+                OAuthToken token = RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), oauthCode);
                 MyApplication.currentAccessToken = token.accessToken;
+                HttpClient httpClient = new PoliteRedditHttpClient();
                 ProfileActions profileActions = new ProfileActions(httpClient, token.accessToken);
                 UserInfo userInfo = profileActions.getUserInformation();
                 User user = new User(httpClient, userInfo.getName(), token);
@@ -144,7 +146,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 newAccount = new SavedAccount(user.getUsername(), token, subredditList, multiList);
             }
             else {
-                User user = new User(httpClient, username, password);
+                User user = new User(new RedditHttpClient(), username, password);
                 user.connect();
 
                 newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), getUserSubreddits(user));

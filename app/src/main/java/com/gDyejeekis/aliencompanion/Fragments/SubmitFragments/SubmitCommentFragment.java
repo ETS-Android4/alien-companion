@@ -15,7 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.CommentAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -95,9 +99,19 @@ public class SubmitCommentFragment extends Fragment {
             UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
             //TODO: sort this shit
 
-            ToastUtils.displayShortToast(getActivity(), "Submitting..");
-            LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, replyField.getText().toString());
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            String commentText = replyField.getText().toString();
+
+            if(GeneralUtils.isNetworkAvailable(getActivity())) {
+                ToastUtils.displayShortToast(getActivity(), "Submitting..");
+                LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, commentText);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+            else {
+                ToastUtils.displayShortToast(getActivity(), "Adding to pending actions..");
+                OfflineUserAction action = new CommentAction(MyApplication.currentAccount.getUsername(), fullname, commentText);
+                SaveOfflineActionTask task = new SaveOfflineActionTask(getActivity(), action);
+                task.execute();
+            }
 
             //getActivity().finish();
         }

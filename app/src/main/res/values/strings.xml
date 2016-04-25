@@ -152,5 +152,6 @@
     <string name="cancel_all_pending">Cancel all</string>
     <string name="execute">Execute</string>
     <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

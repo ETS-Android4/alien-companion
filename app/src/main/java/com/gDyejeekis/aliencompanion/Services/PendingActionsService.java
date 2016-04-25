@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
@@ -43,6 +44,7 @@ public class PendingActionsService extends IntentService {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean actionsPending = prefs.getBoolean("pendingActions", false);
             if (actionsPending) {
+                Log.d(TAG, "Executing remaining offline actions..");
                 try {
                     File file = new File(getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME);
                     List<OfflineUserAction> pendingActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(file);
@@ -56,6 +58,7 @@ public class PendingActionsService extends IntentService {
                     }
 
                     if(remainingActions.size()==0) {
+                        Log.d(TAG, "All remaining offline actions completed");
                         file.delete();
 
                         SharedPreferences.Editor editor = prefs.edit();
@@ -63,6 +66,7 @@ public class PendingActionsService extends IntentService {
                         editor.commit();
                     }
                     else {
+                        Log.d(TAG, remainingActions.size() + " actions failed to complete");
                         GeneralUtils.writeObjectToFile(remainingActions, file);
                         showActionsFailedNotification(remainingActions.size());
                     }

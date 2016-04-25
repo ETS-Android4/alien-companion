@@ -21,9 +21,18 @@ import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.TwoOptionDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.DownvoteAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.HideAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.NoVoteAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.SaveAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UnhideAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UnsaveAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UpvoteAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -72,6 +81,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             case R.id.btn_upvote:
                 UserActionType actionType;
                 LoadUserActionTask task;
+                SaveOfflineActionTask task1;
                 if(MyApplication.currentUser!=null) {
                     if (post.getLikes().equals("true")) {
                         post.setLikes("null");
@@ -87,8 +97,22 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     if (adapter != null) adapter.notifyDataSetChanged();
                     else recyclerAdapter.notifyDataSetChanged();
 
-                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    if(GeneralUtils.isNetworkAvailable(context)) {
+                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
+                    else {
+                        OfflineUserAction action;
+                        String accountName = MyApplication.currentAccount.getUsername();
+                        if(actionType == UserActionType.novote) {
+                            action = new NoVoteAction(accountName, post.getFullName());
+                        }
+                        else {
+                            action = new UpvoteAction(accountName, post.getFullName());
+                        }
+                        task1 = new SaveOfflineActionTask(context, action);
+                        task1.execute();
+                    }
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -108,8 +132,22 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     if (adapter != null) adapter.notifyDataSetChanged();
                     else recyclerAdapter.notifyDataSetChanged();
 
-                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    if(GeneralUtils.isNetworkAvailable(context)) {
+                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
+                    else {
+                        OfflineUserAction action;
+                        String accountName = MyApplication.currentAccount.getUsername();
+                        if(actionType == UserActionType.novote) {
+                            action = new NoVoteAction(accountName, post.getFullName());
+                        }
+                        else {
+                            action = new DownvoteAction(accountName, post.getFullName());
+                        }
+                        task1 = new SaveOfflineActionTask(context, action);
+                        task1.execute();
+                    }
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -126,8 +164,22 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     if (adapter != null) adapter.notifyDataSetChanged();
                     else recyclerAdapter.notifyDataSetChanged();
 
-                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.execute();
+                    if(GeneralUtils.isNetworkAvailable(context)) {
+                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task.execute();
+                    }
+                    else {
+                        OfflineUserAction action;
+                        String accountName = MyApplication.currentAccount.getUsername();
+                        if(actionType == UserActionType.save) {
+                            action = new SaveAction(accountName, post.getFullName());
+                        }
+                        else {
+                            action = new UnsaveAction(accountName, post.getFullName());
+                        }
+                        task1 = new SaveOfflineActionTask(context, action);
+                        task1.execute();
+                    }
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to save");
                 break;
@@ -148,8 +200,22 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     if (adapter != null) adapter.notifyDataSetChanged();
                     else recyclerAdapter.notifyDataSetChanged();
 
-                    task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    if(GeneralUtils.isNetworkAvailable(context)) {
+                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
+                    else {
+                        OfflineUserAction action;
+                        String accountName = MyApplication.currentAccount.getUsername();
+                        if(actionType == UserActionType.hide) {
+                            action = new HideAction(accountName, post.getFullName());
+                        }
+                        else {
+                            action = new UnhideAction(accountName, post.getFullName());
+                        }
+                        task1 = new SaveOfflineActionTask(context, action);
+                        task1.execute();
+                    }
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to hide");
                 break;

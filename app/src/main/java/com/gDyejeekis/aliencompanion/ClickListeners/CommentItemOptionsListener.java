@@ -18,10 +18,18 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.DownvoteAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.NoVoteAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.SaveAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UnsaveAction;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.UpvoteAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
@@ -57,7 +65,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             case R.id.btn_upvote:
                 UserActionType actionType;
                 LoadUserActionTask task;
+                SaveOfflineActionTask task1;
                 if(MyApplication.currentUser!=null) {
+
                     if (comment.getLikes().equals("true")) {
                         comment.setLikes("null");
                         comment.setScore(comment.getScore() - 1);
@@ -73,13 +83,29 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     if (adapter != null) adapter.notifyDataSetChanged();
                     else recyclerAdapter.notifyDataSetChanged();
 
-                    task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    if(GeneralUtils.isNetworkAvailable(context)) {
+
+                        task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
+                    else {
+                        OfflineUserAction action;
+                        String accountName = MyApplication.currentAccount.getUsername();
+                        if(actionType == UserActionType.novote) {
+                            action = new NoVoteAction(accountName, comment.getFullName());
+                        }
+                        else {
+                            action = new UpvoteAction(accountName, comment.getFullName());
+                        }
+                        task1 = new SaveOfflineActionTask(context, action);
+                        task1.execute();
+                    }
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote:
                 if(MyApplication.currentUser!=null) {
+
                     if (comment.getLikes().equals("false")) {
                         comment.setLikes("null");
                         comment.setScore(comment.getScore() + 1);
@@ -95,8 +121,23 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     if (adapter != null) adapter.notifyDataSetChanged();
                     else recyclerAdapter.notifyDataSetChanged();
 
-                    task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    if(GeneralUtils.isNetworkAvailable(context)) {
+
+                        task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
+                    else {
+                        OfflineUserAction action;
+                        String accountName = MyApplication.currentAccount.getUsername();
+                        if(actionType == UserActionType.novote) {
+                            action = new NoVoteAction(accountName, comment.getFullName());
+                        }
+                        else {
+                            action = new DownvoteAction(accountName, comment.getFullName());
+                        }
+                        task1 = new SaveOfflineActionTask(context, action);
+                        task1.execute();
+                    }
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
@@ -171,8 +212,22 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                             UserActionType actionType;
                             if(comment.isSaved()) actionType = UserActionType.unsave;
                             else actionType = UserActionType.save;
-                            task = new LoadUserActionTask(context, comment.getFullName(), actionType);
-                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            if(GeneralUtils.isNetworkAvailable(context)) {
+                                task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                            else {
+                                OfflineUserAction action;
+                                String accountname = MyApplication.currentAccount.getUsername();
+                                if(actionType == UserActionType.save) {
+                                    action = new SaveAction(accountname, comment.getFullName());
+                                }
+                                else {
+                                    action = new UnsaveAction(accountname, comment.getFullName());
+                                }
+                                SaveOfflineActionTask task1 = new SaveOfflineActionTask(context, action);
+                                task1.execute();
+                            }
                         }
                         else ToastUtils.displayShortToast(context, "Must be logged in to save");
                         return true;

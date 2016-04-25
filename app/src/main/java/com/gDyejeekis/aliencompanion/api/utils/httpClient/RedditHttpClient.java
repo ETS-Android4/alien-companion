@@ -73,7 +73,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             connection.setReadTimeout(5000);
 
             Log.d(TAG, "GET request to  " + baseUrl + urlPath);
-            //printRequestProperties(connection);
+            printRequestProperties(connection);
 
             InputStream inputStream = connection.getInputStream();
             //Log.d(TAG, "response code: " + connection.getResponseCode());
@@ -85,7 +85,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
-            //printHeaderFields(connection);
+            printHeaderFields(connection);
 
             if (result.getResponseObject() == null) {
                 throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + baseUrl + urlPath);
@@ -350,15 +350,18 @@ public class RedditHttpClient implements HttpClient, Serializable {
                             OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
                             MyApplication.currentAccount.setToken(token);
                             MyApplication.currentAccessToken = token.accessToken;
+                            accessToken = MyApplication.currentAccessToken;
                             MyApplication.renewingToken = false;
                             MyApplication.accountChanges = true;
                         } else {
                             MyApplication.currentAccount.getToken().checkToken();
+                            accessToken = MyApplication.currentAccessToken;
                         }
                     }
                 }
                 else if(!MyApplication.renewingUserToken) {
                     user.getTokenObject().checkToken(user);
+                    accessToken = user.getTokenObject().accessToken;
                 }
             }
         } catch (Exception e) {
