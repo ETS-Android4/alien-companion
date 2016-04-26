@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:text="(Message body here)"
             android:id="@+id/txtView_messageBody"
-            android:textSize="?attr/font_small"
+            android:textSize="?attr/font_medium"
             android:textColor="?attr/themeTextColor"
             android:fontFamily="?attr/defaultFontFamily" />
 
