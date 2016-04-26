@@ -153,5 +153,6 @@
     <string name="execute">Execute</string>
     <string name="edit">Edit</string>
     <string name="cancel">Cancel</string>
+    <string name="pending_actions">Pending actions</string>
 
 </resources>

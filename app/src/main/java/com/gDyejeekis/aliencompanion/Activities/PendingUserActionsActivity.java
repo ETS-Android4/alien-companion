@@ -62,7 +62,14 @@ public class PendingUserActionsActivity extends BackNavActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO: 4/18/2016
+        switch (item.getItemId()) {
+            case R.id.action_execute_all_offline_actions:
+                adapter.executeAllActions();
+                return true;
+            case R.id.action_cancel_all_offline_actions:
+                adapter.cancelAllActions();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

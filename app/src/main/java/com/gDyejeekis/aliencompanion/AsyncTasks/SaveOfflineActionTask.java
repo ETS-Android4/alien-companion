@@ -46,7 +46,7 @@ public class SaveOfflineActionTask extends AsyncTask<Void, Void, Boolean> {
                 }
                 else if(action.getActionType() == offlineAction.getActionType()) {
                     String id1 = action.getActionId().substring(action.getActionId().lastIndexOf('-') + 1);
-                    String id2 = offlineAction.getActionId().substring(action.getActionId().lastIndexOf('-') + 1);
+                    String id2 = offlineAction.getActionId().substring(offlineAction.getActionId().lastIndexOf('-') + 1);
                     if(id1.equals(id2)) {
                         offlineActions.set(offlineActions.indexOf(action), offlineAction);
                         GeneralUtils.writeObjectToFile(offlineActions, file);

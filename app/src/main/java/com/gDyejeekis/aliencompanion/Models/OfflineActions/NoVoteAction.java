@@ -16,7 +16,7 @@ public class NoVoteAction extends OfflineUserAction implements Serializable {
 
     public static final String ACTION_NAME = "No vote";
 
-    public static final int ACTION_TYPE = 1;
+    public static final int ACTION_TYPE = 4;
 
     private String itemFullname;
 

@@ -41,6 +41,10 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void executeAllActions() {
+        // TODO: 4/25/2016
+    }
+
     public boolean executeAction(int position) {
         // TODO: 4/24/2016
         return false;
@@ -58,12 +62,28 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
         editAction(pendingActions.indexOf(action));
     }
 
+    public void cancelAllActions() {
+        pendingActions.clear();
+        notifyDataSetChanged();
+        saveChanges();
+    }
+
     public void cancelAction(int position) {
-        // TODO: 4/24/2016
+        pendingActions.remove(position);
+        notifyDataSetChanged();
+        saveChanges();
     }
 
     public void cancelAction(OfflineUserAction action) {
         cancelAction(pendingActions.indexOf(action));
+    }
+
+    public void saveChanges() {
+        try {
+            GeneralUtils.writeObjectToFile(pendingActions, new File(activity.getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

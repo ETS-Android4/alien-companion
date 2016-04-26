@@ -24,6 +24,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
@@ -263,6 +264,10 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 ShowSyncedDialogFragment syncedDialog = new ShowSyncedDialogFragment();
                 syncedDialog.show(activity.getFragmentManager(), "dialog");
                 break;
+            case R.id.action_pending_actions:
+                Intent intent = new Intent(activity, PendingUserActionsActivity.class);
+                activity.startActivity(intent);
+                break;
             case R.id.action_clear_synced:
                 String messageEnd;
                 if(subreddit==null) {
@@ -294,7 +299,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }).show();
                 return true;
             case R.id.action_sync_profiles:
-                Intent intent = new Intent(activity, SyncProfilesActivity.class);
+                intent = new Intent(activity, SyncProfilesActivity.class);
                 activity.startActivity(intent);
                 return true;
             case R.id.action_sync_posts:
