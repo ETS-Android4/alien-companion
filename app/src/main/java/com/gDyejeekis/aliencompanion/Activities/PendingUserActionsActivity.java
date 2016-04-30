@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gDyejeekis.aliencompanion.Adapters.PendingActionsAdapter;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
@@ -21,6 +22,8 @@ public class PendingUserActionsActivity extends BackNavActivity {
     private RecyclerView pendingActionsView;
     private PendingActionsAdapter adapter;
     public static boolean isActive;
+    public static int editedIndex = -1;
+    public static OfflineUserAction newAction;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -52,6 +55,17 @@ public class PendingUserActionsActivity extends BackNavActivity {
 
     public PendingActionsAdapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(editedIndex != -1) {
+            adapter.actionEdited(editedIndex, newAction);
+            editedIndex = -1;
+            newAction = null;
+        }
     }
 
     @Override

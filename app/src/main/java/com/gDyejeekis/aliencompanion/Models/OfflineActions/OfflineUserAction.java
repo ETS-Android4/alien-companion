@@ -37,6 +37,10 @@ public abstract class OfflineUserAction implements Serializable {
         this.actionFailed = false;
     }
 
+    public void setActionFailed(boolean flag) {
+        actionFailed = flag;
+    }
+
     public boolean isActionFailed() {
         return actionFailed;
     }

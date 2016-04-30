@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.CommentAction;
@@ -40,6 +41,7 @@ public class SubmitCommentFragment extends Fragment {
     private String selfText;
     private String postName;
     private boolean edit;
+    private CommentAction offlineAction;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -51,6 +53,7 @@ public class SubmitCommentFragment extends Fragment {
         postName = getActivity().getIntent().getStringExtra("postName");
         selfText = getActivity().getIntent().getStringExtra("selfText");
         edit = getActivity().getIntent().getBooleanExtra("edit", false);
+        offlineAction = (CommentAction) getActivity().getIntent().getSerializableExtra("offline");
     }
 
     @Override
@@ -68,7 +71,11 @@ public class SubmitCommentFragment extends Fragment {
             layoutOriginalComment.setVisibility(View.GONE);
             if(edit) {
                 String title;
-                if(selfText != null) {
+                if(offlineAction != null) {
+                    title = "Edit pending comment";
+                    replyField.setText(offlineAction.getCommentText());
+                }
+                else if(selfText != null) {
                     title = "Edit self-post";
                     replyField.setText(selfText);
                 }
@@ -94,23 +101,33 @@ public class SubmitCommentFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_submit) {
-            String fullname = (selfText != null || !edit) ? postName : originalComment.getFullName();
-            if(fullname==null) fullname = originalComment.getFullName();
-            UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
-            //TODO: sort this shit
 
             String commentText = replyField.getText().toString();
 
-            if(GeneralUtils.isNetworkAvailable(getActivity())) {
-                ToastUtils.displayShortToast(getActivity(), "Submitting..");
-                LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, commentText);
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            if(offlineAction != null && edit) {
+                int index = getActivity().getIntent().getIntExtra("index", -1);
+                if(index != -1) {
+                    getActivity().finish();
+                    offlineAction.setCommentText(commentText);
+                    PendingUserActionsActivity.editedIndex = index;
+                    PendingUserActionsActivity.newAction = offlineAction;
+                }
             }
             else {
-                ToastUtils.displayShortToast(getActivity(), "Adding to pending actions..");
-                OfflineUserAction action = new CommentAction(MyApplication.currentAccount.getUsername(), fullname, commentText);
-                SaveOfflineActionTask task = new SaveOfflineActionTask(getActivity(), action);
-                task.execute();
+                String fullname = (selfText != null || !edit) ? postName : originalComment.getFullName();
+                if(fullname==null) fullname = originalComment.getFullName();
+
+                if (GeneralUtils.isNetworkAvailable(getActivity())) {
+                    UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
+                    ToastUtils.displayShortToast(getActivity(), "Submitting..");
+                    LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, commentText);
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                } else {
+                    ToastUtils.displayShortToast(getActivity(), "Adding to pending actions..");
+                    OfflineUserAction action = new CommentAction(MyApplication.currentAccount.getUsername(), fullname, commentText);
+                    SaveOfflineActionTask task = new SaveOfflineActionTask(getActivity(), action);
+                    task.execute();
+                }
             }
 
             //getActivity().finish();

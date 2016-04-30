@@ -86,7 +86,12 @@ public class SubmitActivity extends BackNavActivity implements DialogInterface.O
         String message = "";
         boolean showDialog = false;
         if(fragment instanceof SubmitCommentFragment) {
-            message = "Discard comment?";
+            if(getIntent().getBooleanExtra("edit", false)) {
+                message = "Cancel edit?";
+            }
+            else {
+                message = "Discard comment?";
+            }
             showDialog = ((SubmitCommentFragment) fragment).displayConfirmDialog();
         }
         else if(fragment instanceof SubmitLinkFragment) {
