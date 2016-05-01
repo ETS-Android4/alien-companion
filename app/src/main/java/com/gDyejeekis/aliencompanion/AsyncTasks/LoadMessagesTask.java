@@ -124,7 +124,9 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 mf.hasMore = messages.size() == RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     case init:
-                        markNewMessagesRead((Message) messages.get(0));
+                        try {
+                            markNewMessagesRead((Message) messages.get(0));
+                        } catch (Exception e) {}
                         mf.contentView.setAdapter(mf.adapter);
                         //if(messages.size()==0) ToastUtils.displayShortToast(context, "No messages found");
                         break;

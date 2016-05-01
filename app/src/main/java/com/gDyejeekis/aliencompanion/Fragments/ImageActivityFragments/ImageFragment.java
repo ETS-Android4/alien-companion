@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -263,7 +264,7 @@ public class ImageFragment extends Fragment {
                         mediaScanIntent.setData(contentUri);
                         activity.sendBroadcast(mediaScanIntent);
 
-                        showImageSavedNotification(bitmap);
+                        showImageSavedNotification(bitmap, contentUri);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -292,8 +293,13 @@ public class ImageFragment extends Fragment {
         }
     };
 
-    private void showImageSavedNotification(Bitmap bitmap) {
+    private void showImageSavedNotification(Bitmap bitmap, Uri uri) {
         Bitmap decoded = new BitmapTransform(640, 480).transform(bitmap);
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "image/*");
+        PendingIntent pIntent = PendingIntent.getActivity(activity, 0, intent, 0);
 
         Notification notif = new Notification.Builder(activity)
                 .setContentTitle("Image saved")
@@ -302,6 +308,8 @@ public class ImageFragment extends Fragment {
                 .setSmallIcon(R.mipmap.ic_photo_white_24dp)
                 //.setLargeIcon(bitmap)
                 .setStyle(new Notification.BigPictureStyle().bigPicture(decoded))
+                .setContentIntent(pIntent)
+                .setAutoCancel(true)
                 .build();
 
         NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);

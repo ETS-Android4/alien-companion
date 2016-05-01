@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -349,13 +350,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             @Override protected void onPostExecute(Boolean success) {
                 Log.d(TAG, "Gif downloaded to file");
                 gifSaved = success;
+                Uri contentUri = null;
                 if(gifSaved) {
                     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(file);
+                    contentUri = Uri.fromFile(file);
                     mediaScanIntent.setData(contentUri);
                     activity.sendBroadcast(mediaScanIntent);
                 }
-                showGifSavedNotification(id, gifSaved);
+                showGifSavedNotification(id, gifSaved, contentUri);
             }
         }.execute();
 
@@ -373,7 +375,16 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         nm.notify(id, notif);
     }
 
-    private void showGifSavedNotification(int id, boolean success) {
+    private void showGifSavedNotification(int id, boolean success, Uri uri) {
+        PendingIntent pIntent = null;
+        if(success) {
+            String type = (isGif) ? "image/*" : "video/*";
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, type);
+            pIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+        }
+
         String title = (success) ? "Gif saved" : "Failed to save gif";
         int smallIcon = (success) ? R.mipmap.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
         Notification notif = new Notification.Builder(activity)
@@ -381,6 +392,8 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 .setContentText(url)
                 //.setSubText(url)
                 .setSmallIcon(smallIcon)
+                .setContentIntent(pIntent)
+                .setAutoCancel(true)
                 .build();
 
         NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);

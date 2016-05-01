@@ -75,7 +75,7 @@ public class ConvertUtils {
             Matcher matcher = compiledPatter.matcher(html);
 
             if (matcher.find()) {
-                Log.d(TAG, "MATCH FOUND FOR TITLED SPOILERS");
+                //Log.d(TAG, "MATCH FOUND FOR TITLED SPOILERS");
                 //Log.d(TAG, "Start index: " + matcher.start());
                 //Log.d(TAG, " End index: " + matcher.end());
                 //Log.d(TAG, " Found: " + matcher.group());

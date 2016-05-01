@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Services;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -81,16 +82,23 @@ public class MessageCheckService extends IntentService {
     }
 
     private void showNewMessagesNotif(int count, double lastMessageUtc) {
+        Intent intent = new Intent(this, MessageActivity.class);
+        intent.setClass(getApplicationContext(), MessageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("viewNew", true);
+
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
         String title = "Alien Companion - " + count + " new message";
         if(count > 1) title = title.concat("s");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setSmallIcon(R.mipmap.ic_mail_white_48dp)
                 .setContentTitle(title)
-                .setContentText("Last message received " + ConvertUtils.getSubmissionAge(lastMessageUtc));
+                .setContentText("Last message received " + ConvertUtils.getSubmissionAge(lastMessageUtc))
+                .setContentIntent(pIntent);
 
         Notification notif = builder.build();
-        notif.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+        notif.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
 
         NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.notify(SERVICE_NOTIF_ID, notif);

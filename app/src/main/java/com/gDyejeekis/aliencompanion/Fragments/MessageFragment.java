@@ -123,7 +123,12 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 //currentlyLoading = true;
                 currentLoadType = LoadType.init;
                 category = MessageCategory.INBOX;
-                sort = MessageCategorySort.ALL;
+                if(activity.getIntent().getBooleanExtra("viewNew", false)) {
+                    sort = MessageCategorySort.UNREAD;
+                }
+                else {
+                    sort = MessageCategorySort.ALL;
+                }
                 task = new LoadMessagesTask(activity, this, LoadType.init);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {

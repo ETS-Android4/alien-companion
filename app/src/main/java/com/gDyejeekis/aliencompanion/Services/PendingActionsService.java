@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Services;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -79,14 +80,20 @@ public class PendingActionsService extends IntentService {
     }
 
     private void showActionsFailedNotification(int count) {
+        Intent intent = new Intent(this, PendingUserActionsActivity.class);
+        intent.setClass(getApplicationContext(), PendingUserActionsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(android.R.drawable.stat_notify_error)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentTitle("Alien Companion - Pending actions")
-                .setContentText(count + " action" + ((count>1) ? "s" : "") + " failed to complete");
+                .setContentText(count + " action" + ((count>1) ? "s" : "") + " failed to complete")
+                .setContentIntent(pIntent);
 
         Notification notification = builder.build();
-        notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+        notification.flags = Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
 
         NotificationManager notifManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.notify(SERVICE_NOTIF_ID, notification);
