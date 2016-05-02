@@ -1,7 +1,12 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +17,8 @@ import com.gDyejeekis.aliencompanion.Adapters.PendingActionsAdapter;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 
 /**
@@ -21,6 +28,7 @@ public class PendingUserActionsActivity extends BackNavActivity {
 
     private RecyclerView pendingActionsView;
     private PendingActionsAdapter adapter;
+    private BroadcastReceiver receiver;
     public static boolean isActive;
     public static int editedIndex = -1;
     public static OfflineUserAction newAction;
@@ -51,6 +59,29 @@ public class PendingUserActionsActivity extends BackNavActivity {
         pendingActionsView.setLayoutManager(new LinearLayoutManager(this));
         pendingActionsView.setAdapter(adapter);
         pendingActionsView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String actionId = intent.getStringExtra("actionId");
+                boolean success = intent.getBooleanExtra("success", false);
+                adapter.notifyActionResult(actionId, success);
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
+                new IntentFilter(PendingActionsService.RESULT)
+        );
+    }
+
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        super.onStop();
     }
 
     public PendingActionsAdapter getAdapter() {
@@ -74,13 +105,27 @@ public class PendingUserActionsActivity extends BackNavActivity {
         return true;
     }
 
+    public static boolean checkServiceRunning(Context context) {
+        if(PendingActionsService.isRunning) {
+            ToastUtils.displayShortToast(context, "Pending actions execution in progress");
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_execute_all_offline_actions:
+                if(checkServiceRunning(this)) {
+                    return true;
+                }
                 adapter.executeAllActions();
                 return true;
             case R.id.action_cancel_all_offline_actions:
+                if(checkServiceRunning(this)) {
+                    return true;
+                }
                 adapter.cancelAllActions();
                 return true;
         }

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
@@ -31,30 +32,52 @@ public class PendingActionsService extends IntentService {
 
     public static final String TAG = "PendingActionsService";
 
+    public static final String RESULT = TAG + "_RESULT";
+
     public static final int SERVICE_ID = 5312;
 
     public static final int SERVICE_NOTIF_ID = 6312;
+
+    private LocalBroadcastManager broadcaster;
+
+    public static boolean isRunning = false;
 
     public PendingActionsService() {
         super(TAG);
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        broadcaster = LocalBroadcastManager.getInstance(this);
+    }
+
+    @Override
     public void onHandleIntent(Intent i) {
-        if(!PendingUserActionsActivity.isActive && GeneralUtils.isNetworkAvailable(this)) {
+        if(GeneralUtils.isNetworkAvailable(this)) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean actionsPending = prefs.getBoolean("pendingActions", false);
             if (actionsPending) {
+                isRunning = true;
                 Log.d(TAG, "Executing remaining offline actions..");
                 try {
                     File file = new File(getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME);
                     List<OfflineUserAction> pendingActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(file);
-                    List<OfflineUserAction> remainingActions = new ArrayList<>();
+                    List<OfflineUserAction> remainingActions = new ArrayList<>(pendingActions);
 
                     for (OfflineUserAction action : pendingActions) {
                         action.executeAction(this);
-                        if(!action.isActionCompleted()) {
-                            remainingActions.add(action);
+                        if(action.isActionCompleted()) {
+                            remainingActions.remove(action);
+                        }
+                        else {
+                            int index = remainingActions.indexOf(action);
+                            remainingActions.get(index).setActionFailed(true);
+                        }
+                        GeneralUtils.writeObjectToFile(remainingActions, file);
+
+                        if(PendingUserActionsActivity.isActive) {
+                            sendResult(action.getActionId(), action.isActionCompleted());
                         }
                     }
 
@@ -68,8 +91,9 @@ public class PendingActionsService extends IntentService {
                     }
                     else {
                         Log.d(TAG, remainingActions.size() + " actions failed to complete");
-                        GeneralUtils.writeObjectToFile(remainingActions, file);
-                        showActionsFailedNotification(remainingActions.size());
+                        if(!PendingUserActionsActivity.isActive) {
+                            showActionsFailedNotification(remainingActions.size());
+                        }
                     }
 
                 } catch (Exception e) {
@@ -77,6 +101,14 @@ public class PendingActionsService extends IntentService {
                 }
             }
         }
+        isRunning = false;
+    }
+
+    private void sendResult(String actionid, boolean success) {
+        Intent intent = new Intent(RESULT);
+        intent.putExtra("actionId", actionid);
+        intent.putExtra("success", success);
+        broadcaster.sendBroadcast(intent);
     }
 
     private void showActionsFailedNotification(int count) {

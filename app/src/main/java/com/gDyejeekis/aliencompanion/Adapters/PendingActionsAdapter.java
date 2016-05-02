@@ -27,6 +27,7 @@ import com.gDyejeekis.aliencompanion.Models.OfflineActions.SubmitTextAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.UpvoteAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
@@ -40,13 +41,9 @@ import java.util.List;
  */
 public class PendingActionsAdapter extends RecyclerView.Adapter {
 
-    //public static final int VIEW_TYPE_PENDING_ACTION = 0;
-
     private PendingUserActionsActivity activity;
 
     private List<OfflineUserAction> pendingActions;
-
-    //private boolean ongoingTask = false;
 
     public PendingActionsAdapter(PendingUserActionsActivity activity) {
         this.activity = activity;
@@ -62,9 +59,27 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
         notifyItemRemoved(position);
     }
 
-    //public void setOngoingTask(boolean flag) {
-    //    this.ongoingTask = flag;
-    //}
+    public void notifyActionResult(String actionId, boolean success) {
+        OfflineUserAction currentAction = null;
+        for(OfflineUserAction action : pendingActions) {
+            if(action.getActionId().equals(actionId)) {
+                currentAction = action;
+                break;
+            }
+        }
+        if(currentAction != null) {
+            int index = pendingActions.indexOf(currentAction);
+            if (success) {
+                pendingActions.remove(index);
+                notifyItemRemoved(index);
+            }
+            else {
+                currentAction.setActionFailed(true);
+                pendingActions.set(index, currentAction);
+                notifyItemChanged(index);
+            }
+        }
+    }
 
     public void markActionFailed(int position, boolean flag) {
         pendingActions.get(position).setActionFailed(flag);
@@ -72,15 +87,25 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
     }
 
     public void executeAllActions() {
-        ToastUtils.displayShortToast(activity, "Executing remaining actions..");
-        // TODO: 4/30/2016
-        ToastUtils.displayShortToast(activity, "..but not really");
+        if(GeneralUtils.isNetworkAvailable(activity)) {
+            ToastUtils.displayShortToast(activity, "Executing remaining actions..");
+            Intent intent = new Intent(activity, PendingActionsService.class);
+            activity.startService(intent);
+        }
+        else {
+            ToastUtils.displayShortToast(activity, "Network connection unavailable");
+        }
     }
 
     public void executeAction(int position) {
-        ToastUtils.displayShortToast(activity, "Executing action..");
-        ExecuteSingleActionTask task = new ExecuteSingleActionTask(activity, position);
-        task.execute(pendingActions.get(position));
+        if(GeneralUtils.isNetworkAvailable(activity)) {
+            ToastUtils.displayShortToast(activity, "Executing action..");
+            ExecuteSingleActionTask task = new ExecuteSingleActionTask(activity, position);
+            task.execute(pendingActions.get(position));
+        }
+        else {
+            ToastUtils.displayShortToast(activity, "Network connection unavailable");
+        }
     }
 
     public void executeAction(OfflineUserAction action) {
@@ -193,7 +218,6 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
                 ToastUtils.displayShortToast(activity, "Error completing user action");
             }
             activity.getAdapter().saveChanges();
-            //activity.getAdapter().setOngoingTask(false);
         }
 
     }
@@ -233,7 +257,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
             });
         }
 
-        private void showPendingActionOptions(Context context, View view, final OfflineUserAction action) {
+        private void showPendingActionOptions(final Context context, View view, final OfflineUserAction action) {
             PopupMenu popupMenu = new PopupMenu(context, view);
             popupMenu.inflate(R.menu.pending_action_options);
             Menu menu = popupMenu.getMenu();
@@ -244,12 +268,21 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_execute_offline_action:
+                            if(PendingUserActionsActivity.checkServiceRunning(context)) {
+                                return true;
+                            }
                             adapter.executeAction(action);
                             return true;
                         case R.id.action_edit_offline_action:
+                            if(PendingUserActionsActivity.checkServiceRunning(context)) {
+                                return true;
+                            }
                             adapter.editAction(action);
                             return true;
                         case R.id.action_cancel_offline_action:
+                            if(PendingUserActionsActivity.checkServiceRunning(context)) {
+                                return true;
+                            }
                             adapter.cancelAction(action);
                             return true;
                         default:

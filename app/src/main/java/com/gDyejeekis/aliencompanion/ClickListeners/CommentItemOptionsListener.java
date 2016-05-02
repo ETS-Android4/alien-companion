@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -165,6 +166,11 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         PopupMenu popupMenu = new PopupMenu(context, v);
         if(MyApplication.currentUser!=null && comment.getAuthor().equals(MyApplication.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_comment_more_options_account);
         else popupMenu.inflate(R.menu.menu_comment_more_options);
+
+        if(comment.isSaved()) {
+            Menu menu = popupMenu.getMenu();
+            menu.findItem(R.id.action_save).setTitle("Unsave");
+        }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -207,11 +213,17 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         + "?comment=" + comment.getIdentifier()));
                         context.startActivity(intent);
                         return true;
-                    case R.id.action_save: //TODO: show proper user action
+                    case R.id.action_save:
                         if(MyApplication.currentUser!=null) {
                             UserActionType actionType;
-                            if(comment.isSaved()) actionType = UserActionType.unsave;
-                            else actionType = UserActionType.save;
+                            if(comment.isSaved()) {
+                                comment.setSaved(false);
+                                actionType = UserActionType.unsave;
+                            }
+                            else {
+                                comment.setSaved(true);
+                                actionType = UserActionType.save;
+                            }
                             if(GeneralUtils.isNetworkAvailable(context)) {
                                 task = new LoadUserActionTask(context, comment.getFullName(), actionType);
                                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
