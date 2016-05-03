@@ -80,11 +80,11 @@
             android:summary="Pull down to refresh posts/comments"
             android:defaultValue="true"/>
 
-        <CheckBoxPreference
+        <!--<CheckBoxPreference
             android:key="newSubredditWindow"
             android:title="View subreddit in new window"
             android:summary="Subreddits you view via the 'Subreddit' option open in a new window"
-            android:defaultValue="false"/>
+            android:defaultValue="false"/>-->
 
         <ListPreference
             android:key="navDrawerSide"

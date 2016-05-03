@@ -222,16 +222,6 @@ public class GeneralUtils {
         return null;
     }//met
 
-    public static void downloadArticleToFile(Context context, String url, File file) throws java.lang.Exception {
-        String result = ConvertUtils.cleanHtmlFromUrlWithSnacktory(context, url);
-
-        FileOutputStream  outStream = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(outStream);
-        oos.writeObject(result);
-        oos.close();
-        outStream.close();
-    }
-
     public static void downloadMediaToFile(String url, File file) throws IOException {
         //Open a connection to that URL.
         URLConnection ucon = new URL(url).openConnection();

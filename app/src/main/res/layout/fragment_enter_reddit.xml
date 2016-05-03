@@ -30,6 +30,15 @@
         android:textColorHint="?attr/themeTextHintColor"
         android:layout_margin="5dp" />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View in a new window"
+        android:id="@+id/checkBox_new_window"
+        android:layout_marginLeft="5dp"
+        android:checked="false"
+        android:textColor="?attr/themeTextColor" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

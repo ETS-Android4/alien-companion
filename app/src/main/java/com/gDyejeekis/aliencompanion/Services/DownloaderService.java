@@ -21,6 +21,7 @@ import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -173,14 +174,21 @@ public class DownloaderService extends IntentService {
                     }
                     List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
                     submission.setSyncedComments(comments);
-                    if(syncOptions.isSyncImages() && GeneralUtils.isImageLink(submission.getURL(), submission.getDomain())) {
+
+                    String url = submission.getURL();
+                    String domain = submission.getDomain();
+                    if(domain.contains("reddit.com") || domain.equals("redd.it")) {
+                        syncLinkedRedditPost(url, domain, filename, cmntsRetrieval, syncOptions);
+                    }
+                    else if(syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
                         if(GeneralUtils.canAccessExternalStorage(this)) {
                             downloadPostImage(submission, filename);
                         }
                     }
-                    else if(syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(submission.getURL(), submission.getDomain())) {
+                    else if(syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
                         downloadPostArticle(submission, filename);
                     }
+
                     writePostToFile(submission, filename + "-" + submission.getIdentifier());
                 }
             }
@@ -239,9 +247,36 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    private void syncLinkedRedditPost(String url, String domain, String filename, Comments commentsRetrieval, SyncProfileOptions syncOptions) {
+        Submission linkedpost = null;
+        if(domain.equals("redd.it")) {
+            linkedpost = new Submission(LinkHandler.getShortRedditId(url));
+            List<Comment> comments = commentsRetrieval.ofSubmission(linkedpost, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(),
+                    syncOptions.getSyncCommentSort());
+            linkedpost.setSyncedComments(comments);
+        }
+        else {
+            String[] postInfo = LinkHandler.getRedditPostInfo(url);
+            if(postInfo!=null) {
+                linkedpost = new Submission(postInfo[1]);
+                linkedpost.setSubreddit(postInfo[0]);
+                int parentsShown = (postInfo[3]==null) ? -1 : Integer.valueOf(postInfo[3]);
+                List<Comment> comments = commentsRetrieval.ofSubmission(linkedpost, postInfo[2], parentsShown, syncOptions.getSyncCommentDepth(),
+                        syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
+                linkedpost.setSyncedComments(comments);
+            }
+        }
+
+        if(linkedpost!=null) {
+            writePostToFile(linkedpost, filename + "-" + linkedpost.getIdentifier());
+        }
+    }
+
     private void downloadPostArticle(Submission post, String filename) {
         try {
-            GeneralUtils.downloadArticleToFile(this, post.getURL(), new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
+            String result = ConvertUtils.cleanHtmlFromUrlWithSnacktory(this, post.getURL());
+
+            GeneralUtils.writeObjectToFile(result, new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
         } catch (Exception e) {
             e.printStackTrace();
         }

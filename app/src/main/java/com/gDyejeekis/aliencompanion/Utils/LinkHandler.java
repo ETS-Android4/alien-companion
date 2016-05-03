@@ -118,7 +118,7 @@ public class LinkHandler {
                     }
                 } else if (domainLC.equals("redd.it")) {
                     intent = new Intent(activity, PostActivity.class);
-                    intent.putExtra("postId", url.substring(15));
+                    intent.putExtra("postId", getShortRedditId(url));
                 } else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com")) {
                     startInAppBrowser(activity, post, url, domain);
                 }
@@ -242,6 +242,15 @@ public class LinkHandler {
         //}
 
         return postInfo;
+    }
+
+    public static String getShortRedditId(String url) {
+        String pattern = "redd\\.it/(\\w+)";
+        Matcher matcher = Pattern.compile(pattern).matcher(url);
+        if(matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
     }
 
     public static String getGfycatId(String url) {

@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.KeyEvent;
@@ -13,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
@@ -25,10 +28,11 @@ import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EnterRedditDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
+public class EnterRedditDialogFragment extends ScalableDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private MainActivity activity;
     private AutoCompleteTextView subredditField;
+    private CheckBox newWindowCheckbox;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -47,6 +51,11 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
 
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);
+
+        newWindowCheckbox = (CheckBox) view.findViewById(R.id.checkBox_new_window);
+        newWindowCheckbox.setChecked(MyApplication.prefs.getBoolean("newSubredditWindow", false));
+        newWindowCheckbox.setOnCheckedChangeListener(this);
+
         subredditField = (AutoCompleteTextView) view.findViewById(R.id.editText_subreddit);
         subredditField.setAdapter(adapter);
         subredditField.requestFocus();
@@ -85,6 +94,13 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
     //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
     //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
     //}
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        SharedPreferences.Editor editor = MyApplication.prefs.edit();
+        editor.putBoolean("newSubredditWindow", isChecked);
+        editor.commit();
+    }
 
     @Override
     public void onClick(View view) {

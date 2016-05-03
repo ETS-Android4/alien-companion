@@ -42,7 +42,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         this.postFragment = postFragment;
     }
 
-    private List<Comment> readCommentsFromFile(final String postId) {
+    private Submission readPostFromFile(final String postId) {
         File postFile = null;
 
         FilenameFilter filenameFilter = new FilenameFilter() {
@@ -63,7 +63,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             FileInputStream fis = new FileInputStream(postFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Submission post = (Submission) ois.readObject();
-            return post.getSyncedComments();
+            return post;
         } catch (IOException | ClassNotFoundException | NullPointerException e) {
             e.printStackTrace();
             exception = e;
@@ -76,7 +76,15 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         try {
             List<Comment> comments;
             if(MyApplication.offlineModeEnabled) {
-                comments = readCommentsFromFile(postFragment.post.getIdentifier());
+                Submission post = readPostFromFile(postFragment.post.getIdentifier());
+                if(post==null) {
+                    throw new IOException("File not found ("+postFragment.post.getIdentifier()+")");
+                }
+                else {
+                    postFragment.showFullCommentsButton = false;
+                    postFragment.post = post;
+                    comments = post.getSyncedComments();
+                }
             }
             else {
                 Comments cmnts = new Comments(httpClient, MyApplication.currentUser);
@@ -87,7 +95,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             Comments.indentCommentTree(context, comments);
 
             return comments;
-        } catch (RetrievalFailedException | RedditError | NullPointerException e) {
+        } catch (RetrievalFailedException | RedditError | NullPointerException | IOException e) {
             e.printStackTrace();
             exception = e;
         }

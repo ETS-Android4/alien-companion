@@ -64,7 +64,7 @@ public class ConvertUtils {
         }
         //String imageUrl = res.getImageUrl();
 
-        return "<div style=\"padding-left: 10px; padding-right: 10px;\">" + title + "\n" + text + "</div>";
+        return "<html><head></head><body><div style=\"padding-left: 10px; padding-right: 10px;\">" + title + "\n" + text + "</div></body></html>";
     }
 
     public static String modifySpoilerHtml(String html) {
