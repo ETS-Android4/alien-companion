@@ -13,7 +13,11 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.support.v7.app.NotificationCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
@@ -42,6 +46,8 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,6 +60,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.jetwick.snacktory.HtmlFetcher;
+import de.jetwick.snacktory.JResult;
 
 /**
  * Created by sound on 9/25/2015.
@@ -274,7 +283,38 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostArticle(Submission post, String filename) {
         try {
-            String result = ConvertUtils.cleanHtmlFromUrlWithSnacktory(this, post.getURL());
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
+            float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
+
+            WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            int screenWidth = display.getWidth();
+
+            HtmlFetcher fetcher = new HtmlFetcher();
+            // set cache. e.g. take the map implementation from google collections:
+            // fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
+            //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
+            JResult res = fetcher.fetchAndExtract(post.getURL(), 10000, true);
+
+            String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
+
+            String image = "";
+            if(res.getImageUrl().length()>0) {
+                String imageFilename = filename + "-" + post.getIdentifier() + "-article_image";
+                GeneralUtils.downloadMediaToFile(res.getImageUrl(), new File(getFilesDir(), imageFilename));
+                image = "<img src=\"" + imageFilename + "\" width=\"" + screenWidth + "\"/>";
+            }
+
+            List<String> textList = res.getTextList();
+            String text = "";
+            for(String paragraph : textList) {
+                paragraph = StringEscapeUtils.escapeHtml(paragraph);
+                text = text.concat("<p style=\"font-size:" + textSize + "px;\">" + paragraph + "</p>");
+            }
+
+            String result = "<html><head></head><body><div style=\"padding-left: 10px; padding-right: 10px;\">"
+                    + title + "\n" + image + "\n" + text + "</div></body></html>";
 
             GeneralUtils.writeObjectToFile(result, new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
         } catch (Exception e) {

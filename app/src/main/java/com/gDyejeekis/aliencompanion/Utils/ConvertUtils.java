@@ -41,31 +41,7 @@ public class ConvertUtils {
 
     public static final String TAG = "ConvertUtils";
 
-    private static int fromHtmlCount = 0;
-
-    public static String cleanHtmlFromUrlWithSnacktory(Context context, String url) throws Exception { //run on background
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
-        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
-
-        HtmlFetcher fetcher = new HtmlFetcher();
-        // set cache. e.g. take the map implementation from google collections:
-        // fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
-        //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
-        JResult res = fetcher.fetchAndExtract(url, 10000, true);
-
-        String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
-
-        List<String> textList = res.getTextList();
-        String text = "";
-        for(String paragraph : textList) {
-            paragraph = StringEscapeUtils.escapeHtml(paragraph);
-            text = text.concat("<p style=\"font-size:" + textSize + "px;\">" + paragraph + "</p>");
-        }
-        //String imageUrl = res.getImageUrl();
-
-        return "<html><head></head><body><div style=\"padding-left: 10px; padding-right: 10px;\">" + title + "\n" + text + "</div></body></html>";
-    }
+    //private static int fromHtmlCount = 0;
 
     public static String modifySpoilerHtml(String html) {
         String pattern = "<a href=\\\\?\"(?:#|\\/)(?:s|b|g|p|c|f|fear)\\\\?\" title=\\\\?\"([\\w\\s.,/#!?$%\\^&\\*;:'’\\[\\]\\{}+=\\-_`~()\"“”]*)\\\\?\">([\\w\\s.,/#!?$%\\^&\\*;:'’\\[\\]\\{}+=\\-_`~()\"“”]*)<\\/a>";
