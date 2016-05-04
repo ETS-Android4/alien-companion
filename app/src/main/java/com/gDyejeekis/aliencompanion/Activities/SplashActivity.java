@@ -49,6 +49,7 @@ public class SplashActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    MyApplication.showedWelcomeMessage = true;
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
                     editor.putBoolean("welcomeMsg", true);
                     editor.commit();

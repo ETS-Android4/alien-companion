@@ -36,9 +36,11 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String lastKnownVersion = "0.3.3";
-
     public static final String currentVersion = "0.4";
+
+    public static final int currentVersionCode = 12;
+
+    public static final boolean showWelcomeMsgThisVersion = true;
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -69,6 +71,7 @@ public class MyApplication extends Application {
     public static final boolean useMarkdownParsing = false; //only enable this if/when markdown parsing is ready
 
     public static SharedPreferences prefs;
+    public static int lastKnownVersionCode;
     public static String deviceID;
     public static boolean showedWelcomeMessage;
     public static boolean nightThemeEnabled;
@@ -196,6 +199,16 @@ public class MyApplication extends Application {
     }
 
     public static void getCurrentSettings() {
+        lastKnownVersionCode = prefs.getInt("versionCode", 0);
+        if(lastKnownVersionCode!=currentVersionCode) {
+            lastKnownVersionCode = currentVersionCode;
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("versionCode", currentVersionCode);
+            if(showWelcomeMsgThisVersion) {
+                editor.putBoolean("welcomeMsg", true);
+            }
+            editor.commit();
+        }
         showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);
         syncImages = prefs.getBoolean("syncImg", false);
         syncWebpages = prefs.getBoolean("syncWeb", false);
