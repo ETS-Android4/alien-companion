@@ -238,7 +238,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
         public void bindModel(final Context context, final OfflineUserAction action) {
             options.setImageResource((MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp);
 
-            description.setText(action.getActionId());
+            description.setText(action.getActionName() + " - " + action.getActionPreview());
 
             if(action.isActionFailed()) {
                 status.setTextColor(Color.RED);

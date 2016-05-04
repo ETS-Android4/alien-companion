@@ -17,6 +17,8 @@ import java.util.List;
  */
 public abstract class OfflineUserAction implements Serializable {
 
+    public static final int PREVIEW_LENGTH = 40;
+
     protected String actionName;
 
     protected int actionType;
@@ -31,11 +33,15 @@ public abstract class OfflineUserAction implements Serializable {
 
     protected String actionId;
 
+    protected String actionPreview;
+
     public OfflineUserAction(String accountName) {
         this.accountName = accountName;
         this.actionCompleted = false;
         this.actionFailed = false;
     }
+
+    public abstract String getActionPreview();
 
     public void setActionFailed(boolean flag) {
         actionFailed = flag;
@@ -69,6 +75,15 @@ public abstract class OfflineUserAction implements Serializable {
     //    LoadUserActionTask task = new LoadUserActionTask(context, this);
     //    task.execute();
     //}
+
+    protected void setActionPreview(String preview) {
+        if(preview.length() <= PREVIEW_LENGTH) {
+            actionPreview = preview;
+        }
+        else {
+            actionPreview = preview.substring(0, PREVIEW_LENGTH - 1) + "..";
+        }
+    }
 
     public abstract void executeAction(Context context); //run on background thread
 

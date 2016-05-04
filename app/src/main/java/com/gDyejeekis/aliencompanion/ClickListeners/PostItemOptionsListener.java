@@ -105,10 +105,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
                         if(actionType == UserActionType.novote) {
-                            action = new NoVoteAction(accountName, post.getFullName());
+                            action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
                         }
                         else {
-                            action = new UpvoteAction(accountName, post.getFullName());
+                            action = new UpvoteAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
@@ -140,10 +140,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
                         if(actionType == UserActionType.novote) {
-                            action = new NoVoteAction(accountName, post.getFullName());
+                            action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
                         }
                         else {
-                            action = new DownvoteAction(accountName, post.getFullName());
+                            action = new DownvoteAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
@@ -172,10 +172,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
                         if(actionType == UserActionType.save) {
-                            action = new SaveAction(accountName, post.getFullName());
+                            action = new SaveAction(accountName, post.getFullName(), post.getTitle());
                         }
                         else {
-                            action = new UnsaveAction(accountName, post.getFullName());
+                            action = new UnsaveAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
@@ -208,10 +208,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
                         if(actionType == UserActionType.hide) {
-                            action = new HideAction(accountName, post.getFullName());
+                            action = new HideAction(accountName, post.getFullName(), post.getTitle());
                         }
                         else {
-                            action = new UnhideAction(accountName, post.getFullName());
+                            action = new UnhideAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();

@@ -41,6 +41,13 @@ public class CommentAction extends OfflineUserAction implements Serializable {
         return commentText;
     }
 
+    public String getActionPreview() {
+        if(commentText.length() <= PREVIEW_LENGTH) {
+            return commentText;
+        }
+        return commentText.substring(0, PREVIEW_LENGTH - 1) + "..";
+    }
+
     public void setCommentText(String commentText) {
         this.commentText = commentText;
     }

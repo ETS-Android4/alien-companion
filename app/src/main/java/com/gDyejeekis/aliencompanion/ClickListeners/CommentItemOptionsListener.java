@@ -22,6 +22,7 @@ import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.Models.OfflineActions.CommentAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.DownvoteAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.NoVoteAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
@@ -93,10 +94,10 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
                         if(actionType == UserActionType.novote) {
-                            action = new NoVoteAction(accountName, comment.getFullName());
+                            action = new NoVoteAction(accountName, comment.getFullName(), comment.getBody());
                         }
                         else {
-                            action = new UpvoteAction(accountName, comment.getFullName());
+                            action = new UpvoteAction(accountName, comment.getFullName(), comment.getBody());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
@@ -131,10 +132,10 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
                         if(actionType == UserActionType.novote) {
-                            action = new NoVoteAction(accountName, comment.getFullName());
+                            action = new NoVoteAction(accountName, comment.getFullName(), comment.getBody());
                         }
                         else {
-                            action = new DownvoteAction(accountName, comment.getFullName());
+                            action = new DownvoteAction(accountName, comment.getFullName(), comment.getBody());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
@@ -232,10 +233,10 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                                 OfflineUserAction action;
                                 String accountname = MyApplication.currentAccount.getUsername();
                                 if(actionType == UserActionType.save) {
-                                    action = new SaveAction(accountname, comment.getFullName());
+                                    action = new SaveAction(accountname, comment.getFullName(), comment.getBody());
                                 }
                                 else {
-                                    action = new UnsaveAction(accountname, comment.getFullName());
+                                    action = new UnsaveAction(accountname, comment.getFullName(), comment.getBody());
                                 }
                                 SaveOfflineActionTask task1 = new SaveOfflineActionTask(context, action);
                                 task1.execute();

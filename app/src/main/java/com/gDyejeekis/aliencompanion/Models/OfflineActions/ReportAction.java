@@ -30,6 +30,10 @@ public class ReportAction extends OfflineUserAction implements Serializable {
         this.actionId = ACTION_NAME + "-" + itemFullname;
     }
 
+    public String getActionPreview() {
+        return itemFullname + " (" + reportReason + ")";
+    }
+
     public String getItemFullname() {
         return itemFullname;
     }

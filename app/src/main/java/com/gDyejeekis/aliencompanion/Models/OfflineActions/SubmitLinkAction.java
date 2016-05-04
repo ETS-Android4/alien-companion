@@ -34,6 +34,13 @@ public class SubmitLinkAction extends OfflineUserAction implements Serializable 
         this.actionId = ACTION_NAME + "-" + UUID.randomUUID();
     }
 
+    public String getActionPreview() {
+        if(title.length() <= PREVIEW_LENGTH) {
+            return title;
+        }
+        return title.substring(0, PREVIEW_LENGTH - 1);
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }

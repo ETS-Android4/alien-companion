@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.4" changeDate="Apr 30, 2016">
-
+    <changelogversion versionName="0.4" changeDate="May 5, 2016">
+        <changelogtext>Added 'Sync post articles' in the sync options</changelogtext>
+        <changelogtext>Added offline user actions. Any user actions (voting, commenting, saving/hiding/reporting posts) performed
+            while there is no active internet connection will be added to the 'Pending offline actions' queue</changelogtext>
+        <changelogtext>Added 'Pending actions' screen, accessible from the settings and the toolbar's overflow menu (offline mode)</changelogtext>
+        <changelogtext>Added option to control how often the app should attempt to execute any remaining offline actions</changelogtext>
+        <changelogtext>Added 'View synced' option in the toolbar menu (offline mode), shows all currently synced subreddits sorted by
+            most recent</changelogtext>
+        <changelogtext>Added automatic message checking</changelogtext>
+        <changelogtext>Added option to control automatic message checking intervals</changelogtext>
+        <changelogtext>Syncing posts that link to other reddit.com or redd.it posts now also sync the linked post</changelogtext>
+        <changelogtext>Tweaked navigation drawer to be more in line with material design guidelines</changelogtext>
+        <changelogtext>Visual tweaks to most dialog windows</changelogtext>
+        <changelogtext>Replaced most icons with higher quality material icons</changelogtext>
+        <changelogtext>Added 3 new font options (sans-seriff light, condensed, condensed light)</changelogtext>
+        <changelogtext>Updated subreddit suggestions with the 1000 currently most popular subreddits</changelogtext>
+        <changelogtext>Fixed bug preventing users from viewing some redd.it links</changelogtext>
+        <changelogtext>Fixed bug preventing users from sending private messages</changelogtext>
+        <changelogtext>Fixed bug preventing users from submitting self/link posts</changelogtext>
+        <changelogtext>Moved thumbnail of reversed list view to the right hand side</changelogtext>
+        <changelogtext>Moved 'View subreddit in new window' option to the 'View subreddit' dialog</changelogtext>
+        <changelogtext>Tapping on the notifications of saved images/GIF now opens the file in the preferred app</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.3.3" changeDate="Apr 3, 2016">

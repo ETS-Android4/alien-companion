@@ -20,15 +20,13 @@
         android:layout_weight="0.67" />
 
     <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="75dp"
+        style="@style/DialogButtonStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK"
         android:id="@+id/button_ok"
         android:textColor="#009688"
         android:background="?android:attr/selectableItemBackground"
-        android:layout_gravity="right"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_gravity="right" />
 
 </LinearLayout>

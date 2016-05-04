@@ -5,8 +5,19 @@
         Alien Companion v0.4
     </string>
     <string name="welcome_message">
-        Greetings!\n\nThis is the welcome message for the app! Blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah ..\n\nThanks!
+        Greetings!
+        \n\n
+        Thanks for taking part in the testing of Alien Companion and I hope that it proves/has proved useful to you
+        in some way. I\'ve been developing this app both as a learning experience and as something I personally use a lot
+        daily. Offline functionality has been my number one priority from day one and I intend on improving that aspect in
+        all updates to follow.
+        \n\n
+        This update introduces the ability to view articles of posts you\'ve synced in offline mode as well as a little feature I like
+        to call \'offline user actions\', meaning the ability to perform user actions (such as commenting, voting, saving posts, etc)
+        even when you have no internet. Full changelog is available in the settings.
+        \n\n
+        IMPORTANT: If you\'re updating from a previous version and experience a crash at any point after this screen,
+        just clear the app\'s data in the settings to start fresh and resolve the issue. Apologies for the inconvenience.
     </string>
 <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>

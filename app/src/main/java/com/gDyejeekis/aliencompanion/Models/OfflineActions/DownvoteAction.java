@@ -21,16 +21,21 @@ public class DownvoteAction extends OfflineUserAction implements Serializable {
 
     private String itemFullname;
 
-    public DownvoteAction(String accountName, String fullname) {
+    public DownvoteAction(String accountName, String fullname, String preview) {
         super(accountName);
         this.actionName = ACTION_NAME;
         this.actionType = ACTION_TYPE;
         this.itemFullname = fullname;
+        setActionPreview(preview);
         this.actionId = ACTION_NAME + "-" + itemFullname;
     }
 
     public String getItemFullname() {
         return itemFullname;
+    }
+
+    public String getActionPreview() {
+        return actionPreview;
     }
 
     public void executeAction(Context context) {
