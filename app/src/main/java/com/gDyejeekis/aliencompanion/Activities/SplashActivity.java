@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,13 +26,13 @@ public class SplashActivity extends AppCompatActivity {
         //getTheme().applyStyle(MyApplication.fontStyle, true);
         getTheme().applyStyle(MyApplication.fontFamily, true);
         super.onCreate(bundle);
-        //if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
-        //    // Activity was brought to front and not created,
-        //    // Thus finishing this will get us to the last viewed activity
-        //    Log.d(TAG, "Killing additional SplashActivity that was brought to front");
-        //    finish();
-        //    return;
-        //}
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            // Activity was brought to front and not created,
+            // Thus finishing this will get us to the last viewed activity
+            Log.d(TAG, "Killing additional SplashActivity that was brought to front");
+            finish();
+            return;
+        }
         if(MyApplication.showedWelcomeMessage) {
             setContentView(R.layout.splash_screen);
 
