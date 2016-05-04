@@ -287,9 +287,10 @@ public class DownloaderService extends IntentService {
             float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
             float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
 
-            WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            int screenWidth = display.getWidth();
+            //WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+            //Display display = wm.getDefaultDisplay();
+            //int screenWidth = display.getWidth();
+            int screenWidth = 720;
 
             HtmlFetcher fetcher = new HtmlFetcher();
             // set cache. e.g. take the map implementation from google collections:
