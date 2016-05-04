@@ -42,6 +42,8 @@ public class MyApplication extends Application {
 
     public static final boolean showWelcomeMsgThisVersion = true;
 
+    public static final boolean deleteAppDataThisVersion = true;
+
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
@@ -159,6 +161,7 @@ public class MyApplication extends Application {
         primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
         primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        checkAppVersion();
         getDeviceId();
         getCurrentSettings();
         dualPaneCurrent = dualPane;
@@ -198,17 +201,52 @@ public class MyApplication extends Application {
         }
     }
 
-    public static void getCurrentSettings() {
+    private void checkAppVersion() {
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
         if(lastKnownVersionCode!=currentVersionCode) {
             lastKnownVersionCode = currentVersionCode;
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt("versionCode", currentVersionCode);
+            if(deleteAppDataThisVersion) {
+                prefs.edit().clear().commit();
+                clearApplicationData();
+            }
             if(showWelcomeMsgThisVersion) {
                 editor.putBoolean("welcomeMsg", false);
             }
             editor.commit();
         }
+    }
+
+    private void clearApplicationData() {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                    Log.d(TAG, "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
+                }
+            }
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
+    }
+
+    public static void getCurrentSettings() {
         showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);
         syncImages = prefs.getBoolean("syncImg", false);
         syncWebpages = prefs.getBoolean("syncWeb", false);
