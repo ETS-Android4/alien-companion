@@ -16,7 +16,7 @@
         to call \'offline user actions\', meaning the ability to perform user actions (such as commenting, voting, saving posts, etc)
         even when you have no internet. Full changelog is available in the settings.
         \n\n
-        IMPORTANT: If you\'re updating from a previous version I would strongly recommend clearing the app's data in the settings
+        IMPORTANT: If you\'re updating from a previous version I would strongly recommend clearing the app\'s data in the settings
         to avoid potential crashes and/or weird behavior. Apologies for the inconvenience.
     </string>
 <!-- Activity Title -->

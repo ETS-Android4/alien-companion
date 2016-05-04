@@ -205,7 +205,7 @@ public class MyApplication extends Application {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt("versionCode", currentVersionCode);
             if(showWelcomeMsgThisVersion) {
-                editor.putBoolean("welcomeMsg", true);
+                editor.putBoolean("welcomeMsg", false);
             }
             editor.commit();
         }
