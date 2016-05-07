@@ -45,6 +45,7 @@ import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
 import java.io.File;
@@ -73,6 +74,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public LoadType currentLoadType;
     public LoadPostsTask task;
 
+    private DividerItemDecoration decoration;
+
     public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, boolean isMulti, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
         listFragment.postListAdapter = adapter;
@@ -90,6 +93,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+
+        decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
 
         if(savedInstanceState!=null) {
             subreddit = savedInstanceState.getString("subreddit");
@@ -135,7 +140,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
         contentView.setHasFixedSize(true);
-        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        if(MyApplication.currentPostListView == R.layout.post_list_item || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
+            contentView.addItemDecoration(decoration);
+        }
 
         contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -549,6 +556,15 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             items.remove(items.size() - 1);
             postListAdapter = new RedditItemListAdapter(activity, items);
             contentView.setAdapter(postListAdapter);
+            switch (MyApplication.currentPostListView) {
+                case R.layout.post_list_item:
+                case R.layout.post_list_item_reversed:
+                    contentView.addItemDecoration(decoration);
+                    break;
+                default:
+                    contentView.removeItemDecoration(decoration);
+                    break;
+            }
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 

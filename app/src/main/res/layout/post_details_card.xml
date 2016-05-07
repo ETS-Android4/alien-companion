@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:layout_height="wrap_content">
 
-    <include layout="@layout/post_list_item_card"/>
+    <include layout="@layout/post_list_item_card" />
 
     <include layout="@layout/load_full_comments"/>
     <ProgressBar
@@ -12,7 +11,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/pBar_comments"
         android:layout_gravity="center"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp" />
 
 
 </LinearLayout>
