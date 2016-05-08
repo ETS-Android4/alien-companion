@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.4.1" changeDate="May 30, 2016">
+
+    </changelogversion>
+
     <changelogversion versionName="0.4" changeDate="May 4, 2016">
         <changelogtext>Added 'Sync post articles' in the sync options</changelogtext>
         <changelogtext>Added offline user actions. Any user actions (voting, commenting, saving/hiding/reporting posts) performed

@@ -201,6 +201,7 @@
         <item name="themeDivider">?android:attr/listDivider</item>
         <item name="themeDragHandle">@mipmap/ic_action_drag_handle_grey</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_light</item>
+        <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_light</item>
     </style>
 
     <style name="selectedTheme.night">
@@ -215,6 +216,7 @@
         <item name="themeDivider">@drawable/divider_dark_theme</item>
         <item name="themeDragHandle">@mipmap/ic_action_drag_handle_white</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
+        <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

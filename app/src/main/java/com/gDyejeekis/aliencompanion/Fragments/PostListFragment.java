@@ -75,6 +75,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public LoadPostsTask task;
 
     private DividerItemDecoration decoration;
+    private boolean decorationVisible = false;
 
     public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, boolean isMulti, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
@@ -140,8 +141,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
         contentView.setHasFixedSize(true);
-        if(MyApplication.currentPostListView == R.layout.post_list_item || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
-            contentView.addItemDecoration(decoration);
+        if(MyApplication.nightThemeEnabled || MyApplication.currentPostListView == R.layout.post_list_item
+                || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
+            setListDividerVisible(true);
         }
 
         contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -556,16 +558,32 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             items.remove(items.size() - 1);
             postListAdapter = new RedditItemListAdapter(activity, items);
             contentView.setAdapter(postListAdapter);
+            setListDividerVisible(false);
             switch (MyApplication.currentPostListView) {
                 case R.layout.post_list_item:
                 case R.layout.post_list_item_reversed:
-                    contentView.addItemDecoration(decoration);
+                    if(!decorationVisible) {
+                        setListDividerVisible(true);
+                    }
                     break;
                 default:
-                    contentView.removeItemDecoration(decoration);
+                    if(MyApplication.nightThemeEnabled && !decorationVisible) {
+                        setListDividerVisible(true);
+                    }
                     break;
             }
         } catch (ArrayIndexOutOfBoundsException e) {}
+    }
+
+    private void setListDividerVisible(boolean flag) {
+        if(flag) {
+            contentView.addItemDecoration(decoration);
+            decorationVisible = true;
+        }
+        else {
+            contentView.removeItemDecoration(decoration);
+            decorationVisible = false;
+        }
     }
 
     public void setSubreddit(String subreddit) {

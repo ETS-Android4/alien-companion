@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="listCommentsButtonBackgroundLight">#0a000000</color>
+
+    <color name="listCommentsButtonBackgroundLightPressed">#28000000</color>
+
+    <color name="listCommentsButtonBackgroundDark">#1b1b1b</color>
+
+    <color name="listCommentsButtonBackgroundDarkPressed">#3b3b3b</color>
+
+    <color name="whiteBackgroundPressed">#14000000</color>
+
+    <color name="blackBackgroundPressed">#232323</color>
+
+    <color name="drawerItemDarkPressed">#333333</color>
+
+    <color name="drawerSubredditSelectedLight">#d8d8d8</color>
+
+    <color name="drawerSubredditSelectedDark">#4b4b4b</color>
+
     <item name="red" type="color">#FFFF4444</item>
 
     <color name="black">#000000</color>

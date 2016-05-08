@@ -49,6 +49,7 @@
         <attr name="themeDivider" format="reference"/>
         <attr name="themeDragHandle" format="reference"/>
         <attr name="themeButtonSelector" format="reference"/>
+        <attr name="themeCommentsButtonBackground" format="reference"/>
     </declare-styleable>
 
     <attr name="SwipeBackLayoutStyle" format="reference"/>

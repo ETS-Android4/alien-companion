@@ -36,13 +36,13 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String currentVersion = "0.4";
+    public static final String currentVersion = "0.4.1";
 
-    public static final int currentVersionCode = 12;
+    public static final int currentVersionCode = 13;
 
-    public static final boolean showWelcomeMsgThisVersion = true;
+    public static final boolean showWelcomeMsgThisVersion = false;
 
-    public static final boolean deleteAppDataThisVersion = true;
+    public static final boolean deleteAppDataThisVersion = false;
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 

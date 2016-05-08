@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
@@ -48,8 +47,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by George on 6/25/2015.
@@ -565,9 +562,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         subredditRowViewHolder.name.setTextColor(Color.WHITE);
                     else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
                     if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedDark));
                     else
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedLight));
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
@@ -602,9 +599,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         subredditRowViewHolder.name.setTextColor(Color.WHITE);
                     else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
                     if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darker_gray));
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedDark));
                     else
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.light_gray));
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedLight));
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
