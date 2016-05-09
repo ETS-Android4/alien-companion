@@ -5,9 +5,9 @@
 
     <color name="listCommentsButtonBackgroundLightPressed">#28000000</color>
 
-    <color name="listCommentsButtonBackgroundDark">#1b1b1b</color>
+    <color name="listCommentsButtonBackgroundDark">#232323</color>
 
-    <color name="listCommentsButtonBackgroundDarkPressed">#3b3b3b</color>
+    <color name="listCommentsButtonBackgroundDarkPressed">#333333</color>
 
     <color name="whiteBackgroundPressed">#14000000</color>
 
