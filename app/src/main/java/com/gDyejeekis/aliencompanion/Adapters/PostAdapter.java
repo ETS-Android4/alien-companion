@@ -110,11 +110,6 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 if(comment.getEdited()) ageString += "*";
                 cvh.age.setText(ageString);
 
-                //Comment permalink case
-                if(comment.getIdentifier().equals(postFragment.commentLinkId))
-                    cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
-                else cvh.commentLayout.setBackground(null);
-
                 //Author textview
                 if(author.equals(comment.getAuthor())) {
                     cvh.authorTextView.setTextColor(Color.WHITE);
@@ -137,6 +132,20 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
                     cvh.commentTextView.setText(strBuilder);
                     //cvh.commentTextView.setText(comment.bodyPrepared);
+                    cvh.commentTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int previousPosition = selectedPosition;
+                            if(selectedPosition == position) {
+                                selectedPosition = -1;
+                            }
+                            else {
+                                selectedPosition = position;
+                            }
+                            notifyItemChanged(previousPosition);
+                            notifyItemChanged(position);
+                        }
+                    });
                     cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
                 }
 
@@ -166,6 +175,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
 
                 if(selectedPosition == position) {
+                    cvh.commentLayout.setBackgroundColor(MyApplication.colorPrimaryLight);
                     cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
                     CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
                     cvh.upvote.setOnClickListener(listener);
@@ -175,6 +185,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.more.setOnClickListener(listener);
                 }
                 else {
+                    //Comment permalink case
+                    if(comment.getIdentifier().equals(postFragment.commentLinkId))
+                        cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
+                    else cvh.commentLayout.setBackground(null);
+
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
 

@@ -284,7 +284,10 @@ public class MainActivity extends AppCompatActivity {
             MyApplication.currentColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
             toolbar.setBackgroundColor(MyApplication.colorPrimary);
-            MyApplication.colorPrimaryDark = MyApplication.getPrimaryDarkColor(MyApplication.primaryColors, MyApplication.primaryDarkColors);
+            //MyApplication.colorPrimaryDark = MyApplication.getPrimaryDarkColor(MyApplication.primaryColors, MyApplication.primaryDarkColors);
+            int index = MyApplication.getCurrentColorIndex();
+            MyApplication.colorPrimaryDark = Color.parseColor(MyApplication.primaryDarkColors[index]);
+            MyApplication.colorPrimaryLight = Color.parseColor(MyApplication.primaryLightColors[index]);
             drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
             listFragment.colorSchemeChanged();
             adapter.notifyDataSetChanged();

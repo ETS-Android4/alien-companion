@@ -130,10 +130,10 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     @Override
     protected SavedAccount doInBackground(Void... unused) {
         try {
-            MyApplication.renewingToken = true;
-            MyApplication.currentAccessToken = null;
             SavedAccount newAccount;
             if(RedditOAuth.useOAuth2) {
+                MyApplication.renewingToken = true;
+                MyApplication.currentAccessToken = null;
                 OAuthToken token = RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), oauthCode);
                 MyApplication.currentAccessToken = token.accessToken;
                 HttpClient httpClient = new PoliteRedditHttpClient();
@@ -174,9 +174,9 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     @Override
     protected void onPostExecute(SavedAccount account) {
         dialogFragment.dismiss();
+        MyApplication.renewingToken = false;
         if(exception != null || account == null) {
             ToastUtils.displayShortToast(context, "Failed to verify account");
-            MyApplication.renewingToken = false;
             try {
                 MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
             } catch (NullPointerException e) {}

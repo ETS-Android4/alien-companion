@@ -66,6 +66,8 @@ public class MyApplication extends Application {
 
     public static String[] primaryDarkColors;
 
+    public static String[] primaryLightColors;
+
     public static boolean actionSort = false;
 
     public static boolean showHiddenPosts = false;
@@ -89,6 +91,7 @@ public class MyApplication extends Application {
     public static int currentFontFamily;
     public static int colorPrimary;
     public static int colorPrimaryDark;
+    public static int colorPrimaryLight;
     public static int currentColor;
     public static int swipeSetting;
     public static boolean swipeRefresh;
@@ -160,6 +163,7 @@ public class MyApplication extends Application {
         textHintLight = getResources().getColor(R.color.hint_light);
         primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
         primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
+        primaryLightColors = getResources().getStringArray(R.array.colorPrimaryLightValues);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         checkAppVersion();
         getDeviceId();
@@ -175,6 +179,7 @@ public class MyApplication extends Application {
         if(nightThemeEnabled) {
             currentColor = Color.parseColor("#181818");
             colorPrimaryDark = Color.BLACK;
+            colorPrimaryLight = Color.parseColor("#404040");
             textColor = Color.WHITE;
             textHintColor = textHintDark;
             linkColor = Color.parseColor("#0080FF");
@@ -182,7 +187,10 @@ public class MyApplication extends Application {
         }
         else {
             currentColor = colorPrimary;
-            colorPrimaryDark = getPrimaryDarkColor(primaryColors, primaryDarkColors);
+            //colorPrimaryDark = getPrimaryDarkColor(primaryColors, primaryDarkColors);
+            int index = getCurrentColorIndex();
+            colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
+            colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
             textColor = Color.BLACK;
             textHintColor = textHintLight;
             linkColor = MyApplication.colorPrimary;
@@ -190,6 +198,29 @@ public class MyApplication extends Application {
         }
         //currentColor = colorPrimary;
     }
+
+    public static int getCurrentColorIndex() {
+        int index = 0;
+        for(String color : primaryColors) {
+            if(Color.parseColor(color) == MyApplication.colorPrimary) {
+                return index;
+            }
+            index++;
+        }
+
+        return 7;
+    }
+
+    //public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {
+    //    //String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
+    //    int index = 0;
+    //    for(String color : primaryColors) {
+    //        if(Color.parseColor(color)==MyApplication.colorPrimary) break;
+    //        index++;
+    //    }
+    //    //String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
+    //    return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
+    //}
 
     private void getDeviceId() {
         deviceID = prefs.getString("deviceID", "null");
@@ -377,17 +408,6 @@ public class MyApplication extends Application {
         //offlineActionsServiceActive = prefs.getBoolean("offlineActionsActive", false);
         pendingOfflineActions = prefs.getBoolean("pendingActions", false);
         offlineActionsInterval = Integer.valueOf(prefs.getString("offlineActionsInterval", "15"));
-    }
-
-    public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {
-        //String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
-        int index = 0;
-        for(String color : primaryColors) {
-            if(Color.parseColor(color)==MyApplication.colorPrimary) break;
-            index++;
-        }
-        //String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
-        return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
     }
 
     public static void scheduleMessageCheckService(final Context context) {

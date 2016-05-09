@@ -230,6 +230,29 @@
         <item>#000000</item>
     </string-array>
 
+    <string-array name="colorPrimaryLightValues">
+        <item>#28f44336</item>
+        <item>#28e91e63</item>
+        <item>#289c27b0</item>
+        <item>#28673ab7</item>
+        <item>#283f51b5</item>
+        <item>#282196f3</item>
+        <item>#2803a9f4</item>
+        <item>#2800bcd4</item>
+        <item>#28009688</item>
+        <item>#284caf50</item>
+        <item>#288bc34a</item>
+        <item>#28cddc39</item>
+        <item>#28ffeb3b</item>
+        <item>#28ffc107</item>
+        <item>#28ff9800</item>
+        <item>#28ff5722</item>
+        <item>#28795548</item>
+        <item>#289e9e9e</item>
+        <item>#28607d8b</item>
+        <item>#28181818</item>
+    </string-array>
+
     <array name="fontSizes">
         <item>@string/smallest</item>
         <item>@string/smaller</item>
