@@ -179,7 +179,7 @@ public class MyApplication extends Application {
         if(nightThemeEnabled) {
             currentColor = Color.parseColor("#181818");
             colorPrimaryDark = Color.BLACK;
-            colorPrimaryLight = Color.parseColor("#404040");
+            colorPrimaryLight = Color.parseColor("#2e2e2e");
             textColor = Color.WHITE;
             textHintColor = textHintDark;
             linkColor = Color.parseColor("#0080FF");

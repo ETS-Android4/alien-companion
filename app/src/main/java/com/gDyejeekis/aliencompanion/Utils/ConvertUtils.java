@@ -260,4 +260,143 @@ public class ConvertUtils {
         }
         return strBuilder;
     }
+
+    public static SpannableStringBuilder modifyURLSpan(final Context context, CharSequence sequence,
+                                                       final MyClickableSpan plainTextClickable) {
+        SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
+
+        // Get an array of URLSpan from SpannableStringBuilder object
+        URLSpan[] urlSpans = strBuilder.getSpans(0, strBuilder.length(), URLSpan.class);
+
+        if(urlSpans.length==0) {
+            strBuilder.setSpan(plainTextClickable, 0, strBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return strBuilder;
+        }
+
+        int plainTextSpanStart = 0;
+
+        // Add onClick listener for each of URLSpan object
+        for (final URLSpan span : urlSpans) {
+            final int start = strBuilder.getSpanStart(span);
+            final int end = strBuilder.getSpanEnd(span);
+            // The original URLSpan needs to be removed to block the behavior of browser opening
+            strBuilder.removeSpan(span);
+
+            try {
+                strBuilder.setSpan(new MyClickableSpan() {
+                    @Override
+                    public boolean onLongClick(View widget) {
+                        return plainTextClickable.onLongClick(widget);
+                    }
+
+                    @Override
+                    public void onClick(View widget) {
+                        plainTextClickable.onClick(widget);
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        plainTextClickable.updateDrawState(ds);
+                    }
+                }, plainTextSpanStart, start - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } catch (Exception e) {
+                //e.printStackTrace();
+            }
+            plainTextSpanStart = end + 1;
+
+            MyClickableSpan myClickableSpan;
+
+            if(span.getURL()!=null) {
+                if (span.getURL().substring(0, 2).equals("/s") || span.getURL().equals("#s")) {
+                    myClickableSpan = new MyClickableSpan() {
+
+                        boolean spoilerHidden = true;
+                        TextPaint textPaint;
+
+                        @Override
+                        public boolean onLongClick(View widget) {
+                            return plainTextClickable.onLongClick(widget);
+                            //return false;
+                        }
+
+                        @Override
+                        public void onClick(View widget) {
+                            spoilerHidden = !spoilerHidden;
+                            updateDrawState(textPaint);
+                            widget.invalidate();
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            int backgroundColor = (MyApplication.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
+                            super.updateDrawState(ds);
+                            ds.setUnderlineText(false);
+                            ds.bgColor = backgroundColor;
+                            if (spoilerHidden) ds.setColor(backgroundColor);
+                            else ds.setColor(Color.WHITE);
+                            textPaint = ds;
+                        }
+                    };
+                }
+                else if(span.getURL().equals("#st")) {
+                    myClickableSpan = new MyClickableSpan() {
+                        @Override
+                        public boolean onLongClick(View widget) {
+                            return plainTextClickable.onLongClick(widget);
+                            //return false;
+                        }
+
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            int backgroundColor = (MyApplication.nightThemeEnabled) ? context.getResources().getColor(R.color.darker_gray) : Color.BLACK;
+                            super.updateDrawState(ds);
+                            ds.setUnderlineText(true);
+                            ds.bgColor = backgroundColor;
+                            ds.setColor(Color.YELLOW);
+                        }
+                    };
+                }
+                else {
+                    myClickableSpan = new MyClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            LinkHandler linkHandler = new LinkHandler(context, span.getURL());
+                            linkHandler.handleIt();
+                        }
+
+                        @Override
+                        public boolean onLongClick(View v) {
+                            //Log.d("geotest", "start: " + start + " end: " + end);
+                            try { //illegalstateexception is thrown if the parent activity is destroyed before the dialog can be shown
+                                Bundle args = new Bundle();
+                                args.putString("url", span.getURL());
+                                UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
+                                dialogFragment.setArguments(args);
+                                dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(MyApplication.linkColor);
+                        }
+                    };
+                }
+                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        if(strBuilder.length() > plainTextSpanStart) {
+            strBuilder.setSpan(plainTextClickable, plainTextSpanStart, strBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return strBuilder;
+    }
 }

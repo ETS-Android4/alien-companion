@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.4.1" changeDate="May 9, 2016">
-        <changelogtext>Single tapping on a comment's body now brings up that comment's actions menu</changelogtext>
+    <changelogversion versionName="0.4.1" changeDate="May 10, 2016">
+        <changelogtext>Long tapping on a comment's body (excluding links) now brings up that comment's actions menu</changelogtext>
         <changelogtext>Visual tweaks to all post layouts</changelogtext>
+        <changelogtext>Reduced long tap time for links from 1000ms to 500ms</changelogtext>
+        <changelogtext>Fixed multireddit syncing for sync profiles</changelogtext>
         <changelogtext>Fixed bug preventing renewal of authentication token of previously added accounts
             immediately after adding a new account</changelogtext>
     </changelogversion>

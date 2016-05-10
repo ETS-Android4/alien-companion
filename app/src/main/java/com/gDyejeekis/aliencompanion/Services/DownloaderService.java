@@ -121,17 +121,20 @@ public class DownloaderService extends IntentService {
                 for (String subreddit : profile.getSubreddits()) {
                     progress = 0;
                     String filename;
+                    String subredditName;
                     boolean isMulti = false;
                     if (subreddit.endsWith(" (multi)")) {
-                        filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subreddit.toLowerCase();
+                        subredditName = subreddit.replace(" (multi)", "");
+                        filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subredditName.toLowerCase();
                         isMulti = true;
                     } else {
+                        subredditName = subreddit;
                         filename = subreddit.toLowerCase();
                     }
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                     startForeground(FOREGROUND_ID, buildForegroundNotification(builder, filename));
 
-                    syncSubreddit(filename, builder, subreddit, SubmissionSort.HOT, null, isMulti, syncOptions);
+                    syncSubreddit(filename, builder, subredditName, SubmissionSort.HOT, null, isMulti, syncOptions);
                 }
             }
 

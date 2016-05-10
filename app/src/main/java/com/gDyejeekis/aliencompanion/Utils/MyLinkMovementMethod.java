@@ -19,6 +19,10 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
 
     private static MyLinkMovementMethod sInstance;
 
+    private static final int MAX_CLICK_DURATION = 250;
+
+    private static final int LONG_CLICK_DURATION = 500;
+
     private Long lastClickTime = 0l;
 
     private final Handler handler = new Handler();
@@ -54,17 +58,17 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
             final int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
 
-            if(off >= widget.getText().length()) {
-                handler.removeCallbacks(mLongPressed);
-                return true;
-            }
+            //if(off >= widget.getText().length()) {
+            //    handler.removeCallbacks(mLongPressed);
+            //    return true;
+            //}
 
             final MyClickableSpan[] link = buffer.getSpans(off, off, MyClickableSpan.class);
 
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
                     //Log.d(TAG, "ACTION_UP");
-                    if (System.currentTimeMillis() - lastClickTime < 500) {
+                    if (System.currentTimeMillis() - lastClickTime < MAX_CLICK_DURATION) {
                         link[0].onClick(widget);
                     }
                     handler.removeCallbacks(mLongPressed);
@@ -92,7 +96,7 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
                             link[0].onLongClick(widget);
                         }
                     };
-                    handler.postDelayed(mLongPressed, 1000);
+                    handler.postDelayed(mLongPressed, LONG_CLICK_DURATION);
                 }
 
                 return true;

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.MyClickableSpan;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -129,12 +131,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     //parse html body using fromHTML
                     SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                             Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-                    strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder);
-                    cvh.commentTextView.setText(strBuilder);
-                    //cvh.commentTextView.setText(comment.bodyPrepared);
-                    cvh.commentTextView.setOnClickListener(new View.OnClickListener() {
+
+                    MyClickableSpan clickableSpan = new MyClickableSpan() {
                         @Override
-                        public void onClick(View v) {
+                        public boolean onLongClick(View widget) {
                             int previousPosition = selectedPosition;
                             if(selectedPosition == position) {
                                 selectedPosition = -1;
@@ -144,8 +144,21 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                             }
                             notifyItemChanged(previousPosition);
                             notifyItemChanged(position);
+                            return true;
                         }
-                    });
+
+                        @Override
+                        public void onClick(View widget) {
+
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            //ds.bgColor = Color.GREEN; //enable for debugging plain text clickable spans
+                        }
+                    };
+                    strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
+                    cvh.commentTextView.setText(strBuilder);
                     cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
                 }
 
