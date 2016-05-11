@@ -6,6 +6,7 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -22,6 +23,8 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
     private static final int MAX_CLICK_DURATION = 250;
 
     private static final int LONG_CLICK_DURATION = 500;
+
+    private static final float CANCEL_LONG_CLICK_THRESHOLD_FACTOR = 0.05f; //decrease this value for a more strict threshold
 
     private Long lastClickTime = 0l;
 
@@ -75,7 +78,12 @@ public class MyLinkMovementMethod extends LinkMovementMethod {
                 }
                 else if(action == MotionEvent.ACTION_MOVE) {
                     //Log.d(TAG, "ACTION_MOVE");
-                    if(deltaX > 10 || deltaY > 10) {
+                    DisplayMetrics metrics = widget.getContext().getResources().getDisplayMetrics();
+                    int thresholdX = Math.round(metrics.widthPixels * CANCEL_LONG_CLICK_THRESHOLD_FACTOR);
+                    int thresholdY = Math.round(metrics.heightPixels * CANCEL_LONG_CLICK_THRESHOLD_FACTOR);
+                    //Log.d(TAG, "thresholdX: " + thresholdX);
+                    //Log.d(TAG, "thresholdY: " + thresholdY);
+                    if(deltaX > thresholdX || deltaY > thresholdY) {
                         //Log.d(TAG, "REMOVING LONG PRESS CALLBACK");
                         handler.removeCallbacks(mLongPressed);
                     }

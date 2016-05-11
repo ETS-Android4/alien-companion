@@ -3,87 +3,94 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout_comment"
-        android:background="?attr/themeSelector"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(Post Title Here)"
-            android:id="@+id/txtView_postTitle"
-            android:textSize="?attr/font_medium"
-            android:textStyle="bold"
-            android:textColor="?attr/themeTextColor"
-            android:fontFamily="?attr/defaultFontFamily" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_comment">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/themeSelector"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(subreddit)"
-                android:id="@+id/txtView_commentSubreddit"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor"
+                android:text="(Post Title Here)"
+                android:id="@+id/txtView_postTitle"
+                android:textSize="?attr/font_medium"
+                android:textStyle="bold"
+                android:textColor="?attr/themeTextColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" · "
-                android:id="@+id/textView9"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor"
-                android:fontFamily="?attr/defaultFontFamily" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(subreddit)"
+                    android:id="@+id/txtView_commentSubreddit"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" · "
+                    android:id="@+id/textView9"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(score)"
+                    android:id="@+id/txtView_commentScore"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" pts · "
+                    android:id="@+id/textView11"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(age)"
+                    android:id="@+id/txtView_commentAge"
+                    android:textSize="?attr/font_small"
+                    android:textColor="?attr/themeTextHintColor"
+                    android:fontFamily="?attr/defaultFontFamily" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="(score)"
-                android:id="@+id/txtView_commentScore"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor"
-                android:fontFamily="?attr/defaultFontFamily" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" pts · "
-                android:id="@+id/textView11"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor"
-                android:fontFamily="?attr/defaultFontFamily" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(age)"
-                android:id="@+id/txtView_commentAge"
-                android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextHintColor"
+                android:text="(Comment body here)"
+                android:id="@+id/txtView_commentBody"
+                android:textSize="?attr/font_medium"
+                android:textColor="?attr/themeTextColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(Comment body here)"
-            android:id="@+id/txtView_commentBody"
-            android:textSize="?attr/font_medium"
-            android:textColor="?attr/themeTextColor"
-            android:fontFamily="?attr/defaultFontFamily" />
-
     </LinearLayout>
 
     <LinearLayout

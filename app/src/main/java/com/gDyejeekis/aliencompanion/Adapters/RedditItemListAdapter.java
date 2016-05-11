@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.ShowMore;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.MyClickableSpan;
 import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.R;
@@ -237,7 +239,27 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_USER_COMMENT:
                 Comment comment = (Comment) getItemAt(position);
                 UserCommentViewHolder userCommentViewHolder = (UserCommentViewHolder) viewHolder;
-                userCommentViewHolder.bindModel(context, comment);
+                MyClickableSpan clickableSpan = new MyClickableSpan() {
+                    @Override
+                    public boolean onLongClick(View widget) {
+                        int previousSelected = selectedPosition;
+                        selectedPosition = (selectedPosition == position) ? -1 : position;
+                        notifyItemChanged(previousSelected);
+                        notifyItemChanged(selectedPosition);
+                        return true;
+                    }
+
+                    @Override
+                    public void onClick(View widget) {
+
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        //ds.bgColor = Color.GREEN;
+                    }
+                };
+                userCommentViewHolder.bindModel(context, comment, clickableSpan);
 
                 userCommentViewHolder.layoutComment.setOnLongClickListener(longListener);
 
@@ -381,7 +403,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             more = (ImageView) itemView.findViewById(R.id.btn_more);
         }
 
-        public void bindModel(Context context, Comment comment) {
+        public void bindModel(Context context, Comment comment, MyClickableSpan plainTextClickable) {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
 
@@ -390,8 +412,9 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             }
             else {
                 //parse html body using fromHTML
-                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-                strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null,
+                        new MyHtmlTagHandler()));
+                strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
                 commentBody.setText(strBuilder);
                 commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             }
@@ -422,6 +445,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         }
 
         public void showCommentOptions(View.OnClickListener listener) {
+            layoutComment.setBackgroundColor(MyApplication.colorPrimaryLight);
             layoutCommentOptions.setVisibility(View.VISIBLE);
             upvote.setOnClickListener(listener);
             downvote.setOnClickListener(listener);
@@ -431,6 +455,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         }
 
         public void hideCommentOptions() {
+            layoutComment.setBackground(null);
             layoutCommentOptions.setVisibility(View.GONE);
         }
     }
