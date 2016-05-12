@@ -2,13 +2,12 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="0.4.1" changeDate="May 12, 2016">
-        <changelogtext>Long tapping on a comment's body (excluding links) now brings up that comment's actions menu</changelogtext>
+        <changelogtext>Single tapping on a comment's body (excluding links) now brings up that comment's actions menu</changelogtext>
         <changelogtext>Visual tweaks to all post layouts</changelogtext>
         <changelogtext>Reduced long tap time for links from 1000ms to 500ms</changelogtext>
         <changelogtext>Fixed long tapping links being unreliable on high dpi devices</changelogtext>
         <changelogtext>Fixed multireddit syncing for sync profiles</changelogtext>
-        <changelogtext>Fixed bug preventing renewal of authentication token of previously added accounts
-            immediately after adding a new account</changelogtext>
+        <changelogtext>Fixed bug sometimes preventing renewal of access token</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.4" changeDate="May 4, 2016">

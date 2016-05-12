@@ -242,16 +242,15 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 MyClickableSpan clickableSpan = new MyClickableSpan() {
                     @Override
                     public boolean onLongClick(View widget) {
-                        int previousSelected = selectedPosition;
-                        selectedPosition = (selectedPosition == position) ? -1 : position;
-                        notifyItemChanged(previousSelected);
-                        notifyItemChanged(selectedPosition);
-                        return true;
+                        return false;
                     }
 
                     @Override
                     public void onClick(View widget) {
-
+                        int previousSelected = selectedPosition;
+                        selectedPosition = (selectedPosition == position) ? -1 : position;
+                        notifyItemChanged(previousSelected);
+                        notifyItemChanged(selectedPosition);
                     }
 
                     @Override

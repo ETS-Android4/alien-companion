@@ -255,7 +255,7 @@ public class ConvertUtils {
                         }
                     };
                 }
-                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
         }
         return strBuilder;
@@ -269,7 +269,7 @@ public class ConvertUtils {
         URLSpan[] urlSpans = strBuilder.getSpans(0, strBuilder.length(), URLSpan.class);
 
         if(urlSpans.length==0) {
-            strBuilder.setSpan(plainTextClickable, 0, strBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            strBuilder.setSpan(plainTextClickable, 0, strBuilder.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             return strBuilder;
         }
 
@@ -298,11 +298,11 @@ public class ConvertUtils {
                     public void updateDrawState(TextPaint ds) {
                         plainTextClickable.updateDrawState(ds);
                     }
-                }, plainTextSpanStart, start - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }, plainTextSpanStart, start, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             } catch (Exception e) {
                 //e.printStackTrace();
             }
-            plainTextSpanStart = end + 1;
+            plainTextSpanStart = end;
 
             MyClickableSpan myClickableSpan;
 
@@ -388,14 +388,16 @@ public class ConvertUtils {
                         public void updateDrawState(TextPaint ds) {
                             super.updateDrawState(ds);
                             ds.setColor(MyApplication.linkColor);
+
+                            //ds.bgColor = Color.RED; //enable for debugging clickable link spans
                         }
                     };
                 }
-                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
         }
         if(strBuilder.length() > plainTextSpanStart) {
-            strBuilder.setSpan(plainTextClickable, plainTextSpanStart, strBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            strBuilder.setSpan(plainTextClickable, plainTextSpanStart, strBuilder.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         }
         return strBuilder;
     }

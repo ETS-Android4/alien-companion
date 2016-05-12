@@ -135,21 +135,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     MyClickableSpan clickableSpan = new MyClickableSpan() {
                         @Override
                         public boolean onLongClick(View widget) {
-                            int previousPosition = selectedPosition;
-                            if(selectedPosition == position) {
-                                selectedPosition = -1;
-                            }
-                            else {
-                                selectedPosition = position;
-                            }
-                            notifyItemChanged(previousPosition);
-                            notifyItemChanged(position);
-                            return true;
+                            return false;
                         }
 
                         @Override
                         public void onClick(View widget) {
-
+                            int previousSelected = selectedPosition;
+                            selectedPosition = (selectedPosition == position) ? -1 : position;
+                            notifyItemChanged(previousSelected);
+                            notifyItemChanged(selectedPosition);
                         }
 
                         @Override
