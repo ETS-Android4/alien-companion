@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.api.entity;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
@@ -49,14 +50,16 @@ public class OAuthToken implements Serializable {
         if(new Date().getTime()/1000 >= expiration) {
             MyApplication.renewingToken = true;
             MyApplication.currentAccessToken = null;
+            RedditHttpClient httpClient = new RedditHttpClient();
+            httpClient.setRenewTokenInstance(true);
             if(refreshToken == null) {
-                OAuthToken newToken = RedditOAuth.getApplicationToken(new RedditHttpClient());
+                OAuthToken newToken = RedditOAuth.getApplicationToken(httpClient);
                 this.accessToken = newToken.accessToken;
                 this.expiresIn = newToken.expiresIn;
                 setExpiration(newToken.expiresIn);
             }
             else {
-                RedditOAuth.refreshToken(new RedditHttpClient(), this);
+                RedditOAuth.refreshToken(httpClient, this);
             }
             MyApplication.renewingToken = false;
             MyApplication.currentAccessToken = accessToken;

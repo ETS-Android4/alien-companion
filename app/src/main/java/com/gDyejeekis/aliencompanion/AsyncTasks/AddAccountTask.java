@@ -134,7 +134,10 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             if(RedditOAuth.useOAuth2) {
                 MyApplication.renewingToken = true;
                 MyApplication.currentAccessToken = null;
-                OAuthToken token = RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), oauthCode);
+                RedditHttpClient getTokenClient = new PoliteRedditHttpClient();
+                getTokenClient.setRenewTokenInstance(true);
+                OAuthToken token = RedditOAuth.getOAuthToken(getTokenClient, oauthCode);
+                MyApplication.renewingToken = false;
                 MyApplication.currentAccessToken = token.accessToken;
                 HttpClient httpClient = new PoliteRedditHttpClient();
                 ProfileActions profileActions = new ProfileActions(httpClient, token.accessToken);

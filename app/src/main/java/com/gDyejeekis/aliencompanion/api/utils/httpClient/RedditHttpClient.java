@@ -45,14 +45,22 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     private User user;
 
+    private boolean renewTokenInstance;
+
     public RedditHttpClient() {
         accessToken = MyApplication.currentAccessToken;
         this.user = null;
+        renewTokenInstance = false;
     }
 
     public RedditHttpClient(User user) {
         accessToken = user.getTokenObject().accessToken;
         this.user = user;
+        renewTokenInstance = false;
+    }
+
+    public void setRenewTokenInstance(boolean flag) {
+        renewTokenInstance = flag;
     }
 
     public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException { //TODO: re-write with okhttp
@@ -337,6 +345,10 @@ public class RedditHttpClient implements HttpClient, Serializable {
     //}
 
     private void tokenCheck() {
+        while(MyApplication.renewingToken && !renewTokenInstance) {
+            Log.d(TAG, "Waiting 100ms for access token to be renewed..");
+            SystemClock.sleep(100);
+        }
         try {
             if(RedditOAuth.useOAuth2) {
                 if(user == null) {
@@ -347,7 +359,9 @@ public class RedditHttpClient implements HttpClient, Serializable {
                         }
                         if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
                             MyApplication.renewingToken = true;
-                            OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
+                            RedditHttpClient httpClient = new RedditHttpClient();
+                            httpClient.setRenewTokenInstance(true);
+                            OAuthToken token = RedditOAuth.getApplicationToken(httpClient);
                             MyApplication.currentAccount.setToken(token);
                             MyApplication.currentAccessToken = token.accessToken;
                             accessToken = MyApplication.currentAccessToken;

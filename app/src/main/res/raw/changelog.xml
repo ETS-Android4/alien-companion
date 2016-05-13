@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.4.1" changeDate="May 12, 2016">
-        <changelogtext>Single tapping on a comment's body (excluding links) now brings up that comment's actions menu</changelogtext>
+    <changelogversion versionName="0.4.1" changeDate="May 14, 2016">
+        <changelogtext>Single tapping on a comment's body (excluding links and spoiler tagged text) now brings up that comment's actions menu</changelogtext>
         <changelogtext>Visual tweaks to all post layouts</changelogtext>
         <changelogtext>Reduced long tap time for links from 1000ms to 500ms</changelogtext>
         <changelogtext>Fixed long tapping links being unreliable on high dpi devices</changelogtext>
         <changelogtext>Fixed multireddit syncing for sync profiles</changelogtext>
-        <changelogtext>Fixed bug sometimes preventing renewal of access token</changelogtext>
+        <changelogtext>Fixed bug sometimes preventing renewal of reddit access token</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.4" changeDate="May 4, 2016">

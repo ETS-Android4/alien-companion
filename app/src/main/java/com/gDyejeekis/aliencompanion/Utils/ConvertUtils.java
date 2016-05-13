@@ -4,35 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.URLSpan;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import de.jetwick.snacktory.HtmlFetcher;
-import de.jetwick.snacktory.JResult;
 
 /**
  * Created by George on 6/19/2015.
@@ -109,14 +97,6 @@ public class ConvertUtils {
         }
     }
 
-    //public static String getFileAge(long lastModified) {
-    //    String lastSync = "";
-//
-//
-//
-    //    return lastSync;
-    //}
-
     public static CharSequence noTrailingwhiteLines(CharSequence text) {
         //fromHtmlCount++;
         //Log.d("geotest", "fromhtml() executed " + fromHtmlCount + " times");
@@ -145,17 +125,6 @@ public class ConvertUtils {
             e.printStackTrace();
         }
         return string;
-    }
-
-    public static void preparePostsText(Context context, List<RedditItem> items) { //TODO: delete this shit
-        try {
-            for (RedditItem item : items) {
-                if (item.getMainText() != null) {
-                    //item.storePreparedText((SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(item.getMainText(), null, new MyHtmlTagHandler())));
-                    item.storePreparedText(ConvertUtils.modifyURLSpan(context, item.getPreparedText()));
-                }
-            }
-        } catch (NullPointerException e) {}
     }
 
     public static SpannableStringBuilder modifyURLSpan(final Context context, CharSequence sequence) {
@@ -348,7 +317,7 @@ public class ConvertUtils {
 
                         @Override
                         public void onClick(View view) {
-
+                            plainTextClickable.onClick(view);
                         }
 
                         @Override
