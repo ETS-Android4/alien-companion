@@ -11,8 +11,9 @@
         android:id="@id/drag_handle"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:src="?attr/themeDragHandle" />
+        android:layout_height="32dp"
+        android:src="?attr/themeDragHandle"
+        android:layout_gravity="center" />
     <TextView
         android:id="@+id/subreddit_text"
         android:layout_width="0dp"
@@ -26,6 +27,7 @@
         android:id="@id/click_remove"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:src="@mipmap/ic_close_red_800_48dp" />
+        android:layout_height="32dp"
+        android:src="@mipmap/ic_close_red_800_48dp"
+        android:layout_gravity="center" />
 </LinearLayout>

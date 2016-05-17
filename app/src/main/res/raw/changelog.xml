@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.4.2" changeDate="May 30, 2016">
+
+    </changelogversion>
+
     <changelogversion versionName="0.4.1" changeDate="May 14, 2016">
         <changelogtext>Single tapping on a comment's body (excluding links and spoiler tagged text) now brings up that comment's actions menu</changelogtext>
         <changelogtext>Visual tweaks to all post layouts</changelogtext>
