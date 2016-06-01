@@ -140,10 +140,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                         @Override
                         public void onClick(View widget) {
-                            int previousSelected = selectedPosition;
+                            //int previousSelected = selectedPosition;
                             selectedPosition = (selectedPosition == position) ? -1 : position;
-                            notifyItemChanged(previousSelected);
-                            notifyItemChanged(selectedPosition);
+                            //notifyItemChanged(previousSelected);
+                            //notifyItemChanged(selectedPosition);
+                            notifyDataSetChanged();
                         }
 
                         @Override

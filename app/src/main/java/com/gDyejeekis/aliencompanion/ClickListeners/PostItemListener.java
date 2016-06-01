@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.ClickListeners;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -53,10 +54,7 @@ public class PostItemListener implements View.OnClickListener {
         if(v.getId() == R.id.layout_postCommentsButton || post.isSelf()) {
             if(MainActivity.dualPaneActive) {
                 PostFragment fragment = PostFragment.newInstance(post);
-                if(context instanceof MainActivity) ((MainActivity) context).setupPostFragment(fragment);
-                else if(context instanceof SubredditActivity) ((SubredditActivity) context).setupPostFragment(fragment);
-                else if(context instanceof UserActivity) ((UserActivity) context).setupPostFragment(fragment);
-                else if(context instanceof SearchActivity) ((SearchActivity) context).setupPostFragment(fragment);
+                addPostFragment(context, fragment);
             }
             else {
                 Intent intent = new Intent(context, PostActivity.class);
@@ -65,8 +63,29 @@ public class PostItemListener implements View.OnClickListener {
             }
         }
         else {
-            LinkHandler linkHandler = new LinkHandler(context, post);
-            linkHandler.handleIt();
+            if(MainActivity.dualPaneActive && (post.getDomain().equals("reddit.com") || post.getDomain().substring(3).equals("reddit.com"))) {
+                String url = post.getURL().toLowerCase();
+                if(url.contains("/wiki/") || url.contains("/about/")) {
+                    LinkHandler linkHandler = new LinkHandler(context, post);
+                    linkHandler.handleIt();
+                }
+                else {
+                    String[] postInfo = LinkHandler.getRedditPostInfo(post.getURL());
+                    PostFragment fragment = PostFragment.newInstance(postInfo);
+                    addPostFragment(context, fragment);
+                }
+            }
+            else {
+                LinkHandler linkHandler = new LinkHandler(context, post);
+                linkHandler.handleIt();
+            }
         }
+    }
+
+    private void addPostFragment(Context context, PostFragment fragment) {
+        if(context instanceof MainActivity) ((MainActivity) context).setupPostFragment(fragment);
+        else if(context instanceof SubredditActivity) ((SubredditActivity) context).setupPostFragment(fragment);
+        else if(context instanceof UserActivity) ((UserActivity) context).setupPostFragment(fragment);
+        else if(context instanceof SearchActivity) ((SearchActivity) context).setupPostFragment(fragment);
     }
 }

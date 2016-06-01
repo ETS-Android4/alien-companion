@@ -82,7 +82,9 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 }
                 else {
                     postFragment.showFullCommentsButton = false;
+                    String thumbUri = postFragment.post.getThumbnail();
                     postFragment.post = post;
+                    postFragment.post.setThumbnail(thumbUri);
                     comments = post.getSyncedComments();
                 }
             }

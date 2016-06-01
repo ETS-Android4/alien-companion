@@ -33,7 +33,7 @@ public class RefreshUserMultisTask extends AsyncTask<Void, Void, List<String>> {
         try {
             List<Multireddit> multireddits = MyApplication.currentUser.getMultis(false);
             for (Multireddit multireddit : multireddits) {
-                multiNames.add(multireddit.getDisplayName());
+                multiNames.add(multireddit.getName());
             }
 
         } catch (RetrievalFailedException | NullPointerException | RedditError e) {

@@ -117,7 +117,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         try {
             List<Multireddit> multireddits = user.getMultis(false);
             for (Multireddit multireddit : multireddits) {
-                multiNames.add(multireddit.getDisplayName());
+                multiNames.add(multireddit.getName());
             }
         } catch (RetrievalFailedException | NullPointerException | RedditError e) {
             Log.e("Api error", "Error retrieving user multis");

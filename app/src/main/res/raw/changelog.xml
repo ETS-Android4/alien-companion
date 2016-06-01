@@ -2,7 +2,11 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="0.4.2" changeDate="May 30, 2016">
-
+        <changelogtext>Tweaked icons in 'My subreddits' screen</changelogtext>
+        <changelogtext>Fixed nav drawer multireddits list sometimes containing multis with incorrect names</changelogtext>
+        <changelogtext>Fixed single tapping a comment's body sometimes highlighting a different comment</changelogtext>
+        <changelogtext>Fixed crash occuring when tapping on posts linking to other reddit posts in dual pane mode</changelogtext>
+        <changelogtext>Fixed post thumbnail sometimes disappearing from the comments screen (offline mode)</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.4.1" changeDate="May 14, 2016">

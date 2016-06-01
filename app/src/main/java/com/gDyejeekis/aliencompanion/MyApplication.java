@@ -235,17 +235,17 @@ public class MyApplication extends Application {
     private void checkAppVersion() {
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
         if(lastKnownVersionCode!=currentVersionCode) {
-            lastKnownVersionCode = currentVersionCode;
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("versionCode", currentVersionCode);
-            if(deleteAppDataThisVersion) {
-                prefs.edit().clear().commit();
+            if(deleteAppDataThisVersion || lastKnownVersionCode == 0) {
+                editor.clear();
                 clearApplicationData();
             }
             if(showWelcomeMsgThisVersion) {
                 editor.putBoolean("welcomeMsg", false);
             }
+            editor.putInt("versionCode", currentVersionCode);
             editor.commit();
+            lastKnownVersionCode = currentVersionCode;
         }
     }
 
