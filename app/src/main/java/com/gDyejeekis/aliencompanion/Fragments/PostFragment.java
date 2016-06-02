@@ -319,6 +319,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void refreshComments() {
+        postAdapter.selectedPosition = -1;
         if(!commentsLoaded) task.cancel(true);
         //if(!noResponseObject) {
             commentsLoaded = false;
