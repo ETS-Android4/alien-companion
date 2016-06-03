@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +36,6 @@ import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +59,8 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
+
+    private boolean updateActionBar = false;
 
     //public static boolean currentlyLoading = false;
 
@@ -108,25 +110,40 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
+        String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
+
         if(!MainActivity.dualPaneActive) {
             post = (Submission) activity.getIntent().getSerializableExtra("post");
-            String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
             loadFromList = (post != null);
-            //loadFromLink = activity.getIntent().getBooleanExtra("loadFromLink", false);
+
             if (!loadFromList) {
-                if (postInfo != null) {
-                    post = new Submission(postInfo[1]);
-                    post.setSubreddit(postInfo[0]);
-                    commentLinkId = postInfo[2];
-                    if (commentLinkId != null) showFullCommentsButton = true;
-                    if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
-                } else {
-                    titleUpdated = false;
-                    post = new Submission(activity.getIntent().getStringExtra("postId"));
-                }
+                initPostFromUrl(postInfo);
             }
             if(MyApplication.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) MainActivity.dualPaneActive = true;
         }
+        else {
+            if(post==null) {
+                updateActionBar = true;
+                initPostFromUrl(postInfo);
+            }
+        }
+    }
+
+    private void initPostFromUrl(String[] postInfo) {
+        if (postInfo != null) {
+            initPostFromInfoArray(postInfo);
+        } else {
+            titleUpdated = false;
+            post = new Submission(activity.getIntent().getStringExtra("postId"));
+        }
+    }
+
+    private void initPostFromInfoArray(String[] postInfo) {
+        post = new Submission(postInfo[1]);
+        post.setSubreddit(postInfo[0]);
+        commentLinkId = postInfo[2];
+        if (commentLinkId != null) showFullCommentsButton = true;
+        if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
     }
 
     @Override
@@ -162,6 +179,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         setActionBarTitle();
         if(commentSort == null) commentSort = CommentSort.TOP;
         setActionBarSubtitle();
+        updateActionBar = false;
     }
 
     @Override
@@ -336,7 +354,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void setActionBarTitle() {
-        if(!MainActivity.dualPaneActive) {
+        if(!MainActivity.dualPaneActive || updateActionBar) {
             String title;
             if (post.getSubreddit() != null) {
                 title = post.getSubreddit().toLowerCase();
@@ -350,7 +368,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     public void setActionBarSubtitle() {
-        if(!MainActivity.dualPaneActive) {
+        if(!MainActivity.dualPaneActive || updateActionBar) {
             String subtitle;
             if (MyApplication.offlineModeEnabled) subtitle = getOfflineSubtitle();
             else {

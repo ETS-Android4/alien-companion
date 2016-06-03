@@ -63,22 +63,22 @@ public class PostItemListener implements View.OnClickListener {
             }
         }
         else {
-            if(MainActivity.dualPaneActive && (post.getDomain().equals("reddit.com") || post.getDomain().substring(3).equals("reddit.com"))) {
-                String url = post.getURL().toLowerCase();
-                if(url.contains("/wiki/") || url.contains("/about/")) {
-                    LinkHandler linkHandler = new LinkHandler(context, post);
-                    linkHandler.handleIt();
-                }
-                else {
-                    String[] postInfo = LinkHandler.getRedditPostInfo(post.getURL());
-                    PostFragment fragment = PostFragment.newInstance(postInfo);
-                    addPostFragment(context, fragment);
-                }
-            }
-            else {
+            //if(MainActivity.dualPaneActive && (post.getDomain().equals("reddit.com") || post.getDomain().substring(3).equals("reddit.com"))) {
+            //    String url = post.getURL().toLowerCase();
+            //    if(url.contains("/wiki/") || url.contains("/about/")) {
+            //        LinkHandler linkHandler = new LinkHandler(context, post);
+            //        linkHandler.handleIt();
+            //    }
+            //    else {
+            //        String[] postInfo = LinkHandler.getRedditPostInfo(post.getURL());
+            //        PostFragment fragment = PostFragment.newInstance(postInfo);
+            //        addPostFragment(context, fragment);
+            //    }
+            //}
+            //else {
                 LinkHandler linkHandler = new LinkHandler(context, post);
                 linkHandler.handleIt();
-            }
+            //}
         }
     }
 

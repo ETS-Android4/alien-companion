@@ -7,9 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 
@@ -36,9 +35,9 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String currentVersion = "0.4.2";
+    public static final String currentVersion = "0.4.3";
 
-    public static final int currentVersionCode = 14;
+    public static final int currentVersionCode = 15;
 
     public static final boolean showWelcomeMsgThisVersion = false;
 
@@ -239,6 +238,7 @@ public class MyApplication extends Application {
             if(deleteAppDataThisVersion || lastKnownVersionCode == 0) {
                 editor.clear();
                 clearApplicationData();
+                editor.putBoolean("dualPane", getScreenSizeInches(getApplicationContext()) > 6.4);
             }
             if(showWelcomeMsgThisVersion) {
                 editor.putBoolean("welcomeMsg", false);
@@ -275,6 +275,17 @@ public class MyApplication extends Application {
         }
 
         return dir.delete();
+    }
+
+    public static double getScreenSizeInches(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+
+        double density = dm.density * 160;
+        double x = Math.pow(dm.widthPixels / density, 2);
+        double y = Math.pow(dm.heightPixels / density, 2);
+        double screenInches = Math.sqrt(x + y);
+
+        return screenInches;
     }
 
     public static void getCurrentSettings() {
