@@ -368,24 +368,29 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int resource = -1;
+                int resourceIndex = -1;
                 switch (item.getItemId()) {
                     case R.id.action_list_default:
                         resource = R.layout.post_list_item;
+                        resourceIndex = 0;
                         break;
                     case R.id.action_list_reversed:
                         resource = R.layout.post_list_item_reversed;
+                        resourceIndex = 1;
                         break;
                     case R.id.action_small_cards:
                         resource = R.layout.post_list_item_small_card;
+                        resourceIndex = 2;
                         break;
                     case R.id.action_cards:
                         resource = R.layout.post_list_item_card;
+                        resourceIndex = 3;
                         break;
                 }
                 if (resource != -1 && resource != MyApplication.currentPostListView) {
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
                     MyApplication.currentPostListView = resource;
-                    editor.putInt("postListView", resource);
+                    editor.putInt("postListView", resourceIndex);
                     editor.apply();
                     if(currentLoadType==null) redrawList();
                     return true;

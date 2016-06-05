@@ -296,8 +296,27 @@ public class MyApplication extends Application {
         syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
-        currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
-        //Log.d("geo test", "settings saved");
+
+        //currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
+        currentPostListView = prefs.getInt("postListView", 0);
+        switch (currentPostListView) {
+            case 0:
+                currentPostListView = R.layout.post_list_item;
+                break;
+            case 1:
+                currentPostListView = R.layout.post_list_item_reversed;
+                break;
+            case 2:
+                currentPostListView = R.layout.post_list_item_small_card;
+                break;
+            case 3:
+                currentPostListView = R.layout.post_list_item_card;
+                break;
+            default:
+                currentPostListView = R.layout.post_list_item;
+                break;
+        }
+
         dualPane = prefs.getBoolean("dualPane", false);
         //dualPane = true;
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));

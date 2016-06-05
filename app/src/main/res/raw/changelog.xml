@@ -3,14 +3,15 @@
 
     <changelogversion versionName="0.4.3" changeDate="Jun 6, 2016">
         <changelogtext>Dual pane mode now enabled by default on tablet devices</changelogtext>
-        <changelogtext>Fixed crash occuring when tapping on links to reddit posts in comments/self-text in dual pane mode</changelogtext>
+        <changelogtext>Fixed crash sometimes occurring on app startup after an APK update</changelogtext>
+        <changelogtext>Fixed crash occurring when tapping on links to reddit posts in comments/self-text in dual pane mode</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.4.2" changeDate="Jun 3, 2016">
         <changelogtext>Tweaked icons in 'My subreddits' screen</changelogtext>
         <changelogtext>Fixed nav drawer multireddits list sometimes containing multis with incorrect names</changelogtext>
         <changelogtext>Fixed single tapping a comment's body sometimes highlighting a different comment</changelogtext>
-        <changelogtext>Fixed crash occuring when tapping on posts linking to other reddit posts in dual pane mode</changelogtext>
+        <changelogtext>Fixed crash occurring when tapping on posts linking to other reddit posts in dual pane mode</changelogtext>
         <changelogtext>Fixed post thumbnail sometimes disappearing from the comments screen (offline mode)</changelogtext>
     </changelogversion>
 
