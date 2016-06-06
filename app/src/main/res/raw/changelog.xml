@@ -3,6 +3,7 @@
 
     <changelogversion versionName="0.4.3" changeDate="Jun 6, 2016">
         <changelogtext>Dual pane mode now enabled by default on tablet devices</changelogtext>
+        <changelogtext>Fixed i.reddituploads.com links returning 'Unauthorized' error</changelogtext>
         <changelogtext>Fixed crash sometimes occurring on app startup after an APK update</changelogtext>
         <changelogtext>Fixed crash occurring when tapping on links to reddit posts in comments/self-text in dual pane mode</changelogtext>
     </changelogversion>

@@ -255,6 +255,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 				selftextHTML = ConvertUtils.modifySpoilerHtml(selftextHTML);
 			}
 
+			if(domain.equals("i.reddituploads.com")) {
+				url = url.replace("&amp;", "&");
+			}
+
 			//if(selftextHTML!=null) {
 			//	SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(selftextHTML, null, new MyHtmlTagHandler()));
 			//	String text = stringBuilder.toString();
