@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.5" changeDate="Jul 30, 2016">
+
+    </changelogversion>
+
     <changelogversion versionName="0.4.3" changeDate="Jun 6, 2016">
         <changelogtext>Dual pane mode now enabled by default on tablet devices</changelogtext>
         <changelogtext>Fixed i.reddituploads.com links returning 'Unauthorized' error</changelogtext>

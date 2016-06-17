@@ -302,7 +302,7 @@
         <Preference
             android:key="changelog"
             android:title="View changelog"
-            android:summary="Current version: 0.4.3" />
+            android:summary="Current version: 0.5" />
 
         <Preference
             android:key="feedback"
