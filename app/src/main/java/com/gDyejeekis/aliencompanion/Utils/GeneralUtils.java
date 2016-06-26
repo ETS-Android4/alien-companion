@@ -434,6 +434,8 @@ public class GeneralUtils {
         if(domain.contains("gfycat.com")) return true;
         if(domain.contains("gyazo.com")) return true;
         if(domain.contains("flickr.com")) return true;
+        if(domain.equals("i.redd.it")) return true;
+        if(domain.equals("i.reddituploads.com")) return true;
         String urlLc = url.toLowerCase();
         if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif") || urlLc.endsWith(".jpeg")) return true;
         return false;

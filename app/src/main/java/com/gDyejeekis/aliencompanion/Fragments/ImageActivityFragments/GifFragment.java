@@ -96,7 +96,15 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         activity = (ImageActivity) getActivity();
         url = getArguments().getString("url", "null");
 
-        isGif = url.endsWith(".gif");
+        if(url.endsWith(".gif")) {
+            if(url.contains("imgur.com")) {
+                url = url.replace(".gif", ".mp4");
+                isGif = false;
+            }
+            else {
+                isGif = true;
+            }
+        }
     }
 
     @Override

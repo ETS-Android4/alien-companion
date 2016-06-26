@@ -329,7 +329,8 @@ public class DownloaderService extends IntentService {
     private void downloadPostImage(Submission post, String filename) {
         String url = post.getURL();
         String domain = post.getDomain();
-        if(domain.contains("imgur.com") || domain.contains("gfycat.com") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) {
+        if(domain.contains("imgur.com") || domain.contains("gfycat.com") || domain.equals("i.reddituploads.com") ||
+                url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) { // TODO: 6/26/2016 probably remove this check
             String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
             final File appFolder = new File(dir + "/AlienCompanion");
@@ -351,6 +352,9 @@ public class DownloaderService extends IntentService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+            else if(domain.equals("i.reddituploads.com")) {
+                downloadPostImageToFile(url, folderPath, LinkHandler.getReddituploadsFilename(url));
             }
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
@@ -431,6 +435,22 @@ public class DownloaderService extends IntentService {
     private void downloadPostImageToFile(String url, String dir) {
         try {
             final String imgFilename = url.replaceAll("https?://", "").replace("/", "(s)");
+            final File file = new File(dir, imgFilename);
+            Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
+            GeneralUtils.downloadMediaToFile(url, file);
+
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            sendBroadcast(mediaScanIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void downloadPostImageToFile(String url, String dir, String imgFilename) {
+        try {
+            imgFilename = imgFilename.replaceAll("https?://", "").replace("/", "(s)");
             final File file = new File(dir, imgFilename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadMediaToFile(url, file);

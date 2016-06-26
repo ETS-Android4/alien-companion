@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -37,6 +38,8 @@ import java.util.List;
  * Created by sound on 3/4/2016.
  */
 public class ImageActivity extends BackNavActivity {
+
+    public static final String TAG = "ImageActivity";
 
     private String url;
 
@@ -92,6 +95,9 @@ public class ImageActivity extends BackNavActivity {
             if(domain.contains("gfycat.com")) {
                 toFind = LinkHandler.getGfycatId(url);
             }
+            else if(domain.equals("i.reddituploads.com")) {
+                toFind = LinkHandler.getReddituploadsFilename(url);
+            }
             else if(domain.contains("imgur.com")) {
                 String id = LinkHandler.getImgurImgId(url);
                 if(url.contains("/a/")) {
@@ -146,6 +152,7 @@ public class ImageActivity extends BackNavActivity {
             if(toFind!=null) {
                 File file = GeneralUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
                 if (file != null) {
+                    Log.d(TAG, "Locally saved image found " + file.getAbsolutePath());
                     loadFromLocal = true;
                     String filename = file.getName();
                     if (filename.endsWith(".mp4") || filename.endsWith(".gif")) {
@@ -159,9 +166,13 @@ public class ImageActivity extends BackNavActivity {
         }
 
         if(!loadFromLocal) {
+            Log.d(TAG, "No locally saved image found, loading from network..");
             if (domain.contains("gfycat.com")) {
                 addGifFragment(GeneralUtils.getGfycatMobileUrl(url));
 
+            }
+            else if(domain.equals("i.reddituploads.com")) {
+                addImageFragment(url);
             }
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
