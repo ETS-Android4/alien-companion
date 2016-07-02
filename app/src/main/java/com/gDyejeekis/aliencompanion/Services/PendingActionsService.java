@@ -55,9 +55,9 @@ public class PendingActionsService extends IntentService {
     @Override
     public void onHandleIntent(Intent i) {
         if(GeneralUtils.isNetworkAvailable(this)) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            boolean actionsPending = prefs.getBoolean("pendingActions", false);
-            if (actionsPending) {
+            //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            //boolean actionsPending = prefs.getBoolean("pendingActions", false);
+            if (MyApplication.pendingOfflineActions) {
                 isRunning = true;
                 Log.d(TAG, "Executing remaining offline actions..");
                 try {
@@ -85,7 +85,8 @@ public class PendingActionsService extends IntentService {
                         Log.d(TAG, "All remaining offline actions completed");
                         file.delete();
 
-                        SharedPreferences.Editor editor = prefs.edit();
+                        MyApplication.pendingOfflineActions = false;
+                        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
                         editor.putBoolean("pendingActions", false);
                         editor.commit();
                     }
