@@ -24,7 +24,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        if(MyApplication.offlineActionsInterval!=-1 && MyApplication.pendingOfflineActions && networkInfo != null && networkInfo.isConnected()) {
+        if(MyApplication.autoExecuteOfflineActions && MyApplication.pendingOfflineActions && networkInfo != null && networkInfo.isConnected()) {
             Log.d(TAG, "Starting PendingActionsService..");
             Intent serviceIntent = new Intent(context, PendingActionsService.class);
             context.startService(serviceIntent);

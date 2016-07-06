@@ -64,13 +64,22 @@ public class SettingsFragment extends PreferenceFragment {
             }
         });
 
-        Preference pendingActionsInterval = findPreference("offlineActionsInterval");
-        pendingActionsInterval.setSummary(getTimeIntervalString(MyApplication.offlineActionsInterval));
-        pendingActionsInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        //Preference pendingActionsInterval = findPreference("offlineActionsInterval");
+        //pendingActionsInterval.setSummary(getTimeIntervalString(MyApplication.offlineActionsInterval));
+        //pendingActionsInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        //    @Override
+        //    public boolean onPreferenceChange(Preference preference, Object o) {
+        //        MyApplication.offlineActionsInterval = Integer.valueOf((String) o);
+        //        preference.setSummary(getTimeIntervalString(MyApplication.offlineActionsInterval));
+        //        MyApplication.scheduleOfflineActionsService(getActivity());
+        //        return true;
+        //    }
+        //});
+        Preference autoExecutePendingActions = findPreference("autoOfflineActions");
+        autoExecutePendingActions.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                MyApplication.offlineActionsInterval = Integer.valueOf((String) o);
-                preference.setSummary(getTimeIntervalString(MyApplication.offlineActionsInterval));
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                MyApplication.autoExecuteOfflineActions = (boolean) newValue;
                 MyApplication.scheduleOfflineActionsService(getActivity());
                 return true;
             }

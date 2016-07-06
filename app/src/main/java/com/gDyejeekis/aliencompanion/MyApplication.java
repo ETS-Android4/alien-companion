@@ -131,7 +131,8 @@ public class MyApplication extends Application {
 
     public static boolean pendingOfflineActions;
     //public static boolean offlineActionsServiceActive;
-    public static int offlineActionsInterval;
+    public static final int offlineActionsInterval = 5;
+    public static boolean autoExecuteOfflineActions;
 
     //not used
     public static boolean syncGif = false;
@@ -431,13 +432,12 @@ public class MyApplication extends Application {
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
 
-        //messageServiceActive = prefs.getBoolean("messageCheckActive", false);
         newMessages = prefs.getBoolean("newMessages", false);
         messageCheckInterval = Integer.valueOf(prefs.getString("messageCheckInterval", "15"));
 
-        //offlineActionsServiceActive = prefs.getBoolean("offlineActionsActive", false);
         pendingOfflineActions = prefs.getBoolean("pendingActions", false);
-        offlineActionsInterval = Integer.valueOf(prefs.getString("offlineActionsInterval", "15"));
+        //offlineActionsInterval = Integer.valueOf(prefs.getString("offlineActionsInterval", "15"));
+        autoExecuteOfflineActions = prefs.getBoolean("autoOfflineActions", true);
     }
 
     public static void scheduleMessageCheckService(final Context context) {
@@ -474,9 +474,10 @@ public class MyApplication extends Application {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, PendingActionsService.class);
         PendingIntent pIntent = PendingIntent.getService(context, PendingActionsService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        if(offlineActionsInterval != -1) {
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, 60 * 1000 * offlineActionsInterval, pIntent);
+        if(autoExecuteOfflineActions && pendingOfflineActions) {
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000 * offlineActionsInterval, 60 * 1000 * offlineActionsInterval, pIntent);
             Log.d(TAG, "OfflineActionsService scheduled to run every " + offlineActionsInterval + " minutes");
+            Log.d(TAG, "..until all pending offline actions are successfully executed");
         }
         else {
             manager.cancel(pIntent);

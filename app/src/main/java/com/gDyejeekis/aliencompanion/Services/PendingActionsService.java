@@ -97,6 +97,8 @@ public class PendingActionsService extends IntentService {
                         }
                     }
 
+                    MyApplication.scheduleOfflineActionsService(this);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

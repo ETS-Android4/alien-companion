@@ -288,12 +288,18 @@
             android:key="offlineActions"
             android:title="Pending offline actions" />
 
-        <ListPreference
+        <!--<ListPreference
             android:key="offlineActionsInterval"
             android:title="Execute pending offline actions"
             android:entries="@array/timeIntervals"
             android:entryValues="@array/timeIntervalsValues"
-            android:defaultValue="15" />
+            android:defaultValue="15" />-->
+
+        <CheckBoxPreference
+            android:key="autoOfflineActions"
+            android:title="Execute pending actions automatically"
+            android:summary="All pending offline actions execute automatically as soon as a network connection is established"
+            android:defaultValue="true" />
 
         <Preference
             android:key="clearCache"

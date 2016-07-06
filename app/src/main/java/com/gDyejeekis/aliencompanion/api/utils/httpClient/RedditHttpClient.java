@@ -39,7 +39,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
 
     public static final String TAG = "RedditHttpClient";
 
-    private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/alien_companion)";
+    private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/ubercharge_ready)";
 
     private String accessToken;
 
