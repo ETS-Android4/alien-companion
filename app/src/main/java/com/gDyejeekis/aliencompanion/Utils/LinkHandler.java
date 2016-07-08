@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
  */
 public class LinkHandler {
 
+    public static final String TAG = "LinkHandler";
+
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
 
     private Context context;
@@ -71,12 +73,32 @@ public class LinkHandler {
                 String domainLC = domain.toLowerCase();
                 String urlLC = url.toLowerCase();
                 //Log.d("Link Domain", domain);
-                if ( ((domainLC.contains("youtube.com") || domainLC.equals("youtu.be")) && !(urlLC.contains("playlist") || urlLC.contains("user") || urlLC.contains("channel"))) ) {
+                if (domainLC.contains("youtube.com") || domainLC.equals("youtu.be")) {
                     if (MyApplication.handleYouTube) {
-                        String videoId = getYoutubeVideoId(url);
-                        int time = getYoutubeVideoTime(url);
-                        //Log.d("youtube video id", videoId);
-                        intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+                        if(urlLC.contains("playlist")) {
+                            String playlistId = getYoutubePlaylistId(url);
+                            if(playlistId.equals("")) {
+                                Log.e(TAG, "Unable to validate YouTube playlist ID");
+                                setImplicitIntent = true;
+                            }
+                            else {
+                                Log.d(TAG, "YouTube playlist ID: " + playlistId);
+                                intent = YouTubeStandalonePlayer.createPlaylistIntent(activity, YOUTUBE_API_KEY, playlistId, 0, 0, true, true);
+                            }
+
+                        }
+                        else {
+                            String videoId = getYoutubeVideoId(url);
+                            if(videoId.equals("")) {
+                                Log.e(TAG, "Unable to validate YouTube video ID");
+                                setImplicitIntent = true;
+                            }
+                            else {
+                                Log.d(TAG, "YouTube video ID: " + videoId);
+                                int time = getYoutubeVideoTime(url);
+                                intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+                            }
+                        }
                     }
                     else setImplicitIntent = true;
                 }
@@ -271,6 +293,18 @@ public class LinkHandler {
 
         if(matcher.find()) {
             return matcher.group(1);
+        }
+        return "";
+    }
+
+    public static String getYoutubePlaylistId(String youtubeURL) {
+        String pattern = "^.*(youtu.be\\/|list=)([^#\\&\\?]*).*";
+
+        Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = compiledPattern.matcher(decodeURL(youtubeURL));
+
+        if(matcher.find()) {
+            return matcher.group(2);
         }
         return "";
     }

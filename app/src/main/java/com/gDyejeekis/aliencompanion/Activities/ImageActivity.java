@@ -201,11 +201,13 @@ public class ImageActivity extends BackNavActivity {
                                     addImageFragment(image.getLink());
                                 }
                             } else if (item instanceof ImgurAlbum) {
-                                setupAlbumView(((ImgurAlbum) item).getImages());
+                                checkImgurAlbumSize(item);
+                                //setupAlbumView(item.getImages());
                             } else if (item instanceof ImgurGallery) {
                                 ImgurGallery gallery = (ImgurGallery) item;
                                 if (gallery.isAlbum()) {
-                                    setupAlbumView(gallery.getImages());
+                                    checkImgurAlbumSize(item);
+                                    //setupAlbumView(gallery.getImages());
                                 } else {
                                     if(gallery.isAnimated()) {
                                         addGifFragment(gallery.getMp4());
@@ -219,6 +221,21 @@ public class ImageActivity extends BackNavActivity {
                     }
                 }.execute(url);
             }
+        }
+    }
+
+    private void checkImgurAlbumSize(ImgurItem album) {
+        if(album.getImages().size() == 1) {
+            ImgurImage image = album.getImages().get(0);
+            if(image.isAnimated()) {
+                addGifFragment(image.getMp4());
+            }
+            else {
+                addImageFragment(image.getLink());
+            }
+        }
+        else {
+            setupAlbumView(album.getImages());
         }
     }
 

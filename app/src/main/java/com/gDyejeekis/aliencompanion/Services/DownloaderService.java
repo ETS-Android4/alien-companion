@@ -12,6 +12,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.FileObserver;
+import android.os.SystemClock;
 import android.support.v7.app.NotificationCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.Utils.SyncPausedException;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -82,6 +84,8 @@ public class DownloaderService extends IntentService {
     private int MAX_PROGRESS;
 
     private int progress;
+
+    private boolean manuallyPaused;
 
     private HttpClient httpClient = new PoliteRedditHttpClient();
 
@@ -143,7 +147,7 @@ public class DownloaderService extends IntentService {
             }
         }
         else {
-            MAX_PROGRESS = MyApplication.syncPostCount;
+            MAX_PROGRESS = MyApplication.syncPostCount + 1;
             progress = 0;
             String subreddit = i.getStringExtra("subreddit");
             boolean isMulti = i.getBooleanExtra("isMulti", false);
@@ -163,8 +167,10 @@ public class DownloaderService extends IntentService {
 
     private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
         try {
+            if(manuallyPaused) {
+                throw new SyncPausedException();
+            }
             Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
-            Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             List<RedditItem> posts;
 
             if (subreddit == null || subreddit.equals("frontpage"))
@@ -178,49 +184,96 @@ public class DownloaderService extends IntentService {
                 deletePreviousComments(filename);
                 deletePreviousImages(filename);
                 writePostsToFile(posts, filename + LOCA_POST_LIST_SUFFIX);
+                MAX_PROGRESS = posts.size() + 1;
+                increaseProgress(builder, filename);
                 for (RedditItem post : posts) {
-                    increaseProgress(builder);
                     Submission submission = (Submission) post;
-                    if(syncOptions.isSyncThumbs()) {
-                        downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
-                    }
-                    List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
-                    submission.setSyncedComments(comments);
-
-                    String url = submission.getURL();
-                    String domain = submission.getDomain();
-                    if(domain.contains("reddit.com") || domain.equals("redd.it")) {
-                        syncLinkedRedditPost(url, domain, filename, cmntsRetrieval, syncOptions);
-                    }
-                    else if(syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
-                        if(GeneralUtils.canAccessExternalStorage(this)) {
-                            downloadPostImage(submission, filename);
-                        }
-                    }
-                    else if(syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
-                        downloadPostArticle(submission, filename);
-                    }
-
-                    writePostToFile(submission, filename + "-" + submission.getIdentifier());
+                    syncPost(builder, submission, filename, syncOptions);
                 }
             }
 
-        } catch (RetrievalFailedException | RedditError e) {
-            e.printStackTrace();
+        } catch (RetrievalFailedException | RedditError | SyncPausedException e) {
+            //e.printStackTrace();
+            pauseSync(builder);
+            syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
         }
+    }
+
+    private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, SyncProfileOptions syncOptions) {
+        try {
+            if(manuallyPaused) {
+                throw new SyncPausedException();
+            }
+            Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
+            if (syncOptions.isSyncThumbs()) {
+                downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
+            }
+            List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
+            submission.setSyncedComments(comments);
+
+            String url = submission.getURL();
+            String domain = submission.getDomain();
+            if (domain.contains("reddit.com") || domain.equals("redd.it")) {
+                syncLinkedRedditPost(url, domain, filename, cmntsRetrieval, syncOptions);
+            } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
+                if (GeneralUtils.canAccessExternalStorage(this)) {
+                    downloadPostImage(submission, filename);
+                }
+            } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
+                downloadPostArticle(submission, filename);
+            }
+
+            writePostToFile(submission, filename + "-" + submission.getIdentifier());
+            increaseProgress(builder, filename);
+        } catch (RetrievalFailedException | RedditError | SyncPausedException e) {
+            //e.printStackTrace();
+            pauseSync(builder);
+            syncPost(builder, submission, filename, syncOptions);
+        }
+    }
+
+    private void pauseSync(NotificationCompat.Builder builder) {
+        String pauseReason;
+        long waitTime;
+        if(manuallyPaused) {
+            pauseReason = "Sync paused";
+            waitTime = 0;
+        }
+        else if(!GeneralUtils.isNetworkAvailable(this)) {
+            pauseReason = "Sync paused (network unavailable). Retrying..";
+            waitTime = 0;
+        }
+        else {
+            pauseReason = "Sync paused (error connecting to reddit). Retrying..";
+            waitTime = 2000;
+        }
+
+        builder.setContentText(pauseReason);
+        notificationManager.notify(FOREGROUND_ID, builder.build());
+
+        SystemClock.sleep(waitTime);
+    }
+
+    private void resumeSync() {
+        manuallyPaused = false;
+    }
+
+    private void cancelSync() {
+        this.stopSelf();
     }
 
     private Notification buildForegroundNotification(NotificationCompat.Builder b, String filename) {
         b.setOngoing(true);
         b.setContentTitle("Alien Companion")
                 .setContentText("Syncing " + filename +"...")
-                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...").setProgress(MAX_PROGRESS, 0, false);
+                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...").setProgress(MAX_PROGRESS, progress, false);
         return(b.build());
     }
 
-    private void increaseProgress(NotificationCompat.Builder b) {
+    private void increaseProgress(NotificationCompat.Builder b, String filename) {
         progress++;
-        b.setProgress(MAX_PROGRESS, progress, false);
+        Log.d(TAG, progress + "/" + MAX_PROGRESS + " done");
+        b.setContentText("Syncing " + filename + "...").setProgress(MAX_PROGRESS, progress, false);
         notificationManager.notify(FOREGROUND_ID, b.build());
     }
 

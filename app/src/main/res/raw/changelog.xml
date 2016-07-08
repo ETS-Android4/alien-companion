@@ -3,7 +3,10 @@
 
     <changelogversion versionName="0.5" changeDate="Jul 30, 2016">
         <changelogtext>i.reddituploads.com images now open in the image viewer and cache properly when syncing</changelogtext>
+        <changelogtext>YouTube playlist URLs now open in the in-app youtube player (unless youtube handling is disabled)</changelogtext>
         <changelogtext>Fixed GIFs in imgur albums not loading properly</changelogtext>
+        <changelogtext>Fixed imgur album/gallery URLs with only one item opening in the album view (online mode)</changelogtext>
+        <changelogtext>Fixed various bugs in the 'Show synced' dialog</changelogtext>
         <changelogtext>Changed 'Execute pending offline actions every ..' setting to 'Automatically execute pending actions' (enabled by default).
          When enabled, all pending actions execute as soon as a network connection is established. Any failed actions will attempt to execute
             on a 5 minute interval until successful.</changelogtext>

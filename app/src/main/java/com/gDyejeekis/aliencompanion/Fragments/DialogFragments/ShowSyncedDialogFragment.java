@@ -73,11 +73,11 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         String filename = adapter.getItem(i).toString();
         String subreddit = (filename.equals("frontpage")) ? null : filename;
         if(getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit);
+            ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit, filename.startsWith("multi="));
             ((MainActivity) getActivity()).getNavDrawerAdapter().notifyDataSetChanged();
         }
         else {
-            ((SubredditActivity) getActivity()).getListFragment().changeSubreddit(subreddit);
+            ((SubredditActivity) getActivity()).getListFragment().changeSubreddit(subreddit, filename.startsWith("multi="));
         }
     }
 
