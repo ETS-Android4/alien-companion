@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -19,6 +20,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.RemoteViews;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
@@ -26,6 +29,7 @@ import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
@@ -85,7 +89,20 @@ public class DownloaderService extends IntentService {
 
     private int progress;
 
-    private boolean manuallyPaused;
+    //public static NotificationCompat.Builder notifBuilder;
+
+    public static boolean manuallyPaused = false;
+
+    public static boolean manuallyCancelled = false;
+
+    private static final android.support.v4.app.NotificationCompat.Action pauseAction = new android.support.v4.app.NotificationCompat.Action(
+            R.mipmap.ic_pause_white_48dp, "Pause", null); // TODO: 7/8/2016
+
+    private static final android.support.v4.app.NotificationCompat.Action resumeAction = new android.support.v4.app.NotificationCompat.Action(
+            R.mipmap.ic_resume_white_48dp, "Resume", null); // TODO: 7/8/2016
+
+    private static final android.support.v4.app.NotificationCompat.Action cancelAction = new android.support.v4.app.NotificationCompat.Action(
+            R.mipmap.ic_close_white_48dp, "Cancel", null); // TODO: 7/8/2016
 
     private HttpClient httpClient = new PoliteRedditHttpClient();
 
@@ -167,9 +184,7 @@ public class DownloaderService extends IntentService {
 
     private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
         try {
-            if(manuallyPaused) {
-                throw new SyncPausedException();
-            }
+            checkPausedOrCancelled();
             Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
             List<RedditItem> posts;
 
@@ -201,9 +216,7 @@ public class DownloaderService extends IntentService {
 
     private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, SyncProfileOptions syncOptions) {
         try {
-            if(manuallyPaused) {
-                throw new SyncPausedException();
-            }
+            checkPausedOrCancelled();
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             if (syncOptions.isSyncThumbs()) {
                 downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
@@ -232,54 +245,80 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    private void checkPausedOrCancelled() throws SyncPausedException {
+        if(manuallyPaused) {
+            throw new SyncPausedException();
+        }
+        else if(manuallyCancelled) {
+            manuallyCancelled = false;
+            stopSelf();
+        }
+    }
+
     private void pauseSync(NotificationCompat.Builder builder) {
         String pauseReason;
         long waitTime;
+        int small_icon;
         if(manuallyPaused) {
             pauseReason = "Sync paused";
             waitTime = 0;
+            small_icon = android.R.drawable.ic_media_pause;
+            builder.mActions.set(0, resumeAction);
         }
         else if(!GeneralUtils.isNetworkAvailable(this)) {
             pauseReason = "Sync paused (network unavailable). Retrying..";
             waitTime = 0;
+            small_icon = android.R.drawable.stat_notify_error;
         }
         else {
             pauseReason = "Sync paused (error connecting to reddit). Retrying..";
             waitTime = 2000;
+            small_icon = android.R.drawable.stat_notify_error;
         }
 
-        builder.setContentText(pauseReason);
+        builder.setContentText(pauseReason).setSmallIcon(small_icon);
         notificationManager.notify(FOREGROUND_ID, builder.build());
 
         SystemClock.sleep(waitTime);
     }
 
-    private void resumeSync() {
-        manuallyPaused = false;
+    private void manualSyncPause(NotificationCompat.Builder builder) {
+        manuallyPaused = true;
+        builder.setContentText("Pausing..");
+        builder.mActions.set(0, resumeAction);
+        notificationManager.notify(FOREGROUND_ID, builder.build());
     }
 
-    private void cancelSync() {
-        this.stopSelf();
+    private void manualSyncResume(NotificationCompat.Builder builder) {
+        manuallyPaused = false;
+        builder.setContentText("Resuming..");
+        builder.mActions.set(0, pauseAction);
+        notificationManager.notify(FOREGROUND_ID, builder.build());
     }
 
     private Notification buildForegroundNotification(NotificationCompat.Builder b, String filename) {
         b.setOngoing(true);
         b.setContentTitle("Alien Companion")
                 .setContentText("Syncing " + filename +"...")
-                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...").setProgress(MAX_PROGRESS, progress, false);
+                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...")
+                .setProgress(MAX_PROGRESS, progress, false)
+                .addAction(pauseAction)
+                .addAction(cancelAction);
         return(b.build());
     }
 
     private void increaseProgress(NotificationCompat.Builder b, String filename) {
         progress++;
         Log.d(TAG, progress + "/" + MAX_PROGRESS + " done");
-        b.setContentText("Syncing " + filename + "...").setProgress(MAX_PROGRESS, progress, false);
+        b.setContentText("Syncing " + filename + "...")
+                .setSmallIcon(android.R.drawable.stat_sys_download)
+                .setProgress(MAX_PROGRESS, progress, false);
         notificationManager.notify(FOREGROUND_ID, b.build());
     }
 
     private void writePostsToFile(List<RedditItem> posts, String filename) {
         try {
-            Log.d("Geo test", "writing posts to " + filename);
+            Log.d(TAG, "writing posts to " + filename);
             //File dir = new File(getFilesDir(), filename + "_posts");
             //dir.mkdirs();
 
@@ -297,7 +336,7 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
-            Log.d("Geo test", "writing comments to " + filename);
+            Log.d(TAG, "writing comments to " + filename);
             //File path = new File(directoryName, filename);
 
             FileOutputStream fos;
