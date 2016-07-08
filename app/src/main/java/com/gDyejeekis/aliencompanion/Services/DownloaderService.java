@@ -246,12 +246,13 @@ public class DownloaderService extends IntentService {
     }
 
     private void checkPausedOrCancelled() throws SyncPausedException {
-        if(manuallyPaused) {
-            throw new SyncPausedException();
-        }
-        else if(manuallyCancelled) {
+        if(manuallyCancelled) {
             manuallyCancelled = false;
+            manuallyPaused = false;
             stopSelf();
+        }
+        else if(manuallyPaused) {
+            throw new SyncPausedException();
         }
     }
 
