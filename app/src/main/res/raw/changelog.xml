@@ -2,6 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="0.5" changeDate="Jul 30, 2016">
+        <changelogtext>Added pause/resume and cancel buttons to the sync notification</changelogtext>
         <changelogtext>Syncing now auto-pauses when interrupted due to network/reddit error and auto-resumes as soon as the error is resolved</changelogtext>
         <changelogtext>i.reddituploads.com images now open in the image viewer and cache properly when syncing</changelogtext>
         <changelogtext>YouTube playlist URLs now open in the in-app youtube player (unless youtube handling is disabled)</changelogtext>
