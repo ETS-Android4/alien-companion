@@ -73,8 +73,6 @@ public class MyApplication extends Application {
 
     public static final boolean useMarkdownParsing = false; //only enable this if/when markdown parsing is ready
 
-    private static Context context;
-
     public static SharedPreferences prefs;
     public static int lastKnownVersionCode;
     public static String deviceID;
@@ -155,14 +153,9 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        MyApplication.context = getApplicationContext();
         initStaticFields();
 
         scheduleOfflineActionsService(getApplicationContext());
-    }
-
-    public static Context getAppContext() {
-        return MyApplication.context;
     }
 
     private void initStaticFields() {
