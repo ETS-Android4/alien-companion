@@ -26,6 +26,13 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".BroadcastReceivers.SyncStateReceiver">
+            <intent-filter>
+                <action android:name="com.gDyejeekis.aliencompanion.SYNC_CANCEL"/>
+                <action android:name="com.gDyejeekis.aliencompanion.SYNC_PAUSE"/>
+                <action android:name="com.gDyejeekis.aliencompanion.SYNC_RESUME"/>
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".Activities.SplashActivity"
             android:launchMode="singleTop"
