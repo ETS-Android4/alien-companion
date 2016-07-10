@@ -224,7 +224,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
                 PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
                 switch (postViewHolder.viewType) {
-                    case listItem:
+                    case listItem: case smallCards:
                         postViewHolder.linkButton.setOnLongClickListener(longListener);
                         postViewHolder.commentsButton.setOnLongClickListener(longListener);
                         //post item selected

@@ -62,7 +62,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     public PostViewType viewType;
 
-    //private static final int clickedColor = Color.GRAY;
     private static final int clickedColor = MyApplication.textHintColor;
     private int linkIcon;
 
@@ -182,12 +181,14 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
                 postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
                 linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
-                //upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
-                //layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
-                //downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
-                //save =  (ImageView) itemView.findViewById(R.id.btn_save);
-                //hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
-                //moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+                layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_options);
+                upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+                downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+                save =  (ImageView) itemView.findViewById(R.id.btn_save);
+                hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+                viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+                openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
+                moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
 
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 postDets1 = (TextView) itemView.findViewById(R.id.small_card_details_1);
@@ -316,7 +317,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 bindPostList(context, post);
                 break;
             case smallCards:
-                //moreOptions.setImageResource(moreResource);
+                layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
                 bindPostSmallCards(context, post);
                 break;
             case cards:
@@ -426,21 +427,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         postDets1.setText(dets1);
 
         String dets2 = post.getScore() + " score · " + post.getCommentCount() + " comments";
-        if(post.getLikes().equals("true")) {
-            int index = dets2.indexOf(" ");
-            SpannableString spannableString = new SpannableString(dets2);
-            spannableString.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            postDets2.setText(spannableString);
-        }
-        else if(post.getLikes().equals("false")) {
-            int index = dets2.indexOf(" ");
-            SpannableString spannableString = new SpannableString(dets2);
-            spannableString.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            postDets2.setText(spannableString);
-        }
-        else {
-            postDets2.setText(dets2);
-        }
+        setIconsAndScoreText(context, postDets2, dets2, post);
 
         if(post.isNSFW()) appendNsfwLabel(context, postDets1);
     }
@@ -450,7 +437,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.isSelf()) dets += post.getDomain();
         else dets += post.getSubreddit() + " · " + post.getDomain();
         postDets1.setText(dets);
-        //scoreText.setText(post.getScore() + " score");
+
         setIconsAndScoreText(context, scoreText, post.getScore() + " score", post);
         commentsText.setText(post.getCommentCount() + " comments");
 

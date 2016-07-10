@@ -229,7 +229,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
         if(post.getAuthor().equals(currentUser)) {
             if(post.isSelf()) {
                 labelNSFWindex = 2;
-                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new
+                if(MyApplication.currentPostListView == R.layout.post_list_item_card
                         || recyclerAdapter instanceof PostAdapter) {
                     resource = R.menu.menu_self_post_card_more_options_account;
                 }
@@ -239,7 +239,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             }
             else {
                 labelNSFWindex = 1;
-                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new) {
+                if(MyApplication.currentPostListView == R.layout.post_list_item_card) {
                     resource = R.menu.menu_post_card_more_options_account;
                 }
                 else {
@@ -249,11 +249,11 @@ public class PostItemOptionsListener implements View.OnClickListener {
         }
         else {
             if(post.isSelf()) {
-                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new
+                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card
                         || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
             }
             else {
-                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new || recyclerAdapter instanceof PostAdapter)
+                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter)
                         ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
             }
         }
