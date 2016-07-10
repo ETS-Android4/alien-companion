@@ -24,6 +24,7 @@ import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -63,28 +64,84 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     //private static final int clickedColor = Color.GRAY;
     private static final int clickedColor = MyApplication.textHintColor;
-    private static int upvoteColor, downvoteColor;
+    private int linkIcon;
+
+    //public PostViewHolder(View itemView, PostViewType type) {
+    //    super(itemView);
+    //    this.viewType = type;
+    //    upvoteColor = Color.parseColor("#ff8b60");
+    //    downvoteColor = Color.parseColor("#9494ff");
+//
+    //    title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
+    //    commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
+    //    postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
+    //    linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
+    //    upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+    //    layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
+    //    downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+    //    save =  (ImageView) itemView.findViewById(R.id.btn_save);
+    //    hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+    //    moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+//
+    //    if(viewType == PostViewType.listItem || viewType == PostViewType.smallCards || MyApplication.nightThemeEnabled) {
+    //        viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+    //        openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
+    //        upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
+    //        downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
+    //        saveResource = R.mipmap.ic_star_border_white_48dp;
+    //        hideResource = R.mipmap.ic_close_white_48dp;
+    //        moreResource = R.mipmap.ic_more_vert_white_48dp;
+    //        commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
+    //    }
+    //    else {
+    //        upvoteResource = R.mipmap.ic_arrow_upward_grey_48dp;
+    //        downvoteResource = R.mipmap.ic_arrow_downward_grey_48dp;
+    //        saveResource = R.mipmap.ic_star_border_grey_48dp;
+    //        hideResource = R.mipmap.ic_close_grey_48dp;
+    //        moreResource = R.mipmap.ic_more_vert_grey_48dp;
+    //        commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
+    //    }
+    //    switch (viewType) {
+    //        case listItem:
+    //            commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
+    //            commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
+    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+    //            postDets2 = (TextView) itemView.findViewById(R.id.textView_dets2);
+    //            break;
+    //        case smallCards:
+    //            commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
+    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+    //            scoreText = (TextView) itemView.findViewById(R.id.textView_score);
+    //            break;
+    //        case cards:
+    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+    //            commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
+    //            domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
+    //            fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
+    //            layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
+    //            selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
+    //            scoreText = (TextView) itemView.findViewById(R.id.textView_score);
+    //            imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
+    //            break;
+    //        case cardDetails:
+    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+    //            fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
+    //            commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
+    //            domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
+    //            fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
+    //            layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
+    //            selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
+    //            scoreText = (TextView) itemView.findViewById(R.id.textView_score);
+    //            imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
+    //            break;
+    //    }
+    //}
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
         this.viewType = type;
-        upvoteColor = Color.parseColor("#ff8b60");
-        downvoteColor = Color.parseColor("#9494ff");
 
-        title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
-        commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
-        postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
-        linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
-        upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
-        layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
-        downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
-        save =  (ImageView) itemView.findViewById(R.id.btn_save);
-        hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
-        moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
-
-        if(viewType == PostViewType.listItem || viewType == PostViewType.details || MyApplication.nightThemeEnabled) {
-            viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
-            openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
+        if(viewType == PostViewType.listItem || viewType == PostViewType.smallCards || MyApplication.nightThemeEnabled) {
             upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
             downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
             saveResource = R.mipmap.ic_star_border_white_48dp;
@@ -100,19 +157,55 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             moreResource = R.mipmap.ic_more_vert_grey_48dp;
             commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
         }
-        switch (viewType) {
+
+        switch (type) {
             case listItem:
+                title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
+                commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
+                postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
+                linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
+                upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+                layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
+                downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+                save =  (ImageView) itemView.findViewById(R.id.btn_save);
+                hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+                moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+
+                viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+                openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
                 postDets2 = (TextView) itemView.findViewById(R.id.textView_dets2);
                 break;
             case smallCards:
+                title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
+                postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
+                linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
+                //upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+                //layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
+                //downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+                //save =  (ImageView) itemView.findViewById(R.id.btn_save);
+                //hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+                //moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
-                postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
-                scoreText = (TextView) itemView.findViewById(R.id.textView_score);
+                postDets1 = (TextView) itemView.findViewById(R.id.small_card_details_1);
+                postDets2 = (TextView) itemView.findViewById(R.id.small_card_details_2);
+                linkIcon = (MyApplication.nightThemeEnabled) ? R.drawable.ic_link_white_48dp : R.drawable.ic_link_grey_500_48dp;
                 break;
             case cards:
+                title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
+                commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
+                postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
+                linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
+                upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+                layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
+                downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+                save =  (ImageView) itemView.findViewById(R.id.btn_save);
+                hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+                moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
@@ -123,6 +216,17 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
                 break;
             case cardDetails:
+                title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
+                commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
+                postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
+                linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
+                upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+                layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
+                downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+                save =  (ImageView) itemView.findViewById(R.id.btn_save);
+                hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+                moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
                 fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
                 commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
@@ -156,10 +260,23 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 else if(postThumbnail.hasThumbnail()){
                     try {
                         //Get Post Thumbnail
-                        Picasso.with(context).load(postThumbnail.getUrl()).placeholder(R.drawable.noimage).into(postImage);
+                        Picasso.with(context).load(postThumbnail.getUrl()).placeholder(linkIcon).into(postImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                postImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            }
+
+                            @Override
+                            public void onError() {
+                                postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            }
+                        });
                     } catch (IllegalArgumentException e) {e.printStackTrace();}
                 }
-                else postImage.setImageResource(R.drawable.noimage);
+                else {
+                    postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    postImage.setImageResource(linkIcon);
+                }
             }
         }
         else if (viewType == PostViewType.listItem || !post.hasImageButton) {
@@ -199,8 +316,8 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 bindPostList(context, post);
                 break;
             case smallCards:
-                moreOptions.setImageResource(moreResource);
-                bindPostCards(context, post);
+                //moreOptions.setImageResource(moreResource);
+                bindPostSmallCards(context, post);
                 break;
             case cards:
                 moreOptions.setImageResource(moreResource);
@@ -300,6 +417,32 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         commentsText.setText(String.valueOf(post.getCommentCount()));
 
         if(post.isNSFW()) appendNsfwLabel(context, postDets2);
+    }
+
+    private void bindPostSmallCards(Context context, Submission post) {
+        String dets1 = post.getAuthor() + " · " + post.agePrepared + " · ";
+        if(post.isSelf()) dets1 += post.getDomain();
+        else dets1 += post.getSubreddit() + " · " + post.getDomain();
+        postDets1.setText(dets1);
+
+        String dets2 = post.getScore() + " score · " + post.getCommentCount() + " comments";
+        if(post.getLikes().equals("true")) {
+            int index = dets2.indexOf(" ");
+            SpannableString spannableString = new SpannableString(dets2);
+            spannableString.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            postDets2.setText(spannableString);
+        }
+        else if(post.getLikes().equals("false")) {
+            int index = dets2.indexOf(" ");
+            SpannableString spannableString = new SpannableString(dets2);
+            spannableString.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            postDets2.setText(spannableString);
+        }
+        else {
+            postDets2.setText(dets2);
+        }
+
+        if(post.isNSFW()) appendNsfwLabel(context, postDets1);
     }
 
     private void bindPostCards(Context context, Submission post) {

@@ -252,20 +252,12 @@
         <item name="android:textColor">?attr/themeTextColor</item>
         <item name="android:textSize">?attr/font_medium</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
     </style>
 
     <style name="PostDetailsStyle">
         <item name="android:fontFamily">?attr/defaultFontFamily</item>
-        <item name="android:textColor">?attr/theme</item>
+        <item name="android:textColor">?attr/themeTextHintColor</item>
         <item name="android:textSize">?attr/font_small</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
     </style>
 
     <style name="MyCardViewStyle" parent="CardView">

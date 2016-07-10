@@ -39,7 +39,7 @@ public class MyApplication extends Application {
 
     public static final int currentVersionCode = 16;
 
-    public static final boolean showWelcomeMsgThisVersion = false;
+    public static final boolean showWelcomeMsgThisVersion = true;
 
     public static final boolean deleteAppDataThisVersion = false;
 
@@ -308,7 +308,7 @@ public class MyApplication extends Application {
                 currentPostListView = R.layout.post_list_item_reversed;
                 break;
             case 2:
-                currentPostListView = R.layout.post_list_item_small_card;
+                currentPostListView = R.layout.small_card_new;
                 break;
             case 3:
                 currentPostListView = R.layout.post_list_item_card;

@@ -1,63 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<android.support.v7.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    style="@style/MyCardViewStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardUseCompatPadding="false"
-        card_view:cardElevation="4dp"
-        card_view:cardCornerRadius="4dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:layout_margin="16dp">
+        android:orientation="horizontal"
+        android:id="@+id/small_card_long_tap_layout">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/small_card_long_tap_layout">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(Post title here)"
-                    android:id="@+id/small_card_title"
-                    style="@style/PostTitleStyle" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(user) · (age) · (subreddit) · (domain) · NSFW"
-                    android:id="@+id/small_card_details_1"
-                    style="@style/PostDetailsStyle"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="0dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="##### score · ##### comments"
-                    android:id="@+id/small_card_details_2"
-                    style="@style/PostDetailsStyle" />
-            </LinearLayout>
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:id="@+id/layout_postLinkButton"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:id="@+id/small_card_thumbnail"
-                android:src="@mipmap/ic_launcher"
-                android:scaleType="centerCrop"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgView_postImage"
+                android:src="@mipmap/ic_launcher" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
 
-</LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:id="@+id/layout_postCommentsButton"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingRight="6dp"
+            android:paddingBottom="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(Post title here)"
+                android:id="@+id/txtView_postTitle"
+                style="@style/PostTitleStyle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(user) · (age) · (subreddit) · (domain) · NSFW"
+                android:id="@+id/small_card_details_1"
+                style="@style/PostDetailsStyle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="##### score · ##### comments"
+                android:id="@+id/small_card_details_2"
+                style="@style/PostDetailsStyle" />
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

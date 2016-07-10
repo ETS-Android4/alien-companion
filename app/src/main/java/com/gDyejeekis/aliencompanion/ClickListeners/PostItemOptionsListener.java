@@ -49,14 +49,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
     private Context context;
     private Submission post;
-    private BaseAdapter adapter; //TODO: to be deleted
     private RecyclerView.Adapter recyclerAdapter;
-
-    public PostItemOptionsListener(Context context, Submission post, BaseAdapter adapter) { //TODO: to be deleted
-        this.context = context;
-        this.post = post;
-        this.adapter = adapter;
-    }
 
     public PostItemOptionsListener(Context context, Submission post, RecyclerView.Adapter adapter) {
         this.context = context;
@@ -94,8 +87,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.upvote;
                     }
 
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                    else recyclerAdapter.notifyDataSetChanged();
+                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -129,8 +121,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.downvote;
                     }
 
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                    else recyclerAdapter.notifyDataSetChanged();
+                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -161,8 +152,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.save;
                     }
 
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                    else recyclerAdapter.notifyDataSetChanged();
+                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -197,8 +187,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         }
                     }
 
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                    else recyclerAdapter.notifyDataSetChanged();
+                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -240,24 +229,33 @@ public class PostItemOptionsListener implements View.OnClickListener {
         if(post.getAuthor().equals(currentUser)) {
             if(post.isSelf()) {
                 labelNSFWindex = 2;
-                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card
-                        || recyclerAdapter instanceof PostAdapter) resource = R.menu.menu_self_post_card_more_options_account;
-                else resource = R.menu.menu_self_post_more_options_account;
-            //resource = (MainActivity.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options_account : R.menu.menu_self_post_more_options_account;
+                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new
+                        || recyclerAdapter instanceof PostAdapter) {
+                    resource = R.menu.menu_self_post_card_more_options_account;
+                }
+                else {
+                    resource = R.menu.menu_self_post_more_options_account;
+                }
             }
             else {
                 labelNSFWindex = 1;
-                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card)
+                if(MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new) {
                     resource = R.menu.menu_post_card_more_options_account;
-                else resource = R.menu.menu_post_more_options_account;
-            //resource = (MainActivity.currentPostListView == R.layout.post_list_item_card) ? R.menu.menu_post_card_more_options_account : R.menu.menu_post_more_options_account;
+                }
+                else {
+                    resource = R.menu.menu_post_more_options_account;
+                }
             }
         }
         else {
-            if(post.isSelf()) resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card
-                    || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
-            else resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.post_list_item_small_card || recyclerAdapter instanceof PostAdapter)
-                    ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
+            if(post.isSelf()) {
+                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new
+                        || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
+            }
+            else {
+                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || MyApplication.currentPostListView == R.layout.small_card_new || recyclerAdapter instanceof PostAdapter)
+                        ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
+            }
         }
         popupMenu.inflate(resource);
         if(labelNSFWindex != -1 && post.isNSFW()) popupMenu.getMenu().getItem(labelNSFWindex).setTitle("Unmark NSFW");

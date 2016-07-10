@@ -354,7 +354,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
             case R.layout.post_list_item_reversed:
                 index = 1;
                 break;
-            case R.layout.post_list_item_small_card:
+            case R.layout.small_card_new:
                 index = 2;
                 break;
             case R.layout.post_list_item_card:
@@ -380,7 +380,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         resourceIndex = 1;
                         break;
                     case R.id.action_small_cards:
-                        resource = R.layout.post_list_item_small_card;
+                        resource = R.layout.small_card_new;
                         resourceIndex = 2;
                         break;
                     case R.id.action_cards:

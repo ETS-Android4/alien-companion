@@ -156,7 +156,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                         .inflate(resource, parent, false);
                 //PostViewType postViewType;
                 switch (resource) {
-                    case R.layout.post_list_item_small_card:
+                    case R.layout.small_card_new:
                         postViewType = PostViewType.smallCards;
                         break;
                     case R.layout.post_list_item_card:
@@ -224,14 +224,14 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
                 PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
                 switch (postViewHolder.viewType) {
-                    case listItem: case details:
+                    case listItem:
                         postViewHolder.linkButton.setOnLongClickListener(longListener);
                         postViewHolder.commentsButton.setOnLongClickListener(longListener);
                         //post item selected
                         if(selectedPosition == position) postViewHolder.showPostOptions(optionsListener);
                         else postViewHolder.hidePostOptions();
                         break;
-                    case cards: case cardDetails: case smallCards:
+                    case cards: case cardDetails:
                         postViewHolder.setCardButtonsListener(optionsListener);
                         break;
                 }

@@ -417,6 +417,12 @@ public class DownloaderService extends IntentService {
             //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
             JResult res = fetcher.fetchAndExtract(post.getURL(), 10000, true);
 
+            List<String> textList = res.getTextList();
+            if(textList.size() == 0) {
+                Log.d(TAG, "No paragraph text found for " + post.getIdentifier());
+                return;
+            }
+
             String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
 
             String image = "";
@@ -426,7 +432,6 @@ public class DownloaderService extends IntentService {
                 image = "<img src=\"" + imageFilename + "\" width=\"" + screenWidth + "\"/>";
             }
 
-            List<String> textList = res.getTextList();
             String text = "";
             for(String paragraph : textList) {
                 paragraph = StringEscapeUtils.escapeHtml(paragraph);
