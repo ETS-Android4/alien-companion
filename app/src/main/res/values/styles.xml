@@ -202,6 +202,7 @@
         <item name="themeDragHandle">@mipmap/ic_drag_handle_grey_500_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_light</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_light</item>
+        <item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>
     </style>
 
     <style name="selectedTheme.night">
@@ -217,6 +218,7 @@
         <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
+        <item name="themeCardBorderColor">@color/darker_gray</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -266,8 +268,8 @@
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:clickable">true</item>
         <item name="cardUseCompatPadding">false</item>
-        <item name="cardElevation">2dp</item>
-        <item name="cardCornerRadius">0dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">4dp</item>
         <item name="cardBackgroundColor">@null</item>
     </style>
 

@@ -9,6 +9,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -63,78 +64,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public PostViewType viewType;
 
     private static final int clickedColor = MyApplication.textHintColor;
-    private int linkIcon;
-
-    //public PostViewHolder(View itemView, PostViewType type) {
-    //    super(itemView);
-    //    this.viewType = type;
-    //    upvoteColor = Color.parseColor("#ff8b60");
-    //    downvoteColor = Color.parseColor("#9494ff");
-//
-    //    title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
-    //    commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
-    //    postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
-    //    linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
-    //    upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
-    //    layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
-    //    downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
-    //    save =  (ImageView) itemView.findViewById(R.id.btn_save);
-    //    hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
-    //    moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
-//
-    //    if(viewType == PostViewType.listItem || viewType == PostViewType.smallCards || MyApplication.nightThemeEnabled) {
-    //        viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
-    //        openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
-    //        upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
-    //        downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
-    //        saveResource = R.mipmap.ic_star_border_white_48dp;
-    //        hideResource = R.mipmap.ic_close_white_48dp;
-    //        moreResource = R.mipmap.ic_more_vert_white_48dp;
-    //        commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
-    //    }
-    //    else {
-    //        upvoteResource = R.mipmap.ic_arrow_upward_grey_48dp;
-    //        downvoteResource = R.mipmap.ic_arrow_downward_grey_48dp;
-    //        saveResource = R.mipmap.ic_star_border_grey_48dp;
-    //        hideResource = R.mipmap.ic_close_grey_48dp;
-    //        moreResource = R.mipmap.ic_more_vert_grey_48dp;
-    //        commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
-    //    }
-    //    switch (viewType) {
-    //        case listItem:
-    //            commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
-    //            commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
-    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
-    //            postDets2 = (TextView) itemView.findViewById(R.id.textView_dets2);
-    //            break;
-    //        case smallCards:
-    //            commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
-    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
-    //            scoreText = (TextView) itemView.findViewById(R.id.textView_score);
-    //            break;
-    //        case cards:
-    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
-    //            commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
-    //            domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
-    //            fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
-    //            layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
-    //            selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
-    //            scoreText = (TextView) itemView.findViewById(R.id.textView_score);
-    //            imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
-    //            break;
-    //        case cardDetails:
-    //            postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
-    //            fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
-    //            commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
-    //            domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
-    //            fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
-    //            layoutSelfTextPreview = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
-    //            selfTextCard = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
-    //            scoreText = (TextView) itemView.findViewById(R.id.textView_score);
-    //            imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
-    //            break;
-    //    }
-    //}
+    private static final int smallCardLinkButtonColor = Color.parseColor("#404040");
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
@@ -193,7 +123,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 postDets1 = (TextView) itemView.findViewById(R.id.small_card_details_1);
                 postDets2 = (TextView) itemView.findViewById(R.id.small_card_details_2);
-                linkIcon = (MyApplication.nightThemeEnabled) ? R.drawable.ic_link_white_48dp : R.drawable.ic_link_grey_500_48dp;
                 break;
             case cards:
                 title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
@@ -229,6 +158,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
 
                 postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+                commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
                 fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
                 commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
                 domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
@@ -252,16 +182,24 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         //TODO: clean this
         if(viewType == PostViewType.smallCards) {
             postImage.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            if(post.isSelf()) linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+            if(post.isSelf()) {
+                linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+            }
             else {
-                linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                 if (post.isNSFW() && !MyApplication.showNSFWpreview) {
+                    linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
+                    linkButton.setPadding(10, 10, 0, 10);
+                    linkButton.setBackground(null);
                     postImage.setImageResource(R.drawable.nsfw2);
+                    postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 }
                 else if(postThumbnail.hasThumbnail()){
+                    linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 2f));
+                    linkButton.setPadding(10, 10, 0, 10);
+                    linkButton.setBackground(null);
                     try {
                         //Get Post Thumbnail
-                        Picasso.with(context).load(postThumbnail.getUrl()).placeholder(linkIcon).into(postImage, new Callback() {
+                        Picasso.with(context).load(postThumbnail.getUrl()).placeholder(R.drawable.noimage).into(postImage, new Callback() {
                             @Override
                             public void onSuccess() {
                                 postImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -275,8 +213,11 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     } catch (IllegalArgumentException e) {e.printStackTrace();}
                 }
                 else {
+                    linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+                    linkButton.setPadding(10, 10, 10, 10);
+                    linkButton.setBackgroundColor(smallCardLinkButtonColor);
                     postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    postImage.setImageResource(linkIcon);
+                    postImage.setImageResource(R.drawable.ic_link_white_48dp);
                 }
             }
         }
@@ -364,6 +305,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case cardDetails:
+                commentsButton.setBackground(null);
                 moreOptions.setImageResource(moreResource);
                 bindPostCards(context, post);
                 if(post.isSelf()) {

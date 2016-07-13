@@ -32,7 +32,7 @@
 
         <ListPreference
             android:key="toolbarColor"
-            android:title="Toolbar color"
+            android:title="Primary color"
             android:summary="Only applies to light mode"
             android:entries="@array/toolbarColors"
             android:entryValues="@array/colorPrimaryValues"

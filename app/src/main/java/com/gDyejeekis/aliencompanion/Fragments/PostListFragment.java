@@ -141,7 +141,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
         contentView.setHasFixedSize(true);
-        if(MyApplication.nightThemeEnabled || MyApplication.currentPostListView == R.layout.post_list_item
+        if(MyApplication.currentPostListView == R.layout.post_list_item
                 || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
             setListDividerVisible(true);
         }
@@ -576,11 +576,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 case R.layout.post_list_item:
                 case R.layout.post_list_item_reversed:
                     if(!decorationVisible) {
-                        setListDividerVisible(true);
-                    }
-                    break;
-                default:
-                    if(MyApplication.nightThemeEnabled && !decorationVisible) {
                         setListDividerVisible(true);
                     }
                     break;
