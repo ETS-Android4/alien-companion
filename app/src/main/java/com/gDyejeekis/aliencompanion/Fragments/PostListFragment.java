@@ -547,8 +547,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         task.execute();
     }
 
-    public void changeSubreddit(String subreddit, boolean isMulti) {
+    public void changeSubreddit(String subreddit, boolean isMulti, boolean isOther) {
         this.isMulti = isMulti;
+        this.isOther = isOther;
         if(isMulti) {
             subreddit = subreddit.substring(subreddit.indexOf('=') + 1);
         }

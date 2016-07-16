@@ -72,14 +72,14 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         dismiss();
         String filename = adapter.getItem(i).toString();
         String subreddit = (filename.equals("frontpage")) ? null : filename;
-        boolean isOther = filename.equals("synced");
+        boolean isMulti = filename.startsWith("multi=");
+        boolean isOther = filename.equals(DownloaderService.INDIVIDUALLY_SYNCED_FILENAME);
         if(getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).getListFragment().isOther = isOther;
-            ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit, filename.startsWith("multi="));
+            ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit, isMulti, isOther);
             ((MainActivity) getActivity()).getNavDrawerAdapter().notifyDataSetChanged();
         }
         else {
-            ((SubredditActivity) getActivity()).getListFragment().changeSubreddit(subreddit, filename.startsWith("multi="));
+            ((SubredditActivity) getActivity()).getListFragment().changeSubreddit(subreddit, isMulti, isOther);
         }
     }
 
