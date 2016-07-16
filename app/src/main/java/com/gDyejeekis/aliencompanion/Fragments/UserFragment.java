@@ -50,8 +50,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public LoadType currentLoadType;
     public LoadUserContentTask task;
 
-    //public static boolean currentlyLoading = false;
-
     public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category, boolean hasMore) {
         UserFragment newInstance = new UserFragment();
         newInstance.userAdapter = adapter;
@@ -75,7 +73,11 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
 
         loadMore = MyApplication.endlessPosts;
-        if(username==null) username = activity.getIntent().getStringExtra("username");
+        if(username==null) {
+            username = activity.getIntent().getStringExtra("username");
+            userOverviewSort = (UserOverviewSort) activity.getIntent().getSerializableExtra("sort");
+            userContent = (UserSubmissionsCategory) activity.getIntent().getSerializableExtra("category");
+        }
     }
 
     @Override
@@ -89,7 +91,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onResume() {
         super.onResume();
-        //loadMore = MainActivity.endlessPosts;
         if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
         else swipeRefreshLayout.setEnabled(false);
     }
@@ -159,7 +160,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (loadMore && hasMore) {
                     if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
                         loadMore = false;
-                        //Log.d("scroll listener", "load more now");
                         ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
                         listener.onClick(recyclerView);
                     }
@@ -169,10 +169,11 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         if(currentLoadType == null) {
             if (userAdapter == null) {
-                //currentlyLoading = true;
                 currentLoadType = LoadType.init;
-                if(userContent==null) userContent = UserSubmissionsCategory.OVERVIEW;
-                if(userOverviewSort==null) userOverviewSort = UserOverviewSort.NEW;
+                if(userContent==null) {
+                    userContent = UserSubmissionsCategory.OVERVIEW;
+                    userOverviewSort = UserOverviewSort.NEW;
+                }
                 task = new LoadUserContentTask(activity, this, LoadType.init);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
@@ -183,12 +184,10 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
         else switch (currentLoadType) {
             case init:
-                //Log.d("geo test", "currentLoadType is init");
                 contentView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
                 break;
             case refresh:
-                //Log.d("geo test", "currentLoadType is refersh");
                 progressBar.setVisibility(View.GONE);
                 contentView.setAdapter(userAdapter);
                 swipeRefreshLayout.post(new Runnable() {
@@ -198,20 +197,16 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 });
                 break;
             case extend:
-                //Log.d("geo test", "currentLoadType is extend");
                 progressBar.setVisibility(View.GONE);
                 contentView.setAdapter(userAdapter);
                 userAdapter.setLoadingMoreItems(true);
                 break;
         }
-        //else
-        //    Log.d("geo test", "currently loading");
 
         return view;
     }
 
     @Override public void onRefresh() {
-        //swipeRefreshLayout.setRefreshing(false);
         refreshUser();
     }
 
@@ -282,9 +277,12 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void showContentPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(activity, view);
-        if(MyApplication.currentUser!=null && username.equals(MyApplication.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_user_content_account);
-        else popupMenu.inflate(R.menu.menu_user_content);
-        //popupMenu.inflate(R.menu.menu_user_content_public);
+        if(MyApplication.currentUser!=null && username.equals(MyApplication.currentUser.getUsername())) {
+            popupMenu.inflate(R.menu.menu_user_content_account);
+        }
+        else {
+            popupMenu.inflate(R.menu.menu_user_content);
+        }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -302,33 +300,18 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         showSortPopup();
                         return true;
                     case R.id.action_user_gilded:
-                        //userOverviewSort = null;
-                        //userContent = UserSubmissionsCategory.GILDED;
-                        //setActionBarSubtitle();
                         refreshUser(UserSubmissionsCategory.GILDED, null);
                         return true;
                     case R.id.action_user_upvoted:
-                        //userOverviewSort = null;
-                        //userContent = UserSubmissionsCategory.LIKED;
-                        //setActionBarSubtitle();
                         refreshUser(UserSubmissionsCategory.LIKED, null);
                         return true;
                     case R.id.action_user_downvoted:
-                        //userOverviewSort = null;
-                        //userContent = UserSubmissionsCategory.DISLIKED;
-                        //setActionBarSubtitle();
                         refreshUser(UserSubmissionsCategory.DISLIKED, null);
                         return true;
                     case R.id.action_user_hidden:
-                        //userOverviewSort = null;
-                        //userContent = UserSubmissionsCategory.HIDDEN;
-                        //setActionBarSubtitle();
                         refreshUser(UserSubmissionsCategory.HIDDEN, null);
                         return true;
                     case R.id.action_user_saved:
-                        //userOverviewSort = null;
-                        //userContent = UserSubmissionsCategory.SAVED;
-                        //setActionBarSubtitle();
                         refreshUser(UserSubmissionsCategory.SAVED, null);
                         return true;
                     default:
@@ -351,23 +334,15 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sort_new:
-                        //userOverviewSort = UserOverviewSort.NEW;
-                        //setActionBarSubtitle();
                         refreshUser(tempCategory, UserOverviewSort.NEW);
                         return true;
                     case R.id.action_sort_hot:
-                        //userOverviewSort = UserOverviewSort.HOT;
-                        //setActionBarSubtitle();
                         refreshUser(tempCategory, UserOverviewSort.HOT);
                         return true;
                     case R.id.action_sort_top:
-                        //userOverviewSort = UserOverviewSort.TOP;
-                        //setActionBarSubtitle();
                         refreshUser(tempCategory, UserOverviewSort.TOP);
                         return true;
                     case R.id.action_sort_controversial:
-                        //userOverviewSort = UserOverviewSort.COMMENTS;
-                        //setActionBarSubtitle();
                         refreshUser(tempCategory, UserOverviewSort.COMMENTS);
                         return true;
                     default:

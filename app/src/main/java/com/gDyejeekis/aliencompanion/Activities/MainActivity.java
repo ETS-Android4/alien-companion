@@ -34,6 +34,8 @@ import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerOther;
+import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerOtherItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSeparator;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -470,19 +472,32 @@ public class MainActivity extends AppCompatActivity {
         adapter.add(new NavDrawerHeader());
         adapter.add(new NavDrawerEmptySpace());
         adapter.addAll(getMenuItems());
-        adapter.add(new NavDrawerEmptySpace());
-        adapter.add(new NavDrawerSeparator());
-        adapter.add(new NavDrawerEmptySpace());
+
+        addNavDrawerSeparators();
+
         adapter.add(new NavDrawerSubreddits());
         adapter.addAll(getDefaultSubredditItems());
-        adapter.add(new NavDrawerEmptySpace());
-        adapter.add(new NavDrawerSeparator());
-        adapter.add(new NavDrawerEmptySpace());
+
+        addNavDrawerSeparators();
+
         adapter.add(new NavDrawerMultis());
+
+        addNavDrawerSeparators();
+
+        adapter.add(new NavDrawerOther());
+        if(MyApplication.offlineModeEnabled) {
+            adapter.add(new NavDrawerOtherItem("Synced"));
+        }
 
         drawerContent.setAdapter(adapter);
 
         adapter.importAccounts();
+    }
+
+    private void addNavDrawerSeparators() {
+        adapter.add(new NavDrawerEmptySpace());
+        adapter.add(new NavDrawerSeparator());
+        adapter.add(new NavDrawerEmptySpace());
     }
 
     private List<NavDrawerItem> getMenuItems() {
