@@ -25,10 +25,9 @@ public class OtherItemListener extends NavDrawerListener {
     public void onClick(View v) {
         int position = getRecyclerView().getChildPosition(v);
         NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getAdapter().getItemAt(position);
-        getAdapter().notifyDataSetChanged();
-        getDrawerLayout().closeDrawers();
 
         if(otherItem.getName().equals("Saved")) {
+            getDrawerLayout().closeDrawers();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -40,7 +39,17 @@ public class OtherItemListener extends NavDrawerListener {
             }, MyApplication.NAV_DRAWER_CLOSE_TIME);
         }
         else if(otherItem.getName().equals("Synced")) {
-            // TODO: 7/16/2016
+            if(MyApplication.offlineModeEnabled) {
+                getAdapter().notifyDataSetChanged();
+                getDrawerLayout().closeDrawers();
+                PostListFragment listFragment = getActivity().getListFragment();
+                listFragment.isMulti = false;
+                listFragment.isOther = true;
+                listFragment.changeSubreddit("synced");
+            }
+            else {
+                getAdapter().showOfflineSwitchDialog("synced", false, true, null, null);
+            }
         }
     }
 

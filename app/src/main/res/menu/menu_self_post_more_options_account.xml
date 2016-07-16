@@ -2,18 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_edit" android:title="Edit"
-        android:orderInCategory="92" />
+        android:orderInCategory="10" />
     <item android:id="@+id/action_delete" android:title="Delete"
-        android:orderInCategory="93" />
+        android:orderInCategory="20" />
     <item android:id="@+id/action_mark_nsfw" android:title="Mark NSFW"
-        android:orderInCategory="94" />
+        android:orderInCategory="30" />
+    <item android:id="@+id/action_sync" android:title="@string/sync"
+        android:orderInCategory="40" />
     <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
-        android:orderInCategory="96" />
+        android:orderInCategory="50" />
     <item android:id="@+id/action_share" android:title="Share"
-        android:orderInCategory="97" />
+        android:orderInCategory="60" />
     <item android:id="@+id/action_view_subreddit" android:title="View subreddit"
-        android:orderInCategory="98" />
+        android:orderInCategory="70" />
     <item android:id="@+id/action_report" android:title="Report"
-        android:orderInCategory="100" />
+        android:orderInCategory="80" />
 
 </menu>

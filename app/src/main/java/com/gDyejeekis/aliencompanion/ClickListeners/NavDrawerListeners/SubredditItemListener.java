@@ -27,6 +27,7 @@ public class SubredditItemListener extends NavDrawerListener {
         String subredditName = (subreddit.getName()!=null) ? subreddit.getName().toLowerCase() : null;
 
         listFragment.isMulti = false;
+        listFragment.isOther = false;
         listFragment.changeSubreddit(subredditName);
     }
 

@@ -26,6 +26,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.NavDrawer
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.OtherItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditsListener;
+import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
@@ -40,6 +41,8 @@ import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
 
 import java.io.FileInputStream;
@@ -597,7 +600,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 //Highlight current subreddit
                 String currentSubreddit = activity.getListFragment().subreddit;
                 boolean isMulti = activity.getListFragment().isMulti;
-                if ((subreddit.toLowerCase().equals(currentSubreddit) && !isMulti) ||
+                boolean isOther = activity.getListFragment().isOther;
+                if ((subreddit.toLowerCase().equals(currentSubreddit) && !isMulti && !isOther) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
                     if (MyApplication.nightThemeEnabled)
                         subredditRowViewHolder.name.setTextColor(Color.WHITE);
@@ -655,7 +659,22 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getItemAt(position);
                 subredditRowViewHolder.name.setText(otherItem.getName());
 
-                // TODO: 7/16/2016
+                currentSubreddit = activity.getListFragment().subreddit;
+                isOther = activity.getListFragment().isOther;
+                if (otherItem.getName().toLowerCase().equals(currentSubreddit) && isOther) {
+                    if (MyApplication.nightThemeEnabled)
+                        subredditRowViewHolder.name.setTextColor(Color.WHITE);
+                    else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
+                    if (MyApplication.nightThemeEnabled)
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedDark));
+                    else
+                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedLight));
+                }
+                else {
+                    subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
+                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
+                    else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                }
                 break;
             case VIEW_TYPE_OTHER:
             case VIEW_TYPE_EMPTY_SPACE:
@@ -666,15 +685,20 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void restartApp() {
+    private void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
         //Intent i = activity.getBaseContext().getPackageManager()
         //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
         //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(!MyApplication.offlineModeEnabled && subreddit.equals("synced") && isOther) {
+            subreddit = null;
+            isOther = false;
+        }
         Intent i = activity.getIntent();
-        i.putExtra("subreddit", activity.getListFragment().subreddit);
-        i.putExtra("isMulti", activity.getListFragment().isMulti);
-        i.putExtra("sort", activity.getListFragment().submissionSort);
-        i.putExtra("time", activity.getListFragment().timeSpan);
+        i.putExtra("subreddit", subreddit);
+        i.putExtra("isMulti", isMulti);
+        i.putExtra("isOther", isOther);
+        i.putExtra("sort", sort);
+        i.putExtra("time", timeSpan);
         activity.finish();
         activity.startActivity(i);
     }
@@ -689,14 +713,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 SharedPreferences.Editor editor = MyApplication.prefs.edit();
                 editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
                 editor.apply();
-                restartApp();
+                PostListFragment fragment = activity.getListFragment();
+                restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
             }
         };
         new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
                 .setNegativeButton("No", null).show();
     }
 
-    private void showOfflineSwitchDialog() {
+    public void showOfflineSwitchDialog() {
         String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
         //text += " (App will restart)";
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -706,7 +731,25 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 SharedPreferences.Editor editor = MyApplication.prefs.edit();
                 editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
                 editor.apply();
-                restartApp();
+                PostListFragment fragment = activity.getListFragment();
+                restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
+            }
+        };
+        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+                .setNegativeButton("No", null).show();
+    }
+
+    public void showOfflineSwitchDialog(final String subreddit, final boolean isMulti, final boolean isOther, final SubmissionSort sort, final TimeSpan timeSpan) {
+        String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
+        //text += " (App will restart)";
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
+                SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
+                editor.apply();
+                restartApp(subreddit, isMulti, isOther, sort, timeSpan);
             }
         };
         new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)

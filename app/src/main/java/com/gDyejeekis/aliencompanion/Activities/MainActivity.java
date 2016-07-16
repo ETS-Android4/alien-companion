@@ -485,9 +485,9 @@ public class MainActivity extends AppCompatActivity {
         addNavDrawerSeparators();
 
         adapter.add(new NavDrawerOther());
-        if(MyApplication.offlineModeEnabled) {
+        //if(MyApplication.offlineModeEnabled) {
             adapter.add(new NavDrawerOtherItem("Synced"));
-        }
+        //}
 
         drawerContent.setAdapter(adapter);
 

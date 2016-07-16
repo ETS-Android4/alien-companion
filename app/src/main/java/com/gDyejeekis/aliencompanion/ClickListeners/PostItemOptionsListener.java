@@ -35,6 +35,7 @@ import com.gDyejeekis.aliencompanion.Models.OfflineActions.UnsaveAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.UpvoteAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -223,7 +224,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
     private void showMoreOptionsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(context, v);
         //inflate the right menu layout
-        int resource;
+        final int resource;
         int labelNSFWindex = -1;
         String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
         if(post.getAuthor().equals(currentUser)) {
@@ -263,6 +264,17 @@ public class PostItemOptionsListener implements View.OnClickListener {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_sync:
+                        if(GeneralUtils.isNetworkAvailable(context)) {
+                            ToastUtils.displayShortToast(context, "Post added to sync queue");
+                            Intent intent = new Intent(context, DownloaderService.class);
+                            intent.putExtra("post", post);
+                            context.startService(intent);
+                        }
+                        else {
+                            ToastUtils.displayShortToast(context, "Network connection unavailable");
+                        }
+                        return true;
                     case R.id.action_copy_to_clipboard:
                         TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",
                                 new View.OnClickListener() {

@@ -2,20 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_delete" android:title="Delete"
-        android:orderInCategory="93" />
+        android:orderInCategory="10" />
     <item android:id="@+id/action_mark_nsfw" android:title="Mark NSFW"
-        android:orderInCategory="94" />
-    <item android:id="@+id/action_copy_link" android:title="Copy link"
-        android:orderInCategory="95" />
+        android:orderInCategory="20" />
+    <item android:id="@+id/action_sync" android:title="@string/sync"
+        android:orderInCategory="25" />
+    <!--<item android:id="@+id/action_copy_link" android:title="Copy link"
+        android:orderInCategory="30" />
     <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
-        android:orderInCategory="96" />
+        android:orderInCategory="40" />-->
+    <item android:id="@+id/action_copy_to_clipboard" android:title="Copy to clipboard"
+        android:orderInCategory="30" />
     <item android:id="@+id/action_share" android:title="Share"
-        android:orderInCategory="97" />
+        android:orderInCategory="40" />
     <item android:id="@+id/action_view_subreddit" android:title="View subreddit"
-        android:orderInCategory="98" />
-    <item android:id="@+id/action_download_comments" android:title="Download comments"
-        android:orderInCategory="99" />
+        android:orderInCategory="50" />
+    <!--<item android:id="@+id/action_download_comments" android:title="Download comments"
+        android:orderInCategory="60" />-->
     <item android:id="@+id/action_report" android:title="Report"
-        android:orderInCategory="100" />
+        android:orderInCategory="70" />
 
 </menu>

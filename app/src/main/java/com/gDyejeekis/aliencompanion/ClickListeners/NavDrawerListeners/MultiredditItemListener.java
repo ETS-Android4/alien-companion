@@ -25,6 +25,7 @@ public class MultiredditItemListener extends NavDrawerListener {
         PostListFragment listFragment = getActivity().getListFragment();
 
         listFragment.isMulti = true;
+        listFragment.isOther = false;
         listFragment.changeSubreddit(multireddit.getName().toLowerCase());
     }
 

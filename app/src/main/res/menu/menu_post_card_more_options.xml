@@ -5,6 +5,8 @@
         android:orderInCategory="5" />
     <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
         android:orderInCategory="10" />-->
+    <item android:id="@+id/action_sync" android:title="@string/sync" android:orderInCategory="5" />
+
     <item android:id="@+id/action_copy_to_clipboard" android:title="Copy to clipboard"
         android:orderInCategory="12" />
     <item android:id="@+id/action_open_browser" android:title="@string/action_open_browser"

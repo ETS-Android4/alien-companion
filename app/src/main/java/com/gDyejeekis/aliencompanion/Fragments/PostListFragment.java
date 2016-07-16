@@ -65,6 +65,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public SwipeRefreshLayout swipeRefreshLayout;
     public String subreddit;
     public boolean isMulti = false;
+    public boolean isOther = false;
     private AppCompatActivity activity;
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
@@ -100,6 +101,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         if(savedInstanceState!=null) {
             subreddit = savedInstanceState.getString("subreddit");
             isMulti = savedInstanceState.getBoolean("isMulti");
+            isOther = savedInstanceState.getBoolean("isOther");
             submissionSort = (SubmissionSort) savedInstanceState.getSerializable("sort");
             timeSpan = (TimeSpan) savedInstanceState.getSerializable("time");
         }
@@ -107,6 +109,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         loadMore = MyApplication.endlessPosts;
         if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
         if(!isMulti) isMulti = activity.getIntent().getBooleanExtra("isMulti", false);
+        if(!isOther) isOther = activity.getIntent().getBooleanExtra("isOther", false);
         if(submissionSort==null) submissionSort = (SubmissionSort) activity.getIntent().getSerializableExtra("sort");
         if(timeSpan==null) timeSpan = (TimeSpan) activity.getIntent().getSerializableExtra("time");
     }
@@ -115,6 +118,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("subreddit", subreddit);
         outState.putBoolean("isMulti", isMulti);
+        outState.putBoolean("isOther", isOther);
         outState.putSerializable("sort", submissionSort);
         outState.putSerializable("time", timeSpan);
         super.onSaveInstanceState(outState);
@@ -640,12 +644,12 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             //return ConvertUtils.getSubmissionAge(lastModified);
             if(file.exists()) {
                 //return new Date(file.lastModified()).toString();
-                return "synced " + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
+                return ((isOther) ? "updated " : "synced ") + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "not synced";
+        return ((isOther) ? "no posts" : "not synced");
     }
 
 }
