@@ -185,6 +185,39 @@ public class GeneralUtils {
         }
     }
 
+    public static List<File> getListFiles(File parentDir) {
+        ArrayList<File> inFiles = new ArrayList<File>();
+        File[] files = parentDir.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                inFiles.addAll(getListFiles(file));
+            }
+            else {
+                inFiles.add(file);
+            }
+        }
+        return inFiles;
+    }
+
+    public static boolean moveFile(File file, String targetDir) {
+        try {
+            String oldPath = file.getAbsolutePath();
+            if(!targetDir.endsWith("/")) {
+                targetDir = targetDir.concat("/");
+            }
+            if(file.renameTo(new File(targetDir + file.getName()))) {
+                Log.d(TAG, oldPath + " moved to " + file.getAbsolutePath());
+                return true;
+            }
+            else {
+                Log.e(TAG, "Move operation failed for " + oldPath);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void clearSyncedImages(Context context) {
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
         final File folder = new File(dir + "/AlienCompanion");
@@ -229,7 +262,7 @@ public class GeneralUtils {
 
     /**
      * Search file a file in a directory. Please comment more here, your method is not that standard.
-     * @param file the file / folder where to look our file for.
+     * @param aFile the file / folder where to look our file for.
      * @param sDir a directory that must be in the path of the file to find
      * @param toFind the name of file we are looking for.
      * @return the file we were looking for. Null if no such file could be found.
