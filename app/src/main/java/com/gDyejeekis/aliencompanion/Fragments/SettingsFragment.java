@@ -17,6 +17,7 @@ import android.util.Log;
 import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.MoveAppDataDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -41,6 +42,20 @@ public class SettingsFragment extends PreferenceFragment {
         Preference viewChangeLog = findPreference("changelog");
         Preference profiles = findPreference("profiles");
         Preference feedback = findPreference("feedback");
+
+        Preference preferExternal = findPreference("prefExternal");
+        preferExternal.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                boolean moveToExternal = (boolean) newValue;
+                MoveAppDataDialogFragment dialog = new MoveAppDataDialogFragment();
+                Bundle args = new Bundle();
+                args.putBoolean("external", moveToExternal);
+                dialog.setArguments(args);
+                dialog.show(getActivity().getFragmentManager(), "dialog");
+                return true;
+            }
+        });
 
         Preference pendingActions = findPreference("offlineActions");
         pendingActions.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

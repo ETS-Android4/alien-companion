@@ -689,7 +689,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         //Intent i = activity.getBaseContext().getPackageManager()
         //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
         //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if(!MyApplication.offlineModeEnabled && subreddit.equals("synced") && isOther) {
+        if(!MyApplication.offlineModeEnabled && isOther && subreddit!=null && subreddit.equals("synced")) {
             subreddit = null;
             isOther = false;
         }

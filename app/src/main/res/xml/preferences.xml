@@ -80,6 +80,12 @@
             android:summary="Pull down to refresh posts/comments"
             android:defaultValue="true"/>
 
+        <CheckBoxPreference
+            android:key="commentNav"
+            android:title="FAB comment navigation"
+            android:summary="Easily navigate between parent comments"
+            android:defaultValue="true" />
+
         <!--<CheckBoxPreference
             android:key="newSubredditWindow"
             android:title="View subreddit in new window"
@@ -223,6 +229,12 @@
             android:key="syncWifi"
             android:title="Sync over WiFi only"
             android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="prefExternal"
+            android:title="Prefer external storage"
+            android:summary="(add some description)"
+            android:defaultValue="false" />
 
         <Preference
             android:key="clearSynced"

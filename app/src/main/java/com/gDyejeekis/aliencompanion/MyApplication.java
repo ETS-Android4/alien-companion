@@ -39,7 +39,7 @@ public class MyApplication extends Application {
 
     public static final int currentVersionCode = 16;
 
-    public static final boolean showWelcomeMsgThisVersion = true;
+    public static final boolean showWelcomeMsgThisVersion = false;
 
     public static final boolean deleteAppDataThisVersion = false;
 
@@ -94,6 +94,7 @@ public class MyApplication extends Application {
     public static int currentColor;
     public static int swipeSetting;
     public static boolean swipeRefresh;
+    public static boolean commentNavigation;
     public static int drawerGravity;
     public static boolean endlessPosts;
     public static boolean showNSFWpreview;
@@ -124,6 +125,7 @@ public class MyApplication extends Application {
     public static int syncAlbumImgCount;
     public static boolean syncOverWifiOnly;
     public static boolean syncWebpages;
+    public static boolean preferExternalStorage;
 
     public static boolean newMessages;
     //public static boolean messageServiceActive;
@@ -131,7 +133,7 @@ public class MyApplication extends Application {
 
     public static boolean pendingOfflineActions;
     //public static boolean offlineActionsServiceActive;
-    public static final int offlineActionsInterval = 5;
+    public static final int offlineActionsInterval = 5; //how often (minutes) the app should attempt to execute any failed offline actions
     public static boolean autoExecuteOfflineActions;
 
     //not used
@@ -294,11 +296,10 @@ public class MyApplication extends Application {
         syncImages = prefs.getBoolean("syncImg", false);
         syncWebpages = prefs.getBoolean("syncWeb", false);
         syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
+        preferExternalStorage = prefs.getBoolean("prefExternal", false);
         syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
-
-        //currentPostListView = prefs.getInt("postListView", R.layout.post_list_item);
         currentPostListView = prefs.getInt("postListView", 0);
         switch (currentPostListView) {
             case 0:
@@ -319,7 +320,6 @@ public class MyApplication extends Application {
         }
 
         dualPane = prefs.getBoolean("dualPane", false);
-        //dualPane = true;
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         nightThemeEnabled = prefs.getBoolean("nightTheme", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
@@ -364,6 +364,7 @@ public class MyApplication extends Application {
         }
         colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#00BCD4"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
+        commentNavigation = prefs.getBoolean("commentNav", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         hqThumbnails = prefs.getBoolean("hqThumb", true);
