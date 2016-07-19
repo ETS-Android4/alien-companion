@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -21,6 +22,7 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.MoveAppDataDialog
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import java.io.File;
@@ -48,15 +50,22 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean moveToExternal = (boolean) newValue;
-                if(moveToExternal && !GeneralUtils.isExternalStorageAvailable()) {
-                    ToastUtils.displayShortToast(getActivity(), "External storage unavailable");
-                    return false;
+                if(!StorageUtils.isExternalStorageAvailable()) {
+                    if(moveToExternal) {
+                        ToastUtils.displayShortToast(getActivity(), "External storage unavailable");
+                        return false;
+                    }
+                    else {
+                        MyApplication.preferExternalStorage = moveToExternal;
+                        return true;
+                    }
                 }
                 MoveAppDataDialogFragment dialog = new MoveAppDataDialogFragment();
                 Bundle args = new Bundle();
                 args.putBoolean("external", moveToExternal);
                 dialog.setArguments(args);
                 dialog.show(getActivity().getFragmentManager(), "dialog");
+                MyApplication.preferExternalStorage = moveToExternal;
                 return true;
             }
         });
@@ -144,9 +153,20 @@ public class SettingsFragment extends PreferenceFragment {
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        GeneralUtils.clearSyncedPosts(getActivity());
-                        GeneralUtils.clearSyncedImages(getActivity());
-                        ToastUtils.displayShortToast(getActivity(), "All synced posts cleared");
+                        new AsyncTask<Void, Void, Void>() {
+
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                GeneralUtils.clearSyncedPosts(getActivity());
+                                GeneralUtils.clearSyncedImages(getActivity());
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                ToastUtils.displayShortToast(getActivity(), "All synced posts cleared");
+                            }
+                        }.execute();
                     }
                 };
                 //Log.d(GeneralUtils.TAG, "Remaining local app files BEFORE delete:");
@@ -161,8 +181,19 @@ public class SettingsFragment extends PreferenceFragment {
         clearCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                GeneralUtils.deleteCache(getActivity());
-                ToastUtils.displayShortToast(getActivity(), "Cache cleared");
+                new AsyncTask<Void, Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        GeneralUtils.deleteCache(getActivity());
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        ToastUtils.displayShortToast(getActivity(), "Cache cleared");
+                    }
+                }.execute();
                 return false;
             }
         });

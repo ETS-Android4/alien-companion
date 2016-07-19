@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -33,6 +34,7 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -120,7 +122,9 @@ public class GeneralUtils {
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.startsWith(subreddit)/*filename.length()>=subreddit.length() && filename.substring(0, subreddit.length()).equals(subreddit)*/) return true;
+                if(filename.startsWith(subreddit) && !dir.isDirectory()) {
+                    return true;
+                }
                 return false;
             }
         };
@@ -129,114 +133,91 @@ public class GeneralUtils {
             Log.d(TAG, "Deleting " + file.getName());
             file.delete();
         }
+
+        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+            for(File file : externalDir.listFiles(filenameFilter)) {
+                file.delete();
+            }
+        }
     }
 
+    private static final FilenameFilter dirFilter = new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String filename) {
+            if (dir.isDirectory()) {
+                return false;
+            }
+            return true;
+        }
+    };
+
     public static void clearSyncedPosts(Context context) {
-        File dir = context.getFilesDir();
-        File[] files = dir.listFiles();
+        File[] files = context.getFilesDir().listFiles(dirFilter);
         for (File file : files) {
             //Log.d(TAG, file.getName());
             String filename = file.getName();
             if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)
-                    && !filename.equals(MyApplication.OFFLINE_USER_ACTIONS_FILENAME)) file.delete();
+                    && !filename.equals(MyApplication.OFFLINE_USER_ACTIONS_FILENAME)) {
+                file.delete();
+            }
+        }
+
+        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+            for(File file : externalDir.listFiles(dirFilter)) {
+                file.delete();
+            }
         }
 
         //Log.d(TAG, "Remaining local app files AFTER delete:");
         //listFilesInDir(dir);
     }
 
-    public static void listFilesInDir(File dir) {
-        File[] files = dir.listFiles();
-        for(File file : files) {
-            if(file.isDirectory()) {
-                listFilesInDir(file);
-            }
-            else {
-                Log.d(TAG, file.getName() + " " + file.length());
-            }
-        }
-    }
-
-    public static boolean isExternalStorageAvailable() {
-
-        String state = Environment.getExternalStorageState();
-        boolean mExternalStorageAvailable = false;
-        boolean mExternalStorageWriteable = false;
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // We can read and write the media
-            mExternalStorageAvailable = mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // We can only read the media
-            mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            // Something else is wrong. It may be one of many other states, but
-            // all we need
-            // to know is we can neither read nor write
-            mExternalStorageAvailable = mExternalStorageWriteable = false;
-        }
-
-        if (mExternalStorageAvailable == true
-                && mExternalStorageWriteable == true) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static List<File> getListFiles(File parentDir) {
-        ArrayList<File> inFiles = new ArrayList<File>();
-        File[] files = parentDir.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                inFiles.addAll(getListFiles(file));
-            }
-            else {
-                inFiles.add(file);
-            }
-        }
-        return inFiles;
-    }
-
-    public static boolean moveFile(File file, String targetDir) {
-        try {
-            String oldPath = file.getAbsolutePath();
-            if(!targetDir.endsWith("/")) {
-                targetDir = targetDir.concat("/");
-            }
-            if(file.renameTo(new File(targetDir + file.getName()))) {
-                Log.d(TAG, oldPath + " moved to " + file.getAbsolutePath());
-                return true;
-            }
-            else {
-                Log.e(TAG, "Move operation failed for " + oldPath);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public static void clearSyncedImages(Context context) {
+        //delete in external public directory
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        final File folder = new File(dir + "/AlienCompanion");
-
-        File[] files = folder.listFiles();
-        for(File file : files) {
+        File folder = new File(dir + "/AlienCompanion");
+        for(File file : folder.listFiles()) {
             if(file.isDirectory()) {
                 clearSyncedImages(context, file.getName());
+            }
+        }
+
+        //delete in external private directory
+        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+            File picturesDir = new File(externalDir, "Pictures");
+            if(picturesDir.isDirectory()) {
+                for(File file : picturesDir.listFiles()) {
+                    if(file.isDirectory()) {
+                        clearSyncedImages(context, file.getName());
+                    }
+                }
             }
         }
     }
 
     public static void clearSyncedImages(Context context, final String subreddit) {
+        //delete in external public directory
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        final File folder = new File(dir + "/AlienCompanion/" + subreddit);
-
+        File folder = new File(dir + "/AlienCompanion/" + subreddit);
         if(folder.isDirectory()) {
-            File[] files = folder.listFiles();
-            for(File file : files) {
+            deletePicsFromDirectory(context, folder);
+        }
+
+        //delete in external private directory
+        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+            File subredditDir = new File(externalDir.getAbsolutePath() + "/Pictures/" + subreddit);
+            if(subredditDir.isDirectory()) {
+                deletePicsFromDirectory(context, subredditDir);
+            }
+        }
+    }
+
+    private static void deletePicsFromDirectory(Context context, File dir) {
+        for(File file : dir.listFiles()) {
+            if(file.isDirectory()) {
+                deletePicsFromDirectory(context, file);
+            }
+            else {
                 file.delete();
                 deleteFileFromMediaStore(context.getContentResolver(), file);
             }

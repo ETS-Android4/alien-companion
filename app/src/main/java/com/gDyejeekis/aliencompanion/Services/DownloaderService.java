@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.FileObserver;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -64,6 +66,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -84,6 +87,8 @@ public class DownloaderService extends IntentService {
     private static final int CHANGE_STATE_REQUEST_CODE = 59392;
 
     public static final String INDIVIDUALLY_SYNCED_FILENAME = "synced";
+
+    public static final String EXTERNAL_DATA_FOLDER_NAME = "AlienCompanionData";
 
     public static final String LOCA_POST_LIST_SUFFIX = "-posts";
 
@@ -206,7 +211,8 @@ public class DownloaderService extends IntentService {
         try {
             submission.setSyncedComments(null);
             List<Submission> submissions;
-            File file = new File(getFilesDir(), INDIVIDUALLY_SYNCED_FILENAME + LOCA_POST_LIST_SUFFIX);
+
+            File file = getPreferredStorageFile(INDIVIDUALLY_SYNCED_FILENAME + LOCA_POST_LIST_SUFFIX);
             try {
                 submissions = (List<Submission>) GeneralUtils.readObjectFromFile(file);
             } catch (Exception e) {
@@ -394,13 +400,12 @@ public class DownloaderService extends IntentService {
 
     private void writePostsToFile(List<RedditItem> posts, String filename) {
         try {
-            Log.d(TAG, "writing posts to " + filename);
-            //File dir = new File(getFilesDir(), filename + "_posts");
-            //dir.mkdirs();
+            File file = getPreferredStorageFile(filename);
+            Log.d(TAG, "Writing to " + file.getAbsolutePath());
 
             FileOutputStream fos;
             ObjectOutputStream oos;
-            fos = openFileOutput(filename, Context.MODE_PRIVATE);
+            fos = new FileOutputStream(file);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(posts);
             oos.close();
@@ -412,12 +417,12 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
-            Log.d(TAG, "writing comments to " + filename);
-            //File path = new File(directoryName, filename);
+            File file = getPreferredStorageFile(filename);
+            Log.d(TAG, "Writing to " + file.getAbsolutePath());
 
             FileOutputStream fos;
             ObjectOutputStream oos;
-            fos = openFileOutput(filename, Context.MODE_PRIVATE);
+            fos = new FileOutputStream(file);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(post);
             oos.close();
@@ -425,6 +430,18 @@ public class DownloaderService extends IntentService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private File getPreferredStorageFile(String filename) {
+        File file;
+        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+            File[] dirs = ContextCompat.getExternalFilesDirs(this, null);
+            file = (dirs.length > 1) ? new File(dirs[1], filename) : new File(dirs[0], filename);
+        }
+        else {
+            file = new File(getFilesDir(), filename);
+        }
+        return file;
     }
 
     private void syncLinkedRedditPost(String url, String domain, String filename, Comments commentsRetrieval, SyncProfileOptions syncOptions) {
@@ -493,7 +510,9 @@ public class DownloaderService extends IntentService {
             String result = "<html><head></head><body><div style=\"padding-left: 10px; padding-right: 10px;\">"
                     + title + "\n" + image + "\n" + text + "</div></body></html>";
 
-            GeneralUtils.writeObjectToFile(result, new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
+            File file = getPreferredStorageFile(filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX);
+            //GeneralUtils.writeObjectToFile(result, new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
+            GeneralUtils.writeObjectToFile(result, file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -504,19 +523,29 @@ public class DownloaderService extends IntentService {
         String domain = post.getDomain();
         if(domain.contains("imgur.com") || domain.contains("gfycat.com") || domain.equals("i.reddituploads.com") ||
                 url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) { // TODO: 6/26/2016 probably remove this check
-            String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+            File parentFolder;
+            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+                File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
+                //pictures folder within external files dir
+                parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");
+            }
+            else {
+                File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-            final File appFolder = new File(dir + "/AlienCompanion");
-            if(!appFolder.exists()) {
-                appFolder.mkdir();
+                //app folder inside public pictures directory
+                parentFolder = new File(dir, "AlienCompanion");
             }
 
-            final File folder = new File(dir + "/AlienCompanion/" + filename);
-            if(!folder.exists()) {
-                folder.mkdir();
+            if(!parentFolder.exists()) {
+                parentFolder.mkdir();
+            }
+            //folder for the corresponding subreddit
+            File subredditFolder = new File(parentFolder, filename);
+            if(!subredditFolder.exists()) {
+                subredditFolder.mkdir();
             }
 
-            final String folderPath = folder.getAbsolutePath();
+            final String folderPath = subredditFolder.getAbsolutePath();
 
             if (domain.contains("gfycat.com")) {
                 try {
@@ -640,14 +669,16 @@ public class DownloaderService extends IntentService {
     private void downloadPostThumbnail(Submission post, String filename) {
 
         if(!post.isSelf()) {
-            saveBitmapToDisk(getBitmapFromURL(post.getThumbnail()), filename);
+            File file = getPreferredStorageFile(filename);
+            saveBitmapToDisk(getBitmapFromURL(post.getThumbnail()), file);
         }
     }
 
-    private void saveBitmapToDisk(Bitmap bmp, String filename) {
+    private void saveBitmapToDisk(Bitmap bmp, File file) {
         FileOutputStream out = null;
         try {
-            out = openFileOutput(filename, Context.MODE_PRIVATE);
+            //out = openFileOutput(filename, Context.MODE_PRIVATE);
+            out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {

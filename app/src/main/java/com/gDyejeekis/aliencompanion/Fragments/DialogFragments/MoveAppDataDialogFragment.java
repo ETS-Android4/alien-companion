@@ -32,13 +32,13 @@ public class MoveAppDataDialogFragment extends ScalableDialogFragment {
 
         TextView textView = (TextView) view.findViewById(R.id.textView_operation);
         String string = (moveToExternal) ? "external" : "internal";
-        string = "Moving synced data to " + string + " memory";
+        string = "Moving data to " + string + " memory";
         textView.setText(string);
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
-                //SystemClock.sleep(2000);
+                SystemClock.sleep(2000);
                 if(moveToExternal) {
                     // TODO: 7/17/2016
                 }

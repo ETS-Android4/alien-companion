@@ -230,12 +230,6 @@
             android:title="Sync over WiFi only"
             android:defaultValue="true" />
 
-        <CheckBoxPreference
-            android:key="prefExternal"
-            android:title="Prefer external storage"
-            android:summary="(add some description)"
-            android:defaultValue="false" />
-
         <Preference
             android:key="clearSynced"
             android:title="Clear all synced posts" />
@@ -312,6 +306,12 @@
             android:title="Execute pending actions automatically"
             android:summary="All pending offline actions execute automatically as soon as a network connection is established"
             android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="prefExternal"
+            android:title="Prefer external storage"
+            android:summary="Save synced data and images/GIFs to a mounted SD card if available"
+            android:defaultValue="false" />
 
         <Preference
             android:key="clearCache"

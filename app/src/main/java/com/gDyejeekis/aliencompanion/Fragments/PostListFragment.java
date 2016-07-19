@@ -298,16 +298,25 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 new AlertDialog.Builder(activity).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String folderName = (subreddit==null) ? "frontpage" : subreddit;
-                        if(isMulti) {
-                            folderName = "multi=" + folderName;
-                        }
-                        //if(isMulti) folderName = "multi=";
-                        //folderName = folderName.concat(subreddit);
-                        GeneralUtils.clearSyncedPostsAndComments(activity, folderName);
-                        GeneralUtils.clearSyncedImages(activity, folderName);
-                        String toastMessage = "Synced posts for " + ((subreddit==null) ? "the frontpage" : subreddit) + (isMulti ? " (multi)" : "") + " cleared";
-                        ToastUtils.displayShortToast(activity, toastMessage);
+                        new AsyncTask<Void, Void, Void>() {
+
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                String folderName = (subreddit==null) ? "frontpage" : subreddit;
+                                if(isMulti) {
+                                    folderName = "multi=" + folderName;
+                                }
+                                GeneralUtils.clearSyncedPostsAndComments(activity, folderName);
+                                GeneralUtils.clearSyncedImages(activity, folderName);
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                String toastMessage = "Synced posts for " + ((subreddit==null) ? "the frontpage" : subreddit) + (isMulti ? " (multi)" : "") + " cleared";
+                                ToastUtils.displayShortToast(activity, toastMessage);
+                            }
+                        }.execute();
                     }
                 }).show();
                 return true;
