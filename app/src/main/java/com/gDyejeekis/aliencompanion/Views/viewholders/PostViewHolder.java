@@ -305,7 +305,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case cardDetails:
-                commentsButton.setBackground(null);
+                //commentsButton.setBackground(null);
                 moreOptions.setImageResource(moreResource);
                 bindPostCards(context, post);
                 if(post.isSelf()) {

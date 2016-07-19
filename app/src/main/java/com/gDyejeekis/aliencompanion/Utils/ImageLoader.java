@@ -93,7 +93,7 @@ public class ImageLoader {
                     return false;
                 }
             };
-            File[] files = context.getFilesDir().listFiles(filenameFilter);
+            File[] files = GeneralUtils.getActiveDir(context).listFiles(filenameFilter);
             if(files.length!=0) {
                 thumbnail = new Thumbnail("file:" + files[0].getAbsolutePath());
                 boolean hasThumbnail = false;
