@@ -27,6 +27,7 @@ import com.gDyejeekis.aliencompanion.AsyncTasks.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -389,7 +390,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 return false;
             }
         };
-        File[] files = activity.getFilesDir().listFiles(filenameFilter);
+        File[] files = GeneralUtils.getActiveDir(activity).listFiles(filenameFilter);
         for(File file : files) {
             if(postFile == null) postFile = file;
             else if(file.lastModified() > postFile.lastModified()) postFile = file;

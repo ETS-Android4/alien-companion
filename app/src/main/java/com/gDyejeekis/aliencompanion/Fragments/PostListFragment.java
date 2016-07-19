@@ -649,7 +649,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
             filename += (subreddit == null) ? "frontpage" : subreddit;
             filename = filename.concat(DownloaderService.LOCA_POST_LIST_SUFFIX);
-            File file = new File(activity.getFilesDir(), filename);
+            File file = new File(GeneralUtils.getActiveDir(activity), filename);
             //double lastModified = (double) file.lastModified();
             //return ConvertUtils.getSubmissionAge(lastModified);
             if(file.exists()) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
@@ -12,6 +13,7 @@ import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
@@ -25,6 +27,7 @@ import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.Submissions;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -50,7 +53,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.context = context;
         this.plf = plf;
         this.loadType = loadType;
-        //httpClient = new PoliteRedditHttpClient();
         sort = plf.submissionSort;
         time = plf.timeSpan;
         changedSort = false;
@@ -60,7 +62,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.context = context;
         this.plf = plf;
         this.loadType = loadType;
-        //httpClient = new PoliteRedditHttpClient();
         this.sort = sort;
         this.time = time;
         changedSort = true;
@@ -69,7 +70,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private List<RedditItem> readPostsFromFile(String filename) {
         List<RedditItem> posts = null;
         try {
-            FileInputStream fis = context.openFileInput(filename.toLowerCase());
+            FileInputStream fis = new FileInputStream(new File(GeneralUtils.getActiveDir(context), filename.toLowerCase()));
             ObjectInputStream ois = new ObjectInputStream(fis);
             posts = (List<RedditItem>) ois.readObject();
             ois.close();
@@ -86,7 +87,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
                 //wait until nav drawer is closed to start
-                SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 20);
+                SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 50);
 
                 String filename = "";
                 if(plf.subreddit == null) filename = "frontpage";

@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,11 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import java.io.File;
@@ -136,7 +139,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
                 }
             };
 
-            File[] files = dialog.getActivity().getFilesDir().listFiles(filenameFilter);
+            File[] files = GeneralUtils.getActiveDir(dialog.getActivity()).listFiles(filenameFilter);
             if(files.length > 0) {
                 Collections.sort(Arrays.asList(files), new Comparator<File>() {
                     @Override

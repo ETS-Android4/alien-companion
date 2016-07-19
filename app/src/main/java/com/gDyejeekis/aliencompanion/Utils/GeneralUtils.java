@@ -118,6 +118,14 @@ public class GeneralUtils {
         }
     }
 
+    public static File getActiveDir(Context context) {
+        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+            File[] externalDirs = ContextCompat.getExternalFilesDirs(context, null);
+            return ((externalDirs.length > 1) ? externalDirs[1] : externalDirs[0]);
+        }
+        return context.getFilesDir();
+    }
+
     public static void clearSyncedPostsAndComments(Context context, final String subreddit) {
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override

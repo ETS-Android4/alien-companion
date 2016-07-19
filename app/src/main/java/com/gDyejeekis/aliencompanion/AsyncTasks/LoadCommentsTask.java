@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.AsyncTasks;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.Utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -32,6 +34,8 @@ import java.util.List;
  */
 public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
 
+    public static final String TAG = "LoadCommentsTask";
+
     private Exception exception;
     private Context context;
     private PostFragment postFragment;
@@ -52,14 +56,15 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 return false;
             }
         };
-        File[] files = context.getFilesDir().listFiles(filenameFilter);
+
+        File[] files = GeneralUtils.getActiveDir(context).listFiles(filenameFilter);
         for(File file : files) {
             if(postFile == null) postFile = file;
             else if(file.lastModified() > postFile.lastModified()) postFile = file;
         }
 
         try {
-            Log.d("Geo test", "reading comments from " + postFile.getAbsolutePath());
+            Log.d(TAG, "reading comments from " + postFile.getAbsolutePath());
             FileInputStream fis = new FileInputStream(postFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Submission post = (Submission) ois.readObject();
