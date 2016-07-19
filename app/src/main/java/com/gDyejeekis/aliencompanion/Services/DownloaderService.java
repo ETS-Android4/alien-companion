@@ -88,8 +88,6 @@ public class DownloaderService extends IntentService {
 
     public static final String INDIVIDUALLY_SYNCED_FILENAME = "synced";
 
-    public static final String EXTERNAL_DATA_FOLDER_NAME = "AlienCompanionData";
-
     public static final String LOCA_POST_LIST_SUFFIX = "-posts";
 
     public static final String LOCAL_THUMNAIL_SUFFIX = "thumb";

@@ -122,7 +122,7 @@ public class GeneralUtils {
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.startsWith(subreddit) && !dir.isDirectory()) {
+                if(filename.startsWith(subreddit)) {
                     return true;
                 }
                 return false;
@@ -141,19 +141,8 @@ public class GeneralUtils {
         }
     }
 
-    private static final FilenameFilter dirFilter = new FilenameFilter() {
-        @Override
-        public boolean accept(File dir, String filename) {
-            if (dir.isDirectory()) {
-                return false;
-            }
-            return true;
-        }
-    };
-
     public static void clearSyncedPosts(Context context) {
-        File[] files = context.getFilesDir().listFiles(dirFilter);
-        for (File file : files) {
+        for (File file : context.getFilesDir().listFiles()) {
             //Log.d(TAG, file.getName());
             String filename = file.getName();
             if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)
@@ -163,7 +152,7 @@ public class GeneralUtils {
         }
 
         for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-            for(File file : externalDir.listFiles(dirFilter)) {
+            for(File file : externalDir.listFiles()) {
                 file.delete();
             }
         }
@@ -178,7 +167,7 @@ public class GeneralUtils {
         File folder = new File(dir + "/AlienCompanion");
         for(File file : folder.listFiles()) {
             if(file.isDirectory()) {
-                clearSyncedImages(context, file.getName());
+                deletePicsFromDirectory(context, file);
             }
         }
 
@@ -188,7 +177,7 @@ public class GeneralUtils {
             if(picturesDir.isDirectory()) {
                 for(File file : picturesDir.listFiles()) {
                     if(file.isDirectory()) {
-                        clearSyncedImages(context, file.getName());
+                        deletePicsFromDirectory(context, file);
                     }
                 }
             }
