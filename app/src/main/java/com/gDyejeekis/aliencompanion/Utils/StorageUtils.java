@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Utils;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -134,32 +135,35 @@ public class StorageUtils {
         }
     }
 
-    public static boolean isExternalStorageAvailable() {
+    public static boolean isExternalStorageAvailable(Context context) {
 
-        String state = Environment.getExternalStorageState();
-        boolean mExternalStorageAvailable = false;
-        boolean mExternalStorageWriteable = false;
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // We can read and write the media
-            mExternalStorageAvailable = mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // We can only read the media
-            mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            // Something else is wrong. It may be one of many other states, but
-            // all we need
-            // to know is we can neither read nor write
-            mExternalStorageAvailable = mExternalStorageWriteable = false;
-        }
-
-        if (mExternalStorageAvailable == true
-                && mExternalStorageWriteable == true) {
-            return true;
-        } else {
-            return false;
-        }
+        File[] externalDirs = ContextCompat.getExternalFilesDirs(context, null);
+        File externalDir = (externalDirs.length > 1) ? externalDirs[1] : externalDirs[0];
+        return externalDir != null;
+        //String state = Environment.getExternalStorageState();
+        //boolean mExternalStorageAvailable = false;
+        //boolean mExternalStorageWriteable = false;
+//
+        //if (Environment.MEDIA_MOUNTED.equals(state)) {
+        //    // We can read and write the media
+        //    mExternalStorageAvailable = mExternalStorageWriteable = true;
+        //} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+        //    // We can only read the media
+        //    mExternalStorageAvailable = true;
+        //    mExternalStorageWriteable = false;
+        //} else {
+        //    // Something else is wrong. It may be one of many other states, but
+        //    // all we need
+        //    // to know is we can neither read nor write
+        //    mExternalStorageAvailable = mExternalStorageWriteable = false;
+        //}
+//
+        //if (mExternalStorageAvailable == true
+        //        && mExternalStorageWriteable == true) {
+        //    return true;
+        //} else {
+        //    return false;
+        //}
     }
 
     public static List<File> getListFiles(File parentDir) {

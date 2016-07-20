@@ -432,7 +432,7 @@ public class DownloaderService extends IntentService {
 
     private File getPreferredStorageFile(String filename) {
         File file;
-        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
             File[] dirs = ContextCompat.getExternalFilesDirs(this, null);
             file = (dirs.length > 1) ? new File(dirs[1], filename) : new File(dirs[0], filename);
         }
@@ -522,7 +522,7 @@ public class DownloaderService extends IntentService {
         if(domain.contains("imgur.com") || domain.contains("gfycat.com") || domain.equals("i.reddituploads.com") ||
                 url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) { // TODO: 6/26/2016 probably remove this check
             File parentFolder;
-            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
                 File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
                 //pictures folder within external files dir
                 parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");

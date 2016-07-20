@@ -126,7 +126,7 @@ public class GeneralUtils {
     }
 
     public static File getActiveDir(Context context) {
-        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(context)) {
             File[] externalDirs = ContextCompat.getExternalFilesDirs(context, null);
             return ((externalDirs.length > 1) ? externalDirs[1] : externalDirs[0]);
         }
@@ -149,9 +149,11 @@ public class GeneralUtils {
             file.delete();
         }
 
-        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-            for(File file : externalDir.listFiles(filenameFilter)) {
-                file.delete();
+        if(StorageUtils.isExternalStorageAvailable(context)) {
+            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+                for (File file : externalDir.listFiles(filenameFilter)) {
+                    file.delete();
+                }
             }
         }
     }
@@ -166,9 +168,11 @@ public class GeneralUtils {
             }
         }
 
-        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-            for(File file : externalDir.listFiles()) {
-                file.delete();
+        if(StorageUtils.isExternalStorageAvailable(context)) {
+            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+                for (File file : externalDir.listFiles()) {
+                    file.delete();
+                }
             }
         }
 
@@ -177,7 +181,7 @@ public class GeneralUtils {
     }
 
     public static void clearSyncedImages(Context context) {
-        //delete in external public directory
+        //delete in primary external public directory
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
         File folder = new File(dir + "/AlienCompanion");
         for(File file : folder.listFiles()) {
@@ -186,13 +190,15 @@ public class GeneralUtils {
             }
         }
 
-        //delete in external private directory
-        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-            File picturesDir = new File(externalDir, "Pictures");
-            if(picturesDir.isDirectory()) {
-                for(File file : picturesDir.listFiles()) {
-                    if(file.isDirectory()) {
-                        deletePicsFromDirectory(context, file);
+        if(StorageUtils.isExternalStorageAvailable(context)) {
+            //delete in secondary external private directory
+            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+                File picturesDir = new File(externalDir, "Pictures");
+                if (picturesDir.isDirectory()) {
+                    for (File file : picturesDir.listFiles()) {
+                        if (file.isDirectory()) {
+                            deletePicsFromDirectory(context, file);
+                        }
                     }
                 }
             }
@@ -200,18 +206,20 @@ public class GeneralUtils {
     }
 
     public static void clearSyncedImages(Context context, final String subreddit) {
-        //delete in external public directory
+        //delete in primary external public directory
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
         File folder = new File(dir + "/AlienCompanion/" + subreddit);
         if(folder.isDirectory()) {
             deletePicsFromDirectory(context, folder);
         }
 
-        //delete in external private directory
-        for(File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-            File subredditDir = new File(externalDir.getAbsolutePath() + "/Pictures/" + subreddit);
-            if(subredditDir.isDirectory()) {
-                deletePicsFromDirectory(context, subredditDir);
+        if(StorageUtils.isExternalStorageAvailable(context)) {
+            //delete in secondary external private directory
+            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
+                File subredditDir = new File(externalDir.getAbsolutePath() + "/Pictures/" + subreddit);
+                if (subredditDir.isDirectory()) {
+                    deletePicsFromDirectory(context, subredditDir);
+                }
             }
         }
     }

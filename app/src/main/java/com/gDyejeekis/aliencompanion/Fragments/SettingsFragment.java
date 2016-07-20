@@ -52,7 +52,7 @@ public class SettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 boolean moveToExternal = (boolean) newValue;
-                if(!StorageUtils.isExternalStorageAvailable()) {
+                if(!StorageUtils.isExternalStorageAvailable(getActivity())) {
                     if(moveToExternal) {
                         ToastUtils.displayShortToast(getActivity(), "External storage unavailable");
                         return false;

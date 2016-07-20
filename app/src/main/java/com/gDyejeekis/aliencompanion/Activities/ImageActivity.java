@@ -92,7 +92,7 @@ public class ImageActivity extends BackNavActivity {
 
         if(MyApplication.offlineModeEnabled) {
             File appFolder;
-            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
                 File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
                 String dir = (externalDirs.length > 1) ? externalDirs[1].getAbsolutePath() : externalDirs[0].getAbsolutePath();
                 appFolder = new File(dir + "/Pictures");
