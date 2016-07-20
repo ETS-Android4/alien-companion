@@ -63,7 +63,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
             @Override
             public void onClick(View view) {
                 AddSubredditDialogFragment dialog = new AddSubredditDialogFragment();
-                dialog.show(getFragmentManager(), "dialog");
+                dialog.show(getSupportFragmentManager(), "dialog");
             }
         });
         subreddits = getIntent().getStringArrayListExtra("subreddits");
@@ -76,7 +76,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
                 Bundle bundle = new Bundle();
                 bundle.putString("subreddit", subreddits.get(position));
                 dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), "dialog");
+                dialog.show(getSupportFragmentManager(), "dialog");
                 return true;
             }
         });
@@ -113,7 +113,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
         switch (item.getItemId()) {
             case R.id.action_add_subreddit:
                 AddSubredditDialogFragment dialog = new AddSubredditDialogFragment();
-                dialog.show(getFragmentManager(), "dialog");
+                dialog.show(getSupportFragmentManager(), "dialog");
                 return true;
             case R.id.action_sort_by_alpha:
                 sortByAlpha();

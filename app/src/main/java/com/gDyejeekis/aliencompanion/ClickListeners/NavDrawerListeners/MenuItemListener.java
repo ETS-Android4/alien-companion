@@ -44,7 +44,6 @@ public class MenuItemListener extends NavDrawerListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //ToastUtils.displayShortToast(getActivity(), "Coming soon!");
                         Intent intent = new Intent(getActivity(), MessageActivity.class);
                         getActivity().startActivity(intent);
                     }
@@ -54,7 +53,8 @@ public class MenuItemListener extends NavDrawerListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        showDialogFragment(new EnterUserDialogFragment());
+                        EnterUserDialogFragment dialog = new EnterUserDialogFragment();
+                        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
                     }
                 }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
@@ -62,7 +62,8 @@ public class MenuItemListener extends NavDrawerListener {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        showDialogFragment(new EnterRedditDialogFragment());
+                        EnterRedditDialogFragment dialog = new EnterRedditDialogFragment();
+                        dialog.show(getActivity().getSupportFragmentManager(), "dialog");
                     }
                 }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                 break;
@@ -85,8 +86,4 @@ public class MenuItemListener extends NavDrawerListener {
         return false;
     }
 
-    private void showDialogFragment(DialogFragment dialog) {
-        FragmentManager fm = getActivity().getFragmentManager();
-        dialog.show(fm, "dialog");
-    }
 }

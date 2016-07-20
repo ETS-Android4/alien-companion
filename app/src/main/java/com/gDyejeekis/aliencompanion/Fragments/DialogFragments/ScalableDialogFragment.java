@@ -1,7 +1,7 @@
 package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
 
-import android.app.DialogFragment;
 import android.content.res.Configuration;
+import android.support.v4.app.DialogFragment;
 import android.view.Window;
 import android.widget.LinearLayout;
 

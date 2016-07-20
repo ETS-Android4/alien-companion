@@ -94,6 +94,12 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         new AlertDialog.Builder(getActivity()).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                final PleaseWaitDialogFragment dialogFragment = new PleaseWaitDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("message", "Clearing synced data for '" + filename + "'");
+                dialogFragment.setArguments(args);
+                dialogFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+
                 new AsyncTask<Void, Void, Void>() {
 
                     @Override
@@ -105,9 +111,10 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
                     @Override
                     protected void onPostExecute(Void aVoid) {
+                        dialogFragment.dismiss();
                         filenames.remove(pos);
                         adapter.notifyDataSetChanged();
-                        ToastUtils.displayShortToast(getActivity(), "Synced posts for " + filename + " cleared");
+                        ToastUtils.displayShortToast(getActivity(), "Synced data for '" + filename + "' cleared");
                     }
                 }.execute();
             }

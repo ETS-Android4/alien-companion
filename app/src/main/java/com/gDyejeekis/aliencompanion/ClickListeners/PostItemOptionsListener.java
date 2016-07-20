@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
@@ -294,7 +295,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                                         clipboard.setPrimaryClip(clip);
                                     }
                                 });
-                        choiceDialog.show(((Activity) context).getFragmentManager(), "dialog");
+                        choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         return true;
                     case R.id.action_edit:
                         Intent intent = new Intent(context, SubmitActivity.class);
@@ -357,7 +358,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                                     GeneralUtils.shareUrl(context, label, url);
                                 }
                             });
-                            choiceDialog.show(((Activity) context).getFragmentManager(), "dialog");
+                            choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         }
                         //postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
                         //Intent sendIntent = new Intent();
@@ -382,7 +383,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             Bundle bundle = new Bundle();
                             bundle.putString("postId", post.getFullName());
                             dialog.setArguments(bundle);
-                            dialog.show(((Activity) context).getFragmentManager(), "dialog");
+                            dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         } else ToastUtils.displayShortToast(context, "Must be logged in to report");
                         return true;
                     default:

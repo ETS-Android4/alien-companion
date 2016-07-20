@@ -99,6 +99,13 @@ public class GeneralUtils {
         NavDrawerAdapter.currentAccountName = "Logged out";
     }
 
+    public static void addFileToMediaStore(Context context, File file) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        context.sendBroadcast(mediaScanIntent);
+    }
+
     public static void deleteFileFromMediaStore(final ContentResolver contentResolver, final File file) {
         String canonicalPath;
         try {

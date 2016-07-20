@@ -1,13 +1,19 @@
 package com.gDyejeekis.aliencompanion.Utils;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -170,7 +176,7 @@ public class StorageUtils {
         return inFiles;
     }
 
-    public static boolean moveFile(File file, String targetDir) {
+    public static boolean moveFileInsideDisk(File file, String targetDir) {
         try {
             String oldPath = file.getAbsolutePath();
             if(!targetDir.endsWith("/")) {
@@ -186,6 +192,77 @@ public class StorageUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public static boolean moveFileBetweenDisks(File file, String targetDir) {
+        try{
+            File afile = file;
+            File bfile = new File(targetDir, afile.getName());
+
+            FileInputStream inStream = new FileInputStream(afile);
+            FileOutputStream outStream = new FileOutputStream(bfile);
+
+            byte[] buffer = new byte[1024];
+
+            int length;
+            //copy the file content in bytes
+            while ((length = inStream.read(buffer)) > 0){
+
+                outStream.write(buffer, 0, length);
+
+            }
+
+            inStream.close();
+            outStream.close();
+
+            //delete the original file
+            afile.delete();
+
+            Log.d(TAG, "Successfully copied " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
+            return true;
+
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        Log.d(TAG, "Failed to copy file from " + file.getAbsolutePath() + " to " + targetDir);
+        return false;
+    }
+
+    public static boolean moveFileBetweenDisks(Context context, File file, String targetDir) {
+        try{
+            File afile = file;
+            File bfile = new File(targetDir, afile.getName());
+
+            FileInputStream inStream = new FileInputStream(afile);
+            FileOutputStream outStream = new FileOutputStream(bfile);
+
+            byte[] buffer = new byte[1024];
+
+            int length;
+            //copy the file content in bytes
+            while ((length = inStream.read(buffer)) > 0){
+
+                outStream.write(buffer, 0, length);
+
+            }
+
+            inStream.close();
+            outStream.close();
+
+            //delete the original file
+            afile.delete();
+
+            GeneralUtils.deleteFileFromMediaStore(context.getContentResolver(), afile);
+            GeneralUtils.addFileToMediaStore(context, bfile);
+
+            Log.d(TAG, "Successfully copied " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
+            return true;
+
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        Log.d(TAG, "Failed to copy file from " + file.getAbsolutePath() + " to " + targetDir);
         return false;
     }
 

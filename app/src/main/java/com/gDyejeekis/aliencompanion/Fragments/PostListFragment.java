@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ShowSyncedDialogFragment;
@@ -242,7 +243,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 Bundle args = new Bundle();
                 args.putString("subreddit", subreddit);
                 searchDialog.setArguments(args);
-                searchDialog.show(activity.getFragmentManager(), "dialog");
+                searchDialog.show(activity.getSupportFragmentManager(), "dialog");
                 return true;
             case R.id.action_switch_view:
                 try {
@@ -275,29 +276,30 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 return true;
             case R.id.action_view_synced:
                 ShowSyncedDialogFragment syncedDialog = new ShowSyncedDialogFragment();
-                syncedDialog.show(activity.getFragmentManager(), "dialog");
+                syncedDialog.show(activity.getSupportFragmentManager(), "dialog");
                 break;
             case R.id.action_pending_actions:
                 Intent intent = new Intent(activity, PendingUserActionsActivity.class);
                 activity.startActivity(intent);
                 break;
             case R.id.action_clear_synced:
-                String messageEnd;
+                final String messageEnd;
                 if(subreddit==null) {
-                    messageEnd = " the frontpage?";
+                    messageEnd = "the frontpage";
                 }
                 else {
-                    if(isMulti) {
-                        messageEnd = " this multireddit?";
-                    }
-                    else {
-                        messageEnd = " this subreddit?";
-                    }
+                    messageEnd = "'" + subreddit + "'";
                 }
-                String message = "Delete all synced posts, comments, images and articles for" + messageEnd;
+                final String message = "Delete all synced posts, comments, images and articles for " + messageEnd + "?";
                 new AlertDialog.Builder(activity).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        final PleaseWaitDialogFragment dialogFragment = new PleaseWaitDialogFragment();
+                        Bundle args = new Bundle();
+                        args.putString("message", "Clearing synced data for " + messageEnd);
+                        dialogFragment.setArguments(args);
+                        dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
+
                         new AsyncTask<Void, Void, Void>() {
 
                             @Override
@@ -313,7 +315,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                             @Override
                             protected void onPostExecute(Void aVoid) {
-                                String toastMessage = "Synced posts for " + ((subreddit==null) ? "the frontpage" : subreddit) + (isMulti ? " (multi)" : "") + " cleared";
+                                dialogFragment.dismiss();
+                                String toastMessage = "Synced data for " + messageEnd + " cleared";
                                 ToastUtils.displayShortToast(activity, toastMessage);
                             }
                         }.execute();

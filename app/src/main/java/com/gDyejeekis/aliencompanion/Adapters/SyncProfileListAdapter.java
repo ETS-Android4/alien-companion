@@ -226,7 +226,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         bundle.putSerializable("profile", getItemAt(profilePosition));
         bundle.putBoolean("showSchedule", showSchedule);
         dialog.setArguments(bundle);
-        dialog.show(activity.getFragmentManager(), "dialog");
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     private void showScheduleDialog(int profilePosition, boolean activateProfile) {
@@ -236,7 +236,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         bundle.putSerializable("profile", getItemAt(profilePosition));
         bundle.putBoolean("activate", activateProfile);
         dialog.setArguments(bundle);
-        dialog.show(activity.getFragmentManager(), "dialog");
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     private void showSyncOptionsDialog(int profilePosition) {
@@ -244,7 +244,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
         Bundle bundle = new Bundle();
         bundle.putSerializable("profile", getItemAt(profilePosition));
         dialog.setArguments(bundle);
-        dialog.show(activity.getFragmentManager(), "dialog");
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     public void showScheduleDialog(SyncProfile profile, boolean activateProfile) {

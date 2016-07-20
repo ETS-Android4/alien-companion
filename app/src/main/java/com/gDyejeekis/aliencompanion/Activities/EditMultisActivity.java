@@ -60,7 +60,7 @@ public class EditMultisActivity extends BackNavActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("multi", multireddits.get(position));
                 dialog.setArguments(bundle);
-                dialog.show(getFragmentManager(), "dialog");
+                dialog.show(getSupportFragmentManager(), "dialog");
                 return true;
             }
         });
@@ -97,7 +97,7 @@ public class EditMultisActivity extends BackNavActivity {
         switch (item.getItemId()) {
             case R.id.action_add_multi:
                 AddMultiredditDialogFragment dialog = new AddMultiredditDialogFragment();
-                dialog.show(getFragmentManager(), "dialog");
+                dialog.show(getSupportFragmentManager(), "dialog");
                 return true;
             case R.id.action_refresh_multis:
                 return true;

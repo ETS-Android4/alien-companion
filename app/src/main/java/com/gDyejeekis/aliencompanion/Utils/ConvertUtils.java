@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -210,7 +211,7 @@ public class ConvertUtils {
                                 args.putString("url", span.getURL());
                                 UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
                                 dialogFragment.setArguments(args);
-                                dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                                dialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -346,7 +347,7 @@ public class ConvertUtils {
                                 args.putString("url", span.getURL());
                                 UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
                                 dialogFragment.setArguments(args);
-                                dialogFragment.show(((Activity) context).getFragmentManager(), "dialog");
+                                dialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

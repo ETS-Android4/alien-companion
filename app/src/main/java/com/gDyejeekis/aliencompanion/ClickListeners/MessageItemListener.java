@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -98,7 +99,7 @@ public class MessageItemListener implements View.OnClickListener, View.OnLongCli
                         Bundle bundle = new Bundle();
                         bundle.putString("postId", message.getFullName());
                         dialog.setArguments(bundle);
-                        dialog.show(((Activity) context).getFragmentManager(), "dialog");
+                        dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         return true;
                     default:
                         return false;

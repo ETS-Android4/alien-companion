@@ -13,12 +13,14 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.MoveAppDataDialogFragment;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -64,7 +66,7 @@ public class SettingsFragment extends PreferenceFragment {
                 Bundle args = new Bundle();
                 args.putBoolean("external", moveToExternal);
                 dialog.setArguments(args);
-                dialog.show(getActivity().getFragmentManager(), "dialog");
+                dialog.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(), "dialog");
                 MyApplication.preferExternalStorage = moveToExternal;
                 return true;
             }
@@ -152,7 +154,13 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
+                    public void onClick(final DialogInterface dialog, int whichButton) {
+                        final PleaseWaitDialogFragment dialogFragment = new PleaseWaitDialogFragment();
+                        Bundle args = new Bundle();
+                        args.putString("message", "Clearing all synced data");
+                        dialogFragment.setArguments(args);
+                        dialogFragment.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(), "dialog");
+
                         new AsyncTask<Void, Void, Void>() {
 
                             @Override
@@ -164,7 +172,8 @@ public class SettingsFragment extends PreferenceFragment {
 
                             @Override
                             protected void onPostExecute(Void aVoid) {
-                                ToastUtils.displayShortToast(getActivity(), "All synced posts cleared");
+                                dialogFragment.dismiss();
+                                ToastUtils.displayShortToast(getActivity(), "All synced data cleared");
                             }
                         }.execute();
                     }
@@ -181,6 +190,12 @@ public class SettingsFragment extends PreferenceFragment {
         clearCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                final PleaseWaitDialogFragment dialogFragment = new PleaseWaitDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("message", "Clearing app cache");
+                dialogFragment.setArguments(args);
+                dialogFragment.show(((AppCompatActivity)getActivity()).getSupportFragmentManager(), "dialog");
+
                 new AsyncTask<Void, Void, Void>() {
 
                     @Override
@@ -191,6 +206,7 @@ public class SettingsFragment extends PreferenceFragment {
 
                     @Override
                     protected void onPostExecute(Void aVoid) {
+                        dialogFragment.dismiss();
                         ToastUtils.displayShortToast(getActivity(), "Cache cleared");
                     }
                 }.execute();

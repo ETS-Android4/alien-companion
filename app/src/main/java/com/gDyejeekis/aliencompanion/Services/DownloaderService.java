@@ -495,7 +495,7 @@ public class DownloaderService extends IntentService {
             String image = "";
             if(res.getImageUrl().length()>0) {
                 String imageFilename = filename + "-" + post.getIdentifier() + "-article_image";
-                GeneralUtils.downloadMediaToFile(res.getImageUrl(), new File(getFilesDir(), imageFilename));
+                GeneralUtils.downloadMediaToFile(res.getImageUrl(), getPreferredStorageFile(imageFilename));
                 image = "<img src=\"" + imageFilename + "\" width=\"" + screenWidth + "\"/>";
             }
 
@@ -639,10 +639,11 @@ public class DownloaderService extends IntentService {
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadMediaToFile(url, file);
 
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri contentUri = Uri.fromFile(file);
-            mediaScanIntent.setData(contentUri);
-            sendBroadcast(mediaScanIntent);
+            GeneralUtils.addFileToMediaStore(this, file);
+            //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            //Uri contentUri = Uri.fromFile(file);
+            //mediaScanIntent.setData(contentUri);
+            //sendBroadcast(mediaScanIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -655,10 +656,11 @@ public class DownloaderService extends IntentService {
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadMediaToFile(url, file);
 
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri contentUri = Uri.fromFile(file);
-            mediaScanIntent.setData(contentUri);
-            sendBroadcast(mediaScanIntent);
+            GeneralUtils.addFileToMediaStore(this, file);
+            //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            //Uri contentUri = Uri.fromFile(file);
+            //mediaScanIntent.setData(contentUri);
+            //sendBroadcast(mediaScanIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }

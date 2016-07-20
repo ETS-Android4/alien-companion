@@ -255,7 +255,8 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 showSortPopup(activity.findViewById(R.id.action_sort));
                 return true;
             case R.id.action_search:
-                showDialog(new SearchRedditDialogFragment());
+                SearchRedditDialogFragment dialog = new SearchRedditDialogFragment();
+                dialog.show(activity.getSupportFragmentManager(), "dialog");
                 return true;
             case R.id.action_switch_view:
                 showViewsPopup(activity.findViewById(R.id.action_refresh));
@@ -263,11 +264,6 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showDialog(DialogFragment fragment) {
-        FragmentManager fm = getFragmentManager();
-        fragment.show(fm, "dialog");
     }
 
     public String getSubreddit() {

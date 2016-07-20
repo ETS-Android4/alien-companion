@@ -42,7 +42,7 @@ public class AccountListener extends NavDrawerListener {
                         }
                         else {
                             AddAccountDialogFragment dialogFragment = new AddAccountDialogFragment();
-                            dialogFragment.show(getActivity().getFragmentManager(), "dialog");
+                            dialogFragment.show(getActivity().getSupportFragmentManager(), "dialog");
                         }
                     }
                 }, MyApplication.NAV_DRAWER_CLOSE_TIME + 75);
@@ -89,7 +89,7 @@ public class AccountListener extends NavDrawerListener {
             args.putString("accountName", accountItem.getName());
             AccountOptionsDialogFragment dialogFragment = new AccountOptionsDialogFragment();
             dialogFragment.setArguments(args);
-            dialogFragment.show(getActivity().getFragmentManager(), "dialog");
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "dialog");
             return true;
         }
         return false;

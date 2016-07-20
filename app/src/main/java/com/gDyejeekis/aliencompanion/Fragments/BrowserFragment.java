@@ -110,7 +110,8 @@ public class BrowserFragment extends Fragment {
             url = post.getUrl();
             domain = post.getDomain();
             if(MyApplication.offlineModeEnabled) {
-                File file = GeneralUtils.findFile(activity.getFilesDir(), activity.getFilesDir().getAbsolutePath(), post.getIdentifier() + DownloaderService.LOCAL_ARTICLE_SUFFIX);
+                File activeDir = GeneralUtils.getActiveDir(activity);
+                File file = GeneralUtils.findFile(activeDir, activeDir.getAbsolutePath(), post.getIdentifier() + DownloaderService.LOCAL_ARTICLE_SUFFIX);
                 if(file!=null) {
                     //isPageSynced = true;
                     syncedPagePath = file.getAbsolutePath();

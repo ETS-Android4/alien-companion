@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
@@ -89,7 +91,15 @@ public class ImageActivity extends BackNavActivity {
         domain = getIntent().getStringExtra("domain");
 
         if(MyApplication.offlineModeEnabled) {
-            final File appFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
+            File appFolder;
+            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable()) {
+                File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
+                String dir = (externalDirs.length > 1) ? externalDirs[1].getAbsolutePath() : externalDirs[0].getAbsolutePath();
+                appFolder = new File(dir + "/Pictures");
+            }
+            else {
+                appFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
+            }
 
             String toFind = null;
             if(domain.contains("gfycat.com")) {
