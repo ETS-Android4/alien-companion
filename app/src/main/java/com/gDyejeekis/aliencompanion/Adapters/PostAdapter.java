@@ -278,13 +278,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     break;
                 }
             }
-            //List<ExpIndData> sublist = getData().subList(1, start);
-            //for (ExpIndData item : sublist) {
-            //    if (item.getIndentation() == 0) {
-            //        index = getData().indexOf(item);
-            //        break;
-            //    }
-            //}
+        }
+        else if(start==0) {
+            index = 0;
         }
         return index;
     }
