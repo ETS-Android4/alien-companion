@@ -22,7 +22,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class SearchActivity extends SwipeBackActivity {
 
-    public static boolean activityStarted;
+    public static boolean isForeground;
     private SearchFragment searchFragment;
     private FragmentManager fm;
     private LinearLayout container;
@@ -52,8 +52,6 @@ public class SearchActivity extends SwipeBackActivity {
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
 
-        activityStarted = true;
-
         fm = getFragmentManager();
 
         int resource;
@@ -69,6 +67,18 @@ public class SearchActivity extends SwipeBackActivity {
         }
 
         setupMainFragment(resource);
+    }
+
+    @Override
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isForeground = true;
     }
 
     public void setupPostFragment(PostFragment postFragment) {
@@ -140,12 +150,10 @@ public class SearchActivity extends SwipeBackActivity {
         popupMenu.show();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(isFinishing())
-            activityStarted = false;
-    }
+    //@Override
+    //public void onDestroy() {
+    //    super.onDestroy();
+    //}
 
     public SearchFragment getSearchFragment() {
         return searchFragment;

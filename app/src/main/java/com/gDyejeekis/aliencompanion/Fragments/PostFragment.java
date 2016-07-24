@@ -3,11 +3,14 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -59,6 +63,8 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean titleUpdated;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
+    private FloatingActionButton fab_up;
+    private FloatingActionButton fab_down;
     public LoadCommentsTask task;
 
     private boolean updateActionBar = false;
@@ -253,12 +259,34 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_post_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.GONE);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_postList);
-
+        if(MyApplication.commentNavigation) {
+            fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
+            fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
+            ColorStateList color = (MyApplication.nightThemeEnabled) ? ColorStateList.valueOf(Color.parseColor("#404040")) : ColorStateList.valueOf(MyApplication.colorPrimary);
+            fab_up.setBackgroundTintList(color);
+            fab_down.setBackgroundTintList(color);
+            fab_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    previousParentComment();
+                }
+            });
+            fab_down.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    nextParentComment();
+                }
+            });
+        }
+        else {
+            LinearLayout layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
+            layoutFab.setVisibility(View.GONE);
+        }
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
@@ -329,6 +357,28 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         }
         else {
             return false;
+        }
+    }
+
+    private void nextParentComment() {
+        int start = mLayoutManager.findLastCompletelyVisibleItemPosition();
+        if(start==RecyclerView.NO_POSITION) {
+            start = mLayoutManager.findLastVisibleItemPosition();
+        }
+        int index = postAdapter.findNextParentCommentIndex(start);
+        if(index!=-1) {
+            mLayoutManager.scrollToPositionWithOffset(index, 0);
+        }
+    }
+
+    private void previousParentComment() {
+        int start = mLayoutManager.findFirstCompletelyVisibleItemPosition();
+        if(start==RecyclerView.NO_POSITION) {
+            start = mLayoutManager.findFirstVisibleItemPosition();
+        }
+        int index = postAdapter.findPreviousParentCommentIndex(start);
+        if(index!=-1) {
+            mLayoutManager.scrollToPosition(index);
         }
     }
 

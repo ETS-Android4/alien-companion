@@ -35,7 +35,7 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
 
         activity = (AppCompatActivity) getActivity();
         searchFragment = null;
-        if(!SearchActivity.activityStarted)
+        if(!SearchActivity.isForeground)
             subreddit = getArguments().getString("subreddit");
         else {
             searchFragment = ((SearchActivity) activity).getSearchFragment();
@@ -98,7 +98,7 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
             if(!query.replaceAll("\\s","").equals("")) {
                 dismiss();
                 //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
-                if(!SearchActivity.activityStarted) {
+                if(!SearchActivity.isForeground) {
                     Intent intent = new Intent(activity, SearchActivity.class);
                     intent.putExtra("query", query);
                     if (checkBox.isChecked()) {

@@ -90,7 +90,7 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
          * it's commented out.
          * @return The level of indentation in the range [0, n-1]
          */
-        //int getIndentation();
+        int getIndentation();
 
         /** Note: actually this method is never called in MultiLevelExpIndListAdapter,
          * that's why it's not strictly required that you implement this function and so
@@ -165,6 +165,10 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
             if (mNotifyOnChange)
                 notifyItemRangeRemoved(0, size);
         }
+    }
+
+    public List<ExpIndData> getData() {
+        return mData;
     }
 
     /**

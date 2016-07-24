@@ -302,7 +302,12 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	}
 
-    // this is very stinky..
+	@Override
+	public int getIndentation() {
+		return 0;
+	}
+
+	// this is very stinky..
     //public void setRestClient(HttpClient restClient) {
     //    this.restClient = restClient;
     //}

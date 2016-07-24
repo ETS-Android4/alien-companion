@@ -75,22 +75,16 @@
             android:defaultValue="true"/>
 
         <CheckBoxPreference
+            android:key="commentNav"
+            android:title="FAB comment navigation"
+            android:summary="Easily navigate between top level parent comments"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
             android:key="swipeRefresh"
             android:title="Swipe to refresh"
             android:summary="Pull down to refresh posts/comments"
             android:defaultValue="true"/>
-
-        <CheckBoxPreference
-            android:key="commentNav"
-            android:title="FAB comment navigation"
-            android:summary="Easily navigate between parent comments"
-            android:defaultValue="true" />
-
-        <!--<CheckBoxPreference
-            android:key="newSubredditWindow"
-            android:title="View subreddit in new window"
-            android:summary="Subreddits you view via the 'Subreddit' option open in a new window"
-            android:defaultValue="false"/>-->
 
         <ListPreference
             android:key="navDrawerSide"

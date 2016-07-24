@@ -30,6 +30,8 @@ import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.Utils;
 
+import java.util.List;
+
 /**
  * Created by George on 5/17/2015.
  */
@@ -252,6 +254,39 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             default:
                 throw new IllegalStateException("unknown viewType");
         }
+    }
+
+    public int findNextParentCommentIndex(int start) {
+        int index = -1;
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(item.getIndentation()==0) {
+                index = getData().indexOf(item);
+                break;
+            }
+        }
+        return index;
+    }
+
+    public int findPreviousParentCommentIndex(int start) {
+        int index = -1;
+        if(start-1>=0) {
+            for(int i=start-1;i>=0;i--) {
+                ExpIndData item = getData().get(i);
+                if(item.getIndentation()==0) {
+                    index = getData().indexOf(item);
+                    break;
+                }
+            }
+            //List<ExpIndData> sublist = getData().subList(1, start);
+            //for (ExpIndData item : sublist) {
+            //    if (item.getIndentation() == 0) {
+            //        index = getData().indexOf(item);
+            //        break;
+            //    }
+            //}
+        }
+        return index;
     }
 
     @Override
