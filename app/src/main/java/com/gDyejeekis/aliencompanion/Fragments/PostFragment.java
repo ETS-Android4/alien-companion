@@ -63,8 +63,6 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean titleUpdated;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
-    private FloatingActionButton fab_up;
-    private FloatingActionButton fab_down;
     public LoadCommentsTask task;
 
     private boolean updateActionBar = false;
@@ -264,9 +262,10 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.GONE);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_postList);
+        final LinearLayout layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
         if(MyApplication.commentNavigation) {
-            fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
-            fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
+            FloatingActionButton fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
+            FloatingActionButton fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
             ColorStateList color = (MyApplication.nightThemeEnabled) ? ColorStateList.valueOf(Color.parseColor("#404040")) : ColorStateList.valueOf(MyApplication.colorPrimary);
             fab_up.setBackgroundTintList(color);
             fab_down.setBackgroundTintList(color);
@@ -284,7 +283,6 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             });
         }
         else {
-            LinearLayout layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
             layoutFab.setVisibility(View.GONE);
         }
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
@@ -300,10 +298,22 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (MyApplication.swipeRefresh && mLayoutManager.findFirstCompletelyVisibleItemPosition()==0) {
-                    swipeRefreshLayout.setEnabled(true);
+                if(MyApplication.swipeRefresh) {
+                    if (mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                        swipeRefreshLayout.setEnabled(true);
+                    }
+                    else {
+                        swipeRefreshLayout.setEnabled(false);
+                    }
                 }
-                else swipeRefreshLayout.setEnabled(false);
+
+                if(MyApplication.commentNavigation) {
+                    if (mLayoutManager.findLastVisibleItemPosition() == postAdapter.getData().size() - 1) {
+                        layoutFab.setVisibility(View.GONE);
+                    } else {
+                        layoutFab.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         });
 
@@ -361,10 +371,11 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     private void nextParentComment() {
-        int start = mLayoutManager.findLastCompletelyVisibleItemPosition();
-        if(start==RecyclerView.NO_POSITION) {
-            start = mLayoutManager.findLastVisibleItemPosition();
-        }
+        //int start = mLayoutManager.findLastCompletelyVisibleItemPosition();
+        //if(start==RecyclerView.NO_POSITION) {
+        //    start = mLayoutManager.findLastVisibleItemPosition();
+        //}
+        int start = mLayoutManager.findFirstVisibleItemPosition();
         int index = postAdapter.findNextParentCommentIndex(start);
         if(index!=-1) {
             mLayoutManager.scrollToPositionWithOffset(index, 0);
@@ -372,13 +383,14 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     }
 
     private void previousParentComment() {
-        int start = mLayoutManager.findFirstCompletelyVisibleItemPosition();
-        if(start==RecyclerView.NO_POSITION) {
-            start = mLayoutManager.findFirstVisibleItemPosition();
-        }
+        //int start = mLayoutManager.findFirstCompletelyVisibleItemPosition();
+        //if(start==RecyclerView.NO_POSITION) {
+        //    start = mLayoutManager.findFirstVisibleItemPosition();
+        //}
+        int start = mLayoutManager.findFirstVisibleItemPosition();
         int index = postAdapter.findPreviousParentCommentIndex(start);
         if(index!=-1) {
-            mLayoutManager.scrollToPosition(index);
+            mLayoutManager.scrollToPositionWithOffset(index, 0);
         }
     }
 

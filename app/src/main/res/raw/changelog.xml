@@ -8,8 +8,7 @@
         <changelogtext>Added SD card support (enable in settings)</changelogtext>
         <changelogtext>Added pause/resume and cancel buttons to the sync notification</changelogtext>
         <changelogtext>Syncing now auto-pauses when interrupted due to network/reddit error and auto-resumes as soon as the error is resolved</changelogtext>
-        <changelogtext>Added FAB comment navigation between top level parent comments</changelogtext>
-        <changelogtext>Added option to enable/disable FAB comment navigation in the settings</changelogtext>
+        <changelogtext>Added FAB comment navigation between top level parent comments (enabled by default, can be disabled in settings)</changelogtext>
         <changelogtext>Revamped 'Small cards' view (long tap for options)</changelogtext>
         <changelogtext>Small tweaks to 'Cards' view</changelogtext>
         <changelogtext>i.reddituploads.com images now open in the image viewer and cache properly when syncing</changelogtext>
