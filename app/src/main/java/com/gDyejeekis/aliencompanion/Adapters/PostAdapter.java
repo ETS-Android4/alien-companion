@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.Activities.PostActivity;
+import com.gDyejeekis.aliencompanion.AsyncTasks.LoadMoreCommentsTask;
 import com.gDyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
@@ -25,10 +28,14 @@ import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
+import com.gDyejeekis.aliencompanion.Models.MoreComment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.Utils;
+
+import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.List;
 
@@ -40,34 +47,41 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     /**
      * View type of an item or group.
      */
-    public static final int VIEW_TYPE_ITEM = 0;
+    public static final int VIEW_TYPE_ITEM = 1;
 
     /**
      * View type of the content.
      */
-    public static final int VIEW_TYPE_CONTENT = 1;
+    public static final int VIEW_TYPE_CONTENT = 0;
+
+    public static final int VIEW_TYPE_MORE = 9;
 
     /**
      * This is called when the user click on an item or group.
      */
-    private final View.OnClickListener mListener;
-    private final View.OnLongClickListener mLongListener;
+    //private final View.OnClickListener mListener;
+    //private final View.OnLongClickListener mLongListener;
 
-    private final Activity activity;
+    private PostActivity activity;
 
     /**
      * Unit of indentation.
      */
     private final int mPaddingDP = 5;
 
+    private static final String[] indColors = {"#000000", "#3366FF", "#E65CE6",
+            "#E68A5C", "#00E68A", "#CCCC33"};
+
+    private static final int upvoteColor = Color.parseColor("#ff8b60");
+
+    private static final int downvoteColor = Color.parseColor("#9494ff");
+
     private String author = "";
     public int selectedPosition;
 
-    public PostAdapter (Activity activity, View.OnClickListener listener, View.OnLongClickListener longListener) {
+    public PostAdapter (PostActivity activity) {
         super();
         this.activity = activity;
-        mListener = listener;
-        mLongListener = longListener;
         selectedPosition = -1;
     }
 
@@ -81,8 +95,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 viewHolder = new CommentViewHolder(v);
-                v.setOnClickListener(mListener);
-                v.setOnLongClickListener(mLongListener);
+                //v.setOnClickListener(mListener);
+                //v.setOnLongClickListener(mLongListener);
+                break;
+            case VIEW_TYPE_MORE:
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.comment_list_item_more, parent, false);
+                viewHolder = new MoreViewHolder(v);
                 break;
             case VIEW_TYPE_CONTENT:
                 resource = R.layout.post_details_card;
@@ -99,33 +118,109 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
         final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
                 .findFragmentByTag("postFragment");
         int viewType = getItemViewType(position);
         switch (viewType) {
             case VIEW_TYPE_ITEM:
-                CommentViewHolder cvh = (CommentViewHolder) viewHolder;
+                final CommentViewHolder cvh = (CommentViewHolder) viewHolder;
                 final Comment comment = (Comment) getItemAt(position);
 
+                //modify based on indentation
+                if (comment.getIndentation() == 0) {
+                    cvh.colorBand.setVisibility(View.GONE);
+                    cvh.setPaddingLeft(0);
+                } else {
+                    cvh.colorBand.setVisibility(View.VISIBLE);
+                    cvh.setColorBandColor(comment.getIndentation());
+                    int leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (comment.getIndentation() - 1);
+                    cvh.setPaddingLeft(leftPadding);
+                }
+
+                //modify depending on if group or not
+                if (comment.isGroup()) {
+                    cvh.commentHidden.setVisibility(View.VISIBLE);
+                    int hiddenComments = comment.getGroupSize();
+                    if (hiddenComments + 1 == 1)
+                        cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
+                    else {
+                        cvh.hiddenCommentsCountTextView.setVisibility(View.VISIBLE);
+                        cvh.hiddenCommentsCountTextView.setText("+" + Integer.toString(hiddenComments));
+                    }
+                    cvh.commentTextView.setVisibility(View.GONE);
+                }
+                else {
+                    cvh.commentHidden.setVisibility(View.GONE);
+                    cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
+                    cvh.commentTextView.setVisibility(View.VISIBLE);
+                }
+
+                //check if current selected position
+                if (selectedPosition == position) {
+                    cvh.commentLayout.setBackgroundColor(MyApplication.colorPrimaryLight);
+                    cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
+                    CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
+                    cvh.upvote.setOnClickListener(listener);
+                    cvh.downvote.setOnClickListener(listener);
+                    cvh.reply.setOnClickListener(listener);
+                    cvh.viewUser.setOnClickListener(listener);
+                    cvh.more.setOnClickListener(listener);
+                } else {
+                    //Comment permalink case
+                    if (comment.getIdentifier().equals(postFragment.commentLinkId))
+                        cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
+                    else cvh.commentLayout.setBackground(null);
+
+                    cvh.commentOptionsLayout.setVisibility(View.GONE);
+                }
+                //cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
+
+                //set listeners
+                cvh.rootLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = cvh.getAdapterPosition();
+                        int previousPosition = selectedPosition;
+                        selectedPosition = -1;
+                        notifyItemChanged(previousPosition);
+                        toggleGroup(pos);
+                    }
+                });
+                cvh.rootLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if(!comment.isGroup()) {
+                            int pos = cvh.getAdapterPosition();
+                            int previousPosition = selectedPosition;
+                            if (pos == selectedPosition) selectedPosition = -1;
+                            else selectedPosition = pos;
+                            notifyItemChanged(previousPosition);
+                            notifyItemChanged(selectedPosition);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                //bind comment data
                 cvh.score.setText(Long.toString(comment.getScore()));
                 String ageString = " pts · " + comment.agePrepared;
-                if(comment.getEdited()) ageString += "*";
+                if (comment.getEdited()) ageString += "*";
                 cvh.age.setText(ageString);
 
                 //Author textview
-                if(author.equals(comment.getAuthor())) {
+                if (author.equals(comment.getAuthor())) {
                     cvh.authorTextView.setTextColor(Color.WHITE);
                     cvh.authorTextView.setBackgroundResource(R.drawable.rounded_corner_blue);
-                }
-                else {
+                } else {
                     cvh.authorTextView.setTextColor(Color.parseColor("#5972ff"));
                     cvh.authorTextView.setBackgroundColor(Color.TRANSPARENT);
                 }
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                if(MyApplication.useMarkdownParsing) {
+                if (MyApplication.useMarkdownParsing) {
 
                 }
                 else {
@@ -142,11 +237,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                         @Override
                         public void onClick(View widget) {
-                            //int previousSelected = selectedPosition;
-                            selectedPosition = (selectedPosition == position) ? -1 : position;
-                            //notifyItemChanged(previousSelected);
-                            //notifyItemChanged(selectedPosition);
-                            notifyDataSetChanged();
+                            int previousSelected = selectedPosition;
+                            int pos = cvh.getAdapterPosition();
+                            selectedPosition = (selectedPosition == pos) ? -1 : pos;
+                            notifyItemChanged(previousSelected);
+                            notifyItemChanged(selectedPosition);
+                            //notifyDataSetChanged();
                         }
 
                         @Override
@@ -159,61 +255,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
                 }
 
-                if (comment.getIndentation() == 0) {
-                    cvh.colorBand.setVisibility(View.GONE);
-                    cvh.setPaddingLeft(0);
-                } else {
-                    cvh.colorBand.setVisibility(View.VISIBLE);
-                    cvh.setColorBandColor(comment.getIndentation());
-                    int leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (comment.getIndentation() - 1);
-                    cvh.setPaddingLeft(leftPadding);
-                }
-
-                if (comment.isGroup()) {
-                    cvh.commentHidden.setVisibility(View.VISIBLE);
-                    int hiddenComments = comment.getGroupSize();
-                    if(hiddenComments+1 == 1) cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
-                    else {
-                        cvh.hiddenCommentsCountTextView.setVisibility(View.VISIBLE);
-                        cvh.hiddenCommentsCountTextView.setText("+" + Integer.toString(hiddenComments));
-                    }
-                    cvh.commentTextView.setVisibility(View.GONE);
-                } else {
-                    cvh.commentHidden.setVisibility(View.GONE);
-                    cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
-                    cvh.commentTextView.setVisibility(View.VISIBLE);
-                }
-
-                if(selectedPosition == position) {
-                    cvh.commentLayout.setBackgroundColor(MyApplication.colorPrimaryLight);
-                    cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
-                    CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
-                    cvh.upvote.setOnClickListener(listener);
-                    cvh.downvote.setOnClickListener(listener);
-                    cvh.reply.setOnClickListener(listener);
-                    cvh.viewUser.setOnClickListener(listener);
-                    cvh.more.setOnClickListener(listener);
-                }
-                else {
-                    //Comment permalink case
-                    if(comment.getIdentifier().equals(postFragment.commentLinkId))
-                        cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
-                    else cvh.commentLayout.setBackground(null);
-
-                    cvh.commentOptionsLayout.setVisibility(View.GONE);
-                }
-
-                cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
-
                 //user logged in
-                if(MyApplication.currentUser != null) {
+                if (MyApplication.currentUser != null) {
                     //check user vote
                     if (comment.getLikes().equals("true")) {
-                        cvh.score.setTextColor(CommentViewHolder.upvoteColor);
+                        cvh.score.setTextColor(upvoteColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
                         cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
                     } else if (comment.getLikes().equals("false")) {
-                        cvh.score.setTextColor(CommentViewHolder.downvoteColor);
+                        cvh.score.setTextColor(downvoteColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
                         cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
                     } else {
@@ -222,7 +272,41 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
                     }
                 }
+                break;
+            case VIEW_TYPE_MORE:
+                final MoreViewHolder moreViewHolder = (MoreViewHolder) viewHolder;
+                final MoreComment moreComment = (MoreComment) getItemAt(position);
 
+                if (moreComment.getIndentation() == 0) {
+                    moreViewHolder.colorBand.setVisibility(View.GONE);
+                    moreViewHolder.setPaddingLeft(0);
+                } else {
+                    moreViewHolder.colorBand.setVisibility(View.VISIBLE);
+                    moreViewHolder.setColorBandColor(moreComment.getIndentation());
+                    int leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (moreComment.getIndentation() - 1);
+                    moreViewHolder.setPaddingLeft(leftPadding);
+                }
+
+                if(moreComment.isLoadingMore()) {
+                    moreViewHolder.rootLayout.setOnClickListener(null);
+                    moreViewHolder.moreReplies.setVisibility(View.GONE);
+                    moreViewHolder.loadMore.setText("loading...");
+                }
+                else {
+                    moreViewHolder.rootLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            int pos = moreViewHolder.getAdapterPosition();
+                            moreComment.setLoadingMore(true);
+                            notifyItemChanged(pos);
+                            LoadMoreCommentsTask task = new LoadMoreCommentsTask(activity, moreComment);
+                            task.execute();
+                        }
+                    });
+                    moreViewHolder.moreReplies.setVisibility(View.VISIBLE);
+                    moreViewHolder.moreReplies.setText("(" + moreComment.getMoreCommentIds().size() + " replies)");
+                    moreViewHolder.loadMore.setText("load more comments");
+                }
                 break;
             case VIEW_TYPE_CONTENT:
                 PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
@@ -287,9 +371,40 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0)
+        if (position == 0) {
             return VIEW_TYPE_CONTENT;
-        return VIEW_TYPE_ITEM;
+        }
+        return getItemAt(position).getViewType();
+    }
+
+    public static class MoreViewHolder extends RecyclerView.ViewHolder {
+
+        private View view;
+        public View colorBand;
+        public LinearLayout rootLayout;
+        //public FlowLayout moreLayout;
+        public TextView loadMore;
+        public TextView moreReplies;
+
+        public MoreViewHolder(View v) {
+            super(v);
+            view = v;
+            colorBand = v.findViewById(R.id.color_band);
+            rootLayout = (LinearLayout) v.findViewById(R.id.rootLayout);
+            //moreLayout = (FlowLayout) v.findViewById(R.id.moreLayout);
+            loadMore = (TextView) v.findViewById(R.id.textView_load_more);
+            moreReplies = (TextView) v.findViewById(R.id.textView_more_replies);
+        }
+
+        public void setColorBandColor(int indentation) {
+            int index = (indentation >= indColors.length) ? (indentation - indColors.length)+1 : indentation;
+            int color = Color.parseColor(indColors[index]);
+            colorBand.setBackgroundColor(color);
+        }
+
+        public void setPaddingLeft(int paddingLeft) {
+            view.setPadding(paddingLeft,0,0,0);
+        }
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -301,22 +416,18 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView score;
         public TextView age;
         private View view;
+        public LinearLayout rootLayout;
         public LinearLayout commentLayout;
         public LinearLayout commentOptionsLayout;
+        public FlowLayout moreLayout;
         public ImageView upvote;
         public ImageView downvote;
         public ImageView reply;
         public ImageView viewUser;
         public ImageView more;
-        public static int upvoteColor, downvoteColor;
-
-        private static final String[] indColors = {"#000000", "#3366FF", "#E65CE6",
-                "#E68A5C", "#00E68A", "#CCCC33"};
 
         public CommentViewHolder(View itemView) {
             super(itemView);
-            upvoteColor = Color.parseColor("#ff8b60");
-            downvoteColor = Color.parseColor("#9494ff");
             view = itemView;
             authorTextView = (TextView) itemView.findViewById(R.id.author_textview);
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);
@@ -332,7 +443,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             reply = (ImageView) itemView.findViewById(R.id.btn_reply);
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
+            rootLayout = (LinearLayout) itemView.findViewById(R.id.rootLayout);
+            moreLayout = (FlowLayout) itemView.findViewById(R.id.moreLayout);
 
+            commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
         }
 
         public void setColorBandColor(int indentation) {

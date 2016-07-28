@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
@@ -15,10 +16,12 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -50,14 +53,6 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
         return bodyHTML;
     }
 
-    public SpannableStringBuilder getPreparedText() {
-        return bodyPrepared;
-    }
-
-    public void storePreparedText(SpannableStringBuilder stringBuilder) {
-        bodyPrepared = stringBuilder;
-    }
-
     private String author;			// Username of the author
     private String parentId;		// Parent identifier
     private String subreddit;		// Subreddit name
@@ -78,7 +73,6 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
     private Integer upvotes;        // Number of upvotes that this body received
     private Integer downvotes;      // Number of downvotes that this body received
 
-    public SpannableStringBuilder bodyPrepared;
     public String agePrepared;
 
     private boolean mIsGroup;
@@ -128,7 +122,6 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
                 bodyHTML = ConvertUtils.modifySpoilerHtml(bodyHTML);
             }
 
-            //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
             setIndentation(0);
@@ -149,6 +142,12 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
         bodyHTML = message.bodyHTML;
         created = message.created;
         createdUTC = message.createdUTC;
+    }
+
+    public Comment(JSONObject obj, JSONArray jsonArray) {
+        super(safeJsonToString(obj.get("name")), jsonArray);
+        setIndentation(0);
+        setParentId(safeJsonToString("parent_id"));
     }
 
     public List<? extends MultiLevelExpIndListAdapter.ExpIndData> getChildren() {

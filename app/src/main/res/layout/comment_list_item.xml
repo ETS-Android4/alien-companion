@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/rootLayout">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -20,15 +21,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/listPreferredItemHeight"
-            android:background="?attr/themeSelector"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/bodyLayout"
+            android:background="?attr/themeSelector">
 
             <org.apmem.tools.layouts.FlowLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:layoutDirection="ltr">
+                android:layoutDirection="ltr"
+                android:id="@+id/toggleLayout">
 
                 <TextView
                     android:layout_width="wrap_content"

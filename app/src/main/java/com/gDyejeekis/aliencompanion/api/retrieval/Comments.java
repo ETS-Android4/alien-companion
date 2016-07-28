@@ -1,9 +1,5 @@
 package com.gDyejeekis.aliencompanion.api.retrieval;
 
-import android.content.Context;
-import android.text.Html;
-import android.text.SpannableStringBuilder;
-
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 import java.util.ArrayList;
@@ -14,10 +10,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Kind;
+import com.gDyejeekis.aliencompanion.Models.MoreComment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
@@ -42,6 +37,12 @@ public class Comments implements ActorDriven {
 
     private HttpClient httpClient;
     private User user;
+
+	private boolean syncRetrieval = false;
+
+	public void setSyncRetrieval(boolean flag) {
+		syncRetrieval = flag;
+	}
 
     /**
      * Constructor. Global default user (null) is used.
@@ -111,14 +112,11 @@ public class Comments implements ActorDriven {
 	            String kind = safeJsonToString(data.get("kind"));
 				if (kind != null) {
 					if (kind.equals(Kind.COMMENT.value())) {
-
-                        // Contents of the comment
-                        data = ((JSONObject) data.get("data"));
-
-                        // Create and add the new comment
+						// Contents of the comment
+						data = ((JSONObject) data.get("data"));
+						//create and add the new comment
                         comment = new Comment(data);
-                        comments.add(comment);
-
+						comments.add(comment);
                     }
 				}
 			}
@@ -239,12 +237,15 @@ public class Comments implements ActorDriven {
                         parseRecursive(comment.getReplies(), replies);
                     }
 
-                } else if (kind.equals(Kind.MORE.value())) {
+                }
+				else if (!syncRetrieval && kind.equals(Kind.MORE.value())) {
 
-                    //data = (JSONObject) data.get("data");
-                    //JSONArray children = (JSONArray) data.get("children");
-                    //System.out.println("\t+ More children: " + children);
-
+					data = (JSONObject) data.get("data");
+					JSONArray jsonArray = (JSONArray) data.get("children");
+					if (jsonArray!=null && jsonArray.size()!=0) {
+						comment = new MoreComment(data, jsonArray);
+						comments.add(comment);
+					}
                 }
 			}
 
@@ -418,23 +419,16 @@ public class Comments implements ActorDriven {
 	//	}
 	//}
 
-	public static void indentCommentTree(Context context, List<Comment> comments) {
+	public static void indentCommentTree(List<Comment> comments) {
 		for(Comment c : comments) {
-			//prepareCommentBody(context, c);
 			List<Comment> replies = c.getReplies();
-			if(replies.size() != 0) {
+			if(replies!=null && replies.size() != 0) {
 				for(Comment r : replies) {
 					r.setIndentation(c.getIndentation()+1);
-					//prepareCommentBody(context, r);
-					indentCommentTree(context, replies);
+					indentCommentTree(replies);
 				}
 			}
 		}
-	}
-
-	public static void prepareCommentBody(Context context, Comment comment) { //TODO: deleted everything related to 'preparedBody'
-		//comment.bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
-		comment.bodyPrepared = ConvertUtils.modifyURLSpan(context, comment.bodyPrepared);
 	}
 	
 	/**

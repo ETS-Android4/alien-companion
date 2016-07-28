@@ -54,6 +54,9 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
      * See MyComment in the sample app to see an example of how to implement this.
      */
     public interface ExpIndData {
+
+        int getViewType();
+
         /**
          * @return The children of this item.
          */
@@ -142,7 +145,7 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
         for(ExpIndData d : data) {
             add(d);
             Collection<? extends ExpIndData> children = d.getChildren();
-            if(children.size() != 0) {
+            if(children!=null && children.size() != 0) {
                 addAll(children);
             }
         }

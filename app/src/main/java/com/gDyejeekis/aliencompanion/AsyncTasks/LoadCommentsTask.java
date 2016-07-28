@@ -80,6 +80,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     protected List<Comment> doInBackground(Void... unused) {
         try {
             List<Comment> comments;
+            //Log.d("GEOTEST", "RETRIEVING COMMENTS");
             if(MyApplication.offlineModeEnabled) {
                 Submission post = readPostFromFile(postFragment.post.getIdentifier());
                 if(post==null) {
@@ -99,7 +100,10 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 comments = cmnts.ofSubmission(postFragment.post, postFragment.commentLinkId, postFragment.parentsShown, depth,
                         MyApplication.initialCommentCount, postFragment.commentSort);
             }
-            Comments.indentCommentTree(context, comments);
+            //Log.d("GEOTEST", "RETRIEVAL COMPLETE");
+            //Log.d("GEOTEST", "INDENTING COMMENTS");
+            Comments.indentCommentTree(comments);
+            //Log.d("GEOTEST", "WE GUCCI");
 
             return comments;
         } catch (RetrievalFailedException | RedditError | NullPointerException | IOException e) {
@@ -138,6 +142,8 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 postFragment.noResponseObject = false;
                 postFragment.postAdapter.commentsRefreshed(postFragment.post, comments);
             }
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -25,6 +25,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadCommentsTask;
@@ -45,14 +46,14 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     //private static final String GROUPS_KEY = "groups_key";
 
     public PostAdapter postAdapter;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private AppCompatActivity activity;
+    private PostActivity activity;
     public Submission post;
     public CommentSort commentSort;
     public ProgressBar progressBar;
@@ -63,6 +64,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     public boolean titleUpdated;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
+    private LinearLayout layoutFab;
     public LoadCommentsTask task;
 
     private boolean updateActionBar = false;
@@ -163,7 +165,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
+        this.activity = (PostActivity) activity;
     }
 
     @Override
@@ -262,7 +264,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.GONE);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_postList);
-        final LinearLayout layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
+        layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
         if(MyApplication.commentNavigation) {
             FloatingActionButton fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
             FloatingActionButton fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
@@ -308,7 +310,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
                 }
 
                 if(MyApplication.commentNavigation) {
-                    if (mLayoutManager.findLastVisibleItemPosition() == postAdapter.getData().size() - 1) {
+                    if (mLayoutManager.findLastCompletelyVisibleItemPosition() == postAdapter.getData().size() - 1) {
                         layoutFab.setVisibility(View.GONE);
                     } else {
                         layoutFab.setVisibility(View.VISIBLE);
@@ -321,7 +323,7 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         //if(!currentlyLoading) {
             if (postAdapter == null) {
                 //currentlyLoading = true;
-                postAdapter = new PostAdapter(activity, this, this);
+                postAdapter = new PostAdapter(activity);
 
                 if (loadFromList) postAdapter.add(post);
                 else progressBar.setVisibility(View.VISIBLE);
@@ -345,30 +347,30 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         refreshComments();
     }
 
-    @Override
-    public void onClick(View v) {
-        int position = mRecyclerView.getChildPosition(v);
-        int previousPosition = postAdapter.selectedPosition;
-        postAdapter.selectedPosition = -1;
-        postAdapter.notifyItemChanged(previousPosition);
-        postAdapter.toggleGroup(position);
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        int position = mRecyclerView.getChildPosition(v);
-        if(!postAdapter.getItemAt(position).isGroup()) {
-            int previousPosition = postAdapter.selectedPosition;
-            if (position == postAdapter.selectedPosition) postAdapter.selectedPosition = -1;
-            else postAdapter.selectedPosition = position;
-            postAdapter.notifyItemChanged(previousPosition);
-            postAdapter.notifyItemChanged(postAdapter.selectedPosition);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    //@Override
+    //public void onClick(View v) {
+    //    int position = mRecyclerView.getChildPosition(v);
+    //    int previousPosition = postAdapter.selectedPosition;
+    //    postAdapter.selectedPosition = -1;
+    //    postAdapter.notifyItemChanged(previousPosition);
+    //    postAdapter.toggleGroup(position);
+    //}
+//
+    //@Override
+    //public boolean onLongClick(View v) {
+    //    int position = mRecyclerView.getChildPosition(v);
+    //    if(!postAdapter.getItemAt(position).isGroup()) {
+    //        int previousPosition = postAdapter.selectedPosition;
+    //        if (position == postAdapter.selectedPosition) postAdapter.selectedPosition = -1;
+    //        else postAdapter.selectedPosition = position;
+    //        postAdapter.notifyItemChanged(previousPosition);
+    //        postAdapter.notifyItemChanged(postAdapter.selectedPosition);
+    //        return true;
+    //    }
+    //    else {
+    //        return false;
+    //    }
+    //}
 
     private void nextParentComment() {
         //int start = mLayoutManager.findLastCompletelyVisibleItemPosition();
@@ -379,6 +381,9 @@ public class PostFragment extends Fragment implements View.OnClickListener, View
         int index = postAdapter.findNextParentCommentIndex(start);
         if(index!=-1) {
             mLayoutManager.scrollToPositionWithOffset(index, 0);
+        }
+        if(mLayoutManager.findLastCompletelyVisibleItemPosition() == postAdapter.getData().size() - 1) {
+            layoutFab.setVisibility(View.GONE);
         }
     }
 

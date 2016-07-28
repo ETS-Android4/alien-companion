@@ -273,6 +273,7 @@ public class DownloaderService extends IntentService {
                 return;
             }
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
+            cmntsRetrieval.setSyncRetrieval(true);
             if (syncOptions.isSyncThumbs()) {
                 downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
             }

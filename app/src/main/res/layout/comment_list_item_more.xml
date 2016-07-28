@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/color_band"
+        android:layout_width="5dp"
+        android:layout_height="match_parent"
+        android:background="#ff0000"/>
+
+    <org.apmem.tools.layouts.FlowLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/moreLayout"
+        android:padding="10dp"
+        android:background="?attr/themeSelector">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="load more comments"
+            android:id="@+id/textView_load_more"
+            android:textSize="?attr/font_small"
+            android:textColor="?attr/themeTextColor"
+            android:fontFamily="?attr/defaultFontFamily" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(### replies)"
+            android:id="@+id/textView_more_replies"
+            android:textSize="?attr/font_small"
+            android:textColor="?attr/themeTextHintColor"
+            android:fontFamily="?attr/defaultFontFamily"
+            android:layout_marginLeft="6dp" />
+    </org.apmem.tools.layouts.FlowLayout>
+
+</LinearLayout>

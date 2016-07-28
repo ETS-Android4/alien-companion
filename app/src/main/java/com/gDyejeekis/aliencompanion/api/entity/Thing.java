@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
@@ -29,6 +30,19 @@ public abstract class Thing implements Comparable<Thing>, java.io.Serializable {
         this.fullName = null;
         this.kind = null;
         this.identifier = null;
+    }
+
+    public Thing(String name, JSONArray jsonArray) {
+        if(name!=null && name.contains("_")) {
+            this.fullName = name;
+        }
+        else {
+            this.fullName = jsonArray.get(0).toString();
+            name = fullName;
+        }
+        String[] split = name.split("_");
+        this.kind = split[0];
+        this.identifier = split[1];
     }
 
     public void setName(JSONObject obj) {

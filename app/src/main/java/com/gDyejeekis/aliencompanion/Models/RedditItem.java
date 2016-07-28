@@ -1,13 +1,9 @@
 package com.gDyejeekis.aliencompanion.Models;
 
-import android.text.SpannableStringBuilder;
-
 /**
  * Created by sound on 8/28/2015.
  */
 public interface RedditItem {
-
-    //public SpannableStringBuilder preparedText = null;
 
     public int getViewType();
 
@@ -19,7 +15,4 @@ public interface RedditItem {
 
     public String getMainText();
 
-    public SpannableStringBuilder getPreparedText();
-
-    public void storePreparedText(SpannableStringBuilder stringBuilder);
 }

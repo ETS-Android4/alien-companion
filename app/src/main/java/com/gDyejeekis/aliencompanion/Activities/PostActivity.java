@@ -16,6 +16,12 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class PostActivity extends SwipeBackActivity {
 
+    private PostFragment postFragment;
+
+    public PostFragment getPostFragment() {
+        return postFragment;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getTheme().applyStyle(MyApplication.fontStyle, true);
@@ -43,7 +49,7 @@ public class PostActivity extends SwipeBackActivity {
     }
 
     private void setupFragment() {
-        PostFragment postFragment = (PostFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
+        postFragment = (PostFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
         if(postFragment == null) {
             postFragment = new PostFragment();
             getFragmentManager().beginTransaction().add(R.id.fragmentHolder, postFragment, "postFragment").commit();
