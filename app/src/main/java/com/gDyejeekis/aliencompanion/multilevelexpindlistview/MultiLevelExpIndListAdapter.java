@@ -1,7 +1,9 @@
 package com.gDyejeekis.aliencompanion.multilevelexpindlistview;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.Models.MoreComment;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
@@ -29,6 +31,8 @@ import java.util.List;
  * To see an example of how to extend this abstract class see MyAdapter.java in sampleapp.
  */
 public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
+
+    public static final String TAG = "ExpIndAdapter";
     /**
      * Indicates whether or not the observers must be notified whenever
      * {@link #mData} is modified.
@@ -119,6 +123,42 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
         mData.add(post);
         addAll(comments);
         notifyDataSetChanged();
+    }
+
+    public void commentsAdded(MoreComment moreChildren, List<Comment> comments) {
+        String parentName = moreChildren.getParentId();
+        if(parentName.startsWith("t3")) {
+            mData.remove(moreChildren);
+            mData.addAll(comments);
+            notifyDataSetChanged();
+            return;
+        }
+
+        Comment parentComment = null;
+        for(ExpIndData item : mData) {
+            if(item.getClass() == Comment.class) {
+                Comment c = (Comment) item;
+                if(c.getFullName().equals(parentName)) {
+                    parentComment = c;
+                    break;
+                }
+            }
+        }
+
+        if(parentComment!=null) {
+            int index = mData.indexOf(moreChildren);
+            mData.remove(moreChildren);
+            mData.addAll(index, comments);
+            for(Comment c : comments) {
+                c.setIndentation(parentComment.getIndentation()+1);
+            }
+            notifyDataSetChanged();
+        }
+        else {
+            moreChildren.setLoadingMore(false);
+            notifyItemChanged(mData.indexOf(moreChildren));
+            Log.d(TAG, "Failed to add more comments");
+        }
     }
 
     public void add(ExpIndData item) {

@@ -86,6 +86,8 @@ public class ApiEndpointUtils {
 
     public static final String SUBMISSIONS_GET_FRONT = "/%s.json?%s";
 
+    public static final String SUBMISSION_MORE_COMMENTS = REDDIT_BASE_API_ENDPOINT + "/morechildren.json?%s";
+
     /* Flair specific constants */
 
     public static final String USER_DELETE_SUBREDDIT_FLAIR = "/r/%s/api/deleteflair";

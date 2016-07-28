@@ -147,7 +147,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
     public Comment(JSONObject obj, JSONArray jsonArray) {
         super(safeJsonToString(obj.get("name")), jsonArray);
         setIndentation(0);
-        setParentId(safeJsonToString("parent_id"));
+        setParentId(safeJsonToString(obj.get("parent_id")));
     }
 
     public List<? extends MultiLevelExpIndListAdapter.ExpIndData> getChildren() {

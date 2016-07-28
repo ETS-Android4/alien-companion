@@ -24,6 +24,9 @@ import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.ParamFormatter;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * This class offers the following functionality:
  * 1) Parsing the results of a request into Comment objects (see <code>Comments.parseBreadth()</code> and <code>Comments.parseDepth()</code>).
@@ -384,6 +387,40 @@ public class Comments implements ActorDriven {
         return parseDepth(String.format(ApiEndpointUtils.SUBMISSION_COMMENTS, submission.getIdentifier(), params), submission);
         
     }
+
+	public List<Comment> moreChildren(String linkId, List<String> children, CommentSort sort) {
+		List<Comment> comments = new LinkedList<>();
+
+		String replies = "";
+		for(String id : children) {
+			replies = replies.concat(id);
+			if(children.indexOf(id) != children.size()-1) {
+				replies = replies.concat(",");
+			}
+		}
+		String params = "";
+		params = ParamFormatter.addParameter(params, "api_type", "json");
+		params = ParamFormatter.addParameter(params, "children", replies);
+		params = ParamFormatter.addParameter(params, "link_id", linkId);
+		params = ParamFormatter.addParameter(params, "sort", sort.value());
+
+		JSONObject object = (JSONObject) httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
+				String.format(ApiEndpointUtils.SUBMISSION_MORE_COMMENTS, params), user.getCookie()).getResponseObject();
+
+		JSONObject json = (JSONObject) object.get("json");
+		JSONObject data = (JSONObject) json.get("data");
+		JSONArray things = (JSONArray) data.get("things");
+		for(Object o : things) {
+			JSONObject jsonObject = (JSONObject) o;
+			String kind = (String) jsonObject.get("kind");
+			if(kind!=null && kind.equals(Kind.COMMENT.value())) {
+				JSONObject commentData = (JSONObject) jsonObject.get("data");
+				comments.add(new Comment(commentData));
+			}
+		}
+
+		return comments;
+	}
 
     ///**
     // * Get the comment tree from a given submission (object).
