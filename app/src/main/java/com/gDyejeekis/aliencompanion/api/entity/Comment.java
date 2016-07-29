@@ -172,7 +172,24 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     public void addChild(Comment child) {
         mChildren.add(child);
-        child.setIndentation(getIndentation() + 1);
+    }
+
+    public void addChildren(List<Comment> children) {
+        //mChildren.addAll(children);
+        for(Comment c : children) {
+            if(c.getParentId().equals(fullName)) {
+                mChildren.add(c);
+            }
+            else {
+                for(Comment parent : children) {
+                    if(parent.getFullName().equals(c.getParentId())) {
+                        c.setIndentation(parent.getIndentation()+1);
+                        parent.addChild(c);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public int getIndentation() {

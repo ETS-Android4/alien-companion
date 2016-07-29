@@ -130,6 +130,17 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
         if(parentName.startsWith("t3")) {
             mData.remove(moreChildren);
             mData.addAll(comments);
+            for(Comment c : comments) {
+                if(!c.getParentId().startsWith("t3")) {
+                    for(Comment parent : comments) {
+                        if(c.getParentId().equals(parent.getFullName())) {
+                            c.setIndentation(parent.getIndentation()+1);
+                            parent.addChild(c);
+                            break;
+                        }
+                    }
+                }
+            }
             notifyDataSetChanged();
             return;
         }
@@ -152,6 +163,8 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
             for(Comment c : comments) {
                 c.setIndentation(parentComment.getIndentation()+1);
             }
+            parentComment.getChildren().remove(moreChildren);
+            parentComment.addChildren(comments);
             notifyDataSetChanged();
         }
         else {

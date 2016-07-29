@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private PostListFragment listFragment;
-    //private PostFragment postFragment;
+    private PostFragment postFragment;
     private RecyclerView drawerContent;
     private NavDrawerAdapter adapter;
     private DrawerLayout.LayoutParams drawerParams;
@@ -148,10 +148,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setupPostFragment(PostFragment postFragment) {
-        PostFragment oldFragment = (PostFragment) fm.findFragmentByTag("postFragment");
-        if(oldFragment!=null) fm.beginTransaction().remove(oldFragment).commit();
+    public void setupPostFragment(PostFragment fragment) {
+        //postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
+        if(postFragment!=null) fm.beginTransaction().remove(postFragment).commit();
+        this.postFragment = fragment;
         fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
+    }
+
+    public PostFragment getPostFragment() {
+        return postFragment;
     }
 
     private void setupMainFragment(int containerRes) {

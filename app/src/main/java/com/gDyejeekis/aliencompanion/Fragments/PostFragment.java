@@ -53,7 +53,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private PostActivity activity;
+    private AppCompatActivity activity;
     public Submission post;
     public CommentSort commentSort;
     public ProgressBar progressBar;
@@ -165,7 +165,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (PostActivity) activity;
+        this.activity = (AppCompatActivity) activity;
     }
 
     @Override

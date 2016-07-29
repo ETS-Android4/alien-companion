@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -62,7 +63,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     //private final View.OnClickListener mListener;
     //private final View.OnLongClickListener mLongListener;
 
-    private PostActivity activity;
+    private AppCompatActivity activity;
 
     /**
      * Unit of indentation.
@@ -79,7 +80,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     private String author = "";
     public int selectedPosition;
 
-    public PostAdapter (PostActivity activity) {
+    public PostAdapter (AppCompatActivity activity) {
         super();
         this.activity = activity;
         selectedPosition = -1;

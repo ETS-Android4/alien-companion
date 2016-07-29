@@ -413,9 +413,17 @@ public class Comments implements ActorDriven {
 		for(Object o : things) {
 			JSONObject jsonObject = (JSONObject) o;
 			String kind = (String) jsonObject.get("kind");
-			if(kind!=null && kind.equals(Kind.COMMENT.value())) {
+			if(kind!=null) {
 				JSONObject commentData = (JSONObject) jsonObject.get("data");
-				comments.add(new Comment(commentData));
+				if(kind.equals(Kind.COMMENT.value())) {
+					comments.add(new Comment(commentData));
+				}
+				else if(kind.equals(Kind.MORE.value())) {
+					JSONArray jsonArray = (JSONArray) commentData.get("children");
+					if(jsonArray!=null && jsonArray.size()!=0) {
+						comments.add(new MoreComment(commentData, jsonArray));
+					}
+				}
 			}
 		}
 
