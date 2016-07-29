@@ -391,6 +391,9 @@ public class Comments implements ActorDriven {
 	public List<Comment> moreChildren(String linkId, List<String> children, CommentSort sort) {
 		List<Comment> comments = new LinkedList<>();
 
+		// Determine cookie
+		String cookie = (user == null) ? null : user.getCookie();
+
 		String replies = "";
 		for(String id : children) {
 			replies = replies.concat(id);
@@ -405,7 +408,7 @@ public class Comments implements ActorDriven {
 		params = ParamFormatter.addParameter(params, "sort", sort.value());
 
 		JSONObject object = (JSONObject) httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-				String.format(ApiEndpointUtils.SUBMISSION_MORE_COMMENTS, params), user.getCookie()).getResponseObject();
+				String.format(ApiEndpointUtils.SUBMISSION_MORE_COMMENTS, params), cookie).getResponseObject();
 
 		JSONObject json = (JSONObject) object.get("json");
 		JSONObject data = (JSONObject) json.get("data");
