@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.OAuthActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -62,25 +63,31 @@ public class BrowserFragment extends Fragment {
             //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             //startActivity(intent);
             //return true;
-            if(url.substring(0, 15).equals("redditoauthtest")) {
-                Log.d(TAG, "redirect url: " + url);
-                MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
-                if(MainActivity.oauthCode != null) MainActivity.setupAccount = true;
-                activity.finish();
-                return true;
+            if(activity instanceof OAuthActivity) {
+                if (url.substring(0, 15).equals("redditoauthtest")) {
+                    Log.d(TAG, "redirect url: " + url);
+                    MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
+                    if (MainActivity.oauthCode != null) MainActivity.setupAccount = true;
+                    activity.finish();
+                    return true;
+                }
             }
-            LinkHandler linkHandler = new LinkHandler(activity, url);
-            linkHandler.setBrowserActive(true);
-            //setActionbarTitle(linkHandler.getDomain());
-            Log.d(TAG, "URL: " + url + "\ndomain: " + linkHandler.getDomain());
-            return linkHandler.handleIt();
+            else {
+                LinkHandler linkHandler = new LinkHandler(activity, url);
+                linkHandler.setBrowserActive(true);
+                Log.d(TAG, "URL: " + url + "\ndomain: " + linkHandler.getDomain());
+                return linkHandler.handleIt();
+            }
+            return false;
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             try {
-                setActionbarTitle(ConvertUtils.getDomainName(url));
+                if(syncedPagePath==null && !(activity instanceof OAuthActivity)) {
+                    setActionbarTitle(ConvertUtils.getDomainName(url));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 setActionbarTitle(url);
@@ -279,7 +286,11 @@ public class BrowserFragment extends Fragment {
     }
 
     public void setActionbarTitle(String title) {
-        activity.getSupportActionBar().setTitle(title);
+        try {
+            activity.getSupportActionBar().setTitle(title);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void goBack() {
