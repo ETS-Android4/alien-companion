@@ -11,12 +11,17 @@
         <changelogtext>Added FAB comment navigation between top level parent comments (enabled by default, can be disabled in settings)</changelogtext>
         <changelogtext>Revamped 'Small cards' view (long tap for options)</changelogtext>
         <changelogtext>Small tweaks to 'Cards' view</changelogtext>
+        <changelogtext>Added the ability to dynamically load more comments in online mode</changelogtext>
         <changelogtext>i.reddituploads.com images now open in the image viewer and cache properly when syncing</changelogtext>
         <changelogtext>YouTube playlist URLs now open in the in-app youtube player (unless youtube handling is disabled)</changelogtext>
+        <changelogtext>Link handling rules now apply when clicking on links in the in-app browser</changelogtext>
         <changelogtext>Fixed GIFs in imgur albums not loading properly</changelogtext>
         <changelogtext>Fixed imgur album/gallery URLs with only one item opening in the album view (online mode)</changelogtext>
         <changelogtext>Fixed various bugs in the 'Show synced' dialog</changelogtext>
         <changelogtext>Fixed crash sometimes occurring when performing a search</changelogtext>
+        <changelogtext>Fixed handling of m.reddit.com links</changelogtext>
+        <changelogtext>Fixed handling of (subreddit).reddit.com links</changelogtext>
+        <changelogtext>Fixed reddit live thread links not responding to clicks</changelogtext>
         <changelogtext>Webpages for which no paragraph text is found no longer get synced</changelogtext>
         <changelogtext>Changed 'Execute pending offline actions every ..' setting to 'Automatically execute pending actions' (enabled by default).
          When enabled, all pending actions execute as soon as a network connection is established. Any failed actions will attempt to execute

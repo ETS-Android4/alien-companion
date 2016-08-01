@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -24,7 +25,9 @@ import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
+import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
@@ -34,6 +37,8 @@ import java.io.File;
  * A simple {@link Fragment} subclass.
  */
 public class BrowserFragment extends Fragment {
+
+    public static final String TAG = "BrowserFragment";
 
     private WebView webView;
     private ProgressBar progressBar;
@@ -58,22 +63,28 @@ public class BrowserFragment extends Fragment {
             //startActivity(intent);
             //return true;
             if(url.substring(0, 15).equals("redditoauthtest")) {
-                Log.d("geotest", "redirect url: " + url);
+                Log.d(TAG, "redirect url: " + url);
                 MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
                 if(MainActivity.oauthCode != null) MainActivity.setupAccount = true;
                 activity.finish();
-
-                //AsyncTask.execute(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        try {
-                //            RedditOAuth.getOAuthToken(new PoliteRedditHttpClient(), code);
-                //        } catch (Exception e) {e.printStackTrace();}
-                //    }
-                //});
-
+                return true;
             }
-            return false;
+            LinkHandler linkHandler = new LinkHandler(activity, url);
+            linkHandler.setBrowserActive(true);
+            //setActionbarTitle(linkHandler.getDomain());
+            Log.d(TAG, "URL: " + url + "\ndomain: " + linkHandler.getDomain());
+            return linkHandler.handleIt();
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            try {
+                setActionbarTitle(ConvertUtils.getDomainName(url));
+            } catch (Exception e) {
+                e.printStackTrace();
+                setActionbarTitle(url);
+            }
         }
     }
 
@@ -215,10 +226,10 @@ public class BrowserFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_back:
-                webView.goBack();
+                goBack();
                 return true;
             case R.id.action_forward:
-                webView.goForward();
+                goForward();
                 return true;
             case R.id.action_open_browser:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())));
@@ -265,6 +276,18 @@ public class BrowserFragment extends Fragment {
         else {
             webView.reload();
         }
+    }
+
+    public void setActionbarTitle(String title) {
+        activity.getSupportActionBar().setTitle(title);
+    }
+
+    public void goBack() {
+        webView.goBack();
+    }
+
+    public void goForward() {
+        webView.goForward();
     }
 
 }
