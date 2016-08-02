@@ -21,10 +21,16 @@ public class HandleUrlActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MyApplication.checkAccountInit(this, new PoliteRedditHttpClient());
+        String url;
+        if(getIntent().getAction().equals(Intent.ACTION_VIEW)) {
+            url = getIntent().getDataString();
+        }
+        else {
+            url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+        }
 
-        String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         if(url!=null) {
+            MyApplication.checkAccountInit(this, new PoliteRedditHttpClient());
             if(MyApplication.offlineModeEnabled) {
                 notifySwitchedMode = true;
                 MainActivity.notifySwitchedMode = true;
