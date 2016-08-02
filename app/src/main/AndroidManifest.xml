@@ -127,8 +127,22 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
+                <data
+                    android:host="*reddit.com"
+                    android:pathPattern=".*"
+                    android:scheme="https" />
+                <data
+                    android:host="*reddit.com"
+                    android:pathPattern=".*"
+                    android:scheme="http" />
+                <data
+                    android:host="redd.it"
+                    android:pathPattern=".*"
+                    android:scheme="https" />
+                <data
+                    android:host="redd.it"
+                    android:pathPattern=".*"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
     </application>

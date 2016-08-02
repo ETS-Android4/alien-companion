@@ -12,7 +12,7 @@
         <changelogtext>Revamped 'Small cards' view (long tap for options)</changelogtext>
         <changelogtext>Small tweaks to 'Cards' view</changelogtext>
         <changelogtext>Added the ability to dynamically load more comments in online mode</changelogtext>
-        <changelogtext>Added the ability to open links in Alien Companion</changelogtext>
+        <changelogtext>Added the ability to open reddit links from other apps in Alien Companion</changelogtext>
         <changelogtext>Added the ability to share links from other apps to Alien Companion</changelogtext>
         <changelogtext>i.reddituploads.com images now open in the image viewer and cache properly when syncing</changelogtext>
         <changelogtext>YouTube playlist URLs now open in the in-app youtube player (unless youtube handling is disabled)</changelogtext>

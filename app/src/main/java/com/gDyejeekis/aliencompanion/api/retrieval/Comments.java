@@ -394,10 +394,14 @@ public class Comments implements ActorDriven {
 		// Determine cookie
 		String cookie = (user == null) ? null : user.getCookie();
 
+		final int maxReplies = 950;
+
+		final int limit = (children.size()<=maxReplies) ? children.size() : maxReplies;
+
 		String replies = "";
-		for(String id : children) {
+		for(String id : children.subList(0, limit)) {
 			replies = replies.concat(id);
-			if(children.indexOf(id) != children.size()-1) {
+			if(children.indexOf(id) != limit-1) {
 				replies = replies.concat(",");
 			}
 		}
