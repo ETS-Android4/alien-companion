@@ -16,6 +16,7 @@ import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -84,6 +85,15 @@ public class SubredditActivity extends SwipeBackActivity {
         if(listFragment == null) {
             listFragment = new PostListFragment();
             fm.beginTransaction().add(container, listFragment, "listFragment").commit();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(HandleUrlActivity.notifySwitchedMode) {
+            HandleUrlActivity.notifySwitchedMode = false;
+            ToastUtils.displayShortToast(this, "Switched to online mode");
         }
     }
 

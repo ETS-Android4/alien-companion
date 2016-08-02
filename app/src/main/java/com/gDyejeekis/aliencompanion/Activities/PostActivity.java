@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -53,6 +54,15 @@ public class PostActivity extends SwipeBackActivity {
         if(postFragment == null) {
             postFragment = new PostFragment();
             getFragmentManager().beginTransaction().add(R.id.fragmentHolder, postFragment, "postFragment").commit();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(HandleUrlActivity.notifySwitchedMode) {
+            HandleUrlActivity.notifySwitchedMode = false;
+            ToastUtils.displayShortToast(this, "Switched to online mode");
         }
     }
 

@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean setupAccount = false;
     public static boolean notifyDrawerChanged = false;
-    public static boolean restartApp = false;
     public static String oauthCode;
 
     @Override
@@ -220,21 +219,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        if(restartApp) {
-            restartApp = false;
-            SharedPreferences.Editor editor = MyApplication.prefs.edit();
-            editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
-            editor.apply();
-            String subreddit;
-            if(listFragment.isOther && listFragment.subreddit.equals("synced")) {
-                subreddit = null;
-            }
-            else {
-                subreddit = listFragment.subreddit;
-            }
-            getNavDrawerAdapter().restartApp(subreddit, listFragment.isMulti, false, listFragment.submissionSort, listFragment.timeSpan);
-        }
         super.onResume();
+
+        if(HandleUrlActivity.notifySwitchedMode) {
+            HandleUrlActivity.notifySwitchedMode = false;
+            ToastUtils.displayShortToast(this, "Switched to online mode");
+        }
 
         listFragment.loadMore = MyApplication.endlessPosts;
 
