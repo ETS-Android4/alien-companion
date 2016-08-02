@@ -222,6 +222,9 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         if(restartApp) {
             restartApp = false;
+            SharedPreferences.Editor editor = MyApplication.prefs.edit();
+            editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
+            editor.apply();
             String subreddit;
             if(listFragment.isOther && listFragment.subreddit.equals("synced")) {
                 subreddit = null;
