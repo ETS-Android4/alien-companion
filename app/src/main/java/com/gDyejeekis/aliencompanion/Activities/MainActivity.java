@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean setupAccount = false;
     public static boolean notifyDrawerChanged = false;
+    public static boolean notifySwitchedMode = false;
     public static String oauthCode;
 
     @Override
@@ -224,6 +225,13 @@ public class MainActivity extends AppCompatActivity {
         if(HandleUrlActivity.notifySwitchedMode) {
             HandleUrlActivity.notifySwitchedMode = false;
             ToastUtils.displayShortToast(this, "Switched to online mode");
+        }
+
+        if(notifySwitchedMode) {
+            notifySwitchedMode = false;
+            if(listFragment.subreddit!=null && listFragment.isOther && listFragment.subreddit.equals("synced")) {
+                listFragment.changeSubreddit(null);
+            }
         }
 
         listFragment.loadMore = MyApplication.endlessPosts;

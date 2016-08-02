@@ -27,6 +27,7 @@ public class HandleUrlActivity extends AppCompatActivity {
         if(url!=null) {
             if(MyApplication.offlineModeEnabled) {
                 notifySwitchedMode = true;
+                MainActivity.notifySwitchedMode = true;
                 MyApplication.offlineModeEnabled = false;
                 MainActivity.notifyDrawerChanged = true;
                 SharedPreferences.Editor editor = MyApplication.prefs.edit();
