@@ -50,16 +50,11 @@ public class MessageCheckService extends IntentService {
     public void onHandleIntent(Intent i) {
         if(!MessageActivity.isActive) {
             Log.d(TAG, "Checking for new messages..");
-            if (MyApplication.currentAccount == null) {
-                MyApplication.currentAccount = MyApplication.getCurrentAccount(this);
-            }
+            HttpClient httpClient = new PoliteRedditHttpClient();
+            MyApplication.checkAccountInit(this, httpClient);
 
             try {
                 if (MyApplication.currentAccount.loggedIn) {
-                    HttpClient httpClient = new PoliteRedditHttpClient();
-                    MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
-                    MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
-
                     Messages msgRetrieval = new Messages(httpClient, MyApplication.currentUser);
                     List<RedditItem> messages = msgRetrieval.ofUser(MessageCategory.INBOX, MessageCategorySort.UNREAD, -1, 1000, null, null, true);
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();

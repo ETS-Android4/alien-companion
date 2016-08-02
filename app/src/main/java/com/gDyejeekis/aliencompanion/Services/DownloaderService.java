@@ -40,6 +40,7 @@ import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -128,9 +129,7 @@ public class DownloaderService extends IntentService {
 
     @Override
     public void onHandleIntent(Intent i) {
-        if(MyApplication.currentAccount == null) {
-            MyApplication.currentAccount = MyApplication.getCurrentAccount(this);
-        }
+        MyApplication.checkAccountInit(this, httpClient);
         //Log.d("SYNC_DEBUG", "DownloaderService onHandleIntent...");
 
         //List<String> subreddits = i.getStringArrayListExtra("subreddits");

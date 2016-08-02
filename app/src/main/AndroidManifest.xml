@@ -6,19 +6,18 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name=".MyApplication">
+        android:theme="@style/AppTheme">
         <receiver android:name=".BroadcastReceivers.OnBootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver android:name=".BroadcastReceivers.ConnectivityChangeReceiver">
@@ -28,110 +27,102 @@
         </receiver>
         <receiver android:name=".BroadcastReceivers.SyncStateReceiver">
             <intent-filter>
-                <action android:name="com.gDyejeekis.aliencompanion.SYNC_CANCEL"/>
-                <action android:name="com.gDyejeekis.aliencompanion.SYNC_PAUSE"/>
-                <action android:name="com.gDyejeekis.aliencompanion.SYNC_RESUME"/>
+                <action android:name="com.gDyejeekis.aliencompanion.SYNC_CANCEL" />
+                <action android:name="com.gDyejeekis.aliencompanion.SYNC_PAUSE" />
+                <action android:name="com.gDyejeekis.aliencompanion.SYNC_RESUME" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".Activities.SplashActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.MainActivity"
+            android:name=".Activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/MainActivityTheme" >
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
+            android:theme="@style/MainActivityTheme"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.PostActivity"
+            android:name=".Activities.PostActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_post" >
-        </activity>
+            android:label="@string/title_activity_post"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.BrowserActivity"
+            android:name=".Activities.BrowserActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_browser" >
-        </activity>
+            android:label="@string/title_activity_browser"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.UserActivity"
+            android:name=".Activities.UserActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_user" >
-        </activity>
+            android:label="@string/title_activity_user"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.SearchActivity"
+            android:name=".Activities.SearchActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_search" >
-        </activity>
+            android:label="@string/title_activity_search"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_prefs"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.SubredditActivity"
+            android:name=".Activities.SubredditActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_subreddit" >
-        </activity>
+            android:label="@string/title_activity_subreddit"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.SubmitActivity"
+            android:name=".Activities.SubmitActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_submit_post" >
-        </activity>
+            android:label="@string/title_activity_submit_post"></activity>
 
         <service
-            android:name="com.gDyejeekis.aliencompanion.Services.DownloaderService"
-            android:enabled="true" >
-        </service>
-        <service android:name=".Services.MessageCheckService" android:enabled="true" />
-        <service android:name=".Services.PendingActionsService" android:enabled="true" />
+            android:name=".Services.DownloaderService"
+            android:enabled="true"></service>
+        <service
+            android:name=".Services.MessageCheckService"
+            android:enabled="true" />
+        <service
+            android:name=".Services.PendingActionsService"
+            android:enabled="true" />
 
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.MessageActivity"
+            android:name=".Activities.MessageActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_message" >
-        </activity>
+            android:label="@string/title_activity_message"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.OAuthActivity"
+            android:name=".Activities.OAuthActivity"
             android:configChanges="orientation|screenSize"
-            android:label="OAuthActivity" >
-        </activity>
+            android:label="OAuthActivity"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.EditSubredditsActivity"
+            android:name=".Activities.EditSubredditsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="My subreddits" >
-        </activity>
+            android:label="My subreddits"></activity>
         <activity
-            android:name="com.gDyejeekis.aliencompanion.Activities.EditMultisActivity"
+            android:name=".Activities.EditMultisActivity"
             android:configChanges="orientation|screenSize"
-            android:label="My multireddits" >
-        </activity>
+            android:label="My multireddits"></activity>
         <activity
             android:name=".Activities.SyncProfilesActivity"
             android:configChanges="orientation|screenSize"
-            android:label="Sync profiles" >
-        </activity>
+            android:label="Sync profiles"></activity>
         <activity
             android:name=".Activities.PendingUserActionsActivity"
             android:configChanges="orientation|screenSize"
-            android:label="Pending actions" >
-        </activity>
+            android:label="Pending actions"></activity>
         <activity
             android:name=".Activities.ImageActivity"
-            android:theme="@style/Theme.Transparent"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Transparent"></activity>
+        <activity android:name=".Activities.HandleUrlActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
         </activity>
     </application>
 

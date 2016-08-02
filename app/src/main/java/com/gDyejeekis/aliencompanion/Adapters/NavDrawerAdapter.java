@@ -685,7 +685,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
+    public void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
         //Intent i = activity.getBaseContext().getPackageManager()
         //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
         //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -7,12 +7,10 @@
     <string name="welcome_message">
         Hello everyone,
         \n\n
-        This update took a little longer than I\'d like but it\'s finally here and I think most of you will
-        appreciate all the new features and improvements. For this version, I decided to focus on improving offline
-        functionality, adding some QoL features and fixing as many bugs as I could find. Some of the highlights of this
-        update:
-        \n
-        \n
+        This update took a little longer than I\'d like but it\'s finally here and it brings many new features and
+        improvements. For this version, I decided to focus on improving offline functionality, adding some QoL features
+        and fixing as many bugs as I could find. Some of the highlights of this update:
+        \n\n
         • Ability to sync individual posts
         \n
         • Pause/resume and cancel buttons to control syncing
@@ -25,16 +23,15 @@
         \n
         • Dynamically load more comments in online mode
         \n
-        •
-        \n
-        \n
+        • Ability to share links to Alien Companion
+        \n\n
         As always, the full changelog is available in the settings. Have a nice day!
 
     </string>
-<!-- Activity Title -->
+    <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
     <string name="title_activity_options">SettingsActivity</string>
-<!-- Navigation Drawer -->
+    <!-- Navigation Drawer -->
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="drawer_profile">Profile</string>
@@ -49,25 +46,25 @@
     <string name="reddit_videos">videos</string>
     <string name="reddit_worldnews">worldnews</string>
     <string name="reddit_technology">technology</string>
-<!-- Acton Bar -->
+    <!-- Acton Bar -->
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="action_sort">Sort</string>
     <string name="action_refresh">Refresh</string>
-<!-- Action Bar Sort -->
+    <!-- Action Bar Sort -->
     <string name="sort_hot">What\'s Hot</string>
     <string name="sort_new">New</string>
     <string name="sort_rising">Rising</string>
     <string name="sort_top">Top</string>
     <string name="sort_controversial">Controversial</string>
-<!-- Action Bar Sort Time -->
+    <!-- Action Bar Sort Time -->
     <string name="sort_hour">Hour</string>
     <string name="sort_day">Day</string>
     <string name="sort_week">Week</string>
     <string name="sort_month">Month</string>
     <string name="sort_year">Year</string>
     <string name="sort_all">All</string>
-<!-- Action Bar Sort Comments -->
+    <!-- Action Bar Sort Comments -->
     <string name="sort_comments_top">Top</string>
     <string name="sort_comments_best">Best</string>
     <string name="sort_comments_new">New</string>
@@ -75,21 +72,21 @@
     <string name="sort_comments_controversial">Controversial</string>
     <string name="sort_comments_random">Random</string>
     <string name="sort_comments_confidence">Confidence</string>
-<!-- Main Options Title Strings -->
+    <!-- Main Options Title Strings -->
     <string name="options_general">General</string>
     <string name="options_appearance">Appearance</string>
     <string name="options_navigation">Navigation</string>
     <string name="options_posts">Posts</string>
     <string name="options_comments">Comments</string>
     <string name="options_other">Other</string>
-<!-- Main Options Subtitle -->
+    <!-- Main Options Subtitle -->
     <string name="options_general_sub">General reader settings</string>
     <string name="options_appearance_sub">Change fonts, colors, themes and more</string>
     <string name="options_navigation_sub">Change the way you interact with the reader</string>
     <string name="options_posts_sub">Post specific options</string>
     <string name="options_comments_sub">Comment specific options</string>
     <string name="options_other_sub">Everything else</string>
-<!-- Other Strings -->
+    <!-- Other Strings -->
     <string name="enter_subreddit">enter subreddit</string>
     <string name="enter_user">enter user</string>
     <string name="frontpage_title">Frontpage</string>

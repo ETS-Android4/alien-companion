@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean setupAccount = false;
     public static boolean notifyDrawerChanged = false;
+    public static boolean restartApp = false;
     public static String oauthCode;
 
     @Override
@@ -219,6 +220,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        if(restartApp) {
+            restartApp = false;
+            String subreddit;
+            if(listFragment.isOther && listFragment.subreddit.equals("synced")) {
+                subreddit = null;
+            }
+            else {
+                subreddit = listFragment.subreddit;
+            }
+            getNavDrawerAdapter().restartApp(subreddit, listFragment.isMulti, false, listFragment.submissionSort, listFragment.timeSpan);
+        }
         super.onResume();
 
         listFragment.loadMore = MyApplication.endlessPosts;

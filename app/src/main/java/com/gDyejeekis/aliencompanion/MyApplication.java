@@ -18,6 +18,7 @@ import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -539,5 +540,15 @@ public class MyApplication extends Application {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void checkAccountInit(Context context, HttpClient httpClient) {
+        if (MyApplication.currentAccount == null) {
+            MyApplication.currentAccount = MyApplication.getCurrentAccount(context);
+            MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
+            if(MyApplication.currentAccount.loggedIn) {
+                MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
+            }
+        }
     }
 }
