@@ -139,7 +139,7 @@ public class StorageUtils {
 
         File[] externalDirs = ContextCompat.getExternalFilesDirs(context, null);
         File externalDir = (externalDirs.length > 1) ? externalDirs[1] : externalDirs[0];
-        return externalDir != null;
+        return externalDir != null && Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
         //String state = Environment.getExternalStorageState();
         //boolean mExternalStorageAvailable = false;
         //boolean mExternalStorageWriteable = false;

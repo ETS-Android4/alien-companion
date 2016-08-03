@@ -5,7 +5,8 @@
         <changelogtext>Added the ability to sync individual posts. Any posts synced this way will be available by tapping on 'Synced' under 'Other'
          on the navigation drawer</changelogtext>
         <changelogtext>Added shortcut to saved posts under 'Other' on the navigation drawer</changelogtext>
-        <changelogtext>Added SD card support (enable in settings)</changelogtext>
+        <changelogtext>Added SD card support (enable in settings, try rebooting your device if it doesn't
+            function properly)</changelogtext>
         <changelogtext>Added pause/resume and cancel buttons to the sync notification</changelogtext>
         <changelogtext>Syncing now auto-pauses when interrupted due to network/reddit error and auto-resumes as soon as the error is resolved</changelogtext>
         <changelogtext>Added FAB comment navigation between top level parent comments (enabled by default, can be disabled in settings)</changelogtext>

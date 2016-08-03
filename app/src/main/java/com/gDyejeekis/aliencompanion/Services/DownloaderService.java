@@ -427,6 +427,7 @@ public class DownloaderService extends IntentService {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            // TODO: 8/3/2016 stop syncing and show failed notification
         }
     }
 
