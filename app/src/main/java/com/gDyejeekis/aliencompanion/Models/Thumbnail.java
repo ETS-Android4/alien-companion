@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 public class Thumbnail implements Serializable {
 
+    private static final long serialVersionUID = 1234544L;
+
     private String url;
     private boolean hasThumbnail;
     private boolean isSelf;

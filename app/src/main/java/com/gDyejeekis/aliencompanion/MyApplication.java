@@ -43,7 +43,7 @@ public class MyApplication extends Application {
 
     public static final boolean showWelcomeMsgThisVersion = true;
 
-    public static final boolean deleteAppDataThisVersion = false;
+    public static final boolean deleteAppDataThisVersion = true;
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 

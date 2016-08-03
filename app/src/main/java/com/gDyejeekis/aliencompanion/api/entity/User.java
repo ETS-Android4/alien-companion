@@ -38,6 +38,8 @@ import okhttp3.RequestBody;
  */
 public class User implements Serializable {
 
+    private static final long serialVersionUID = 12345199L;
+
     private final String username;
     private final HttpClient httpClient;
     private String modhash, cookie, password;

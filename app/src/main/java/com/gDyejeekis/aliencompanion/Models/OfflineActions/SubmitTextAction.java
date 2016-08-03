@@ -16,6 +16,8 @@ import java.util.UUID;
  */
 public class SubmitTextAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234559L;
+
     public static final String ACTION_NAME = "Submit text";
 
     public static final int ACTION_TYPE = 3;

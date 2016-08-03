@@ -14,6 +14,8 @@ import java.io.Serializable;
  */
 public class UnhideAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234561L;
+
     public static final String ACTION_NAME = "Unhide";
 
     public static final int ACTION_TYPE = 6;

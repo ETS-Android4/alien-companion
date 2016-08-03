@@ -8,6 +8,8 @@ import java.util.List;
  */
 public abstract class ImgurItem implements Serializable {
 
+    private static final long serialVersionUID = 1234524L;
+
     public abstract String getId();
 
     public abstract boolean isAlbum();

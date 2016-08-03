@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class SyncProfile implements Serializable {
 
+    private static final long serialVersionUID = 1234542L;
+
     static class TimeWindow {
 
         long windowStart;

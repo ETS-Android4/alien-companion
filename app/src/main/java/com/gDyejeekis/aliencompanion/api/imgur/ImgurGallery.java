@@ -16,6 +16,8 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
  */
 public class ImgurGallery extends ImgurItem implements Serializable {
 
+    private static final long serialVersionUID = 1234522L;
+
     private String id;
     private boolean isAlbum;
     private boolean isAnimated;

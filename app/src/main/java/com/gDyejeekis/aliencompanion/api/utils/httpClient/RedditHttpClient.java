@@ -37,6 +37,8 @@ import okhttp3.RequestBody;
  */
 public class RedditHttpClient implements HttpClient, Serializable {
 
+    private static final long serialVersionUID = 1234531L;
+
     public static final String TAG = "RedditHttpClient";
 
     private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/ubercharge_ready)";

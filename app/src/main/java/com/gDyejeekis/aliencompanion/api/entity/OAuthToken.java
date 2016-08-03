@@ -20,6 +20,8 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
  */
 public class OAuthToken implements Serializable {
 
+    private static final long serialVersionUID = 1234591L;
+
     public String accessToken;
     public String tokenType;
     public long expiresIn;

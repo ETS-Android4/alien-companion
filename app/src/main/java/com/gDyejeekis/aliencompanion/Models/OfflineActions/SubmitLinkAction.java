@@ -16,6 +16,8 @@ import java.util.UUID;
  */
 public class SubmitLinkAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234558L;
+
     public static final String ACTION_NAME = "Submit link";
 
     public static final int ACTION_TYPE = 2;

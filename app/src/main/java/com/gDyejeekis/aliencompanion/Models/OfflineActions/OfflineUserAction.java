@@ -17,6 +17,8 @@ import java.util.List;
  */
 public abstract class OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234555L;
+
     public static final int PREVIEW_LENGTH = 40;
 
     protected String actionName;

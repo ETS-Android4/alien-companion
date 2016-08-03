@@ -13,6 +13,8 @@ import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
  * @see <a href="http://www.reddit.com/dev/api#fullname">Reddit API Reference</a>
  */
 public abstract class Thing implements Comparable<Thing>, java.io.Serializable {
+
+    private static final long serialVersionUID = 1234500L;
     
 	/**
 	 * Constructor. Must be called.

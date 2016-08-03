@@ -16,6 +16,8 @@ import java.util.UUID;
  */
 public class CommentAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234551L;
+
     public static final String ACTION_NAME = "Comment";
 
     public static final int ACTION_TYPE = 0;

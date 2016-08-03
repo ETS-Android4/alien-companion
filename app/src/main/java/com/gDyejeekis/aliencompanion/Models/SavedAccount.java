@@ -12,6 +12,8 @@ import java.util.List;
  */
 public class SavedAccount implements Serializable {
 
+    private static final long serialVersionUID = 1234541L;
+
     private String username;
     private String modhash;
     private String cookie;

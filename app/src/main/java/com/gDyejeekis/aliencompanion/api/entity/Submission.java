@@ -37,6 +37,8 @@ import java.util.List;
  */
 public class Submission extends Thing implements Serializable, MultiLevelExpIndListAdapter.ExpIndData, RedditItem {
 
+	private static final long serialVersionUID = 1234511L;
+
 	public int getViewType(){
 		return RedditItemListAdapter.VIEW_TYPE_POST;
 	}

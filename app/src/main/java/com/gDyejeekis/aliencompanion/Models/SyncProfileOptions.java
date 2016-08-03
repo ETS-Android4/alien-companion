@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 public class SyncProfileOptions implements Serializable {
 
+    private static final long serialVersionUID = 1234543L;
+
     public int getSyncPostCount() {
         return syncPostCount;
     }

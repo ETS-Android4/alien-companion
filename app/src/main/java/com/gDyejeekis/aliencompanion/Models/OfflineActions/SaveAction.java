@@ -14,6 +14,8 @@ import java.io.Serializable;
  */
 public class SaveAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234557L;
+
     public static final String ACTION_NAME = "Save";
 
     public static final int ACTION_TYPE = 5;

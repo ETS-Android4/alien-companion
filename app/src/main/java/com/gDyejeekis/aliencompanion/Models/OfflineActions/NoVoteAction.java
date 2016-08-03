@@ -14,6 +14,8 @@ import java.io.Serializable;
  */
 public class NoVoteAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234554L;
+
     public static final String ACTION_NAME = "No vote";
 
     public static final int ACTION_TYPE = 4;

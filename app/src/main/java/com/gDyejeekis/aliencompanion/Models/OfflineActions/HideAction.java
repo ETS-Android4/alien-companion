@@ -14,6 +14,8 @@ import java.io.Serializable;
  */
 public class HideAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234553L;
+
     public static final String ACTION_NAME = "Hide";
 
     public static final int ACTION_TYPE = 6;

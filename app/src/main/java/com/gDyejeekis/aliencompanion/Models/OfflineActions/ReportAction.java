@@ -14,6 +14,8 @@ import java.io.Serializable;
  */
 public class ReportAction extends OfflineUserAction implements Serializable {
 
+    private static final long serialVersionUID = 1234556L;
+
     public static final String ACTION_NAME = "Report";
 
     public static final int ACTION_TYPE = 1;

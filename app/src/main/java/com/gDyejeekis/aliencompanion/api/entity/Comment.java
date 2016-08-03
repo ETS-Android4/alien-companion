@@ -33,6 +33,8 @@ import org.json.simple.JSONObject;
  */
 public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpIndData, RedditItem, Serializable {
 
+    private static final long serialVersionUID = 1234512L;
+
     public int getViewType(){
         return RedditItemListAdapter.VIEW_TYPE_USER_COMMENT;
     }
