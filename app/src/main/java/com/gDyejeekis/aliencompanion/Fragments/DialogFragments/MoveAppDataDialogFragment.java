@@ -84,15 +84,18 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                     }
 
                     //find any pictures in primary external directory and move them to secondary (SD card)
-                    for(File file : picturesDir.listFiles()) {
-                        if(file.isDirectory()) {
-                            File subredditDir = new File(externalPicsDir + "/" + file.getName());
-                            if(!subredditDir.exists()) {
-                                subredditDir.mkdir();
-                            }
-                            File[] pics = file.listFiles();
-                            for(File pic : pics) {
-                                StorageUtils.moveFileBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
+                    File[] picDirs = picturesDir.listFiles();
+                    if(picDirs!=null && picDirs.length!=0) {
+                        for (File file : picDirs) {
+                            if (file.isDirectory()) {
+                                File subredditDir = new File(externalPicsDir + "/" + file.getName());
+                                if (!subredditDir.exists()) {
+                                    subredditDir.mkdir();
+                                }
+                                File[] pics = file.listFiles();
+                                for (File pic : pics) {
+                                    StorageUtils.moveFileBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
+                                }
                             }
                         }
                     }
@@ -103,15 +106,18 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                         StorageUtils.moveFileBetweenDisks(file, internalDir.getAbsolutePath());
                     }
 
-                    for(File file : externalPicsDir.listFiles()) {
-                        if(file.isDirectory()) {
-                            File subredditDir = new File(picturesDir + "/" + file.getName());
-                            if(!subredditDir.exists()) {
-                                subredditDir.mkdir();
-                            }
-                            File[] pics = file.listFiles();
-                            for(File pic : pics) {
-                                StorageUtils.moveFileBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
+                    File[] picDirs = externalPicsDir.listFiles();
+                    if(picDirs!=null && picDirs.length!=0) {
+                        for (File file : picDirs) {
+                            if (file.isDirectory()) {
+                                File subredditDir = new File(picturesDir + "/" + file.getName());
+                                if (!subredditDir.exists()) {
+                                    subredditDir.mkdir();
+                                }
+                                File[] pics = file.listFiles();
+                                for (File pic : pics) {
+                                    StorageUtils.moveFileBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
+                                }
                             }
                         }
                     }
