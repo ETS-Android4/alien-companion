@@ -19,6 +19,7 @@ import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -444,19 +445,7 @@ public class MyApplication extends Application {
 
     public static void scheduleMessageCheckService(final Context context) {
         Log.d(TAG, "Scheduling MessageCheckService..");
-        if(MyApplication.currentAccount == null) {
-            MyApplication.currentAccount = getCurrentAccount(context);
-        }
-
-        //int timer = 0;
-        //while(MyApplication.currentAccount==null) {
-        //    if(timer >= 5000) {
-        //        Log.d(TAG, "Scheduling of MessageCheckService failed");
-        //        return;
-        //    }
-        //    timer += 100;
-        //    SystemClock.sleep(100);
-        //}
+        checkAccountInit(context, new PoliteRedditHttpClient());
 
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, MessageCheckService.class);
