@@ -18,10 +18,7 @@ public class SettingsActivity extends BackNavActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_settings);
         if(MyApplication.nightThemeEnabled)
@@ -29,7 +26,6 @@ public class SettingsActivity extends BackNavActivity {
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(MyApplication.currentColor);
-        //currentColor = MainActivity.colorPrimary;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
         toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);

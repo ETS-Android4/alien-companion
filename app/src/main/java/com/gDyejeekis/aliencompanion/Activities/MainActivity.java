@@ -85,17 +85,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         setOrientation();
-        MyApplication.setThemeRelatedFields();
-        getTheme().applyStyle(MyApplication.fontStyle, true);
-        getTheme().applyStyle(MyApplication.fontFamily, true);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else {
-            getTheme().applyStyle(R.style.selectedTheme_day, true);
-        }
-
+        //MyApplication.setThemeRelatedFields(this);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         //if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
         //    // Activity was brought to front and not created,
@@ -300,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             listFragment.redrawList();
         }
 
-        if(!MyApplication.nightThemeEnabled && MyApplication.currentColor != MyApplication.colorPrimary) {
+        if(MyApplication.currentBaseTheme < MyApplication.DARK_THEME && MyApplication.currentColor != MyApplication.colorPrimary) {
             MyApplication.currentColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
             toolbar.setBackgroundColor(MyApplication.colorPrimary);

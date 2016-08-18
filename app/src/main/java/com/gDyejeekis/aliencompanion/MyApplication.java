@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -60,6 +61,16 @@ public class MyApplication extends Application {
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
 
     public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+
+    public static final int LIGHT_THEME = 0;
+
+    public static final int MATERIAL_BLUE_THEME = 1;
+
+    public static final int MATERIAL_GREY_THEME = 2;
+
+    public static final int DARK_THEME = 3;
+
+    public static final int DARK_THEME_LOW_CONTRAST = 4;
 
     public static int textHintDark;
 
@@ -131,6 +142,8 @@ public class MyApplication extends Application {
     public static boolean syncWebpages;
     public static boolean preferExternalStorage;
 
+    public static int currentBaseTheme;
+
     public static boolean newMessages;
     //public static boolean messageServiceActive;
     public static int messageCheckInterval;
@@ -156,6 +169,8 @@ public class MyApplication extends Application {
     public static String accountUsernameChanged;
     public static String newAccountAccessToken;
 
+    public static boolean themeFieldsInitialized = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -165,8 +180,8 @@ public class MyApplication extends Application {
     }
 
     private void initStaticFields() {
-        textHintDark = getResources().getColor(R.color.hint_dark);
-        textHintLight = getResources().getColor(R.color.hint_light);
+        textHintDark = getResources().getColor(R.color.darkHintText);
+        textHintLight = getResources().getColor(R.color.lightHintText);
         primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
         primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
         primaryLightColors = getResources().getStringArray(R.array.colorPrimaryLightValues);
@@ -181,28 +196,89 @@ public class MyApplication extends Application {
         //savedAccounts = readAccounts();
     }
 
-    public static void setThemeRelatedFields() {
+    public static void setThemeRelatedFields(Context context) {
+        themeFieldsInitialized = true;
+        currentBaseTheme = prefs.getInt("baseTheme", LIGHT_THEME);
+        nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+        switch(currentBaseTheme) {
+            case LIGHT_THEME:
+                currentColor = colorPrimary;
+                int index = getCurrentColorIndex();
+                colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
+                colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
+                textColor = Color.BLACK;
+                textHintColor = textHintLight;
+                linkColor = MyApplication.colorPrimary;
+                commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+                break;
+            case MATERIAL_BLUE_THEME:
+                currentColor = colorPrimary;
+                index = getCurrentColorIndex();
+                colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
+                colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
+                textColor = Color.WHITE;
+                textHintColor = textHintDark;
+                linkColor = MyApplication.colorPrimary;
+                commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA"); // TODO: 8/18/2016 maybe changes this
+                break;
+            case MATERIAL_GREY_THEME:
+                currentColor = colorPrimary;
+                index = getCurrentColorIndex();
+                colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
+                colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
+                textColor = Color.WHITE;
+                textHintColor = textHintDark;
+                linkColor = MyApplication.colorPrimary;
+                commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA"); // TODO: 8/18/2016 maybe change this
+                break;
+            case DARK_THEME:
+                currentColor = Color.parseColor("#181818");
+                colorPrimaryDark = Color.BLACK;
+                colorPrimaryLight = Color.parseColor("#2e2e2e");
+                textColor = Color.WHITE;
+                textHintColor = textHintDark;
+                linkColor = Color.parseColor("#0080FF");
+                commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+                break;
+            case DARK_THEME_LOW_CONTRAST:
+                currentColor = Color.parseColor("#181818");
+                colorPrimaryDark = Color.BLACK;
+                colorPrimaryLight = Color.parseColor("#2e2e2e");
+                textColor = context.getResources().getColor(R.color.lowContrastText);
+                textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
+                linkColor = context.getResources().getColor(R.color.lowContrastLinkText);
+                commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+                break;
+        }
+    }
+
+    public static void applyCurrentTheme(Activity activity) {
+        if(!themeFieldsInitialized) {
+            Log.d(TAG, "Theme related fields not initialized, initializing..");
+            setThemeRelatedFields(activity);
+        }
+        activity.getTheme().applyStyle(MyApplication.fontStyle, true);
+        activity.getTheme().applyStyle(MyApplication.fontFamily, true);
         if(nightThemeEnabled) {
-            currentColor = Color.parseColor("#181818");
-            colorPrimaryDark = Color.BLACK;
-            colorPrimaryLight = Color.parseColor("#2e2e2e");
-            textColor = Color.WHITE;
-            textHintColor = textHintDark;
-            linkColor = Color.parseColor("#0080FF");
-            commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+            activity.getTheme().applyStyle(R.style.PopupDarkTheme, true);
         }
-        else {
-            currentColor = colorPrimary;
-            //colorPrimaryDark = getPrimaryDarkColor(primaryColors, primaryDarkColors);
-            int index = getCurrentColorIndex();
-            colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
-            colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
-            textColor = Color.BLACK;
-            textHintColor = textHintLight;
-            linkColor = MyApplication.colorPrimary;
-            commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+        switch(currentBaseTheme) {
+            case LIGHT_THEME:
+                activity.getTheme().applyStyle(R.style.selectedTheme_day, true);
+                break;
+            case MATERIAL_BLUE_THEME:
+                activity.getTheme().applyStyle(R.style.selectedTheme_material_blue, true);
+                break;
+            case MATERIAL_GREY_THEME:
+                activity.getTheme().applyStyle(R.style.selectedTheme_material_grey, true);
+                break;
+            case DARK_THEME:
+                activity.getTheme().applyStyle(R.style.selectedTheme_night, true);
+                break;
+            case DARK_THEME_LOW_CONTRAST:
+                activity.getTheme().applyStyle(R.style.selectedTheme_night_low_contrast, true);
+                break;
         }
-        //currentColor = colorPrimary;
     }
 
     public static int getCurrentColorIndex() {
@@ -325,7 +401,6 @@ public class MyApplication extends Application {
 
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
-        nightThemeEnabled = prefs.getBoolean("nightTheme", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
         fontStyle = Integer.parseInt(prefs.getString("fontSize", "2"));
         switch (fontStyle) {

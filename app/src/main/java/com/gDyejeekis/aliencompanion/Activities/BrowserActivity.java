@@ -18,16 +18,10 @@ public class BrowserActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MyApplication.fontStyle, true);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
-        if(MyApplication.currentColor==0) MyApplication.setThemeRelatedFields();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
         toolbar.setBackgroundColor(MyApplication.currentColor);

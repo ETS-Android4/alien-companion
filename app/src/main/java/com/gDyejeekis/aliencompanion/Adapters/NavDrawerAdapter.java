@@ -26,6 +26,7 @@ import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.NavDrawer
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.OtherItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners.SubredditsListener;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.BaseThemesDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
@@ -525,12 +526,20 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 headerViewHolder.headerLayout.setBackgroundColor(MyApplication.currentColor);
                 headerViewHolder.currentAccount.setText(currentAccountName);
 
-                String themeButtonText = (MyApplication.nightThemeEnabled) ? "Light theme" : "Dark theme";
-                headerViewHolder.themeButton.setText(themeButtonText);
+                //String themeButtonText = (MyApplication.nightThemeEnabled) ? "Light theme" : "Dark theme";
+                //headerViewHolder.themeButton.setText(themeButtonText);
+                //headerViewHolder.themeButton.setOnClickListener(new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View view) {
+                //        showThemeSwitchDialog();
+                //    }
+                //});
+
+                headerViewHolder.themeButton.setText("Base theme");
                 headerViewHolder.themeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        showThemeSwitchDialog();
+                    public void onClick(View v) {
+                        showThemesDialog();
                     }
                 });
 
@@ -603,18 +612,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 boolean isOther = activity.getListFragment().isOther;
                 if ((subreddit.toLowerCase().equals(currentSubreddit) && !isMulti && !isOther) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
-                    if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.name.setTextColor(Color.WHITE);
-                    else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
-                    if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedDark));
-                    else
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedLight));
+                    highlightSelectedItem(subredditRowViewHolder);
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
-                    else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                    setBackgroundSelector(subredditRowViewHolder);
                 }
                 break;
             case VIEW_TYPE_ACCOUNT:
@@ -640,18 +642,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 currentSubreddit = activity.getListFragment().subreddit;
                 isMulti = activity.getListFragment().isMulti;
                 if (multireddit.getName().toLowerCase().equals(currentSubreddit) && isMulti) {
-                    if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.name.setTextColor(Color.WHITE);
-                    else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
-                    if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedDark));
-                    else
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedLight));
+                    highlightSelectedItem(subredditRowViewHolder);
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
-                    else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                    setBackgroundSelector(subredditRowViewHolder);
                 }
                 break;
             case VIEW_TYPE_OTHER_ITEM:
@@ -662,18 +657,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 currentSubreddit = activity.getListFragment().subreddit;
                 isOther = activity.getListFragment().isOther;
                 if (otherItem.getName().toLowerCase().equals(currentSubreddit) && isOther) {
-                    if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.name.setTextColor(Color.WHITE);
-                    else subredditRowViewHolder.name.setTextColor(MyApplication.colorPrimary);
-                    if (MyApplication.nightThemeEnabled)
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedDark));
-                    else
-                        subredditRowViewHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.drawerSubredditSelectedLight));
+                    highlightSelectedItem(subredditRowViewHolder);
                 }
                 else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
-                    if(MyApplication.nightThemeEnabled) subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
-                    else subredditRowViewHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                    setBackgroundSelector(subredditRowViewHolder);
                 }
                 break;
             case VIEW_TYPE_OTHER:
@@ -682,6 +670,51 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
+        }
+    }
+
+    private void setBackgroundSelector(SubredditRowViewHolder vHolder) {
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.LIGHT_THEME:
+                vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
+                break;
+            case MyApplication.MATERIAL_BLUE_THEME:
+                vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_material_blue));
+                break;
+            case MyApplication.MATERIAL_GREY_THEME:
+                vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_material_grey));
+                break;
+            case MyApplication.DARK_THEME:
+                vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
+                break;
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
+                break;
+        }
+    }
+
+    private void highlightSelectedItem(SubredditRowViewHolder vHolder) {
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.LIGHT_THEME:
+                vHolder.name.setTextColor(MyApplication.colorPrimary);
+                vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.lightDrawerItemSelected));
+                break;
+            case MyApplication.MATERIAL_BLUE_THEME:
+                vHolder.name.setTextColor(MyApplication.colorPrimary);
+                vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.materialBlueDrawerItemSelected));
+                break;
+            case MyApplication.MATERIAL_GREY_THEME:
+                vHolder.name.setTextColor(MyApplication.colorPrimary);
+                vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.materialGreyDrawerItemSelected));
+                break;
+            case MyApplication.DARK_THEME:
+                vHolder.name.setTextColor(MyApplication.textColor);
+                vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
+                break;
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                vHolder.name.setTextColor(MyApplication.textColor);
+                vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
+                break;
         }
     }
 
@@ -703,22 +736,31 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         activity.startActivity(i);
     }
 
-    private void showThemeSwitchDialog() {
-        String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
-        //text += " (App will restart)";
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                MyApplication.nightThemeEnabled = !MyApplication.nightThemeEnabled;
-                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
-                editor.apply();
-                PostListFragment fragment = activity.getListFragment();
-                restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
-            }
-        };
-        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
-                .setNegativeButton("No", null).show();
+    public void restartApp() {
+        PostListFragment fragment = activity.getListFragment();
+        restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
+    }
+
+    //private void showThemeSwitchDialog() {
+    //    String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
+    //    //text += " (App will restart)";
+    //    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+    //        @Override
+    //        public void onClick(DialogInterface dialog, int which) {
+    //            MyApplication.nightThemeEnabled = !MyApplication.nightThemeEnabled;
+    //            SharedPreferences.Editor editor = MyApplication.prefs.edit();
+    //            editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
+    //            editor.apply();
+    //            restartApp();
+    //        }
+    //    };
+    //    new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+    //            .setNegativeButton("No", null).show();
+    //}
+
+    private void showThemesDialog() {
+        BaseThemesDialogFragment dialogFragment = new BaseThemesDialogFragment();
+        dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     public void showOfflineSwitchDialog() {

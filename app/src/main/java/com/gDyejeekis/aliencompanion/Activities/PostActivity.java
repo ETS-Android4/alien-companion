@@ -25,17 +25,10 @@ public class PostActivity extends SwipeBackActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MyApplication.fontStyle, true);
-        getTheme().applyStyle(MyApplication.fontFamily, true);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
 
-        if(MyApplication.currentColor==0) MyApplication.setThemeRelatedFields();
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(MyApplication.currentColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);

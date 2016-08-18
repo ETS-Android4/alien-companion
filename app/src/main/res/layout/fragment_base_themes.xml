@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/themeBackgroundColor">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/white" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="LIGHT"
+            android:id="@+id/radioButtonLight"
+            android:layout_weight="1"
+            android:textColor="?attr/themeTextColor"
+            android:layout_marginLeft="12dp"
+            android:textSize="16sp"
+            android:checked="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@color/materialBlueBackground" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="MATERIAL BLUE GREY"
+            android:id="@+id/radioButtonMaterialBlue"
+            android:layout_weight="1"
+            android:textColor="?attr/themeTextColor"
+            android:layout_marginLeft="12dp"
+            android:textSize="16sp"
+            android:checked="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@color/materialGreyBackground" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="MATERIAL GREY"
+            android:id="@+id/radioButtonMaterialGrey"
+            android:layout_weight="1"
+            android:textColor="?attr/themeTextColor"
+            android:layout_marginLeft="12dp"
+            android:textSize="16sp"
+            android:checked="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/black" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="DARK"
+            android:id="@+id/radioButtonDark"
+            android:layout_weight="1"
+            android:textColor="?attr/themeTextColor"
+            android:layout_marginLeft="12dp"
+            android:textSize="16sp"
+            android:checked="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:color/black" />
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="DARK (LOW CONTRAST)"
+            android:id="@+id/radioButtonDarkLowContrast"
+            android:layout_weight="1"
+            android:textColor="?attr/themeTextColor"
+            android:layout_marginLeft="12dp"
+            android:textSize="16sp"
+            android:checked="false" />
+    </LinearLayout>
+
+</LinearLayout>

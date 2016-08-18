@@ -33,7 +33,7 @@
         <ListPreference
             android:key="toolbarColor"
             android:title="Primary color"
-            android:summary="Only applies to light mode"
+            android:summary="Doesn't apply to dark themes"
             android:entries="@array/toolbarColors"
             android:entryValues="@array/colorPrimaryValues"
             android:defaultValue="#00BCD4"/>

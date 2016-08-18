@@ -27,12 +27,24 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private int mOrientation;
 
     public DividerItemDecoration(Context context, int orientation) {
-        if(MyApplication.nightThemeEnabled) mDivider = ContextCompat.getDrawable(context, R.drawable.divider_dark_theme);
-        else {
-            final TypedArray a = context.obtainStyledAttributes(ATTRS);
-            mDivider = a.getDrawable(0);
-            a.recycle();
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.LIGHT_THEME:
+                final TypedArray a = context.obtainStyledAttributes(ATTRS);
+                mDivider = a.getDrawable(0);
+                a.recycle();
+                break;
+            case MyApplication.MATERIAL_BLUE_THEME:
+                mDivider = ContextCompat.getDrawable(context, R.drawable.divider_material_blue);
+                break;
+            case MyApplication.MATERIAL_GREY_THEME:
+                mDivider = ContextCompat.getDrawable(context, R.drawable.divider_material_grey);
+                break;
+            case MyApplication.DARK_THEME:
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                mDivider = ContextCompat.getDrawable(context, R.drawable.divider_dark_theme);
+                break;
         }
+
         setOrientation(orientation);
     }
 

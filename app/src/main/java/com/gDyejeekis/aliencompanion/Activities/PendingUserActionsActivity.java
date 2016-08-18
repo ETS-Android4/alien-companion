@@ -36,11 +36,7 @@ public class PendingUserActionsActivity extends BackNavActivity {
     @Override
     public void onCreate(Bundle bundle) {
         isActive = true;
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_pending_actions);
         if(MyApplication.nightThemeEnabled)

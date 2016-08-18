@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
@@ -41,11 +40,11 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
         Resources resources = getActivity().getResources();
         if(MyApplication.nightThemeEnabled) {
             textColor = Color.WHITE;
-            hintColor = resources.getColor(R.color.hint_dark);
+            hintColor = resources.getColor(R.color.darkHintText);
         }
         else {
             textColor = Color.BLACK;
-            hintColor = resources.getColor(R.color.hint_dark);
+            hintColor = resources.getColor(R.color.darkHintText);
         }
         postId = getArguments().getString("postId");
     }

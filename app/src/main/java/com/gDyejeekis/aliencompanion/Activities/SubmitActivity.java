@@ -23,12 +23,7 @@ public class SubmitActivity extends BackNavActivity implements DialogInterface.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getTheme().applyStyle(MyApplication.fontStyle, true);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
         if(MyApplication.nightThemeEnabled)

@@ -37,12 +37,7 @@ public class SyncProfilesActivity extends BackNavActivity implements DialogInter
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        //getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_profiles);
         if(MyApplication.nightThemeEnabled)
