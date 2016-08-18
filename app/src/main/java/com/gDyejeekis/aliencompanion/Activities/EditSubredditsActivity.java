@@ -36,12 +36,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
 
     @Override
     public void onCreate(Bundle bundle) {
-        //getTheme().applyStyle(MainActivity.fontStyle, true);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.PopupDarkTheme, true);
-            getTheme().applyStyle(R.style.selectedTheme_night, true);
-        }
-        else getTheme().applyStyle(R.style.selectedTheme_day, true);
+        MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_edit_subreddits);
         if(MyApplication.nightThemeEnabled)

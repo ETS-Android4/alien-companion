@@ -243,9 +243,9 @@
         <item name="themeTextBackgroundColor">@color/primary_dark</item>
         <item name="themeBackgroundColor">@android:color/black</item>
         <item name="themeSelector">@drawable/touch_selector_dark_theme</item>
-        <item name="themeDrawerBackgroundColor">@color/primary_dark</item>
+        <item name="themeDrawerBackgroundColor">@color/darkDrawerBackground</item>
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
-        <item name="themeDialogBackgroundColor">@color/darker_gray</item>
+        <item name="themeDialogBackgroundColor">@color/darkDialogBackground</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
         <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
@@ -259,9 +259,9 @@
         <item name="themeTextBackgroundColor">@color/primary_dark</item>
         <item name="themeBackgroundColor">@android:color/black</item>
         <item name="themeSelector">@drawable/touch_selector_dark_theme</item>
-        <item name="themeDrawerBackgroundColor">@color/primary_dark</item>
+        <item name="themeDrawerBackgroundColor">@color/darkDrawerBackground</item>
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
-        <item name="themeDialogBackgroundColor">@color/darker_gray</item>
+        <item name="themeDialogBackgroundColor">@color/darkDialogBackground</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
         <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>

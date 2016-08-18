@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/themeBackgroundColor">
+    android:background="?attr/themeDialogBackgroundColor">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -19,7 +19,7 @@
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="LIGHT"
+            android:text="Light"
             android:id="@+id/radioButtonLight"
             android:layout_weight="1"
             android:textColor="?attr/themeTextColor"
@@ -43,7 +43,7 @@
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="MATERIAL BLUE GREY"
+            android:text="Material blue grey"
             android:id="@+id/radioButtonMaterialBlue"
             android:layout_weight="1"
             android:textColor="?attr/themeTextColor"
@@ -67,7 +67,7 @@
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="MATERIAL GREY"
+            android:text="Material grey"
             android:id="@+id/radioButtonMaterialGrey"
             android:layout_weight="1"
             android:textColor="?attr/themeTextColor"
@@ -91,7 +91,7 @@
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="DARK"
+            android:text="Dark"
             android:id="@+id/radioButtonDark"
             android:layout_weight="1"
             android:textColor="?attr/themeTextColor"
@@ -115,7 +115,7 @@
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="DARK (LOW CONTRAST)"
+            android:text="Dark (low contrast)"
             android:id="@+id/radioButtonDarkLowContrast"
             android:layout_weight="1"
             android:textColor="?attr/themeTextColor"

@@ -21,7 +21,7 @@
 
     <color name="materialBlueDrawerBackground">#263238</color>
 
-    <color name="materialBlueDialogBackground">#263238</color>
+    <color name="materialBlueDialogBackground">@color/darker_gray</color>
 
     <color name="materialBlueCommentButtonBackground">#1e282d</color>
 
@@ -41,7 +41,7 @@
 
     <color name="materialGreyDrawerBackground">#424242</color>
 
-    <color name="materialGreyDialogBackground">#424242</color>
+    <color name="materialGreyDialogBackground">@color/darker_gray</color>
 
     <color name="materialGreyCommentButtonBackground">#353535</color>
 
@@ -61,9 +61,13 @@
 
     <color name="darkCommentButtonBackgroundPressed">#333333</color>
 
+    <color name="darkDrawerBackground">@color/primary_dark</color>
+
     <color name="darkDrawerItemPressed">#333333</color>
 
     <color name="darkDrawerItemSelected">#4b4b4b</color>
+
+    <color name="darkDialogBackground">@color/darker_gray</color>
 
     <color name="darkDivider">#404040</color>
 

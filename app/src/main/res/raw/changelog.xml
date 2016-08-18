@@ -2,7 +2,8 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="0.6" changeDate="Aug 30, 2016">
-
+        <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
+         and low contrast dark)</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.5" changeDate="Aug 3, 2016">
