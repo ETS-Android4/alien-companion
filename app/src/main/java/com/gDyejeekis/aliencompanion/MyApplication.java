@@ -219,7 +219,7 @@ public class MyApplication extends Application {
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
-                commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA"); // TODO: 8/18/2016 maybe changes this
+                commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialBlueCommentHighlight);
                 break;
             case MATERIAL_GREY_THEME:
                 currentColor = colorPrimary;
@@ -229,7 +229,7 @@ public class MyApplication extends Application {
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
-                commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA"); // TODO: 8/18/2016 maybe change this
+                commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialGreyCommentHighlight);
                 break;
             case DARK_THEME:
                 currentColor = Color.parseColor("#181818");
@@ -238,7 +238,7 @@ public class MyApplication extends Application {
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = Color.parseColor("#0080FF");
-                commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+                commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
                 break;
             case DARK_THEME_LOW_CONTRAST:
                 currentColor = Color.parseColor("#181818");
@@ -247,7 +247,7 @@ public class MyApplication extends Application {
                 textColor = context.getResources().getColor(R.color.lowContrastText);
                 textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
                 linkColor = context.getResources().getColor(R.color.lowContrastLinkText);
-                commentPermaLinkBackgroundColor = Color.parseColor("#545454");
+                commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
                 break;
         }
     }

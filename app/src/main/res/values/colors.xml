@@ -17,37 +17,41 @@
 
     <color name="materialBlueBackground">#263238</color>
 
-    <color name="materialBlueBackgroundPressed">#263238</color>
+    <color name="materialBlueBackgroundPressed">#394b53</color>
 
     <color name="materialBlueDrawerBackground">#263238</color>
 
     <color name="materialBlueDialogBackground">#263238</color>
 
-    <color name="materialBlueCommentButtonBackground">#263238</color>
+    <color name="materialBlueCommentButtonBackground">#1e282d</color>
 
-    <color name="materialBlueCommentButtonBackgroundPressed">#263238</color>
+    <color name="materialBlueCommentButtonBackgroundPressed">#32434b</color>
 
-    <color name="materialBlueDrawerItemSelected">#263238</color>
+    <color name="materialBlueDrawerItemSelected">#445863</color>
 
-    <color name="materialBlueDivider">#263238</color>
+    <color name="materialBlueDivider">#3a4b54</color>
+
+    <color name="materialBlueCommentHighlight">@color/materialBlueBackgroundPressed</color>
 
     <!-- MATERIAL GREY THEME -->
 
     <color name="materialGreyBackground">#424242</color>
 
-    <color name="materialGreyBackgroundPressed">#424242</color>
+    <color name="materialGreyBackgroundPressed">#5c5c5c</color>
 
     <color name="materialGreyDrawerBackground">#424242</color>
 
     <color name="materialGreyDialogBackground">#424242</color>
 
-    <color name="materialGreyCommentButtonBackground">#424242</color>
+    <color name="materialGreyCommentButtonBackground">#353535</color>
 
-    <color name="materialGreyCommentButtonBackgroundPressed">#424242</color>
+    <color name="materialGreyCommentButtonBackgroundPressed">#515151</color>
 
-    <color name="materialGreyDrawerItemSelected">#424242</color>
+    <color name="materialGreyDrawerItemSelected">#666666</color>
 
-    <color name="materialGreyDivider">#424242</color>
+    <color name="materialGreyDivider">#5b5b5b</color>
+
+    <color name="materialGreyCommentHighlight">@color/materialGreyBackgroundPressed</color>
 
     <!-- DARK THEME -->
 
@@ -64,6 +68,8 @@
     <color name="darkDivider">#404040</color>
 
     <color name="darkHintText">#b0b0b0</color>
+
+    <color name="darkCommentHighlight">#545454</color>
 
     <!-- DARK LOW CONTRAST THEME -->
 

@@ -268,7 +268,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if(MyApplication.commentNavigation) {
             FloatingActionButton fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
             FloatingActionButton fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
-            ColorStateList color = (MyApplication.nightThemeEnabled) ? ColorStateList.valueOf(Color.parseColor("#404040")) : ColorStateList.valueOf(MyApplication.colorPrimary);
+            ColorStateList color = (MyApplication.currentBaseTheme >= MyApplication.DARK_THEME) ?
+                    ColorStateList.valueOf(Color.parseColor("#404040")) : ColorStateList.valueOf(MyApplication.colorPrimary);
             fab_up.setBackgroundTintList(color);
             fab_down.setBackgroundTintList(color);
             fab_up.setOnClickListener(new View.OnClickListener() {
