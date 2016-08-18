@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.6" changeDate="Aug 30, 2016">
+
+    </changelogversion>
+
     <changelogversion versionName="0.5" changeDate="Aug 3, 2016">
         <changelogtext>Added the ability to sync individual posts. Any posts synced this way will be available by tapping on 'Synced' under 'Other'
          on the navigation drawer</changelogtext>

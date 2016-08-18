@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         chg:changeLogFileResourceId="@raw/changelog"
-        android:layout_weight="0.67" />
+        android:layout_weight="0.67"
+        android:scrollbars="vertical"/>
 
     <Button
         style="@style/DialogButtonStyle"

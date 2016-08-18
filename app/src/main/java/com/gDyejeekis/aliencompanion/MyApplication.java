@@ -37,13 +37,15 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String currentVersion = "0.5";
+    public static final String currentVersion = "0.6";
 
-    public static final int currentVersionCode = 20;
+    public static final int currentVersionCode = 30;
 
     public static final boolean showWelcomeMsgThisVersion = true;
 
-    public static final boolean deleteAppDataThisVersion = true;
+    //public static final boolean deleteAppDataThisVersion = true;
+
+    public static final int clearAppDataVersionCode = 20;
 
     public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
@@ -240,7 +242,7 @@ public class MyApplication extends Application {
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
         if(lastKnownVersionCode!=currentVersionCode) {
             SharedPreferences.Editor editor = prefs.edit();
-            if(deleteAppDataThisVersion || lastKnownVersionCode == 0) {
+            if(lastKnownVersionCode < clearAppDataVersionCode) {
                 editor.clear();
                 clearApplicationData();
                 editor.putBoolean("dualPane", getScreenSizeInches(getApplicationContext()) > 6.4);
