@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/themeDialogBackgroundColor">
 
@@ -9,12 +11,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:id="@+id/light"
+        android:clickable="false"
+        android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.github.pavlospt.CircleView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@android:color/white" />
+            app:cv_fillColor="@android:color/white"
+            app:cv_fillRadius="1"
+            app:cv_titleText="A"
+            app:cv_subtitleText=""
+            app:cv_titleColor="@android:color/black"
+            app:cv_titleSize="10dp"
+            app:cv_strokeColorValue="@color/dark_gray"
+            app:cv_strokeWidthSize="2"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -25,7 +37,8 @@
             android:textColor="?attr/themeTextColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
-            android:checked="false" />
+            android:checked="false"
+            android:clickable="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -33,12 +46,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:id="@+id/material_blue"
+        android:clickable="false"
+        android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.github.pavlospt.CircleView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@color/materialBlueBackground" />
+            app:cv_fillColor="@color/materialBlueBackground"
+            app:cv_fillRadius="1"
+            app:cv_titleText="B"
+            app:cv_subtitleText=""
+            app:cv_titleColor="@android:color/white"
+            app:cv_titleSize="10dp"
+            app:cv_strokeColorValue="@color/materialBlueDivider"
+            app:cv_strokeWidthSize="2"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -49,7 +72,8 @@
             android:textColor="?attr/themeTextColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
-            android:checked="false" />
+            android:checked="false"
+            android:clickable="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -57,12 +81,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:id="@+id/material_grey"
+        android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.github.pavlospt.CircleView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@color/materialGreyBackground" />
+            app:cv_fillColor="@color/materialGreyBackground"
+            app:cv_fillRadius="1"
+            app:cv_titleText="C"
+            app:cv_subtitleText=""
+            app:cv_titleColor="@android:color/white"
+            app:cv_titleSize="10dp"
+            app:cv_strokeColorValue="@color/materialGreyDivider"
+            app:cv_strokeWidthSize="2"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -73,7 +106,8 @@
             android:textColor="?attr/themeTextColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
-            android:checked="false" />
+            android:checked="false"
+            android:clickable="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -81,12 +115,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:id="@+id/dark"
+        android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.github.pavlospt.CircleView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@android:color/black" />
+            app:cv_fillColor="@android:color/black"
+            app:cv_fillRadius="1"
+            app:cv_titleText="D"
+            app:cv_subtitleText=""
+            app:cv_titleColor="@android:color/white"
+            app:cv_titleSize="10dp"
+            app:cv_strokeColorValue="@color/primary_dark"
+            app:cv_strokeWidthSize="2"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -97,7 +140,8 @@
             android:textColor="?attr/themeTextColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
-            android:checked="false" />
+            android:checked="false"
+            android:clickable="false"/>
     </LinearLayout>
 
     <LinearLayout
@@ -105,12 +149,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:id="@+id/dark_low_contrast"
+        android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.github.pavlospt.CircleView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:background="@android:color/black" />
+            app:cv_fillColor="@android:color/black"
+            app:cv_fillRadius="1"
+            app:cv_titleText="E"
+            app:cv_subtitleText=""
+            app:cv_titleColor="@color/lowContrastText"
+            app:cv_titleSize="10dp"
+            app:cv_strokeColorValue="@color/primary_dark"
+            app:cv_strokeWidthSize="2"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -121,7 +174,8 @@
             android:textColor="?attr/themeTextColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
-            android:checked="false" />
+            android:checked="false"
+            android:clickable="false"/>
     </LinearLayout>
 
 </LinearLayout>
