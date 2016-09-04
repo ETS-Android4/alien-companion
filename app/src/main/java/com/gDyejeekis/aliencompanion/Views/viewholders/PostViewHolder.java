@@ -1,7 +1,6 @@
 package com.gDyejeekis.aliencompanion.Views.viewholders;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableString;
@@ -64,7 +63,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
     public PostViewType viewType;
 
     private static final int clickedColor = MyApplication.textHintColor;
-    private static final int smallCardLinkButtonColor = Color.parseColor("#404040");
+    //private static final int smallCardLinkButtonColor = Color.parseColor("#404040");
 
     public PostViewHolder(View itemView, PostViewType type) {
         super(itemView);
@@ -215,7 +214,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 else {
                     linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
                     linkButton.setPadding(10, 10, 10, 10);
-                    linkButton.setBackgroundColor(smallCardLinkButtonColor);
+                    linkButton.setBackgroundColor(MyApplication.smallCardLinkBackground);
                     postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     postImage.setImageResource(R.drawable.ic_link_white_48dp);
                 }

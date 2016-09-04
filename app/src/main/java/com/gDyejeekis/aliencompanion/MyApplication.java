@@ -76,6 +76,8 @@ public class MyApplication extends Application {
 
     public static int textHintLight;
 
+    public static int smallCardLinkBackground;
+
     public static String[] primaryColors;
 
     public static String[] primaryDarkColors;
@@ -210,6 +212,7 @@ public class MyApplication extends Application {
                 textHintColor = textHintLight;
                 linkColor = MyApplication.colorPrimary;
                 commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+                smallCardLinkBackground = context.getResources().getColor(R.color.lightSmallCardLinkBackground);
                 break;
             case MATERIAL_BLUE_THEME:
                 currentColor = colorPrimary;
@@ -220,6 +223,7 @@ public class MyApplication extends Application {
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialBlueCommentHighlight);
+                smallCardLinkBackground = context.getResources().getColor(R.color.materialBlueSmallCardLinkBackground);
                 break;
             case MATERIAL_GREY_THEME:
                 currentColor = colorPrimary;
@@ -230,6 +234,7 @@ public class MyApplication extends Application {
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialGreyCommentHighlight);
+                smallCardLinkBackground = context.getResources().getColor(R.color.materialGreySmallCardLinkBackground);
                 break;
             case DARK_THEME:
                 currentColor = Color.parseColor("#181818");
@@ -239,6 +244,8 @@ public class MyApplication extends Application {
                 textHintColor = textHintDark;
                 linkColor = Color.parseColor("#0080FF");
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
+                smallCardLinkBackground = 0;
+                //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);
                 break;
             case DARK_THEME_LOW_CONTRAST:
                 currentColor = Color.parseColor("#181818");
@@ -248,6 +255,8 @@ public class MyApplication extends Application {
                 textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
                 linkColor = context.getResources().getColor(R.color.lowContrastLinkText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
+                smallCardLinkBackground = 0;
+                //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);
                 break;
         }
     }

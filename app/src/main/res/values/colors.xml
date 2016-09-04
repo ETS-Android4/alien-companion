@@ -13,6 +13,8 @@
 
     <color name="lightHintText">#808080</color>
 
+    <color name="lightSmallCardLinkBackground">#404040</color>
+
     <!-- MATERIAL BLUE THEME -->
 
     <color name="materialBlueBackground">#263238</color>
@@ -33,6 +35,8 @@
 
     <color name="materialBlueCommentHighlight">@color/materialBlueBackgroundPressed</color>
 
+    <color name="materialBlueSmallCardLinkBackground">#1e282d</color>
+
     <!-- MATERIAL GREY THEME -->
 
     <color name="materialGreyBackground">#424242</color>
@@ -52,6 +56,8 @@
     <color name="materialGreyDivider">#5b5b5b</color>
 
     <color name="materialGreyCommentHighlight">@color/materialGreyBackgroundPressed</color>
+
+    <color name="materialGreySmallCardLinkBackground">#353535</color>
 
     <!-- DARK THEME -->
 
@@ -74,6 +80,8 @@
     <color name="darkHintText">#b0b0b0</color>
 
     <color name="darkCommentHighlight">#545454</color>
+
+    <color name="darkSmallCardLinkBackground">#232323</color>
 
     <!-- DARK LOW CONTRAST THEME -->
 

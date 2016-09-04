@@ -25,7 +25,7 @@
 
         <ListPreference
             android:key="fontFamily"
-            android:title="Font family"
+            android:title="Font style"
             android:entries="@array/fontFamily"
             android:entryValues="@array/fontFamilyValues"
             android:defaultValue="0" />
