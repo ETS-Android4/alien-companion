@@ -561,35 +561,67 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 menuRowViewHolder.name.setText(menuItem.getMenuType().value());
                 switch (menuItem.getMenuType()) {
                     case profile:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_white_48dp);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_grey_48dp);
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_light_grey_48dp);
+                        }
+                        else {
+                            if (MyApplication.nightThemeEnabled)
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_white_48dp);
+                            else
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_grey_48dp);
+                        }
                         break;
                     case messages:
                         if(MyApplication.newMessages) {
                             menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_orange_48dp);
                         }
                         else {
-                            if (MyApplication.nightThemeEnabled)
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_white_48dp);
-                            else
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_grey_48dp);
+                            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_light_grey_48dp);
+                            }
+                            else {
+                                if (MyApplication.nightThemeEnabled)
+                                    menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_white_48dp);
+                                else
+                                    menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_grey_48dp);
+                            }
                         }
                         break;
                     case user:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_white_48dp);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_grey_48dp);
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_light_grey_48dp);
+                        }
+                        else {
+                            if (MyApplication.nightThemeEnabled)
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_white_48dp);
+                            else
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_grey_48dp);
+                        }
                         break;
                     case subreddit:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_white_48dp);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_grey_48dp);
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_light_grey_48dp);
+                        }
+                        else {
+                            if (MyApplication.nightThemeEnabled)
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_white_48dp);
+                            else
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_grey_48dp);
+                        }
                         break;
                     case settings:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_white_48dp);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_grey_48dp);
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_light_grey_48dp);
+                        }
+                        else {
+                            if (MyApplication.nightThemeEnabled)
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_white_48dp);
+                            else
+                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_grey_48dp);
+                        }
                         break;
                     case cached:
-                        if(MyApplication.nightThemeEnabled) menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_profile_grey);
-                        else menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
+                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
                         break;
                 }
                 break;

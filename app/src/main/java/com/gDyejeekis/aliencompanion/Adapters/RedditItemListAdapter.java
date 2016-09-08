@@ -401,6 +401,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             reply = (ImageView) itemView.findViewById(R.id.btn_reply);
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
+
+            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                viewUser.setImageResource(R.mipmap.ic_person_light_grey_48dp);
+                reply.setImageResource(R.mipmap.ic_reply_light_grey_48dp);
+                more.setImageResource(R.mipmap.ic_more_vert_light_grey_48dp);
+            }
         }
 
         public void bindModel(Context context, Comment comment, MyClickableSpan plainTextClickable) {
@@ -431,15 +437,33 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 if (comment.getLikes().equals("true")) {
                     commentScore.setTextColor(upvoteColor);
                     upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
-                    downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
-                } else if (comment.getLikes().equals("false")) {
+                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                        downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
+                    }
+                    else {
+                        downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
+                    }
+                }
+                else if (comment.getLikes().equals("false")) {
                     commentScore.setTextColor(downvoteColor);
-                    upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                        upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
+                    }
+                    else {
+                        upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                    }
                     downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
-                } else {
+                }
+                else {
                     commentScore.setTextColor(MyApplication.textHintColor);
-                    upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
-                    downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
+                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                        upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
+                        downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
+                    }
+                    else {
+                        upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                        downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
+                    }
                 }
             }
         }

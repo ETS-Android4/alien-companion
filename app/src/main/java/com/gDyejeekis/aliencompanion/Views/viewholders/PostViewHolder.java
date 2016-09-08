@@ -69,23 +69,6 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.viewType = type;
 
-        if(viewType == PostViewType.listItem || viewType == PostViewType.smallCards || MyApplication.nightThemeEnabled) {
-            upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
-            downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
-            saveResource = R.mipmap.ic_star_border_white_48dp;
-            hideResource = R.mipmap.ic_close_white_48dp;
-            moreResource = R.mipmap.ic_more_vert_white_48dp;
-            commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
-        }
-        else {
-            upvoteResource = R.mipmap.ic_arrow_upward_grey_48dp;
-            downvoteResource = R.mipmap.ic_arrow_downward_grey_48dp;
-            saveResource = R.mipmap.ic_star_border_grey_48dp;
-            hideResource = R.mipmap.ic_close_grey_48dp;
-            moreResource = R.mipmap.ic_more_vert_grey_48dp;
-            commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
-        }
-
         switch (type) {
             case listItem:
                 title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
@@ -168,6 +151,66 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                 imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
                 break;
         }
+
+        initIcons();
+    }
+
+    //only call after initializing all other fields
+    private void initIcons() {
+        if(viewType == PostViewType.listItem || viewType == PostViewType.smallCards) {
+            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                initLightGreyColorIcons();
+            }
+            else {
+                initWhiteColorIcons();
+            }
+        }
+        else {
+            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                initLightGreyColorIcons();
+            }
+            else if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
+                initGreyColorIcons();
+            }
+            else {
+                initWhiteColorIcons();
+            }
+        }
+
+        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+            try {
+                viewUser.setImageResource(R.mipmap.ic_person_light_grey_48dp);
+                openBrowser.setImageResource(R.mipmap.ic_open_in_browser_light_grey_48dp);
+            } catch (NullPointerException e) {}
+            moreOptions.setImageResource(R.mipmap.ic_more_vert_light_grey_48dp);
+        }
+    }
+
+    private void initWhiteColorIcons() {
+        upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
+        downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
+        saveResource = R.mipmap.ic_star_border_white_48dp;
+        hideResource = R.mipmap.ic_close_white_48dp;
+        moreResource = R.mipmap.ic_more_vert_white_48dp;
+        commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
+    }
+
+    private void initGreyColorIcons() {
+        upvoteResource = R.mipmap.ic_arrow_upward_grey_48dp;
+        downvoteResource = R.mipmap.ic_arrow_downward_grey_48dp;
+        saveResource = R.mipmap.ic_star_border_grey_48dp;
+        hideResource = R.mipmap.ic_close_grey_48dp;
+        moreResource = R.mipmap.ic_more_vert_grey_48dp;
+        commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
+    }
+
+    private void initLightGreyColorIcons() {
+        upvoteResource = R.mipmap.ic_arrow_upward_light_grey_48dp;
+        downvoteResource = R.mipmap.ic_arrow_downward_light_grey_48dp;
+        saveResource = R.mipmap.ic_star_border_light_grey_48dp;
+        hideResource = R.mipmap.ic_clear_light_grey_48dp;
+        moreResource = R.mipmap.ic_more_vert_light_grey_48dp;
+        commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
     }
 
     public void bindModel(Context context, Submission post) {
@@ -216,7 +259,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
                     linkButton.setPadding(10, 10, 10, 10);
                     linkButton.setBackgroundColor(MyApplication.smallCardLinkBackground);
                     postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                    postImage.setImageResource(R.drawable.ic_link_white_48dp);
+                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                        postImage.setImageResource(R.drawable.ic_link_light_grey_48dp);
+                    }
+                    else {
+                        postImage.setImageResource(R.drawable.ic_link_white_48dp);
+                    }
                 }
             }
         }

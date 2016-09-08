@@ -262,15 +262,33 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     if (comment.getLikes().equals("true")) {
                         cvh.score.setTextColor(upvoteColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
-                        cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
-                    } else if (comment.getLikes().equals("false")) {
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
+                        }
+                        else {
+                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
+                        }
+                    }
+                    else if (comment.getLikes().equals("false")) {
                         cvh.score.setTextColor(downvoteColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
+                        }
+                        else {
+                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                        }
                         cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
-                    } else {
+                    }
+                    else {
                         cvh.score.setTextColor(MyApplication.textHintColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
-                        cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
+                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
+                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
+                        }
+                        else {
+                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
+                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
+                        }
                     }
                 }
                 break;
@@ -448,6 +466,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             moreLayout = (FlowLayout) itemView.findViewById(R.id.moreLayout);
 
             commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
+
+            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
+                viewUser.setImageResource(R.mipmap.ic_person_light_grey_48dp);
+                reply.setImageResource(R.mipmap.ic_reply_light_grey_48dp);
+                more.setImageResource(R.mipmap.ic_more_vert_light_grey_48dp);
+            }
         }
 
         public void setColorBandColor(int indentation) {
