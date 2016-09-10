@@ -14,6 +14,7 @@ import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialog
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.EnterUserDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
 
 /**
  * Created by George on 6/26/2015.
@@ -72,6 +73,7 @@ public class MenuItemListener extends NavDrawerListener {
                     @Override
                     public void run() {
                         Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                        intent.putExtra("menuType", SettingsMenuType.headers);
                         getActivity().startActivity(intent);
                     }
                 }, MyApplication.NAV_DRAWER_CLOSE_TIME);

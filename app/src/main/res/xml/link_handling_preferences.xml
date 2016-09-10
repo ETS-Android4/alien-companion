@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="handleYoutube"
+        android:title="YouTube"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="handleImgur"
+        android:title="Imgur"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="handleTwitter"
+        android:title="Twitter"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="handleOther"
+        android:title="All other links"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="useCCT"
+        android:title="Use Chrome custom tabs"
+        android:defaultValue="false"/>
+
+</PreferenceScreen>

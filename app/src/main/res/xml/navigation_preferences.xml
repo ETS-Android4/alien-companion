@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="swipeBack"
+        android:title="Swipe to go back"
+        android:summary="Change edge tracking side or disable it"
+        android:entries="@array/swipeEntries"
+        android:entryValues="@array/swipeValues"
+        android:defaultValue="0"/>
+
+    <CheckBoxPreference
+        android:key="imageTap"
+        android:title="Dismiss images on single tap"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="gifTap"
+        android:title="Dismiss GIF on single tap"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="commentNav"
+        android:title="FAB comment navigation"
+        android:summary="Easily navigate between top level parent comments"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:key="swipeRefresh"
+        android:title="Swipe to refresh"
+        android:summary="Pull down to refresh posts/comments"
+        android:defaultValue="true"/>
+
+    <ListPreference
+        android:key="navDrawerSide"
+        android:title="Navigation drawer side"
+        android:summary="Change the side from which the navigation drawer opens"
+        android:entries="@array/navDrawerSides"
+        android:entryValues="@array/navDrawerSides"
+        android:defaultValue="@string/left"/>
+
+</PreferenceScreen>

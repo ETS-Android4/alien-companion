@@ -2,11 +2,21 @@ package com.gDyejeekis.aliencompanion.Activities;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.support.v7.widget.Toolbar;
 
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.SettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.AppearanceSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.CommentsSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.HeadersSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.LinkHandlingSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.NavigationSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.OtherSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.PostsSettingsFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.SyncSettingsFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
 
 /**
  * Created by George on 8/4/2015.
@@ -14,6 +24,8 @@ import com.gDyejeekis.aliencompanion.R;
 public class SettingsActivity extends BackNavActivity {
 
     private Toolbar toolbar;
+
+    private SettingsMenuType menuType;
     //private int currentColor;
 
     @Override
@@ -30,28 +42,54 @@ public class SettingsActivity extends BackNavActivity {
         toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Settings");
 
+        menuType = (SettingsMenuType) getIntent().getSerializableExtra("menuType");
+        try {
+            getSupportActionBar().setTitle(menuType.value());
+        } catch (NullPointerException e) {
+            getSupportActionBar().setTitle("Settings");
+        }
+
+        PreferenceFragment fragment = null;
+        switch (menuType) {
+            case headers:
+                fragment = new HeadersSettingsFragment();
+                break;
+            case appearance:
+                fragment = new AppearanceSettingsFragment();
+                break;
+            case navigation:
+                fragment = new NavigationSettingsFragment();
+                break;
+            case posts:
+                fragment = new PostsSettingsFragment();
+                break;
+            case comments:
+                fragment = new CommentsSettingsFragment();
+                break;
+            case sync:
+                fragment = new SyncSettingsFragment();
+                break;
+            case linkHandling:
+                fragment = new LinkHandlingSettingsFragment();
+                break;
+            case other:
+                fragment = new OtherSettingsFragment();
+                break;
+            default:
+                fragment = new SettingsFragment();
+                break;
+        }
         getFragmentManager().beginTransaction()
-                .replace(R.id.optionsHolder, new SettingsFragment())
+                .replace(R.id.optionsHolder, fragment)
                 .commit();
     }
 
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    Log.d("geo test", "on resume called in settings");
-    //    if(currentColor != MainActivity.colorPrimary) {
-    //        currentColor = MainActivity.colorPrimary;
-    //        toolbar.setBackgroundColor(MainActivity.colorPrimary);
-    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MainActivity.colorPrimaryDark);
-    //        Log.d("geo test", "settings color changed");
-    //    }
-    //}
-
     @Override
     public void onBackPressed() {
-        MyApplication.getCurrentSettings();
+        if(menuType == SettingsMenuType.headers) {
+            MyApplication.getCurrentSettings();
+        }
         super.onBackPressed();
     }
 

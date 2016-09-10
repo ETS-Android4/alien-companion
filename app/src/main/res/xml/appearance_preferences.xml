@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="fontSize"
+        android:title="Font size"
+        android:entries="@array/fontSizes"
+        android:entryValues="@array/fontSizeValues"
+        android:defaultValue="2"/>
+
+    <ListPreference
+        android:key="fontFamily"
+        android:title="Font style"
+        android:entries="@array/fontFamily"
+        android:entryValues="@array/fontFamilyValues"
+        android:defaultValue="0" />
+
+    <ListPreference
+        android:key="toolbarColor"
+        android:title="Primary color"
+        android:summary="Doesn't apply to dark themes"
+        android:entries="@array/toolbarColors"
+        android:entryValues="@array/colorPrimaryValues"
+        android:defaultValue="#00BCD4"/>
+
+    <ListPreference
+        android:key="screenOrientation"
+        android:title="Screen Orientation"
+        android:entries="@array/screenOrientation"
+        android:entryValues="@array/orientationValues"
+        android:defaultValue="2"/>
+
+    <CheckBoxPreference
+        android:key="dualPane"
+        android:title="Dual pane in landscape"
+        android:summary="Tablet recommended"
+        android:defaultValue="false"/>
+
+</PreferenceScreen>

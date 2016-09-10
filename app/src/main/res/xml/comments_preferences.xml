@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="initialCommentCount"
+        android:title="Initial comment count"
+        android:summary="Choose the number of comments that load initially"
+        android:entries="@array/commentCount"
+        android:entryValues="@array/commentCount"
+        android:defaultValue="100"/>
+
+    <ListPreference
+        android:key="initialCommentDepth"
+        android:title="Initial comment depth"
+        android:summary="Choose the maximum comment depth of any given thread"
+        android:entries="@array/commentDepth"
+        android:entryValues="@array/commentDepth"
+        android:defaultValue="5"/>
+
+    <ListPreference
+        android:key="defaultCommentSort"
+        android:title="Default comment sort"
+        android:entries="@array/commentSortEntries"
+        android:entryValues="@array/commentSortValues"
+        android:defaultValue="1"/>
+
+</PreferenceScreen>

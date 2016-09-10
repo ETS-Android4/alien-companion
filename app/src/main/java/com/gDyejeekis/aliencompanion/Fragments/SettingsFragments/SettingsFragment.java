@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.Fragments.SettingsFragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,8 +44,8 @@ public class SettingsFragment extends PreferenceFragment {
         Preference clearSynced = findPreference("clearSynced");
         Preference clearCache = findPreference("clearCache");
         Preference viewChangeLog = findPreference("changelog");
-        Preference profiles = findPreference("profiles");
         Preference feedback = findPreference("feedback");
+        Preference profiles = findPreference("profiles");
 
         Preference preferExternal = findPreference("prefExternal");
         preferExternal.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

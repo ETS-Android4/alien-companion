@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <header
-        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.GeneralFragment"
-        android:summary="@string/options_general_sub"
-        android:title="@string/options_general">
-    </header>
-    <header
-        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.AppearanceFragment"
-        android:summary="@string/options_appearance_sub"
-        android:title="@string/options_appearance">
-    </header>
-    <header
-        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.NavigationFragment"
-        android:summary="@string/options_navigation_sub"
-        android:title="@string/options_navigation">
-    </header>
-    <header
-        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.PostsFragment"
-        android:summary="@string/options_posts_sub"
-        android:title="@string/options_posts">
-    </header>
-    <header
-        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.CommentsFragment"
-        android:summary="@string/options_comments_sub"
-        android:title="@string/options_comments">
-    </header>
-    <header
-        android:fragment="com.gDyejeekis.aliencompanion.Fragments.PreferenceFragments.OtherFragment"
-        android:summary="@string/options_other_sub"
-        android:title="@string/options_other">
-    </header>
-
-
-</preference-headers>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="appearance"
+        android:title="Appearance"
+        android:summary="Change how the app looks" />
+    <Preference
+        android:key="navigation"
+        android:title="Navigation"
+        android:summary="Change how you navigate the app"/>
+    <Preference
+        android:key="posts"
+        android:title="Posts"
+        android:summary="Post specific options"/>
+    <Preference
+        android:key="comments"
+        android:title="Comments"
+        android:summary="Comment specific options"/>
+    <Preference
+        android:key="sync"
+        android:title="Sync options"
+        android:summary="Change how you sync content for offline browsing"/>
+    <Preference
+        android:key="links"
+        android:title="Link handling"
+        android:summary="Choose how external links are handled"/>
+    <Preference
+        android:key="other"
+        android:title="Other"
+        android:summary="Everything else"/>
+</PreferenceScreen>
