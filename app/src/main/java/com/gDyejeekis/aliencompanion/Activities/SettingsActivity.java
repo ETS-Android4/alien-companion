@@ -1,9 +1,12 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.SettingsFragment;
 import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.AppearanceSettingsFragment;
@@ -26,13 +29,18 @@ public class SettingsActivity extends BackNavActivity {
     private Toolbar toolbar;
 
     private SettingsMenuType menuType;
-    //private int currentColor;
+
+    private boolean dualPaneActive;
+
+    private boolean dualPaneInLandScape;
+    private boolean dualPaneEverywhere;
 
     @Override
     public void onCreate(Bundle bundle) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.settings_dual_pane);
+
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
@@ -50,9 +58,11 @@ public class SettingsActivity extends BackNavActivity {
             getSupportActionBar().setTitle("Settings");
         }
 
-        PreferenceFragment fragment = null;
+        PreferenceFragment fragment;
         switch (menuType) {
             case headers:
+                dualPaneEverywhere = MyApplication.getScreenSizeInches(this) > 9;
+                dualPaneInLandScape = MyApplication.getScreenSizeInches(this) > 6.4;
                 fragment = new HeadersSettingsFragment();
                 break;
             case appearance:
@@ -80,10 +90,62 @@ public class SettingsActivity extends BackNavActivity {
                 fragment = new SettingsFragment();
                 break;
         }
+
+        if(dualPaneEverywhere) {
+            dualPaneActive = true;
+        }
+        else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE
+                && dualPaneInLandScape) {
+            dualPaneActive = true;
+        }
+        else {
+            dualPaneActive = false;
+        }
+
         getFragmentManager().beginTransaction()
-                .replace(R.id.optionsHolder, fragment)
-                .commit();
+                .replace(R.id.headers_holder, fragment)
+                .commitAllowingStateLoss();
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if(menuType == SettingsMenuType.headers) {
+            if(dualPaneEverywhere) {
+                dualPaneActive = true;
+            }
+            else if(dualPaneInLandScape && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                dualPaneActive = true;
+            }
+            else {
+                dualPaneActive = false;
+                hideOptionsFragment();
+            }
+        }
+        else {
+            dualPaneActive = false;
+        }
+    }
+
+    public void setupOptionsFragment(PreferenceFragment fragment, SettingsMenuType type) {
+        if(type != SettingsMenuType.headers) {
+            getSupportActionBar().setTitle(type.value());
+            getFragmentManager().beginTransaction().replace(R.id.options_holder, fragment, "optionsFragment").commitAllowingStateLoss();
+            findViewById(R.id.options_holder).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideOptionsFragment() {
+        getSupportActionBar().setTitle("Settings");
+        findViewById(R.id.options_holder).setVisibility(View.GONE);
+    }
+
+    //private void showOptionsFragment() {
+    //    if(getFragmentManager().findFragmentByTag("optionsFragment") != null) {
+    //        findViewById(R.id.options_holder).setVisibility(View.VISIBLE);
+    //    }
+    //}
 
     @Override
     public void onBackPressed() {
@@ -91,6 +153,10 @@ public class SettingsActivity extends BackNavActivity {
             MyApplication.getCurrentSettings();
         }
         super.onBackPressed();
+    }
+
+    public boolean isDualPaneActive() {
+        return dualPaneActive;
     }
 
 }

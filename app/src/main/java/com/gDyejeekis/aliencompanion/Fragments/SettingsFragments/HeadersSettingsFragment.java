@@ -18,12 +18,19 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference_headers);
 
+        final SettingsActivity activity = (SettingsActivity) getActivity();
+
         findPreference("appearance").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.appearance);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new AppearanceSettingsFragment(), SettingsMenuType.appearance);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.appearance);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
@@ -31,9 +38,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         findPreference("navigation").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.navigation);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new NavigationSettingsFragment(), SettingsMenuType.navigation);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.navigation);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
@@ -41,9 +53,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         findPreference("posts").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.posts);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new PostsSettingsFragment(), SettingsMenuType.posts);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.posts);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
@@ -51,9 +68,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         findPreference("comments").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.comments);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new CommentsSettingsFragment(), SettingsMenuType.comments);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.comments);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
@@ -61,9 +83,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         findPreference("sync").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.sync);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new SyncSettingsFragment(), SettingsMenuType.sync);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.sync);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
@@ -71,9 +98,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         findPreference("links").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.linkHandling);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new LinkHandlingSettingsFragment(), SettingsMenuType.linkHandling);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.linkHandling);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
@@ -81,9 +113,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         findPreference("other").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                intent.putExtra("menuType", SettingsMenuType.other);
-                getActivity().startActivity(intent);
+                if(activity.isDualPaneActive()) {
+                    activity.setupOptionsFragment(new OtherSettingsFragment(), SettingsMenuType.other);
+                }
+                else {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    intent.putExtra("menuType", SettingsMenuType.other);
+                    getActivity().startActivity(intent);
+                }
                 return false;
             }
         });
