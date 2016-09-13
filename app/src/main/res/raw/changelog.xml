@@ -5,6 +5,8 @@
         <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
          and low contrast dark)</changelogtext>
         <changelogtext>Redesigned settings menu to make options more easily accessible</changelogtext>
+        <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>
+        <changelogtext>WAKE_LOCK permission now required</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.5" changeDate="Aug 3, 2016">

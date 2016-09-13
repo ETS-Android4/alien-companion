@@ -12,8 +12,10 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.os.FileObserver;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
@@ -109,6 +111,10 @@ public class DownloaderService extends IntentService {
 
     private NotificationManager notificationManager;
 
+    private PowerManager.WakeLock wakeLock;
+
+    private WifiManager.WifiLock wifiLock;
+
     public DownloaderService() {
         super("DownloaderService");
     }
@@ -124,6 +130,7 @@ public class DownloaderService extends IntentService {
     public void onDestroy() {
         manuallyCancelled = false;
         manuallyPaused = false;
+        releaseWakelock();
         super.onDestroy();
     }
 
@@ -161,6 +168,7 @@ public class DownloaderService extends IntentService {
                     }
                     notifBuilder = new NotificationCompat.Builder(this);
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
+                    acquireWakelock();
 
                     syncSubreddit(filename, notifBuilder, subredditName, SubmissionSort.HOT, null, isMulti, syncOptions);
                 }
@@ -176,6 +184,7 @@ public class DownloaderService extends IntentService {
             notifBuilder = new NotificationCompat.Builder(this);
             String title = (submission.getTitle().length() > 20) ? submission.getTitle().substring(0, 20) : submission.getTitle();
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, title, true));
+            acquireWakelock();
 
             syncPost(notifBuilder, submission, INDIVIDUALLY_SYNCED_FILENAME, title, new SyncProfileOptions());
             addToIndividuallySyncedPosts(submission);
@@ -191,11 +200,55 @@ public class DownloaderService extends IntentService {
 
             notifBuilder = new NotificationCompat.Builder(this);
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
+            acquireWakelock();
 
             SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
             TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
 
             syncSubreddit(filename, notifBuilder, subreddit, submissionSort, timeSpan, isMulti, new SyncProfileOptions());
+        }
+    }
+
+    private void acquireWakelock() {
+        String message;
+
+        if(wakeLock == null) {
+            Log.d(TAG, "Acquiring wakelock..");
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "downloaderServiceWakelock");
+            wakeLock.acquire();
+            message = (wakeLock.isHeld()) ? "Wakelock acquired" : "Failed to acquire wakelock";
+            Log.d(TAG, message);
+        }
+
+        if(wifiLock == null) {
+            Log.d(TAG, "Acquiring wifilock..");
+            WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, "downloaderServiceWifilock");
+            wifiLock.acquire();
+            message = (wifiLock.isHeld()) ? "Wifilock acquired" : "Failed to acquire wifilock";
+            Log.d(TAG, message);
+        }
+    }
+
+    //call on onDestroy()
+    private void releaseWakelock() {
+        String message;
+
+        if(wakeLock != null) {
+            Log.d(TAG, "Releasing wakelock..");
+            wakeLock.release();
+            message = (wakeLock.isHeld()) ? "Failed to release wakelock" : "Wakelock released";
+            Log.d(TAG, message);
+            wakeLock = null;
+        }
+
+        if(wifiLock != null) {
+            Log.d(TAG, "Releasing wifilock..");
+            wifiLock.release();
+            message = (wifiLock.isHeld()) ? "Failed to release wifilock" : "Wifilock released";
+            Log.d(TAG, message);
+            wifiLock = null;
         }
     }
 
