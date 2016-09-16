@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.ClickListeners.NavDrawerListeners;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
@@ -8,9 +7,9 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerOtherItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 
 /**
@@ -58,7 +57,14 @@ public class OtherItemListener extends NavDrawerListener {
                 showSyncedPosts();
             }
             else {
-                getAdapter().switchMode("synced", false, true, null, null);
+                getDrawerLayout().closeDrawers();
+                ToastUtils.displayShortToast(getActivity(), "Switching to offline mode");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getAdapter().switchMode("synced", false, true, null, null);
+                    }
+                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
             }
             return true;
         }

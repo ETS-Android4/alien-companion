@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,6 +43,7 @@ import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
@@ -555,7 +557,14 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 headerViewHolder.offlineButton.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        switchMode();
+                        activity.getDrawerLayout().closeDrawers();
+                        ToastUtils.displayShortToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                switchMode();
+                            }
+                        }, MyApplication.NAV_DRAWER_CLOSE_TIME);
                         return true;
                     }
                 });
