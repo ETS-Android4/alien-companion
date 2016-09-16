@@ -21,7 +21,7 @@
     <CheckBoxPreference
         android:key="prefExternal"
         android:title="Prefer external storage"
-        android:summary="Save synced data and images/GIFs to a mounted SD card if available"
+        android:summary="Save synced data and images/GIFs to a mounted SD card if available (a device reboot might be required for this to work properly)"
         android:defaultValue="false" />
 
     <Preference
