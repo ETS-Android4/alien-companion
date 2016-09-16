@@ -42,7 +42,9 @@ public class MyApplication extends Application {
 
     public static final int currentVersionCode = 30;
 
-    public static final boolean showWelcomeMsgThisVersion = true;
+    //public static final boolean showWelcomeMsgThisVersion = true;
+
+    public static final int showWelcomeMsgVersionCode = 30;
 
     //public static final boolean deleteAppDataThisVersion = true;
 
@@ -302,17 +304,6 @@ public class MyApplication extends Application {
         return 7;
     }
 
-    //public static int getPrimaryDarkColor(String[] primaryColors, String[] primaryDarkColors) {
-    //    //String[] primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
-    //    int index = 0;
-    //    for(String color : primaryColors) {
-    //        if(Color.parseColor(color)==MyApplication.colorPrimary) break;
-    //        index++;
-    //    }
-    //    //String[] primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
-    //    return Color.parseColor(primaryDarkColors[index]); //TODO: check indexoutofboundsexception
-    //}
-
     private void getDeviceId() {
         deviceID = prefs.getString("deviceID", "null");
         if(deviceID.equals("null")) {
@@ -332,7 +323,7 @@ public class MyApplication extends Application {
                 clearApplicationData();
                 editor.putBoolean("dualPane", getScreenSizeInches(getApplicationContext()) > 6.4);
             }
-            if(showWelcomeMsgThisVersion) {
+            if(lastKnownVersionCode < showWelcomeMsgVersionCode) {
                 editor.putBoolean("welcomeMsg", false);
             }
             editor.putInt("versionCode", currentVersionCode);
