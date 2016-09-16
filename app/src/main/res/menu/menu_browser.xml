@@ -21,4 +21,7 @@
 
     <item android:id="@+id/action_load_from_cache" android:title="@string/load_cached_copy"
         android:orderInCategory="105" app:showAsAction="never" />
+
+    <item android:id="@+id/action_share_url" android:title="@string/action_share"
+        android:orderInCategory="110" app:showAsAction="never" />
 </menu>

@@ -256,6 +256,9 @@ public class BrowserFragment extends Fragment {
             case R.id.action_load_live:
                 loadLiveVersion();
                 return true;
+            case R.id.action_share_url:
+                GeneralUtils.shareUrl(activity, "Share url to..", webView.getUrl());
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
