@@ -266,15 +266,22 @@ public class PostItemOptionsListener implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sync:
+                        String toastMessage;
                         if(GeneralUtils.isNetworkAvailable(context)) {
-                            ToastUtils.displayShortToast(context, "Post added to sync queue");
-                            Intent intent = new Intent(context, DownloaderService.class);
-                            intent.putExtra("post", post);
-                            context.startService(intent);
+                            if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
+                                toastMessage = "Syncing over mobile data connection is disabled";
+                            }
+                            else {
+                                toastMessage = "Post added to sync queue";
+                                Intent intent = new Intent(context, DownloaderService.class);
+                                intent.putExtra("post", post);
+                                context.startService(intent);
+                            }
                         }
                         else {
-                            ToastUtils.displayShortToast(context, "Network connection unavailable");
+                            toastMessage = "Network connection unavailable";
                         }
+                        ToastUtils.displayShortToast(context, toastMessage);
                         return true;
                     case R.id.action_copy_to_clipboard:
                         TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",

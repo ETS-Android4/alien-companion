@@ -6,6 +6,7 @@
          and low contrast dark)</changelogtext>
         <changelogtext>Redesigned settings menu to make options more easily accessible</changelogtext>
         <changelogtext>Long tapping the 'Go offline/online' and 'Synced' options now trigger the effect without a confirmation dialog</changelogtext>
+        <changelogtext>Syncing of individual posts now respects the 'Sync over wifi only' option</changelogtext>
         <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>
         <changelogtext>WAKE_LOCK permission now required</changelogtext>
     </changelogversion>
