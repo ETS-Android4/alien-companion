@@ -40,12 +40,7 @@ public class OtherItemListener extends NavDrawerListener {
         }
         else if(otherItem.getName().equals("Synced")) {
             if(MyApplication.offlineModeEnabled) {
-                getAdapter().notifyDataSetChanged();
-                getDrawerLayout().closeDrawers();
-                PostListFragment listFragment = getActivity().getListFragment();
-                listFragment.isMulti = false;
-                listFragment.isOther = true;
-                listFragment.changeSubreddit("synced");
+                showSyncedPosts();
             }
             else {
                 getAdapter().showOfflineSwitchDialog("synced", false, true, null, null);
@@ -55,6 +50,27 @@ public class OtherItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
+        int position = getRecyclerView().getChildPosition(v);
+        NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getAdapter().getItemAt(position);
+
+        if(otherItem.getName().equals("Synced")) {
+            if(MyApplication.offlineModeEnabled) {
+                showSyncedPosts();
+            }
+            else {
+                getAdapter().switchMode("synced", false, true, null, null);
+            }
+            return true;
+        }
         return false;
+    }
+
+    private void showSyncedPosts() {
+        getAdapter().notifyDataSetChanged();
+        getDrawerLayout().closeDrawers();
+        PostListFragment listFragment = getActivity().getListFragment();
+        listFragment.isMulti = false;
+        listFragment.isOther = true;
+        listFragment.changeSubreddit("synced");
     }
 }

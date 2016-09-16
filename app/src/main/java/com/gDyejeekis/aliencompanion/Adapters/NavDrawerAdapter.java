@@ -502,6 +502,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 listener = new OtherItemListener(activity);
                 v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
                 v.setOnClickListener(listener);
+                v.setOnLongClickListener(listener);
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_EMPTY_SPACE:
@@ -549,6 +550,13 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View view) {
                         showOfflineSwitchDialog();
+                    }
+                });
+                headerViewHolder.offlineButton.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        switchMode();
+                        return true;
                     }
                 });
 
@@ -773,23 +781,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
     }
 
-    //private void showThemeSwitchDialog() {
-    //    String text = (MyApplication.nightThemeEnabled) ? "Switch to light mode?" : "Switch to dark mode?";
-    //    //text += " (App will restart)";
-    //    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-    //        @Override
-    //        public void onClick(DialogInterface dialog, int which) {
-    //            MyApplication.nightThemeEnabled = !MyApplication.nightThemeEnabled;
-    //            SharedPreferences.Editor editor = MyApplication.prefs.edit();
-    //            editor.putBoolean("nightTheme", MyApplication.nightThemeEnabled);
-    //            editor.apply();
-    //            restartApp();
-    //        }
-    //    };
-    //    new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
-    //            .setNegativeButton("No", null).show();
-    //}
-
     private void showThemesDialog() {
         BaseThemesDialogFragment dialogFragment = new BaseThemesDialogFragment();
         dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
@@ -801,16 +792,24 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
-                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
-                editor.apply();
-                PostListFragment fragment = activity.getListFragment();
-                restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
+                switchMode();
             }
         };
         new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
                 .setNegativeButton("No", null).show();
+    }
+
+    private void switchMode() {
+        PostListFragment fragment = activity.getListFragment();
+        switchMode(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
+    }
+
+    public void switchMode(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
+        MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
+        SharedPreferences.Editor editor = MyApplication.prefs.edit();
+        editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
+        editor.apply();
+        restartApp(subreddit, isMulti, isOther, sort, timeSpan);
     }
 
     public void showOfflineSwitchDialog(final String subreddit, final boolean isMulti, final boolean isOther, final SubmissionSort sort, final TimeSpan timeSpan) {
@@ -819,11 +818,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
-                SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
-                editor.apply();
-                restartApp(subreddit, isMulti, isOther, sort, timeSpan);
+                switchMode(subreddit, isMulti, isOther, sort, timeSpan);
             }
         };
         new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
