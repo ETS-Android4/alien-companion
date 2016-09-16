@@ -426,7 +426,7 @@ public class MyApplication extends Application {
                 fontStyle = R.style.FontStyle_Largest;
                 break;
         }
-        fontFamily = Integer.parseInt(prefs.getString("fontFamily", "0"));
+        fontFamily = Integer.parseInt(prefs.getString("fontFamily", "1"));
         switch (fontFamily) {
             case 0:
                 fontFamily = R.style.FontFamily_SansSerifRegular;

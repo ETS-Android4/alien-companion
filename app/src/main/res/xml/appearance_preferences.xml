@@ -13,7 +13,7 @@
         android:title="Font style"
         android:entries="@array/fontFamily"
         android:entryValues="@array/fontFamilyValues"
-        android:defaultValue="0" />
+        android:defaultValue="1" />
 
     <ListPreference
         android:key="toolbarColor"
