@@ -2,33 +2,10 @@
     <string name="app_name">Alien Companion</string>
 
     <string name="welcome_title">
-        Alien Companion v0.5
+        Alien Companion v0.6
     </string>
     <string name="welcome_message">
-        Hello everyone,
-        \n\n
-        This update took a little longer than I\'d like but it\'s finally here and it brings many new features and
-        improvements. For this version, I decided to focus on improving offline functionality, adding some QoL features
-        and fixing as many bugs as I could find. Some of the highlights of this update:
-        \n\n
-        • Ability to sync individual posts
-        \n
-        • Pause/resume and cancel buttons to control syncing
-        \n
-        • SD card support
-        \n
-        • FAB comment navigation
-        \n
-        • New \'Small cards\' layout
-        \n
-        • Dynamically load more comments in online mode
-        \n
-        • Ability to share links from other apps to Alien Companion
-        \n\n
-        As always, the full changelog is available in the settings.
-        \n\n
-        IMPORTANT: All previous user data has been cleared (probably for the last time). Apologies for the inconvenience.
-
+        PLACEHOLDER UPDATE TEXT FOR v0.6
     </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
