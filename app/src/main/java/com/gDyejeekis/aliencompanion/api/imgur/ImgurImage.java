@@ -55,10 +55,6 @@ public class ImgurImage extends ImgurItem implements Serializable {
         }
     }
 
-    public boolean hasInfo() {
-        return title != null || description != null;
-    }
-
     public void setImages(List<ImgurImage> images) {
 
     }

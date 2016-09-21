@@ -224,7 +224,7 @@ public class ImageActivity extends BackNavActivity {
                         } else {
                             if (item instanceof ImgurImage) {
                                 ImgurImage image = (ImgurImage) item;
-                                showInfoAction = image.hasInfo();
+                                checkImgurItemInfo(image);
                                 if (image.isAnimated()) {
                                     addGifFragment(image.getMp4());
                                 } else {
@@ -239,7 +239,7 @@ public class ImageActivity extends BackNavActivity {
                                     checkImgurAlbumSize(item);
                                     //setupAlbumView(gallery.getImages());
                                 } else {
-                                    showInfoAction = gallery.hasInfo();
+                                    checkImgurItemInfo(gallery);
                                     if(gallery.isAnimated()) {
                                         addGifFragment(gallery.getMp4());
                                     }
@@ -252,6 +252,13 @@ public class ImageActivity extends BackNavActivity {
                     }
                 }.execute(url);
             }
+        }
+    }
+
+    private void checkImgurItemInfo(ImgurItem item) {
+        showInfoAction = item.hasInfo();
+        if(showInfoAction) {
+            setInfoValues(item.getTitle(), item.getDescription());
         }
     }
 
@@ -313,30 +320,23 @@ public class ImageActivity extends BackNavActivity {
             public void onPageSelected(int position) {
                 removeInfoFragment();
                 String subtitle;
-                String imageTitle;
-                String imageDescr;
                 if(position==albumSize) {
                     setMainProgressBarVisible(false);
                     showSaveAction = false;
                     showGridviewAction = false;
                     showInfoAction = hasAlbumInfo;
+                    if(showInfoAction) {
+                        setInfoValues(title, description);
+                    }
                     setHqMenuItemVisible(false);
                     subtitle = albumSize + " items";
-                    imageTitle = title;
-                    imageDescr = description;
                 }
                 else {
                     showSaveAction = true;
                     showGridviewAction = true;
-                    showInfoAction = images.get(position).hasInfo();
+                    checkImgurItemInfo(images.get(position));
                     setHqMenuItemVisible(!images.get(position).isAnimated());
                     subtitle = (position + 1) + " of " + albumSize;
-                    imageTitle = images.get(position).getTitle();
-                    imageDescr = images.get(position).getDescription();
-                }
-
-                if(showInfoAction) {
-                    setInfoValues(imageTitle, imageDescr);
                 }
                 getSupportActionBar().setSubtitle(subtitle);
             }

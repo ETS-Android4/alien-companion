@@ -56,10 +56,6 @@ public class ImgurAlbum extends ImgurItem implements Serializable {
         }
     }
 
-    public boolean hasInfo() {
-        return title != null || description != null;
-    }
-
     public boolean isAlbum() {
         return true;
     }

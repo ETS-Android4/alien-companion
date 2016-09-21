@@ -20,7 +20,15 @@ public abstract class ImgurItem implements Serializable {
 
     public abstract void setImages(List<ImgurImage> images);
 
-    public abstract boolean hasInfo();
+    public boolean hasInfo() {
+        if(title != null && !title.isEmpty()) {
+            return true;
+        }
+        else if(description != null && !description.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
     public String getId() {
         return id;

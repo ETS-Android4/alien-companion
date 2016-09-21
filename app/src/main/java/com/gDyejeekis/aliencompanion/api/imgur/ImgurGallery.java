@@ -46,10 +46,6 @@ public class ImgurGallery extends ImgurItem implements Serializable {
         }
     }
 
-    public boolean hasInfo() {
-        return title != null || description != null;
-    }
-
     public boolean isAnimated() {
         return isAnimated;
     }
