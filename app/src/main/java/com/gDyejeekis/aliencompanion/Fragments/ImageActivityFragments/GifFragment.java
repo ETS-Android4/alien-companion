@@ -121,8 +121,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 @Override
                 public void onClick(View view) {
                     if (MyApplication.dismissGifOnTap) {
-                        activity.finish();
-                    } else {
+                        if(activity.isInfoVisible()) {
+                            activity.removeInfoFragment();
+                        }
+                        else {
+                            activity.finish();
+                        }
+                    }
+                    else {
                         if (gifDrawable.isPlaying()) {
                             gifDrawable.stop();
                         } else {
@@ -169,8 +175,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             @Override
             public void onClick(View view) {
                 if (MyApplication.dismissGifOnTap) {
-                    activity.finish();
-                } else {
+                    if(activity.isInfoVisible()) {
+                        activity.removeInfoFragment();
+                    }
+                    else {
+                        activity.finish();
+                    }
+                }
+                else {
                     if (mPlayer.isPlaying()) {
                         mPlayer.pause();
                     } else {

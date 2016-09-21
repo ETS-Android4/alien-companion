@@ -27,9 +27,6 @@ public class ImgurAlbum extends ImgurItem implements Serializable {
     private int coverHeight;
     private int coverWidth;
     private int datetime;
-    private String description;
-    private String id;
-    private String title;
     private int imageCount;
 
     public void setImages(List<ImgurImage> images) {
@@ -39,9 +36,9 @@ public class ImgurAlbum extends ImgurItem implements Serializable {
     private List<ImgurImage> images;
 
     public ImgurAlbum(JSONObject obj) {
-        //setTitle(safeJsonToString(obj.get("title")));
+        setTitle(safeJsonToString(obj.get("title")));
         setId(safeJsonToString(obj.get("id")));
-        //setDescription(safeJsonToString(obj.get("description")));
+        setDescription(safeJsonToString(obj.get("description")));
         //setDatetime(safeJsonToInteger(obj.get("datetime")));
         //setCoverWidth(safeJsonToInteger(obj.get("cover_width")));
         //setCoverHeight(safeJsonToInteger(obj.get("cover_height")));
@@ -57,6 +54,10 @@ public class ImgurAlbum extends ImgurItem implements Serializable {
         for(Object object : jsonArray) {
             images.add(new ImgurImage((JSONObject) object));
         }
+    }
+
+    public boolean hasInfo() {
+        return title != null || description != null;
     }
 
     public boolean isAlbum() {
@@ -85,30 +86,6 @@ public class ImgurAlbum extends ImgurItem implements Serializable {
 
     public void setImgurImages(List<ImgurImage> imgurImages) {
         this.images = images;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getDatetime() {

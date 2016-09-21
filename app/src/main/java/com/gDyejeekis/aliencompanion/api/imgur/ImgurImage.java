@@ -32,14 +32,11 @@ public class ImgurImage extends ImgurItem implements Serializable {
     private boolean animated;
     private String type;
     private int datetime;
-    private String description;
-    private String id;
-    private String title;
 
     public ImgurImage(JSONObject obj) {
-        //setTitle(safeJsonToString(obj.get("title")));
+        setTitle(safeJsonToString(obj.get("title")));
         setId(safeJsonToString(obj.get("id")));
-        //setDescription(safeJsonToString(obj.get("description")));
+        setDescription(safeJsonToString(obj.get("description")));
         //setDatetime(safeJsonToInteger(obj.get("datetime")));
         //setType(safeJsonToString(obj.get("type")));
         setAnimated(safeJsonToBoolean(obj.get("animated")));
@@ -56,6 +53,10 @@ public class ImgurImage extends ImgurItem implements Serializable {
             setMp4(safeJsonToString(obj.get("mp4")));
             setWebm(safeJsonToString(obj.get("webm")));
         }
+    }
+
+    public boolean hasInfo() {
+        return title != null || description != null;
     }
 
     public void setImages(List<ImgurImage> images) {
@@ -84,30 +85,6 @@ public class ImgurImage extends ImgurItem implements Serializable {
 
     public void setMp4(String mp4) {
         this.mp4 = mp4;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getDatetime() {

@@ -20,6 +20,7 @@ import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
+import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageInfoFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -66,6 +67,24 @@ public class ImageActivity extends BackNavActivity {
     private boolean showGridviewAction;
 
     private boolean showSaveAction = true;
+
+    private boolean showInfoAction;
+
+    private boolean infoFragmentVisible;
+
+    private String imageTitle;
+
+    private String imageDescription;
+
+    @Override
+    public void onBackPressed() {
+        if(infoFragmentVisible) {
+            removeInfoFragment();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +143,7 @@ public class ImageActivity extends BackNavActivity {
                             }
                         }
                         else {
-                            setupAlbumView(album.getImages());
+                            setupAlbumView(album.getImages(), album.hasInfo(), album.getTitle(), album.getDescription());
                         }
                     }
                 }
@@ -143,7 +162,7 @@ public class ImageActivity extends BackNavActivity {
                                 }
                             }
                             else {
-                                setupAlbumView(gallery.getImages());
+                                setupAlbumView(gallery.getImages(), false, null, null);
                             }
                         }
                         else {
@@ -205,6 +224,7 @@ public class ImageActivity extends BackNavActivity {
                         } else {
                             if (item instanceof ImgurImage) {
                                 ImgurImage image = (ImgurImage) item;
+                                showInfoAction = image.hasInfo();
                                 if (image.isAnimated()) {
                                     addGifFragment(image.getMp4());
                                 } else {
@@ -219,6 +239,7 @@ public class ImageActivity extends BackNavActivity {
                                     checkImgurAlbumSize(item);
                                     //setupAlbumView(gallery.getImages());
                                 } else {
+                                    showInfoAction = gallery.hasInfo();
                                     if(gallery.isAnimated()) {
                                         addGifFragment(gallery.getMp4());
                                     }
@@ -237,6 +258,7 @@ public class ImageActivity extends BackNavActivity {
     private void checkImgurAlbumSize(ImgurItem album) {
         if(album.getImages().size() == 1) {
             ImgurImage image = album.getImages().get(0);
+            showInfoAction = image.hasInfo();
             if(image.isAnimated()) {
                 addGifFragment(image.getMp4());
             }
@@ -245,7 +267,7 @@ public class ImageActivity extends BackNavActivity {
             }
         }
         else {
-            setupAlbumView(album.getImages());
+            setupAlbumView(album.getImages(), album.hasInfo(), album.getTitle(), album.getDescription());
         }
     }
 
@@ -267,9 +289,13 @@ public class ImageActivity extends BackNavActivity {
         return null;
     }
 
-    private void setupAlbumView(final List<ImgurImage> images) {
+    private void setupAlbumView(final List<ImgurImage> images, final boolean hasAlbumInfo, final String title, final String description) {
         albumSize = images.size();
         showGridviewAction = true;
+        showInfoAction = images.get(0).hasInfo();
+        if(showInfoAction) {
+            setInfoValues(images.get(0).getTitle(), images.get(0).getDescription());
+        }
         setHqMenuItemVisible(!images.get(0).isAnimated());
         getSupportActionBar().setTitle("Album");
         getSupportActionBar().setSubtitle("1 of " + images.size());
@@ -285,24 +311,32 @@ public class ImageActivity extends BackNavActivity {
 
             @Override
             public void onPageSelected(int position) {
-                String subtitle = "";
+                removeInfoFragment();
+                String subtitle;
+                String imageTitle;
+                String imageDescr;
                 if(position==albumSize) {
                     setMainProgressBarVisible(false);
                     showSaveAction = false;
                     showGridviewAction = false;
+                    showInfoAction = hasAlbumInfo;
                     setHqMenuItemVisible(false);
                     subtitle = albumSize + " items";
+                    imageTitle = title;
+                    imageDescr = description;
                 }
                 else {
                     showSaveAction = true;
                     showGridviewAction = true;
-                    if(images.get(position).isAnimated()) {
-                        setHqMenuItemVisible(false);
-                    }
-                    else {
-                        setHqMenuItemVisible(true);
-                    }
+                    showInfoAction = images.get(position).hasInfo();
+                    setHqMenuItemVisible(!images.get(position).isAnimated());
                     subtitle = (position + 1) + " of " + albumSize;
+                    imageTitle = images.get(position).getTitle();
+                    imageDescr = images.get(position).getDescription();
+                }
+
+                if(showInfoAction) {
+                    setInfoValues(imageTitle, imageDescr);
                 }
                 getSupportActionBar().setSubtitle(subtitle);
             }
@@ -339,17 +373,23 @@ public class ImageActivity extends BackNavActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_image, menu);
+
+        MenuItem infoAction = menu.findItem(R.id.action_info);
+        infoAction.setVisible(showInfoAction);
+
         MenuItem saveAction = menu.findItem(R.id.action_save);
-        MenuItem hq_action = menu.findItem(R.id.action_high_quality);
-        MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
         saveAction.setVisible(showSaveAction && !loadFromLocal);
+
+        MenuItem hq_action = menu.findItem(R.id.action_high_quality);
         hq_action.setVisible(showHqAction);
+
+        MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
         gridview_action.setVisible(showGridviewAction);
         //gridview_action.setVisible(albumSize != -1);
         return true;
     }
 
-    public void setHqMenuItemVisible(boolean flag) {
+    private void setHqMenuItemVisible(boolean flag) {
         showHqAction = flag;
         invalidateOptionsMenu();
     }
@@ -364,8 +404,40 @@ public class ImageActivity extends BackNavActivity {
             case R.id.action_album_gridview:
                 setViewPagerPosition(albumSize);
                 return true;
+            case R.id.action_info:
+                if(infoFragmentVisible) {
+                    removeInfoFragment();
+                }
+                else {
+                    addInfoFragment(imageTitle, imageDescription);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void addInfoFragment(String title, String description) {
+        if(!infoFragmentVisible) {
+            infoFragmentVisible = true;
+            fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageInfoFragment.newInstance(title, description), ImageInfoFragment.TAG).commitAllowingStateLoss();
+        }
+    }
+
+    public void removeInfoFragment() {
+        if(infoFragmentVisible) {
+            infoFragmentVisible = false;
+            fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag(ImageInfoFragment.TAG)).commitAllowingStateLoss();
+        }
+    }
+
+    private void setInfoValues(String title, String description) {
+        this.imageTitle = title;
+        this.imageDescription = description;
+    }
+
+    public boolean isInfoVisible() {
+        return infoFragmentVisible;
+    }
+
 }

@@ -205,5 +205,6 @@
     <string name="smaller">Smaller</string>
     <string name="larger">Larger</string>
     <string name="largest">Largest</string>
+    <string name="info">Info</string>
 
 </resources>
