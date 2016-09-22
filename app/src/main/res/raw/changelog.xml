@@ -11,6 +11,7 @@
         <changelogtext>Added 'Share' option in the in-app browser</changelogtext>
         <changelogtext>Changed default font style to 'Light'</changelogtext>
         <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>
+        <changelogtext>Reduced APK size by ~PERCENTAGE HERE~</changelogtext>
         <changelogtext>WAKE_LOCK permission now required</changelogtext>
     </changelogversion>
 
