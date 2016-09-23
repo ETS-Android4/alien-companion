@@ -43,8 +43,8 @@ public class ImageFragment extends Fragment {
 
     public static final String TAG = "ImageFragment";
 
-    private static final int MAX_WIDTH = 4096;
-    private static final int MAX_HEIGHT = 4096;
+    private static final int MAX_WIDTH = 2048;
+    private static final int MAX_HEIGHT = 2048;
 
     private static final int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT));
 
@@ -56,7 +56,7 @@ public class ImageFragment extends Fragment {
 
     private Button buttonRetry;
 
-    private boolean attemptSecondLoad = true;
+    private boolean attemptSecondLoad = false;
 
     public static ImageFragment newInstance(String url) {
         ImageFragment fragment = new ImageFragment();
@@ -112,11 +112,12 @@ public class ImageFragment extends Fragment {
     private final Target loadTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            Log.d(TAG, "Successfully loaded bitmap into loadTarget");
+            Log.d(TAG, "Successfully loaded " + bitmap.getWidth() + "x" + bitmap.getHeight() + " bitmap into loadTarget");
             activity.setMainProgressBarVisible(false);
             buttonRetry.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
             //imageView.setMinimumTileDpi(160);
+            imageView.setMinimumDpi(40);
             imageView.setImage(ImageSource.cachedBitmap(bitmap));
         }
 
@@ -145,6 +146,7 @@ public class ImageFragment extends Fragment {
 
     private void loadImage() {
         Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).resize(size, size).centerInside().into(loadTarget);
+        //Picasso.with(activity).load(url).into(loadTarget);
     }
 
     @Override
