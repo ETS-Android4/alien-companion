@@ -347,7 +347,7 @@ public class LinkHandler {
     }
 
     public static String getImgurImgId(String url) {
-        String pattern = "imgur\\.com(?:/gallery)?(?:/a)?/(\\w+)";
+        String pattern = "imgur\\.com(?:\\/(?:a|gallery))?(?:\\/(?:topic|r)\\/\\w+)?\\/(\\w+)";
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = compiledPattern.matcher(url);
 
@@ -357,7 +357,7 @@ public class LinkHandler {
         return "";
     }
 
-    public static String getYoutubePlaylistId(String youtubeURL) {
+    private static String getYoutubePlaylistId(String youtubeURL) {
         String pattern = "^.*(youtu.be\\/|list=)([^#\\&\\?]*).*";
 
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
@@ -385,7 +385,7 @@ public class LinkHandler {
         return url.substring(0, url.indexOf("?")).replaceAll("https?://", "").replace("/", "(s)").concat(".jpg");
     }
 
-    public static String decodeURL(String url) {
+    private static String decodeURL(String url) {
         try {
             String decodedurl = URLDecoder.decode(url, "UTF-8");
             //Log.d("url decoder", decodedurl);

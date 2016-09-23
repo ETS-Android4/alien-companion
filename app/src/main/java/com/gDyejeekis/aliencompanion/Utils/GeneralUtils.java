@@ -308,21 +308,29 @@ public class GeneralUtils {
         ImgurItem item;
         String urlLC = url.toLowerCase();
         String id = LinkHandler.getImgurImgId(url);
-        if (urlLC.contains("/a/")) {
+        if (urlLC.contains("/a/") || urlLC.contains("/topic/")) {
             JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.ALBUM, id)).getResponseObject();
             JSONObject object = (JSONObject) response.get("data");
             item = new ImgurAlbum(object);
-        } else if (urlLC.contains("/gallery/")) {
+        }
+        else if (urlLC.contains("/gallery/")) {
             JSONObject response;
             try {
                 response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.GALLERY, id)).getResponseObject();
+                item = new ImgurGallery((JSONObject) response.get("data"));
             } catch (Exception e) {
                 e.printStackTrace();
-                response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.IMAGE, id)).getResponseObject();
+                try {
+                    response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.IMAGE, id)).getResponseObject();
+                    item = new ImgurImage((JSONObject) response.get("data"));
+                } catch (Exception r) {
+                    r.printStackTrace();
+                    response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.ALBUM, id)).getResponseObject();
+                    item = new ImgurAlbum((JSONObject) response.get("data"));
+                }
             }
-            JSONObject object = (JSONObject) response.get("data");
-            item = new ImgurGallery(object);
-        } else {
+        }
+        else {
             JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.IMAGE, id)).getResponseObject();
             JSONObject object = (JSONObject) response.get("data");
             item = new ImgurImage(object);
