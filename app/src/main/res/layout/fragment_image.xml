@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/frag_img_layout">
 
-    <com.gDyejeekis.aliencompanion.Views.TouchImageView
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

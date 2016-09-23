@@ -381,7 +381,8 @@ public class ImageActivity extends BackNavActivity {
         saveAction.setVisible(showSaveAction && !loadFromLocal);
 
         MenuItem hq_action = menu.findItem(R.id.action_high_quality);
-        hq_action.setVisible(showHqAction);
+        //hq_action.setVisible(showHqAction);
+        hq_action.setVisible(false);
 
         MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
         gridview_action.setVisible(showGridviewAction);

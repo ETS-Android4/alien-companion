@@ -20,25 +20,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.Views.TouchImageView;
-import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.Permission;
 import java.util.UUID;
-import java.util.jar.Manifest;
 
 /**
  * Created by sound on 3/8/2016.
@@ -47,25 +43,20 @@ public class ImageFragment extends Fragment {
 
     public static final String TAG = "ImageFragment";
 
-    private static final int MAX_WIDTH = 1600;
-    private static final int MAX_HEIGHT = 900;
-
-    private static final int HQ_MAX_WIDTH = 1920;
-    private static final int HQ_MAX_HEIGHT = 1200;
+    private static final int MAX_WIDTH = 4096;
+    private static final int MAX_HEIGHT = 4096;
 
     private static final int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT));
-
-    private static final int hqSize = (int) Math.ceil(Math.sqrt(HQ_MAX_WIDTH * HQ_MAX_HEIGHT));
 
     private ImageActivity activity;
 
     private String url;
 
-    private TouchImageView imageView;
+    private SubsamplingScaleImageView imageView;
 
     private Button buttonRetry;
 
-    private boolean attemptSecondSave = true;
+    private boolean attemptSecondLoad = true;
 
     public static ImageFragment newInstance(String url) {
         ImageFragment fragment = new ImageFragment();
@@ -90,8 +81,8 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
 
-        imageView = (TouchImageView) view.findViewById(R.id.photoview);
-        //imageView.setTag(target); //this keeps reference to imageview, causes OOM issues
+        imageView = (SubsamplingScaleImageView) view.findViewById(R.id.photoview);
+        //imageView.setTag(saveTarget); //this keeps reference to imageview, causes OOM issues
         if(MyApplication.dismissImageOnTap) {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,41 +109,55 @@ public class ImageFragment extends Fragment {
         return view;
     }
 
-    private void loadImage() {
-        Log.d(TAG, "Loading image from " + url);
-        imageView.setVisibility(View.GONE);
-        buttonRetry.setVisibility(View.GONE);
-        activity.setMainProgressBarVisible(true);
+    private final Target loadTarget = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Log.d(TAG, "Successfully loaded bitmap into loadTarget");
+            activity.setMainProgressBarVisible(false);
+            buttonRetry.setVisibility(View.GONE);
+            imageView.setVisibility(View.VISIBLE);
+            //imageView.setMinimumTileDpi(160);
+            imageView.setImage(ImageSource.cachedBitmap(bitmap));
+        }
 
-        Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).skipMemoryCache().resize(size, size).centerInside().into(imageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                activity.setMainProgressBarVisible(false);
-                imageView.setVisibility(View.VISIBLE);
-                buttonRetry.setVisibility(View.GONE);
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            if(attemptSecondLoad) {
+                attemptSecondLoad = false;
+                Picasso.with(activity).load(url).into(loadTarget);
             }
-
-            @Override
-            public void onError() {
+            else {
+                Log.e(TAG, "Failed to load bitmap into loadTarget");
                 activity.setMainProgressBarVisible(false);
                 imageView.setVisibility(View.GONE);
                 buttonRetry.setVisibility(View.VISIBLE);
             }
-        });
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.d(TAG, "Loading image from " + url);
+            activity.setMainProgressBarVisible(true);
+            imageView.setVisibility(View.GONE);
+            buttonRetry.setVisibility(View.GONE);
+        }
+    };
+
+    private void loadImage() {
+        Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).resize(size, size).centerInside().into(loadTarget);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Picasso.with(activity).cancelRequest(imageView);
+        Picasso.with(activity).cancelRequest(loadTarget);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_high_quality:
-                //loadOriginalBitmap();
-                loadBitmapResized(2560, 1440);
+                //blank
                 return true;
             case R.id.action_save:
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -187,50 +192,11 @@ public class ImageFragment extends Fragment {
         }
     }
 
-    private void loadOriginalBitmap() {
-        imageView.setVisibility(View.GONE);
-        activity.setMainProgressBarVisible(true);
-        Picasso.with(activity).load(url).into(imageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "Loaded original size bitmap");
-                imageView.setVisibility(View.VISIBLE);
-                activity.setMainProgressBarVisible(false);
-            }
-
-            @Override
-            public void onError() {
-                loadBitmapResized(3840, 2160);
-            }
-        });
-    }
-
-    private void loadBitmapResized(final int width, final int height) {
-        int size = (int) Math.ceil(Math.sqrt(width * height));
-        Picasso.with(activity).load(url).transform(new BitmapTransform(width, height)).skipMemoryCache().resize(size, size).centerInside().into(imageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                Log.d(TAG, "Loaded bitmap with dimensions " + width + "x" + height);
-                imageView.setVisibility(View.VISIBLE);
-                activity.setMainProgressBarVisible(false);
-            }
-
-            @Override
-            public void onError() {
-                if(width <= 0 || height <= 0) {
-                    Log.d(TAG, "Failed to load bitmap");
-                    return;
-                }
-                loadBitmapResized(width - 200, height - 200);
-            }
-        });
-    }
-
     private void saveImageToPhotos() {
-        Picasso.with(activity).load(url).into(target);
+        Picasso.with(activity).load(url).into(saveTarget);
     }
 
-    private final Target target = new Target(){
+    private final Target saveTarget = new Target(){
 
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -272,21 +238,12 @@ public class ImageFragment extends Fragment {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            if(attemptSecondSave) {
-                Log.d(TAG, "onBitmapFailed, resizing image..");
-                attemptSecondSave = false;
-                Picasso.with(activity).load(url).transform(new BitmapTransform(HQ_MAX_WIDTH, HQ_MAX_HEIGHT)).resize(hqSize, hqSize).into(target);
-            }
-            else {
-                ToastUtils.displayShortToast(activity, "Failed to save image");
-            }
+            ToastUtils.displayShortToast(activity, "Failed to save image");
         }
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            if(attemptSecondSave) {
-                ToastUtils.displayShortToast(activity, "Saving to photos..");
-            }
+            ToastUtils.displayShortToast(activity, "Saving to photos..");
         }
     };
 
