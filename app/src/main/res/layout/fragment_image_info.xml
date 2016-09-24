@@ -5,13 +5,17 @@
     android:layout_height="match_parent"
     android:background="#96000000"
     android:scrollbarThumbVertical="@drawable/light_scrollbar"
-    android:scrollbarSize="4dp">
+    android:scrollbarSize="4dp"
+    android:id="@+id/scrollview_image_info"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="12dp"
+        android:clickable="true"
+        android:id="@+id/layout_image_info">
 
         <TextView
             android:text="(Title here)"
@@ -21,14 +25,16 @@
             android:textColor="@android:color/white"
             android:textStyle="normal|bold"
             android:layout_marginBottom="6dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:clickable="false" />
 
         <TextView
             android:text="(Description here)"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView_image_descr"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:clickable="false" />
 
     </LinearLayout>
 

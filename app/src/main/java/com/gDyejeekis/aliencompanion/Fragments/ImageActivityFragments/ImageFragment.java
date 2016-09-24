@@ -99,12 +99,7 @@ public class ImageFragment extends Fragment {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(activity.isInfoVisible()) {
-                        activity.removeInfoFragment();
-                    }
-                    else {
-                        activity.finish();
-                    }
+                    activity.finish();
                 }
             });
         }

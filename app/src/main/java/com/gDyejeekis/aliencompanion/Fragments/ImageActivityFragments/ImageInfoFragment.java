@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.R;
 
 /**
@@ -33,6 +35,17 @@ public class ImageInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_info, container, false);
+
+        if(true) { // TODO: 9/24/2016 replace with preference flag
+            //ScrollView scrollView = (ScrollView) view.findViewById(R.id.scrollview_image_info);
+            LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_image_info);
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((ImageActivity) getActivity()).removeInfoFragment();
+                }
+            });
+        }
 
         TextView titleTextView = (TextView) view.findViewById(R.id.textView_image_title);
         String title = getArguments().getString("title");
