@@ -119,8 +119,6 @@ public class ImageFragment extends Fragment {
     private void loadImage() {
         imageLoading();
 
-        picasso = Picasso.with(imageView.getContext());
-
         imageView.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
             @Override
             public void onReady() {
@@ -136,7 +134,6 @@ public class ImageFragment extends Fragment {
             @Override
             public void onPreviewLoadError(Exception e) {
                 Log.d(TAG, "onPreviewLoadError()");
-
             }
 
             @Override
@@ -151,17 +148,25 @@ public class ImageFragment extends Fragment {
             }
         });
 
-        imageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
-            public ImageDecoder make() {
-                return new PicassoDecoder(url, picasso);
-            }});
+        if(url.startsWith("file:")) {
+            url = url.replace("file:", "");
+        }
+        else {
+            picasso = Picasso.with(imageView.getContext());
 
-        imageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
-            @Override
-            public ImageRegionDecoder make() throws IllegalAccessException, InstantiationException {
-                return new PicassoRegionDecoder(okHttpClient);
-            }
-        });
+            imageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
+                public ImageDecoder make() {
+                    return new PicassoDecoder(url, picasso);
+                }
+            });
+
+            imageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
+                @Override
+                public ImageRegionDecoder make() throws IllegalAccessException, InstantiationException {
+                    return new PicassoRegionDecoder(okHttpClient);
+                }
+            });
+        }
 
         imageView.setImage(ImageSource.uri(url));
     }
