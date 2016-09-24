@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,12 +23,18 @@ import android.widget.Button;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
+import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
+import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder;
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.PicassoDecoder;
+import com.gDyejeekis.aliencompanion.Utils.PicassoRegionDecoder;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -36,17 +43,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.UUID;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by sound on 3/8/2016.
  */
 public class ImageFragment extends Fragment {
 
     public static final String TAG = "ImageFragment";
-
-    private static final int MAX_WIDTH = 2048;
-    private static final int MAX_HEIGHT = 2048;
-
-    private static final int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT));
 
     private ImageActivity activity;
 
@@ -56,16 +60,24 @@ public class ImageFragment extends Fragment {
 
     private Button buttonRetry;
 
-    private boolean attemptSecondLoad = false;
+    private Picasso picasso;
 
-    public static ImageFragment newInstance(String url) {
+    private OkHttpClient okHttpClient;
+
+    public static ImageFragment newInstance(String url, OkHttpClient okHttpClient) {
         ImageFragment fragment = new ImageFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
         fragment.setArguments(bundle);
 
+        fragment.setOkHttpClient(okHttpClient);
+
         return fragment;
+    }
+
+    public void setOkHttpClient(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
     }
 
     @Override
@@ -109,50 +121,83 @@ public class ImageFragment extends Fragment {
         return view;
     }
 
-    private final Target loadTarget = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            Log.d(TAG, "Successfully loaded " + bitmap.getWidth() + "x" + bitmap.getHeight() + " bitmap into loadTarget");
-            activity.setMainProgressBarVisible(false);
-            buttonRetry.setVisibility(View.GONE);
-            imageView.setVisibility(View.VISIBLE);
-            //imageView.setMinimumTileDpi(160);
-            imageView.setMinimumDpi(40);
-            imageView.setImage(ImageSource.cachedBitmap(bitmap));
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            if(attemptSecondLoad) {
-                attemptSecondLoad = false;
-                Picasso.with(activity).load(url).into(loadTarget);
-            }
-            else {
-                Log.e(TAG, "Failed to load bitmap into loadTarget");
-                activity.setMainProgressBarVisible(false);
-                imageView.setVisibility(View.GONE);
-                buttonRetry.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.d(TAG, "Loading image from " + url);
-            activity.setMainProgressBarVisible(true);
-            imageView.setVisibility(View.GONE);
-            buttonRetry.setVisibility(View.GONE);
-        }
-    };
-
     private void loadImage() {
-        Picasso.with(activity).load(url).transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT)).resize(size, size).centerInside().into(loadTarget);
-        //Picasso.with(activity).load(url).into(loadTarget);
+        imageLoading();
+
+        picasso = Picasso.with(imageView.getContext());
+
+        imageView.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
+            @Override
+            public void onReady() {
+                Log.d(TAG, "onReady()");
+            }
+
+            @Override
+            public void onImageLoaded() {
+                Log.d(TAG, "onImageLoaded()");
+                imageLoaded();
+            }
+
+            @Override
+            public void onPreviewLoadError(Exception e) {
+                Log.d(TAG, "onPreviewLoadError()");
+
+            }
+
+            @Override
+            public void onImageLoadError(Exception e) {
+                Log.d(TAG, "onImageLoadError()");
+                imageLoadError();
+            }
+
+            @Override
+            public void onTileLoadError(Exception e) {
+                Log.d(TAG, "onTileLoadError()");
+            }
+        });
+
+        imageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
+            public ImageDecoder make() {
+                return new PicassoDecoder(url, picasso);
+            }});
+
+        imageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
+            @Override
+            public ImageRegionDecoder make() throws IllegalAccessException, InstantiationException {
+                return new PicassoRegionDecoder(okHttpClient);
+            }
+        });
+
+        imageView.setImage(ImageSource.uri(url));
+    }
+
+    // call at the start of every image load
+    private void imageLoading() {
+        activity.setMainProgressBarVisible(true);
+        imageView.setVisibility(View.VISIBLE); // can't hide the view until it is loaded because Android will not call its onDraw method
+        buttonRetry.setVisibility(View.GONE);
+    }
+
+    // call on succesful image load
+    private void imageLoaded() {
+        activity.setMainProgressBarVisible(false);
+        imageView.setVisibility(View.VISIBLE);
+        buttonRetry.setVisibility(View.GONE);
+    }
+
+    // call on image load error
+    private void imageLoadError() {
+        activity.setMainProgressBarVisible(false);
+        imageView.setVisibility(View.GONE);
+        buttonRetry.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDestroy() {
+        if(picasso!=null) {
+            picasso.cancelTag(url);
+        }
         super.onDestroy();
-        Picasso.with(activity).cancelRequest(loadTarget);
     }
 
     @Override

@@ -37,6 +37,8 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by sound on 3/4/2016.
  */
@@ -354,7 +356,7 @@ public class ImageActivity extends BackNavActivity {
 
     public void addImageFragment(String url) {
         setHqMenuItemVisible(true);
-        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), "imageFragment").commitAllowingStateLoss();
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url, new OkHttpClient()), "imageFragment").commitAllowingStateLoss();
     }
 
     public void addGifFragment(String url) {

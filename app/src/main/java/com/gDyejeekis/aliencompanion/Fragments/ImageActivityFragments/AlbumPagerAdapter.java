@@ -18,6 +18,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by sound on 3/12/2016.
  */
@@ -29,10 +31,13 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<String> thumbUrls = new ArrayList<>();
 
+    private OkHttpClient okHttpClient;
+
     public AlbumPagerAdapter(Activity activity, FragmentManager fm, List<ImgurImage> images, boolean loadFromLocal) {
         super(fm);
         //this.activity = activity;
         this.images = images;
+        this.okHttpClient = new OkHttpClient();
 
         for(ImgurImage image : images) {
             if(loadFromLocal) {
@@ -63,7 +68,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
         else {
             String url = images.get(position).getLink();
             if (url.matches("(?i).*\\.(png|jpg|jpeg)")) {
-                return ImageFragment.newInstance(url);
+                return ImageFragment.newInstance(url, okHttpClient);
             } else if (url.matches("(?i).*\\.(gifv|gif)")) {
                 return GifFragment.newInstance(url);
             }
