@@ -140,6 +140,7 @@ public class MyApplication extends Application {
     public static boolean syncThumbnails;
     public static boolean dismissImageOnTap;
     public static boolean dismissGifOnTap;
+    public static boolean dismissInfoOnTap;
     public static boolean syncImages;
     public static int syncAlbumImgCount;
     public static boolean syncOverWifiOnly;
@@ -380,6 +381,7 @@ public class MyApplication extends Application {
         syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
+        dismissInfoOnTap = prefs.getBoolean("infoTap", true);
         currentPostListView = prefs.getInt("postListView", 0);
         switch (currentPostListView) {
             case 0:

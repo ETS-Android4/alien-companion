@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
 /**
@@ -36,8 +37,7 @@ public class ImageInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_info, container, false);
 
-        if(true) { // TODO: 9/24/2016 replace with preference flag
-            //ScrollView scrollView = (ScrollView) view.findViewById(R.id.scrollview_image_info);
+        if(MyApplication.dismissInfoOnTap) {
             LinearLayout layout = (LinearLayout) view.findViewById(R.id.layout_image_info);
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override

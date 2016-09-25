@@ -75,6 +75,11 @@
             android:defaultValue="true"/>
 
         <CheckBoxPreference
+            android:key="infoTap"
+            android:title="Dismiss image info on single tap"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
             android:key="commentNav"
             android:title="FAB comment navigation"
             android:summary="Easily navigate between top level parent comments"
