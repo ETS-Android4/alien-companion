@@ -168,6 +168,8 @@ public class ImageFragment extends Fragment {
             });
         }
 
+        imageView.setMinimumTileDpi(160);
+        imageView.setMinimumDpi(40);
         imageView.setImage(ImageSource.uri(url));
     }
 
