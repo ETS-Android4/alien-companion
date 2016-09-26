@@ -25,8 +25,6 @@ import okhttp3.OkHttpClient;
  */
 public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
 
-    //private ImageActivity activity;
-
     private List<ImgurImage> images;
 
     private ArrayList<String> thumbUrls = new ArrayList<>();
@@ -35,7 +33,6 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
 
     public AlbumPagerAdapter(Activity activity, FragmentManager fm, List<ImgurImage> images, boolean loadFromLocal) {
         super(fm);
-        //this.activity = activity;
         this.images = images;
         this.okHttpClient = new OkHttpClient();
 
@@ -70,7 +67,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
             if (url.matches("(?i).*\\.(png|jpg|jpeg)")) {
                 return ImageFragment.newInstance(url, okHttpClient);
             } else if (url.matches("(?i).*\\.(gifv|gif)")) {
-                return GifFragment.newInstance(url);
+                return GifFragment.newInstance(url, false);
             }
         }
         return null;

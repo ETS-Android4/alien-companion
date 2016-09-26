@@ -4,9 +4,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
@@ -39,6 +38,9 @@ import java.util.List;
 
 import okhttp3.OkHttpClient;
 
+import static android.support.v4.view.ViewPager.SCROLL_STATE_DRAGGING;
+import static android.support.v4.view.ViewPager.SCROLL_STATE_IDLE;
+
 /**
  * Created by sound on 3/4/2016.
  */
@@ -47,8 +49,6 @@ public class ImageActivity extends BackNavActivity {
     public static final String TAG = "ImageActivity";
 
     private String url;
-
-    private String domain;
 
     private boolean loadFromLocal = false;
 
@@ -59,6 +59,8 @@ public class ImageActivity extends BackNavActivity {
     private ProgressBar progressBar;
 
     private ViewPager viewPager;
+
+    private int viewPagerPosition;
 
     private FragmentManager fragmentManager;
 
@@ -109,7 +111,7 @@ public class ImageActivity extends BackNavActivity {
 
     private void setupFragments() {
         url = getIntent().getStringExtra("url");
-        domain = getIntent().getStringExtra("domain");
+        String domain = getIntent().getStringExtra("domain");
 
         if(MyApplication.offlineModeEnabled) {
             File appFolder;
@@ -315,11 +317,12 @@ public class ImageActivity extends BackNavActivity {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                
             }
 
             @Override
             public void onPageSelected(int position) {
+                viewPagerPosition = position;
                 removeInfoFragment();
                 String subtitle;
                 if(position==albumSize) {
@@ -345,7 +348,18 @@ public class ImageActivity extends BackNavActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                if(state == SCROLL_STATE_DRAGGING || state == SCROLL_STATE_IDLE) {
+                    //Log.d(TAG, "onPageScrollStateChanged");
+                    Fragment fragment = (Fragment) viewPager.getAdapter().instantiateItem(viewPager, viewPagerPosition);
+                    if (fragment instanceof GifFragment) {
+                        if (state == SCROLL_STATE_IDLE) {
+                            ((GifFragment) fragment).resumePlayback();
+                        }
+                        else {
+                            ((GifFragment) fragment).pausePlayback();
+                        }
+                    }
+                }
             }
         });
     }
@@ -356,12 +370,16 @@ public class ImageActivity extends BackNavActivity {
 
     public void addImageFragment(String url) {
         setHqMenuItemVisible(true);
-        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url, new OkHttpClient()), "imageFragment").commitAllowingStateLoss();
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url, new OkHttpClient()), ImageFragment.TAG).commitAllowingStateLoss();
     }
 
     public void addGifFragment(String url) {
-        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url), "gifFragment").commitAllowingStateLoss();
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url, true), GifFragment.TAG).commitAllowingStateLoss();
     }
+
+    //public void addGifFragment(String url, int position) {
+    //    fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url, false), GifFragment.TAG + position).commitAllowingStateLoss();
+    //}
 
     public void setMainProgressBarVisible(boolean flag) {
         if(flag) {

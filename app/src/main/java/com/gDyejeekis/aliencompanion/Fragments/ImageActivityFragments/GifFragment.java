@@ -76,13 +76,16 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     private boolean isGif;
 
+    private boolean autoplay;
+
     private boolean gifSaved;
 
-    public static GifFragment newInstance(String url) {
+    public static GifFragment newInstance(String url, boolean autoplay) {
         GifFragment fragment = new GifFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
+        bundle.putBoolean("autoplay", autoplay);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -95,6 +98,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
         activity = (ImageActivity) getActivity();
         url = getArguments().getString("url", "null");
+        autoplay = getArguments().getBoolean("autoplay");
 
         if(url.endsWith(".gif")) {
             if(url.contains("imgur.com")) {
@@ -147,12 +151,17 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     }
 
     private void loadUrl() {
-        if(isGif) loadGif();
-        else loadVideo();
+        if(isGif) {
+            loadGif();
+        }
+        else {
+            if(autoplay) {
+                loadVideo();
+            }
+        }
     }
 
     private void loadVideo() {
-        Log.d(TAG, "Loading video from " + url);
         activity.setMainProgressBarVisible(true);
         buttonRetry.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
@@ -181,6 +190,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 }
             }
         });
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -203,6 +213,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     }
 
     private void loadVideoSource() {
+        Log.d(TAG, "Loading video from " + url);
         try {
             mPlayer = new MediaPlayer();
             mPlayer.setDataSource(url);
@@ -300,6 +311,35 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                     }
                 }
             }.execute(url);
+        }
+    }
+
+    public void resumePlayback() {
+        if(isGif) {
+            if(gifDrawable != null) {
+                gifDrawable.start();
+            }
+        }
+        else {
+            if(sHolder == null) {
+                loadVideo();
+            }
+            else if(mPlayer != null) {
+                mPlayer.start();
+            }
+        }
+    }
+
+    public void pausePlayback() {
+        if(isGif) {
+            if(gifDrawable != null && gifDrawable.isPlaying()) {
+                gifDrawable.pause();
+            }
+        }
+        else {
+            if(mPlayer !=null && mPlayer.isPlaying()) {
+                mPlayer.pause();
+            }
         }
     }
 
