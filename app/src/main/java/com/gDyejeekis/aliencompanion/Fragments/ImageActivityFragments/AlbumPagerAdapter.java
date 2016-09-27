@@ -66,7 +66,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
             String url = images.get(position).getLink();
             if (url.matches("(?i).*\\.(png|jpg|jpeg)")) {
                 return ImageFragment.newInstance(url, okHttpClient);
-            } else if (url.matches("(?i).*\\.(gifv|gif)")) {
+            } else if (url.matches("(?i).*\\.(mp4|gifv|gif)")) {
                 return GifFragment.newInstance(url, (position == 0));
             }
         }

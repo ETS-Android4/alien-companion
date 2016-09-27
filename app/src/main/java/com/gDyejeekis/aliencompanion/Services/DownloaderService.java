@@ -655,7 +655,7 @@ public class DownloaderService extends IntentService {
         int i = 0;
         for(ImgurImage img : item.getImages()) {
             if(i >= MyApplication.syncAlbumImgCount) break;
-            downloadPostImageToFile(img.getLink(), folderPath);
+            downloadPostImageToFile((img.isAnimated()) ? img.getMp4() : img.getLink(), folderPath);
             String imgId = LinkHandler.getImgurImgId(img.getLink());
             if(MyApplication.syncAlbumImgCount > 1) {
                 try {
@@ -669,7 +669,8 @@ public class DownloaderService extends IntentService {
         int indexExlusive = (MyApplication.syncAlbumImgCount > item.getImages().size()) ? item.getImages().size() : MyApplication.syncAlbumImgCount;
         item.setImages(new ArrayList<ImgurImage>(item.getImages().subList(0, indexExlusive)));
         for(ImgurImage img : item.getImages()) {
-            img.setLink("file:" + folderPath + "/" + img.getLink().replaceAll("https?://", "").replace("/", "(s)"));
+            String imgLink = (img.isAnimated()) ? img.getMp4() : img.getLink();
+            img.setLink("file:" + folderPath + "/" + imgLink.replaceAll("https?://", "").replace("/", "(s)"));
         }
         saveAlbumInfoToFile(item, filename + "-" + item.getId() + "-albumInfo");
     }
