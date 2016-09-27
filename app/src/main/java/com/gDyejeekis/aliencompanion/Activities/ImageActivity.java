@@ -308,7 +308,6 @@ public class ImageActivity extends BackNavActivity {
             setInfoValues(images.get(0).getTitle(), images.get(0).getDescription());
         }
         invalidateOptionsMenu();
-        //setHqMenuItemVisible(!images.get(0).isAnimated());
         getSupportActionBar().setTitle("Album");
         getSupportActionBar().setSubtitle("1 of " + images.size());
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
@@ -334,14 +333,14 @@ public class ImageActivity extends BackNavActivity {
                     if(showInfoAction) {
                         setInfoValues(title, description);
                     }
-                    //setHqMenuItemVisible(false);
+                    invalidateOptionsMenu();
                     subtitle = albumSize + " items";
                 }
                 else {
                     showSaveAction = true;
                     showGridviewAction = true;
                     checkImgurItemInfo(images.get(position));
-                    //setHqMenuItemVisible(!images.get(position).isAnimated());
+                    invalidateOptionsMenu();
                     subtitle = (position + 1) + " of " + albumSize;
                 }
                 getSupportActionBar().setSubtitle(subtitle);
@@ -370,7 +369,6 @@ public class ImageActivity extends BackNavActivity {
     }
 
     public void addImageFragment(String url) {
-        //setHqMenuItemVisible(true);
         fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url, new OkHttpClient()), ImageFragment.TAG).commitAllowingStateLoss();
     }
 
@@ -410,11 +408,6 @@ public class ImageActivity extends BackNavActivity {
         //gridview_action.setVisible(albumSize != -1);
         return true;
     }
-
-    //private void setHqMenuItemVisible(boolean flag) {
-    //    showHqAction = flag;
-    //    invalidateOptionsMenu();
-    //}
 
     public String getOriginalUrl() {
         return url;
