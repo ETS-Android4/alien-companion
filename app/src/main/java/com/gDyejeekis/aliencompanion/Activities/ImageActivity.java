@@ -307,7 +307,8 @@ public class ImageActivity extends BackNavActivity {
         if(showInfoAction) {
             setInfoValues(images.get(0).getTitle(), images.get(0).getDescription());
         }
-        setHqMenuItemVisible(!images.get(0).isAnimated());
+        invalidateOptionsMenu();
+        //setHqMenuItemVisible(!images.get(0).isAnimated());
         getSupportActionBar().setTitle("Album");
         getSupportActionBar().setSubtitle("1 of " + images.size());
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
@@ -333,14 +334,14 @@ public class ImageActivity extends BackNavActivity {
                     if(showInfoAction) {
                         setInfoValues(title, description);
                     }
-                    setHqMenuItemVisible(false);
+                    //setHqMenuItemVisible(false);
                     subtitle = albumSize + " items";
                 }
                 else {
                     showSaveAction = true;
                     showGridviewAction = true;
                     checkImgurItemInfo(images.get(position));
-                    setHqMenuItemVisible(!images.get(position).isAnimated());
+                    //setHqMenuItemVisible(!images.get(position).isAnimated());
                     subtitle = (position + 1) + " of " + albumSize;
                 }
                 getSupportActionBar().setSubtitle(subtitle);
@@ -369,7 +370,7 @@ public class ImageActivity extends BackNavActivity {
     }
 
     public void addImageFragment(String url) {
-        setHqMenuItemVisible(true);
+        //setHqMenuItemVisible(true);
         fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url, new OkHttpClient()), ImageFragment.TAG).commitAllowingStateLoss();
     }
 
@@ -410,10 +411,10 @@ public class ImageActivity extends BackNavActivity {
         return true;
     }
 
-    private void setHqMenuItemVisible(boolean flag) {
-        showHqAction = flag;
-        invalidateOptionsMenu();
-    }
+    //private void setHqMenuItemVisible(boolean flag) {
+    //    showHqAction = flag;
+    //    invalidateOptionsMenu();
+    //}
 
     public String getOriginalUrl() {
         return url;
