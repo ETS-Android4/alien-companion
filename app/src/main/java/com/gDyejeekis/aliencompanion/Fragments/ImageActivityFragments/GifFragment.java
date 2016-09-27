@@ -281,6 +281,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         activity.setMainProgressBarVisible(true);
 
         if(activity.loadedFromLocal()) {
+            activity.setMainProgressBarVisible(false);
             try {
                 //byte[] bytes = org.apache.commons.io.FileUtils.readFileToByteArray(new File(url));
                 gifDrawable = new GifDrawable(url);
@@ -294,23 +295,50 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             }
         }
         else {
-            new GifDataDownloader() {
+            new AsyncTask<String, Void, String>() {
+
                 @Override
-                protected void onPostExecute(final byte[] bytes) {
+                protected String doInBackground(String... params) {
+                    final String url = params[0];
+                    String cachedGif = GeneralUtils.checkCacheForGif(activity, url);
+                    if(cachedGif == null) {
+                        cachedGif = GeneralUtils.downloadGifToCache(activity, url);
+                    }
+                    return cachedGif;
+                }
+
+                @Override
+                protected void onPostExecute(String gifPath) {
                     activity.setMainProgressBarVisible(false);
                     try {
-                        if (bytes == null) throw new Exception();
-                        gifDrawable = new GifDrawable(bytes);
+                        gifDrawable = new GifDrawable(gifPath);
                         gifView.setImageDrawable(gifDrawable);
                         gifView.setVisibility(View.VISIBLE);
                         buttonRetry.setVisibility(View.GONE);
-                    } catch (Exception e) {
-                        buttonRetry.setVisibility(View.VISIBLE);
+                    } catch (IOException e) {
                         gifView.setVisibility(View.GONE);
+                        buttonRetry.setVisibility(View.VISIBLE);
                         e.printStackTrace();
                     }
                 }
             }.execute(url);
+            //new GifDataDownloader() {
+            //    @Override
+            //    protected void onPostExecute(final byte[] bytes) {
+            //        activity.setMainProgressBarVisible(false);
+            //        try {
+            //            if (bytes == null) throw new Exception();
+            //            gifDrawable = new GifDrawable(bytes);
+            //            gifView.setImageDrawable(gifDrawable);
+            //            gifView.setVisibility(View.VISIBLE);
+            //            buttonRetry.setVisibility(View.GONE);
+            //        } catch (Exception e) {
+            //            buttonRetry.setVisibility(View.VISIBLE);
+            //            gifView.setVisibility(View.GONE);
+            //            e.printStackTrace();
+            //        }
+            //    }
+            //}.execute(url);
         }
     }
 
