@@ -269,7 +269,7 @@ public class ImageActivity extends BackNavActivity {
     private void checkImgurAlbumSize(ImgurItem album) {
         if(album.getImages().size() == 1) {
             ImgurImage image = album.getImages().get(0);
-            showInfoAction = image.hasInfo();
+            checkImgurItemInfo(image);
             if(image.isAnimated()) {
                 addGifFragment(image.getMp4());
             }
@@ -303,10 +303,7 @@ public class ImageActivity extends BackNavActivity {
     private void setupAlbumView(final List<ImgurImage> images, final boolean hasAlbumInfo, final String title, final String description) {
         albumSize = images.size();
         showGridviewAction = true;
-        showInfoAction = images.get(0).hasInfo();
-        if(showInfoAction) {
-            setInfoValues(images.get(0).getTitle(), images.get(0).getDescription());
-        }
+        checkImgurItemInfo(images.get(0));
         invalidateOptionsMenu();
         getSupportActionBar().setTitle("Album");
         getSupportActionBar().setSubtitle("1 of " + images.size());
