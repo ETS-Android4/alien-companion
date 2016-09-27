@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,35 +16,23 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.GifDataDownloader;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.Views.VideoSurfaceView;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.UUID;
 
 import pl.droidsonroids.gif.GifDrawable;
@@ -300,9 +287,9 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 @Override
                 protected String doInBackground(String... params) {
                     final String url = params[0];
-                    String cachedGif = GeneralUtils.checkCacheForGif(activity, url);
+                    String cachedGif = GeneralUtils.checkCacheForMedia(activity, url);
                     if(cachedGif == null) {
-                        cachedGif = GeneralUtils.downloadGifToCache(activity, url);
+                        cachedGif = GeneralUtils.downloadMediaToCache(activity, url);
                     }
                     return cachedGif;
                 }

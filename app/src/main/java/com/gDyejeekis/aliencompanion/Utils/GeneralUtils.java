@@ -367,27 +367,27 @@ public class GeneralUtils {
         return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
     }
 
-    public static String checkCacheForGif(Context context, String url) {
+    public static String checkCacheForMedia(Context context, String url) {
         File file = findFile(context.getCacheDir(), context.getCacheDir().getAbsolutePath(), urlToFilename(url));
         if(file!=null) {
-            Log.d(TAG, "Found GIF in cache " + file.getAbsolutePath());
+            Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
         }
-        Log.d(TAG, "Didn't find GIF from " + url + " in cache");
+        Log.d(TAG, "Didn't find media from " + url + " in cache");
         return null;
     }
 
 
     // Don't call on main thread
-    public static String downloadGifToCache(Context context, String url) {
-        Log.d(TAG, "Caching GIF from " + url);
+    public static String downloadMediaToCache(Context context, String url) {
+        Log.d(TAG, "Caching media from " + url);
         File file = new File(context.getCacheDir(), urlToFilename(url));
         try {
             downloadMediaToFile(url, file);
-            Log.d(TAG, "GIF cached to " + file.getAbsolutePath());
+            Log.d(TAG, "Media cached to " + file.getAbsolutePath());
             return file.getAbsolutePath();
         } catch (IOException e) {
-            Log.e(TAG, "Failed to cache GIF to " + file.getAbsolutePath());
+            Log.e(TAG, "Failed to cache media to " + file.getAbsolutePath());
             e.printStackTrace();
         }
         return null;
