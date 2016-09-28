@@ -1,7 +1,9 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.AsyncTasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.gDyejeekis.aliencompanion.Utils.ByteArrayHttpClient;
 
 public class GifDataDownloader extends AsyncTask<String, Void, byte[]> {
     private static final String TAG = "GifDataDownloader";

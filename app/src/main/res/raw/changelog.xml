@@ -12,6 +12,7 @@
         <changelogtext>Fixed GIFs in imgur albums autoplaying even when out of view</changelogtext>
         <changelogtext>Fixed synced GIFs in imgur albums not displaying in offline mode</changelogtext>
         <changelogtext>Implemented caching of non-imgur GIFs in online mode</changelogtext>
+        <changelogtext>Reduced 'Save to photos' times for both images and GIFs</changelogtext>
         <changelogtext>Redesigned settings menu to make options more easily accessible</changelogtext>
         <changelogtext>Long tapping the 'Go offline/online' and 'Synced' options now trigger the effect without a confirmation dialog</changelogtext>
         <changelogtext>Syncing of individual posts now respects the 'Sync over wifi only' option</changelogtext>

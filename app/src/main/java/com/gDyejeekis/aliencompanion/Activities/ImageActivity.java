@@ -366,7 +366,7 @@ public class ImageActivity extends BackNavActivity {
     }
 
     public void addImageFragment(String url) {
-        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url, new OkHttpClient()), ImageFragment.TAG).commitAllowingStateLoss();
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, ImageFragment.newInstance(url), ImageFragment.TAG).commitAllowingStateLoss();
     }
 
     public void addGifFragment(String url) {

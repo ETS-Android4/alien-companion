@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -54,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -338,6 +341,26 @@ public class GeneralUtils {
         return item;
     }
 
+    public static void copy(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+
+    public static Bitmap getBitmapFromPath(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeFile(path, options);
+    }
+
     //this method makes an API call to gfycat.com
     //public static String getGfycatMobileUrl(String desktopUrl) throws IOException, ParseException {
     //    String url = "http://gfycat.com/cajax/get/" + LinkHandler.getGfycatId(desktopUrl);
@@ -367,8 +390,8 @@ public class GeneralUtils {
         return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
     }
 
-    public static String checkCacheForMedia(Context context, String url) {
-        File file = findFile(context.getCacheDir(), context.getCacheDir().getAbsolutePath(), urlToFilename(url));
+    public static String checkCacheForMedia(File cacheDir, String url) {
+        File file = findFile(cacheDir, cacheDir.getAbsolutePath(), urlToFilename(url));
         if(file!=null) {
             Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
@@ -379,9 +402,9 @@ public class GeneralUtils {
 
 
     // Don't call on main thread
-    public static String downloadMediaToCache(Context context, String url) {
+    public static String downloadMediaToCache(File cacheDir, String url) {
         Log.d(TAG, "Caching media from " + url);
-        File file = new File(context.getCacheDir(), urlToFilename(url));
+        File file = new File(cacheDir, urlToFilename(url));
         try {
             downloadMediaToFile(url, file);
             Log.d(TAG, "Media cached to " + file.getAbsolutePath());

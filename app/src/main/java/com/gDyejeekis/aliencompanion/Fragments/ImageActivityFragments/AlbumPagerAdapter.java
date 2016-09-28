@@ -29,12 +29,9 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<String> thumbUrls = new ArrayList<>();
 
-    private OkHttpClient okHttpClient;
-
     public AlbumPagerAdapter(Activity activity, FragmentManager fm, List<ImgurImage> images, boolean loadFromLocal) {
         super(fm);
         this.images = images;
-        this.okHttpClient = new OkHttpClient();
 
         for(ImgurImage image : images) {
             if(loadFromLocal) {
@@ -65,7 +62,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
         else {
             String url = images.get(position).getLink();
             if (url.matches("(?i).*\\.(png|jpg|jpeg)")) {
-                return ImageFragment.newInstance(url, okHttpClient);
+                return ImageFragment.newInstance(url);
             } else if (url.matches("(?i).*\\.(mp4|gifv|gif)")) {
                 return GifFragment.newInstance(url, (position == 0));
             }

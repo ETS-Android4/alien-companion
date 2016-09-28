@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -15,29 +16,36 @@ import java.net.URLConnection;
 /**
  * Created by sound on 3/18/2016.
  */
-public class MediaDownloadTask extends AsyncTask<Void, Void, Boolean> {
 
-    //Downloader task for images, gif and mp4 files
+/*
+    Task for downloading media to file
+ */
+public class MediaDownloadTask extends AsyncTask<Void, Void, Boolean> {
 
     public static final String TAG = "MediaDownloadTask";
 
     private String url;
-    //private String directory;
     private File file;
+    private File cacheDir;
 
-    public MediaDownloadTask(String url, File file) {
+    public MediaDownloadTask(String url, File file, File cacheDir) {
         this.url = url;
-        //this.directory = directory;
         this.file = file;
+        this.cacheDir = cacheDir;
     }
 
     @Override
     protected Boolean doInBackground(Void... unused) {
-        //final String filename = url.replace("/", "(s)");
-        //final File file = new File(directory, filename);
-
         try {
-            GeneralUtils.downloadMediaToFile(url, file);
+            String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, GeneralUtils.urlToFilename(url));
+            if(cachedPath == null) {
+                Log.d(TAG, "Didn't find media in cache, downloading to " + file.getAbsolutePath());
+                GeneralUtils.downloadMediaToFile(url, file);
+            }
+            else {
+                Log.d(TAG, "Found media in cache " + cachedPath + " , copying to " + file.getAbsolutePath());
+                GeneralUtils.copy(new File(cachedPath), file);
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();

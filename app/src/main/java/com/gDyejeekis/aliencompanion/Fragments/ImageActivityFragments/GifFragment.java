@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,6 +25,7 @@ import android.widget.Button;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -282,17 +282,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             }
         }
         else {
-            new AsyncTask<String, Void, String>() {
-
-                @Override
-                protected String doInBackground(String... params) {
-                    final String url = params[0];
-                    String cachedGif = GeneralUtils.checkCacheForMedia(activity, url);
-                    if(cachedGif == null) {
-                        cachedGif = GeneralUtils.downloadMediaToCache(activity, url);
-                    }
-                    return cachedGif;
-                }
+            new MediaLoadTask(activity.getCacheDir()) {
 
                 @Override
                 protected void onPostExecute(String gifPath) {
@@ -411,7 +401,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
         showSavingGifNotif(id);
 
-        new MediaDownloadTask(url, file) {
+        new MediaDownloadTask(url, file, activity.getCacheDir()) {
             @Override protected void onPostExecute(Boolean success) {
                 Log.d(TAG, "Gif downloaded to file");
                 gifSaved = success;

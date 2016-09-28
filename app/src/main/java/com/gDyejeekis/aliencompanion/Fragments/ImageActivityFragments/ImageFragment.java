@@ -7,13 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,27 +21,21 @@ import android.widget.Button;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
-import com.davemorrissey.labs.subscaleview.decoder.ImageDecoder;
-import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder;
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.PicassoDecoder;
-import com.gDyejeekis.aliencompanion.Utils.PicassoRegionDecoder;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.UUID;
 
 import okhttp3.OkHttpClient;
+
+import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 
 /**
  * Created by sound on 3/8/2016.
@@ -60,25 +52,25 @@ public class ImageFragment extends Fragment {
 
     private Button buttonRetry;
 
-    private Picasso picasso;
+    private MediaLoadTask loadTask;
 
-    private OkHttpClient okHttpClient;
+    //private Picasso picasso;
 
-    public static ImageFragment newInstance(String url, OkHttpClient okHttpClient) {
+    //private OkHttpClient okHttpClient;
+
+    public static ImageFragment newInstance(String url) {
         ImageFragment fragment = new ImageFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString("url", url);
         fragment.setArguments(bundle);
 
-        fragment.setOkHttpClient(okHttpClient);
-
         return fragment;
     }
 
-    public void setOkHttpClient(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
-    }
+    //public void setOkHttpClient(OkHttpClient okHttpClient) {
+    //    this.okHttpClient = okHttpClient;
+    //}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,6 +111,9 @@ public class ImageFragment extends Fragment {
     private void loadImage() {
         imageLoading();
 
+        imageView.setMinimumTileDpi(160);
+        imageView.setMinimumDpi(40);
+
         imageView.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
             @Override
             public void onReady() {
@@ -150,27 +145,38 @@ public class ImageFragment extends Fragment {
 
         if(url.startsWith("file:")) {
             url = url.replace("file:", "");
+            imageView.setImage(ImageSource.uri(url));
         }
         else {
-            picasso = Picasso.with(imageView.getContext());
+            loadTask = new MediaLoadTask(activity.getCacheDir()) {
 
-            imageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
-                public ImageDecoder make() {
-                    return new PicassoDecoder(url, picasso);
-                }
-            });
-
-            imageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
                 @Override
-                public ImageRegionDecoder make() throws IllegalAccessException, InstantiationException {
-                    return new PicassoRegionDecoder(okHttpClient);
+                protected void onPostExecute(String cachedPath) {
+                    if(cachedPath!=null) {
+                        imageView.setImage(ImageSource.uri(cachedPath));
+                    }
+                    else {
+                        ToastUtils.displayShortToast(activity, "Error loading image");
+                    }
                 }
-            });
+            };
+            //loadTask.executeOnExecutor(THREAD_POOL_EXECUTOR, url);
+            loadTask.execute(url);
+            //picasso = Picasso.with(imageView.getContext());
+//
+            //imageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
+            //    public ImageDecoder make() {
+            //        return new PicassoDecoder(url, picasso);
+            //    }
+            //});
+//
+            //imageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
+            //    @Override
+            //    public ImageRegionDecoder make() throws IllegalAccessException, InstantiationException {
+            //        return new PicassoRegionDecoder(okHttpClient);
+            //    }
+            //});
         }
-
-        imageView.setMinimumTileDpi(160);
-        imageView.setMinimumDpi(40);
-        imageView.setImage(ImageSource.uri(url));
     }
 
     // call at the start of every image load
@@ -196,8 +202,11 @@ public class ImageFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        if(picasso!=null) {
-            picasso.cancelTag(url);
+        //if(picasso!=null) {
+        //    picasso.cancelTag(url);
+        //}
+        if(loadTask!=null) {
+            loadTask.cancel(true);
         }
         super.onDestroy();
     }
@@ -242,66 +251,111 @@ public class ImageFragment extends Fragment {
     }
 
     private void saveImageToPhotos() {
-        Picasso.with(activity).load(url).into(saveTarget);
+        final int notifId = UUID.randomUUID().hashCode();
+        showSavingImgNotif(notifId);
+        final File saveTarget = getSaveDestination();
+        new MediaDownloadTask(url, saveTarget, activity.getCacheDir()) {
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                if(success) {
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(saveTarget);
+                    mediaScanIntent.setData(contentUri);
+                    activity.sendBroadcast(mediaScanIntent);
+
+                    showImageSavedNotif(notifId, saveTarget);
+                }
+                else {
+                    showImageSaveFailedNotif(notifId);
+                }
+            }
+        }.execute();
+        //Picasso.with(activity).load(url).into(saveTarget);
     }
 
-    private final Target saveTarget = new Target(){
+    //private final Target saveTarget = new Target(){
+//
+    //    @Override
+    //    public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+    //        new Thread(new Runnable() {
+//
+    //            @Override
+    //            public void run() {
+    //                Log.d(TAG, "Saving " + url + " to pictures directory");
+    //                String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+//
+    //                File appFolder = new File(dir + "/AlienCompanion");
+//
+    //                if(!appFolder.exists()) {
+    //                    appFolder.mkdir();
+    //                }
+//
+    //                String filename = url.replaceAll("https?://", "").replace("/", "(s)");
+    //                File file = new File(appFolder.getAbsolutePath(), filename);
+    //                try {
+    //                    file.createNewFile();
+    //                    FileOutputStream ostream = new FileOutputStream(file);
+    //                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+    //                    ostream.flush();
+    //                    ostream.close();
+//
+    //                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+    //                    Uri contentUri = Uri.fromFile(file);
+    //                    mediaScanIntent.setData(contentUri);
+    //                    activity.sendBroadcast(mediaScanIntent);
+//
+    //                    showImageSavedNotification(bitmap, contentUri);
+    //                } catch (Exception e) {
+    //                    e.printStackTrace();
+    //                }
+    //            }
+    //        }).start();
+//
+    //    }
+//
+    //    @Override
+    //    public void onBitmapFailed(Drawable errorDrawable) {
+    //        ToastUtils.displayShortToast(activity, "Failed to save image");
+    //    }
+//
+    //    @Override
+    //    public void onPrepareLoad(Drawable placeHolderDrawable) {
+    //        ToastUtils.displayShortToast(activity, "Saving to photos..");
+    //    }
+    //};
 
-        @Override
-        public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-            new Thread(new Runnable() {
+    private File getSaveDestination() {
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
-                @Override
-                public void run() {
-                    Log.d(TAG, "Saving " + url + " to pictures directory");
-                    String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        File appFolder = new File(dir + "/AlienCompanion");
 
-                    File appFolder = new File(dir + "/AlienCompanion");
-
-                    if(!appFolder.exists()) {
-                        appFolder.mkdir();
-                    }
-
-                    String filename = url.replaceAll("https?://", "").replace("/", "(s)");
-                    File file = new File(appFolder.getAbsolutePath(), filename);
-                    try {
-                        file.createNewFile();
-                        FileOutputStream ostream = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-                        ostream.flush();
-                        ostream.close();
-
-                        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        Uri contentUri = Uri.fromFile(file);
-                        mediaScanIntent.setData(contentUri);
-                        activity.sendBroadcast(mediaScanIntent);
-
-                        showImageSavedNotification(bitmap, contentUri);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-
+        if(!appFolder.exists()) {
+            appFolder.mkdir();
         }
 
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            ToastUtils.displayShortToast(activity, "Failed to save image");
-        }
+        String filename = url.replaceAll("https?://", "").replace("/", "(s)");
+        return new File(appFolder.getAbsolutePath(), filename);
+    }
 
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            ToastUtils.displayShortToast(activity, "Saving to photos..");
-        }
-    };
+    private void showSavingImgNotif(int id) {
+        Notification notif = new Notification.Builder(activity)
+                .setContentTitle("Saving image..")
+                .setContentText(url)
+                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
+                .setProgress(1, 0, true)
+                .build();
 
-    private void showImageSavedNotification(Bitmap bitmap, Uri uri) {
-        Bitmap decoded = new BitmapTransform(640, 480).transform(bitmap);
+        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(id, notif);
+    }
+
+    private void showImageSavedNotif(int id, File file) {
+        Bitmap resizedBitmap = new BitmapTransform(640, 480).transform(GeneralUtils.getBitmapFromPath(file.getAbsolutePath()));
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "image/*");
+        intent.setDataAndType(Uri.fromFile(file), "image/*");
         PendingIntent pIntent = PendingIntent.getActivity(activity, 0, intent, 0);
 
         Notification notif = new Notification.Builder(activity)
@@ -310,13 +364,25 @@ public class ImageFragment extends Fragment {
                 .setSubText(url)
                 .setSmallIcon(R.mipmap.ic_photo_white_24dp)
                 //.setLargeIcon(bitmap)
-                .setStyle(new Notification.BigPictureStyle().bigPicture(decoded))
+                .setStyle(new Notification.BigPictureStyle().bigPicture(resizedBitmap))
                 .setContentIntent(pIntent)
                 .setAutoCancel(true)
                 .build();
 
         NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(UUID.randomUUID().hashCode(), notif);
+        nm.notify(id, notif);
+    }
+
+    private void showImageSaveFailedNotif(int id) {
+        Notification notif = new Notification.Builder(activity)
+                .setContentTitle("Failed to save image")
+                .setContentText(url)
+                .setSmallIcon(android.R.drawable.stat_notify_error)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(id, notif);
     }
 
     private void shareImage() {
