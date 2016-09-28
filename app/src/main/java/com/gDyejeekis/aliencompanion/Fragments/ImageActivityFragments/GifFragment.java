@@ -265,8 +265,9 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     @Override
     public void onDestroy() {
+        Log.d(GeneralUtils.CURRENT_DEBUG_TAG, "gifFragment onDestroy");
         if(loadGifTask!=null) {
-            loadGifTask.cancel(true);
+            loadGifTask.cancelOperation();
         }
         super.onDestroy();
     }

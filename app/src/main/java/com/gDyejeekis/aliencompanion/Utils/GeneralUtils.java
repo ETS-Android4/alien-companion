@@ -56,6 +56,8 @@ import java.util.List;
  */
 public class GeneralUtils {
 
+    public static final String CURRENT_DEBUG_TAG = "CurrentDebug";
+
     public static final String TAG = "GeneralUtils";
 
     public static final String MOBILE_USER_AGENT_STRING = "Mozilla/5.0 (Linux; U; Android 2.2.1; en-us; Nexus One Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
@@ -262,6 +264,7 @@ public class GeneralUtils {
         return null;
     }//met
 
+    // Don't call on main thread
     public static void downloadMediaToFile(String url, File file) throws IOException {
         //Open a connection to that URL.
         URLConnection ucon = new URL(url).openConnection();
@@ -414,11 +417,10 @@ public class GeneralUtils {
 
     public static void checkCacheSize(File cacheDir) {
         if(dirSize(cacheDir, false) >= MyApplication.IMAGES_CACHE_LIMIT) {
-            //oldestFileInDir(cacheDir).delete();
             File toDelete = oldestFileInDir(cacheDir);
             long length = toDelete.length();
             if(toDelete.delete()) {
-                Log.d(TAG, length + " bytes cleared from cache");
+                Log.d(CURRENT_DEBUG_TAG, length + " bytes cleared from cache");
             }
             checkCacheSize(cacheDir);
         }
@@ -427,26 +429,10 @@ public class GeneralUtils {
     public static String checkCacheForMedia(File cacheDir, String url) {
         File file = findFile(cacheDir, cacheDir.getAbsolutePath(), urlToFilename(url));
         if(file!=null) {
-            Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
+            Log.d(CURRENT_DEBUG_TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
         }
-        Log.d(TAG, "Didn't find media from " + url + " in cache");
-        return null;
-    }
-
-
-    // Don't call on main thread
-    public static String downloadMediaToCache(File cacheDir, String url) {
-        Log.d(TAG, "Caching media from " + url);
-        File file = new File(cacheDir, urlToFilename(url));
-        try {
-            downloadMediaToFile(url, file);
-            Log.d(TAG, "Media cached to " + file.getAbsolutePath());
-            return file.getAbsolutePath();
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to cache media to " + file.getAbsolutePath());
-            e.printStackTrace();
-        }
+        Log.d(CURRENT_DEBUG_TAG, "Didn't find media from " + url + " in cache");
         return null;
     }
 
