@@ -67,6 +67,8 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     private boolean gifSaved;
 
+    private MediaLoadTask loadGifTask;
+
     public static GifFragment newInstance(String url, boolean autoplay) {
         GifFragment fragment = new GifFragment();
 
@@ -261,6 +263,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         } catch (Exception e) {}
     }
 
+    @Override
+    public void onDestroy() {
+        if(loadGifTask!=null) {
+            loadGifTask.cancel(true);
+        }
+        super.onDestroy();
+    }
+
     private void loadGif() {
         Log.d(TAG, "Loading gif from " + url);
         gifView.setVisibility(View.GONE);
@@ -282,7 +292,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             }
         }
         else {
-            new MediaLoadTask(activity.getCacheDir()) {
+            loadGifTask = new MediaLoadTask(activity.getCacheDir()) {
 
                 @Override
                 protected void onPostExecute(String gifPath) {
@@ -298,7 +308,8 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                         e.printStackTrace();
                     }
                 }
-            }.execute(url);
+            };
+            loadGifTask.execute(url);
             //new GifDataDownloader() {
             //    @Override
             //    protected void onPostExecute(final byte[] bytes) {
