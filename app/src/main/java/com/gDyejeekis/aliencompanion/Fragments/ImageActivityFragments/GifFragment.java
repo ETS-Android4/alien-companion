@@ -280,7 +280,6 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         if(activity.loadedFromLocal()) {
             activity.setMainProgressBarVisible(false);
             try {
-                //byte[] bytes = org.apache.commons.io.FileUtils.readFileToByteArray(new File(url));
                 gifDrawable = new GifDrawable(url);
                 gifView.setImageDrawable(gifDrawable);
                 gifView.setVisibility(View.VISIBLE);
@@ -297,15 +296,22 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 @Override
                 protected void onPostExecute(String gifPath) {
                     activity.setMainProgressBarVisible(false);
-                    try {
-                        gifDrawable = new GifDrawable(gifPath);
-                        gifView.setImageDrawable(gifDrawable);
-                        gifView.setVisibility(View.VISIBLE);
-                        buttonRetry.setVisibility(View.GONE);
-                    } catch (IOException e) {
+                    if(gifPath!=null) {
+                        try {
+                            gifDrawable = new GifDrawable(gifPath);
+                            gifView.setImageDrawable(gifDrawable);
+                            gifView.setVisibility(View.VISIBLE);
+                            buttonRetry.setVisibility(View.GONE);
+                        } catch (IOException e) {
+                            gifView.setVisibility(View.GONE);
+                            buttonRetry.setVisibility(View.VISIBLE);
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
                         gifView.setVisibility(View.GONE);
                         buttonRetry.setVisibility(View.VISIBLE);
-                        e.printStackTrace();
+                        ToastUtils.displayShortToast(activity, "Error loading gif");
                     }
                 }
             };

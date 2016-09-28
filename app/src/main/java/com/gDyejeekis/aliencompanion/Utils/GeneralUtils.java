@@ -18,9 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -35,21 +33,12 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurHttpClient;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -57,16 +46,10 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.jetwick.snacktory.HtmlFetcher;
-import de.jetwick.snacktory.JResult;
-
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/5/2015.
@@ -355,6 +338,45 @@ public class GeneralUtils {
         out.close();
     }
 
+    /**
+     * Return the size of a directory in bytes
+     */
+    private static long dirSize(File dir, boolean recursive) {
+
+        if (dir.exists()) {
+            long result = 0;
+            File[] fileList = dir.listFiles();
+            for(int i = 0; i < fileList.length; i++) {
+                // Recursive call if it's a directory
+                if(recursive && fileList[i].isDirectory()) {
+                    result += dirSize(fileList [i], true);
+                } else {
+                    // Sum the file size in bytes
+                    result += fileList[i].length();
+                }
+            }
+            return result; // return the file size
+        }
+        return 0;
+    }
+
+    public static File oldestFileInDir(File dir) {
+        File[] files = dir.listFiles(new FileFilter() {
+            public boolean accept(File file) {
+                return file.isFile();
+            }
+        });
+        long firstMod = Long.MAX_VALUE;
+        File choice = null;
+        for (File file : files) {
+            if (file.lastModified() < firstMod) {
+                choice = file;
+                firstMod = file.lastModified();
+            }
+        }
+        return choice;
+    }
+
     public static Bitmap getBitmapFromPath(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -388,6 +410,18 @@ public class GeneralUtils {
     public static String getGfycatMobileUrl(String desktopUrl) {
         String id = LinkHandler.getGfycatId(desktopUrl);
         return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
+    }
+
+    public static void checkCacheSize(File cacheDir) {
+        if(dirSize(cacheDir, false) >= MyApplication.IMAGES_CACHE_LIMIT) {
+            //oldestFileInDir(cacheDir).delete();
+            File toDelete = oldestFileInDir(cacheDir);
+            long length = toDelete.length();
+            if(toDelete.delete()) {
+                Log.d(TAG, length + " bytes cleared from cache");
+            }
+            checkCacheSize(cacheDir);
+        }
     }
 
     public static String checkCacheForMedia(File cacheDir, String url) {

@@ -54,6 +54,8 @@ public class MyApplication extends Application {
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
+    public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
+
     public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
 
     public static final String SYNC_PROFILES_FILENAME = "SyncProfiles";
