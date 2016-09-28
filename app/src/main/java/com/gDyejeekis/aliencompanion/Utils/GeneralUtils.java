@@ -420,7 +420,7 @@ public class GeneralUtils {
             File toDelete = oldestFileInDir(cacheDir);
             long length = toDelete.length();
             if(toDelete.delete()) {
-                Log.d(CURRENT_DEBUG_TAG, length + " bytes cleared from cache");
+                Log.d(TAG, length + " bytes cleared from cache");
             }
             checkCacheSize(cacheDir);
         }
@@ -429,10 +429,10 @@ public class GeneralUtils {
     public static String checkCacheForMedia(File cacheDir, String url) {
         File file = findFile(cacheDir, cacheDir.getAbsolutePath(), urlToFilename(url));
         if(file!=null) {
-            Log.d(CURRENT_DEBUG_TAG, "Found media in cache " + file.getAbsolutePath());
+            Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
         }
-        Log.d(CURRENT_DEBUG_TAG, "Didn't find media from " + url + " in cache");
+        Log.d(TAG, "Didn't find media from " + url + " in cache");
         return null;
     }
 

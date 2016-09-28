@@ -205,7 +205,7 @@ public class ImageFragment extends Fragment {
         //if(picasso!=null) {
         //    picasso.cancelTag(url);
         //}
-        Log.d(GeneralUtils.CURRENT_DEBUG_TAG, "imageFragment onDestroy");
+        //Log.d(TAG, "imageFragment onDestroy");
         if(loadTask!=null) {
             loadTask.cancelOperation();
         }

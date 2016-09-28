@@ -12,8 +12,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import static com.gDyejeekis.aliencompanion.Utils.GeneralUtils.CURRENT_DEBUG_TAG;
-
 /**
  * Created by George on 9/28/2016.
  */
@@ -48,7 +46,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
     }
 
     private String downloadToCache(File file) {
-        Log.d(CURRENT_DEBUG_TAG, "Caching media from " + url);
+        Log.d(TAG, "Caching media from " + url);
         try {
             //Open a connection to that URL.
             URLConnection ucon = new URL(url).openConnection();
@@ -75,17 +73,17 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
             outStream.flush();
             outStream.close();
             inStream.close();
-            Log.d(CURRENT_DEBUG_TAG, "Media cached to " + file.getAbsolutePath());
+            Log.d(TAG, "Media cached to " + file.getAbsolutePath());
             return file.getAbsolutePath();
         } catch (Exception e) {
-            Log.e(CURRENT_DEBUG_TAG, "Failed to cache media to " + file.getAbsolutePath());
+            Log.e(TAG, "Failed to cache media to " + file.getAbsolutePath());
             e.printStackTrace();
         }
         return null;
     }
 
     public void cancelOperation() {
-        Log.d(CURRENT_DEBUG_TAG, "Attempting to cancel MediaLoadTask for " + url);
+        //Log.d(TAG, "Attempting to cancel MediaLoadTask for " + url);
         cancel(true);
         try {
             inStream.close();
@@ -94,14 +92,14 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onCancelled() {
-        Log.d(CURRENT_DEBUG_TAG, "onCancelled");
+        Log.d(TAG, "onCancelled");
         super.onCancelled();
 
         if(url != null) {
             String filename = GeneralUtils.urlToFilename(url);
             File file = new File(cacheDir, filename);
             if (file.delete()) {
-                Log.d(CURRENT_DEBUG_TAG, "Deleted " + file.getAbsolutePath());
+                Log.d(TAG, "Deleted " + file.getAbsolutePath());
             }
         }
     }
