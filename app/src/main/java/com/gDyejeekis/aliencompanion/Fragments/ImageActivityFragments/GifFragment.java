@@ -269,7 +269,9 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    handleAspectRatio();
+                    try {
+                        handleAspectRatio();
+                    } catch (Exception e) {}
                 }
             }, 600);
         }
