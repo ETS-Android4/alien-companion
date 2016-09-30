@@ -22,6 +22,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
@@ -69,6 +70,8 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     private MediaLoadTask loadGifTask;
 
+    private RelativeLayout gifParent;
+
     public static GifFragment newInstance(String url, boolean autoplay) {
         GifFragment fragment = new GifFragment();
 
@@ -105,6 +108,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         View view = inflater.inflate(R.layout.fragment_gif, container, false);
 
         if(!isGif) {
+            gifParent = (RelativeLayout) view.findViewById(R.id.layout_gif_parent);
             videoView = (SurfaceView) view.findViewById(R.id.videoView);
             videoView.setZOrderOnTop(true);
         }
@@ -218,8 +222,8 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     }
 
     private void handleAspectRatio() {
-        int surfaceView_Width = videoView.getWidth();
-        int surfaceView_Height = videoView.getHeight();
+        int surfaceView_Width = gifParent.getWidth();
+        int surfaceView_Height = gifParent.getHeight();
 
         float video_Width = mPlayer.getVideoWidth();
         float video_Height = mPlayer.getVideoHeight();
@@ -233,7 +237,8 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         if (ratio_width > ratio_height){
             layoutParams.width = (int) (surfaceView_Height * aspectratio);
             layoutParams.height = surfaceView_Height;
-        }else{
+        }
+        else {
             layoutParams.width = surfaceView_Width;
             layoutParams.height = (int) (surfaceView_Width / aspectratio);
         }
@@ -241,14 +246,16 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         videoView.setLayoutParams(layoutParams);
 
         //Log.d(TAG, "-----------------------------------------------");
-        //Log.d(TAG, "SurfaceView width: " + videoView.getWidth());
-        //Log.d(TAG, "SurfaceView height: " + videoView.getHeight());
-        //Log.d(TAG, "MediaPlayer width: " + mPlayer.getVideoWidth());
-        //Log.d(TAG, "MediaPlayer height: " + mPlayer.getVideoHeight());
+        //Log.d(TAG, "SurfaceView width: " + surfaceView_Width);
+        //Log.d(TAG, "SurfaceView height: " + surfaceView_Height);
+        //Log.d(TAG, "MediaPlayer width: " + video_Width);
+        //Log.d(TAG, "MediaPlayer height: " + video_Height);
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
@@ -258,9 +265,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        try {
-            handleAspectRatio();
-        } catch (Exception e) {}
+        if(!isGif) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    handleAspectRatio();
+                }
+            }, 600);
+        }
     }
 
     @Override
