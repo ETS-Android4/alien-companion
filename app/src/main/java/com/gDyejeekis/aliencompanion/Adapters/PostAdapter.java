@@ -212,7 +212,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 cvh.age.setText(ageString);
 
                 //Author textview
-                if (author.equals(comment.getAuthor())) {
+                if (author.equals(comment.getAuthor()) && !author.equals("[deleted]")) {
                     cvh.authorTextView.setTextColor(Color.WHITE);
                     cvh.authorTextView.setBackgroundResource(R.drawable.rounded_corner_blue);
                 } else {

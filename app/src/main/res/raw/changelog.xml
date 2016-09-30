@@ -4,7 +4,7 @@
     <changelogversion versionName="0.6" changeDate="Sep 30, 2016">
         <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
          and low contrast dark)</changelogtext>
-        <changelogtext>Added 'Display info' action to image viewer for imgur images</changelogtext>
+        <changelogtext>Added 'Display info' action to image viewer for imgur images that have a title/description</changelogtext>
         <changelogtext>Added 'Dismiss image info on single tap' option under Navigation settings</changelogtext>
         <changelogtext>Improved image viewer to be able to display high resolution images in full detail</changelogtext>
         <changelogtext>Removed 'High quality' toolbar button from the image viewer</changelogtext>
@@ -20,7 +20,8 @@
         <changelogtext>Added 'Share' option in the in-app browser</changelogtext>
         <changelogtext>Changed default font style to 'Light'</changelogtext>
         <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>
-        <changelogtext>Reduced APK size by ~PERCENTAGE HERE~</changelogtext>
+        <changelogtext>Fixed incorrect marking of users as OP in comments for posts submitted by '[deleted]'</changelogtext>
+        <changelogtext>Reduced APK size to ~SIZE HERE~</changelogtext>
         <changelogtext>WAKE_LOCK permission now required</changelogtext>
     </changelogversion>
 
