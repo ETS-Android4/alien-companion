@@ -13,6 +13,8 @@
 
     <color name="lightHintText">#808080</color>
 
+    <color name="lightCommentHighlight">#FFFFDA</color>
+
     <color name="lightSmallCardLinkBackground">#404040</color>
 
     <!-- MATERIAL BLUE THEME -->
@@ -61,6 +63,10 @@
 
     <!-- DARK THEME -->
 
+    <color name="darkPrimary">#181818</color>
+
+    <color name="darkPrimaryLight">#232323</color>
+
     <color name="darkBackgroundPressed">#232323</color>
 
     <color name="darkCommentButtonBackground">#232323</color>
@@ -79,7 +85,9 @@
 
     <color name="darkHintText">#b0b0b0</color>
 
-    <color name="darkCommentHighlight">#545454</color>
+    <color name="darkLinkText">#0080FF</color>
+
+    <color name="darkCommentHighlight">#2e2e2e</color>
 
     <color name="darkSmallCardLinkBackground">#232323</color>
 

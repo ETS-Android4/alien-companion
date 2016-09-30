@@ -216,7 +216,7 @@ public class MyApplication extends Application {
                 textColor = Color.BLACK;
                 textHintColor = textHintLight;
                 linkColor = MyApplication.colorPrimary;
-                commentPermaLinkBackgroundColor = Color.parseColor("#FFFFDA");
+                commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.lightCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.lightSmallCardLinkBackground);
                 break;
             case MATERIAL_BLUE_THEME:
@@ -242,20 +242,20 @@ public class MyApplication extends Application {
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialGreySmallCardLinkBackground);
                 break;
             case DARK_THEME:
-                currentColor = Color.parseColor("#181818");
+                currentColor = context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = Color.BLACK;
-                colorPrimaryLight = Color.parseColor("#2e2e2e");
+                colorPrimaryLight = context.getResources().getColor(R.color.darkPrimaryLight);
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
-                linkColor = Color.parseColor("#0080FF");
+                linkColor = context.getResources().getColor(R.color.darkLinkText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
                 smallCardLinkBackground = 0;
                 //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);
                 break;
             case DARK_THEME_LOW_CONTRAST:
-                currentColor = Color.parseColor("#181818");
+                currentColor = context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = Color.BLACK;
-                colorPrimaryLight = Color.parseColor("#2e2e2e");
+                colorPrimaryLight = context.getResources().getColor(R.color.darkPrimaryLight);
                 textColor = context.getResources().getColor(R.color.lowContrastText);
                 textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
                 linkColor = context.getResources().getColor(R.color.lowContrastLinkText);
