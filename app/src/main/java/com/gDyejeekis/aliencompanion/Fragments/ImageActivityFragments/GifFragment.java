@@ -327,6 +327,11 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                         gifView.setVisibility(View.GONE);
                         buttonRetry.setVisibility(View.VISIBLE);
                         ToastUtils.displayShortToast(activity, "Error loading gif");
+                        try {
+                            GeneralUtils.clearMediaFromCache(activity.getCacheDir(), url);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             };

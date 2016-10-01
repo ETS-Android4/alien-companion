@@ -436,6 +436,13 @@ public class GeneralUtils {
         return null;
     }
 
+    public static void clearMediaFromCache(File cacheDir, String url) {
+        File file = new File(cacheDir, urlToFilename(url));
+        if(file.delete()) {
+            Log.d(TAG, "Deleted " + file.getAbsolutePath() + " from cache");
+        }
+    }
+
     public static String urlToFilename(String url) {
         return url.replaceAll("https?://", "").replace("/", "(s)");
     }

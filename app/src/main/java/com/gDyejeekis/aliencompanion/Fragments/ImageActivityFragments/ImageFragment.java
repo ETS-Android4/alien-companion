@@ -156,7 +156,13 @@ public class ImageFragment extends Fragment {
                         imageView.setImage(ImageSource.uri(cachedPath));
                     }
                     else {
+                        imageLoadError();
                         ToastUtils.displayShortToast(activity, "Error loading image");
+                        try {
+                            GeneralUtils.clearMediaFromCache(activity.getCacheDir(), url);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             };
