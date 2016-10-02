@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/themeDialogBackgroundColor"
+    android:gravity="end">
+
+    <TextView
+        android:text="How many posts?"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView24"
+        android:textSize="20sp"
+        android:textStyle="normal|bold"
+        android:layout_margin="12dp" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup_post_count"
+        android:paddingEnd="12dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingStart="12dp">
+
+        <RadioButton
+            android:text="10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton_sync_10"
+            android:textColor="?attr/themeTextColor"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:buttonTint="?attr/themeTextColor" />
+
+        <RadioButton
+            android:text="25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton_sync_25"
+            android:textColor="?attr/themeTextColor"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:buttonTint="?attr/themeTextColor" />
+
+        <RadioButton
+            android:text="50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton_sync_50"
+            android:textColor="?attr/themeTextColor"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:buttonTint="?attr/themeTextColor" />
+
+        <RadioButton
+            android:text="75"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton_sync_75"
+            android:textColor="?attr/themeTextColor"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:buttonTint="?attr/themeTextColor" />
+
+        <RadioButton
+            android:text="100"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioButton_sync_100"
+            android:textColor="?attr/themeTextColor"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:buttonTint="?attr/themeTextColor" />
+
+    </RadioGroup>
+
+    <Button
+        android:text="Sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_add_to_synced"
+        style="@style/DialogButtonStyle" />
+</LinearLayout>

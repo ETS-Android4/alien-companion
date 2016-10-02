@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
@@ -159,13 +160,16 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     uf.userAdapter = new RedditItemListAdapter(activity);
                     uf.contentView.setAdapter(uf.userAdapter);
                 }
-            } else {
+            }
+            else {
                 if(things.size()>0) {
                     //load trophy images here
                     if(!MyApplication.noThumbnails) ImageLoader.preloadUserImages(things, activity);
                     uf.userAdapter = adapter;
                 }
-                else ToastUtils.displayShortToast(activity, "No posts found");
+                else {
+                    ToastUtils.displayShortToast(activity, "No posts found");
+                }
                 uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (mLoadType) {
                     case init:
@@ -177,6 +181,9 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                                 uf.userContent = userCategory;
                                 uf.userOverviewSort = userSort;
                                 uf.setActionBarSubtitle();
+                                try {
+                                    ((UserActivity) activity).setAddToSyncedVisible(userCategory == UserSubmissionsCategory.SAVED);
+                                } catch (Exception e) {}
                             }
                             uf.contentView.setAdapter(uf.userAdapter);
                         }

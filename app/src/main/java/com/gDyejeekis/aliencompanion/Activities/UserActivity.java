@@ -25,6 +25,7 @@ public class UserActivity extends SwipeBackActivity {
     private FragmentManager fm;
     private UserFragment userFragment;
     private LinearLayout container;
+    private boolean addToSyncedVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,16 @@ public class UserActivity extends SwipeBackActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_user, menu);
+
+        MenuItem addToSynced = menu.findItem(R.id.action_add_to_synced);
+        addToSynced.setVisible(addToSyncedVisible);
+
         return true;
+    }
+
+    public void setAddToSyncedVisible(boolean flag) {
+        addToSyncedVisible = flag;
+        invalidateOptionsMenu();
     }
 
     @Override

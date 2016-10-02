@@ -206,5 +206,6 @@
     <string name="larger">Larger</string>
     <string name="largest">Largest</string>
     <string name="info">Info</string>
+    <string name="add_to_synced">Add to synced</string>
 
 </resources>

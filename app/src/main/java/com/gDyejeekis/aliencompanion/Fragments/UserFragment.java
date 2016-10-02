@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.Fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,9 +19,11 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
+import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserContentTask;
+import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddToSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
@@ -78,6 +81,10 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             userOverviewSort = (UserOverviewSort) activity.getIntent().getSerializableExtra("sort");
             userContent = (UserSubmissionsCategory) activity.getIntent().getSerializableExtra("category");
         }
+
+        if(activity instanceof UserActivity && userContent == UserSubmissionsCategory.SAVED) {
+            ((UserActivity) activity).setAddToSyncedVisible(true);
+        }
     }
 
     @Override
@@ -102,6 +109,17 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if(!MyApplication.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
             userAdapter.notifyItemChanged(0);
     }
+
+    //@Override
+    //public void onAttach(Context context) {
+    //    super.onAttach(context);
+    //    if(context instanceof AppCompatActivity) {
+    //        this.activity = (AppCompatActivity) context;
+    //        if(activity instanceof UserActivity) {
+    //            ((UserActivity) activity).setAddToSyncedVisible(userContent == UserSubmissionsCategory.SAVED);
+    //        }
+    //    }
+    //}
 
     @Override
     public void onAttach(Activity activity) {
@@ -269,6 +287,10 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 return true;
             case R.id.action_sort:
                 showContentPopup(activity.findViewById(R.id.action_sort));
+                return true;
+            case R.id.action_add_to_synced:
+                AddToSyncedDialogFragment fragment = new AddToSyncedDialogFragment();
+                fragment.show(activity.getSupportFragmentManager(), AddToSyncedDialogFragment.TAG);
                 return true;
         }
 
