@@ -96,11 +96,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
         super.onCancelled();
 
         if(url != null) {
-            String filename = GeneralUtils.urlToFilename(url);
-            File file = new File(cacheDir, filename);
-            if (file.delete()) {
-                Log.d(TAG, "Deleted " + file.getAbsolutePath());
-            }
+            GeneralUtils.clearMediaFromCache(cacheDir, url);
         }
     }
 
