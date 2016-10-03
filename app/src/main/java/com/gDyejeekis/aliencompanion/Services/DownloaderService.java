@@ -52,9 +52,11 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.retrieval.Submissions;
+import com.gDyejeekis.aliencompanion.api.retrieval.UserMixed;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.squareup.picasso.Picasso;
@@ -142,6 +144,8 @@ public class DownloaderService extends IntentService {
         //List<String> subreddits = i.getStringArrayListExtra("subreddits");
         SyncProfile profile = (SyncProfile) i.getSerializableExtra("profile");
         Submission submission = (Submission) i.getSerializableExtra("post");
+        int savedCount = i.getIntExtra("savedCount", 0);
+
         if(profile != null) {
             SyncProfileOptions syncOptions;
             if(!profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null) {
@@ -189,6 +193,18 @@ public class DownloaderService extends IntentService {
             syncPost(notifBuilder, submission, INDIVIDUALLY_SYNCED_FILENAME, title, new SyncProfileOptions());
             addToIndividuallySyncedPosts(submission);
         }
+        else if(savedCount != 0) {
+            MAX_PROGRESS = savedCount + 1;
+            progress = 0;
+
+            SyncProfileOptions syncOptions = new SyncProfileOptions();
+            String filename = INDIVIDUALLY_SYNCED_FILENAME;
+            notifBuilder = new NotificationCompat.Builder(this);
+            startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
+            acquireWakelock();
+
+            syncSaved(filename, notifBuilder, savedCount, syncOptions);
+        }
         else {
             MAX_PROGRESS = MyApplication.syncPostCount + 1;
             progress = 0;
@@ -209,6 +225,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    // call right after starting on foreground
     private void acquireWakelock() {
         String message;
 
@@ -231,7 +248,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    //call on onDestroy()
+    // call on onDestroy()
     private void releaseWakelock() {
         String message;
 
@@ -280,6 +297,35 @@ public class DownloaderService extends IntentService {
             e.printStackTrace();
             Log.e(TAG, "Error updating individually synced posts list");
             showFailedNotification("Error updating synced posts list");
+        }
+    }
+
+    private void syncSaved(String filename, NotificationCompat.Builder builder, int savedCount, SyncProfileOptions syncOptions) {
+        try {
+            checkManuallyPaused();
+            if(manuallyCancelled) {
+                return;
+            }
+            UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
+            List<RedditItem> savedList = userMixed.ofUser(MyApplication.currentUser.getUsername(), UserSubmissionsCategory.SAVED, null, TimeSpan.ALL, -1, savedCount, null, null, false);
+            increaseProgress(builder, filename);
+            for(RedditItem item : savedList) {
+                Submission s;
+                if(item instanceof Submission) {
+                    s = (Submission) item;
+                }
+                // comment case
+                else {
+                    // TODO: 10/3/2016 create submission with permalink to comment
+                    s = null;
+                }
+                syncPost(builder, s, filename, "Syncing saved..", syncOptions);
+                addToIndividuallySyncedPosts(s);
+            }
+        } catch (RetrievalFailedException | RedditError e) {
+            //e.printStackTrace();
+            pauseSync(builder);
+            syncSaved(filename, builder, savedCount, syncOptions);
         }
     }
 

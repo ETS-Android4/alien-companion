@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.Fragments.DialogFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.Services.DownloaderService;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 
 /**
@@ -43,7 +45,9 @@ public class AddToSyncedDialogFragment extends ScalableDialogFragment implements
     public void onClick(View v) {
         if(count != 0) {
             dismiss();
-            // TODO: 10/2/2016
+            Intent intent = new Intent(getContext(), DownloaderService.class);
+            intent.putExtra("savedCount", count);
+            getContext().startService(intent);
         }
         else {
             ToastUtils.displayShortToast(getContext(), "Select post count");
