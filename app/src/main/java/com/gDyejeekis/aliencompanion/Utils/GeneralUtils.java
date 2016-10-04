@@ -26,6 +26,8 @@ import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.Services.DownloaderService;
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurApiEndpoints;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
@@ -445,6 +447,66 @@ public class GeneralUtils {
 
     public static String urlToFilename(String url) {
         return url.replaceAll("https?://", "").replace("/", "(s)");
+    }
+
+    public static boolean deleteSyncedPostFromCategory(Context context, final String name, final String id) {
+        File activeDir = getActiveDir(context);
+        File postListFile = new File(activeDir, name + DownloaderService.LOCA_POST_LIST_SUFFIX);
+        String postLink = null;
+        try {
+            // modify post list file
+            List<Submission> postList = (List<Submission>) readObjectFromFile(postListFile);
+            for(Submission post : postList) {
+                if(post.getIdentifier().equals(id)) {
+                    postLink = post.getURL();
+                    postList.remove(post);
+                    break;
+                }
+            }
+            writeObjectToFile(postList, postListFile);
+
+            // delete synced files for current post
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String filename) {
+                    return filename.contains(name) && filename.contains(id);
+                }
+            };
+            File[] files = activeDir.listFiles(filter);
+            for (File file : files) {
+                if (file.delete()) {
+                    Log.d(TAG, "Deleted " + file.getAbsolutePath());
+                }
+            }
+
+            // delete any corresponding synced media (images/GIF)
+            if(postLink!=null) {
+                if(postLink.contains("imgur.com") || postLink.contains("gfycat.com") || postLink.endsWith(".jpg") || postLink.endsWith(".jpeg") || postLink.endsWith(".png") || postLink.endsWith(".gif")) {
+                    File namedDir;
+                    // internal storage active
+                    if(activeDir.getAbsolutePath().equals(context.getFilesDir().getAbsolutePath())) {
+                        namedDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion/" + name);
+                    }
+                    // external storage active
+                    else {
+                        namedDir = new File(activeDir.getAbsolutePath() + "/Pictures/" + name);
+                    }
+
+                    if(namedDir.isDirectory()) {
+                        File imgFile = new File(namedDir, urlToFilename(postLink));
+                        if(imgFile.delete()) {
+                            deleteFileFromMediaStore(context.getContentResolver(), imgFile);
+                            Log.d(TAG, "Deleted " + imgFile.getAbsolutePath());
+                        }
+                    }
+
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @SuppressWarnings("deprecation")
