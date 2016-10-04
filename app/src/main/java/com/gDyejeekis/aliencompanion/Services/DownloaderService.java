@@ -200,7 +200,7 @@ public class DownloaderService extends IntentService {
             SyncProfileOptions syncOptions = new SyncProfileOptions();
             String filename = INDIVIDUALLY_SYNCED_FILENAME;
             notifBuilder = new NotificationCompat.Builder(this);
-            startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
+            startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, "saved", false));
             acquireWakelock();
 
             syncSaved(filename, notifBuilder, savedCount, syncOptions);
@@ -308,19 +308,28 @@ public class DownloaderService extends IntentService {
             }
             UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
             List<RedditItem> savedList = userMixed.ofUser(MyApplication.currentUser.getUsername(), UserSubmissionsCategory.SAVED, null, TimeSpan.ALL, -1, savedCount, null, null, false);
-            increaseProgress(builder, filename);
+            increaseProgress(builder, "saved");
             for(RedditItem item : savedList) {
                 Submission s;
                 if(item instanceof Submission) {
                     s = (Submission) item;
+                    syncPost(builder, s, filename, "saved", syncOptions);
                 }
                 // comment case
                 else {
-                    // TODO: 10/3/2016 create submission with permalink to comment
-                    s = null;
+                    Comment comment = (Comment) item;
+                    String url = "https://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().split("_")[1] + "/title_text/" + comment.getIdentifier() + "?context=" + syncOptions.getSyncCommentCount();
+                    Comments comments =  new Comments(httpClient, MyApplication.currentUser);
+                    comments.setSyncRetrieval(true);
+                    s = syncLinkedRedditPost(url, "reddit.com", filename, comments, syncOptions);
                 }
-                syncPost(builder, s, filename, "Syncing saved..", syncOptions);
-                addToIndividuallySyncedPosts(s);
+
+                if(s != null) {
+                    addToIndividuallySyncedPosts(s);
+                }
+                else {
+                    Log.e(TAG, "Failed to sync saved post");
+                }
             }
         } catch (RetrievalFailedException | RedditError e) {
             //e.printStackTrace();
@@ -448,10 +457,10 @@ public class DownloaderService extends IntentService {
         notifManager.notify(FOREGROUND_ID, notifBuilder.build());
     }
 
-    private Notification buildForegroundNotification(NotificationCompat.Builder b, String filename, boolean indeterminateProgress) {
+    private Notification buildForegroundNotification(NotificationCompat.Builder b, String displayName, boolean indeterminateProgress) {
         b.setOngoing(true);
         b.setContentTitle("Alien Companion")
-                .setContentText("Syncing " + filename +"...")
+                .setContentText("Syncing " + displayName +"...")
                 .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...")
                 .setProgress(MAX_PROGRESS, progress, indeterminateProgress)
                 .addAction(createPauseAction(this))
@@ -542,29 +551,40 @@ public class DownloaderService extends IntentService {
         return file;
     }
 
-    private void syncLinkedRedditPost(String url, String domain, String filename, Comments commentsRetrieval, SyncProfileOptions syncOptions) {
+    private Submission syncLinkedRedditPost(String url, String domain, String filename, Comments commentsRetrieval, SyncProfileOptions syncOptions) {
         Submission linkedpost = null;
-        if(domain.equals("redd.it")) {
-            linkedpost = new Submission(LinkHandler.getShortRedditId(url));
-            List<Comment> comments = commentsRetrieval.ofSubmission(linkedpost, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(),
-                    syncOptions.getSyncCommentSort());
-            linkedpost.setSyncedComments(comments);
-        }
-        else {
-            String[] postInfo = LinkHandler.getRedditPostInfo(url);
-            if(postInfo!=null) {
-                linkedpost = new Submission(postInfo[1]);
-                linkedpost.setSubreddit(postInfo[0]);
-                int parentsShown = (postInfo[3]==null) ? -1 : Integer.valueOf(postInfo[3]);
-                List<Comment> comments = commentsRetrieval.ofSubmission(linkedpost, postInfo[2], parentsShown, syncOptions.getSyncCommentDepth(),
-                        syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
-                linkedpost.setSyncedComments(comments);
+        try {
+            checkManuallyPaused();
+            if(manuallyCancelled) {
+                return null;
             }
-        }
 
-        if(linkedpost!=null) {
-            writePostToFile(linkedpost, filename + "-" + linkedpost.getIdentifier());
+            if (domain.equals("redd.it")) {
+                linkedpost = new Submission(LinkHandler.getShortRedditId(url));
+                List<Comment> comments = commentsRetrieval.ofSubmission(linkedpost, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(),
+                        syncOptions.getSyncCommentSort());
+                linkedpost.setSyncedComments(comments);
+            } else {
+                String[] postInfo = LinkHandler.getRedditPostInfo(url);
+                if (postInfo != null) {
+                    linkedpost = new Submission(postInfo[1]);
+                    linkedpost.setSubreddit(postInfo[0]);
+                    int parentsShown = (postInfo[3] == null) ? -1 : Integer.valueOf(postInfo[3]);
+                    List<Comment> comments = commentsRetrieval.ofSubmission(linkedpost, postInfo[2], parentsShown, syncOptions.getSyncCommentDepth(),
+                            syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
+                    linkedpost.setSyncedComments(comments);
+                }
+            }
+
+            if (linkedpost != null) {
+                writePostToFile(linkedpost, filename + "-" + linkedpost.getIdentifier());
+            }
+        } catch (RetrievalFailedException | RedditError e) {
+            //e.printStackTrace();
+            pauseSync(notifBuilder);
+            syncLinkedRedditPost(url, domain, filename, commentsRetrieval, syncOptions);
         }
+        return linkedpost;
     }
 
     private void downloadPostArticle(Submission post, String filename) {
