@@ -9,7 +9,11 @@
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar7" />
+        android:id="@+id/progressBar7"
+        android:maxHeight="36dp"
+        android:maxWidth="36dp"
+        android:minHeight="24dp"
+        android:minWidth="24dp" />
 
     <TextView
         android:layout_width="wrap_content"
