@@ -318,7 +318,7 @@ public class DownloaderService extends IntentService {
                 // comment case
                 else {
                     Comment comment = (Comment) item;
-                    String url = "https://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().split("_")[1] + "/title_text/" + comment.getIdentifier() + "?context=" + syncOptions.getSyncCommentCount();
+                    String url = "https://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().split("_")[1] + "/title_text/" + comment.getIdentifier(); //+ "?context=" + syncOptions.getSyncCommentCount();
                     Comments comments =  new Comments(httpClient, MyApplication.currentUser);
                     comments.setSyncRetrieval(true);
                     s = syncLinkedRedditPost(url, "reddit.com", filename, comments, syncOptions);

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.6" changeDate="Sep 30, 2016">
+    <changelogversion versionName="0.6" changeDate="Oct 30, 2016">
         <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
          and low contrast dark)</changelogtext>
+        <changelogtext>Added toolbar option 'Add to synced' for saved posts</changelogtext>
         <changelogtext>Added 'Display info' action to image viewer for imgur images that have a title/description</changelogtext>
         <changelogtext>Added 'Dismiss image info on single tap' option under Navigation settings</changelogtext>
         <changelogtext>Improved image viewer to be able to display high resolution images in full detail</changelogtext>
