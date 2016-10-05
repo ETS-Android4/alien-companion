@@ -285,7 +285,7 @@ public class ImageActivity extends BackNavActivity {
     }
 
     private ImgurItem findImgurItemFromFile(String id) {
-        File dir = getFilesDir();
+        File dir = GeneralUtils.getActiveDir(this);
         File file = GeneralUtils.findFile(dir, dir.getAbsolutePath(), id + "-albumInfo");
         if(file!=null) {
             try {

@@ -725,7 +725,7 @@ public class DownloaderService extends IntentService {
             String imgId = LinkHandler.getImgurImgId(img.getLink());
             if(MyApplication.syncAlbumImgCount > 1) {
                 try {
-                    GeneralUtils.downloadMediaToFile("http://i.imgur.com/" + imgId + "s.jpg", new File(getFilesDir().getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
+                    GeneralUtils.downloadMediaToFile("http://i.imgur.com/" + imgId + "s.jpg", new File(GeneralUtils.getActiveDir(this).getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -736,14 +736,15 @@ public class DownloaderService extends IntentService {
         item.setImages(new ArrayList<ImgurImage>(item.getImages().subList(0, indexExlusive)));
         for(ImgurImage img : item.getImages()) {
             String imgLink = (img.isAnimated()) ? img.getMp4() : img.getLink();
-            img.setLink("file:" + folderPath + "/" + imgLink.replaceAll("https?://", "").replace("/", "(s)"));
+            //img.setLink("file:" + folderPath + "/" + imgLink.replaceAll("https?://", "").replace("/", "(s)"));
+            img.setLink(imgLink);
         }
         saveAlbumInfoToFile(item, filename + "-" + item.getId() + "-albumInfo");
     }
 
     private void saveAlbumInfoToFile(ImgurItem item, final String filename) {
         try {
-            FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+            FileOutputStream fos = new FileOutputStream(new File(GeneralUtils.getActiveDir(this), filename));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(item);
             oos.close();

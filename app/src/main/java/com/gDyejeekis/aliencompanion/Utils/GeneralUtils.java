@@ -24,6 +24,7 @@ import android.webkit.CookieSyncManager;
 
 import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
+import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.LinkHandlingSettingsFragment;
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.Services.DownloaderService;
@@ -121,6 +122,18 @@ public class GeneralUtils {
             return ((externalDirs.length > 1) ? externalDirs[1] : externalDirs[0]);
         }
         return context.getFilesDir();
+    }
+
+    public static File getActiveMediaDir(Context context) {
+        File activeDir = getActiveDir(context);
+        File mediaDir;
+        if(activeDir.equals(context.getFilesDir())) {
+            mediaDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
+        }
+        else {
+            mediaDir = new File(activeDir.getAbsolutePath() + "/Pictures");
+        }
+        return mediaDir;
     }
 
     public static void clearSyncedPostsAndComments(Context context, final String subreddit) {
@@ -494,14 +507,40 @@ public class GeneralUtils {
                     //Log.d(TAG, "namedDir: " + namedDir.getAbsolutePath());
 
                     if(namedDir.isDirectory()) {
-                        // TODO: 10/5/2016 find all media files that belong to the post and delete them
-                        String toFind = urlToFilename(postLink);
-                        toFind = toFind.substring(0, toFind.length() -4);
-                        File imgFile = findFile(namedDir, namedDir.getAbsolutePath(), toFind);
-                        if(imgFile!=null && imgFile.delete()) {
-                            deleteFileFromMediaStore(context.getContentResolver(), imgFile);
-                            Log.d(TAG, "Deleted " + imgFile.getAbsolutePath());
+                        String toFind;
+                        if(postLink.contains("imgur.com")) {
+                            if(postLink.contains("/a/") || postLink.contains("/gallery/")) {
+                                File infoFile = findFile(activeDir, activeDir.getAbsolutePath(), LinkHandler.getImgurImgId(postLink));
+                                if(infoFile != null && infoFile.isFile()) {
+                                    ImgurItem albumInfo = (ImgurItem) readObjectFromFile(infoFile);
+                                    for(ImgurImage img : albumInfo.getImages()) {
+                                        toFind = LinkHandler.getImgurImgId(img.getLink());
+                                        findDeleteMediaInDir(context, namedDir, toFind);
+                                        findDeleteMediaInDir(context, activeDir, toFind + "-thumb");
+                                    }
+                                    if(infoFile.delete()) {
+                                        Log.d(TAG, "Deleted " + infoFile.getAbsolutePath());
+                                    }
+                                }
+                                else {
+                                    toFind = LinkHandler.getImgurImgId(postLink);
+                                    findDeleteMediaInDir(context, namedDir, toFind);
+                                }
+                            }
+                            else {
+                                toFind = LinkHandler.getImgurImgId(postLink);
+                                findDeleteMediaInDir(context, namedDir, toFind);
+                            }
                         }
+                        else if(postLink.contains("gfycat.com")) {
+                            toFind = LinkHandler.getGfycatId(postLink);
+                            findDeleteMediaInDir(context, namedDir, toFind);
+                        }
+                        else {
+                            toFind = urlToFilename(postLink);
+                            findDeleteMediaInDir(context, namedDir, toFind);
+                        }
+
                     }
 
                 }
@@ -511,6 +550,14 @@ public class GeneralUtils {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private static void findDeleteMediaInDir(Context context, File dir, String toFind) {
+        File imgFile = findFile(dir, dir.getAbsolutePath(), toFind);
+        if(imgFile!=null && imgFile.delete()) {
+            deleteFileFromMediaStore(context.getContentResolver(), imgFile);
+            Log.d(TAG, "Deleted " + imgFile.getAbsolutePath());
+        }
     }
 
     @SuppressWarnings("deprecation")
