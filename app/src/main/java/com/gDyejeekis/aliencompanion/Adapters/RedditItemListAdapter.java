@@ -120,8 +120,9 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public void remove(RedditItem item) {
         selectedPosition = -1;
+        int index = redditItems.indexOf(item);
         redditItems.remove(item);
-        notifyItemRemoved(redditItems.indexOf(item));
+        notifyItemRemoved(index);
     }
 
     public RedditItem getLastItem() { //TODO: check out of bounds index exception, probably related to load task
