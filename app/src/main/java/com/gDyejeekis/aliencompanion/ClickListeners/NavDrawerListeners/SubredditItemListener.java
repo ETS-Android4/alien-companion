@@ -33,6 +33,10 @@ public class SubredditItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        return false;
+        int position = getRecyclerView().getChildPosition(v);
+        NavDrawerSubredditItem subreddit = (NavDrawerSubredditItem) getAdapter().getItemAt(position);
+        String subredditName = (subreddit.getName()!=null) ? subreddit.getName().toLowerCase() : null;
+        getAdapter().switchModeGracefully(subredditName, false);
+        return true;
     }
 }

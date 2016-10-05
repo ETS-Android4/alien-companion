@@ -473,6 +473,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 v.setOnClickListener(listener);
+                v.setOnLongClickListener(listener);
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_ACCOUNT:
@@ -494,6 +495,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 listener = new MultiredditItemListener(activity);
                 v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
                 v.setOnClickListener(listener);
+                v.setOnLongClickListener(listener);
                 viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_OTHER:
@@ -557,14 +559,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 headerViewHolder.offlineButton.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        activity.getDrawerLayout().closeDrawers();
-                        ToastUtils.displayShortToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                switchMode();
-                            }
-                        }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+                        switchModeGracefully();
                         return true;
                     }
                 });
@@ -819,6 +814,28 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
         editor.apply();
         restartApp(subreddit, isMulti, isOther, sort, timeSpan);
+    }
+
+    public void switchModeGracefully() {
+        activity.getDrawerLayout().closeDrawers();
+        ToastUtils.displayShortToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switchMode();
+            }
+        }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+    }
+
+    public void switchModeGracefully(final String reddit, final boolean isMulti) {
+        activity.getDrawerLayout().closeDrawers();
+        ToastUtils.displayShortToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switchMode(reddit, isMulti, false, SubmissionSort.HOT, null);
+            }
+        }, MyApplication.NAV_DRAWER_CLOSE_TIME);
     }
 
     public void showOfflineSwitchDialog(final String subreddit, final boolean isMulti, final boolean isOther, final SubmissionSort sort, final TimeSpan timeSpan) {

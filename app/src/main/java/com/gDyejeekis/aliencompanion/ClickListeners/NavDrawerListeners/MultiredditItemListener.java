@@ -31,6 +31,9 @@ public class MultiredditItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        return false;
+        int position = getRecyclerView().getChildPosition(v);
+        NavDrawerMutliredditItem multireddit = (NavDrawerMutliredditItem) getAdapter().getItemAt(position);
+        getAdapter().switchModeGracefully(multireddit.getName().toLowerCase(), true);
+        return true;
     }
 }
