@@ -80,6 +80,12 @@
             android:defaultValue="true"/>
 
         <CheckBoxPreference
+            android:key="longTapSwitch"
+            android:title="Long tap to enter offline/online mode"
+            android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly change the current mode"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
             android:key="commentNav"
             android:title="FAB comment navigation"
             android:summary="Easily navigate between top level parent comments"

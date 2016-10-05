@@ -49,24 +49,25 @@ public class OtherItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        int position = getRecyclerView().getChildPosition(v);
-        NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getAdapter().getItemAt(position);
+        if(MyApplication.longTapSwitchMode) {
+            int position = getRecyclerView().getChildPosition(v);
+            NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getAdapter().getItemAt(position);
 
-        if(otherItem.getName().equals("Synced")) {
-            if(MyApplication.offlineModeEnabled) {
-                showSyncedPosts();
+            if (otherItem.getName().equals("Synced")) {
+                if (MyApplication.offlineModeEnabled) {
+                    showSyncedPosts();
+                } else {
+                    getDrawerLayout().closeDrawers();
+                    ToastUtils.displayShortToast(getActivity(), "Switching to offline mode");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getAdapter().switchMode("synced", false, true, null, null);
+                        }
+                    }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+                }
+                return true;
             }
-            else {
-                getDrawerLayout().closeDrawers();
-                ToastUtils.displayShortToast(getActivity(), "Switching to offline mode");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getAdapter().switchMode("synced", false, true, null, null);
-                    }
-                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
-            }
-            return true;
         }
         return false;
     }

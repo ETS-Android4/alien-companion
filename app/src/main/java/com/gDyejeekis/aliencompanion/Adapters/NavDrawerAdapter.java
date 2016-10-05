@@ -559,8 +559,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 headerViewHolder.offlineButton.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        switchModeGracefully();
-                        return true;
+                        if(MyApplication.longTapSwitchMode) {
+                            switchModeGracefully();
+                            return true;
+                        }
+                        return false;
                     }
                 });
 

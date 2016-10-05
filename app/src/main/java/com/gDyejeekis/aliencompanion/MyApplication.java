@@ -148,6 +148,7 @@ public class MyApplication extends Application {
     public static boolean syncOverWifiOnly;
     public static boolean syncWebpages;
     public static boolean preferExternalStorage;
+    public static boolean longTapSwitchMode;
 
     public static int currentBaseTheme;
 
@@ -384,6 +385,7 @@ public class MyApplication extends Application {
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);
+        longTapSwitchMode = prefs.getBoolean("longTapSwitch", true);
         currentPostListView = prefs.getInt("postListView", 0);
         switch (currentPostListView) {
             case 0:

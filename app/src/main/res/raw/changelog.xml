@@ -19,6 +19,7 @@
         <changelogtext>Redesigned settings menu to make options more easily accessible</changelogtext>
         <changelogtext>Long tapping the 'Go offline/online' and 'Synced' options now trigger the effect without a confirmation dialog</changelogtext>
         <changelogtext>Long tapping a subreddit/multireddit on the navigation drawer will change the current mode (online/offline), then load the selected subreddit/multireddit</changelogtext>
+        <changelogtext>Added option 'Long tap to enter offline/online mode' under Navigation settings</changelogtext>
         <changelogtext>Syncing of individual posts now respects the 'Sync over wifi only' option</changelogtext>
         <changelogtext>Added 'Share' option in the in-app browser</changelogtext>
         <changelogtext>Changed default font style to 'Light'</changelogtext>

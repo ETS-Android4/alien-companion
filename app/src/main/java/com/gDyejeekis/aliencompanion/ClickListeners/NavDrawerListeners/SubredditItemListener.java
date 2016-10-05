@@ -5,6 +5,7 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubredditItem;
+import com.gDyejeekis.aliencompanion.MyApplication;
 
 /**
  * Created by George on 6/26/2015.
@@ -33,10 +34,13 @@ public class SubredditItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        int position = getRecyclerView().getChildPosition(v);
-        NavDrawerSubredditItem subreddit = (NavDrawerSubredditItem) getAdapter().getItemAt(position);
-        String subredditName = (subreddit.getName()!=null) ? subreddit.getName().toLowerCase() : null;
-        getAdapter().switchModeGracefully(subredditName, false);
-        return true;
+        if(MyApplication.longTapSwitchMode) {
+            int position = getRecyclerView().getChildPosition(v);
+            NavDrawerSubredditItem subreddit = (NavDrawerSubredditItem) getAdapter().getItemAt(position);
+            String subredditName = (subreddit.getName() != null) ? subreddit.getName().toLowerCase() : null;
+            getAdapter().switchModeGracefully(subredditName, false);
+            return true;
+        }
+        return false;
     }
 }
