@@ -491,10 +491,14 @@ public class GeneralUtils {
                     else {
                         namedDir = new File(activeDir.getAbsolutePath() + "/Pictures/" + name);
                     }
+                    //Log.d(TAG, "namedDir: " + namedDir.getAbsolutePath());
 
                     if(namedDir.isDirectory()) {
-                        File imgFile = new File(namedDir, urlToFilename(postLink));
-                        if(imgFile.delete()) {
+                        // TODO: 10/5/2016 find all media files that belong to the post and delete them
+                        String toFind = urlToFilename(postLink);
+                        toFind = toFind.substring(0, toFind.length() -4);
+                        File imgFile = findFile(namedDir, namedDir.getAbsolutePath(), toFind);
+                        if(imgFile!=null && imgFile.delete()) {
                             deleteFileFromMediaStore(context.getContentResolver(), imgFile);
                             Log.d(TAG, "Deleted " + imgFile.getAbsolutePath());
                         }

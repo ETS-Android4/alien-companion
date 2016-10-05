@@ -5,6 +5,7 @@
         <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
          and low contrast dark)</changelogtext>
         <changelogtext>Added toolbar option 'Add to synced' for saved posts</changelogtext>
+        <changelogtext>Added the ability to remove individual posts from the 'Synced' section</changelogtext>
         <changelogtext>Added 'Display info' action to image viewer for imgur images that have a title/description</changelogtext>
         <changelogtext>Added 'Dismiss image info on single tap' option under Navigation settings</changelogtext>
         <changelogtext>Improved image viewer to be able to display high resolution images in full detail</changelogtext>

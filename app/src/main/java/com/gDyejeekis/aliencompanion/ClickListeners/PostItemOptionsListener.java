@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -26,6 +28,7 @@ import com.gDyejeekis.aliencompanion.AsyncTasks.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ReportDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.TwoOptionDialogFragment;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.DownvoteAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.HideAction;
 import com.gDyejeekis.aliencompanion.Models.OfflineActions.NoVoteAction;
@@ -48,6 +51,8 @@ import com.gDyejeekis.aliencompanion.enums.UserActionType;
  * Created by George on 8/9/2015.
  */
 public class PostItemOptionsListener implements View.OnClickListener {
+
+    public static final int ACTION_REMOVE_SYNCED = 1;
 
     private Context context;
     private Submission post;
@@ -180,16 +185,16 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     if (post.isHidden()) {
                         post.setHidden(false);
                         actionType = UserActionType.unhide;
-                    } else {
+                        recyclerAdapter.notifyDataSetChanged();
+                    }
+                    else {
                         post.setHidden(true);
                         actionType = UserActionType.hide;
                         if(!(context instanceof PostActivity)) {
-                            RedditItemListAdapter redditItemListAdapter = (RedditItemListAdapter) recyclerAdapter;
-                            redditItemListAdapter.remove(post);
+                            ((RedditItemListAdapter) recyclerAdapter).remove(post);
+                            notifyDataSetChangedDelayed();
                         }
                     }
-
-                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -208,7 +213,9 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to hide");
+                else {
+                    ToastUtils.displayShortToast(context, "Must be logged in to hide");
+                }
                 break;
             case R.id.btn_view_user:
                 viewUser();
@@ -393,11 +400,44 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         } else ToastUtils.displayShortToast(context, "Must be logged in to report");
                         return true;
+                    case ACTION_REMOVE_SYNCED:
+                        ((RedditItemListAdapter) recyclerAdapter).remove(post);
+                        notifyDataSetChangedDelayed();
+                        new AsyncTask<String, Void, Boolean>() {
+
+                            @Override
+                            protected Boolean doInBackground(String... params) {
+                                return GeneralUtils.deleteSyncedPostFromCategory(context, DownloaderService.INDIVIDUALLY_SYNCED_FILENAME, params[0]);
+                            }
+
+                            @Override
+                            protected void onPostExecute(Boolean success) {
+                                String message = (success) ? "Post deleted" : "Failed to delete post";
+                                ToastUtils.displayShortToast(context, message);
+                            }
+                        }.execute(post.getIdentifier());
+                        return true;
                     default:
                         return false;
                 }
             }
         });
+        if(MyApplication.offlineModeEnabled && context instanceof MainActivity) {
+            PostListFragment fragment = ((MainActivity) context).getListFragment();
+            if(fragment.isOther && fragment.subreddit.equals("synced")) {
+                popupMenu.getMenu().add(Menu.NONE, ACTION_REMOVE_SYNCED, 6, "Remove");
+            }
+        }
         popupMenu.show();
     }
+
+    private void notifyDataSetChangedDelayed() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        }, 500);
+    }
+
 }
