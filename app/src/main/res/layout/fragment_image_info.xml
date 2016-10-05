@@ -25,8 +25,9 @@
             android:textColor="@android:color/white"
             android:textStyle="normal|bold"
             android:layout_marginBottom="6dp"
-            android:textSize="16sp"
-            android:clickable="false" />
+            android:textSize="?attr/font_medium"
+            android:clickable="false"
+            android:fontFamily="?attr/defaultFontFamily" />
 
         <TextView
             android:text="(Description here)"
@@ -34,7 +35,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView_image_descr"
             android:textColor="@android:color/white"
-            android:clickable="false" />
+            android:clickable="false"
+            android:textSize="?attr/font_comments"
+            android:fontFamily="?attr/defaultFontFamily" />
 
     </LinearLayout>
 

@@ -92,6 +92,8 @@ public class ImageActivity extends BackNavActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getTheme().applyStyle(MyApplication.fontStyle, true);
+        getTheme().applyStyle(MyApplication.fontFamily, true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
         fragmentManager = getSupportFragmentManager();
