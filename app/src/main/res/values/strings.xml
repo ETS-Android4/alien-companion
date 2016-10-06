@@ -13,16 +13,16 @@
         • Improvements to the image viewer. There were a lot of rough edges on this part of the app (and probably there are still some left),
         but this update aims to make it a whole lot better. High resolution images can now be viewed in full detail, a \'Display info\' button for imgur images
         with titles/descriptions and a lot of under the hood improvements/fixes are the main things you can expect from the updated image viewer.
-        \n
+        \n\n
         • Improvements to offline/sync functionality. This mainly includes two \'quality of life\' features, an \'Add to synced\' button for saved posts which allows you
         to sync posts you\'ve saved on reddit en masse and the ability to switch between online/offline mode by long tapping the appropriate items on the nav drawer.
         I also added the ability to delete individual posts from the \'Synced\' section.
-        \n
+        \n\n
         • Three new base themes (material blue grey, material grey and low contrast dark). In place of the old option for switching between themes, there\'s now a new option
         which allows you to switch between the five base themes currently available.
-        \n
+        \n\n
         As always, the full list of changes is available in the (revamped) settings menu. I\'d recommend clearing the app\'s cache and any synced data you have from the previous version.
-        \n
+        \n\n
         With all that out of the way, I\'d like to let you know that from now on I will be focusing on the release version of Alien Companion (v1.0) which will probably end up
         being the biggest update yet. If you have any feature requests, suggestions and/or complaints, now would be the time to let me know (\'Send feedback\' option in the settings).
     </string>
