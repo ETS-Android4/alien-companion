@@ -6,6 +6,8 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.CharacterStyle;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -406,7 +408,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         postDets2.setText(dets2);
         commentsText.setText(String.valueOf(post.getCommentCount()));
 
-        if(post.isNSFW()) appendNsfwLabel(context, postDets2);
+        if(post.getLinkFlairText()!=null) {
+            prependLinkFlairText(postDets1, post.getLinkFlairText());
+        }
+        if(post.isNSFW()) {
+            appendNsfwLabel(context, postDets2);
+        }
     }
 
     private void bindPostSmallCards(Context context, Submission post) {
@@ -418,7 +425,12 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         String dets2 = post.getScore() + " score · " + post.getCommentCount() + " comments";
         setIconsAndScoreText(context, postDets2, dets2, post);
 
-        if(post.isNSFW()) appendNsfwLabel(context, postDets1);
+        if(post.getLinkFlairText()!=null) {
+            prependLinkFlairText(postDets1, post.getLinkFlairText());
+        }
+        if(post.isNSFW()) {
+            appendNsfwLabel(context, postDets1);
+        }
     }
 
     private void bindPostCards(Context context, Submission post) {
@@ -430,7 +442,18 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         setIconsAndScoreText(context, scoreText, post.getScore() + " score", post);
         commentsText.setText(post.getCommentCount() + " comments");
 
-        if(post.isNSFW()) appendNsfwLabel(context, postDets1);
+        if(post.getLinkFlairText()!=null) {
+            prependLinkFlairText(postDets1, post.getLinkFlairText());
+        }
+        if(post.isNSFW()) {
+            appendNsfwLabel(context, postDets1);
+        }
+    }
+
+    private void prependLinkFlairText(TextView textView, String text) {
+        SpannableString flairSpan = new SpannableString(text + " · " + textView.getText());
+        flairSpan.setSpan(new ForegroundColorSpan(MyApplication.currentColor), 0, text.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        textView.setText(flairSpan);
     }
 
     private void appendNsfwLabel(Context context, TextView textView) {

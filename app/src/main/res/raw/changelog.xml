@@ -19,6 +19,7 @@
         <changelogtext>Redesigned settings menu to make options more easily accessible</changelogtext>
         <changelogtext>Added option 'Long tap to enter offline/online mode' under Navigation settings (enabled by default)</changelogtext>
         <changelogtext>Syncing of individual posts now respects the 'Sync over wifi only' option</changelogtext>
+        <changelogtext>Added flair text to post layouts</changelogtext>
         <changelogtext>Added 'Share' option in the in-app browser</changelogtext>
         <changelogtext>Changed default font style to 'Light'</changelogtext>
         <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>

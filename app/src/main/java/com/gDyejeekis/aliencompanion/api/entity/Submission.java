@@ -93,6 +93,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	public boolean hasImageButton;
 
     private String likes;
+	private String linkFlairText;
     //private String authorFlairCSSClass;
     //private String linkFlairCSSClass;
     //private String distinguished;
@@ -210,6 +211,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setPermalink(safeJsonToString(obj.get("permalink")));
 			setAuthor(safeJsonToString(obj.get("author")));
 			setTitle(safeJsonToString(obj.get("title")));
+			setLinkFlairText(safeJsonToString(obj.get("link_flair_text")));
 			setSubreddit(safeJsonToString(obj.get("subreddit")));
 			setSubredditId(safeJsonToString(obj.get("subreddit_id")));
 			setThumbnail(safeJsonToString(obj.get("thumbnail")));
@@ -301,6 +303,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	public String getLikes() {
 		return likes;
+	}
+
+	public void setLinkFlairText(String linkFlairText) {
+		this.linkFlairText = linkFlairText;
+	}
+
+	public String getLinkFlairText() {
+		return linkFlairText;
 	}
 
     public void setUpVotes(Long upVotes) {
