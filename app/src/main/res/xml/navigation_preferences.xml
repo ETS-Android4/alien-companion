@@ -27,7 +27,7 @@
     <CheckBoxPreference
         android:key="longTapSwitch"
         android:title="Long tap to enter offline/online mode"
-        android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly change the current mode"
+        android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly switch between modes"
         android:defaultValue="true"/>
 
     <CheckBoxPreference

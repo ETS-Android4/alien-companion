@@ -274,59 +274,7 @@ public class ImageFragment extends Fragment {
                 }
             }
         }.execute();
-        //Picasso.with(activity).load(url).into(saveTarget);
     }
-
-    //private final Target saveTarget = new Target(){
-//
-    //    @Override
-    //    public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-    //        new Thread(new Runnable() {
-//
-    //            @Override
-    //            public void run() {
-    //                Log.d(TAG, "Saving " + url + " to pictures directory");
-    //                String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-//
-    //                File appFolder = new File(dir + "/AlienCompanion");
-//
-    //                if(!appFolder.exists()) {
-    //                    appFolder.mkdir();
-    //                }
-//
-    //                String filename = url.replaceAll("https?://", "").replace("/", "(s)");
-    //                File file = new File(appFolder.getAbsolutePath(), filename);
-    //                try {
-    //                    file.createNewFile();
-    //                    FileOutputStream ostream = new FileOutputStream(file);
-    //                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-    //                    ostream.flush();
-    //                    ostream.close();
-//
-    //                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-    //                    Uri contentUri = Uri.fromFile(file);
-    //                    mediaScanIntent.setData(contentUri);
-    //                    activity.sendBroadcast(mediaScanIntent);
-//
-    //                    showImageSavedNotification(bitmap, contentUri);
-    //                } catch (Exception e) {
-    //                    e.printStackTrace();
-    //                }
-    //            }
-    //        }).start();
-//
-    //    }
-//
-    //    @Override
-    //    public void onBitmapFailed(Drawable errorDrawable) {
-    //        ToastUtils.displayShortToast(activity, "Failed to save image");
-    //    }
-//
-    //    @Override
-    //    public void onPrepareLoad(Drawable placeHolderDrawable) {
-    //        ToastUtils.displayShortToast(activity, "Saving to photos..");
-    //    }
-    //};
 
     private File getSaveDestination() {
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
@@ -337,7 +285,10 @@ public class ImageFragment extends Fragment {
             appFolder.mkdir();
         }
 
-        String filename = url.replaceAll("https?://", "").replace("/", "(s)");
+        String filename = GeneralUtils.urlToFilename(url);
+        if(!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))) {
+            filename = filename.concat(".jpg");
+        }
         return new File(appFolder.getAbsolutePath(), filename);
     }
 
@@ -390,14 +341,7 @@ public class ImageFragment extends Fragment {
 
     private void shareImage() {
         String label = "Share image to..";
-        String link;
-        if(activity.loadedFromLocal()) {
-            link = "http://" + url.substring(url.lastIndexOf("/")+1).replace("(s)", "/");
-        }
-        else {
-            link = url;
-        }
-        GeneralUtils.shareUrl(activity, label, link);
+        GeneralUtils.shareUrl(activity, label, activity.getOriginalUrl());
     }
 
 }
