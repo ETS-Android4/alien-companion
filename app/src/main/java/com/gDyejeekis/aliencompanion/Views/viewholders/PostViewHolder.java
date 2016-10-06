@@ -452,7 +452,7 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private void prependLinkFlairText(TextView textView, String text) {
         SpannableString flairSpan = new SpannableString(text + " · " + textView.getText());
-        flairSpan.setSpan(new ForegroundColorSpan(MyApplication.currentColor), 0, text.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        flairSpan.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, text.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         textView.setText(flairSpan);
     }
 
