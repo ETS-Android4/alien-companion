@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.6" changeDate="Oct 30, 2016">
+    <changelogversion versionName="0.6" changeDate="Oct 7, 2016">
         <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
          and low contrast dark)</changelogtext>
         <changelogtext>Added toolbar option 'Add to synced' for saved posts</changelogtext>
@@ -25,7 +25,7 @@
         <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>
         <changelogtext>Fixed incorrect marking of users as OP in comments for posts submitted by '[deleted]'</changelogtext>
         <changelogtext>Fixed an issue where synced album images would fail to load after moving synced data to a new directory</changelogtext>
-        <changelogtext>Reduced APK size to ~SIZE HERE~</changelogtext>
+        <changelogtext>Reduced APK size to 2.16 MB</changelogtext>
         <changelogtext>WAKE_LOCK permission now required</changelogtext>
     </changelogversion>
 
