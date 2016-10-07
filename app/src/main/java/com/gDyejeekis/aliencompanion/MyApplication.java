@@ -207,9 +207,10 @@ public class MyApplication extends Application {
     public static void setThemeRelatedFields(Context context) {
         themeFieldsInitialized = true;
         currentBaseTheme = prefs.getInt("baseTheme", LIGHT_THEME);
-        nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+        //nightThemeEnabled = prefs.getBoolean("nightTheme", false);
         switch(currentBaseTheme) {
             case LIGHT_THEME:
+                nightThemeEnabled = false;
                 currentColor = colorPrimary;
                 int index = getCurrentColorIndex();
                 colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
@@ -221,6 +222,7 @@ public class MyApplication extends Application {
                 smallCardLinkBackground = context.getResources().getColor(R.color.lightSmallCardLinkBackground);
                 break;
             case MATERIAL_BLUE_THEME:
+                nightThemeEnabled = true;
                 currentColor = colorPrimary;
                 index = getCurrentColorIndex();
                 colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
@@ -232,6 +234,7 @@ public class MyApplication extends Application {
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialBlueSmallCardLinkBackground);
                 break;
             case MATERIAL_GREY_THEME:
+                nightThemeEnabled = true;
                 currentColor = colorPrimary;
                 index = getCurrentColorIndex();
                 colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
@@ -243,6 +246,7 @@ public class MyApplication extends Application {
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialGreySmallCardLinkBackground);
                 break;
             case DARK_THEME:
+                nightThemeEnabled = true;
                 currentColor = context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = Color.BLACK;
                 colorPrimaryLight = context.getResources().getColor(R.color.darkPrimaryLight);
@@ -254,6 +258,7 @@ public class MyApplication extends Application {
                 //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);
                 break;
             case DARK_THEME_LOW_CONTRAST:
+                nightThemeEnabled = true;
                 currentColor = context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = Color.BLACK;
                 colorPrimaryLight = context.getResources().getColor(R.color.darkPrimaryLight);

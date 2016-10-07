@@ -29,9 +29,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     public DividerItemDecoration(Context context, int orientation) {
         switch (MyApplication.currentBaseTheme) {
             case MyApplication.LIGHT_THEME:
-                final TypedArray a = context.obtainStyledAttributes(ATTRS);
-                mDivider = a.getDrawable(0);
-                a.recycle();
+                mDivider = ContextCompat.getDrawable(context, R.drawable.divider_light_theme);
                 break;
             case MyApplication.MATERIAL_BLUE_THEME:
                 mDivider = ContextCompat.getDrawable(context, R.drawable.divider_material_blue);
