@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="0.6.1" changeDate="Oct 7, 2016">
+        <changelogtext>Fixed crash at startup caused by updating to v0.6</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.6" changeDate="Oct 6, 2016">
         <changelogtext>Changed dialog for switching themes and added 3 new base themes (material blue grey, material grey
          and low contrast dark)</changelogtext>

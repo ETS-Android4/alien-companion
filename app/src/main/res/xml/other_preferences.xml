@@ -31,7 +31,7 @@
     <Preference
         android:key="changelog"
         android:title="View changelog"
-        android:summary="Current version: 0.6" />
+        android:summary="Current version: 0.6.1" />
 
     <Preference
         android:key="feedback"
