@@ -38,9 +38,9 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String currentVersion = "0.6.1";
+    public static final String currentVersion = "0.6.2";
 
-    public static final int currentVersionCode = 31;
+    public static final int currentVersionCode = 32;
 
     //public static final boolean showWelcomeMsgThisVersion = true;
 
