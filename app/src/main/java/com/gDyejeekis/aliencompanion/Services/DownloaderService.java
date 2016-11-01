@@ -347,7 +347,7 @@ public class DownloaderService extends IntentService {
             Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
             List<RedditItem> posts;
 
-            if (subreddit == null || subreddit.equals("frontpage"))
+            if (subreddit == null || subreddit.equalsIgnoreCase("frontpage"))
                 posts = submissions.frontpage(submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
             else {
                 if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
