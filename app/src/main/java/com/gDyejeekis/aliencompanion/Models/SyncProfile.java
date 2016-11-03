@@ -139,7 +139,12 @@ public class SyncProfile implements Serializable {
         Log.d("SCHEDULE_DEBUG", "Scheduling sync services...");
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DownloaderService.class);
-        intent.putExtra("profile", this);
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            intent.putExtra("profileId", this.profileId);
+        }
+        else {
+            intent.putExtra("profile", this);
+        }
         intent.putExtra("reschedule", true);
         //intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
 

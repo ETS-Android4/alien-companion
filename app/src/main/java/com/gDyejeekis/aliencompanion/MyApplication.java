@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 
 import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Services.MessageCheckService;
 import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -627,5 +628,29 @@ public class MyApplication extends Application {
                 MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
             }
         }
+    }
+
+    public static SyncProfile getSyncProfileByIndex(Context context, int index) {
+        try {
+            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), SYNC_PROFILES_FILENAME));
+            return profiles.get(index);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static SyncProfile getSyncProfileById(Context context, int id) {
+        try {
+            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), SYNC_PROFILES_FILENAME));
+            for(SyncProfile profile : profiles) {
+                if(profile.getProfileId() == id) {
+                    return profile;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

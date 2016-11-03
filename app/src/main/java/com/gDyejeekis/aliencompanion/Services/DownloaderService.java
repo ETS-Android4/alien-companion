@@ -139,10 +139,17 @@ public class DownloaderService extends IntentService {
     @Override
     public void onHandleIntent(Intent i) {
         MyApplication.checkAccountInit(this, httpClient);
-        //Log.d("SYNC_DEBUG", "DownloaderService onHandleIntent...");
 
         //List<String> subreddits = i.getStringArrayListExtra("subreddits");
-        SyncProfile profile = (SyncProfile) i.getSerializableExtra("profile");
+        SyncProfile profile;
+        int profileId = i.getIntExtra("profileId", -1);
+        if(profileId!=-1) {
+            profile = MyApplication.getSyncProfileById(this, profileId);
+        }
+        else {
+            profile = (SyncProfile) i.getSerializableExtra("profile");
+        }
+
         Submission submission = (Submission) i.getSerializableExtra("post");
         int savedCount = i.getIntExtra("savedCount", 0);
 

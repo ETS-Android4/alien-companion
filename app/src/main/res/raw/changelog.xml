@@ -2,6 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="0.6.2" changeDate="Nov 30, 2016">
+        <changelogtext>Fixed issue on android N which caused scheduled sync profiles to only sync the frontpage</changelogtext>
         <changelogtext>Adding 'frontpage' to a sync profile with upper case letters now syncs the user's front page instead of the
         subreddit /r/frontpage</changelogtext>
     </changelogversion>
