@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.6.2" changeDate="Nov 30, 2016">
+    <changelogversion versionName="0.6.2" changeDate="Nov 3, 2016">
         <changelogtext>Fixed issue on android N which caused scheduled sync profiles to only sync the frontpage</changelogtext>
         <changelogtext>Adding 'frontpage' to a sync profile with upper case letters now syncs the user's front page instead of the
         subreddit /r/frontpage</changelogtext>
@@ -33,7 +33,7 @@
         <changelogtext>Added 'Share' option in the in-app browser</changelogtext>
         <changelogtext>Changed default font style to 'Light'</changelogtext>
         <changelogtext>Fixed issue where manual syncing would sometimes halt while the screen is off</changelogtext>
-        <changelogtext>Fixed incorrect marking of users as OP in comments for posts submitted by '[deleted]'</changelogtext>
+        <changelogtext>Fixed incorrect marking of users as OP in comments for posts submitted by [deleted]</changelogtext>
         <changelogtext>Fixed an issue where synced album images would fail to load after moving synced data to a new directory</changelogtext>
         <changelogtext>WAKE_LOCK permission now required</changelogtext>
     </changelogversion>
