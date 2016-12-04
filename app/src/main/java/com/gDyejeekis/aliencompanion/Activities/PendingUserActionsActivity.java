@@ -39,16 +39,10 @@ public class PendingUserActionsActivity extends BackNavActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_pending_actions);
-        if(MyApplication.nightThemeEnabled)
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        MyApplication.setupStandardToolbar(this);
 
         pendingActionsView = (RecyclerView) findViewById(R.id.recyclerView_pendingActions);
         adapter = new PendingActionsAdapter(this);

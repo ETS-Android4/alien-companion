@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
+import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
@@ -326,10 +327,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        int menuResource;
-        if(MyApplication.offlineModeEnabled) menuResource = R.menu.menu_main_offline;
-        else menuResource = R.menu.menu_main;
+        int menuResource = (MyApplication.offlineModeEnabled) ? R.menu.menu_main_offline : R.menu.menu_main;
         getMenuInflater().inflate(menuResource, menu);
+        if(BuildConfig.DEBUG) {
+            menu.add(Menu.NONE, DebugActivity.MENU_ITEM_ID, 999, "Debug");
+        }
         return true;
     }
 
@@ -351,6 +353,12 @@ public class MainActivity extends AppCompatActivity {
                     return true;
             }
         }
+
+        if(item.getItemId() == DebugActivity.MENU_ITEM_ID) {
+            startActivity(new Intent(this, DebugActivity.class));
+            return true;
+        }
+
         return drawerToggle.onOptionsItemSelected(item);
     }
 

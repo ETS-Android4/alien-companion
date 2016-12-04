@@ -3,9 +3,7 @@ package com.gDyejeekis.aliencompanion.Activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,15 +32,9 @@ public class MessageActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subreddit);
-        container = (LinearLayout) findViewById(R.id.container);
+        MyApplication.setupStandardToolbar(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        container = (LinearLayout) findViewById(R.id.container);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);

@@ -1,8 +1,6 @@
 package com.gDyejeekis.aliencompanion.Activities;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,9 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddMultiredditDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddSubredditDialogFragment;
 import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.MultiredditOptionsDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.mobeta.android.dslv.DragSortListView;
@@ -34,14 +30,7 @@ public class EditMultisActivity extends BackNavActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_edit_subreddits);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        MyApplication.setupStandardToolbar(this);
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);

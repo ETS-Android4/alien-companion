@@ -3,11 +3,9 @@ package com.gDyejeekis.aliencompanion.Activities;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,16 +37,10 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_edit_subreddits);
-        if(MyApplication.nightThemeEnabled)
+        if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MyApplication.nightThemeEnabled) toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        MyApplication.setupStandardToolbar(this);
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);

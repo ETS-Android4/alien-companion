@@ -135,6 +135,7 @@ public class ImageFragment extends Fragment {
             public void onImageLoadError(Exception e) {
                 Log.d(TAG, "onImageLoadError()");
                 imageLoadError();
+                ToastUtils.displayShortToast(activity, "Error decoding image");
             }
 
             @Override

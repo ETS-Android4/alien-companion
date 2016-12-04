@@ -118,6 +118,10 @@
             android:name=".Activities.ImageActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Transparent"/>
+        <activity
+            android:name=".Activities.DebugActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Debug"/>
         <activity android:name=".Activities.HandleUrlActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

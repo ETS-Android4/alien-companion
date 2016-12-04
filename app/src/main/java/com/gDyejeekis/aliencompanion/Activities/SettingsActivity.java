@@ -26,8 +26,6 @@ import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
  */
 public class SettingsActivity extends BackNavActivity {
 
-    private Toolbar toolbar;
-
     private SettingsMenuType menuType;
 
     private boolean dualPaneActive;
@@ -44,12 +42,7 @@ public class SettingsActivity extends BackNavActivity {
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        MyApplication.setupStandardToolbar(this);
 
         menuType = (SettingsMenuType) getIntent().getSerializableExtra("menuType");
         try {

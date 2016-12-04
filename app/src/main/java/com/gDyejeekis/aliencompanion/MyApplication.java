@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -300,6 +303,20 @@ public class MyApplication extends Application {
                 activity.getTheme().applyStyle(R.style.selectedTheme_night_low_contrast, true);
                 break;
         }
+    }
+
+    public static void setupStandardToolbar(AppCompatActivity activity) {
+        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.my_toolbar);
+        if(MyApplication.nightThemeEnabled) {
+            toolbar.setPopupTheme(R.style.OverflowStyleDark);
+        }
+        toolbar.setBackgroundColor(MyApplication.currentColor);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
+        }
+        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public static int getCurrentColorIndex() {
