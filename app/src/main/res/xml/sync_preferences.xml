@@ -50,9 +50,9 @@
         android:key="syncAlbum"
         android:title="Imgur album limit"
         android:summary="Number of images per imgur album that get saved locally"
-        android:entries="@array/commentDepth"
-        android:entryValues="@array/commentDepth"
-        android:defaultValue="1"/>
+        android:entries="@array/syncAlbumLimit"
+        android:entryValues="@array/syncAlbumLimit"
+        android:defaultValue="5"/>
 
 
     <CheckBoxPreference

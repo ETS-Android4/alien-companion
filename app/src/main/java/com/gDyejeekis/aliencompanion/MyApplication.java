@@ -404,7 +404,7 @@ public class MyApplication extends Application {
         syncWebpages = prefs.getBoolean("syncWeb", false);
         syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
         preferExternalStorage = prefs.getBoolean("prefExternal", false);
-        syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "1"));
+        syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "5"));
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);

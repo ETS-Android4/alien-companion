@@ -112,6 +112,15 @@
         <item>100</item>
     </string-array>
 
+    <string-array name="syncAlbumLimit">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+        <item>25</item>
+        <item>50</item>
+    </string-array>
+
     <string-array name="commentDepth">
         <item>1</item>
         <item>2</item>
