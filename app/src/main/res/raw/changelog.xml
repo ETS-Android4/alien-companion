@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="0.6.3" changeDate="Nov 30, 2016">
-        <changelogtext></changelogtext>
+    <changelogversion versionName="0.6.3" changeDate="Dec 10, 2016">
+        <changelogtext>Adjusted font size values across all font size options to be smaller (font size is now set to 'Medium' by default)</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.2" changeDate="Nov 3, 2016">

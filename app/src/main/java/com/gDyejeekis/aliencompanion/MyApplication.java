@@ -431,7 +431,7 @@ public class MyApplication extends Application {
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
-        fontStyle = Integer.parseInt(prefs.getString("fontSize", "2"));
+        fontStyle = Integer.parseInt(prefs.getString("fontSize", "3"));
         switch (fontStyle) {
             case 0:
                 fontStyle = R.style.FontStyle_Smallest;
