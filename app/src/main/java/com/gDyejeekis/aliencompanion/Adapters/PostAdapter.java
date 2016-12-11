@@ -323,7 +323,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         }
                     });
                     moreViewHolder.moreReplies.setVisibility(View.VISIBLE);
-                    moreViewHolder.moreReplies.setText("(" + moreComment.getMoreCommentIds().size() + " replies)");
+                    int repliesCount = moreComment.getMoreCommentIds().size();
+                    String textEnd = (repliesCount == 1) ? "y)" : "ies)";
+                    moreViewHolder.moreReplies.setText("(" + repliesCount + " repl" + textEnd);
                     moreViewHolder.loadMore.setText("load more comments");
                 }
                 break;
