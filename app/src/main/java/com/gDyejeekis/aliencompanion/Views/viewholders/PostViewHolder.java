@@ -6,7 +6,6 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
@@ -403,14 +402,15 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private void bindPostList(Context context, Submission post) {
         String dets1 = post.getScore() + " · " + post.agePrepared + " · " + post.getAuthor();
-        setIconsAndScoreText(context, postDets1, dets1, post);
+        if(post.getLinkFlairText()!=null) {
+            dets1 = post.getLinkFlairText() + " · " + dets1;
+        }
+        postDets1.setText(dets1);
+        setListIconsAndTextColors(context, post, postDets1);
         String dets2 = (post.isSelf()) ? post.getDomain() : post.getSubreddit() + " · " + post.getDomain();
         postDets2.setText(dets2);
         commentsText.setText(String.valueOf(post.getCommentCount()));
 
-        if(post.getLinkFlairText()!=null) {
-            prependLinkFlairText(postDets1, post.getLinkFlairText());
-        }
         if(post.isNSFW()) {
             appendNsfwLabel(context, postDets2);
         }
@@ -418,16 +418,23 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private void bindPostSmallCards(Context context, Submission post) {
         String dets1 = post.getAuthor() + " · " + post.agePrepared + " · ";
-        if(post.isSelf()) dets1 += post.getDomain();
-        else dets1 += post.getSubreddit() + " · " + post.getDomain();
+        if(post.getLinkFlairText()!=null) {
+            dets1 = post.getLinkFlairText() + " · " + dets1;
+        }
+
+        if(post.isSelf()) {
+            dets1 += post.getDomain();
+        }
+        else {
+            dets1 += post.getSubreddit() + " · " + post.getDomain();
+        }
+
         postDets1.setText(dets1);
 
         String dets2 = post.getScore() + " score · " + post.getCommentCount() + " comments";
-        setIconsAndScoreText(context, postDets2, dets2, post);
+        postDets2.setText(dets2);
+        setCardIconsAndTextColors(context, post, postDets1, postDets2);
 
-        if(post.getLinkFlairText()!=null) {
-            prependLinkFlairText(postDets1, post.getLinkFlairText());
-        }
         if(post.isNSFW()) {
             appendNsfwLabel(context, postDets1);
         }
@@ -435,25 +442,26 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private void bindPostCards(Context context, Submission post) {
         String dets = post.getAuthor() + " · " + post.agePrepared + " · ";
-        if(post.isSelf()) dets += post.getDomain();
-        else dets += post.getSubreddit() + " · " + post.getDomain();
+        if(post.getLinkFlairText()!=null) {
+            dets = post.getLinkFlairText() + " · " + dets;
+        }
+
+        if(post.isSelf()) {
+            dets += post.getDomain();
+        }
+        else {
+            dets += post.getSubreddit() + " · " + post.getDomain();
+        }
+
         postDets1.setText(dets);
 
-        setIconsAndScoreText(context, scoreText, post.getScore() + " score", post);
+        scoreText.setText(post.getScore() + " score");
         commentsText.setText(post.getCommentCount() + " comments");
+        setCardIconsAndTextColors(context, post, postDets1, scoreText);
 
-        if(post.getLinkFlairText()!=null) {
-            prependLinkFlairText(postDets1, post.getLinkFlairText());
-        }
         if(post.isNSFW()) {
             appendNsfwLabel(context, postDets1);
         }
-    }
-
-    private void prependLinkFlairText(TextView textView, String text) {
-        SpannableString flairSpan = new SpannableString(text + " · " + textView.getText());
-        flairSpan.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, text.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        textView.setText(flairSpan);
     }
 
     private void appendNsfwLabel(Context context, TextView textView) {
@@ -462,25 +470,34 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         textView.append(nsfwSpan);
     }
 
-    private void setIconsAndScoreText(Context context, TextView textView, String text, Submission post) {
+    private void setListIconsAndTextColors(Context context, Submission post, TextView textView) {
+        String text = textView.getText().toString();
+        SpannableString spannableString = new SpannableString(text);
+        int scoreStart;
+        int scoreEnd;
+        if(post.getLinkFlairText() == null) {
+            scoreStart = 0;
+            scoreEnd = text.indexOf(" ");
+        }
+        else {
+            scoreStart = text.indexOf("·") + 2;
+            scoreEnd = text.indexOf(" ", scoreStart);
+            spannableString.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
         if(MyApplication.currentUser != null) {
             //check user vote
             if (post.getLikes().equals("true")) {
-                int index = text.indexOf(" ");
-                SpannableString spannable = new SpannableString(text);
-                spannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                textView.setText(spannable);
+                spannableString.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), scoreStart, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
                 downvote.setImageResource(downvoteResource);
-            } else if (post.getLikes().equals("false")) {
-                int index = text.indexOf(" ");
-                SpannableString spannable = new SpannableString(text);
-                spannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, index, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                textView.setText(spannable);
+            }
+            else if (post.getLikes().equals("false")) {
+                spannableString.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), scoreStart, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvote.setImageResource(upvoteResource);
                 downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
-            } else {
-                textView.setText(text);
+            }
+            else {
                 textView.setTextColor(MyApplication.textHintColor);
                 upvote.setImageResource(upvoteResource);
                 downvote.setImageResource(downvoteResource);
@@ -493,7 +510,54 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
             else hide.setImageResource(hideResource);
         }
         else {
-            textView.setText(text);
+            upvote.setImageResource(upvoteResource);
+            downvote.setImageResource(downvoteResource);
+            save.setImageResource(saveResource);
+            hide.setImageResource(hideResource);
+        }
+
+        textView.setText(spannableString);
+    }
+
+    private void setCardIconsAndTextColors(Context context, Submission post, TextView flairTextView, TextView scoreTextView) {
+        // set flair color if flair is avaiable
+        if(post.getLinkFlairText() != null) {
+            String flairString = flairTextView.getText().toString();
+            SpannableString flairSpannable = new SpannableString(flairString);
+            flairSpannable.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            flairTextView.setText(flairSpannable);
+        }
+
+        //set score color and icon colors
+        if(MyApplication.currentUser != null) {
+            String scoreString = scoreTextView.getText().toString();
+            int scoreEnd = scoreString.indexOf(" ");
+            SpannableString scoreSpannable = new SpannableString(scoreString);
+            //check user vote
+            if (post.getLikes().equals("true")) {
+                scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
+                downvote.setImageResource(downvoteResource);
+            }
+            else if (post.getLikes().equals("false")) {
+                scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                upvote.setImageResource(upvoteResource);
+                downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
+            }
+            else {
+                scoreTextView.setTextColor(MyApplication.textHintColor);
+                upvote.setImageResource(upvoteResource);
+                downvote.setImageResource(downvoteResource);
+            }
+            scoreTextView.setText(scoreSpannable);
+            //check saved post
+            if(post.isSaved()) save.setImageResource(R.mipmap.ic_star_border_yellow_500_48dp);
+            else save.setImageResource(saveResource);
+            //check hidden post
+            if(post.isHidden()) hide.setImageResource(R.mipmap.ic_close_red_800_48dp);
+            else hide.setImageResource(hideResource);
+        }
+        else {
             upvote.setImageResource(upvoteResource);
             downvote.setImageResource(downvoteResource);
             save.setImageResource(saveResource);

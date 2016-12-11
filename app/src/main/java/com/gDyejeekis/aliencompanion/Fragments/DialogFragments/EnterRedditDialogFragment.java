@@ -123,6 +123,7 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
                     activity.getNavDrawerAdapter().notifyDataSetChanged();
                     PostListFragment listFragment = activity.getListFragment();
                     listFragment.isMulti = false;
+                    listFragment.isOther = false;
                     listFragment.changeSubreddit(subreddit);
                 }
             }

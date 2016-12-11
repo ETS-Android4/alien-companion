@@ -4,6 +4,7 @@
     <changelogversion versionName="0.6.3" changeDate="Dec 10, 2016">
         <changelogtext>Adjusted font size values across all font size options to be smaller (font size is now set to 'Medium' by default)</changelogtext>
         <changelogtext>Changed imgur album limit values in 'Sync options' to 1,2,5,10,25 and 50 (set to 5 by default)</changelogtext>
+        <changelogtext>Miscellaneous small fixes</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.2" changeDate="Nov 3, 2016">
