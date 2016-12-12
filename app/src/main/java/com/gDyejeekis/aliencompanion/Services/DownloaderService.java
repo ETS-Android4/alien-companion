@@ -646,7 +646,7 @@ public class DownloaderService extends IntentService {
     private void downloadPostImage(Submission post, String filename) {
         String url = post.getURL();
         String domain = post.getDomain();
-        if(domain.contains("imgur.com") || domain.contains("gfycat.com") || domain.equals("i.reddituploads.com") ||
+        if(domain.contains("imgur.com") || domain.contains("gfycat.com") || domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com") ||
                 url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) { // TODO: 6/26/2016 probably remove this check
             File parentFolder;
             if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
@@ -680,7 +680,7 @@ public class DownloaderService extends IntentService {
                     e.printStackTrace();
                 }
             }
-            else if(domain.equals("i.reddituploads.com")) {
+            else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 downloadPostImageToFile(url, folderPath, LinkHandler.getReddituploadsFilename(url));
             }
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {

@@ -691,6 +691,7 @@ public class GeneralUtils {
         if(domain.contains("flickr.com")) return true;
         if(domain.equals("i.redd.it")) return true;
         if(domain.equals("i.reddituploads.com")) return true;
+        if(domain.equals("i.redditmedia.com")) return true;
         String urlLc = url.toLowerCase();
         if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif") || urlLc.endsWith(".jpeg")) return true;
         return false;
@@ -706,6 +707,7 @@ public class GeneralUtils {
 
     public static boolean isVideoLink(String url, String domain) {
         if(domain.contains("youtube.com") || domain.equals("youtu.be")) return true;
+        if(domain.contains("streamable.com")) return true;
         if(domain.equals("dailymotion.com")) return true;
         if(domain.equals("vimeo.com")) return true;
         if(domain.equals("vid.me")) return true;

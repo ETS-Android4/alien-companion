@@ -116,7 +116,7 @@ public class LinkHandler {
                     }
                     else setImplicitIntent = true;
                 }
-                else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com")) {
+                else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.contains("gfycat.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {

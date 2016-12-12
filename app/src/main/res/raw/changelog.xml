@@ -5,6 +5,7 @@
         <changelogtext>Adjusted font size values across all font size options to be smaller (font size is now set to 'Medium' by default)</changelogtext>
         <changelogtext>Changed imgur album limit values in 'Sync options' to 1,2,5,10,25 and 50 (set to 5 by default)</changelogtext>
         <changelogtext>Fixed decoding issue which prevented a small percentage of images from displaying</changelogtext>
+        <changelogtext>Added support for images hosted on the i.redditmedia.com domain</changelogtext>
         <changelogtext>Miscellaneous small fixes</changelogtext>
     </changelogversion>
 

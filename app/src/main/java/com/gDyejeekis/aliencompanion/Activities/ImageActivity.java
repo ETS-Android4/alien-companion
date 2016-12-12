@@ -130,7 +130,7 @@ public class ImageActivity extends BackNavActivity {
             if(domain.contains("gfycat.com")) {
                 toFind = LinkHandler.getGfycatId(url);
             }
-            else if(domain.equals("i.reddituploads.com")) {
+            else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 toFind = LinkHandler.getReddituploadsFilename(url);
             }
             else if(domain.contains("imgur.com")) {
@@ -206,7 +206,7 @@ public class ImageActivity extends BackNavActivity {
                 addGifFragment(GeneralUtils.getGfycatMobileUrl(url));
 
             }
-            else if(domain.equals("i.reddituploads.com")) {
+            else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 addImageFragment(url);
             }
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
