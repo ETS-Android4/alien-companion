@@ -135,19 +135,20 @@
                 <data
                     android:host="*reddit.com"
                     android:pathPattern=".*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
                 <data
                     android:host="*reddit.com"
                     android:pathPattern=".*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
                 <data
                     android:host="redd.it"
                     android:pathPattern=".*"
-                    android:scheme="https" />
+                    android:scheme="https"/>
                 <data
                     android:host="redd.it"
                     android:pathPattern=".*"
-                    android:scheme="http" />
+                    android:scheme="http"/>
+                <!--<data android:host="*" android:pathPattern=".*" android:scheme="https"/>-->
             </intent-filter>
         </activity>
     </application>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,9 +34,9 @@ import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import java.io.File;
 import java.util.UUID;
 
-import okhttp3.OkHttpClient;
-
-import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
+import magick.ColorspaceType;
+import magick.ImageInfo;
+import magick.MagickImage;
 
 /**
  * Created by sound on 3/8/2016.
@@ -54,9 +55,7 @@ public class ImageFragment extends Fragment {
 
     private MediaLoadTask loadTask;
 
-    //private Picasso picasso;
-
-    //private OkHttpClient okHttpClient;
+    private boolean convertedImg;
 
     public static ImageFragment newInstance(String url) {
         ImageFragment fragment = new ImageFragment();
@@ -67,10 +66,6 @@ public class ImageFragment extends Fragment {
 
         return fragment;
     }
-
-    //public void setOkHttpClient(OkHttpClient okHttpClient) {
-    //    this.okHttpClient = okHttpClient;
-    //}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +81,6 @@ public class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_image, container, false);
 
         imageView = (SubsamplingScaleImageView) view.findViewById(R.id.photoview);
-        //imageView.setTag(saveTarget); //this keeps reference to imageview, causes OOM issues
         if(MyApplication.dismissImageOnTap) {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -134,8 +128,14 @@ public class ImageFragment extends Fragment {
             @Override
             public void onImageLoadError(Exception e) {
                 Log.d(TAG, "onImageLoadError()");
-                imageLoadError();
-                ToastUtils.displayShortToast(activity, "Error decoding image");
+                if(convertedImg) {
+                    imageLoadError();
+                    ToastUtils.displayShortToast(activity, "Error decoding image");
+                }
+                else {
+                    ToastUtils.displayShortToast(activity, "Converting image to RGB..");
+                    convertAndShowImg();
+                }
             }
 
             @Override
@@ -165,21 +165,38 @@ public class ImageFragment extends Fragment {
             };
             //loadTask.executeOnExecutor(THREAD_POOL_EXECUTOR, url);
             loadTask.execute(url);
-            //picasso = Picasso.with(imageView.getContext());
-//
-            //imageView.setBitmapDecoderFactory(new DecoderFactory<ImageDecoder>() {
-            //    public ImageDecoder make() {
-            //        return new PicassoDecoder(url, picasso);
-            //    }
-            //});
-//
-            //imageView.setRegionDecoderFactory(new DecoderFactory<ImageRegionDecoder>() {
-            //    @Override
-            //    public ImageRegionDecoder make() throws IllegalAccessException, InstantiationException {
-            //        return new PicassoRegionDecoder(okHttpClient);
-            //    }
-            //});
         }
+    }
+
+    private void convertAndShowImg() {
+        convertedImg = true;
+        final String cachedPath = GeneralUtils.checkCacheForMedia(activity.getCacheDir(), url);
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    ImageInfo imageInfo = new ImageInfo(cachedPath);
+                    MagickImage magickImage = new MagickImage(imageInfo);
+                    boolean success = magickImage.transformRgbImage(ColorspaceType.RGBColorspace);
+                    if(success) {
+                        magickImage.writeImage(imageInfo);
+                    }
+                    return success;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                imageView.setImage(ImageSource.uri(cachedPath));
+                if(!success) {
+                    ToastUtils.displayShortToast(activity, "Error converting image");
+                }
+            }
+        }.execute();
     }
 
     // call at the start of every image load
@@ -205,9 +222,6 @@ public class ImageFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        //if(picasso!=null) {
-        //    picasso.cancelTag(url);
-        //}
         //Log.d(TAG, "imageFragment onDestroy");
         if(loadTask!=null) {
             loadTask.cancelOperation();
