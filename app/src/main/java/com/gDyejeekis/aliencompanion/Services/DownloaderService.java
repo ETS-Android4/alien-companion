@@ -75,6 +75,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.jetwick.snacktory.HtmlFetcher;
@@ -315,6 +316,7 @@ public class DownloaderService extends IntentService {
             }
             UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
             List<RedditItem> savedList = userMixed.ofUser(MyApplication.currentUser.getUsername(), UserSubmissionsCategory.SAVED, null, TimeSpan.ALL, -1, savedCount, null, null, false);
+            Collections.reverse(savedList);
             increaseProgress(builder, "saved");
             for(RedditItem item : savedList) {
                 Submission s;
