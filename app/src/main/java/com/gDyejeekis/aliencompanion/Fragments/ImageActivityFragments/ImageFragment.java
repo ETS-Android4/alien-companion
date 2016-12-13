@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,10 +33,6 @@ import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import java.io.File;
 import java.util.UUID;
 
-import magick.ColorspaceType;
-import magick.ImageInfo;
-import magick.MagickImage;
-
 /**
  * Created by sound on 3/8/2016.
  */
@@ -55,7 +50,7 @@ public class ImageFragment extends Fragment {
 
     private MediaLoadTask loadTask;
 
-    private boolean convertedImg;
+    private boolean triedAltDecoder;
 
     public static ImageFragment newInstance(String url) {
         ImageFragment fragment = new ImageFragment();
@@ -128,13 +123,13 @@ public class ImageFragment extends Fragment {
             @Override
             public void onImageLoadError(Exception e) {
                 Log.d(TAG, "onImageLoadError()");
-                if(convertedImg) {
+                if(triedAltDecoder) {
                     imageLoadError();
                     ToastUtils.displayShortToast(activity, "Error decoding image");
                 }
                 else {
-                    ToastUtils.displayShortToast(activity, "Converting image to RGB..");
-                    convertAndShowImg();
+                    triedAltDecoder = true;
+                    // TODO: 12/14/2016
                 }
             }
 
@@ -145,7 +140,8 @@ public class ImageFragment extends Fragment {
         });
 
         if(url.startsWith("file:")) {
-            imageView.setImage(ImageSource.uri(url.replace("file:", "")));
+            url = url.replace("file:", "");
+            imageView.setImage(ImageSource.uri(url));
         }
         else {
             loadTask = new MediaLoadTask(activity.getCacheDir()) {
@@ -165,45 +161,6 @@ public class ImageFragment extends Fragment {
             //loadTask.executeOnExecutor(THREAD_POOL_EXECUTOR, url);
             loadTask.execute(url);
         }
-    }
-
-    private void convertAndShowImg() {
-        convertedImg = true;
-
-        final String cachedPath;
-        if(url.startsWith("file:")) {
-            cachedPath = url.replace("file:", "");
-        }
-        else {
-            cachedPath = GeneralUtils.checkCacheForMedia(activity.getCacheDir(), url);
-        }
-
-        new AsyncTask<Void, Void, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                try {
-                    ImageInfo imageInfo = new ImageInfo(cachedPath);
-                    MagickImage magickImage = new MagickImage(imageInfo);
-                    boolean success = magickImage.transformRgbImage(ColorspaceType.RGBColorspace);
-                    if(success) {
-                        magickImage.writeImage(imageInfo);
-                    }
-                    return success;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return false;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-                imageView.setImage(ImageSource.uri(cachedPath));
-                if(!success) {
-                    ToastUtils.displayShortToast(activity, "Error converting image");
-                }
-            }
-        }.execute();
     }
 
     // call at the start of every image load

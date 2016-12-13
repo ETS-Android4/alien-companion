@@ -332,23 +332,6 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 }
             };
             loadGifTask.execute(url);
-            //new GifDataDownloader() {
-            //    @Override
-            //    protected void onPostExecute(final byte[] bytes) {
-            //        activity.setMainProgressBarVisible(false);
-            //        try {
-            //            if (bytes == null) throw new Exception();
-            //            gifDrawable = new GifDrawable(bytes);
-            //            gifView.setImageDrawable(gifDrawable);
-            //            gifView.setVisibility(View.VISIBLE);
-            //            buttonRetry.setVisibility(View.GONE);
-            //        } catch (Exception e) {
-            //            buttonRetry.setVisibility(View.VISIBLE);
-            //            gifView.setVisibility(View.GONE);
-            //            e.printStackTrace();
-            //        }
-            //    }
-            //}.execute(url);
         }
     }
 
