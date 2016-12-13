@@ -145,8 +145,7 @@ public class ImageFragment extends Fragment {
         });
 
         if(url.startsWith("file:")) {
-            url = url.replace("file:", "");
-            imageView.setImage(ImageSource.uri(url));
+            imageView.setImage(ImageSource.uri(url.replace("file:", "")));
         }
         else {
             loadTask = new MediaLoadTask(activity.getCacheDir()) {
@@ -170,7 +169,15 @@ public class ImageFragment extends Fragment {
 
     private void convertAndShowImg() {
         convertedImg = true;
-        final String cachedPath = GeneralUtils.checkCacheForMedia(activity.getCacheDir(), url);
+
+        final String cachedPath;
+        if(url.startsWith("file:")) {
+            cachedPath = url.replace("file:", "");
+        }
+        else {
+            cachedPath = GeneralUtils.checkCacheForMedia(activity.getCacheDir(), url);
+        }
+
         new AsyncTask<Void, Void, Boolean>() {
 
             @Override
