@@ -3,3 +3,4 @@ include ':app'
 //include ':multilevelexpindlistview'
 
 //project(':multilevelexpindlistview').projectDir = new File('C:/Users/George/AndroidStudioProjects/MultiLevelExpandableIndentableListView/multilevelexpindlistview')
+include ':androidlibmagick'
