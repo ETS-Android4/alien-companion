@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="unset" changeDate="unset">
+        <changelogtext></changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="0.6.4" changeDate="Dec 15, 2016">
         <changelogtext>Fixed issue causing the app icon to appear twice in the app drawer</changelogtext>
     </changelogversion>
