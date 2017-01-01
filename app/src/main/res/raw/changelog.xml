@@ -2,7 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="unset" changeDate="unset">
-        <changelogtext></changelogtext>
+        <changelogtext>Link flair text is now properly unescaped</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.4" changeDate="Dec 15, 2016">
