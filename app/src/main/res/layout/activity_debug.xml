@@ -8,7 +8,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/layout_link_debug"
         android:padding="8dp">
 
@@ -37,6 +37,30 @@
             android:id="@+id/button_handle_url"
             android:textSize="14sp"
             android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_url_tests"
+        android:padding="8dp">
+
+        <TextView
+            android:text="URL tests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView26"
+            android:textSize="18sp" />
+
+        <TextView
+            android:text="(test urls here)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_url_tests"
+            android:layout_marginTop="12dp" />
+
     </LinearLayout>
 
 </LinearLayout>
