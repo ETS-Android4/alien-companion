@@ -35,12 +35,14 @@ public class LinkHandler {
 
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
 
+    public static final String GOOGLE_DOCS_VIEWER_URL_PREFIX = "http://docs.google.com/gview?embedded=true&url=";
+
     private Context context;
     private Submission post;
     private String url;
     private String domain;
 
-    private boolean browserActive;
+    private boolean browserActive; // flag that checks if an instance of browserFragment is already open and visible
 
     public LinkHandler(Context context, Submission post) {
         this.context = context;
@@ -172,7 +174,7 @@ public class LinkHandler {
                     intent = new Intent(activity, PostActivity.class);
                     intent.putExtra("postId", getShortRedditId(url));
                 }
-                else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com")) {
+                else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
                         startInAppBrowser(activity, post, url, domain);
                     }
