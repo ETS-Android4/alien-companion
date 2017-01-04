@@ -56,9 +56,7 @@ public class UserActivity extends SwipeBackActivity {
     }
 
     public void setupPostFragment(PostFragment postFragment) {
-        PostFragment oldFragment = (PostFragment) fm.findFragmentByTag("postFragment");
-        if(oldFragment!=null) fm.beginTransaction().remove(oldFragment).commit();
-        fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
+        fm.beginTransaction().replace(R.id.postFragmentHolder, postFragment, "postFragment").commit();
     }
 
     private void setupMainFragment(int container) {
