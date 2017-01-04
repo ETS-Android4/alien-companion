@@ -17,18 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView25"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textUri"
             android:ems="10"
             android:id="@+id/editText_test_url"
             android:textSize="14sp"
             android:hint="enter url here"
             android:textColor="?attr/themeTextColor"
-            android:textColorHint="?attr/themeTextHintColor" />
+            android:textColorHint="?attr/themeTextHintColor"
+            android:nextFocusUp="@id/editText_test_url"
+            android:nextFocusLeft="@id/editText_test_url"/>
 
         <Button
             android:text="Go"
