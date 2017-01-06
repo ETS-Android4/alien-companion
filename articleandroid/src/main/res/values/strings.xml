@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Jacob Klinker
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="article_open_in_chrome">Open in browser</string>
+    <string name="article_share">Share…</string>
+    <string name="article_share_with">Share with…</string>
+    <string name="article_bullet_point">•</string>
+    <string name="article_save_title">Save</string>
+    <string name="article_saved_permission_label">Save articles from the web</string>
+    <string name="article_saved_permission_description">Allows app to save articles for viewing
+        later.</string>
+</resources>

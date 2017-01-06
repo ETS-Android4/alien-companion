@@ -215,32 +215,32 @@ public class LinkHandler {
         int textSize;
         switch (MyApplication.fontStyle) {
             case R.style.FontStyle_Smallest:
-                textSize = 12;
-                break;
-            case R.style.FontStyle_Smaller:
                 textSize = 13;
                 break;
-            case R.style.FontStyle_Small:
+            case R.style.FontStyle_Smaller:
                 textSize = 14;
                 break;
-            case R.style.FontStyle_Medium:
+            case R.style.FontStyle_Small:
                 textSize = 15;
                 break;
-            case R.style.FontStyle_Large:
+            case R.style.FontStyle_Medium:
                 textSize = 16;
                 break;
-            case R.style.FontStyle_Larger:
+            case R.style.FontStyle_Large:
                 textSize = 17;
                 break;
-            case R.style.FontStyle_Largest:
+            case R.style.FontStyle_Larger:
                 textSize = 18;
                 break;
+            case R.style.FontStyle_Largest:
+                textSize = 19;
+                break;
             default:
-                textSize = 15;
+                textSize = 16;
                 break;
         }
 
-        ArticleIntent intent = new ArticleIntent.Builder(context, ARTICLE_API_KEY)
+        ArticleIntent intent = new ArticleIntentBuilder(context, ARTICLE_API_KEY)
                 .setToolbarColor(MyApplication.currentColor)
                 //.setAccentColor(accentColor)
                 .setTheme(theme)
