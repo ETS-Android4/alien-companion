@@ -15,6 +15,7 @@ import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
@@ -26,6 +27,8 @@ import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import xyz.klinker.android.article.ArticleIntent;
+
 /**
  * Created by George on 6/11/2015.
  */
@@ -34,6 +37,8 @@ public class LinkHandler {
     public static final String TAG = "LinkHandler";
 
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
+
+    private static final String ARTICLE_API_KEY = "2f271e88a87b7bd125f99988d5daf2f3";
 
     public static final String GOOGLE_DOCS_VIEWER_URL_PREFIX = "http://docs.google.com/gview?embedded=true&url=";
 
@@ -176,7 +181,13 @@ public class LinkHandler {
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
-                        startInAppBrowser(activity, post, url, domain);
+                        if(MyApplication.handleArticles) {
+                            openImprovedArticle();
+                            return true;
+                        }
+                        else {
+                            startInAppBrowser(activity, post, url, domain);
+                        }
                     }
                 }
                 else {
@@ -197,6 +208,46 @@ public class LinkHandler {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void openImprovedArticle() {
+        int theme = (MyApplication.nightThemeEnabled) ? ArticleIntent.THEME_DARK : ArticleIntent.THEME_LIGHT;
+        int textSize;
+        switch (MyApplication.fontStyle) {
+            case R.style.FontStyle_Smallest:
+                textSize = 12;
+                break;
+            case R.style.FontStyle_Smaller:
+                textSize = 13;
+                break;
+            case R.style.FontStyle_Small:
+                textSize = 14;
+                break;
+            case R.style.FontStyle_Medium:
+                textSize = 15;
+                break;
+            case R.style.FontStyle_Large:
+                textSize = 16;
+                break;
+            case R.style.FontStyle_Larger:
+                textSize = 17;
+                break;
+            case R.style.FontStyle_Largest:
+                textSize = 18;
+                break;
+            default:
+                textSize = 15;
+                break;
+        }
+
+        ArticleIntent intent = new ArticleIntent.Builder(context, ARTICLE_API_KEY)
+                .setToolbarColor(MyApplication.currentColor)
+                //.setAccentColor(accentColor)
+                .setTheme(theme)
+                .setTextSize(textSize)     // 15 SP (default)
+                .build();
+
+        intent.launchUrl(context, Uri.parse(url));
     }
 
     public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {

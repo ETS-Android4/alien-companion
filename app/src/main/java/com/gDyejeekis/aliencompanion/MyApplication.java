@@ -153,6 +153,7 @@ public class MyApplication extends Application {
     public static boolean syncWebpages;
     public static boolean preferExternalStorage;
     public static boolean longTapSwitchMode;
+    public static boolean handleArticles;
 
     public static int currentBaseTheme;
 
@@ -540,6 +541,7 @@ public class MyApplication extends Application {
         handleTwitter = prefs.getBoolean("handleTwitter", true);
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
+        handleArticles = prefs.getBoolean("handleArticles", true);
 
         newMessages = prefs.getBoolean("newMessages", false);
         messageCheckInterval = Integer.valueOf(prefs.getString("messageCheckInterval", "15"));
