@@ -697,11 +697,13 @@ public class GeneralUtils {
         return false;
     }
 
+    // TODO: 1/7/2017 further improve this
     public static boolean isArticleLink(String url, String domain) {
         if(isImageLink(url, domain)) return false;
         if(isVideoLink(url, domain)) return false;
         if(domain.contains("reddit.com") || domain.equals("redd.it")) return false;
         if(domain.equals("twitter.com")) return false;
+        if(domain.equals("store.steampowered.com")) return false;
         return true;
     }
 
