@@ -30,6 +30,7 @@
 
     <xyz.klinker.android.article.view.ElasticDragDismissFrameLayout
         android:layout_width="@dimen/article_articleWidth"
+        android:layout_weight="8"
         android:layout_height="match_parent"
         android:id="@+id/article_drag_dismiss_layout">
 
