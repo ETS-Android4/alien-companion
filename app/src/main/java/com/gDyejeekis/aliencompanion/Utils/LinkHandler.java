@@ -181,7 +181,7 @@ public class LinkHandler {
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
-                        if(MyApplication.handleArticles) {
+                        if(MyApplication.handleArticles && GeneralUtils.isArticleLink(url, domain)) {
                             openImprovedArticle();
                             return true;
                         }
