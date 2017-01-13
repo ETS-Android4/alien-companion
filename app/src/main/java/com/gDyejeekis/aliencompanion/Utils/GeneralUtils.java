@@ -689,6 +689,8 @@ public class GeneralUtils {
         if(domain.contains("gfycat.com")) return true;
         if(domain.contains("gyazo.com")) return true;
         if(domain.contains("flickr.com")) return true;
+        if(domain.contains("twimg.com")) return true;
+        if(domain.contains("photobucket.com")) return true;
         if(domain.equals("i.redd.it")) return true;
         if(domain.equals("i.reddituploads.com")) return true;
         if(domain.equals("i.redditmedia.com")) return true;
@@ -714,6 +716,7 @@ public class GeneralUtils {
         if(domain.contains("dailymotion")) return true;
         if(domain.contains("vimeo")) return true;
         if(domain.equals("vid.me")) return true;
+        if(domain.equals("vine.co")) return true;
         if(domain.equals("liveleak.com")) return true;
         if(domain.contains("twitch.tv")) return true;
         if(domain.equals("oddshot.tv")) return true;
