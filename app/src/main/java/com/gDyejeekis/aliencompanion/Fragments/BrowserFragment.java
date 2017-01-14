@@ -49,9 +49,6 @@ public class BrowserFragment extends Fragment {
     private String url;
     private String domain;
 
-    //private boolean isPageSynced;
-    private String syncedPagePath;
-
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -85,7 +82,7 @@ public class BrowserFragment extends Fragment {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             try {
-                if(syncedPagePath==null && !(activity instanceof OAuthActivity)) {
+                if(!(activity instanceof OAuthActivity)) {
                     setActionbarTitle(ConvertUtils.getDomainName(url));
                 }
             } catch (Exception e) {
@@ -127,16 +124,6 @@ public class BrowserFragment extends Fragment {
         if (post != null) {
             url = post.getUrl();
             domain = post.getDomain();
-            if(MyApplication.offlineModeEnabled) {
-                File activeDir = GeneralUtils.getActiveDir(activity);
-                File file = GeneralUtils.findFile(activeDir, activeDir.getAbsolutePath(), post.getIdentifier() + DownloaderService.LOCAL_ARTICLE_SUFFIX);
-                if(file!=null) {
-                    //isPageSynced = true;
-                    syncedPagePath = file.getAbsolutePath();
-                    ((BrowserActivity) activity).loadFromCache = true;
-                    activity.invalidateOptionsMenu();
-                }
-            }
         } else {
             url = activity.getIntent().getStringExtra("url");
             domain = activity.getIntent().getStringExtra("domain");
@@ -195,13 +182,7 @@ public class BrowserFragment extends Fragment {
 
         if(webViewBundle == null) {
             webView.setWebChromeClient(new MyWebChromeClient());
-            if(MyApplication.offlineModeEnabled && syncedPagePath != null) {
-                settings.setCacheMode(WebSettings.LOAD_CACHE_ONLY);
-                webView.loadUrl("file:///" + syncedPagePath);
-            }
-            else {
-                webView.loadUrl(url);
-            }
+            webView.loadUrl(url);
         }
         else {
             webView.restoreState(webViewBundle);
@@ -268,24 +249,14 @@ public class BrowserFragment extends Fragment {
         ((BrowserActivity) activity).loadFromCache = true;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
-        if(MyApplication.offlineModeEnabled && syncedPagePath !=null) {
-            webView.loadUrl("file:///" + syncedPagePath);
-        }
-        else {
-            webView.reload();
-        }
+        webView.reload();
     }
 
     private void loadLiveVersion() {
         ((BrowserActivity) activity).loadFromCache = false;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
-        if(MyApplication.offlineModeEnabled && syncedPagePath != null) {
-            webView.loadUrl(url);
-        }
-        else {
-            webView.reload();
-        }
+        webView.reload();
     }
 
     public void setActionbarTitle(String title) {
