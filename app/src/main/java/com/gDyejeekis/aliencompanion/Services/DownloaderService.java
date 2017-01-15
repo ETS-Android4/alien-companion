@@ -9,40 +9,24 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
-import android.os.FileObserver;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.RemoteViews;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -53,27 +37,18 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.retrieval.Submissions;
 import com.gDyejeekis.aliencompanion.api.retrieval.UserMixed;
-import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
-import com.squareup.picasso.Picasso;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -94,8 +69,6 @@ public class DownloaderService extends IntentService {
     public static final String LOCA_POST_LIST_SUFFIX = "-posts";
 
     public static final String LOCAL_THUMNAIL_SUFFIX = "thumb";
-
-    public static final String LOCAL_ARTICLE_SUFFIX = "-article.html";
 
     private int MAX_PROGRESS;
 
@@ -595,48 +568,7 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostArticle(Submission post, String filename) {
         try {
-            //DisplayMetrics metrics = getResources().getDisplayMetrics();
-            //float headerSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 24, metrics);
-            //float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, metrics);
-//
-            ////WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-            ////Display display = wm.getDefaultDisplay();
-            ////int screenWidth = display.getWidth();
-            //int screenWidth = 720;
-//
-            //HtmlFetcher fetcher = new HtmlFetcher();
-            //// set cache. e.g. take the map implementation from google collections:
-            //// fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
-            ////    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
-            //JResult res = fetcher.fetchAndExtract(post.getURL(), 10000, true);
-//
-            //List<String> textList = res.getTextList();
-            //if(textList.size() == 0) {
-            //    Log.d(TAG, "No paragraph text found for " + post.getIdentifier());
-            //    return;
-            //}
-//
-            //String title = "<h1 style=\"font-size:" + headerSize + "px;\"> " + StringEscapeUtils.escapeHtml(res.getTitle()) + "</h1>";
-//
-            //String image = "";
-            //if(res.getImageUrl().length()>0) {
-            //    String imageFilename = filename + "-" + post.getIdentifier() + "-article_image";
-            //    GeneralUtils.downloadMediaToFile(res.getImageUrl(), getPreferredStorageFile(imageFilename));
-            //    image = "<img src=\"" + imageFilename + "\" width=\"" + screenWidth + "\"/>";
-            //}
-//
-            //String text = "";
-            //for(String paragraph : textList) {
-            //    paragraph = StringEscapeUtils.escapeHtml(paragraph);
-            //    text = text.concat("<p style=\"font-size:" + textSize + "px;\">" + paragraph + "</p>");
-            //}
-//
-            //String result = "<html><head></head><body><div style=\"padding-left: 10px; padding-right: 10px;\">"
-            //        + title + "\n" + image + "\n" + text + "</div></body></html>";
-//
-            //File file = getPreferredStorageFile(filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX);
-            ////GeneralUtils.writeObjectToFile(result, new File(getFilesDir(), filename + post.getIdentifier() + LOCAL_ARTICLE_SUFFIX));
-            //GeneralUtils.writeObjectToFile(result, file);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
