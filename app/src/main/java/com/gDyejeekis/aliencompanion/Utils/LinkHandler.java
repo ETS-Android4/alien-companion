@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
-import android.webkit.WebView;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
@@ -16,9 +15,7 @@ import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
 import java.io.UnsupportedEncodingException;
@@ -39,8 +36,6 @@ public class LinkHandler {
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
 
     private static final String ARTICLE_API_KEY = "2f271e88a87b7bd125f99988d5daf2f3";
-
-    public static final String GOOGLE_DOCS_VIEWER_URL_PREFIX = "http://docs.google.com/gview?embedded=true&url=";
 
     private Context context;
     private Submission post;
@@ -211,7 +206,21 @@ public class LinkHandler {
     }
 
     private void openImprovedArticle() {
-        int theme = (MyApplication.nightThemeEnabled) ? ArticleIntent.THEME_DARK : ArticleIntent.THEME_LIGHT;
+        ArticleIntent intent = new ArticleIntentBuilder(context, ARTICLE_API_KEY)
+                .setToolbarColor(MyApplication.currentColor)
+                //.setAccentColor(accentColor)
+                .setTheme(getArticleViewTheme())
+                .setTextSize(getArticleViewTextSize())     // 15 SP (default)
+                .build();
+
+        intent.launchUrl(context, Uri.parse(url));
+    }
+
+    private int getArticleViewTheme() {
+        return (MyApplication.nightThemeEnabled) ? ArticleIntent.THEME_DARK : ArticleIntent.THEME_LIGHT;
+    }
+
+    private int getArticleViewTextSize() {
         int textSize;
         switch (MyApplication.fontStyle) {
             case R.style.FontStyle_Smallest:
@@ -239,15 +248,7 @@ public class LinkHandler {
                 textSize = 16;
                 break;
         }
-
-        ArticleIntent intent = new ArticleIntentBuilder(context, ARTICLE_API_KEY)
-                .setToolbarColor(MyApplication.currentColor)
-                //.setAccentColor(accentColor)
-                .setTheme(theme)
-                .setTextSize(textSize)     // 15 SP (default)
-                .build();
-
-        intent.launchUrl(context, Uri.parse(url));
+        return textSize;
     }
 
     public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {
