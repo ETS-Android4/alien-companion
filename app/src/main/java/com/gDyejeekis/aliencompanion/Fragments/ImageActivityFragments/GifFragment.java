@@ -278,6 +278,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if(mPlayer != null) {
+            mPlayer.release(); // should cause to do less work in mPlayer.finalize()
+        }
+    }
+
+    @Override
     public void onDestroy() {
         //Log.d(TAG, "gifFragment onDestroy");
         if(loadGifTask!=null) {
