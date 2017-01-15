@@ -705,7 +705,13 @@ public class GeneralUtils {
         if(isVideoLink(url, domain)) return false;
         if(domain.contains("reddit.com") || domain.equals("redd.it")) return false;
         if(domain.equals("twitter.com")) return false;
+        if(domain.contains("github.com")) return false;
+        if(domain.equals("bitbucket.org")) return false;
+        if(domain.equals("gitlab.com")) return false;
         if(domain.equals("store.steampowered.com")) return false;
+        if(domain.equals("steamcommunity.com")) return false;
+        if(domain.equals("origin.com")) return false;
+        if(domain.equals("ubisoft.com")) return false;
         return true;
     }
 
