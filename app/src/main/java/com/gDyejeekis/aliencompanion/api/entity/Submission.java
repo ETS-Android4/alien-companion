@@ -91,6 +91,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	private List<Comment> syncedComments;
 
 	public boolean hasImageButton;
+	public boolean hasSyncedArticle;
 
     private String likes;
 	private String linkFlairText;

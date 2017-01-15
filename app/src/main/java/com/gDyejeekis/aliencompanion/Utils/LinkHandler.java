@@ -35,7 +35,7 @@ public class LinkHandler {
 
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
 
-    private static final String ARTICLE_API_KEY = "2f271e88a87b7bd125f99988d5daf2f3";
+    public static final String ARTICLE_API_KEY = "2f271e88a87b7bd125f99988d5daf2f3";
 
     private Context context;
     private Submission post;
@@ -176,7 +176,7 @@ public class LinkHandler {
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
-                        if(MyApplication.handleArticles && GeneralUtils.isArticleLink(url, domain)) {
+                        if( post.hasSyncedArticle || (MyApplication.handleArticles && GeneralUtils.isArticleLink(url, domain)) ) {
                             openImprovedArticle();
                             return true;
                         }

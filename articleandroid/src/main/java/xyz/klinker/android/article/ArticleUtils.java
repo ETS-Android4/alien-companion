@@ -168,7 +168,7 @@ public final class ArticleUtils {
      * @param callback the callback to receive after loading completes.
      * @param handler UI thread handler to use when performing the callback.
      */
-    private Article loadArticleSync(final String url, final DataSource source,
+    public Article loadArticleSync(final String url, final DataSource source,
                                     final ArticleLoadedListener callback, final Handler handler) {
         source.open();
         Article loadedArticle = source.getArticle(url);
