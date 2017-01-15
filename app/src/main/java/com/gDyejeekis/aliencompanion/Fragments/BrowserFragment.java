@@ -41,7 +41,7 @@ public class BrowserFragment extends Fragment {
 
     public static final String TAG = "BrowserFragment";
 
-    private WebView webView;
+    public WebView webView;
     private ProgressBar progressBar;
     private Submission post;
     private AppCompatActivity activity;

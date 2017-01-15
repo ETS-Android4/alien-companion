@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gDyejeekis.aliencompanion.Fragments.BrowserFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
@@ -13,6 +14,17 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 public class BrowserActivity extends SwipeBackActivity {
 
     public boolean loadFromCache = false;
+
+    @Override
+    public void onBackPressed() {
+        BrowserFragment fragment = (BrowserFragment) getFragmentManager().findFragmentById(R.id.fragment_browser);
+        if(fragment.webView.canGoBack()) {
+            fragment.goBack();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

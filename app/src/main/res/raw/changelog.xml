@@ -8,6 +8,7 @@
         <changelogtext>Added 'Improved post articles' under 'Link handling' options (enabled by default)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Link flair text is now properly unescaped</changelogtext>
+        <changelogtext>Pressing the system bar's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

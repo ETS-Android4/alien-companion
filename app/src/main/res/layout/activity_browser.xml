@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.gDyejeekis.aliencompanion.Fragments.BrowserFragment"
-        android:id="@+id/fragment"
+        android:id="@+id/fragment_browser"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </LinearLayout>
