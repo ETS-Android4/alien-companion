@@ -176,7 +176,8 @@ public class LinkHandler {
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
-                        if( post.hasSyncedArticle || (MyApplication.handleArticles && GeneralUtils.isArticleLink(url, domain)) ) {
+                        if( post != null &&
+                                ( post.hasSyncedArticle || (MyApplication.handleArticles && GeneralUtils.isArticleLink(url, domain)) ) ) {
                             openImprovedArticle();
                             return true;
                         }
