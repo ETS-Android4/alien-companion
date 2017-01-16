@@ -430,7 +430,7 @@ public class LinkHandler {
     }
 
     public static String getGiphyId(String url) {
-        String pattern = "giphy\\.com\\/(?:media\\/)?(\\w+)";
+        String pattern = "giphy\\.com\\/(?:(?:media|gifs)\\/)?(\\w+)";
         Matcher matcher = Pattern.compile(pattern).matcher(url);
         if(matcher.find()) {
             return matcher.group(1);
