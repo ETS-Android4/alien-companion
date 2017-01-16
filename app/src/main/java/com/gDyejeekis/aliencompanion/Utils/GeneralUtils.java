@@ -36,7 +36,10 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurHttpClient;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
+import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -49,10 +52,13 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/5/2015.
@@ -401,7 +407,7 @@ public class GeneralUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    //this method makes an API call to gfycat.com
+    // this method makes an API call to gfycat.com (synchronously)
     //public static String getGfycatMobileUrl(String desktopUrl) throws IOException, ParseException {
     //    String url = "http://gfycat.com/cajax/get/" + LinkHandler.getGfycatId(desktopUrl);
     //    Log.d("Gfycat", "GET request to " + url);
@@ -428,6 +434,27 @@ public class GeneralUtils {
     public static String getGfycatMobileUrl(String desktopUrl) {
         String id = LinkHandler.getGfycatId(desktopUrl);
         return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
+    }
+
+    // this method makes an API call to api.gyazo.com (synchronously)
+    public static String getGyazoRawUrl(String originalUrl) throws IOException, ParseException {
+        String url = "https://api.gyazo.com/api/oembed?url=" + originalUrl;
+        Log.d("Gyazo", "GET request to " + url);
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setUseCaches(true);
+        connection.setRequestMethod("GET");
+        connection.setDoInput(true);
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
+
+        InputStream inputStream = connection.getInputStream();
+        String content = IOUtils.toString(inputStream, "UTF-8");
+        IOUtils.closeQuietly(inputStream);
+
+        Log.d("Gyazo", content);
+        JSONObject gyazoJson = (JSONObject) new JSONParser().parse(content);
+
+        return safeJsonToString(gyazoJson.get("url"));
     }
 
     public static void checkCacheSize(File cacheDir) {

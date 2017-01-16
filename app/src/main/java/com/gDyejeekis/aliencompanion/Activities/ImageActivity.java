@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.AsyncTasks.GyazoTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
@@ -36,8 +37,6 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-
 import static android.support.v4.view.ViewPager.SCROLL_STATE_DRAGGING;
 import static android.support.v4.view.ViewPager.SCROLL_STATE_IDLE;
 
@@ -50,10 +49,10 @@ public class ImageActivity extends BackNavActivity {
 
     private String url;
 
-    private boolean loadFromLocal = false;
+    private boolean loadFromSynced = false;
 
     public boolean loadedFromLocal() {
-        return loadFromLocal;
+        return loadFromSynced;
     }
 
     private ProgressBar progressBar;
@@ -133,12 +132,15 @@ public class ImageActivity extends BackNavActivity {
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 toFind = LinkHandler.getReddituploadsFilename(url);
             }
+            else if(domain.contains("gyazo.com")) {
+                toFind = LinkHandler.getGyazoId(url);
+            }
             else if(domain.contains("imgur.com")) {
                 String id = LinkHandler.getImgurImgId(url);
                 if(url.contains("/a/")) {
                     ImgurAlbum album = (ImgurAlbum) findImgurItemFromFile(id);
                     if(album!=null) {
-                        loadFromLocal = true;
+                        loadFromSynced = true;
                         if(album.getImages().size()==1) {
                             String path = album.getImages().get(0).getLink();
                             if(path.endsWith(".mp4") || path.endsWith(".gif")) {
@@ -157,7 +159,7 @@ public class ImageActivity extends BackNavActivity {
                     ImgurGallery gallery = (ImgurGallery) findImgurItemFromFile(id);
                     if(gallery!=null) {
                         if(gallery.isAlbum()) {
-                            loadFromLocal = true;
+                            loadFromSynced = true;
                             if(gallery.getImages().size()==1) {
                                 String path = gallery.getImages().get(0).getLink();
                                 if(path.endsWith(".mp4") || path.endsWith(".gif")) {
@@ -188,7 +190,7 @@ public class ImageActivity extends BackNavActivity {
                 File file = GeneralUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
                 if (file != null) {
                     Log.d(TAG, "Locally saved image found " + file.getAbsolutePath());
-                    loadFromLocal = true;
+                    loadFromSynced = true;
                     String filename = file.getName();
                     if (filename.endsWith(".mp4") || filename.endsWith(".gif")) {
                         addGifFragment(file.getAbsolutePath());
@@ -200,11 +202,28 @@ public class ImageActivity extends BackNavActivity {
 
         }
 
-        if(!loadFromLocal) {
+        if(!loadFromSynced) {
             Log.d(TAG, "No locally saved image found, loading from network..");
             if (domain.contains("gfycat.com")) {
                 addGifFragment(GeneralUtils.getGfycatMobileUrl(url));
-
+            }
+            else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
+                new GyazoTask(this) {
+                    @Override
+                    protected void onPostExecute(String rawUrl) {
+                        if(rawUrl == null) {
+                            ToastUtils.displayShortToast(getContext(), "Error retrieve gyazo info");
+                        }
+                        else {
+                            if(rawUrl.endsWith(".jpg") || rawUrl.endsWith(",jpeg") || rawUrl.endsWith("png")) {
+                                addImageFragment(rawUrl);
+                            }
+                            else if(rawUrl.endsWith(".gif") || rawUrl.endsWith(".mp4")) {
+                                addGifFragment(rawUrl);
+                            }
+                        }
+                    }
+                }.execute(url);
             }
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 addImageFragment(url);
@@ -312,7 +331,7 @@ public class ImageActivity extends BackNavActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
         viewPager.setVisibility(View.VISIBLE);
         viewPager.setOffscreenPageLimit(1);
-        viewPager.setAdapter(new AlbumPagerAdapter(this, fragmentManager, images, loadFromLocal));
+        viewPager.setAdapter(new AlbumPagerAdapter(this, fragmentManager, images, loadFromSynced));
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -396,7 +415,7 @@ public class ImageActivity extends BackNavActivity {
         infoAction.setVisible(showInfoAction);
 
         MenuItem saveAction = menu.findItem(R.id.action_save);
-        saveAction.setVisible(showSaveAction && !loadFromLocal);
+        saveAction.setVisible(showSaveAction && !loadFromSynced);
 
         MenuItem hq_action = menu.findItem(R.id.action_high_quality);
         //hq_action.setVisible(showHqAction);

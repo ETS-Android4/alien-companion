@@ -375,7 +375,7 @@ public class DownloaderService extends IntentService {
             if (domain.contains("reddit.com") || domain.equals("redd.it")) {
                 syncLinkedRedditPost(url, domain, filename, cmntsRetrieval, syncOptions);
             } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
-                if (GeneralUtils.canAccessExternalStorage(this)) {
+                if (GeneralUtils.canAccessExternalStorage(this)) { // TODO: 1/16/2017 remove this check later down the line
                     downloadPostImage(submission, filename);
                 }
             } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
@@ -583,79 +583,85 @@ public class DownloaderService extends IntentService {
     private void downloadPostImage(Submission post, String filename) {
         String url = post.getURL();
         String domain = post.getDomain();
-        if(domain.contains("imgur.com") || domain.contains("gfycat.com") || domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com") ||
-                url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".png") || url.endsWith(".gif")) { // TODO: 6/26/2016 probably remove this check
-            File parentFolder;
-            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
-                File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
-                //pictures folder within external files dir
-                parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");
-            }
-            else {
-                File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-                //app folder inside public pictures directory
-                parentFolder = new File(dir, "AlienCompanion");
-            }
+        File parentFolder;
+        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
+            File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
+            //pictures folder within external files dir
+            parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");
+        }
+        else {
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-            if(!parentFolder.exists()) {
-                parentFolder.mkdir();
-            }
-            //folder for the corresponding subreddit
-            File subredditFolder = new File(parentFolder, filename);
-            if(!subredditFolder.exists()) {
-                subredditFolder.mkdir();
-            }
+            //app folder inside public pictures directory
+            parentFolder = new File(dir, "AlienCompanion");
+        }
 
-            final String folderPath = subredditFolder.getAbsolutePath();
+        if(!parentFolder.exists()) {
+            parentFolder.mkdir();
+        }
+        //folder for the corresponding subreddit
+        File subredditFolder = new File(parentFolder, filename);
+        if(!subredditFolder.exists()) {
+            subredditFolder.mkdir();
+        }
 
-            if (domain.contains("gfycat.com")) {
-                try {
-                    url = GeneralUtils.getGfycatMobileUrl(url);
-                    downloadPostImageToFile(url, folderPath);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-                downloadPostImageToFile(url, folderPath, LinkHandler.getReddituploadsFilename(url));
-            }
-            else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
-                url = url.replaceAll("\\?(\\d+)?", "");
+        final String folderPath = subredditFolder.getAbsolutePath();
+
+        if (domain.contains("gfycat.com")) {
+            try {
+                url = GeneralUtils.getGfycatMobileUrl(url);
                 downloadPostImageToFile(url, folderPath);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
-                url = url.replaceAll("\\?(\\d+)?", "");
-                if (domain.contains("imgur.com")) {
-                    url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
-                    //url = url.replace(".gif", ".mp4");
-                }
+        }
+        else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
+            try {
+                url = GeneralUtils.getGyazoRawUrl(url);
                 downloadPostImageToFile(url, folderPath);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else if (domain.contains("imgur.com")) {
-                ImgurItem item = null;
-                try {
-                    item = GeneralUtils.getImgurDataFromUrl(new ImgurHttpClient(), url);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        }
+        else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
+            downloadPostImageToFile(url, folderPath, LinkHandler.getReddituploadsFilename(url));
+        }
+        else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
+            url = url.replaceAll("\\?(\\d+)?", "");
+            downloadPostImageToFile(url, folderPath);
+        }
+        else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
+            url = url.replaceAll("\\?(\\d+)?", "");
+            if (domain.contains("imgur.com")) {
+                url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
+                //url = url.replace(".gif", ".mp4");
+            }
+            downloadPostImageToFile(url, folderPath);
+        }
+        else if (domain.contains("imgur.com")) {
+            ImgurItem item = null;
+            try {
+                item = GeneralUtils.getImgurDataFromUrl(new ImgurHttpClient(), url);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(item instanceof ImgurImage) {
+                ImgurImage image = (ImgurImage) item;
+                String link = (image.isAnimated()) ? image.getMp4() : image.getLink();
+                downloadPostImageToFile(link, folderPath);
+            }
+            else if(item instanceof ImgurAlbum) {
+                downloadAlbumImages(item, filename, folderPath);
+            }
+            else if(item instanceof ImgurGallery) {
+                ImgurGallery gallery = (ImgurGallery) item;
+                if(gallery.isAlbum()) {
+                    downloadAlbumImages(gallery, filename, folderPath);
                 }
-                if(item instanceof ImgurImage) {
-                    ImgurImage image = (ImgurImage) item;
-                    String link = (image.isAnimated()) ? image.getMp4() : image.getLink();
+                else {
+                    String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
                     downloadPostImageToFile(link, folderPath);
-                }
-                else if(item instanceof ImgurAlbum) {
-                    downloadAlbumImages(item, filename, folderPath);
-                }
-                else if(item instanceof ImgurGallery) {
-                    ImgurGallery gallery = (ImgurGallery) item;
-                    if(gallery.isAlbum()) {
-                        downloadAlbumImages(gallery, filename, folderPath);
-                    }
-                    else {
-                        String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
-                        downloadPostImageToFile(link, folderPath);
-                    }
                 }
             }
         }

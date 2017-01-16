@@ -5,11 +5,22 @@
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
         <changelogtext>Added 'Improved post articles' under 'Link handling' options (enabled by default)</changelogtext>
         <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext>Added gyazo support</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Link flair text is now properly unescaped</changelogtext>
         <changelogtext>Pressing the system bar's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
         <changelogtext>Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

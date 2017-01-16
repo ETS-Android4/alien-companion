@@ -118,7 +118,8 @@ public class LinkHandler {
                     }
                     else setImplicitIntent = true;
                 }
-                else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")) {
+                else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
+                        || domainLC.contains("gyazo.com")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.contains("gfycat.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
@@ -399,6 +400,19 @@ public class LinkHandler {
             return matcher.group(1);
         }
         return "";
+    }
+
+    public static String getGyazoId(String url) {
+        String pattern = "gyazo\\.com/(\\w+)";
+        Matcher matcher = Pattern.compile(pattern).matcher(url);
+        if(matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
+    public static boolean isRawGyazoUrl(String url) {
+        return url.matches(".*(i|embed|bot)\\.gyazo\\.com\\/\\w+\\.(jpg|jpeg|png|gif|mp4)");
     }
 
     public static String getImgurImgId(String url) {
