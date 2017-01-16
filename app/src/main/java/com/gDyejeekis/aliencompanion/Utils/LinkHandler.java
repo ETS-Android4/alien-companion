@@ -18,13 +18,25 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
+import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import xyz.klinker.android.article.ArticleIntent;
+
+import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by George on 6/11/2015.
@@ -36,6 +48,12 @@ public class LinkHandler {
     private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
 
     public static final String ARTICLE_API_KEY = "2f271e88a87b7bd125f99988d5daf2f3";
+
+    public static final String GIPHY_PUBLIC_BETA_API_KEY = "dc6zaTOxFJmzC";
+
+    public static final String GIPHY_PRODUCTION_API_KEY = "";
+
+    public static final String GIPHY_API_KEY = GIPHY_PUBLIC_BETA_API_KEY;
 
     private Context context;
     private Submission post;
@@ -122,7 +140,7 @@ public class LinkHandler {
                         || domainLC.contains("gyazo.com")) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
-                else if(domainLC.contains("gfycat.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
+                else if(domainLC.contains("gfycat.com") || domainLC.contains("giphy.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
                     intent = getImageActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.equals("twitter.com")) {
@@ -411,8 +429,21 @@ public class LinkHandler {
         return "";
     }
 
+    public static String getGiphyId(String url) {
+        String pattern = "giphy\\.com\\/(?:media\\/)?(\\w+)";
+        Matcher matcher = Pattern.compile(pattern).matcher(url);
+        if(matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
     public static boolean isRawGyazoUrl(String url) {
         return url.matches(".*(i|embed|bot)\\.gyazo\\.com\\/\\w+\\.(jpg|jpeg|png|gif|mp4)");
+    }
+
+    public static boolean isMp4Giphy(String url) {
+        return url.matches(".*giphy\\.com\\/media\\/\\w+\\/giphy\\.mp4");
     }
 
     public static String getImgurImgId(String url) {
@@ -518,4 +549,87 @@ public class LinkHandler {
     public String getDomain() {
         return domain;
     }
+
+
+
+    // this method makes an API call to gfycat.com (synchronously)
+    //public static String getGfycatMobileUrl(String desktopUrl) throws IOException, ParseException {
+    //    String url = "http://gfycat.com/cajax/get/" + LinkHandler.getGfycatId(desktopUrl);
+    //    Log.d("Gfycat", "GET request to " + url);
+    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+    //    connection.setUseCaches(true);
+    //    connection.setRequestMethod("GET");
+    //    connection.setDoInput(true);
+    //    connection.setConnectTimeout(5000);
+    //    connection.setReadTimeout(5000);
+//
+    //    InputStream inputStream = connection.getInputStream();
+//
+    //    String content = IOUtils.toString(inputStream, "UTF-8");
+    //    IOUtils.closeQuietly(inputStream);
+//
+    //    Log.d("Gfycat", content);
+    //    Object responseObject = new JSONParser().parse(content);
+//
+    //    JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");
+//
+    //    return safeJsonToString(gfyItem.get("mobileUrl"));
+    //}
+
+    // simple modify url method for GFYCAT
+    public static String getGfycatMobileUrl(String desktopUrl) {
+        String id = LinkHandler.getGfycatId(desktopUrl);
+        return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
+    }
+
+    // this method makes an API call to api.gyazo.com (synchronously)
+    public static String getGyazoRawUrl(String originalUrl) throws IOException, ParseException {
+        String url = "https://api.gyazo.com/api/oembed?url=" + originalUrl;
+        Log.d("Gyazo", "GET request to " + url);
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setUseCaches(true);
+        connection.setRequestMethod("GET");
+        connection.setDoInput(true);
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
+
+        InputStream inputStream = connection.getInputStream();
+        String content = IOUtils.toString(inputStream, "UTF-8");
+        IOUtils.closeQuietly(inputStream);
+
+        Log.d("Gyazo", content);
+        JSONObject gyazoJson = (JSONObject) new JSONParser().parse(content);
+
+        return safeJsonToString(gyazoJson.get("url"));
+    }
+
+    // this method makes an API call to api.giphy.com (synchronously)
+    //public static String getGiphyMp4Url(String originalUrl) throws IOException, ParseException {
+    //    String url = "http://api.giphy.com/v1/gifs/" + getGiphyId(originalUrl) + "?api_key=" + GIPHY_API_KEY;
+    //    Log.d("Giphy", "GET request to " + url);
+    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+    //    connection.setUseCaches(true);
+    //    connection.setRequestMethod("GET");
+    //    connection.setDoInput(true);
+    //    connection.setConnectTimeout(5000);
+    //    connection.setReadTimeout(5000);
+//
+    //    InputStream inputStream = connection.getInputStream();
+    //    String content = IOUtils.toString(inputStream, "UTF-8");
+    //    IOUtils.closeQuietly(inputStream);
+//
+    //    Log.d("Giphy", content);
+    //    Object responseObject = new JSONParser().parse(content);
+    //    JSONObject giphyData = (JSONObject) ((JSONObject) responseObject).get("data");
+    //    JSONObject images = (JSONObject) giphyData.get("images");
+    //    JSONObject original = (JSONObject) images.get("original");
+//
+    //    return safeJsonToString(original.get("mp4"));
+    //}
+
+    // simple modify url method for GIPHY
+    public static String getGiphyMp4Url(String originalUrl) {
+        return "http://media.giphy.com/media/" + getGiphyId(originalUrl) + "/giphy.mp4";
+    }
+
 }

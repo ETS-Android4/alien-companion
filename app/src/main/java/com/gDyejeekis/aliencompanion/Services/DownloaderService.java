@@ -608,29 +608,43 @@ public class DownloaderService extends IntentService {
 
         final String folderPath = subredditFolder.getAbsolutePath();
 
+        // GFYCAT
         if (domain.contains("gfycat.com")) {
             try {
-                url = GeneralUtils.getGfycatMobileUrl(url);
+                url = LinkHandler.getGfycatMobileUrl(url);
                 downloadPostImageToFile(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        // GYAZO
         else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
             try {
-                url = GeneralUtils.getGyazoRawUrl(url);
+                url = LinkHandler.getGyazoRawUrl(url);
                 downloadPostImageToFile(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        // GIPHY
+        else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
+            try {
+                url = LinkHandler.getGiphyMp4Url(url);
+                downloadPostImageToFile(url, folderPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // REDDIT
         else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
             downloadPostImageToFile(url, folderPath, LinkHandler.getReddituploadsFilename(url));
         }
+        // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
             url = url.replaceAll("\\?(\\d+)?", "");
             downloadPostImageToFile(url, folderPath);
         }
+        // GIFs
         else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
             url = url.replaceAll("\\?(\\d+)?", "");
             if (domain.contains("imgur.com")) {
@@ -639,6 +653,7 @@ public class DownloaderService extends IntentService {
             }
             downloadPostImageToFile(url, folderPath);
         }
+        // IMGUR
         else if (domain.contains("imgur.com")) {
             ImgurItem item = null;
             try {

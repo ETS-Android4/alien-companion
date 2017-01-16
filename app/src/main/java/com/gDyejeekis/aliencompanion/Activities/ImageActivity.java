@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.AsyncTasks.GiphyTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.GyazoTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
@@ -135,6 +136,9 @@ public class ImageActivity extends BackNavActivity {
             else if(domain.contains("gyazo.com")) {
                 toFind = LinkHandler.getGyazoId(url);
             }
+            else if(domain.contains("giphy.com")) {
+                toFind = LinkHandler.getGiphyId(url);
+            }
             else if(domain.contains("imgur.com")) {
                 String id = LinkHandler.getImgurImgId(url);
                 if(url.contains("/a/")) {
@@ -204,15 +208,17 @@ public class ImageActivity extends BackNavActivity {
 
         if(!loadFromSynced) {
             Log.d(TAG, "No locally saved image found, loading from network..");
+            // GFYCAT
             if (domain.contains("gfycat.com")) {
-                addGifFragment(GeneralUtils.getGfycatMobileUrl(url));
+                addGifFragment(LinkHandler.getGfycatMobileUrl(url));
             }
+            // GYAZO
             else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
                 new GyazoTask(this) {
                     @Override
                     protected void onPostExecute(String rawUrl) {
                         if(rawUrl == null) {
-                            ToastUtils.displayShortToast(getContext(), "Error retrieve gyazo info");
+                            ToastUtils.displayShortToast(getContext(), "Error retrieving gyazo info");
                         }
                         else {
                             if(rawUrl.endsWith(".jpg") || rawUrl.endsWith(",jpeg") || rawUrl.endsWith("png")) {
@@ -225,13 +231,31 @@ public class ImageActivity extends BackNavActivity {
                     }
                 }.execute(url);
             }
+            // GIPHY
+            else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
+                addGifFragment(LinkHandler.getGiphyMp4Url(url));
+                //new GiphyTask(this) {
+                //    @Override
+                //    protected void onPostExecute(String mp4Url) {
+                //        if(mp4Url == null) {
+                //            ToastUtils.displayShortToast(getContext(), "Error retrieving giphy info");
+                //        }
+                //        else {
+                //            addGifFragment(mp4Url);
+                //        }
+                //    }
+                //}.execute(url);
+            }
+            // REDDIT (SMH FAM)
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 addImageFragment(url);
             }
+            // IMAGES
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 addImageFragment(url);
             }
+            // GIFs
             else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
@@ -240,6 +264,7 @@ public class ImageActivity extends BackNavActivity {
                 }
                 addGifFragment(url);
             }
+            // IMGUR
             else if (domain.contains("imgur.com")) {
                 new ImgurTask(this) {
                     @Override
