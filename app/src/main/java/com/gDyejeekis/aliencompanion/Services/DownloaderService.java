@@ -17,6 +17,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.GiphyTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.GyazoTask;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
@@ -611,7 +614,7 @@ public class DownloaderService extends IntentService {
         // GFYCAT
         if (domain.contains("gfycat.com")) {
             try {
-                url = LinkHandler.getGfycatMobileUrl(url);
+                url = GfycatTask.getGfycatDirectUrlSimple(url);
                 downloadPostImageToFile(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -620,7 +623,7 @@ public class DownloaderService extends IntentService {
         // GYAZO
         else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
             try {
-                url = LinkHandler.getGyazoRawUrl(url);
+                url = GyazoTask.getGyazoDirectUrl(url);
                 downloadPostImageToFile(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -629,7 +632,7 @@ public class DownloaderService extends IntentService {
         // GIPHY
         else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
             try {
-                url = LinkHandler.getGiphyMp4Url(url);
+                url = GiphyTask.getGiphyDirectUrlSimple(url);
                 downloadPostImageToFile(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();

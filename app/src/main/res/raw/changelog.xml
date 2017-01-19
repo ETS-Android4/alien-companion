@@ -11,8 +11,10 @@
         <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext>Added gyazo support</changelogtext>
-        <changelogtext>Added giphy support</changelogtext>
+        <changelogtext>Added gyazo.com link handling support</changelogtext>
+        <changelogtext>Added giphy.com link handling support</changelogtext>
+        <changelogtext>Added streamable.com link handling support</changelogtext>
+        <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Link flair text is now properly unescaped</changelogtext>

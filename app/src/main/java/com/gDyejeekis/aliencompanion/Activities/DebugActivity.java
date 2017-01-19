@@ -26,8 +26,8 @@ public class DebugActivity extends BackNavActivity {
 
     public static final int MENU_ITEM_ID = TAG.hashCode();
 
-    public static final String[] URL_TESTS_HARDCODED = {"http://www.adobe.com/devnet/acrobat/pdfs/pdf_open_parameters.pdf", "https://www.google.gr/search?q=%22http%3A%2F%2Fwww.adobe.com%2Fdevnet%2Facrobat%2Fpdfs%2Fpdf_open_parameters.p" +
-            "df%22&oq=%22http%3A%2F%2Fwww.adobe.com%2Fdevnet%2Facrobat%2Fpdfs%2Fpdf_open_parameters.pdf%22&aqs=chrome..69i57j5.681j0j7&sourceid=chrome&ie=UTF-8"};
+    public static final String[] URL_TESTS_HARDCODED = {"https://streamable.com/96d7", "https://streamable.com/ifjh",
+            "https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

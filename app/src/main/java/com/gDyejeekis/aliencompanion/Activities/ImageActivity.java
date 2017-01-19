@@ -15,13 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.GiphyTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.GyazoTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.ImgurTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.StreamableTask;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
 import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageInfoFragment;
+import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.VideoFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
@@ -139,6 +142,9 @@ public class ImageActivity extends BackNavActivity {
             else if(domain.contains("giphy.com")) {
                 toFind = LinkHandler.getGiphyId(url);
             }
+            else if(domain.contains("streamable.com")) {
+                toFind = LinkHandler.getStreamableId(url);
+            }
             else if(domain.contains("imgur.com")) {
                 String id = LinkHandler.getImgurImgId(url);
                 if(url.contains("/a/")) {
@@ -210,7 +216,7 @@ public class ImageActivity extends BackNavActivity {
             Log.d(TAG, "No locally saved image found, loading from network..");
             // GFYCAT
             if (domain.contains("gfycat.com")) {
-                addGifFragment(LinkHandler.getGfycatMobileUrl(url));
+                addGifFragment(GfycatTask.getGfycatDirectUrlSimple(url));
             }
             // GYAZO
             else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
@@ -221,7 +227,7 @@ public class ImageActivity extends BackNavActivity {
                             ToastUtils.displayShortToast(getContext(), "Error retrieving gyazo info");
                         }
                         else {
-                            if(rawUrl.endsWith(".jpg") || rawUrl.endsWith(",jpeg") || rawUrl.endsWith("png")) {
+                            if(rawUrl.endsWith(".jpg") || rawUrl.endsWith(".jpeg") || rawUrl.endsWith(".png")) {
                                 addImageFragment(rawUrl);
                             }
                             else if(rawUrl.endsWith(".gif") || rawUrl.endsWith(".mp4")) {
@@ -233,7 +239,7 @@ public class ImageActivity extends BackNavActivity {
             }
             // GIPHY
             else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
-                addGifFragment(LinkHandler.getGiphyMp4Url(url));
+                addGifFragment(GiphyTask.getGiphyDirectUrlSimple(url));
                 //new GiphyTask(this) {
                 //    @Override
                 //    protected void onPostExecute(String mp4Url) {
@@ -245,6 +251,24 @@ public class ImageActivity extends BackNavActivity {
                 //        }
                 //    }
                 //}.execute(url);
+            }
+            // VIDEOS
+            else if(url.endsWith(".mp4")) {
+                addVideoFramgnet(url);
+            }
+            // STREAMABLE
+            else if(domain.contains("streamable.com")) {
+                new StreamableTask(this) {
+                    @Override
+                    protected void onPostExecute(String url) {
+                        if(url == null) {
+                            ToastUtils.displayShortToast(getContext(), "Error retrieving streamable info");
+                        }
+                        else {
+                            addVideoFramgnet(url);
+                        }
+                    }
+                }.execute(url);
             }
             // REDDIT (SMH FAM)
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
@@ -419,9 +443,9 @@ public class ImageActivity extends BackNavActivity {
         fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url, true), GifFragment.TAG).commitAllowingStateLoss();
     }
 
-    //public void addGifFragment(String url, int position) {
-    //    fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url, false), GifFragment.TAG + position).commitAllowingStateLoss();
-    //}
+    public void addVideoFramgnet(String url) {
+        fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, VideoFragment.newInstance(url), VideoFragment.TAG).commitAllowingStateLoss();
+    }
 
     public void setMainProgressBarVisible(boolean flag) {
         if(flag) {
