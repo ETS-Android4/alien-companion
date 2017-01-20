@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.Activities.MediaActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
@@ -38,7 +38,7 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
         return fragment;
     }
 
-    private ImageActivity activity;
+    private MediaActivity activity;
 
     private String url;
 
@@ -53,7 +53,7 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        activity = (ImageActivity) getActivity();
+        activity = (MediaActivity) getActivity();
         url = getArguments().getString("url");
     }
 

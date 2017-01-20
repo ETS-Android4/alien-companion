@@ -119,7 +119,7 @@
             android:configChanges="orientation|screenSize"
             android:label="Pending actions"/>
         <activity
-            android:name=".Activities.ImageActivity"
+            android:name=".Activities.MediaActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Transparent"/>
         <activity

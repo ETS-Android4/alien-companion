@@ -47,9 +47,9 @@ import static android.support.v4.view.ViewPager.SCROLL_STATE_IDLE;
 /**
  * Created by sound on 3/4/2016.
  */
-public class ImageActivity extends BackNavActivity {
+public class MediaActivity extends BackNavActivity {
 
-    public static final String TAG = "ImageActivity";
+    public static final String TAG = "MediaActivity";
 
     private String url;
 

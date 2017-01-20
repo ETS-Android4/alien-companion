@@ -5,18 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.Activities.MediaActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.squareup.picasso.Picasso;
 
@@ -27,7 +25,7 @@ import java.util.ArrayList;
  */
 public class AlbumGridviewFragment extends Fragment {
 
-    private ImageActivity activity;
+    private MediaActivity activity;
 
     private ArrayList<String> urls;
 
@@ -46,7 +44,7 @@ public class AlbumGridviewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        activity = (ImageActivity) getActivity();
+        activity = (MediaActivity) getActivity();
         urls = getArguments().getStringArrayList("urls");
     }
 

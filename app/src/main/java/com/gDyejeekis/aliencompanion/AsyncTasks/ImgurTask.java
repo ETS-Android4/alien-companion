@@ -1,25 +1,11 @@
 package com.gDyejeekis.aliencompanion.AsyncTasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
-import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.GifFragment;
-import com.gDyejeekis.aliencompanion.Fragments.ImageActivityFragments.ImageFragment;
-import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
-import com.gDyejeekis.aliencompanion.api.imgur.ImgurApiEndpoints;
-import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurHttpClient;
-import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
-
-import org.json.simple.JSONObject;
 
 /**
  * Created by sound on 3/9/2016.

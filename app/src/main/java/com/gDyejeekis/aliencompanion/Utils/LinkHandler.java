@@ -9,7 +9,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.Activities.MediaActivity;
 import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.Activities.UserActivity;
@@ -287,7 +287,7 @@ public class LinkHandler {
     }
 
     private Intent getImageActivityIntent(Activity activity, String url, String domain) {
-        Intent intent = new Intent(activity, ImageActivity.class);
+        Intent intent = new Intent(activity, MediaActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("domain", domain);
 

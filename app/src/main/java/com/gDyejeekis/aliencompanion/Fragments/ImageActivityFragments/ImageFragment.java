@@ -22,7 +22,7 @@ import android.widget.Button;
 
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.Activities.MediaActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -45,7 +45,7 @@ public class ImageFragment extends Fragment {
 
     public static final String TAG = "ImageFragment";
 
-    private ImageActivity activity;
+    private MediaActivity activity;
 
     private String url;
 
@@ -72,7 +72,7 @@ public class ImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        activity = (ImageActivity) getActivity();
+        activity = (MediaActivity) getActivity();
         url = getArguments().getString("url");
     }
 

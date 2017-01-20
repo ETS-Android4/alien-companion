@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.gDyejeekis.aliencompanion.Activities.ImageActivity;
+import com.gDyejeekis.aliencompanion.Activities.MediaActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -46,7 +46,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     public static final String TAG = "GifFragment";
 
-    private ImageActivity activity;
+    private MediaActivity activity;
 
     private String url;
 
@@ -88,7 +88,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        activity = (ImageActivity) getActivity();
+        activity = (MediaActivity) getActivity();
         url = getArguments().getString("url", "null");
         autoplay = getArguments().getBoolean("autoplay");
 
