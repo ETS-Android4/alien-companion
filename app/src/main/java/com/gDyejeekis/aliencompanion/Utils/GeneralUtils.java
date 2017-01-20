@@ -688,14 +688,15 @@ public class GeneralUtils {
 
     public static boolean isVideoLink(String url, String domain) {
         if(domain.contains("youtube") || domain.equals("youtu.be")) return true;
-        if(domain.contains("streamable")) return true;
+        if(domain.contains("streamable.com")) return true;
         if(domain.contains("mixtape")) return true;
         if(domain.contains("dailymotion")) return true;
-        if(domain.contains("vimeo")) return true;
+        if(domain.contains("vimeo.com")) return true;
         if(domain.equals("vid.me")) return true;
         if(domain.equals("vine.co")) return true;
         if(domain.equals("liveleak.com")) return true;
         if(domain.contains("twitch.tv")) return true;
+        if(domain.equals("hitbox.tv")) return true;
         if(domain.equals("oddshot.tv")) return true;
         String urlLc = url.toLowerCase();
         if(urlLc.endsWith(".webm") || urlLc.endsWith(".mp4"))  return true;
