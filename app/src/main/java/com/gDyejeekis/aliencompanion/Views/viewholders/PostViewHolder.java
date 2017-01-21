@@ -414,6 +414,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.isNSFW()) {
             appendNsfwLabel(context, postDets2);
         }
+
+        if(post.isSpoiler()) {
+            appendSpoilerLabel(postDets2);
+        }
     }
 
     private void bindPostSmallCards(Context context, Submission post) {
@@ -437,6 +441,10 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
 
         if(post.isNSFW()) {
             appendNsfwLabel(context, postDets1);
+        }
+
+        if(post.isSpoiler()) {
+            appendSpoilerLabel(postDets1);
         }
     }
 
@@ -462,12 +470,22 @@ public class PostViewHolder extends RecyclerView.ViewHolder {
         if(post.isNSFW()) {
             appendNsfwLabel(context, postDets1);
         }
+
+        if(post.isSpoiler()) {
+            appendSpoilerLabel(postDets1);
+        }
     }
 
     private void appendNsfwLabel(Context context, TextView textView) {
         SpannableString nsfwSpan = new SpannableString(" · NSFW");
         nsfwSpan.setSpan(new TextAppearanceSpan(context, R.style.nsfwLabel), 2, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.append(nsfwSpan);
+    }
+
+    private void appendSpoilerLabel(TextView textView) {
+        SpannableString spoilerSpan = new SpannableString(" · SPOILER");
+        spoilerSpan.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 2, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.append(spoilerSpan);
     }
 
     private void setListIconsAndTextColors(Context context, Submission post, TextView textView) {

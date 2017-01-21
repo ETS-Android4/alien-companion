@@ -83,6 +83,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     private Boolean edited;
     private Boolean stickied;
     private Boolean nsfw;
+	private Boolean spoiler;
     private Boolean hidden;
     private Boolean clicked;
 
@@ -239,6 +240,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setEdited(safeJsonToBoolean(obj.get("edited")));
 			setStickied(safeJsonToBoolean(obj.get("stickied")));
 			setNSFW(safeJsonToBoolean(obj.get("over_18")));
+			setSpoiler(safeJsonToBoolean(obj.get("spoiler")));
 			setHidden(safeJsonToBoolean(obj.get("hidden")));
 			setClicked(safeJsonToBoolean(obj.get("clicked")));
 			setLikes(safeJsonToString(obj.get("likes")));
@@ -643,5 +645,12 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	public int compareTo(Thing o) {
 		return this.getFullName().compareTo(o.getFullName());
 	}
-    
+
+	public Boolean isSpoiler() {
+		return spoiler;
+	}
+
+	public void setSpoiler(Boolean spoiler) {
+		this.spoiler = spoiler;
+	}
 }
