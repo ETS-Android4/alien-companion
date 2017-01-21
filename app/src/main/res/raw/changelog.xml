@@ -7,15 +7,15 @@
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext>Added 'Improved post articles' under 'Link handling' options (disabled by default)</changelogtext>
+        <changelogtext>[b]New![/b] Added 'Improved post articles' under 'Link handling' options (disabled by default)</changelogtext>
         <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
+        <changelogtext>[b]New![/b] Added 'Sync post videos' option under 'Sync options' (currently supports streamable, *.mp4 and *.webm links)</changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
         <changelogtext>Added giphy.com link handling support</changelogtext>
         <changelogtext>Added streamable.com link handling support</changelogtext>
         <changelogtext>Added *.mp4 and *.webm link handling support</changelogtext>
-        <changelogtext>Added 'Sync post videos' option under 'Sync options' (currently supports streamable, *.mp4 and *.webm links)</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
@@ -27,7 +27,7 @@
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext>Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
+        <changelogtext>[b]Bug:[/b] Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

@@ -59,7 +59,7 @@ dependencies {
     compile 'com.android.support:customtabs:25.1.0'
     compile 'org.apmem.tools:layouts:1.10@aar'
     compile 'com.makeramen:roundedimageview:2.2.1'
-    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.0.0'
+    compile 'com.github.gabrielemariotti.changeloglib:changelog:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
     compile files('libs/slf4j-simple-1.7.21.jar')
