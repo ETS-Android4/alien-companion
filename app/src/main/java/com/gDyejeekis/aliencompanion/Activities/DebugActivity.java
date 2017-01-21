@@ -26,8 +26,7 @@ public class DebugActivity extends BackNavActivity {
 
     public static final int MENU_ITEM_ID = TAG.hashCode();
 
-    public static final String[] URL_TESTS_HARDCODED = {"https://streamable.com/96d7", "https://streamable.com/ifjh",
-            "https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4"};
+    public static final String[] URL_TESTS_HARDCODED = {"http://a.pomf.se/njqqwq.webm", "http://web.archive.org/web/20150612051901/http://a.pomf.se/dwssfz.webm", "http://a.pomf.se/dwssfz.webm"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

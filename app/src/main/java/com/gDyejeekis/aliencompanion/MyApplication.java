@@ -149,6 +149,7 @@ public class MyApplication extends Application {
     public static boolean dismissInfoOnTap;
     public static boolean syncImages;
     public static int syncAlbumImgCount;
+    public static boolean syncVideo;
     public static boolean syncOverWifiOnly;
     public static boolean syncWebpages;
     public static boolean preferExternalStorage;
@@ -402,6 +403,7 @@ public class MyApplication extends Application {
     public static void getCurrentSettings() {
         showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);
         syncImages = prefs.getBoolean("syncImg", false);
+        syncVideo = prefs.getBoolean("syncVideo", false);
         syncWebpages = prefs.getBoolean("syncWeb", false);
         syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
         preferExternalStorage = prefs.getBoolean("prefExternal", false);
@@ -541,7 +543,7 @@ public class MyApplication extends Application {
         handleTwitter = prefs.getBoolean("handleTwitter", true);
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
-        handleArticles = prefs.getBoolean("handleArticles", true);
+        handleArticles = prefs.getBoolean("handleArticles", false);
 
         newMessages = prefs.getBoolean("newMessages", false);
         messageCheckInterval = Integer.valueOf(prefs.getString("messageCheckInterval", "15"));

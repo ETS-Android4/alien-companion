@@ -20,6 +20,7 @@ import android.util.Log;
 import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.GiphyTask;
 import com.gDyejeekis.aliencompanion.AsyncTasks.GyazoTask;
+import com.gDyejeekis.aliencompanion.AsyncTasks.StreamableTask;
 import com.gDyejeekis.aliencompanion.Models.RedditItem;
 import com.gDyejeekis.aliencompanion.Models.SyncProfile;
 import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
@@ -70,6 +71,8 @@ public class DownloaderService extends IntentService {
     private static final int FOREGROUND_ID = 574974;
 
     private static final int CHANGE_STATE_REQUEST_CODE = 59392;
+
+    public static final String MEDIA_DIRECTORY_NAME = "synced_media";
 
     public static final String INDIVIDUALLY_SYNCED_FILENAME = "synced";
 
@@ -377,11 +380,16 @@ public class DownloaderService extends IntentService {
             String domain = submission.getDomain();
             if (domain.contains("reddit.com") || domain.equals("redd.it")) {
                 syncLinkedRedditPost(url, domain, filename, cmntsRetrieval, syncOptions);
-            } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
+            }
+            else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
                 if (GeneralUtils.canAccessExternalStorage(this)) { // TODO: 1/16/2017 remove this check later down the line
                     downloadPostImage(submission, filename);
                 }
-            } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
+            }
+            else if(syncOptions.isSyncVideo() && GeneralUtils.isVideoLink(url, domain)) {
+                downloadPostVideo(submission, filename);
+            }
+            else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
                 downloadPostArticle(submission, filename);
             }
 
@@ -583,6 +591,49 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    private void downloadPostVideo(Submission post, String filename) {
+        String url = post.getURL();
+        String domain = post.getDomain();
+
+        File parentFolder;
+        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
+            File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
+            //pictures folder within external files dir
+            parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");
+        }
+        else {
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+            //app folder inside public pictures directory
+            parentFolder = new File(dir, "AlienCompanion");
+        }
+
+        if(!parentFolder.exists()) {
+            parentFolder.mkdir();
+        }
+        //folder for the corresponding subreddit
+        File subredditFolder = new File(parentFolder, filename);
+        if(!subredditFolder.exists()) {
+            subredditFolder.mkdir();
+        }
+
+        final String path = subredditFolder.getAbsolutePath();
+
+        // VIDEOS
+        if(url.endsWith(".mp4") || url.endsWith(".webm")) {
+            downloadPostMediaToPath(url, path);
+        }
+        // STREAMABLE
+        else if(domain.contains("streamable.com")) {
+            try {
+                url = StreamableTask.getStreamableDirectUrl(url);
+                downloadPostMediaToPath(url, path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void downloadPostImage(Submission post, String filename) {
         String url = post.getURL();
         String domain = post.getDomain();
@@ -615,7 +666,7 @@ public class DownloaderService extends IntentService {
         if (domain.contains("gfycat.com")) {
             try {
                 url = GfycatTask.getGfycatDirectUrlSimple(url);
-                downloadPostImageToFile(url, folderPath);
+                downloadPostMediaToPath(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -624,7 +675,7 @@ public class DownloaderService extends IntentService {
         else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
             try {
                 url = GyazoTask.getGyazoDirectUrl(url);
-                downloadPostImageToFile(url, folderPath);
+                downloadPostMediaToPath(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -633,7 +684,7 @@ public class DownloaderService extends IntentService {
         else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
             try {
                 url = GiphyTask.getGiphyDirectUrlSimple(url);
-                downloadPostImageToFile(url, folderPath);
+                downloadPostMediaToPath(url, folderPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -645,7 +696,7 @@ public class DownloaderService extends IntentService {
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
             url = url.replaceAll("\\?(\\d+)?", "");
-            downloadPostImageToFile(url, folderPath);
+            downloadPostMediaToPath(url, folderPath);
         }
         // GIFs
         else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
@@ -654,7 +705,7 @@ public class DownloaderService extends IntentService {
                 url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
                 //url = url.replace(".gif", ".mp4");
             }
-            downloadPostImageToFile(url, folderPath);
+            downloadPostMediaToPath(url, folderPath);
         }
         // IMGUR
         else if (domain.contains("imgur.com")) {
@@ -667,7 +718,7 @@ public class DownloaderService extends IntentService {
             if(item instanceof ImgurImage) {
                 ImgurImage image = (ImgurImage) item;
                 String link = (image.isAnimated()) ? image.getMp4() : image.getLink();
-                downloadPostImageToFile(link, folderPath);
+                downloadPostMediaToPath(link, folderPath);
             }
             else if(item instanceof ImgurAlbum) {
                 downloadAlbumImages(item, filename, folderPath);
@@ -679,7 +730,7 @@ public class DownloaderService extends IntentService {
                 }
                 else {
                     String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
-                    downloadPostImageToFile(link, folderPath);
+                    downloadPostMediaToPath(link, folderPath);
                 }
             }
         }
@@ -689,7 +740,7 @@ public class DownloaderService extends IntentService {
         int i = 0;
         for(ImgurImage img : item.getImages()) {
             if(i >= MyApplication.syncAlbumImgCount) break;
-            downloadPostImageToFile((img.isAnimated()) ? img.getMp4() : img.getLink(), folderPath);
+            downloadPostMediaToPath((img.isAnimated()) ? img.getMp4() : img.getLink(), folderPath);
             String imgId = LinkHandler.getImgurImgId(img.getLink());
             if(MyApplication.syncAlbumImgCount > 1) {
                 try {
@@ -722,14 +773,18 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadPostImageToFile(String url, String dir) {
+    private void downloadPostMediaToPath(String url, String dir) {
         try {
-            final String imgFilename = url.replaceAll("https?://", "").replace("/", "(s)");
-            final File file = new File(dir, imgFilename);
+            // remove any url parameters
+            try {
+                url = url.substring(0, url.lastIndexOf("?"));
+            } catch (Exception e){}
+            final String filename = GeneralUtils.urlToFilename(url);
+            final File file = new File(dir, filename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadMediaToFile(url, file);
 
-            GeneralUtils.addFileToMediaStore(this, file);
+            GeneralUtils.addFileToMediaStore(this, file); // TODO: 1/21/2017  remove this later
             //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             //Uri contentUri = Uri.fromFile(file);
             //mediaScanIntent.setData(contentUri);

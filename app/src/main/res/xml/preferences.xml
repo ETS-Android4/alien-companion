@@ -224,6 +224,11 @@
             android:entryValues="@array/syncAlbumLimit"
             android:defaultValue="5"/>
 
+        <CheckBoxPreference
+            android:key="syncVideo"
+            android:title="Sync post videos"
+            android:summary="Supports streamable, *.mp4 and *.webm links"
+            android:defaultValue="false" />
 
         <CheckBoxPreference
             android:key="syncWeb"
@@ -287,7 +292,7 @@
             android:key="handleArticles"
             android:title="Improved post articles"
             android:summary="Shows stripped down versions of article pages for easier reading and faster loading"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
     <PreferenceCategory

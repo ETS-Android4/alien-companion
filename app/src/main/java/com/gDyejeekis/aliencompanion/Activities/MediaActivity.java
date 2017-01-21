@@ -130,6 +130,7 @@ public class MediaActivity extends BackNavActivity {
             }
 
             String toFind = null;
+            boolean hasSound = false;
             if(domain.contains("gfycat.com")) {
                 toFind = LinkHandler.getGfycatId(url);
             }
@@ -144,6 +145,7 @@ public class MediaActivity extends BackNavActivity {
             }
             else if(domain.contains("streamable.com")) {
                 toFind = LinkHandler.getStreamableId(url);
+                hasSound = true;
             }
             else if(domain.contains("imgur.com")) {
                 String id = LinkHandler.getImgurImgId(url);
@@ -194,6 +196,7 @@ public class MediaActivity extends BackNavActivity {
             }
             else {
                 toFind = url.replaceAll("https?://", "").replace("/", "(s)");
+                hasSound = url.endsWith(".mp4") || url.endsWith(".webm");
             }
 
             if(toFind!=null) {
@@ -202,8 +205,16 @@ public class MediaActivity extends BackNavActivity {
                     Log.d(TAG, "Locally saved image found " + file.getAbsolutePath());
                     loadFromSynced = true;
                     String filename = file.getName();
-                    if (filename.endsWith(".mp4") || filename.endsWith(".gif")) {
-                        addGifFragment(file.getAbsolutePath());
+                    if(filename.endsWith(".webm")) {
+                        addVideoFragment(file.getAbsolutePath());
+                    }
+                    else if (filename.endsWith(".mp4") || filename.endsWith(".gif")) {
+                        if(hasSound) {
+                            addVideoFragment(file.getAbsolutePath());
+                        }
+                        else {
+                            addGifFragment(file.getAbsolutePath());
+                        }
                     } else {
                         addImageFragment("file:" + file.getAbsolutePath());
                     }
@@ -253,8 +264,8 @@ public class MediaActivity extends BackNavActivity {
                 //}.execute(url);
             }
             // VIDEOS
-            else if(url.endsWith(".mp4")) {
-                addVideoFramgnet(url);
+            else if(url.endsWith(".mp4") || url.endsWith(".webm")) {
+                addVideoFragment(url);
             }
             // STREAMABLE
             else if(domain.contains("streamable.com")) {
@@ -265,7 +276,7 @@ public class MediaActivity extends BackNavActivity {
                             ToastUtils.displayShortToast(getContext(), "Error retrieving streamable info");
                         }
                         else {
-                            addVideoFramgnet(url);
+                            addVideoFragment(url);
                         }
                     }
                 }.execute(url);
@@ -443,7 +454,7 @@ public class MediaActivity extends BackNavActivity {
         fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, GifFragment.newInstance(url, true), GifFragment.TAG).commitAllowingStateLoss();
     }
 
-    public void addVideoFramgnet(String url) {
+    public void addVideoFragment(String url) {
         fragmentManager.beginTransaction().add(R.id.layout_fragment_holder, VideoFragment.newInstance(url), VideoFragment.TAG).commitAllowingStateLoss();
     }
 

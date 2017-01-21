@@ -74,6 +74,16 @@ public class SyncProfileOptions implements Serializable {
 
     private boolean syncImages;
 
+    public boolean isSyncVideo() {
+        return syncVideo;
+    }
+
+    public void setSyncVideo(boolean syncVideo) {
+        this.syncVideo = syncVideo;
+    }
+
+    private boolean syncVideo;
+
     public int getAlbumSyncLimit() {
         return albumSyncLimit;
     }
@@ -133,6 +143,7 @@ public class SyncProfileOptions implements Serializable {
         else if(syncCommentSort != other.getSyncCommentSort()) return false;
         else if(syncThumbs != other.isSyncThumbs()) return false;
         else if(syncImages != other.isSyncImages()) return false;
+        else if(syncVideo != other.isSyncVideo()) return false;
         else if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
         else if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
 
@@ -146,6 +157,7 @@ public class SyncProfileOptions implements Serializable {
         this.syncCommentSort = other.getSyncCommentSort();
         this.syncThumbs = other.isSyncThumbs();
         this.syncImages = other.isSyncImages();
+        this.syncVideo = other.isSyncVideo();
         this.albumSyncLimit = other.getAlbumSyncLimit();
         this.syncOverWifiOnly = other.isSyncOverWifiOnly();
         this.syncWebpages = other.isSyncWebpages();
@@ -160,6 +172,7 @@ public class SyncProfileOptions implements Serializable {
         syncCommentSort = MyApplication.syncCommentSort;
         syncThumbs = MyApplication.syncThumbnails;
         syncImages = MyApplication.syncImages;
+        syncVideo = MyApplication.syncVideo;
         albumSyncLimit = MyApplication.syncAlbumImgCount;
         syncOverWifiOnly = MyApplication.syncOverWifiOnly;
         syncWebpages = MyApplication.syncWebpages;

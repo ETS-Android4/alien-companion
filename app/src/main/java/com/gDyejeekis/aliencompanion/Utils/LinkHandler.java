@@ -120,19 +120,19 @@ public class LinkHandler {
                 else if(domainLC.contains("imgur.com")) {
                     if(MyApplication.handleImgur) {
                         //startInAppBrowser(activity, post, url, domain);
-                        intent = getImageActivityIntent(activity, url, domain);
+                        intent = getMediaActivityIntent(activity, url, domain);
                     }
                     else setImplicitIntent = true;
                 }
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
                         || domainLC.contains("gyazo.com")) {
-                    intent = getImageActivityIntent(activity, url, domain);
+                    intent = getMediaActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.contains("gfycat.com") || domainLC.contains("giphy.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
-                    intent = getImageActivityIntent(activity, url, domain);
+                    intent = getMediaActivityIntent(activity, url, domain);
                 }
-                else if(domainLC.contains("streamable.com") || urlLC.endsWith(".mp4")) {
-                    intent = getImageActivityIntent(activity, url, domain);
+                else if(domainLC.contains("streamable.com") || urlLC.endsWith(".mp4") || urlLC.endsWith(".webm")) {
+                    intent = getMediaActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.equals("twitter.com")) {
                     if(MyApplication.handleTwitter) {
@@ -286,7 +286,7 @@ public class LinkHandler {
         }
     }
 
-    private Intent getImageActivityIntent(Activity activity, String url, String domain) {
+    private Intent getMediaActivityIntent(Activity activity, String url, String domain) {
         Intent intent = new Intent(activity, MediaActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("domain", domain);

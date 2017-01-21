@@ -54,6 +54,11 @@
         android:entryValues="@array/syncAlbumLimit"
         android:defaultValue="5"/>
 
+    <CheckBoxPreference
+        android:key="syncVideo"
+        android:title="Sync post videos"
+        android:summary="Supports streamable, *.mp4 and *.webm links"
+        android:defaultValue="false" />
 
     <CheckBoxPreference
         android:key="syncWeb"

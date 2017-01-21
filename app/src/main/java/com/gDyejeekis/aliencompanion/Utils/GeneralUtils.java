@@ -689,7 +689,8 @@ public class GeneralUtils {
     public static boolean isVideoLink(String url, String domain) {
         if(domain.contains("youtube") || domain.equals("youtu.be")) return true;
         if(domain.contains("streamable.com")) return true;
-        if(domain.contains("mixtape")) return true;
+        if(domain.contains("mixtape.moe")) return true;
+        if(domain.contains("pomf.se")) return true;
         if(domain.contains("dailymotion")) return true;
         if(domain.contains("vimeo.com")) return true;
         if(domain.equals("vid.me")) return true;

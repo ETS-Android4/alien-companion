@@ -111,7 +111,7 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         loadError();
-        return false;
+        return true;
     }
 
     private void loadVideo() {
