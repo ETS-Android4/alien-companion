@@ -263,10 +263,6 @@ public class MediaActivity extends BackNavActivity {
                 //    }
                 //}.execute(url);
             }
-            // VIDEOS
-            else if(url.endsWith(".mp4") || url.endsWith(".webm")) {
-                addVideoFragment(url);
-            }
             // STREAMABLE
             else if(domain.contains("streamable.com")) {
                 new StreamableTask(this) {
@@ -336,6 +332,10 @@ public class MediaActivity extends BackNavActivity {
                         }
                     }
                 }.execute(url);
+            }
+            // VIDEOS
+            else if(url.endsWith(".mp4") || url.endsWith(".webm")) {
+                addVideoFragment(url);
             }
         }
     }
