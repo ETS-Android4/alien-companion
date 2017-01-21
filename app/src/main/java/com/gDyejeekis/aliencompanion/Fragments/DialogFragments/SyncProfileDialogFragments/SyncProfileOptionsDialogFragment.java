@@ -47,6 +47,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private Spinner albumImageLimitSpinner;
     private CheckBox syncThumbsCheckbox;
     private CheckBox syncImagesCheckbox;
+    private CheckBox syncVideoCheckbox;
     private CheckBox syncArticlesCheckbox;
     private CheckBox syncWifiOnlyCheckbox;
 
@@ -102,6 +103,10 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncImagesCheckbox.setChecked(syncOptions.isSyncImages());
         syncImagesCheckbox.setEnabled(!useGlobal);
 
+        syncVideoCheckbox = (CheckBox) view.findViewById(R.id.checkBox_syncVideo);
+        syncVideoCheckbox.setChecked(syncOptions.isSyncVideo());
+        syncVideoCheckbox.setEnabled(!useGlobal);
+
         syncWifiOnlyCheckbox = (CheckBox) view.findViewById(R.id.checkBox_syncWifiOnly);
         syncWifiOnlyCheckbox.setChecked(syncOptions.isSyncOverWifiOnly());
         syncWifiOnlyCheckbox.setEnabled(!useGlobal);
@@ -134,6 +139,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncOptions.setAlbumSyncLimit(Integer.valueOf((String) albumImageLimitSpinner.getSelectedItem()));
             syncOptions.setSyncThumbs(syncThumbsCheckbox.isChecked());
             syncOptions.setSyncImages(syncImagesCheckbox.isChecked());
+            syncOptions.setSyncVideo(syncVideoCheckbox.isChecked());
             syncOptions.setSyncWebpages(syncArticlesCheckbox.isChecked());
             syncOptions.setSyncOverWifiOnly(syncWifiOnlyCheckbox.isChecked());
         }
@@ -161,6 +167,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncAlbumImgCount)));
             syncThumbsCheckbox.setChecked(MyApplication.syncThumbnails);
             syncImagesCheckbox.setChecked(MyApplication.syncImages);
+            syncVideoCheckbox.setChecked(MyApplication.syncVideo);
             syncArticlesCheckbox.setChecked(MyApplication.syncWebpages);
             syncWifiOnlyCheckbox.setChecked(MyApplication.syncOverWifiOnly);
         }
@@ -171,6 +178,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         albumImageLimitSpinner.setEnabled(!b);
         syncThumbsCheckbox.setEnabled(!b);
         syncImagesCheckbox.setEnabled(!b);
+        syncVideoCheckbox.setEnabled(!b);
         syncArticlesCheckbox.setEnabled(!b);
         syncWifiOnlyCheckbox.setEnabled(!b);
     }

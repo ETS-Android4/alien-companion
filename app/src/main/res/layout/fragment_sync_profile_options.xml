@@ -206,6 +206,32 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sync post videos"
+                android:id="@+id/textView26"
+                android:textSize="18sp"
+                android:textColor="?attr/themeTextColor"
+                android:layout_weight="1"
+                android:labelFor="@+id/checkBox_syncImages"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox_syncVideo"
+                android:checked="false"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp" >
 
             <TextView
