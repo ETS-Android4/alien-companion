@@ -40,7 +40,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
     public ImageView moreOptions;
     public ImageView upvoteClassic;
     public ImageView downvoteClassic;
-    public LinearLayout linkButton;
+    //public LinearLayout linkButton;
     public LinearLayout commentsButton;
     public LinearLayout layoutPostOptions;
 
@@ -52,7 +52,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
         scoreText = (TextView) itemView.findViewById(R.id.textView_score_classic);
         postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
-        linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
+        //linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
         layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_options);
         upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
         upvoteClassic = (ImageView) itemView.findViewById(R.id.imageView_upvote_classic);
@@ -84,35 +84,28 @@ public class PostClassicViewHolder extends PostViewHolder  {
         }
         // set post thumbnail
         if(post.isSelf()) {
-            linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-            commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 14f));
-            commentsButton.setPadding(0, 6, 10, 6);
+            postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+            commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
         }
         else {
             Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
             if (post.isNSFW() && !MyApplication.showNSFWpreview) {
-                linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-                linkButton.setPadding(0, 6, 10, 6);
-                linkButton.setBackground(null);
-                postImage.setScaleType(ImageView.ScaleType.FIT_START);
-                postImage.setImageResource(R.drawable.nsfw2);
+                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
             else if(thumbnailObject.hasThumbnail()) {
-                linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 2f));
-                linkButton.setBackground(null);
-                commentsButton.setPadding(10, 6, 10, 6);
-                postImage.setScaleType(ImageView.ScaleType.FIT_START);
+                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 3f));
+                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 12f));
+                //postImage.setBackground(null);
                 try {
-                    //Get Post Thumbnail
                     Picasso.with(context).load(thumbnailObject.getUrl()).placeholder(R.drawable.noimage).into(postImage);
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
             }
             else {
-                linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 14f));
-                commentsButton.setPadding(0, 6, 10, 6);
+                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
         }
         // set first row post details
@@ -187,9 +180,9 @@ public class PostClassicViewHolder extends PostViewHolder  {
 
     @Override
     public void setClickListeners(PostItemListener postItemListener, View.OnLongClickListener postLongListener, PostItemOptionsListener optionsListener) {
-        linkButton.setOnClickListener(postItemListener);
+        postImage.setOnClickListener(postItemListener);
         commentsButton.setOnClickListener(postItemListener);
-        linkButton.setOnLongClickListener(postLongListener);
+        postImage.setOnLongClickListener(postLongListener);
         commentsButton.setOnLongClickListener(postLongListener);
 
         upvoteClassic.setOnClickListener(optionsListener);

@@ -17,7 +17,7 @@
         <item android:id="@+id/action_cards" android:title="@string/cards"
             android:orderInCategory="25"/>
 
-        <item android:id="@+id/action_image_board" android:title="@string/image_board"
+        <item android:id="@+id/action_image_board" android:title="@string/gallery"
             android:orderInCategory="30" android:enabled="false"/>
     </group>
 

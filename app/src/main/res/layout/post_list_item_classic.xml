@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/layout_post">
+        android:id="@+id/layout_post"
+        android:weightSum="17"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -21,47 +24,38 @@
 
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 app:srcCompat="@mipmap/ic_expand_less_grey_24dp"
-                android:id="@+id/imageView_upvote_classic"
-                android:layout_weight="1"/>
+                android:id="@+id/imageView_upvote_classic"/>
 
             <TextView
                 android:text="####"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/textView_score_classic"
-                android:layout_weight="1"
                 android:gravity="center_vertical|center_horizontal"
                 android:fontFamily="?attr/defaultFontFamily"
                 android:textColor="?attr/themeTextHintColor"
                 android:textSize="?attr/font_comments"/>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 app:srcCompat="@mipmap/ic_expand_more_grey_24dp"
-                android:id="@+id/imageView_downvote_classic"
-                android:layout_weight="1" />
+                android:id="@+id/imageView_downvote_classic"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
+
+        <ImageView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_postLinkButton"
             android:layout_weight="3"
-            android:gravity="top|center_horizontal">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/imgView_postImage"
-                android:src="@mipmap/ic_launcher"
-                android:scaleType="fitStart"
-                android:paddingTop="8dp"/>
-        </LinearLayout>
+            android:id="@+id/imgView_postImage"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitStart"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -69,17 +63,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="12"
             android:id="@+id/layout_postCommentsButton"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:paddingRight="6dp"
-            android:paddingBottom="6dp">
+            android:paddingRight="6dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(Post title here)"
                 android:id="@+id/txtView_postTitle"
-                style="@style/PostTitleStyle" />
+                style="@style/PostTitleStyle"/>
 
             <TextView
                 android:layout_width="wrap_content"

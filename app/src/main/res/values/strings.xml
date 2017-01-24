@@ -228,5 +228,6 @@
     <string name="add_to_synced">Add to synced</string>
     <string name="classic">Classic</string>
     <string name="image_board">Image board</string>
+    <string name="gallery">Gallery</string>
 
 </resources>
