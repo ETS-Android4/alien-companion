@@ -24,12 +24,12 @@
         <changelogtext></changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Link flair text is now properly unescaped</changelogtext>
-        <changelogtext>Pressing the system bar's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
+        <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>[b]Bug:[/b] Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Various small fixes and improvements</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.4" changeDate="Dec 15, 2016">

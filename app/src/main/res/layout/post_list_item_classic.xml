@@ -55,8 +55,8 @@
             android:gravity="top|center_horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/imgView_postImage"
                 android:src="@mipmap/ic_launcher"
                 android:scaleType="fitStart"
@@ -93,7 +93,8 @@
                 android:layout_height="wrap_content"
                 android:text="##### comments · NSFW · SPOILER"
                 android:id="@+id/small_card_details_2"
-                style="@style/PostDetailsStyle" />
+                style="@style/PostDetailsStyle"
+                android:textSize="?attr/font_comments"/>
         </LinearLayout>
 
     </LinearLayout>

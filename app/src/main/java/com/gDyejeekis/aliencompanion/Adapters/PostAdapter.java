@@ -24,7 +24,7 @@ import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Views.viewholders.PostViewHolderOld;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostCardViewHolder;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.Models.MoreComment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -104,8 +104,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 resource = R.layout.post_details_card;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                //viewHolder = new ContentViewHolder(v);
-                viewHolder = new PostViewHolderOld(v, PostViewType.cardDetails);
+                viewHolder = new PostCardViewHolder(v, true);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -326,16 +325,14 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 break;
             case VIEW_TYPE_CONTENT:
-                PostViewHolderOld postViewHolder = (PostViewHolderOld) viewHolder;
+                PostCardViewHolder postViewHolder = (PostCardViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
                 author = post.getAuthor();
                 postViewHolder.bindModel(activity, post);
 
                 PostItemListener listener = new PostItemListener(activity, post, this, position);
-                if(post.hasImageButton && post.getThumbnailObject().hasThumbnail()) postViewHolder.imageButton.setOnClickListener(listener);
-                else postViewHolder.linkButton.setOnClickListener(listener);
                 PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
-                postViewHolder.setCardButtonsListener(optionsListener);
+                postViewHolder.setClickListeners(listener, null, optionsListener);
 
                 if(postFragment.showFullCommentsButton) {
                     postViewHolder.fullComments.setVisibility(View.VISIBLE);

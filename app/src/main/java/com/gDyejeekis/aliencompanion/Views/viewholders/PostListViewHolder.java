@@ -82,18 +82,15 @@ public class PostListViewHolder extends PostViewHolder {
         }
         commentsIcon.setImageResource(commentsResource); // TODO: 1/22/2017 set different icon depending on clicked state
         // set post thumbnail
-        Thumbnail thumbnailObject = post.getThumbnailObject();
+        Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
         if(thumbnailObject.hasThumbnail()) {
-            postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
-            if (thumbnailObject.isSelf()) {
-                postImage.setImageResource(R.drawable.self_default2);
-                //postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-            } else if (post.isNSFW() && !MyApplication.showNSFWpreview) {
+            if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                 //postImage.setImageResource(R.drawable.nsfw2);
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-            } else {
+            }
+            else {
+                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                 try {
-                    //Get Post Thumbnail
                     Picasso.with(context).load(thumbnailObject.getUrl()).placeholder(R.drawable.noimage).into(postImage);
                 } catch (IllegalArgumentException e) {e.printStackTrace();}
             }
@@ -158,10 +155,13 @@ public class PostListViewHolder extends PostViewHolder {
         if(post.isSpoiler()) {
             appendSpoilerLabel(postDets2);
         }
+        // set comments text
+        commentsText.setText(post.getCommentCount().toString());
         // set post options backgound color
         layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
         // set remaining icon resources
         viewUser.setImageResource(viewUserResource);
+        openBrowser.setImageResource(openBrowserResource);
         moreOptions.setImageResource(moreResource);
     }
 
@@ -181,6 +181,7 @@ public class PostListViewHolder extends PostViewHolder {
         moreOptions.setOnClickListener(optionsListener);
     }
 
+    @Override
     public void setPostOptionsVisible(boolean flag) {
         if(flag) {
             layoutPostOptions.setVisibility(View.VISIBLE);

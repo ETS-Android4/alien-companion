@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
+import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
@@ -97,6 +98,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             title.setTextColor(MyApplication.textColor);
         }
         // set post thumbnail or self text
+        Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
         if(post.isSelf()) {
             linkButton.setVisibility(View.GONE);
             imageButton.setVisibility(View.GONE);
@@ -124,12 +126,12 @@ public class PostCardViewHolder extends PostViewHolder  {
                 }
             }
         }
-        else if(post.hasImageButton && post.getThumbnailObject().hasThumbnail()) {
+        else if(post.hasImageButton && thumbnailObject.hasThumbnail()) {
             layoutSelfText.setVisibility(View.GONE);
             linkButton.setVisibility(View.GONE);
             imageButton.setVisibility(View.VISIBLE);
             try {
-                Picasso.with(context).load(post.getThumbnailObject().getUrl())/*.centerCrop().resize(1000, 300)*/.into(imageButton);
+                Picasso.with(context).load(thumbnailObject.getUrl())/*.centerCrop().resize(1000, 300)*/.into(imageButton);
             } catch (IllegalArgumentException e) {e.printStackTrace();}
         }
         else {
@@ -139,7 +141,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             domain2.setText(post.getDomain());
             domain2.setTextColor(MyApplication.linkColor);
             fullUrl.setText(post.getURL());
-            if(post.getThumbnailObject().hasThumbnail()) {
+            if(thumbnailObject.hasThumbnail()) {
                 if(post.isNSFW() && !MyApplication.showNSFWpreview) {
                     postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 }
@@ -215,6 +217,8 @@ public class PostCardViewHolder extends PostViewHolder  {
     @Override
     public void setClickListeners(PostItemListener postItemListener, View.OnLongClickListener postLongListener, PostItemOptionsListener postItemOptionsListener) {
         linkButton.setOnClickListener(postItemListener);
+        imageButton.setOnClickListener(postItemListener);
+
         if(showDetails) {
             commentsButton.setOnClickListener(null);
         }
@@ -227,6 +231,11 @@ public class PostCardViewHolder extends PostViewHolder  {
         save.setOnClickListener(postItemOptionsListener);
         hide.setOnClickListener(postItemOptionsListener);
         moreOptions.setOnClickListener(postItemOptionsListener);
+    }
+
+    @Override
+    public void setPostOptionsVisible(boolean flag) {
+
     }
 
     private void initIcons() {

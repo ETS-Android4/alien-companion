@@ -265,10 +265,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	}
 
 	public Thumbnail getThumbnailObject() {
-		if(thumbnailObject!=null) {
-			return thumbnailObject;
-		}
-		return new Thumbnail();
+		return thumbnailObject;
 	}
 
 	public void setThumbnailObject(Thumbnail thumbnail) {

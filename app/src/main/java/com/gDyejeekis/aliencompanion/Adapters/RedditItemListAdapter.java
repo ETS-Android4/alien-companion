@@ -34,13 +34,17 @@ import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.Views.viewholders.PostViewHolderOld;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostCardViewHolder;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostClassicViewHolder;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostImageBoardViewHolder;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostListViewHolder;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostSmallCardViewHolder;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Message;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.entity.Trophy;
 import com.gDyejeekis.aliencompanion.api.entity.UserInfo;
-import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -70,8 +74,6 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     private int selectedPosition;
 
     private boolean loadingMoreItems;
-
-    private PostViewType postViewType;
 
     public RedditItemListAdapter(Context context) {
         this.context = context;
@@ -134,17 +136,6 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         notifyItemChanged(redditItems.size() - 1);
     }
 
-    public void hideReadPosts() {
-        //List<RedditItem> nonClicked = new ArrayList<>();
-
-
-        //redditItems = nonClicked;
-//
-        //selectedPosition = -1;
-        //notifyDataSetChanged();
-    }
-
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -155,25 +146,23 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                //PostViewType postViewType;
                 switch (resource) {
                     case R.layout.post_list_item_classic:
-                        postViewType = PostViewType.classic;
+                        viewHolder = new PostClassicViewHolder(v);
                         break;
                     case R.layout.small_card_new:
-                        postViewType = PostViewType.smallCards;
+                        viewHolder = new PostSmallCardViewHolder(v);
                         break;
                     case R.layout.post_list_item_card:
-                        postViewType = PostViewType.cards;
+                        viewHolder = new PostCardViewHolder(v, false);
                         break;
                     case R.layout.post_list_item_image_board:
-                        postViewType = PostViewType.imageBoard;
+                        viewHolder = new PostImageBoardViewHolder(v);
                         break;
                     default:
-                        postViewType = PostViewType.listItem;
+                        viewHolder = new PostListViewHolder(v);
                         break;
                 }
-                viewHolder = new PostViewHolderOld(v, postViewType);
                 break;
             case VIEW_TYPE_USER_COMMENT:
                 resource = R.layout.user_comment;
@@ -220,31 +209,14 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POST:
-                PostViewHolderOld postViewHolder = (PostViewHolderOld) viewHolder;
+                PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
                 Submission post = (Submission) getItemAt(position);
                 postViewHolder.bindModel(context, post);
 
                 PostItemListener listener = new PostItemListener(context, post, this, position);
-                if(postViewType == PostViewType.cards && post.hasImageButton && post.getThumbnailObject().hasThumbnail()) postViewHolder.imageButton.setOnClickListener(listener);
-                else postViewHolder.linkButton.setOnClickListener(listener);
-                postViewHolder.commentsButton.setOnClickListener(listener);
-
                 PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
-                switch (postViewHolder.viewType) {
-                    case listItem: case smallCards: case classic: case imageBoard:
-                        postViewHolder.linkButton.setOnLongClickListener(longListener);
-                        postViewHolder.commentsButton.setOnLongClickListener(longListener);
-                        if(postViewHolder.viewType == PostViewType.classic) {
-                            postViewHolder.setClassicViewClickListeners(optionsListener);
-                        }
-                        //post item selected
-                        if(selectedPosition == position) postViewHolder.showPostOptions(optionsListener);
-                        else postViewHolder.hidePostOptions();
-                        break;
-                    case cards: case cardDetails:
-                        postViewHolder.setCardButtonsListener(optionsListener);
-                        break;
-                }
+                postViewHolder.setClickListeners(listener, longListener, optionsListener);
+                postViewHolder.setPostOptionsVisible(selectedPosition == position);
                 break;
             case VIEW_TYPE_USER_COMMENT:
                 Comment comment = (Comment) getItemAt(position);

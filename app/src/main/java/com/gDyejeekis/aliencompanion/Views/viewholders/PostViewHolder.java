@@ -37,6 +37,8 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
     public abstract void setClickListeners(PostItemListener postItemListener, View.OnLongClickListener postLongListener, PostItemOptionsListener postItemOptionsListener);
 
+    public abstract void setPostOptionsVisible(boolean flag);
+
     protected void initWhiteColorIcons() {
         saveResource = R.mipmap.ic_star_border_white_48dp;
         hideResource = R.mipmap.ic_close_white_48dp;

@@ -42,6 +42,8 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
     public LinearLayout commentsButton;
     public LinearLayout layoutPostOptions;
 
+    private int postLinkResource;
+
     public PostSmallCardViewHolder(View itemView) {
         super(itemView);
 
@@ -80,7 +82,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
             linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
         }
         else {
-            Thumbnail postThumbnail = post.getThumbnailObject();
+            Thumbnail postThumbnail = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
             if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                 linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                 linkButton.setPadding(10, 10, 0, 10);
@@ -109,6 +111,13 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 }
+            }
+            else {
+                linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f));
+                linkButton.setPadding(10, 10, 10, 10);
+                linkButton.setBackgroundColor(MyApplication.smallCardLinkBackground);
+                postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                postImage.setImageResource(postLinkResource);
             }
         }
         // set first row of post details
@@ -167,6 +176,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
         // set remaining icon resources
         viewUser.setImageResource(viewUserResource);
+        openBrowser.setImageResource(openBrowserResource);
         moreOptions.setImageResource(moreResource);
     }
 
@@ -186,6 +196,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         moreOptions.setOnClickListener(optionsListener);
     }
 
+    @Override
     public void setPostOptionsVisible(boolean flag) {
         if(flag) {
             layoutPostOptions.setVisibility(View.VISIBLE);
@@ -213,6 +224,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         super.initWhiteColorIcons();
         upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
         downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
+        postLinkResource = R.drawable.ic_link_white_48dp;
     }
 
     @Override
@@ -220,5 +232,6 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         super.initLightGreyColorIcons();
         upvoteResource = R.mipmap.ic_arrow_upward_light_grey_48dp;
         downvoteResource = R.mipmap.ic_arrow_downward_light_grey_48dp;
+        postLinkResource = R.drawable.ic_link_light_grey_48dp;
     }
 }
