@@ -196,7 +196,7 @@ public class MediaActivity extends BackNavActivity {
             }
             else {
                 toFind = url.replaceAll("https?://", "").replace("/", "(s)");
-                hasSound = url.endsWith(".mp4") || url.endsWith(".webm");
+                hasSound = url.endsWith(".mp4");
             }
 
             if(toFind!=null) {
@@ -334,7 +334,7 @@ public class MediaActivity extends BackNavActivity {
                 }.execute(url);
             }
             // VIDEOS
-            else if(url.endsWith(".mp4") || url.endsWith(".webm")) {
+            else if(url.endsWith(".mp4")) {
                 addVideoFragment(url);
             }
         }

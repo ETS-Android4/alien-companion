@@ -131,7 +131,7 @@ public class LinkHandler {
                 else if(domainLC.contains("gfycat.com") || domainLC.contains("giphy.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
                     intent = getMediaActivityIntent(activity, url, domain);
                 }
-                else if(domainLC.contains("streamable.com") || urlLC.endsWith(".mp4") || urlLC.endsWith(".webm")) {
+                else if(domainLC.contains("streamable.com") || urlLC.endsWith(".mp4")) {
                     intent = getMediaActivityIntent(activity, url, domain);
                 }
                 else if(domainLC.equals("twitter.com")) {

@@ -620,7 +620,7 @@ public class DownloaderService extends IntentService {
         final String path = subredditFolder.getAbsolutePath();
 
         // VIDEOS
-        if(url.endsWith(".mp4") || url.endsWith(".webm")) {
+        if(url.endsWith(".mp4")) {
             downloadPostMediaToPath(url, path);
         }
         // STREAMABLE
