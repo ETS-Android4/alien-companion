@@ -104,7 +104,8 @@ public class PostListViewHolder extends PostViewHolder {
         int scoreStart;
         int scoreEnd;
         if(post.getLinkFlairText() != null) {
-            detsOneSpannable = new SpannableString(post.getLinkFlairText() + " · " + detsOneText);
+            detsOneText = post.getLinkFlairText() + " · " + detsOneText;
+            detsOneSpannable = new SpannableString(detsOneText);
             detsOneSpannable.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             scoreStart = detsOneText.indexOf("·") + 2;
             scoreEnd = detsOneText.indexOf(" ", scoreStart);
