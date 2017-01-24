@@ -4,7 +4,7 @@
     tools:context="com.gDyejeekis.aliencompanion.Activities.BrowserActivity">
 
     <item android:id="@+id/action_comments" android:title="@string/action_comments"
-        android:icon="@mipmap/ic_chat_bubble_outline_white_24dp" app:showAsAction="ifRoom"/>
+        android:icon="@mipmap/ic_comment_white_24dp" app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_back" android:title="@string/action_browser_back"
         android:icon="@mipmap/ic_action_back" app:showAsAction="always"/>

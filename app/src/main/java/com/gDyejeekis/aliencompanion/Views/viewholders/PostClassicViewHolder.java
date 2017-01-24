@@ -17,7 +17,6 @@ import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -40,11 +39,13 @@ public class PostClassicViewHolder extends PostViewHolder  {
     public ImageView moreOptions;
     public ImageView upvoteClassic;
     public ImageView downvoteClassic;
+    public ImageView commentsIcon;
     //public LinearLayout linkButton;
-    public LinearLayout commentsButton;
+    public LinearLayout layoutPostInfo;
     public LinearLayout layoutPostOptions;
+    public LinearLayout commentsButton;
 
-    private int postLinkResource;
+    private int postLinkResource, commentsResource;
 
     public PostClassicViewHolder(View itemView) {
         super(itemView);
@@ -64,9 +65,11 @@ public class PostClassicViewHolder extends PostViewHolder  {
         openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
 
-        commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
+        layoutPostInfo = (LinearLayout) itemView.findViewById(R.id.layout_postInfo);
         postDets1 = (TextView) itemView.findViewById(R.id.small_card_details_1);
         postDets2 = (TextView) itemView.findViewById(R.id.small_card_details_2);
+        commentsIcon = (ImageView) itemView.findViewById(R.id.imageView_comments_icon);
+        commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
 
         initIcons();
     }
@@ -85,17 +88,17 @@ public class PostClassicViewHolder extends PostViewHolder  {
         // set post thumbnail
         if(post.isSelf()) {
             postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-            commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
+            layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
         }
         else {
             Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
             if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
+                layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
             else if(thumbnailObject.hasThumbnail()) {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 3f));
-                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 12f));
+                layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 12f));
                 //postImage.setBackground(null);
                 try {
                     Picasso.with(context).load(thumbnailObject.getUrl()).placeholder(R.drawable.noimage).into(postImage);
@@ -105,7 +108,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
             }
             else {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
-                commentsButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
+                layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
         }
         // set first row post details
@@ -176,13 +179,17 @@ public class PostClassicViewHolder extends PostViewHolder  {
         viewUser.setImageResource(viewUserResource);
         openBrowser.setImageResource(openBrowserResource);
         moreOptions.setImageResource(moreResource);
+        commentsIcon.setImageResource(commentsResource);
     }
 
     @Override
     public void setClickListeners(PostItemListener postItemListener, View.OnLongClickListener postLongListener, PostItemOptionsListener optionsListener) {
         postImage.setOnClickListener(postItemListener);
+        title.setOnClickListener(postItemListener);
         commentsButton.setOnClickListener(postItemListener);
+
         postImage.setOnLongClickListener(postLongListener);
+        title.setOnLongClickListener(postLongListener);
         commentsButton.setOnLongClickListener(postLongListener);
 
         upvoteClassic.setOnClickListener(optionsListener);
@@ -226,6 +233,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         upvoteResource = R.mipmap.ic_upvote_classic_white_48dp;
         downvoteResource = R.mipmap.ic_downvote_classic_white_48dp;
         postLinkResource = R.drawable.ic_link_white_48dp;
+        commentsResource = R.mipmap.ic_comment_white_24dp;
     }
 
     @Override
@@ -234,6 +242,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         upvoteResource = R.mipmap.ic_upvote_classic_grey_48dp;
         downvoteResource = R.mipmap.ic_downvote_classic_grey_48dp;
         postLinkResource = R.drawable.ic_link_grey_48dp;
+        commentsResource = R.mipmap.ic_comment_grey_600_24dp;
     }
 
     @Override
@@ -242,5 +251,6 @@ public class PostClassicViewHolder extends PostViewHolder  {
         upvoteResource = R.mipmap.ic_upvote_classic_light_grey_48dp;
         downvoteResource = R.mipmap.ic_downvote_classic_light_grey_48dp;
         postLinkResource = R.drawable.ic_link_light_grey_48dp;
+        commentsResource = R.mipmap.ic_comment_light_grey_24dp;
     }
 }

@@ -11,8 +11,8 @@
         android:orientation="horizontal"
         android:id="@+id/layout_post"
         android:weightSum="17"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp">
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -24,8 +24,8 @@
 
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="?attr/font_xlarge"
+                android:layout_height="?attr/font_xlarge"
                 app:srcCompat="@mipmap/ic_expand_less_grey_24dp"
                 android:id="@+id/imageView_upvote_classic"/>
 
@@ -40,8 +40,8 @@
                 android:textSize="?attr/font_comments"/>
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="?attr/font_xlarge"
+                android:layout_height="?attr/font_xlarge"
                 app:srcCompat="@mipmap/ic_expand_more_grey_24dp"
                 android:id="@+id/imageView_downvote_classic"/>
         </LinearLayout>
@@ -62,30 +62,53 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="12"
-            android:id="@+id/layout_postCommentsButton"
+            android:id="@+id/layout_postInfo"
             android:paddingRight="6dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="(Post title here)"
                 android:id="@+id/txtView_postTitle"
                 style="@style/PostTitleStyle"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="(user) · (age) · (subreddit) · (domain)"
-                android:id="@+id/small_card_details_1"
-                style="@style/PostDetailsStyle" />
+                android:orientation="vertical"
+                android:id="@+id/layout_postCommentsButton">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="##### comments · NSFW · SPOILER"
-                android:id="@+id/small_card_details_2"
-                style="@style/PostDetailsStyle"
-                android:textSize="?attr/font_comments"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(user) · (age) · (subreddit) · (domain)"
+                    android:id="@+id/small_card_details_1"
+                    style="@style/PostDetailsStyle" />
+
+                <org.apmem.tools.layouts.FlowLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="?attr/font_comments"
+                        android:layout_height="?attr/font_comments"
+                        android:id="@+id/imageView_comments_icon"
+                        android:src="@mipmap/ic_comment_grey_600_24dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_marginTop="4dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="##### comments · NSFW · SPOILER"
+                        android:id="@+id/small_card_details_2"
+                        style="@style/PostDetailsStyle"
+                        android:textSize="?attr/font_comments"/>
+
+                </org.apmem.tools.layouts.FlowLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

@@ -1,7 +1,6 @@
 package com.gDyejeekis.aliencompanion.Views.viewholders;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -17,7 +16,6 @@ import com.gDyejeekis.aliencompanion.Models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -42,6 +40,8 @@ public class PostListViewHolder extends PostViewHolder {
     public LinearLayout linkButton;
     public LinearLayout layoutPostOptions;
     public LinearLayout commentsButton;
+
+    private int commentsResource, commentsResourceClicked;
 
     public PostListViewHolder(View itemView) {
         super(itemView);
@@ -75,12 +75,13 @@ public class PostListViewHolder extends PostViewHolder {
         if(post.isClicked()) {
             title.setTextColor(clickedTextColor);
             commentsText.setTextColor(clickedTextColor);
+            commentsIcon.setImageResource(commentsResourceClicked);
         }
         else {
             title.setTextColor(MyApplication.textColor);
             commentsText.setTextColor(MyApplication.textColor);
+            commentsIcon.setImageResource(commentsResource);
         }
-        commentsIcon.setImageResource(commentsResource); // TODO: 1/22/2017 set different icon depending on clicked state
         // set post thumbnail
         Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
         if(thumbnailObject.hasThumbnail()) {
@@ -198,9 +199,18 @@ public class PostListViewHolder extends PostViewHolder {
         switch (MyApplication.currentBaseTheme) {
             case MyApplication.DARK_THEME_LOW_CONTRAST:
                 initLightGreyColorIcons();
+                commentsResource = R.mipmap.ic_comment_light_grey_24dp;
+                commentsResourceClicked = R.mipmap.ic_comment_grey_600_24dp;
+                break;
+            case MyApplication.LIGHT_THEME:
+                initWhiteColorIcons();
+                commentsResource = R.mipmap.ic_comment_grey_600_24dp;
+                commentsResourceClicked = R.mipmap.ic_comment_light_grey_24dp;
                 break;
             default:
                 initWhiteColorIcons();
+                commentsResource = R.mipmap.ic_comment_white_24dp;
+                commentsResourceClicked = R.mipmap.ic_comment_light_grey_24dp;
                 break;
         }
     }

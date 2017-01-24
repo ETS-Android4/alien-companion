@@ -8,7 +8,7 @@
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Classic' view]]></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Small tweaks to 'List' and 'List (reversed)' view</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default)]]></changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
         <changelogtext>Added giphy.com link handling support</changelogtext>

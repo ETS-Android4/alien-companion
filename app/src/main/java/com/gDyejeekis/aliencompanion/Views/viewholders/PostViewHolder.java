@@ -14,7 +14,6 @@ import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.enums.PostViewType;
 
 /**
  * Created by George on 1/22/2017.
@@ -24,7 +23,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
     protected static final int clickedTextColor = MyApplication.textHintColor;
 
-    protected int saveResource, hideResource, moreResource, viewUserResource, openBrowserResource, commentsResource, saveResourceYellow, hideResourceRed,
+    protected int saveResource, hideResource, moreResource, viewUserResource, openBrowserResource, saveResourceYellow, hideResourceRed,
             upvoteResource, downvoteResource, upvoteResourceOrange, downvoteResourceBlue;
 
     public PostViewHolder(View itemView) {
@@ -43,7 +42,6 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         saveResource = R.mipmap.ic_star_border_white_48dp;
         hideResource = R.mipmap.ic_close_white_48dp;
         moreResource = R.mipmap.ic_more_vert_white_48dp;
-        commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
         viewUserResource = R.mipmap.ic_person_white_48dp;
         openBrowserResource = R.mipmap.ic_open_in_browser_white_48dp;
     }
@@ -52,7 +50,6 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         saveResource = R.mipmap.ic_star_border_grey_48dp;
         hideResource = R.mipmap.ic_close_grey_48dp;
         moreResource = R.mipmap.ic_more_vert_grey_48dp;
-        commentsResource = R.mipmap.ic_chat_bubble_outline_grey_24dp;
         viewUserResource = R.mipmap.ic_person_grey_48dp;
         openBrowserResource = R.mipmap.ic_open_in_browser_grey_48dp;
     }
@@ -61,7 +58,6 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         saveResource = R.mipmap.ic_star_border_light_grey_48dp;
         hideResource = R.mipmap.ic_clear_light_grey_48dp;
         moreResource = R.mipmap.ic_more_vert_light_grey_48dp;
-        commentsResource = R.mipmap.ic_chat_bubble_outline_light_grey_24dp;
         viewUserResource = R.mipmap.ic_person_light_grey_48dp;
         openBrowserResource = R.mipmap.ic_open_in_browser_light_grey_48dp;
     }

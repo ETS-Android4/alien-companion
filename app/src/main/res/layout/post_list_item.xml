@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imgView_commentsIcon"
-                android:src="@mipmap/ic_chat_bubble_outline_black_24dp" />
+                android:src="@mipmap/ic_comment_grey_600_24dp" />
         </LinearLayout>
     </LinearLayout>
 
