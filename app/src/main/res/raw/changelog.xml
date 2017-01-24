@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="unset" changeDate="unset">
+    <changelogversion versionName="1.0" changeDate="unset">
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
         <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Classic' view]]></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default)]]></changelogtext>
-        <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable, *.mp4 and *.webm links)]]></changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
         <changelogtext>Added giphy.com link handling support</changelogtext>
         <changelogtext>Added streamable.com link handling support</changelogtext>
         <changelogtext>Added *.mp4 and *.webm link handling support</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable, *.mp4 and *.webm links)]]></changelogtext>
+        <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Added spoiler tag support for posts</changelogtext>
         <changelogtext></changelogtext>
@@ -25,11 +27,7 @@
         <changelogtext>Pressing the system bar's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext>[b]Bug:[/b] Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>

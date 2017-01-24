@@ -1,13 +1,11 @@
 package com.gDyejeekis.aliencompanion.Adapters;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.Activities.PostActivity;
 import com.gDyejeekis.aliencompanion.AsyncTasks.LoadMoreCommentsTask;
 import com.gDyejeekis.aliencompanion.ClickListeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
@@ -27,11 +24,10 @@ import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Views.viewholders.PostViewHolder;
+import com.gDyejeekis.aliencompanion.Views.viewholders.PostViewHolderOld;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.Models.MoreComment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.gDyejeekis.aliencompanion.multilevelexpindlistview.Utils;
@@ -109,7 +105,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 //viewHolder = new ContentViewHolder(v);
-                viewHolder = new PostViewHolder(v, PostViewType.cardDetails);
+                viewHolder = new PostViewHolderOld(v, PostViewType.cardDetails);
                 break;
             default:
                 throw new IllegalStateException("unknown viewType");
@@ -330,7 +326,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 break;
             case VIEW_TYPE_CONTENT:
-                PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
+                PostViewHolderOld postViewHolder = (PostViewHolderOld) viewHolder;
                 Submission post = (Submission) getItemAt(position);
                 author = post.getAuthor();
                 postViewHolder.bindModel(activity, post);

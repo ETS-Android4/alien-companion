@@ -421,16 +421,21 @@ public class MyApplication extends Application {
                 currentPostListView = R.layout.post_list_item_reversed;
                 break;
             case 2:
-                currentPostListView = R.layout.small_card_new;
+                currentPostListView = R.layout.post_list_item_classic;
                 break;
             case 3:
+                currentPostListView = R.layout.small_card_new;
+                break;
+            case 4:
                 currentPostListView = R.layout.post_list_item_card;
+                break;
+            case 5:
+                currentPostListView = R.layout.post_list_item_image_board;
                 break;
             default:
                 currentPostListView = R.layout.post_list_item;
                 break;
         }
-
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);

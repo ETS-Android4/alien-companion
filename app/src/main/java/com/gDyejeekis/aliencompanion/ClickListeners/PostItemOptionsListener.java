@@ -78,7 +78,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_upvote:
+            case R.id.btn_upvote:case R.id.imageView_upvote_classic:
                 UserActionType actionType;
                 LoadUserActionTask task;
                 SaveOfflineActionTask task1;
@@ -115,7 +115,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 }
                 else ToastUtils.displayShortToast(context, "Must be logged in to vote");
                 break;
-            case R.id.btn_downvote:
+            case R.id.btn_downvote: case R.id.imageView_downvote_classic:
                 if(MyApplication.currentUser!=null) {
                     if (post.getLikes().equals("false")) {
                         post.setLikes("null");
