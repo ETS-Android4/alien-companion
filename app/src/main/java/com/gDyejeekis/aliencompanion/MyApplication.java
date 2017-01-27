@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -129,6 +130,8 @@ public class MyApplication extends Application {
     public static int textColor;
     public static int textHintColor;
     public static int linkColor;
+    public static int textColorStickied;
+    public static int textColorStickiedClicked;
     public static int commentPermaLinkBackgroundColor;
     public static int syncPostCount;
     public static int syncCommentCount;
@@ -224,6 +227,8 @@ public class MyApplication extends Application {
                 textColor = Color.BLACK;
                 textHintColor = textHintLight;
                 linkColor = MyApplication.colorPrimary;
+                textColorStickied = context.getResources().getColor(R.color.lightStickiedText);
+                textColorStickiedClicked = context.getResources().getColor(R.color.lightStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.lightCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.lightSmallCardLinkBackground);
                 break;
@@ -236,6 +241,8 @@ public class MyApplication extends Application {
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
+                textColorStickied = context.getResources().getColor(R.color.materialBlueStickiedText);
+                textColorStickiedClicked = context.getResources().getColor(R.color.materialBlueStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialBlueCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialBlueSmallCardLinkBackground);
                 break;
@@ -248,6 +255,8 @@ public class MyApplication extends Application {
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
+                textColorStickied = context.getResources().getColor(R.color.materialGreyStickiedText);
+                textColorStickiedClicked = context.getResources().getColor(R.color.materialGreyStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialGreyCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialGreySmallCardLinkBackground);
                 break;
@@ -259,6 +268,8 @@ public class MyApplication extends Application {
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = context.getResources().getColor(R.color.darkLinkText);
+                textColorStickied = context.getResources().getColor(R.color.darkStickiedText);
+                textColorStickiedClicked = context.getResources().getColor(R.color.darkStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
                 smallCardLinkBackground = 0;
                 //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);
@@ -271,6 +282,8 @@ public class MyApplication extends Application {
                 textColor = context.getResources().getColor(R.color.lowContrastText);
                 textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
                 linkColor = context.getResources().getColor(R.color.lowContrastLinkText);
+                textColorStickied = context.getResources().getColor(R.color.lowContrastStickiedText);
+                textColorStickiedClicked = context.getResources().getColor(R.color.lowContrastStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
                 smallCardLinkBackground = 0;
                 //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);

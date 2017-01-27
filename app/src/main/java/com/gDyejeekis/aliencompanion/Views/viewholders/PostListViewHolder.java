@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.Views.viewholders;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -73,12 +74,12 @@ public class PostListViewHolder extends PostViewHolder {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(clickedTextColor);
+            title.setTextColor(post.isStickied() ? MyApplication.textColorStickiedClicked : clickedTextColor);
             commentsText.setTextColor(clickedTextColor);
             commentsIcon.setImageResource(commentsResourceClicked);
         }
         else {
-            title.setTextColor(MyApplication.textColor);
+            title.setTextColor(post.isStickied() ? MyApplication.textColorStickied : MyApplication.textColor);
             commentsText.setTextColor(MyApplication.textColor);
             commentsIcon.setImageResource(commentsResource);
         }

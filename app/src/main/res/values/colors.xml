@@ -19,6 +19,10 @@
 
     <color name="lightSmallCardLinkBackground">#404040</color>
 
+    <color name="lightStickiedText">#228822</color>
+
+    <color name="lightStickiedClickedText">#96228822</color>
+
     <!-- MATERIAL BLUE THEME -->
 
     <color name="materialBlueBackground">#263238</color>
@@ -41,6 +45,10 @@
 
     <color name="materialBlueSmallCardLinkBackground">#1e282d</color>
 
+    <color name="materialBlueStickiedText">#2dae2d</color>
+
+    <color name="materialBlueStickiedClickedText">#c82dae2d</color>
+
     <!-- MATERIAL GREY THEME -->
 
     <color name="materialGreyBackground">#424242</color>
@@ -62,6 +70,10 @@
     <color name="materialGreyCommentHighlight">@color/materialGreyBackgroundPressed</color>
 
     <color name="materialGreySmallCardLinkBackground">#353535</color>
+
+    <color name="materialGreyStickiedText">#2dae2d</color>
+
+    <color name="materialGreyStickiedClickedText">#c82dae2d</color>
 
     <!-- DARK THEME -->
 
@@ -93,6 +105,10 @@
 
     <color name="darkSmallCardLinkBackground">#232323</color>
 
+    <color name="darkStickiedText">#2dae2d</color>
+
+    <color name="darkStickiedClickedText">#c82dae2d</color>
+
     <!-- DARK LOW CONTRAST THEME -->
 
     <color name="lowContrastText">#c6c6c6</color>
@@ -100,6 +116,10 @@
     <color name="lowContrastHintText">#868686</color>
 
     <color name="lowContrastLinkText">#004cff</color>
+
+    <color name="lowContrastStickiedText">#228822</color>
+
+    <color name="lowContrastStickiedClickedText">#c8228822</color>
 
     <!-- OTHER -->
 

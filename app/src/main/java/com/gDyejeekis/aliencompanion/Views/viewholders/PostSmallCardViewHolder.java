@@ -72,10 +72,10 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(clickedTextColor);
+            title.setTextColor(post.isStickied() ? MyApplication.textColorStickiedClicked : clickedTextColor);
         }
         else {
-            title.setTextColor(MyApplication.textColor);
+            title.setTextColor(post.isStickied() ? MyApplication.textColorStickied : MyApplication.textColor);
         }
         // set post thumbnail
         if(post.isSelf()) {
