@@ -8,7 +8,7 @@
     <ListPreference
         android:key="syncPostCount"
         android:title="Sync post count"
-        android:summary="Number of posts that get saved locally"
+        android:summary="Number of posts per subreddit/multireddit that get synced"
         android:entries="@array/syncPostCount"
         android:entryValues="@array/syncPostCount"
         android:defaultValue="25"/>
@@ -16,7 +16,7 @@
     <ListPreference
         android:key="syncCommentCount"
         android:title="Sync comment count"
-        android:summary="Number of comments per post that get saved locally"
+        android:summary="Number of comments per post that get synced"
         android:entries="@array/commentCount"
         android:entryValues="@array/commentCount"
         android:defaultValue="100"/>
@@ -24,7 +24,7 @@
     <ListPreference
         android:key="syncCommentDepth"
         android:title="Sync comment depth"
-        android:summary="Choose the maximum comment depth of locally saved threads"
+        android:summary="Choose the maximum comment depth of all synced threads"
         android:entries="@array/commentDepth"
         android:entryValues="@array/commentDepth"
         android:defaultValue="5"/>
@@ -49,7 +49,7 @@
     <ListPreference
         android:key="syncAlbum"
         android:title="Imgur album limit"
-        android:summary="Number of images per imgur album that get saved locally"
+        android:summary="Number of images per imgur album that get synced"
         android:entries="@array/syncAlbumLimit"
         android:entryValues="@array/syncAlbumLimit"
         android:defaultValue="5"/>
@@ -57,7 +57,7 @@
     <CheckBoxPreference
         android:key="syncVideo"
         android:title="Sync post videos"
-        android:summary="Supports streamable, *.mp4 and *.webm links"
+        android:summary="Supports streamable and *.mp4 links"
         android:defaultValue="false" />
 
     <CheckBoxPreference
