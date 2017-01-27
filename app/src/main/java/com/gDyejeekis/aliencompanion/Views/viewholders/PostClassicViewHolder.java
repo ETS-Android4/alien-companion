@@ -138,7 +138,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
             appendSpoilerLabel(postDets2);
         }
         // set score color and icons depending on user
-        SpannableString scoreSpannable = new SpannableString(post.getScore().toString()); // TODO: 1/24/2017 get condensed score
+        SpannableString scoreSpannable = new SpannableString(getCondensedScore(post.getScore()));
         if(MyApplication.currentUser != null) {
             // check user vote
             if (post.getLikes().equals("true")) {
@@ -180,6 +180,17 @@ public class PostClassicViewHolder extends PostViewHolder  {
         openBrowser.setImageResource(openBrowserResource);
         moreOptions.setImageResource(moreResource);
         commentsIcon.setImageResource(commentsResource);
+    }
+
+    private String getCondensedScore(long score) {
+        if(score > 9999) {
+            Long divideBy = 1000L;
+            String suffix = "k";
+            long truncated = score / (divideBy / 10); //the number part of the output times 10
+            boolean hasDecimal = truncated < 1000 && (truncated / 10d) != (truncated / 10);
+            return hasDecimal ? (truncated / 10d) + suffix : (truncated / 10) + suffix;
+        }
+        return Long.toString(score);
     }
 
     @Override
