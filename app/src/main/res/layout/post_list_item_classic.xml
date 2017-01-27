@@ -10,9 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/layout_post"
-        android:weightSum="17"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="6dp">
+        android:weightSum="17">
 
         <LinearLayout
             android:orientation="vertical"
@@ -20,7 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:id="@+id/layout_vote_score"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
 
 
             <ImageView
@@ -54,7 +54,7 @@
             android:id="@+id/imgView_postImage"
             android:src="@mipmap/ic_launcher"
             android:scaleType="fitStart"
-            android:paddingTop="4dp"
+            android:paddingTop="12dp"
             android:paddingRight="8dp"/>
 
         <LinearLayout
@@ -70,13 +70,15 @@
                 android:layout_height="wrap_content"
                 android:text="(Post title here)"
                 android:id="@+id/txtView_postTitle"
-                style="@style/PostTitleStyle"/>
+                style="@style/PostTitleStyle"
+                android:paddingTop="6dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/layout_postCommentsButton">
+                android:id="@+id/layout_postCommentsButton"
+                android:paddingBottom="6dp">
 
                 <TextView
                     android:layout_width="wrap_content"
