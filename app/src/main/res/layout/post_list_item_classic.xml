@@ -54,7 +54,7 @@
             android:id="@+id/imgView_postImage"
             android:src="@mipmap/ic_launcher"
             android:scaleType="fitStart"
-            android:paddingTop="12dp"
+            android:paddingTop="10dp"
             android:paddingRight="8dp"/>
 
         <LinearLayout
