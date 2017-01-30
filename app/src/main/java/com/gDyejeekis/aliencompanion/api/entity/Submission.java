@@ -94,6 +94,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	public boolean hasImageButton;
 	public boolean hasSyncedArticle;
 
+	public boolean showAsStickied;
+
     private String likes;
 	private String linkFlairText;
     //private String authorFlairCSSClass;

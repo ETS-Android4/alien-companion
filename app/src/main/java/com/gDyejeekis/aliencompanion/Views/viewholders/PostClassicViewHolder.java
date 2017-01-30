@@ -80,10 +80,10 @@ public class PostClassicViewHolder extends PostViewHolder  {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(post.isStickied() ? MyApplication.textColorStickiedClicked : clickedTextColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
         }
         else {
-            title.setTextColor(post.isStickied() ? MyApplication.textColorStickied : MyApplication.textColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textColor);
         }
         // set post thumbnail
         if(post.isSelf()) {

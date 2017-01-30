@@ -42,7 +42,11 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
  * @author <a href="http://www.deltacdev.com">Simon Kassing</a>
  */
 public class Submissions implements ActorDriven {
-	
+
+	// when true stickied posts will always show up as stickied regardless of how they are retrieved (subreddit, user, multireddit, etc)
+	// when false stickied posts will only show up as stickied when using the ofSubreddit() method (excluding /r/all)
+	public static final boolean alwaysShowStickied = false;
+
 	/**
 	 * Handle to REST client instance.
 	 */
@@ -90,7 +94,7 @@ public class Submissions implements ActorDriven {
      * @param url 	URL
      * @return 		Listing of submissions
      */
-    public List<RedditItem> parse(String url) throws RetrievalFailedException, RedditError {
+    public List<RedditItem> parse(String url, boolean showStickied) throws RetrievalFailedException, RedditError {
 		Log.d("parse url", url);
     	
     	// Determine cookie
@@ -124,6 +128,7 @@ public class Submissions implements ActorDriven {
                         // Create and add submission
                         data = ((JSONObject) data.get("data"));
                         submission = new Submission(data);
+						submission.showAsStickied = showStickied;
 						if(!submission.isNSFW()) {
 							submission.setUser(user);
 							submissions.add(submission);
@@ -161,7 +166,7 @@ public class Submissions implements ActorDriven {
 		params = ParamFormatter.addParameter(params, "show", show);
 
 		// Retrieve submissions from the given URL
-		return parse(String.format(ApiEndpointUtils.SUBMISSIONS_GET_FRONT, sort, params));
+		return parse(String.format(ApiEndpointUtils.SUBMISSIONS_GET_FRONT, sort, params), alwaysShowStickied);
 	}
 
 	public List<RedditItem> frontpage(SubmissionSort sort, TimeSpan timeSpan, int count, int limit, Submission after, Submission before, boolean show_all) throws RetrievalFailedException, RedditError {
@@ -211,9 +216,11 @@ public class Submissions implements ActorDriven {
     	params = ParamFormatter.addParameter(params, "after", after);
     	params = ParamFormatter.addParameter(params, "before", before);
     	params = ParamFormatter.addParameter(params, "show", show);
+
+		boolean showStickied = alwaysShowStickied ? true : !subreddit.equalsIgnoreCase("all");
     	
         // Retrieve submissions from the given URL
-        return parse(String.format(ApiEndpointUtils.SUBMISSIONS_GET, subreddit, sort, params));
+        return parse(String.format(ApiEndpointUtils.SUBMISSIONS_GET, subreddit, sort, params), showStickied);
         
     }
     
@@ -273,7 +280,7 @@ public class Submissions implements ActorDriven {
 		params = ParamFormatter.addParameter(params, "show", show_all);
 
 		// Retrieve submissions from the given URL
-		return parse(String.format(ApiEndpointUtils.MULTIREDDIT_SUBMISSIONS_GET, multireddit, sort, params));
+		return parse(String.format(ApiEndpointUtils.MULTIREDDIT_SUBMISSIONS_GET, multireddit, sort, params), alwaysShowStickied);
 	}
 
 	/**
@@ -346,10 +353,10 @@ public class Submissions implements ActorDriven {
     	
         // Retrieve submissions from the given URL
 		if(subreddit == null)
-        	return parse(String.format(ApiEndpointUtils.SUBMISSIONS_SEARCH, params));
+        	return parse(String.format(ApiEndpointUtils.SUBMISSIONS_SEARCH, params), alwaysShowStickied);
 		else {
 			params = ParamFormatter.addParameter(params, "restrict_sr", "on");
-			return parse(String.format(ApiEndpointUtils.SUBREDDIT_SEARCH, subreddit, params));
+			return parse(String.format(ApiEndpointUtils.SUBREDDIT_SEARCH, subreddit, params), alwaysShowStickied);
 		}
     }
     
@@ -419,7 +426,7 @@ public class Submissions implements ActorDriven {
     	params = ParamFormatter.addParameter(params, "show", show);
     	
         // Retrieve submissions from the given URL
-        return parse(String.format(ApiEndpointUtils.USER_SUBMISSIONS_INTERACTION, username, category, params));
+        return parse(String.format(ApiEndpointUtils.USER_SUBMISSIONS_INTERACTION, username, category, params), alwaysShowStickied);
         
     }
     
