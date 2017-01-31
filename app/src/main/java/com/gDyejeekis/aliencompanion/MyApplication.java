@@ -43,15 +43,11 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String currentVersion = "0.6.4";
+    public static final String currentVersion = "1.0";
 
-    public static final int currentVersionCode = 35;
-
-    //public static final boolean showWelcomeMsgThisVersion = true;
+    public static final int currentVersionCode = 100;
 
     public static final int showWelcomeMsgVersionCode = 30;
-
-    //public static final boolean deleteAppDataThisVersion = true;
 
     public static final int clearAppDataVersionCode = 20;
 
