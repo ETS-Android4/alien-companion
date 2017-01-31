@@ -84,10 +84,23 @@ public class BrowserFragment extends Fragment {
             try {
                 if(!(activity instanceof OAuthActivity)) {
                     setActionbarTitle(ConvertUtils.getDomainName(url));
+                    updateMenuItems();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 setActionbarTitle(url);
+            }
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            try {
+                if(activity instanceof BrowserActivity) {
+                    updateMenuItems();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -273,6 +286,15 @@ public class BrowserFragment extends Fragment {
 
     public void goForward() {
         webView.goForward();
+    }
+
+    private void updateMenuItems() {
+        Log.d(TAG, "can go back " + webView.canGoBack());
+        Log.d(TAG, "can go forward " + webView.canGoForward());
+        BrowserActivity browserActivity = (BrowserActivity) activity;
+        browserActivity.canGoBack = webView.canGoBack();
+        browserActivity.canGoForward = webView.canGoForward();
+        browserActivity.invalidateOptionsMenu();
     }
 
 }
