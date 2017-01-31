@@ -662,6 +662,8 @@ public class GeneralUtils {
         if(domain.contains("flickr.com")) return true;
         if(domain.contains("twimg.com")) return true;
         if(domain.contains("photobucket.com")) return true;
+        if(domain.equals("imgfly.net")) return true;
+        if(domain.equals("9gag.com")) return true;
         if(domain.equals("i.redd.it")) return true;
         if(domain.equals("i.reddituploads.com")) return true;
         if(domain.equals("i.redditmedia.com")) return true;
