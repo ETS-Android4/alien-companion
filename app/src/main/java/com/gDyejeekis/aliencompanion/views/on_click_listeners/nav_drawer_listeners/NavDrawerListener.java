@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.views.on_click_listeners.NavDrawerListeners;
+package com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners;
 
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
