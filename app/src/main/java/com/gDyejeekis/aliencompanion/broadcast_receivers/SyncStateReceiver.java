@@ -13,6 +13,12 @@ import com.gDyejeekis.aliencompanion.services.DownloaderService;
  */
 public class SyncStateReceiver extends BroadcastReceiver {
 
+    public static final String SYNC_CANCEL = "com.gDyejeekis.aliencompanion.SYNC_CANCEL";
+
+    public static final String SYNC_PAUSE = "com.gDyejeekis.aliencompanion.SYNC_PAUSE";
+
+    public static final String SYNC_RESUME = "com.gDyejeekis.aliencompanion.SYNC_RESUME";
+
     public static final String TAG = "SyncStateReceiver";
 
     @Override
@@ -20,15 +26,15 @@ public class SyncStateReceiver extends BroadcastReceiver {
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if(intent.getAction().endsWith("SYNC_CANCEL")) {
+        if(intent.getAction().equals(SYNC_CANCEL)) {
             Log.d(TAG, "Cancelling sync..");
             DownloaderService.manualSyncCancel(manager);
         }
-        else if(intent.getAction().endsWith("SYNC_PAUSE")) {
+        else if(intent.getAction().equals(SYNC_PAUSE)) {
             Log.d(TAG, "Pausing sync..");
             DownloaderService.manualSyncPause(context, manager);
         }
-        else if(intent.getAction().endsWith("SYNC_RESUME")) {
+        else if(intent.getAction().equals(SYNC_RESUME)) {
             Log.d(TAG, "Resuming sync..");
             DownloaderService.manualSyncResume(context, manager);
         }

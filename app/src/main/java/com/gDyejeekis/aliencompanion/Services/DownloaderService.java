@@ -21,6 +21,7 @@ import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
 import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
 import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
 import com.gDyejeekis.aliencompanion.asynctask.StreamableTask;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.SyncStateReceiver;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.models.SyncProfileOptions;
@@ -479,25 +480,25 @@ public class DownloaderService extends IntentService {
 
     public static android.support.v4.app.NotificationCompat.Action createPauseAction(Context context) {
         PendingIntent pIntent = PendingIntent.getBroadcast(context, CHANGE_STATE_REQUEST_CODE,
-                new Intent("com.gDyejeekis.aliencompanion.SYNC_PAUSE"), PendingIntent.FLAG_CANCEL_CURRENT);
+                new Intent(SyncStateReceiver.SYNC_PAUSE), PendingIntent.FLAG_CANCEL_CURRENT);
 
         return new android.support.v4.app.NotificationCompat.Action(R.mipmap.ic_pause_white_48dp, "Pause", pIntent);
     }
 
     public static android.support.v4.app.NotificationCompat.Action createResumeAction(Context context) {
         PendingIntent pIntent = PendingIntent.getBroadcast(context, CHANGE_STATE_REQUEST_CODE,
-                new Intent("com.gDyejeekis.aliencompanion.SYNC_RESUME"), PendingIntent.FLAG_CANCEL_CURRENT);
+                new Intent(SyncStateReceiver.SYNC_RESUME), PendingIntent.FLAG_CANCEL_CURRENT);
 
         return new android.support.v4.app.NotificationCompat.Action(R.mipmap.ic_resume_white_48dp, "Resume", pIntent);
     }
 
     public static android.support.v4.app.NotificationCompat.Action createCancelAction(Context context) {
         PendingIntent pIntent = PendingIntent.getBroadcast(context, CHANGE_STATE_REQUEST_CODE,
-                new Intent("com.gDyejeekis.aliencompanion.SYNC_CANCEL"), PendingIntent.FLAG_CANCEL_CURRENT);
+                new Intent(SyncStateReceiver.SYNC_CANCEL), PendingIntent.FLAG_CANCEL_CURRENT);
 
         return new android.support.v4.app.NotificationCompat.Action(R.mipmap.ic_close_white_48dp, "Cancel", pIntent);
     }
-
+    
     private void writePostsToFile(List<RedditItem> posts, String filename) {
         try {
             File file = getPreferredStorageFile(filename);
