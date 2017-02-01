@@ -1,25 +1,23 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.gDyejeekis.aliencompanion.Adapters.PendingActionsAdapter;
-import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.views.adapters.PendingActionsAdapter;
+import com.gDyejeekis.aliencompanion.models.offline_actions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Services.PendingActionsService;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.gDyejeekis.aliencompanion.services.PendingActionsService;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 
 /**
  * Created by sound on 4/9/2016.

@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.text.Editable;
 import android.text.Html;
@@ -10,8 +10,6 @@ import android.text.style.StrikethroughSpan;
 
 import org.xml.sax.XMLReader;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 /**

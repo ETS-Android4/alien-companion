@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Models;
+package com.gDyejeekis.aliencompanion.models;
 
 /**
  * Created by sound on 8/28/2015.

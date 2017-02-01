@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Services;
+package com.gDyejeekis.aliencompanion.services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -13,13 +13,10 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
-import com.gDyejeekis.aliencompanion.Models.OfflineActions.OfflineUserAction;
+import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
+import com.gDyejeekis.aliencompanion.models.offline_actions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 import java.io.File;
 import java.util.ArrayList;

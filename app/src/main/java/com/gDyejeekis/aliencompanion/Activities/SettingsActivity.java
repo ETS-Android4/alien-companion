@@ -1,22 +1,19 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.SettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.AppearanceSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.CommentsSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.HeadersSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.LinkHandlingSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.NavigationSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.OtherSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.PostsSettingsFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SettingsFragments.SyncSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.SettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.AppearanceSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.CommentsSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.HeadersSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.LinkHandlingSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.NavigationSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.OtherSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.PostsSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.SyncSettingsFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;

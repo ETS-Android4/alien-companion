@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Views;
+package com.gDyejeekis.aliencompanion.views;
 
 import android.annotation.TargetApi;
 import android.content.Context;

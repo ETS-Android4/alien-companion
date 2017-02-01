@@ -1,6 +1,4 @@
-package com.gDyejeekis.aliencompanion.Models;
-
-import android.util.Log;
+package com.gDyejeekis.aliencompanion.models;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;

@@ -7,10 +7,9 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToLong;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 1/24/2016.

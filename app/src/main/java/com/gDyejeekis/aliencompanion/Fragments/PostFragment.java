@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.app.Activity;
@@ -15,7 +15,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,16 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.Activities.PostActivity;
-import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
-import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
-import com.gDyejeekis.aliencompanion.AsyncTasks.LoadCommentsTask;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
+import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
+import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;

@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Services;
+package com.gDyejeekis.aliencompanion.services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -17,18 +17,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.AsyncTasks.GfycatTask;
-import com.gDyejeekis.aliencompanion.AsyncTasks.GiphyTask;
-import com.gDyejeekis.aliencompanion.AsyncTasks.GyazoTask;
-import com.gDyejeekis.aliencompanion.AsyncTasks.StreamableTask;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Models.SyncProfile;
-import com.gDyejeekis.aliencompanion.Models.SyncProfileOptions;
+import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
+import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
+import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
+import com.gDyejeekis.aliencompanion.asynctask.StreamableTask;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
-import com.gDyejeekis.aliencompanion.Utils.StorageUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;

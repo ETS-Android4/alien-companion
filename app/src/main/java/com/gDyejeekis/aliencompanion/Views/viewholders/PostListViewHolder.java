@@ -1,7 +1,6 @@
-package com.gDyejeekis.aliencompanion.Views.viewholders;
+package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -11,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
-import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
+import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;

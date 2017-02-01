@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.os.Handler;
 import android.text.Layout;
@@ -7,7 +7,6 @@ import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.TextView;
 

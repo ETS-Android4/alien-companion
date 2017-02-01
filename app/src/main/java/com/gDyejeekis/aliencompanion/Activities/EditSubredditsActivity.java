@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddSubredditDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditOptionsDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddSubredditDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.mobeta.android.dslv.DragSortListView;

@@ -1,6 +1,5 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.UrlOptionsDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.UrlOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 

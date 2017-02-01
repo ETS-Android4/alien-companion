@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.AddMultiredditDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.MultiredditOptionsDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddMultiredditDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.MultiredditOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.mobeta.android.dslv.DragSortListView;

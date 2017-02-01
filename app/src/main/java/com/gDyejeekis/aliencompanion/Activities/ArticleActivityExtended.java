@@ -1,6 +1,6 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
-import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 
 import xyz.klinker.android.article.ArticleActivity;
 

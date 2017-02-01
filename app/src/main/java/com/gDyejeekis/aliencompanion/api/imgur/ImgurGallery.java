@@ -7,9 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToInteger;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 3/10/2016.

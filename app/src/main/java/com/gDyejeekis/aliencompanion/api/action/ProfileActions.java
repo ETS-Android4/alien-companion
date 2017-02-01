@@ -2,7 +2,7 @@ package com.gDyejeekis.aliencompanion.api.action;
 
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.entity.UserInfo;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;

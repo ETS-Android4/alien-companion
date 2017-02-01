@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

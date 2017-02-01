@@ -1,17 +1,14 @@
-package com.gDyejeekis.aliencompanion.Models;
+package com.gDyejeekis.aliencompanion.models;
 
-import com.gDyejeekis.aliencompanion.Adapters.PostAdapter;
+import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
-import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by George on 7/26/2016.

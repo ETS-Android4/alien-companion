@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 public final class JsonUtils {
 

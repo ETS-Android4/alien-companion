@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import com.gDyejeekis.aliencompanion.enums.ImgurThumbnailSize;
 import com.gDyejeekis.aliencompanion.enums.YoutubeThumbnailSize;

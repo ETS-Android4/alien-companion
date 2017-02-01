@@ -1,7 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
 import org.json.simple.JSONObject;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by George on 6/20/2015.

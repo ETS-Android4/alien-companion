@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Views;
+package com.gDyejeekis.aliencompanion.views;
 
 import android.content.Context;
 import android.media.MediaPlayer;

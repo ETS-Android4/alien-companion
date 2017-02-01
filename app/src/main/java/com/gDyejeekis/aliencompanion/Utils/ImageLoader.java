@@ -1,20 +1,15 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.BuildConfig;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**

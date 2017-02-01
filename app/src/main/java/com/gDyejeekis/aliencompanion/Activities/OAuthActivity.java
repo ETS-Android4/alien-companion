@@ -1,10 +1,10 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 /**
  * Created by sound on 10/23/2015.

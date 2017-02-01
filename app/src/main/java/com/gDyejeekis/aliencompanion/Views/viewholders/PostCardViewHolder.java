@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Views.viewholders;
+package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
 import android.text.Html;
@@ -13,14 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
-import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
+import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
-import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
+import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;

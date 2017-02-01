@@ -9,7 +9,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONObject;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by George on 6/16/2015.

@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.content.Context;
 import android.widget.Toast;

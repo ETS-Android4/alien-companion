@@ -1,6 +1,6 @@
 package com.gDyejeekis.aliencompanion.api.retrieval;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,10 +9,10 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Kind;
-import com.gDyejeekis.aliencompanion.Models.MoreComment;
+import com.gDyejeekis.aliencompanion.models.MoreComment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
@@ -23,9 +23,6 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.ParamFormatter;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 /**
  * This class offers the following functionality:

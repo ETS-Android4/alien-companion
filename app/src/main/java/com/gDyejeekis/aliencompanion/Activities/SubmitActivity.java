@@ -1,18 +1,16 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-import com.gDyejeekis.aliencompanion.Fragments.ComposeMessageFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitCommentFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitImageFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitLinkFragment;
-import com.gDyejeekis.aliencompanion.Fragments.SubmitFragments.SubmitTextFragment;
+import com.gDyejeekis.aliencompanion.fragments.ComposeMessageFragment;
+import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitCommentFragment;
+import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitImageFragment;
+import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitLinkFragment;
+import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitTextFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;

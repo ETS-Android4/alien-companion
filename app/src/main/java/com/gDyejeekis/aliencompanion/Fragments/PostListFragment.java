@@ -1,8 +1,7 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,34 +21,30 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.Activities.PendingUserActionsActivity;
-import com.gDyejeekis.aliencompanion.Activities.SubmitActivity;
-import com.gDyejeekis.aliencompanion.Activities.SyncProfilesActivity;
-import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.PleaseWaitDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
-import com.gDyejeekis.aliencompanion.AsyncTasks.LoadPostsTask;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ShowSyncedDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SubredditSidebarDialogFragment;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
+import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
+import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
+import com.gDyejeekis.aliencompanion.asynctask.LoadPostsTask;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Services.DownloaderService;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
-import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.services.DownloaderService;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
-import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 

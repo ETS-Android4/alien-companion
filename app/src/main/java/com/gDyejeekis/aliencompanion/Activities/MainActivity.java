@@ -1,14 +1,12 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
@@ -26,37 +24,33 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
-import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
+import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.VerifyAccountDialogFragment;
-import com.gDyejeekis.aliencompanion.Fragments.PostFragment;
-import com.gDyejeekis.aliencompanion.Fragments.PostListFragment;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerAccount;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerEmptySpace;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMultis;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMutliredditItem;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerOther;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerOtherItem;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSeparator;
-import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.VerifyAccountDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerAccount;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerEmptySpace;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerMultis;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerOther;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerOtherItem;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerSeparator;
+import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.MenuType;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerHeader;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerItem;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerMenuItem;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubredditItem;
-import com.gDyejeekis.aliencompanion.Models.NavDrawer.NavDrawerSubreddits;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerHeader;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerItem;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerMenuItem;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerSubredditItem;
+import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerSubreddits;
 import com.gDyejeekis.aliencompanion.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import me.imid.swipebacklayout.lib.ViewDragHelper;
 
 
 public class MainActivity extends AppCompatActivity {

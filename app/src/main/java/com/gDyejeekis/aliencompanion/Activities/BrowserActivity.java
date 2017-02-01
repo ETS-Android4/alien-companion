@@ -1,10 +1,10 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.gDyejeekis.aliencompanion.Fragments.BrowserFragment;
+import com.gDyejeekis.aliencompanion.fragments.BrowserFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 

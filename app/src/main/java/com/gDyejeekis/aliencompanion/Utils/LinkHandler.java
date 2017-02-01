@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -8,11 +8,11 @@ import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
-import com.gDyejeekis.aliencompanion.Activities.MediaActivity;
-import com.gDyejeekis.aliencompanion.Activities.PostActivity;
-import com.gDyejeekis.aliencompanion.Activities.SubredditActivity;
-import com.gDyejeekis.aliencompanion.Activities.UserActivity;
+import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
+import com.gDyejeekis.aliencompanion.activities.MediaActivity;
+import com.gDyejeekis.aliencompanion.activities.PostActivity;
+import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
+import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;

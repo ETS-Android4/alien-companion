@@ -3,9 +3,9 @@ package com.gDyejeekis.aliencompanion.api.entity;
 import android.content.Context;
 import android.text.SpannableStringBuilder;
 
-import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.api.retrieval.Trophies;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.squareup.picasso.Picasso;

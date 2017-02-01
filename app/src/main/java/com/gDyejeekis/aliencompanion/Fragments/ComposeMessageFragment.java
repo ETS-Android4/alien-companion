@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.fragments;
 
 import android.app.Fragment;
 import android.graphics.Color;
@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.gDyejeekis.aliencompanion.AsyncTasks.LoadUserActionTask;
+import com.gDyejeekis.aliencompanion.asynctask.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
  * Created by sound on 11/20/2015.

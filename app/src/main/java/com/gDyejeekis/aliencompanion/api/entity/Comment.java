@@ -1,22 +1,18 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
-import android.text.SpannableStringBuilder;
-import android.util.Log;
-
-import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.multilevelexpindlistview.MultiLevelExpIndListAdapter;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToInteger;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToInteger;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToDouble;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

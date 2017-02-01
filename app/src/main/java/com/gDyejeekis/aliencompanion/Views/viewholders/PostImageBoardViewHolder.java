@@ -1,10 +1,10 @@
-package com.gDyejeekis.aliencompanion.Views.viewholders;
+package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.ClickListeners.PostItemListener;
-import com.gDyejeekis.aliencompanion.ClickListeners.PostItemOptionsListener;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
 /**

@@ -2,7 +2,7 @@ package com.gDyejeekis.aliencompanion.api.retrieval;
 
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Kind;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -24,7 +24,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by George on 6/16/2015.

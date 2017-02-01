@@ -1,9 +1,7 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,14 +17,13 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.ClickListeners.ShowMoreListener;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.SearchRedditDialogFragment;
-import com.gDyejeekis.aliencompanion.AsyncTasks.LoadSearchTask;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
+import com.gDyejeekis.aliencompanion.asynctask.LoadSearchTask;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SearchSort;

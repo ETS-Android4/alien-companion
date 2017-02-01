@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
-import com.gDyejeekis.aliencompanion.Utils.MyHtmlTagHandler;
-import com.gDyejeekis.aliencompanion.Utils.MyLinkMovementMethod;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
+import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 
 /**
  * Created by George on 12/4/2016.

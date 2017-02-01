@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;

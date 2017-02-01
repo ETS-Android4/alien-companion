@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.gDyejeekis.aliencompanion.Fragments.DialogFragments.EnterRedditDialogFragment"
+    tools:context="com.gDyejeekis.aliencompanion.fragments.dialog_fragments.EnterRedditDialogFragment"
     android:orientation="vertical"
     android:background="?attr/themeDialogBackgroundColor">
 
@@ -20,7 +20,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp" />
 
-    <com.gDyejeekis.aliencompanion.Views.ListViewMaxHeight
+    <com.gDyejeekis.aliencompanion.views.ListViewMaxHeight
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listView_subreddits"

@@ -4,10 +4,10 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToLong;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToLong;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 import org.json.simple.JSONObject;
 

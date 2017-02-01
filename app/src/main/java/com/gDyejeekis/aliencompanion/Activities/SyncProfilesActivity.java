@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Activities;
+package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -12,11 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
-import com.gDyejeekis.aliencompanion.Models.SyncProfile;
+import com.gDyejeekis.aliencompanion.views.adapters.SyncProfileListAdapter;
+import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Views.DividerItemDecoration;
+import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 
 /**
  * Created by sound on 2/4/2016.

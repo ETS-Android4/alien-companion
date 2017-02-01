@@ -1,9 +1,9 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.content.Context;
 import android.content.Intent;
 
-import com.gDyejeekis.aliencompanion.Activities.ArticleActivityExtended;
+import com.gDyejeekis.aliencompanion.activities.ArticleActivityExtended;
 
 import xyz.klinker.android.article.ArticleIntent;
 

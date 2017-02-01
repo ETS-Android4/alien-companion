@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.SubmitFragments.SubmitCommentFragment"
+    tools:context=".fragments.submit_fragments.SubmitCommentFragment"
     android:orientation="vertical"
     android:divider="?attr/themeDivider"
     android:showDividers="middle">
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/layout_originalComment">
 
-        <com.gDyejeekis.aliencompanion.Views.ScrollViewWithMaxHeight
+        <com.gDyejeekis.aliencompanion.views.ScrollViewWithMaxHeight
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                 android:padding="10dp"
                 android:textIsSelectable="true"
                 android:textColor="?attr/themeTextColor" />
-        </com.gDyejeekis.aliencompanion.Views.ScrollViewWithMaxHeight>
+        </com.gDyejeekis.aliencompanion.views.ScrollViewWithMaxHeight>
     </LinearLayout>
 
     <LinearLayout

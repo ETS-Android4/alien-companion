@@ -1,13 +1,11 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
-import android.os.SystemClock;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import org.json.simple.JSONObject;

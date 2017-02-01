@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Models;
+package com.gDyejeekis.aliencompanion.models;
 
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.entity.User;

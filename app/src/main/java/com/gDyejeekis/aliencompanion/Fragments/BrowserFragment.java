@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Fragments;
+package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.app.Activity;
@@ -19,20 +19,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.gDyejeekis.aliencompanion.Activities.BrowserActivity;
-import com.gDyejeekis.aliencompanion.Activities.MainActivity;
-import com.gDyejeekis.aliencompanion.Activities.OAuthActivity;
-import com.gDyejeekis.aliencompanion.Activities.PostActivity;
-import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.OAuthActivity;
+import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.Services.DownloaderService;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
-
-import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.

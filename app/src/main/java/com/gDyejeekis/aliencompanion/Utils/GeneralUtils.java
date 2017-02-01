@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Utils;
+package com.gDyejeekis.aliencompanion.utils;
 
 import android.Manifest;
 import android.app.Activity;
@@ -22,11 +22,11 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.gDyejeekis.aliencompanion.Adapters.NavDrawerAdapter;
-import com.gDyejeekis.aliencompanion.Fragments.DialogFragments.ChangeLogDialogFragment;
-import com.gDyejeekis.aliencompanion.Models.SavedAccount;
+import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ChangeLogDialogFragment;
+import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Services.DownloaderService;
+import com.gDyejeekis.aliencompanion.services.DownloaderService;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurApiEndpoints;

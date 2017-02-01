@@ -2,18 +2,18 @@ package com.gDyejeekis.aliencompanion.api.entity;
 
 import android.text.SpannableStringBuilder;
 
-import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.Models.RedditItem;
-import com.gDyejeekis.aliencompanion.Models.Thumbnail;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToBoolean;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToDouble;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToDouble;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/10/2015.

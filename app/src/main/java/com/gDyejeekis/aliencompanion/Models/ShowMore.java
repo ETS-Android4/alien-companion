@@ -1,8 +1,8 @@
-package com.gDyejeekis.aliencompanion.Models;
+package com.gDyejeekis.aliencompanion.models;
 
 import android.text.SpannableStringBuilder;
 
-import com.gDyejeekis.aliencompanion.Adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 
 /**
  * Created by sound on 8/28/2015.

@@ -3,7 +3,6 @@ package com.gDyejeekis.aliencompanion.api.entity;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
@@ -12,8 +11,8 @@ import org.json.simple.JSONObject;
 import java.io.Serializable;
 import java.util.Date;
 
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToLong;
-import static com.gDyejeekis.aliencompanion.Utils.JsonUtils.safeJsonToString;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToLong;
+import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 /**
  * Created by sound on 10/24/2015.

@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.Models;
+package com.gDyejeekis.aliencompanion.models;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -8,12 +8,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.Adapters.SyncProfileListAdapter;
-import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.Services.DownloaderService;
-import com.gDyejeekis.aliencompanion.Utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.Utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
+import com.gDyejeekis.aliencompanion.views.adapters.SyncProfileListAdapter;
+import com.gDyejeekis.aliencompanion.services.DownloaderService;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.Serializable;
