@@ -48,37 +48,27 @@ public class PostItemListener implements View.OnClickListener {
         }
 
         if(v.getId() == R.id.layout_postCommentsButton || post.isSelf()) {
-            if(MainActivity.dualPaneActive) {
-                PostFragment fragment = PostFragment.newInstance(post);
-                addPostFragment(context, fragment);
-            }
-            else {
-                Intent intent = new Intent(context, PostActivity.class);
-                intent.putExtra("post", post);
-                context.startActivity(intent);
-            }
+            openComments(context, post);
         }
         else {
-            //if(MainActivity.dualPaneActive && (post.getDomain().equals("reddit.com") || post.getDomain().substring(3).equals("reddit.com"))) {
-            //    String url = post.getURL().toLowerCase();
-            //    if(url.contains("/wiki/") || url.contains("/about/")) {
-            //        LinkHandler linkHandler = new LinkHandler(context, post);
-            //        linkHandler.handleIt();
-            //    }
-            //    else {
-            //        String[] postInfo = LinkHandler.getRedditPostInfo(post.getURL());
-            //        PostFragment fragment = PostFragment.newInstance(postInfo);
-            //        addPostFragment(context, fragment);
-            //    }
-            //}
-            //else {
-                LinkHandler linkHandler = new LinkHandler(context, post);
-                linkHandler.handleIt();
-            //}
+            LinkHandler linkHandler = new LinkHandler(context, post);
+            linkHandler.handleIt();
         }
     }
 
-    private void addPostFragment(Context context, PostFragment fragment) {
+    public static void openComments(Context context, Submission post) {
+        if(MainActivity.dualPaneActive) {
+            PostFragment fragment = PostFragment.newInstance(post);
+            addPostFragment(context, fragment);
+        }
+        else {
+            Intent intent = new Intent(context, PostActivity.class);
+            intent.putExtra("post", post);
+            context.startActivity(intent);
+        }
+    }
+
+    private static void addPostFragment(Context context, PostFragment fragment) {
         if(context instanceof MainActivity) ((MainActivity) context).setupPostFragment(fragment);
         else if(context instanceof SubredditActivity) ((SubredditActivity) context).setupPostFragment(fragment);
         else if(context instanceof UserActivity) ((UserActivity) context).setupPostFragment(fragment);

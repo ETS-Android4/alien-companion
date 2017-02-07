@@ -142,12 +142,12 @@ public class PostClassicViewHolder extends PostViewHolder  {
         if(MyApplication.currentUser != null) {
             // check user vote
             if (post.getLikes().equals("true")) {
-                scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, scoreSpannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyleClassic), 0, scoreSpannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvoteClassic.setImageResource(upvoteResourceOrange);
                 downvoteClassic.setImageResource(downvoteResource);
             }
             else if (post.getLikes().equals("false")) {
-                scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, scoreSpannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyleClassic), 0, scoreSpannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvoteClassic.setImageResource(upvoteResource);
                 downvoteClassic.setImageResource(downvoteResourceBlue);
             }

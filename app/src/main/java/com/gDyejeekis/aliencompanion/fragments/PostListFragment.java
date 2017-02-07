@@ -12,6 +12,7 @@ import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
@@ -44,6 +46,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 
 import java.io.File;
 import java.util.List;
@@ -57,7 +60,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public RedditItemListAdapter postListAdapter;
     public ProgressBar mainProgressBar;
     public RecyclerView contentView;
-    private LinearLayoutManager layoutManager;
+    private RecyclerView.LayoutManager layoutManager;
     public SwipeRefreshLayout swipeRefreshLayout;
     public String subreddit;
     public boolean isMulti = false;
@@ -124,8 +127,47 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onResume() {
         super.onResume();
         //loadMore = MainActivity.endlessPosts;
-        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
-        else swipeRefreshLayout.setEnabled(false);
+        updateSwipeRefreshState();
+    }
+
+    private void updateSwipeRefreshState() {
+        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
+    }
+
+    private void updateLoadMoreState(RecyclerView recyclerView) {
+        int pastVisiblesItems, visibleItemCount, totalItemCount;
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = findFirstVisiblePostPosition();
+
+        if (!MyApplication.offlineModeEnabled && loadMore && hasMore) {
+            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) { // TODO: 2/7/2017  maybe change this constant
+                loadMore = false;
+                //Log.d("scroll listener", "load more now");
+                ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
+                listener.onClick(recyclerView);
+            }
+        }
+    }
+
+    private int findFirstCompletelyVisiblePostPosition() {
+        if(layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
+        }
+        else if(layoutManager instanceof GridLayoutManager) {
+            return ((GridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
+        }
+        return -1;
+    }
+
+    private int findFirstVisiblePostPosition() {
+        if(layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
+        else if(layoutManager instanceof GridLayoutManager) {
+            return ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
+        return -1;
     }
 
     @Override
@@ -138,8 +180,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        layoutManager = new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
+        setLayoutManager();
         contentView.setHasFixedSize(true);
         if(MyApplication.currentPostListView == R.layout.post_list_item
                 || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
@@ -151,23 +192,9 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
-                    swipeRefreshLayout.setEnabled(true);
-                else swipeRefreshLayout.setEnabled(false);
+                updateSwipeRefreshState();
 
-                int pastVisiblesItems, visibleItemCount, totalItemCount;
-                visibleItemCount = layoutManager.getChildCount();
-                totalItemCount = layoutManager.getItemCount();
-                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-                if (!MyApplication.offlineModeEnabled && loadMore && hasMore) {
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
-                        loadMore = false;
-                        //Log.d("scroll listener", "load more now");
-                        ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
-                        listener.onClick(recyclerView);
-                    }
-                }
+                updateLoadMoreState(recyclerView);
             }
         });
 
@@ -213,6 +240,12 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
 
         return view;
+    }
+
+    private void setLayoutManager() {
+        layoutManager = MyApplication.currentPostListView == R.layout.post_list_item_gallery ?
+                new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
     }
 
     public void colorSchemeChanged() {
@@ -596,6 +629,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             List<RedditItem> items = postListAdapter.redditItems;
             items.remove(items.size() - 1);
             postListAdapter = new RedditItemListAdapter(activity, items);
+            setLayoutManager();
             contentView.setAdapter(postListAdapter);
             setListDividerVisible(false);
             switch (MyApplication.currentPostListView) {

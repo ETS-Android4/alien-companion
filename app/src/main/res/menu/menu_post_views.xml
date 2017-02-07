@@ -18,7 +18,7 @@
             android:orderInCategory="25"/>
 
         <item android:id="@+id/action_image_board" android:title="@string/gallery"
-            android:orderInCategory="30" android:enabled="false"/>
+            android:orderInCategory="30"/>
     </group>
 
 </menu>

@@ -36,7 +36,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostCardViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostClassicViewHolder;
-import com.gDyejeekis.aliencompanion.views.viewholders.PostImageBoardViewHolder;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostListViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostSmallCardViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostViewHolder;
@@ -157,7 +157,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                         viewHolder = new PostCardViewHolder(v, false);
                         break;
                     case R.layout.post_list_item_gallery:
-                        viewHolder = new PostImageBoardViewHolder(v);
+                        viewHolder = new PostGalleryViewHolder(v);
                         break;
                     default:
                         viewHolder = new PostListViewHolder(v);
@@ -210,7 +210,18 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POST:
                 PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
-                Submission post = (Submission) getItemAt(position);
+                final Submission post = (Submission) getItemAt(position);
+
+                if(MyApplication.currentPostListView == R.layout.post_list_item_gallery) {
+                    longListener = new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            PostItemListener.openComments(context, post);
+                            return true;
+                        }
+                    };
+                }
+
                 postViewHolder.bindModel(context, post);
 
                 PostItemListener listener = new PostItemListener(context, post, this, position);

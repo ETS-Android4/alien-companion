@@ -278,14 +278,26 @@
         <item name="android:fontFamily">?attr/defaultFontFamily</item>
     </style>
 
+    <style name="nsfwLabelGallery" parent="nsfwLabel">
+        <item name="android:textSize">?attr/font_large</item>
+    </style>
+
     <style name="upvotedStyle">
         <item name="android:textColor">#ff8b60</item>
         <item name="android:textSize">?attr/font_small</item>
     </style>
 
+    <style name="upvotedStyleClassic" parent="upvotedStyle">
+        <item name="android:textSize">?attr/font_comments</item>
+    </style>
+
     <style name="downvotedStyle">
         <item name="android:textColor">#9494ff</item>
         <item name="android:textSize">?attr/font_small</item>
+    </style>
+
+    <style name="downvotedStyleClassic" parent="downvotedStyle">
+        <item name="android:textSize">?attr/font_comments</item>
     </style>
 
     <style name="DialogButtonStyle" parent="Widget.AppCompat.Button.Small">
