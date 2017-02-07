@@ -54,6 +54,7 @@ public class PostGalleryViewHolder extends PostViewHolder {
             postImage.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
             textView.setText("SELF");
+            textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textHintColor);
         }
         else if(thumbnailObject.hasThumbnail()) {
             textView.setVisibility(View.GONE);
