@@ -87,6 +87,8 @@ public class PostGalleryViewHolder extends PostViewHolder {
     public void setClickListeners(PostItemListener postItemListener, View.OnLongClickListener postLongListener, PostItemOptionsListener postItemOptionsListener) {
         postImage.setOnClickListener(postItemListener);
         postImage.setOnLongClickListener(postLongListener);
+        textView.setOnClickListener(postItemListener);
+        textView.setOnLongClickListener(postLongListener);
     }
 
     @Override
