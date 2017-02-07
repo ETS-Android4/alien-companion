@@ -156,7 +156,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     case R.layout.post_list_item_card:
                         viewHolder = new PostCardViewHolder(v, false);
                         break;
-                    case R.layout.post_list_item_image_board:
+                    case R.layout.post_list_item_gallery:
                         viewHolder = new PostImageBoardViewHolder(v);
                         break;
                     default:

@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
@@ -372,7 +373,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             case R.layout.post_list_item_card:
                 index = 4;
                 break;
-            case R.layout.post_list_item_image_board:
+            case R.layout.post_list_item_gallery:
                 index = 5;
                 break;
             default:
@@ -384,37 +385,37 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int resource = -1;
-                int resourceIndex = -1;
+                PostViewType viewType = PostViewType.list;
                 switch (item.getItemId()) {
                     case R.id.action_list_default:
                         resource = R.layout.post_list_item;
-                        resourceIndex = 0;
+                        viewType = PostViewType.list;
                         break;
                     case R.id.action_list_reversed:
                         resource = R.layout.post_list_item_reversed;
-                        resourceIndex = 1;
+                        viewType = PostViewType.listReversed;
                         break;
                     case R.id.action_classic:
                         resource = R.layout.post_list_item_classic;
-                        resourceIndex = 2;
+                        viewType = PostViewType.classic;
                         break;
                     case R.id.action_small_cards:
                         resource = R.layout.small_card_new;
-                        resourceIndex = 3;
+                        viewType = PostViewType.smallCards;
                         break;
                     case R.id.action_cards:
                         resource = R.layout.post_list_item_card;
-                        resourceIndex = 4;
+                        viewType = PostViewType.cards;
                         break;
                     case R.id.action_image_board:
-                        resource = R.layout.post_list_item_image_board;
-                        resourceIndex = 5;
+                        resource = R.layout.post_list_item_gallery;
+                        viewType = PostViewType.gallery;
                         break;
                 }
                 if (resource != -1 && resource != MyApplication.currentPostListView) {
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
                     MyApplication.currentPostListView = resource;
-                    editor.putInt("postListView", resourceIndex);
+                    editor.putInt("postListView", viewType.value());
                     editor.apply();
                     if(currentLoadType==null) redrawList();
                     return true;

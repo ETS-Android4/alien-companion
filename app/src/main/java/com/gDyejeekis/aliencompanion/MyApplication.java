@@ -16,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.services.MessageCheckService;
@@ -420,29 +421,24 @@ public class MyApplication extends Application {
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);
         longTapSwitchMode = prefs.getBoolean("longTapSwitch", true);
-        currentPostListView = prefs.getInt("postListView", 0);
-        switch (currentPostListView) {
-            case 0:
-                currentPostListView = R.layout.post_list_item;
-                break;
-            case 1:
-                currentPostListView = R.layout.post_list_item_reversed;
-                break;
-            case 2:
-                currentPostListView = R.layout.post_list_item_classic;
-                break;
-            case 3:
-                currentPostListView = R.layout.small_card_new;
-                break;
-            case 4:
-                currentPostListView = R.layout.post_list_item_card;
-                break;
-            case 5:
-                currentPostListView = R.layout.post_list_item_image_board;
-                break;
-            default:
-                currentPostListView = R.layout.post_list_item;
-                break;
+        currentPostListView = prefs.getInt("postListView", PostViewType.list.value());
+        if(currentPostListView == PostViewType.listReversed.value()) {
+            currentPostListView = R.layout.post_list_item_reversed;
+        }
+        else if(currentPostListView == PostViewType.classic.value()) {
+            currentPostListView = R.layout.post_list_item_classic;
+        }
+        else if(currentPostListView == PostViewType.smallCards.value()) {
+            currentPostListView = R.layout.small_card_new;
+        }
+        else if(currentPostListView == PostViewType.cards.value()) {
+            currentPostListView = R.layout.post_list_item_card;
+        }
+        else if(currentPostListView == PostViewType.gallery.value()) {
+            currentPostListView = R.layout.post_list_item_gallery;
+        }
+        else {
+            currentPostListView = R.layout.post_list_item;
         }
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
