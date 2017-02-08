@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
@@ -29,6 +31,7 @@ import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SearchSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 
 import java.util.List;
 
@@ -40,7 +43,7 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private AppCompatActivity activity;
     public ProgressBar mainProgressBar;
     public RecyclerView contentView;
-    private LinearLayoutManager layoutManager;
+    private RecyclerView.LayoutManager layoutManager;
     public SwipeRefreshLayout swipeRefreshLayout;
     public RedditItemListAdapter postListAdapter;
     public SearchSort searchSort, tempSort;
@@ -51,6 +54,9 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public boolean hasMore = true;
     public LoadType currentLoadType;
     public LoadSearchTask task;
+
+    private DividerItemDecoration decoration;
+    private boolean decorationVisible = false;
 
     public static SearchFragment newInstance(RedditItemListAdapter adapter, String searchQuery, SearchSort sort, TimeSpan time, boolean hasMore, LoadType currentLoadType) {
         SearchFragment newInstance = new SearchFragment();
@@ -68,6 +74,8 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         super.onCreate(bundle);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+
+        decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
 
         if(bundle!=null) {
             subreddit = bundle.getString("subreddit");
@@ -95,8 +103,64 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onResume() {
         super.onResume();
         //loadMore = MainActivity.endlessPosts;
-        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
-        else swipeRefreshLayout.setEnabled(false);
+        updateSwipeRefreshState();
+    }
+
+    private void setListDividerVisible(boolean flag) {
+        if(flag) {
+            contentView.addItemDecoration(decoration);
+            decorationVisible = true;
+        }
+        else {
+            contentView.removeItemDecoration(decoration);
+            decorationVisible = false;
+        }
+    }
+
+    private void setLayoutManager() {
+        layoutManager = MyApplication.currentPostListView == R.layout.post_list_item_gallery ?
+                new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
+    }
+
+    private void updateSwipeRefreshState() {
+        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
+    }
+
+    private void updateLoadMoreState(RecyclerView recyclerView) {
+        int pastVisiblesItems, visibleItemCount, totalItemCount;
+        visibleItemCount = layoutManager.getChildCount();
+        totalItemCount = layoutManager.getItemCount();
+        pastVisiblesItems = findFirstVisiblePostPosition();
+
+        if (loadMore && hasMore) {
+            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) { // TODO: 2/7/2017  maybe change this constant
+                loadMore = false;
+                //Log.d("scroll listener", "load more now");
+                ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
+                listener.onClick(recyclerView);
+            }
+        }
+    }
+
+    private int findFirstCompletelyVisiblePostPosition() {
+        if(layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
+        }
+        else if(layoutManager instanceof GridLayoutManager) {
+            return ((GridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
+        }
+        return -1;
+    }
+
+    private int findFirstVisiblePostPosition() {
+        if(layoutManager instanceof LinearLayoutManager) {
+            return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
+        else if(layoutManager instanceof GridLayoutManager) {
+            return ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        }
+        return -1;
     }
 
     @Override
@@ -133,33 +197,21 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        layoutManager = new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
+        setLayoutManager();
         contentView.setHasFixedSize(true);
-        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        if(MyApplication.currentPostListView == R.layout.post_list_item
+                || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
+            setListDividerVisible(true);
+        }
 
         contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
-                    swipeRefreshLayout.setEnabled(true);
-                else swipeRefreshLayout.setEnabled(false);
+                updateSwipeRefreshState();
 
-                int pastVisiblesItems, visibleItemCount, totalItemCount;
-                visibleItemCount = layoutManager.getChildCount();
-                totalItemCount = layoutManager.getItemCount();
-                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-                if (loadMore && hasMore) {
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
-                        loadMore = false;
-                        //Log.d("scroll listener", "load more now");
-                        ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
-                        listener.onClick(recyclerView);
-                    }
-                }
+                updateLoadMoreState(recyclerView);
             }
         });
 
@@ -239,7 +291,17 @@ public class SearchFragment extends Fragment implements SwipeRefreshLayout.OnRef
             List<RedditItem> items = postListAdapter.redditItems;
             items.remove(items.size() - 1);
             postListAdapter = new RedditItemListAdapter(activity, items);
+            setLayoutManager();
             contentView.setAdapter(postListAdapter);
+            setListDividerVisible(false);
+            switch (MyApplication.currentPostListView) {
+                case R.layout.post_list_item:
+                case R.layout.post_list_item_reversed:
+                    if(!decorationVisible) {
+                        setListDividerVisible(true);
+                    }
+                    break;
+            }
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
