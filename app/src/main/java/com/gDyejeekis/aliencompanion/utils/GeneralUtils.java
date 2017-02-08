@@ -662,6 +662,7 @@ public class GeneralUtils {
         if(domain.contains("flickr.com")) return true;
         if(domain.contains("twimg.com")) return true;
         if(domain.contains("photobucket.com")) return true;
+        if(domain.contains("devianart.com")) return true;
         if(domain.equals("instagram.com")) return true;
         if(domain.equals("snapchat.com")) return true;
         if(domain.equals("trbimg.com")) return true;
@@ -675,7 +676,6 @@ public class GeneralUtils {
         return false;
     }
 
-    // TODO: 1/7/2017 further improve this
     public static boolean isArticleLink(String url, String domain) {
         if(isImageLink(url, domain)) return false;
         if(isVideoLink(url, domain)) return false;
