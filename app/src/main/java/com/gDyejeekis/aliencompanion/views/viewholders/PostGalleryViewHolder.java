@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -30,6 +31,8 @@ public class PostGalleryViewHolder extends PostViewHolder {
     private ImageView postImage;
     private TextView textView;
 
+    private final int textColor = MyApplication.textHintColor;
+    private final int clickedTextColor = ConvertUtils.adjustAlpha(textColor, 0.75f);
     private int postLinkResource, postLinkClickedResource;
 
     public PostGalleryViewHolder(View itemView) {
@@ -47,14 +50,20 @@ public class PostGalleryViewHolder extends PostViewHolder {
             postImage.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
             SpannableString nsfwSpan = new SpannableString("NSFW");
-            nsfwSpan.setSpan(new TextAppearanceSpan(context, R.style.nsfwLabelGallery), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            int style = post.isClicked() ? R.style.nsfwLabelGalleryClicked : R.style.nsfwLabelGallery;
+            nsfwSpan.setSpan(new TextAppearanceSpan(context, style), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             textView.setText(nsfwSpan);
         }
         else if(post.isSelf()) {
             postImage.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
             textView.setText("SELF");
-            textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textHintColor);
+            if(post.isClicked()) {
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
+            }
+            else {
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : textColor);
+            }
         }
         else if(thumbnailObject.hasThumbnail()) {
             textView.setVisibility(View.GONE);
@@ -99,16 +108,16 @@ public class PostGalleryViewHolder extends PostViewHolder {
     private void initIcons() {
         switch (MyApplication.currentBaseTheme) {
             case MyApplication.LIGHT_THEME:
-                postLinkResource = R.drawable.ic_link_grey_48dp;
-                postLinkClickedResource = R.drawable.ic_link_light_grey_48dp;
+                postLinkResource = R.drawable.ic_link_alt_grey_600_48dp;
+                postLinkClickedResource = R.drawable.ic_link_alt_light_grey_48dp;
                 break;
             case MyApplication.DARK_THEME_LOW_CONTRAST:
-                postLinkResource = R.drawable.ic_link_light_grey_48dp;
-                postLinkClickedResource = R.drawable.ic_link_grey_48dp;
+                postLinkResource = R.drawable.ic_link_alt_light_grey_48dp;
+                postLinkClickedResource = R.drawable.ic_link_alt_grey_600_48dp;
                 break;
             default:
-                postLinkResource = R.drawable.ic_link_white_48dp;
-                postLinkClickedResource = R.drawable.ic_link_light_grey_48dp;
+                postLinkResource = R.drawable.ic_link_alt_white_48dp;
+                postLinkClickedResource = R.drawable.ic_link_alt_light_grey_48dp;
                 break;
         }
     }

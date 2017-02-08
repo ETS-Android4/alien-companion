@@ -281,6 +281,10 @@
     <style name="nsfwLabelGallery" parent="nsfwLabel">
         <item name="android:textSize">?attr/font_large</item>
     </style>
+    
+    <style name="nsfwLabelGalleryClicked" parent="nsfwLabelGallery">
+        <item name="android:textColor">#b4d81d1b</item>
+    </style>
 
     <style name="upvotedStyle">
         <item name="android:textColor">#ff8b60</item>
