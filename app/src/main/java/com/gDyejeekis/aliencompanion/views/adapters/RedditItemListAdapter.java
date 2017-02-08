@@ -216,6 +216,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     longListener = new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
+                            if(!post.isClicked()) {
+                                post.setClicked(true);
+                                notifyItemChanged(position);
+                            }
                             PostItemListener.openComments(context, post);
                             return true;
                         }
