@@ -101,12 +101,12 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
                 if (loadType == LoadType.extend) { //extend case
                     if (plf.subreddit == null) {
-                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     } else {
-                        if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
-                        else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.postListAdapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     }
-                    adapter = plf.postListAdapter;
+                    adapter = plf.adapter;
                 } else { //init or refresh case
                     if (plf.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
@@ -151,18 +151,18 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
             if (exception != null || submissions == null) {
                 if(loadType == LoadType.extend) {
-                    plf.postListAdapter.setLoadingMoreItems(false);
+                    plf.adapter.setLoadingMoreItems(false);
                 }
                 else if(loadType == LoadType.init) {
-                    plf.postListAdapter = new RedditItemListAdapter(context);
-                    plf.contentView.setAdapter(plf.postListAdapter);
+                    plf.adapter = new RedditItemListAdapter(context);
+                    plf.contentView.setAdapter(plf.adapter);
                 }
                 if(MyApplication.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
                 else ToastUtils.postsLoadError(context);
             } else {
                 if(submissions.size()>0) {
                     if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
-                    plf.postListAdapter = adapter;
+                    plf.adapter = adapter;
                 }
                 plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
 
@@ -174,7 +174,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
                             ToastUtils.displayShortToast(context, message);
                         }
-                        else plf.contentView.setAdapter(plf.postListAdapter);
+                        else plf.contentView.setAdapter(plf.adapter);
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -187,13 +187,13 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             //    plf.setActionBarSubtitle();
                             //}
                             plf.setActionBarSubtitle();
-                            plf.contentView.setAdapter(plf.postListAdapter);
+                            plf.contentView.setAdapter(plf.adapter);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");
                         break;
                     case extend:
-                        plf.postListAdapter.setLoadingMoreItems(false);
-                        plf.postListAdapter.addAll(submissions);
+                        plf.adapter.setLoadingMoreItems(false);
+                        plf.adapter.addAll(submissions);
                         plf.loadMore = MyApplication.endlessPosts;
                         break;
                 }

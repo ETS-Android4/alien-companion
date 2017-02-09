@@ -422,24 +422,6 @@ public class MyApplication extends Application {
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);
         longTapSwitchMode = prefs.getBoolean("longTapSwitch", true);
         currentPostListView = prefs.getInt("postListView", PostViewType.list.value());
-        if(currentPostListView == PostViewType.listReversed.value()) {
-            currentPostListView = R.layout.post_list_item_reversed;
-        }
-        else if(currentPostListView == PostViewType.classic.value()) {
-            currentPostListView = R.layout.post_list_item_classic;
-        }
-        else if(currentPostListView == PostViewType.smallCards.value()) {
-            currentPostListView = R.layout.small_card_new;
-        }
-        else if(currentPostListView == PostViewType.cards.value()) {
-            currentPostListView = R.layout.post_list_item_card;
-        }
-        else if(currentPostListView == PostViewType.gallery.value()) {
-            currentPostListView = R.layout.post_list_item_gallery;
-        }
-        else {
-            currentPostListView = R.layout.post_list_item;
-        }
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);

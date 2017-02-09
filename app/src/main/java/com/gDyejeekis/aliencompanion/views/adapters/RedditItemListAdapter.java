@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentLinkListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.MessageItemListener;
@@ -142,7 +143,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType) {
             case VIEW_TYPE_POST:
-                int resource = MyApplication.currentPostListView;
+                int resource = PostViewType.getLayoutResource(MyApplication.currentPostListView);
                 if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
@@ -212,7 +213,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
                 final Submission post = (Submission) getItemAt(position);
 
-                if(MyApplication.currentPostListView == R.layout.post_list_item_gallery) {
+                if(MyApplication.currentPostListView == PostViewType.gallery.value()) {
                     longListener = new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
@@ -273,7 +274,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_SHOW_MORE:
                 FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
                 Activity activity = (Activity) context;
-                footerViewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(context, activity.getFragmentManager().findFragmentByTag("listFragment")));
+                footerViewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(activity.getFragmentManager().findFragmentByTag("listFragment")));
                 if(loadingMoreItems) {
                     footerViewHolder.showMoreProgress.setVisibility(View.VISIBLE);
                     footerViewHolder.showMoreButton.setVisibility(View.GONE);

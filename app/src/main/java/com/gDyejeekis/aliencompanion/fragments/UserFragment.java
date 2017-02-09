@@ -18,6 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserContentTask;
@@ -35,25 +36,18 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class UserFragment extends RedditContentFragment {
 
-    public ProgressBar progressBar;
-    public RecyclerView contentView;
-    private LinearLayoutManager layoutManager;
-    public SwipeRefreshLayout swipeRefreshLayout;
-    public RedditItemListAdapter userAdapter;
-    private AppCompatActivity activity;
+    public static final String TAG = "UserFragment";
+
     public String username;
     public UserOverviewSort userOverviewSort;
     public UserSubmissionsCategory userContent, tempCategory;
-    public boolean loadMore;
-    public boolean hasMore = true;
-    public LoadType currentLoadType;
     public LoadUserContentTask task;
 
     public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category, boolean hasMore) {
         UserFragment newInstance = new UserFragment();
-        newInstance.userAdapter = adapter;
+        newInstance.adapter = adapter;
         newInstance.username = username;
         newInstance.userOverviewSort = sort;
         newInstance.userContent = category;
@@ -64,8 +58,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
 
         if(bundle!=null) {
             username = bundle.getString("username");
@@ -73,7 +65,6 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             userContent = (UserSubmissionsCategory) bundle.getSerializable("category");
         }
 
-        loadMore = MyApplication.endlessPosts;
         if(username==null) {
             username = activity.getIntent().getStringExtra("username");
             userOverviewSort = (UserOverviewSort) activity.getIntent().getSerializableExtra("sort");
@@ -86,6 +77,22 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
+    public void redrawList() {
+        try {
+            List<RedditItem> items = adapter.redditItems;
+            items.remove(items.size() - 1); // TODO: 2/9/2017 ??
+            adapter = new RedditItemListAdapter(activity, items);
+            contentView.setAdapter(adapter);
+        } catch (ArrayIndexOutOfBoundsException e) {}
+    }
+
+    @Override
+    protected void setLayoutManager() {
+        layoutManager = new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("username", username);
         outState.putSerializable("sort", userOverviewSort);
@@ -94,41 +101,11 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
-        else swipeRefreshLayout.setEnabled(false);
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if(!MyApplication.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
-            userAdapter.notifyItemChanged(0);
-    }
-
-    //@Override
-    //public void onAttach(Context context) {
-    //    super.onAttach(context);
-    //    if(context instanceof AppCompatActivity) {
-    //        this.activity = (AppCompatActivity) context;
-    //        if(activity instanceof UserActivity) {
-    //            ((UserActivity) activity).setAddToSyncedVisible(userContent == UserSubmissionsCategory.SAVED);
-    //        }
-    //    }
-    //}
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.activity = null;
+            adapter.notifyItemChanged(0);
     }
 
     @Override
@@ -147,44 +124,21 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
+        mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        layoutManager = new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
+        setLayoutManager();
         contentView.setHasFixedSize(true);
-        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        setListDividerVisible(true);
 
-        contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
-                    swipeRefreshLayout.setEnabled(true);
-                else swipeRefreshLayout.setEnabled(false);
-
-                int pastVisiblesItems, visibleItemCount, totalItemCount;
-                visibleItemCount = layoutManager.getChildCount();
-                totalItemCount = layoutManager.getItemCount();
-                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-                if (loadMore && hasMore) {
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
-                        loadMore = false;
-                        ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
-                        listener.onClick(recyclerView);
-                    }
-                }
-            }
-        });
+        contentView.addOnScrollListener(onScrollListener);
 
         if(currentLoadType == null) {
-            if (userAdapter == null) {
+            if (adapter == null) {
                 currentLoadType = LoadType.init;
                 if(userContent==null) {
                     userContent = UserSubmissionsCategory.OVERVIEW;
@@ -194,18 +148,18 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 setActionBarSubtitle();
-                progressBar.setVisibility(View.GONE);
-                contentView.setAdapter(userAdapter);
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(adapter);
             }
         }
         else switch (currentLoadType) {
             case init:
                 contentView.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
+                mainProgressBar.setVisibility(View.VISIBLE);
                 break;
             case refresh:
-                progressBar.setVisibility(View.GONE);
-                contentView.setAdapter(userAdapter);
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(adapter);
                 swipeRefreshLayout.post(new Runnable() {
                     @Override public void run() {
                         swipeRefreshLayout.setRefreshing(true);
@@ -213,24 +167,29 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 });
                 break;
             case extend:
-                progressBar.setVisibility(View.GONE);
-                contentView.setAdapter(userAdapter);
-                userAdapter.setLoadingMoreItems(true);
+                mainProgressBar.setVisibility(View.GONE);
+                contentView.setAdapter(adapter);
+                adapter.setLoadingMoreItems(true);
                 break;
         }
 
         return view;
     }
 
-    @Override public void onRefresh() {
-        refreshUser();
-    }
-
-    public void refreshUser() {
+    @Override
+    public void refreshList() {
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadUserContentTask(activity, this, LoadType.refresh);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void extendList() {
+        currentLoadType = LoadType.extend;
+        adapter.setLoadingMoreItems(true);
+        task = new LoadUserContentTask(activity, this, LoadType.extend);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -251,18 +210,9 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setActionBarTitle();
         setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadUserContentTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    public void redrawList() {
-        try {
-            List<RedditItem> items = userAdapter.redditItems;
-            items.remove(items.size() - 1);
-            userAdapter = new RedditItemListAdapter(activity, items);
-            contentView.setAdapter(userAdapter);
-        } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     public void setActionBarTitle() {
@@ -281,7 +231,7 @@ public class UserFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             case R.id.action_settings:
                 return true;
             case R.id.action_refresh:
-                refreshUser();
+                refreshList();
                 return true;
             case R.id.action_sort:
                 showContentPopup(activity.findViewById(R.id.action_sort));

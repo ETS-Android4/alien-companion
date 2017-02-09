@@ -74,9 +74,9 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case OVERVIEW: case GILDED: case SAVED:
                     UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
-                        RedditItem lastItem = uf.userAdapter.getLastItem();
+                        RedditItem lastItem = uf.adapter.getLastItem();
                         userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastItem, null, false);
-                        adapter = uf.userAdapter;
+                        adapter = uf.adapter;
                     }
                     else {
                         UserDetails userDetails = new UserDetails(httpClient, MyApplication.currentUser);
@@ -93,9 +93,9 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case COMMENTS:
                     Comments comments = new Comments(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
-                        Comment lastComment = (Comment) uf.userAdapter.getLastItem();
+                        Comment lastComment = (Comment) uf.adapter.getLastItem();
                         userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
-                        adapter = uf.userAdapter;
+                        adapter = uf.adapter;
                     }
                     else {
                         userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
@@ -106,9 +106,9 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case SUBMITTED: case LIKED: case DISLIKED: case HIDDEN:
                     Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
-                        Submission lastPost = (Submission) uf.userAdapter.getLastItem();
+                        Submission lastPost = (Submission) uf.adapter.getLastItem();
                         userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, false);
-                        adapter = uf.userAdapter;
+                        adapter = uf.adapter;
                     }
                     else {
                         userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
@@ -145,25 +145,25 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
             uf = userFragment;
             uf.currentLoadType = null;
-            uf.progressBar.setVisibility(View.GONE);
+            uf.mainProgressBar.setVisibility(View.GONE);
             uf.swipeRefreshLayout.setRefreshing(false);
             uf.contentView.setVisibility(View.VISIBLE);
 
             if (mException != null) {
                 ToastUtils.userLoadError(activity);
                 if (mLoadType == LoadType.extend) {
-                    uf.userAdapter.setLoadingMoreItems(false);
+                    uf.adapter.setLoadingMoreItems(false);
                 }
                 else if(mLoadType == LoadType.init){
-                    uf.userAdapter = new RedditItemListAdapter(activity);
-                    uf.contentView.setAdapter(uf.userAdapter);
+                    uf.adapter = new RedditItemListAdapter(activity);
+                    uf.contentView.setAdapter(uf.adapter);
                 }
             }
             else {
                 if(things.size()>0) {
                     //load trophy images here
                     if(!MyApplication.noThumbnails) ImageLoader.preloadUserImages(things, activity);
-                    uf.userAdapter = adapter;
+                    uf.adapter = adapter;
                 }
                 else {
                     ToastUtils.displayShortToast(activity, "No posts found");
@@ -171,7 +171,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (mLoadType) {
                     case init:
-                        uf.contentView.setAdapter(uf.userAdapter);
+                        uf.contentView.setAdapter(uf.adapter);
                         break;
                     case refresh:
                         if (things.size() != 0) {
@@ -183,12 +183,12 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                                     ((UserActivity) activity).setAddToSyncedVisible(userCategory == UserSubmissionsCategory.SAVED);
                                 } catch (Exception e) {}
                             }
-                            uf.contentView.setAdapter(uf.userAdapter);
+                            uf.contentView.setAdapter(uf.adapter);
                         }
                         break;
                     case extend:
-                        uf.userAdapter.setLoadingMoreItems(false);
-                        uf.userAdapter.addAll(things);
+                        uf.adapter.setLoadingMoreItems(false);
+                        uf.adapter.addAll(things);
                         uf.loadMore = MyApplication.endlessPosts;
                         break;
                 }

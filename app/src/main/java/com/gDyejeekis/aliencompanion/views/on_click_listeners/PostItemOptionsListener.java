@@ -20,6 +20,7 @@ import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.SaveOfflineActionTask;
@@ -236,7 +237,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
         if(post.getAuthor().equals(currentUser)) {
             if(post.isSelf()) {
                 labelNSFWindex = 2;
-                if(MyApplication.currentPostListView == R.layout.post_list_item_card
+                if(MyApplication.currentPostListView == PostViewType.cards.value()
                         || recyclerAdapter instanceof PostAdapter) {
                     resource = R.menu.menu_self_post_card_more_options_account;
                 }
@@ -246,7 +247,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             }
             else {
                 labelNSFWindex = 1;
-                if(MyApplication.currentPostListView == R.layout.post_list_item_card) {
+                if(MyApplication.currentPostListView == PostViewType.cards.value()) {
                     resource = R.menu.menu_post_card_more_options_account;
                 }
                 else {
@@ -256,11 +257,11 @@ public class PostItemOptionsListener implements View.OnClickListener {
         }
         else {
             if(post.isSelf()) {
-                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card
+                resource = (MyApplication.currentPostListView == PostViewType.cards.value()
                         || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
             }
             else {
-                resource = (MyApplication.currentPostListView == R.layout.post_list_item_card || recyclerAdapter instanceof PostAdapter)
+                resource = (MyApplication.currentPostListView == PostViewType.cards.value() || recyclerAdapter instanceof PostAdapter)
                         ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
             }
         }

@@ -70,8 +70,8 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             List<RedditItem> submissions;
 
             if(loadType == LoadType.extend) {
-                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) sf.postListAdapter.getLastItem(), null, true);
-                adapter = sf.postListAdapter;
+                submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) sf.adapter.getLastItem(), null, true);
+                adapter = sf.adapter;
             }
             else {
                 submissions = subms.search(sf.subreddit, sf.searchQuery, QuerySyntax.PLAIN, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
@@ -112,16 +112,16 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             if (exception != null) {
                 ToastUtils.postsLoadError(context);
                 if (loadType == LoadType.extend) {
-                    sf.postListAdapter.setLoadingMoreItems(false);
+                    sf.adapter.setLoadingMoreItems(false);
                 }
                 else if(loadType == LoadType.init){
-                    sf.postListAdapter = new RedditItemListAdapter(context);
-                    sf.contentView.setAdapter(sf.postListAdapter);
+                    sf.adapter = new RedditItemListAdapter(context);
+                    sf.contentView.setAdapter(sf.adapter);
                 }
             } else {
                 if(submissions.size()>0) {
                     if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context);
-                    sf.postListAdapter = adapter;
+                    sf.adapter = adapter;
                 }
                 sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (loadType) {
@@ -130,7 +130,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             sf.contentView.setAdapter(new RedditItemListAdapter(context));
                             ToastUtils.noResults(context, sf.searchQuery);
                         }
-                        else sf.contentView.setAdapter(sf.postListAdapter);
+                        else sf.contentView.setAdapter(sf.adapter);
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -139,13 +139,13 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                                 sf.timeSpan = time;
                                 sf.setActionBarSubtitle();
                             }
-                            sf.contentView.setAdapter(sf.postListAdapter);
+                            sf.contentView.setAdapter(sf.adapter);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");
                         break;
                     case extend:
-                        sf.postListAdapter.setLoadingMoreItems(false);
-                        sf.postListAdapter.addAll(submissions);
+                        sf.adapter.setLoadingMoreItems(false);
+                        sf.adapter.addAll(submissions);
                         sf.loadMore = MyApplication.endlessPosts;
                         break;
                 }

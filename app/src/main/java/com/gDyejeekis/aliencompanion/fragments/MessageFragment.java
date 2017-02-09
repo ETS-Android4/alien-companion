@@ -1,13 +1,11 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,12 +17,10 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.asynctask.LoadMessagesTask;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.MessageCategory;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.MessageCategorySort;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
@@ -35,22 +31,13 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MessageFragment extends RedditContentFragment {
 
-    public ProgressBar mainProgressBar;
-    public RecyclerView contentView;
-    public RedditItemListAdapter adapter;
-    private LinearLayoutManager layoutManager;
-    public SwipeRefreshLayout swipeRefreshLayout;
-    public AppCompatActivity activity;
+    public static final String TAG = "MessageFragment";
+
     public MessageCategory category, tempCategory;
     public MessageCategorySort sort;
-    public boolean loadMore;
-    public boolean hasMore;
-    public LoadType currentLoadType;
     public LoadMessagesTask task;
-
-    //public static boolean currentlyLoading = false;
 
     public static MessageFragment newInstance(RedditItemListAdapter adapter, MessageCategory category, MessageCategorySort sort, boolean hasMore) {
         MessageFragment newInstance = new MessageFragment();
@@ -59,22 +46,6 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         newInstance.sort = sort;
         newInstance.hasMore = hasMore;
         return newInstance;
-    }
-
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
-        loadMore = MyApplication.endlessPosts;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //loadMore = MainActivity.endlessPosts;
-        if(MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition()==0) swipeRefreshLayout.setEnabled(true);
-        else swipeRefreshLayout.setEnabled(false);
     }
 
     @Override
@@ -87,35 +58,11 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        layoutManager = new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
+        setLayoutManager();
         contentView.setHasFixedSize(true);
-        contentView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        setListDividerVisible(true);
 
-        contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (MyApplication.swipeRefresh && layoutManager.findFirstCompletelyVisibleItemPosition() == 0)
-                    swipeRefreshLayout.setEnabled(true);
-                else swipeRefreshLayout.setEnabled(false);
-
-                int pastVisiblesItems, visibleItemCount, totalItemCount;
-                visibleItemCount = layoutManager.getChildCount();
-                totalItemCount = layoutManager.getItemCount();
-                pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-
-                if (loadMore && hasMore) {
-                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
-                        loadMore = false;
-                        //Log.d("scroll listener", "load more now");
-                        ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
-                        listener.onClick(recyclerView);
-                    }
-                }
-            }
-        });
+        contentView.addOnScrollListener(onScrollListener);
 
         if(currentLoadType == null) {
             if (adapter == null) {
@@ -182,15 +129,20 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         setActionBarSubtitle();
     }
 
-    @Override public void onRefresh() {
-        refreshList();
-    }
-
+    @Override
     public void refreshList() {
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadMessagesTask(activity, this, LoadType.refresh);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void extendList() {
+        currentLoadType = LoadType.extend;
+        adapter.setLoadingMoreItems(true);
+        task = new LoadMessagesTask(activity, this, LoadType.extend);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -202,6 +154,7 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    @Override
     public void redrawList() {
         try {
             List<RedditItem> items = adapter.redditItems;
@@ -209,6 +162,12 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
             adapter = new RedditItemListAdapter(activity, items);
             contentView.setAdapter(adapter);
         } catch (ArrayIndexOutOfBoundsException e) {}
+    }
+
+    @Override
+    protected void setLayoutManager() {
+        layoutManager = new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
     }
 
     public void showCategoryPopup(View v) {
@@ -277,24 +236,5 @@ public class MessageFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
         popupMenu.show();
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.activity = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        activity = null;
-    }
-
 
 }

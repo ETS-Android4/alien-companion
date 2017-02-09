@@ -8,14 +8,14 @@
         <item android:id="@+id/action_list_reversed" android:title="@string/list_reversed"
             android:orderInCategory="10"/>
 
-        <item android:id="@+id/action_classic" android:title="@string/classic"
-            android:orderInCategory="15"/>
-
         <item android:id="@+id/action_small_cards" android:title="@string/small_cards"
             android:orderInCategory="20"/>
 
         <item android:id="@+id/action_cards" android:title="@string/cards"
             android:orderInCategory="25"/>
+
+        <item android:id="@+id/action_classic" android:title="@string/classic"
+            android:orderInCategory="28"/>
 
         <item android:id="@+id/action_image_board" android:title="@string/gallery"
             android:orderInCategory="30"/>

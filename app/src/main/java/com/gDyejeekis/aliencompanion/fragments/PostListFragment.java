@@ -1,19 +1,13 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 
-import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,60 +20,44 @@ import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
-import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.asynctask.LoadPostsTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
-import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
-import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 
 import java.io.File;
-import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class PostListFragment extends RedditContentFragment {
 
-    public RedditItemListAdapter postListAdapter;
-    public ProgressBar mainProgressBar;
-    public RecyclerView contentView;
-    private RecyclerView.LayoutManager layoutManager;
-    public SwipeRefreshLayout swipeRefreshLayout;
+    public static final String TAG = "PostListFragment";
+
     public String subreddit;
     public boolean isMulti = false;
     public boolean isOther = false;
-    private AppCompatActivity activity;
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
-    public boolean loadMore;
-    public boolean hasMore;
-    public LoadType currentLoadType;
     public LoadPostsTask task;
-
-    private DividerItemDecoration decoration;
-    private boolean decorationVisible = false;
 
     public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, boolean isMulti, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
-        listFragment.postListAdapter = adapter;
+        listFragment.adapter = adapter;
         listFragment.subreddit = subreddit;
         listFragment.isMulti = isMulti;
         listFragment.submissionSort = sort;
@@ -92,10 +70,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
-
-        decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
 
         if(savedInstanceState!=null) {
             subreddit = savedInstanceState.getString("subreddit");
@@ -105,7 +79,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             timeSpan = (TimeSpan) savedInstanceState.getSerializable("time");
         }
 
-        loadMore = MyApplication.endlessPosts;
         if(subreddit==null) subreddit = activity.getIntent().getStringExtra("subreddit");
         if(!isMulti) isMulti = activity.getIntent().getBooleanExtra("isMulti", false);
         if(!isOther) isOther = activity.getIntent().getBooleanExtra("isOther", false);
@@ -124,53 +97,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        //loadMore = MainActivity.endlessPosts;
-        updateSwipeRefreshState();
-    }
-
-    private void updateSwipeRefreshState() {
-        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
-    }
-
-    private void updateLoadMoreState(RecyclerView recyclerView) {
-        int pastVisiblesItems, visibleItemCount, totalItemCount;
-        visibleItemCount = layoutManager.getChildCount();
-        totalItemCount = layoutManager.getItemCount();
-        pastVisiblesItems = findFirstVisiblePostPosition();
-
-        if (!MyApplication.offlineModeEnabled && loadMore && hasMore) {
-            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) { // TODO: 2/7/2017  maybe change this constant
-                loadMore = false;
-                //Log.d("scroll listener", "load more now");
-                ShowMoreListener listener = new ShowMoreListener(activity, activity.getFragmentManager().findFragmentByTag("listFragment"));
-                listener.onClick(recyclerView);
-            }
-        }
-    }
-
-    private int findFirstCompletelyVisiblePostPosition() {
-        if(layoutManager instanceof LinearLayoutManager) {
-            return ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
-        }
-        else if(layoutManager instanceof GridLayoutManager) {
-            return ((GridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
-        }
-        return -1;
-    }
-
-    private int findFirstVisiblePostPosition() {
-        if(layoutManager instanceof LinearLayoutManager) {
-            return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-        }
-        else if(layoutManager instanceof GridLayoutManager) {
-            return ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
-        }
-        return -1;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
@@ -182,26 +108,13 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         setLayoutManager();
         contentView.setHasFixedSize(true);
-        if(MyApplication.currentPostListView == R.layout.post_list_item
-                || MyApplication.currentPostListView == R.layout.post_list_item_reversed) {
-            setListDividerVisible(true);
-        }
+        setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
 
-        contentView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                updateSwipeRefreshState();
-
-                updateLoadMoreState(recyclerView);
-            }
-        });
-
+        contentView.addOnScrollListener(onScrollListener);
 
         if(currentLoadType == null) {
             //Log.d("geo test", "currentLoadType is null");
-            if (postListAdapter == null) {
+            if (adapter == null) {
                 //Log.d("geo test", "postListAdapter is null");
                 currentLoadType = LoadType.init;
                 //setSubmissionSort(SubmissionSort.HOT);
@@ -212,7 +125,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             } else {
                 setActionBarSubtitle();
                 mainProgressBar.setVisibility(View.GONE);
-                contentView.setAdapter(postListAdapter);
+                contentView.setAdapter(adapter);
             }
         }
         else switch (currentLoadType) {
@@ -224,7 +137,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             case refresh:
                 //Log.d("geo test", "currentLoadType is refersh");
                 mainProgressBar.setVisibility(View.GONE);
-                contentView.setAdapter(postListAdapter);
+                contentView.setAdapter(adapter);
                 swipeRefreshLayout.post(new Runnable() {
                     @Override public void run() {
                         swipeRefreshLayout.setRefreshing(true);
@@ -234,27 +147,12 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             case extend:
                 //Log.d("geo test", "currentLoadType is extend");
                 mainProgressBar.setVisibility(View.GONE);
-                contentView.setAdapter(postListAdapter);
-                postListAdapter.setLoadingMoreItems(true);
+                contentView.setAdapter(adapter);
+                adapter.setLoadingMoreItems(true);
                 break;
         }
 
         return view;
-    }
-
-    private void setLayoutManager() {
-        layoutManager = MyApplication.currentPostListView == R.layout.post_list_item_gallery ?
-                new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
-    }
-
-    public void colorSchemeChanged() {
-        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorPrimary);
-        if(postListAdapter!=null) postListAdapter.notifyDataSetChanged();
-    }
-
-    @Override public void onRefresh() {
-        refreshList();
     }
 
     @Override
@@ -389,76 +287,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         return super.onOptionsItemSelected(item);
     }
 
-    private void showViewsPopup(View v) {
-        PopupMenu popupMenu = new PopupMenu(activity, v);
-        popupMenu.inflate(R.menu.menu_post_views);
-        int index;
-        switch (MyApplication.currentPostListView) {
-            case R.layout.post_list_item_reversed:
-                index = 1;
-                break;
-            case R.layout.post_list_item_classic:
-                index = 2;
-                break;
-            case R.layout.small_card_new:
-                index = 3;
-                break;
-            case R.layout.post_list_item_card:
-                index = 4;
-                break;
-            case R.layout.post_list_item_gallery:
-                index = 5;
-                break;
-            default:
-                index = 0;
-                break;
-        }
-        popupMenu.getMenu().getItem(index).setChecked(true);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int resource = -1;
-                PostViewType viewType = PostViewType.list;
-                switch (item.getItemId()) {
-                    case R.id.action_list_default:
-                        resource = R.layout.post_list_item;
-                        viewType = PostViewType.list;
-                        break;
-                    case R.id.action_list_reversed:
-                        resource = R.layout.post_list_item_reversed;
-                        viewType = PostViewType.listReversed;
-                        break;
-                    case R.id.action_classic:
-                        resource = R.layout.post_list_item_classic;
-                        viewType = PostViewType.classic;
-                        break;
-                    case R.id.action_small_cards:
-                        resource = R.layout.small_card_new;
-                        viewType = PostViewType.smallCards;
-                        break;
-                    case R.id.action_cards:
-                        resource = R.layout.post_list_item_card;
-                        viewType = PostViewType.cards;
-                        break;
-                    case R.id.action_image_board:
-                        resource = R.layout.post_list_item_gallery;
-                        viewType = PostViewType.gallery;
-                        break;
-                }
-                if (resource != -1 && resource != MyApplication.currentPostListView) {
-                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                    MyApplication.currentPostListView = resource;
-                    editor.putInt("postListView", viewType.value());
-                    editor.apply();
-                    if(currentLoadType==null) redrawList();
-                    return true;
-                }
-                return false;
-            }
-        });
-        popupMenu.show();
-    }
-
     private void showSubmitPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_post_type);
@@ -552,24 +380,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        this.activity = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        activity = null;
-    }
-
-    @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
@@ -577,19 +387,20 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setActionBarSubtitle();
     }
 
-    public DialogFragment getCurrentDialogFragment() {
-        try {
-            return (DialogFragment) activity.getFragmentManager().findFragmentByTag("dialog");
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
+    @Override
     public void refreshList() {
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadPostsTask(activity, this, LoadType.refresh);
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void extendList() {
+        currentLoadType = LoadType.extend;
+        adapter.setLoadingMoreItems(true);
+        task = new LoadPostsTask(activity, this, LoadType.extend);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -622,36 +433,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadPostsTask(activity, this, LoadType.init);
         task.execute();
-    }
-
-    public void redrawList() {
-        try {
-            List<RedditItem> items = postListAdapter.redditItems;
-            items.remove(items.size() - 1);
-            postListAdapter = new RedditItemListAdapter(activity, items);
-            setLayoutManager();
-            contentView.setAdapter(postListAdapter);
-            setListDividerVisible(false);
-            switch (MyApplication.currentPostListView) {
-                case R.layout.post_list_item:
-                case R.layout.post_list_item_reversed:
-                    if(!decorationVisible) {
-                        setListDividerVisible(true);
-                    }
-                    break;
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-    }
-
-    private void setListDividerVisible(boolean flag) {
-        if(flag) {
-            contentView.addItemDecoration(decoration);
-            decorationVisible = true;
-        }
-        else {
-            contentView.removeItemDecoration(decoration);
-            decorationVisible = false;
-        }
     }
 
     public void setSubreddit(String subreddit) {

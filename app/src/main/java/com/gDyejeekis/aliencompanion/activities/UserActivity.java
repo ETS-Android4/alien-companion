@@ -113,7 +113,7 @@ public class UserActivity extends SwipeBackActivity {
                 switch (item.getItemId()) {
                     case R.id.action_posts:
                         if (MyApplication.actionSort) userFragment.showContentPopup(v);
-                        else userFragment.refreshUser();
+                        else userFragment.refreshList();
                         return true;
                     case R.id.action_comments:
                         PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
@@ -162,7 +162,7 @@ public class UserActivity extends SwipeBackActivity {
     private UserFragment recreateUserFragment(UserFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        UserFragment newInstance = UserFragment.newInstance(f.userAdapter, f.username, f.userOverviewSort, f.userContent, f.hasMore);
+        UserFragment newInstance = UserFragment.newInstance(f.adapter, f.username, f.userOverviewSort, f.userContent, f.hasMore);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;

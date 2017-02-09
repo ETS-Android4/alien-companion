@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.pm.ActivityInfoCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -566,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
     private PostListFragment recreateListFragment(PostListFragment f) {
         Fragment.SavedState savedState = fm.saveFragmentInstanceState(f);
 
-        PostListFragment newInstance = PostListFragment.newInstance(f.postListAdapter, f.subreddit, f.isMulti, f.submissionSort, f.timeSpan, f.currentLoadType, f.hasMore);
+        PostListFragment newInstance = PostListFragment.newInstance(f.adapter, f.subreddit, f.isMulti, f.submissionSort, f.timeSpan, f.currentLoadType, f.hasMore);
         newInstance.setInitialSavedState(savedState);
 
         return newInstance;
