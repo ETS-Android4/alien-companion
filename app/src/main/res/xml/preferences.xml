@@ -43,7 +43,7 @@
             android:title="Screen Orientation"
             android:entries="@array/screenOrientation"
             android:entryValues="@array/orientationValues"
-            android:defaultValue="2"/>
+            android:defaultValue="4"/>
 
         <CheckBoxPreference
             android:key="dualPane"

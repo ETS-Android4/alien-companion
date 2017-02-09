@@ -200,6 +200,8 @@
     <string name="xlarge">Extra Large</string>
     <string name="portrait">Portrait</string>
     <string name="landscape">Landscape</string>
+    <string name="sensor_landscape">Sensor landscape</string>
+    <string name="sensor_portrait">Sensor portrait</string>
     <string name="systemDefault">System Default</string>
     <string name="smallest">Smallest</string>
     <string name="smaller">Smaller</string>

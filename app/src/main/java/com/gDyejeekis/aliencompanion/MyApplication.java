@@ -423,7 +423,7 @@ public class MyApplication extends Application {
         longTapSwitchMode = prefs.getBoolean("longTapSwitch", true);
         currentPostListView = prefs.getInt("postListView", PostViewType.list.value());
         dualPane = prefs.getBoolean("dualPane", false);
-        screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "2"));
+        screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "4"));
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
         fontStyle = Integer.parseInt(prefs.getString("fontSize", "3"));
         switch (fontStyle) {
