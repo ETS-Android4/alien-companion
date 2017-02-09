@@ -4,7 +4,7 @@
     <ListPreference
         android:key="swipeBack"
         android:title="Swipe to go back"
-        android:summary="Change edge tracking side or disable it"
+        android:summary="Change the side from which you swipe to go back or disable it"
         android:entries="@array/swipeEntries"
         android:entryValues="@array/swipeValues"
         android:defaultValue="0"/>
@@ -39,7 +39,7 @@
     <CheckBoxPreference
         android:key="swipeRefresh"
         android:title="Swipe to refresh"
-        android:summary="Pull down to refresh posts/comments"
+        android:summary="Swipe down to refresh posts/comments"
         android:defaultValue="true"/>
 
     <ListPreference
