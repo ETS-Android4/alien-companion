@@ -55,7 +55,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         sort = plf.submissionSort;
         time = plf.timeSpan;
         changedSort = false;
-        viewTypeValue = getCurrentViewTypeValue();
+        viewTypeValue = plf.getCurrentViewTypeValue();
     }
 
     public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType, SubmissionSort sort, TimeSpan time) {
@@ -65,7 +65,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.sort = sort;
         this.time = time;
         changedSort = true;
-        viewTypeValue = getCurrentViewTypeValue();
+        viewTypeValue = plf.getCurrentViewTypeValue();
     }
 
     private List<RedditItem> readPostsFromFile(String filename) {
@@ -80,11 +80,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             e.printStackTrace();
         }
         return posts;
-    }
-
-    private int getCurrentViewTypeValue() {
-        return MyApplication.rememberPostListView ? MyApplication.prefs.getInt(MyApplication.getSubredditSpecificViewKey(plf.subreddit, plf.isMulti), MyApplication.currentPostListView)
-                : MyApplication.currentPostListView;
     }
 
     @Override
@@ -163,6 +158,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     plf.adapter = new RedditItemListAdapter(context, viewTypeValue);
                     plf.setLayoutManager(viewTypeValue);
                     plf.contentView.setAdapter(plf.adapter);
+                    plf.updateContentViewDecorations(viewTypeValue);
                 }
                 if(MyApplication.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
                 else ToastUtils.postsLoadError(context);
@@ -185,6 +181,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         else {
                             plf.contentView.setAdapter(plf.adapter);
                         }
+                        plf.updateContentViewDecorations(viewTypeValue);
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -199,6 +196,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.setActionBarSubtitle();
                             plf.setLayoutManager(viewTypeValue);
                             plf.contentView.setAdapter(plf.adapter);
+                            plf.updateContentViewDecorations(viewTypeValue);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");
                         break;

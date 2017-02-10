@@ -181,7 +181,7 @@ public class PostListFragment extends RedditContentFragment {
 
         setLayoutManager();
         contentView.setHasFixedSize(true);
-        setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
+        setListDividerVisible(PostViewType.hasVisibleListDivider(getCurrentViewTypeValue()));
 
         contentView.addOnScrollListener(onScrollListener);
 
@@ -358,6 +358,11 @@ public class PostListFragment extends RedditContentFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public int getCurrentViewTypeValue() {
+        return MyApplication.rememberPostListView ? MyApplication.prefs.getInt(MyApplication.getSubredditSpecificViewKey(subreddit, isMulti), MyApplication.currentPostListView)
+                : MyApplication.currentPostListView;
     }
 
     private void showSubmitPopup(View v) {

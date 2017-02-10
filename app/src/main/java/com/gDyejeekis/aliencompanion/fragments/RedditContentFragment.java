@@ -184,8 +184,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             adapter = new RedditItemListAdapter(activity, items);
             setLayoutManager();
             contentView.setAdapter(adapter);
-            setListDividerVisible(false);
-            setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
+            updateContentViewDecorations();
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
@@ -196,9 +195,17 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             adapter = new RedditItemListAdapter(activity, viewTypeValue, items);
             setLayoutManager(viewTypeValue);
             contentView.setAdapter(adapter);
-            setListDividerVisible(false);
-            setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
+            updateContentViewDecorations(viewTypeValue);
         } catch (ArrayIndexOutOfBoundsException e) {}
+    }
+
+    public void updateContentViewDecorations() {
+        updateContentViewDecorations(MyApplication.currentPostListView);
+    }
+
+    public void updateContentViewDecorations(int viewTypeValue) {
+        setListDividerVisible(false);
+        setListDividerVisible(PostViewType.hasVisibleListDivider(viewTypeValue));
     }
 
     protected void setListDividerVisible(boolean flag) {
