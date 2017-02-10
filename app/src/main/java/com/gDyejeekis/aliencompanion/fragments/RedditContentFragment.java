@@ -60,7 +60,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     };
 
-    private DividerItemDecoration decoration;
+    private DividerItemDecoration dividerDecoration;
 
     @Override
     public void onAttach(Activity activity) {
@@ -74,7 +74,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        decoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
+        dividerDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
 
         loadMore = MyApplication.endlessPosts;
         //hasMore = true;
@@ -203,10 +203,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     protected void setListDividerVisible(boolean flag) {
         if(flag) {
-            contentView.addItemDecoration(decoration);
+            contentView.addItemDecoration(dividerDecoration);
         }
         else {
-            contentView.removeItemDecoration(decoration);
+            contentView.removeItemDecoration(dividerDecoration);
         }
     }
 
