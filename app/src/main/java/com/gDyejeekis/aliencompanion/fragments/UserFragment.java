@@ -80,14 +80,14 @@ public class UserFragment extends RedditContentFragment {
     public void redrawList() {
         try {
             List<RedditItem> items = adapter.redditItems;
-            items.remove(items.size() - 1); // TODO: 2/9/2017 ??
+            items.remove(items.size() - 1); // remove show more item
             adapter = new RedditItemListAdapter(activity, items);
             contentView.setAdapter(adapter);
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
     @Override
-    protected void setLayoutManager() {
+    public void setLayoutManager() {
         layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
     }

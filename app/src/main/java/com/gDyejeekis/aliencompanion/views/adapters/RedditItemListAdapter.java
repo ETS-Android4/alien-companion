@@ -74,10 +74,13 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     private int selectedPosition;
 
+    public final int viewTypeValue;
+
     private boolean loadingMoreItems;
 
     public RedditItemListAdapter(Context context) {
         this.context = context;
+        this.viewTypeValue = MyApplication.currentPostListView;
         selectedPosition = -1;
         loadingMoreItems = false;
         redditItems = new ArrayList<>();
@@ -86,6 +89,28 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public RedditItemListAdapter(Context context, List<RedditItem> items) {
         this.context = context;
+        this.viewTypeValue = MyApplication.currentPostListView;
+        selectedPosition = -1;
+        loadingMoreItems = false;
+        redditItems = new ArrayList<>();
+        showMoreButton = new ShowMore();
+        redditItems.addAll(items);
+        //if(items.size() == RedditConstants.DEFAULT_LIMIT)
+        if(!MyApplication.offlineModeEnabled) redditItems.add(showMoreButton);
+    }
+
+    public RedditItemListAdapter(Context context, int viewTypeValue) {
+        this.context = context;
+        this.viewTypeValue = viewTypeValue;
+        selectedPosition = -1;
+        loadingMoreItems = false;
+        redditItems = new ArrayList<>();
+        showMoreButton = new ShowMore();
+    }
+
+    public RedditItemListAdapter(Context context, int viewTypeValue, List<RedditItem> items) {
+        this.context = context;
+        this.viewTypeValue = viewTypeValue;
         selectedPosition = -1;
         loadingMoreItems = false;
         redditItems = new ArrayList<>();
@@ -143,7 +168,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder viewHolder = null;
         switch (viewType) {
             case VIEW_TYPE_POST:
-                int resource = PostViewType.getLayoutResource(MyApplication.currentPostListView);
+                int resource = PostViewType.getLayoutResource(viewTypeValue);
                 if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
@@ -213,7 +238,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
                 final Submission post = (Submission) getItemAt(position);
 
-                if(MyApplication.currentPostListView == PostViewType.gallery.value()) {
+                if(viewTypeValue == PostViewType.gallery.value()) {
                     longListener = new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {

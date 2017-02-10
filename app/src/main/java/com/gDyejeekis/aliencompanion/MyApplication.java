@@ -65,6 +65,8 @@ public class MyApplication extends Application {
 
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
 
+    public static final String REMEMBER_VIEW_SUFFIX = "-view";
+
     public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
 
     public static final int LIGHT_THEME = 0;
@@ -154,6 +156,8 @@ public class MyApplication extends Application {
     public static boolean preferExternalStorage;
     public static boolean longTapSwitchMode;
     public static boolean handleArticles;
+    public static boolean rememberPostListView;
+    public static boolean askedRememberPostView;
 
     public static int currentBaseTheme;
 
@@ -342,6 +346,11 @@ public class MyApplication extends Application {
         return 7;
     }
 
+    public static String getSubredditSpecificViewKey(String reddit, boolean isMulti) {
+        String key = isMulti ? MULTIREDDIT_FILE_PREFIX + reddit : reddit;
+        return key + MyApplication.REMEMBER_VIEW_SUFFIX;
+    }
+
     private void getDeviceId() {
         deviceID = prefs.getString("deviceID", "null");
         if(deviceID.equals("null")) {
@@ -422,6 +431,8 @@ public class MyApplication extends Application {
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);
         longTapSwitchMode = prefs.getBoolean("longTapSwitch", true);
         currentPostListView = prefs.getInt("postListView", PostViewType.list.value());
+        rememberPostListView = prefs.getBoolean("rememberView", false);
+        askedRememberPostView = prefs.getBoolean("askedRememberView", false);
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "4"));
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);

@@ -175,14 +175,26 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     /**
-     * override this in UserFragment
+     * override this in UserFragment and MessageFragment
      */
     public void redrawList() {
         try {
             List<RedditItem> items = adapter.redditItems;
-            items.remove(items.size() - 1); // TODO: 2/9/2017 ??
+            items.remove(items.size() - 1); // remove show more item
             adapter = new RedditItemListAdapter(activity, items);
             setLayoutManager();
+            contentView.setAdapter(adapter);
+            setListDividerVisible(false);
+            setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
+        } catch (ArrayIndexOutOfBoundsException e) {}
+    }
+
+    public void redrawList(int viewTypeValue) {
+        try {
+            List<RedditItem> items = adapter.redditItems;
+            items.remove(items.size() - 1); // remove show more item
+            adapter = new RedditItemListAdapter(activity, viewTypeValue, items);
+            setLayoutManager(viewTypeValue);
             contentView.setAdapter(adapter);
             setListDividerVisible(false);
             setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
@@ -199,10 +211,14 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     /**
-     * override this in UserFragment
+     * override this in UserFragment and MessageFragment
      */
-    protected void setLayoutManager() {
-        layoutManager = MyApplication.currentPostListView == PostViewType.gallery.value() ?
+    public void setLayoutManager() {
+        setLayoutManager(MyApplication.currentPostListView);
+    }
+
+    public void setLayoutManager(int viewTypeValue) {
+        layoutManager = viewTypeValue == PostViewType.gallery.value() ?
                 new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
     }

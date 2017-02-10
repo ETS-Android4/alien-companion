@@ -4,6 +4,7 @@
     <changelogversion versionName="1.0" changeDate="unset">
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Classic' view]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Gallery' view]]></changelogtext>
+        <changelogtext>Added 'Subreddit specific views' under 'Posts' options (disabled by default)</changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default)]]></changelogtext>

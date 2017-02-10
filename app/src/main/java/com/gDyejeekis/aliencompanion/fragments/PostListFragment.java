@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -84,6 +85,78 @@ public class PostListFragment extends RedditContentFragment {
         if(!isOther) isOther = activity.getIntent().getBooleanExtra("isOther", false);
         if(submissionSort==null) submissionSort = (SubmissionSort) activity.getIntent().getSerializableExtra("sort");
         if(timeSpan==null) timeSpan = (TimeSpan) activity.getIntent().getSerializableExtra("time");
+    }
+
+    @Override
+    protected void showViewsPopup(View v) {
+        PopupMenu popupMenu = new PopupMenu(activity, v);
+        popupMenu.inflate(R.menu.menu_post_views);
+        //final int currentViewTypeValue = MyApplication.rememberPostListView ? MyApplication.prefs.getInt(MyApplication.getSubredditSpecificViewKey(subreddit, isMulti), MyApplication.currentPostListView)
+        //        : MyApplication.currentPostListView;
+        final int currentViewTypeValue = adapter.viewTypeValue;
+        popupMenu.getMenu().getItem(currentViewTypeValue).setChecked(true);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                PostViewType selectedViewType = PostViewType.list;
+                switch (item.getItemId()) {
+                    case R.id.action_list_default:
+                        selectedViewType = PostViewType.list;
+                        break;
+                    case R.id.action_list_reversed:
+                        selectedViewType = PostViewType.listReversed;
+                        break;
+                    case R.id.action_classic:
+                        selectedViewType = PostViewType.classic;
+                        break;
+                    case R.id.action_small_cards:
+                        selectedViewType = PostViewType.smallCards;
+                        break;
+                    case R.id.action_cards:
+                        selectedViewType = PostViewType.cards;
+                        break;
+                    case R.id.action_image_board:
+                        selectedViewType = PostViewType.gallery;
+                        break;
+                }
+                // TODO: 2/10/2017 this conditional flow might need changing OR reset all subreddit specific views on option disable
+                if (selectedViewType.value() != currentViewTypeValue) {
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    if(MyApplication.rememberPostListView) {
+                        editor.putInt(MyApplication.getSubredditSpecificViewKey(subreddit, isMulti), selectedViewType.value());
+                    }
+                    else {
+                        MyApplication.currentPostListView = selectedViewType.value();
+                        editor.putInt("postListView", selectedViewType.value());
+                    }
+                    editor.apply();
+                    if(currentLoadType==null) redrawList(selectedViewType.value());
+                    return true;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+
+        // ask whether to remember subreddit specific views
+        if(!MyApplication.askedRememberPostView) {
+            MyApplication.askedRememberPostView = true;
+            final SharedPreferences.Editor editor = MyApplication.prefs.edit();
+            editor.putBoolean("askedRememberView", true);
+            editor.apply();
+
+            final String text = "Remember the last used view option for each subreddit/multireddit?";
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MyApplication.rememberPostListView = true;
+                    editor.putBoolean("rememberView", true);
+                    editor.apply();
+                }
+            };
+            new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Remember", listener)
+                    .setNegativeButton("Cancel", null).show();
+        }
     }
 
     @Override

@@ -38,7 +38,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     private Exception exception;
     private LoadType loadType;
-    //private Activity activity;
     private Context context;
     private PostListFragment plf;
     private HttpClient httpClient = new PoliteRedditHttpClient();
@@ -47,6 +46,8 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private TimeSpan time;
     private boolean changedSort;
 
+    private int viewTypeValue;
+
     public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType) {
         this.context = context;
         this.plf = plf;
@@ -54,6 +55,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         sort = plf.submissionSort;
         time = plf.timeSpan;
         changedSort = false;
+        viewTypeValue = getCurrentViewTypeValue();
     }
 
     public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType, SubmissionSort sort, TimeSpan time) {
@@ -63,6 +65,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.sort = sort;
         this.time = time;
         changedSort = true;
+        viewTypeValue = getCurrentViewTypeValue();
     }
 
     private List<RedditItem> readPostsFromFile(String filename) {
@@ -79,12 +82,17 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         return posts;
     }
 
+    private int getCurrentViewTypeValue() {
+        return MyApplication.rememberPostListView ? MyApplication.prefs.getInt(MyApplication.getSubredditSpecificViewKey(plf.subreddit, plf.isMulti), MyApplication.currentPostListView)
+                : MyApplication.currentPostListView;
+    }
+
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
         try {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
-                //wait until nav drawer is closed to start
+                // wait until nav drawer is closed to start
                 SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 50);
 
                 String filename = "";
@@ -94,12 +102,12 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     filename = filename + plf.subreddit.toLowerCase();
                 }
                 submissions = readPostsFromFile(filename + DownloaderService.LOCA_POST_LIST_SUFFIX);
-                if(submissions!=null) adapter = new RedditItemListAdapter(context, submissions);
+                if(submissions!=null) adapter = new RedditItemListAdapter(context, viewTypeValue, submissions);
             }
             else {
                 Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
 
-                if (loadType == LoadType.extend) { //extend case
+                if (loadType == LoadType.extend) { // extend case
                     if (plf.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     } else {
@@ -107,18 +115,16 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     }
                     adapter = plf.adapter;
-                } else { //init or refresh case
+                } else { // init or refresh case
                     if (plf.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     } else {
                         if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                         else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     }
-                    adapter = new RedditItemListAdapter(context, submissions);
+                    adapter = new RedditItemListAdapter(context, viewTypeValue, submissions);
                 }
-                //ImageLoader.preloadThumbnails(submissions, context); //TODO: fix image preloading
             }
-            //ConvertUtils.preparePostsText(context, submissions);
             return submissions;
         } catch (RetrievalFailedException | RedditError | NullPointerException e) {
             exception = e;
@@ -154,7 +160,8 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     plf.adapter.setLoadingMoreItems(false);
                 }
                 else if(loadType == LoadType.init) {
-                    plf.adapter = new RedditItemListAdapter(context);
+                    plf.adapter = new RedditItemListAdapter(context, viewTypeValue);
+                    plf.setLayoutManager(viewTypeValue);
                     plf.contentView.setAdapter(plf.adapter);
                 }
                 if(MyApplication.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
@@ -168,13 +175,16 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
                 switch (loadType) {
                     case init:
+                        plf.setLayoutManager(viewTypeValue);
                         if(submissions.size()==0) {
-                            plf.contentView.setAdapter(new RedditItemListAdapter(context));
+                            plf.contentView.setAdapter(new RedditItemListAdapter(context, viewTypeValue));
                             String message = "No posts found";
                             if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
                             ToastUtils.displayShortToast(context, message);
                         }
-                        else plf.contentView.setAdapter(plf.adapter);
+                        else {
+                            plf.contentView.setAdapter(plf.adapter);
+                        }
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -187,6 +197,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             //    plf.setActionBarSubtitle();
                             //}
                             plf.setActionBarSubtitle();
+                            plf.setLayoutManager(viewTypeValue);
                             plf.contentView.setAdapter(plf.adapter);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");
@@ -201,7 +212,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        //Log.d("geo test", "loadmore: " + plf.loadMore + " hasMore: " + plf.hasMore);
     }
 
 }
