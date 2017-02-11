@@ -121,6 +121,12 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         }
         // set first row of post details
         String detsOneText = post.getAuthor() + " · " + post.agePrepared + " · ";
+        if(post.isSelf()) {
+            detsOneText += post.getDomain();
+        }
+        else {
+            detsOneText += post.getSubreddit() + " · " + post.getDomain();
+        }
         SpannableString detsOneSpannable;
         if(post.getLinkFlairText() != null) {
             detsOneSpannable = new SpannableString(post.getLinkFlairText() + " · " + detsOneText);
