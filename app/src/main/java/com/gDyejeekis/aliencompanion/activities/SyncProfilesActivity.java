@@ -40,7 +40,7 @@ public class SyncProfilesActivity extends BackNavActivity implements DialogInter
 
         profilesView = (RecyclerView) findViewById(R.id.recyclerView_sync_profiles);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF9800")));
+        fab.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -115,6 +115,7 @@ public class MyApplication extends Application {
     public static int colorPrimary;
     public static int colorPrimaryDark;
     public static int colorPrimaryLight;
+    public static int colorSecondary;
     public static int currentColor;
     public static int swipeSetting;
     public static boolean swipeRefresh;
@@ -476,6 +477,7 @@ public class MyApplication extends Application {
                 break;
         }
         colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#00BCD4"));
+        colorSecondary = Color.parseColor(prefs.getString("secondaryColor", "#FF9800"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         commentNavigation = prefs.getBoolean("commentNav", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;

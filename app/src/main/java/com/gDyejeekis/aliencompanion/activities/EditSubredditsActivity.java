@@ -45,7 +45,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF9800")));
+        fab.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

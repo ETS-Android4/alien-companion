@@ -7,6 +7,7 @@
         <changelogtext>Added 'Subreddit specific views' under 'Posts' options (disabled by default)</changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
+        <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default)]]></changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
         <changelogtext>Added giphy.com link handling support</changelogtext>
