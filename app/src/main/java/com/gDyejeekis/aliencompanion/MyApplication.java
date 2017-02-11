@@ -85,12 +85,6 @@ public class MyApplication extends Application {
 
     public static int smallCardLinkBackground;
 
-    public static String[] primaryColors;
-
-    public static String[] primaryDarkColors;
-
-    public static String[] primaryLightColors;
-
     public static boolean actionSort = false;
 
     public static boolean showHiddenPosts = false;
@@ -116,7 +110,9 @@ public class MyApplication extends Application {
     public static int colorPrimaryDark;
     public static int colorPrimaryLight;
     public static int colorSecondary;
-    public static int currentColor;
+    public static int currentColor; // TODO: 2/11/2017 delet this
+    public static boolean colorPrimaryChanged;
+    public static boolean colorSecondaryChanged;
     public static int swipeSetting;
     public static boolean swipeRefresh;
     public static boolean commentNavigation;
@@ -200,9 +196,6 @@ public class MyApplication extends Application {
     private void initStaticFields() {
         textHintDark = getResources().getColor(R.color.darkHintText);
         textHintLight = getResources().getColor(R.color.lightHintText);
-        primaryColors = getResources().getStringArray(R.array.colorPrimaryValues);
-        primaryDarkColors = getResources().getStringArray(R.array.colorPrimaryDarkValues);
-        primaryLightColors = getResources().getStringArray(R.array.colorPrimaryLightValues);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         checkAppVersion();
         getDeviceId();
@@ -214,17 +207,31 @@ public class MyApplication extends Application {
         //savedAccounts = readAccounts();
     }
 
+    public static int[] getPrimaryColors(Context context) {
+        return context.getResources().getIntArray(R.array.colorPrimaryValues);
+    }
+
+    public static int[] getPrimaryDarkColors(Context context) {
+        return context.getResources().getIntArray(R.array.colorPrimaryDarkValues);
+    }
+
+    public static int[] getPrimarLightColors(Context context) {
+        return context.getResources().getIntArray(R.array.colorPrimaryLightValues);
+    }
+
     public static void setThemeRelatedFields(Context context) {
         themeFieldsInitialized = true;
         currentBaseTheme = prefs.getInt("baseTheme", LIGHT_THEME);
-        //nightThemeEnabled = prefs.getBoolean("nightTheme", false);
+        int[] primaryColors = getPrimaryColors(context);
+        int[] primaryDarkColors = getPrimaryDarkColors(context);
+        int[] primaryLightColors = getPrimarLightColors(context);
         switch(currentBaseTheme) {
             case LIGHT_THEME:
                 nightThemeEnabled = false;
                 currentColor = colorPrimary;
-                int index = getCurrentColorIndex();
-                colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
-                colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
+                int index = getCurrentColorIndex(primaryColors);
+                colorPrimaryDark = primaryDarkColors[index];
+                colorPrimaryLight = primaryLightColors[index];
                 textColor = Color.BLACK;
                 textHintColor = textHintLight;
                 linkColor = MyApplication.colorPrimary;
@@ -236,9 +243,9 @@ public class MyApplication extends Application {
             case MATERIAL_BLUE_THEME:
                 nightThemeEnabled = true;
                 currentColor = colorPrimary;
-                index = getCurrentColorIndex();
-                colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
-                colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
+                index = getCurrentColorIndex(primaryColors);
+                colorPrimaryDark = primaryDarkColors[index];
+                colorPrimaryLight = primaryLightColors[index];
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
@@ -250,9 +257,9 @@ public class MyApplication extends Application {
             case MATERIAL_GREY_THEME:
                 nightThemeEnabled = true;
                 currentColor = colorPrimary;
-                index = getCurrentColorIndex();
-                colorPrimaryDark = Color.parseColor(primaryDarkColors[index]);
-                colorPrimaryLight = Color.parseColor(primaryLightColors[index]);
+                index = getCurrentColorIndex(primaryColors);
+                colorPrimaryDark = primaryDarkColors[index];
+                colorPrimaryLight = primaryLightColors[index];
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
@@ -335,10 +342,10 @@ public class MyApplication extends Application {
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public static int getCurrentColorIndex() {
+    public static int getCurrentColorIndex(int[] primaryColors) {
         int index = 0;
-        for(String color : primaryColors) {
-            if(Color.parseColor(color) == MyApplication.colorPrimary) {
+        for (int color : primaryColors) {
+            if (color == MyApplication.colorPrimary) {
                 return index;
             }
             index++;
@@ -476,8 +483,8 @@ public class MyApplication extends Application {
                 fontFamily = R.style.FontFamily_SansSerifCondensedLight;
                 break;
         }
-        colorPrimary = Color.parseColor(prefs.getString("toolbarColor", "#00BCD4"));
-        colorSecondary = Color.parseColor(prefs.getString("secondaryColor", "#FF9800"));
+        colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#00BCD4"));
+        colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF9800"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         commentNavigation = prefs.getBoolean("commentNav", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;

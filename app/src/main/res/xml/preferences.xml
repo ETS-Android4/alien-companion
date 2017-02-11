@@ -30,20 +30,14 @@
             android:entryValues="@array/fontFamilyValues"
             android:defaultValue="1" />
 
-        <ListPreference
-            android:key="toolbarColor"
+        <Preference
+            android:key="colorPrimary"
             android:title="Primary color"
-            android:summary="Does not apply to dark themes"
-            android:entries="@array/toolbarColors"
-            android:entryValues="@array/colorPrimaryValues"
-            android:defaultValue="#00BCD4"/>
+            android:summary="Does not apply to dark themes"/>
 
-        <ListPreference
-            android:key="secondaryColor"
-            android:title="Secondary color"
-            android:entries="@array/toolbarColors"
-            android:entryValues="@array/colorPrimaryValues"
-            android:defaultValue="#FF9800"/>
+        <Preference
+            android:key="colorSecondary"
+            android:title="Secondary color"/>
 
         <ListPreference
             android:key="screenOrientation"

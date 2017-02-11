@@ -24,10 +24,12 @@ import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
+import petrov.kristiyan.colorpicker.ColorPicker;
+
 /**
  * Created by George on 8/3/2015.
  */
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
     private CheckBoxPreference syncImages;
 
@@ -35,6 +37,12 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        Preference colorPrimaryPref = findPreference("colorPrimary");
+        colorPrimaryPref.setOnPreferenceClickListener(this);
+
+        Preference colorSecondaryPref = findPreference("colorSecondary");
+        colorSecondaryPref.setOnPreferenceClickListener(this);
 
         Preference clearSynced = findPreference("clearSynced");
         Preference clearCache = findPreference("clearCache");
@@ -215,6 +223,59 @@ public class SettingsFragment extends PreferenceFragment {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if(preference.getKey().equals("colorPrimary")) {
+            ColorPicker colorPicker = new ColorPicker(getActivity());
+            colorPicker.setColors(R.array.colorPrimaryValues);
+            colorPicker.setDefaultColorButton(MyApplication.colorPrimary);
+            colorPicker.setRoundColorButton(true);
+            colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+
+                @Override
+                public void onChooseColor(int position, int color) {
+                    MyApplication.colorPrimaryChanged = true;
+                    MyApplication.colorPrimary = color;
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putInt("colorPrimary", color);
+                    editor.apply();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            colorPicker.show();
+            return true;
+        }
+        else if(preference.getKey().equals("colorSecondary")) {
+            ColorPicker colorPicker = new ColorPicker(getActivity());
+            colorPicker.setColors(R.array.colorPrimaryValues);
+            colorPicker.setDefaultColorButton(MyApplication.colorSecondary);
+            colorPicker.setRoundColorButton(true);
+            colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+
+                @Override
+                public void onChooseColor(int position, int color) {
+                    MyApplication.colorSecondaryChanged = true;
+                    MyApplication.colorSecondary = color;
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putInt("colorSecondary", color);
+                    editor.apply();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+            colorPicker.show();
+            return true;
+        }
+        return false;
     }
 
     @Override
