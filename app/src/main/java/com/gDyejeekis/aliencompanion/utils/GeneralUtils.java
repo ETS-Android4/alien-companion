@@ -662,7 +662,7 @@ public class GeneralUtils {
         if(domain.contains("flickr.com")) return true;
         if(domain.contains("twimg.com")) return true;
         if(domain.contains("photobucket.com")) return true;
-        if(domain.contains("devianart.com")) return true;
+        if(domain.contains("deviantart.com")) return true;
         if(domain.equals("instagram.com")) return true;
         if(domain.equals("snapchat.com")) return true;
         if(domain.equals("trbimg.com")) return true;
@@ -689,7 +689,17 @@ public class GeneralUtils {
         if(domain.equals("steamcommunity.com")) return false;
         if(domain.equals("origin.com")) return false;
         if(domain.equals("ubisoft.com")) return false;
+        if(domain.equals("humblebundle.com")) return false;
         return true;
+    }
+
+    public static boolean isGifLink(String url, String domain) {
+        if(domain.contains("gfycat.com")) return true;
+        if(domain.contains("giphy.com")) return true;
+        String urlLc = url.toLowerCase();
+        if(domain.contains("imgur.com") && urlLc.endsWith(".mp4")) return true;
+        if(urlLc.endsWith(".gif") || urlLc.endsWith(".gifv")) return true;
+        return false;
     }
 
     public static boolean isVideoLink(String url, String domain) {
