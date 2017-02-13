@@ -156,9 +156,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
                 else if(loadType == LoadType.init) {
                     plf.adapter = new RedditItemListAdapter(context, viewTypeValue);
-                    plf.setLayoutManager(viewTypeValue);
-                    plf.contentView.setAdapter(plf.adapter);
-                    plf.updateContentViewDecorations(viewTypeValue);
+                    plf.updateContentView(adapter, viewTypeValue);
                 }
                 if(MyApplication.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
                 else ToastUtils.postsLoadError(context);
@@ -171,17 +169,15 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
                 switch (loadType) {
                     case init:
-                        plf.setLayoutManager(viewTypeValue);
                         if(submissions.size()==0) {
-                            plf.contentView.setAdapter(new RedditItemListAdapter(context, viewTypeValue));
+                            plf.updateContentView(new RedditItemListAdapter(context, viewTypeValue), viewTypeValue);
                             String message = "No posts found";
                             if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
                             ToastUtils.displayShortToast(context, message);
                         }
                         else {
-                            plf.contentView.setAdapter(plf.adapter);
+                            plf.updateContentView(plf.adapter, viewTypeValue);
                         }
-                        plf.updateContentViewDecorations(viewTypeValue);
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -194,9 +190,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             //    plf.setActionBarSubtitle();
                             //}
                             plf.setActionBarSubtitle();
-                            plf.setLayoutManager(viewTypeValue);
-                            plf.contentView.setAdapter(plf.adapter);
-                            plf.updateContentViewDecorations(viewTypeValue);
+                            plf.updateContentView(adapter, viewTypeValue);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");
                         break;

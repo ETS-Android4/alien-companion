@@ -174,17 +174,12 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         popupMenu.show();
     }
 
-    /**
-     * override this in UserFragment and MessageFragment
-     */
     public void redrawList() {
         try {
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
             adapter = new RedditItemListAdapter(activity, items);
-            setLayoutManager();
-            contentView.setAdapter(adapter);
-            updateContentViewDecorations();
+            updateContentView(adapter);
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
@@ -193,38 +188,49 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
             adapter = new RedditItemListAdapter(activity, viewTypeValue, items);
-            setLayoutManager(viewTypeValue);
-            contentView.setAdapter(adapter);
-            updateContentViewDecorations(viewTypeValue);
+            updateContentView(adapter, viewTypeValue);
         } catch (ArrayIndexOutOfBoundsException e) {}
     }
 
-    public void updateContentViewDecorations() {
-        updateContentViewDecorations(MyApplication.currentPostListView);
+    public void updateContentViewProperties() {
+        updateContentViewProperties(MyApplication.currentPostListView);
     }
 
-    public void updateContentViewDecorations(int viewTypeValue) {
-        setListDividerVisible(false);
+    public void updateContentViewProperties(int viewTypeValue) {
+        contentView.setHasFixedSize(true);
+        setLayoutManager(viewTypeValue);
         setListDividerVisible(PostViewType.hasVisibleListDivider(viewTypeValue));
     }
 
+    public void updateContentViewAdapter(RedditItemListAdapter adapter) {
+        contentView.setAdapter(adapter);
+    }
+
+    public void updateContentView(RedditItemListAdapter adapter, int viewTypeValue) {
+        updateContentViewAdapter(adapter);
+        updateContentViewProperties(viewTypeValue);
+    }
+
+    public void updateContentView(RedditItemListAdapter adapter) {
+        updateContentViewAdapter(adapter);
+        updateContentViewProperties();
+    }
+
     protected void setListDividerVisible(boolean flag) {
+        contentView.removeItemDecoration(dividerDecoration);
         if(flag) {
             contentView.addItemDecoration(dividerDecoration);
-        }
-        else {
-            contentView.removeItemDecoration(dividerDecoration);
         }
     }
 
     /**
      * override this in UserFragment and MessageFragment
      */
-    public void setLayoutManager() {
+    protected void setLayoutManager() {
         setLayoutManager(MyApplication.currentPostListView);
     }
 
-    public void setLayoutManager(int viewTypeValue) {
+    protected void setLayoutManager(int viewTypeValue) {
         layoutManager = viewTypeValue == PostViewType.gallery.value() ?
                 new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
@@ -235,13 +241,13 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         if(adapter!=null) adapter.notifyDataSetChanged();
     }
 
-    public DialogFragment getCurrentDialogFragment() {
-        try {
-            return (DialogFragment) activity.getFragmentManager().findFragmentByTag("dialog");
-        } catch (Exception e) {
-            return null;
-        }
-    }
+    //public DialogFragment getCurrentDialogFragment() {
+    //    try {
+    //        return (DialogFragment) activity.getFragmentManager().findFragmentByTag("dialog");
+    //    } catch (Exception e) {
+    //        return null;
+    //    }
+    //}
 
     @Override
     public void onRefresh() {

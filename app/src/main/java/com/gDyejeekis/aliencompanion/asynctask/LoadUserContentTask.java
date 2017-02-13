@@ -156,7 +156,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 }
                 else if(mLoadType == LoadType.init){
                     uf.adapter = new RedditItemListAdapter(activity);
-                    uf.contentView.setAdapter(uf.adapter);
+                    uf.updateContentViewAdapter(uf.adapter);
                 }
             }
             else {
@@ -171,7 +171,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (mLoadType) {
                     case init:
-                        uf.contentView.setAdapter(uf.adapter);
+                        uf.updateContentViewAdapter(uf.adapter);
                         break;
                     case refresh:
                         if (things.size() != 0) {
@@ -183,7 +183,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                                     ((UserActivity) activity).setAddToSyncedVisible(userCategory == UserSubmissionsCategory.SAVED);
                                 } catch (Exception e) {}
                             }
-                            uf.contentView.setAdapter(uf.adapter);
+                            uf.updateContentViewAdapter(uf.adapter);
                         }
                         break;
                     case extend:

@@ -116,7 +116,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
                 else if(loadType == LoadType.init){
                     mf.adapter = new RedditItemListAdapter(context);
-                    mf.contentView.setAdapter(mf.adapter);
+                    mf.updateContentViewAdapter(mf.adapter);
                 }
             } else {
                 if(messages.size()>0) mf.adapter = adapter;
@@ -127,7 +127,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         try {
                             markNewMessagesRead((Message) messages.get(0));
                         } catch (Exception e) {}
-                        mf.contentView.setAdapter(mf.adapter);
+                        mf.updateContentViewAdapter(mf.adapter);
                         //if(messages.size()==0) ToastUtils.displayShortToast(context, "No messages found");
                         break;
                     case refresh:
@@ -137,7 +137,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                                 mf.sort = sort;
                                 mf.setActionBarSubtitle();
                             }
-                            mf.contentView.setAdapter(mf.adapter);
+                            mf.updateContentViewAdapter(mf.adapter);
                         }
                         break;
                     case extend:

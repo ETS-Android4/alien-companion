@@ -116,7 +116,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
                 else if(loadType == LoadType.init){
                     sf.adapter = new RedditItemListAdapter(context);
-                    sf.contentView.setAdapter(sf.adapter);
+                    sf.updateContentViewAdapter(sf.adapter);
                 }
             } else {
                 if(submissions.size()>0) {
@@ -127,10 +127,12 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 switch (loadType) {
                     case init:
                         if(submissions.size()==0) {
-                            sf.contentView.setAdapter(new RedditItemListAdapter(context));
+                            sf.updateContentViewAdapter(new RedditItemListAdapter(context));
                             ToastUtils.noResults(context, sf.searchQuery);
                         }
-                        else sf.contentView.setAdapter(sf.adapter);
+                        else {
+                            sf.updateContentViewAdapter(sf.adapter);
+                        }
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
@@ -139,7 +141,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                                 sf.timeSpan = time;
                                 sf.setActionBarSubtitle();
                             }
-                            sf.contentView.setAdapter(sf.adapter);
+                            sf.updateContentViewAdapter(sf.adapter);
                         }
                         else ToastUtils.displayShortToast(context, "No posts found");
                         break;

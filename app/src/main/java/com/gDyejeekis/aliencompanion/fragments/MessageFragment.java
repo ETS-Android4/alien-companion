@@ -58,9 +58,7 @@ public class MessageFragment extends RedditContentFragment {
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        setLayoutManager();
-        contentView.setHasFixedSize(true);
-        setListDividerVisible(true);
+        updateContentViewProperties();
 
         contentView.addOnScrollListener(onScrollListener);
 
@@ -155,13 +153,10 @@ public class MessageFragment extends RedditContentFragment {
     }
 
     @Override
-    public void redrawList() {
-        try {
-            List<RedditItem> items = adapter.redditItems;
-            items.remove(items.size() - 1); // remove show more item
-            adapter = new RedditItemListAdapter(activity, items);
-            contentView.setAdapter(adapter);
-        } catch (ArrayIndexOutOfBoundsException e) {}
+    public void updateContentViewProperties() {
+        contentView.setHasFixedSize(true);
+        setLayoutManager();
+        setListDividerVisible(true);
     }
 
     @Override

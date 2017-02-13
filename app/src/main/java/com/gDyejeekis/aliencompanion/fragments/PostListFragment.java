@@ -179,9 +179,7 @@ public class PostListFragment extends RedditContentFragment {
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        setLayoutManager();
-        contentView.setHasFixedSize(true);
-        setListDividerVisible(PostViewType.hasVisibleListDivider(getCurrentViewTypeValue()));
+        updateContentViewProperties(getCurrentViewTypeValue());
 
         contentView.addOnScrollListener(onScrollListener);
 
