@@ -155,6 +155,7 @@ public class MyApplication extends Application {
     public static boolean handleArticles;
     public static boolean rememberPostListView;
     public static boolean askedRememberPostView;
+    public static boolean disableAnimations;
 
     public static int currentBaseTheme;
 
@@ -443,6 +444,7 @@ public class MyApplication extends Application {
         askedRememberPostView = prefs.getBoolean("askedRememberView", false);
         dualPane = prefs.getBoolean("dualPane", false);
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "4"));
+        disableAnimations = prefs.getBoolean("noAnimation", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);
         fontStyle = Integer.parseInt(prefs.getString("fontSize", "3"));
         switch (fontStyle) {

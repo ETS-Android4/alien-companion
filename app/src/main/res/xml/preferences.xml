@@ -47,6 +47,11 @@
             android:defaultValue="4"/>
 
         <CheckBoxPreference
+            android:key="noAnimation"
+            android:title="Disable animations"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
             android:key="dualPane"
             android:title="Dual pane in landscape"
             android:summary="Tablet recommended"
