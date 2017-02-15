@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
     <item android:id="@+id/action_sort" android:title="@string/action_sort"
-        android:icon="@mipmap/ic_sort_white_24dp" app:showAsAction="always"/>
+        android:icon="@mipmap/ic_sort_white_24dp"
+        android:orderInCategory="80" app:showAsAction="always"/>
 
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="ifRoom"/>
+        android:icon="@mipmap/ic_refresh_white_24dp"
+        android:orderInCategory="90" app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_search" android:title="@string/action_search"
         android:orderInCategory="100" app:showAsAction="never" />
@@ -14,21 +16,21 @@
     <!--<item android:id="@+id/action_toggle_hidden" android:title="@string/action_show_hidden"
         android:orderInCategory="101" app:showAsAction="never" android:checkable="true" />-->
 
-    <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
-        android:orderInCategory="101" app:showAsAction="never" />
+    <item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
+        android:orderInCategory="102" app:showAsAction="never" />
 
-    <!--<item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
-        android:orderInCategory="102" app:showAsAction="never" />-->
+    <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
+        android:orderInCategory="103" app:showAsAction="never" />
 
     <item android:id="@+id/action_view_sidebar" android:title="@string/view_sidebar"
         android:orderInCategory="105" app:showAsAction="never" />
+
+    <item android:id="@+id/action_submit_post" android:title="@string/action_submit_post"
+        android:orderInCategory="110" app:showAsAction="never" />
 
     <item android:id="@+id/action_sync_profiles" android:title="@string/sync_profiles"
         android:orderInCategory="115" app:showAsAction="never" />
 
     <item android:id="@+id/action_sync_posts" android:title="@string/sync_posts"
         android:orderInCategory="120" app:showAsAction="never" />
-
-    <item android:id="@+id/action_submit_post" android:title="@string/action_submit_post"
-        android:orderInCategory="110" app:showAsAction="never" />
 </menu>

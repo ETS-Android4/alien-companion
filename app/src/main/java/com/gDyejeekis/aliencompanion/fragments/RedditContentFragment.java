@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -27,6 +28,7 @@ import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -172,6 +174,21 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             }
         });
         popupMenu.show();
+    }
+
+    public void removeClickedPosts() {
+        try {
+            List<RedditItem> notClicked = new ArrayList<>();
+            for(RedditItem item : adapter.redditItems) {
+                if(item instanceof Submission && !((Submission) item).isClicked()) {
+                    notClicked.add(item);
+                }
+            }
+            adapter = new RedditItemListAdapter(activity, notClicked);
+            updateContentView(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void redrawList() {

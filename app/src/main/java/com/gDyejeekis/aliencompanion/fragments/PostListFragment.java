@@ -242,6 +242,9 @@ public class PostListFragment extends RedditContentFragment {
                 searchDialog.setArguments(args);
                 searchDialog.show(activity.getSupportFragmentManager(), "dialog");
                 return true;
+            case R.id.action_hide_read:
+                removeClickedPosts();
+                return true;
             case R.id.action_switch_view:
                 try {
                     showViewsPopup(activity.findViewById(R.id.action_sort));

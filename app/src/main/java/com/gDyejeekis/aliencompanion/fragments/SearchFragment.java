@@ -186,6 +186,9 @@ public class SearchFragment extends RedditContentFragment {
             case R.id.action_sort:
                 showSortPopup(activity.findViewById(R.id.action_sort));
                 return true;
+            case R.id.action_hide_read:
+                removeClickedPosts();
+                return true;
             case R.id.action_search:
                 SearchRedditDialogFragment dialog = new SearchRedditDialogFragment();
                 dialog.show(activity.getSupportFragmentManager(), "dialog");
