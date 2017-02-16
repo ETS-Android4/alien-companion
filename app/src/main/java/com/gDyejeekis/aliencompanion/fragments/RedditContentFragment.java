@@ -191,6 +191,21 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
+    public void removeClickedPosts(int viewTypeValue) {
+        try {
+            List<RedditItem> notClicked = new ArrayList<>();
+            for(RedditItem item : adapter.redditItems) {
+                if(item instanceof Submission && !((Submission) item).isClicked()) {
+                    notClicked.add(item);
+                }
+            }
+            adapter = new RedditItemListAdapter(activity, notClicked);
+            updateContentView(adapter, viewTypeValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void redrawList() {
         try {
             List<RedditItem> items = adapter.redditItems;

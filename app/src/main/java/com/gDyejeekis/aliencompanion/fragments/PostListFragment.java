@@ -243,7 +243,7 @@ public class PostListFragment extends RedditContentFragment {
                 searchDialog.show(activity.getSupportFragmentManager(), "dialog");
                 return true;
             case R.id.action_hide_read:
-                removeClickedPosts();
+                removeClickedPosts(getCurrentViewTypeValue());
                 return true;
             case R.id.action_switch_view:
                 try {
