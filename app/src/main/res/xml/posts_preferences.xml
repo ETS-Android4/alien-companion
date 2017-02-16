@@ -17,6 +17,19 @@
         android:summary="Load more posts automatically when scrolling"
         android:defaultValue="true"/>
 
+    <ListPreference
+        android:key="defaultView"
+        android:title="Default view"
+        android:entries="@array/viewType"
+        android:entryValues="@array/viewTypeValues"
+        android:defaultValue="0"/>
+
+    <CheckBoxPreference
+        android:key="rememberView"
+        android:title="Subreddit specific views"
+        android:summary="Remember the last used view option for each subreddit/multireddit"
+        android:defaultValue="false"/>
+
     <CheckBoxPreference
         android:key="hqThumb"
         android:title="Higher quality thumbnails"
@@ -27,12 +40,6 @@
         android:key="noThumb"
         android:title="Never load thumbnails"
         android:summary="Enable this to save data if you're on a limited data plan"
-        android:defaultValue="false"/>
-
-    <CheckBoxPreference
-        android:key="rememberView"
-        android:title="Subreddit specific views"
-        android:summary="Remember the last used view option for each subreddit/multireddit"
         android:defaultValue="false"/>
 
 </PreferenceScreen>

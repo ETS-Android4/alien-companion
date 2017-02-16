@@ -55,4 +55,46 @@ public enum PostViewType {
         return hasVisibleListDivider(viewType.value());
     }
 
+    public static PostViewType getViewType(int value) {
+        switch (value) {
+            case 0:
+                return list;
+            case 1:
+                return listReversed;
+            case 2:
+                return smallCards;
+            case 3:
+                return cards;
+            case 4:
+                return classic;
+            case 5:
+                return gallery;
+            default:
+                throw new IllegalArgumentException("No corresponding viewtype found for this value");
+        }
+    }
+
+    public static String getName(int value) {
+        switch (value) {
+            case 0:
+                return "List";
+            case 1:
+                return "Reversed list";
+            case 2:
+                return "Small cards";
+            case 3:
+                return "Cards";
+            case 4:
+                return "Classic";
+            case 5:
+                return "Gallery";
+            default:
+                throw new IllegalArgumentException("No corresponding name found for this value");
+        }
+    }
+
+    public static String getName(PostViewType viewType) {
+        return getName(viewType.value());
+    }
+
 }

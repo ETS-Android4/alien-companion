@@ -108,6 +108,24 @@
         <item>3</item>
     </string-array>
 
+    <string-array name="viewType">
+        <item>List</item>
+        <item>Reversed list</item>
+        <item>Small cards</item>
+        <item>Cards</item>
+        <item>Classic</item>
+        <item>Gallery</item>
+    </string-array>
+
+    <string-array name="viewTypeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string-array name="syncPostCount">
         <item>10</item>
         <item>25</item>

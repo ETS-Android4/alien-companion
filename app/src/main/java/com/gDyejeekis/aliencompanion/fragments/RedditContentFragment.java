@@ -165,7 +165,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                 if (viewType.value() != MyApplication.currentPostListView) {
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
                     MyApplication.currentPostListView = viewType.value();
-                    editor.putInt("postListView", viewType.value());
+                    editor.putString("defaultView", String.valueOf(viewType.value()));
                     editor.apply();
                     if(currentLoadType==null) redrawList();
                     return true;

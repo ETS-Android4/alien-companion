@@ -449,7 +449,7 @@ public class MyApplication extends Application {
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);
         longTapSwitchMode = prefs.getBoolean("longTapSwitch", true);
-        currentPostListView = prefs.getInt("postListView", PostViewType.list.value());
+        currentPostListView = Integer.parseInt(prefs.getString("defaultView", String.valueOf(PostViewType.list.value())));
         rememberPostListView = prefs.getBoolean("rememberView", false);
         askedRememberPostView = prefs.getBoolean("askedRememberView", false);
         dualPane = prefs.getBoolean("dualPane", false);

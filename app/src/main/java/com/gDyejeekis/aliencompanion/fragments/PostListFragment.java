@@ -127,7 +127,7 @@ public class PostListFragment extends RedditContentFragment {
                     }
                     else {
                         MyApplication.currentPostListView = selectedViewType.value();
-                        editor.putInt("postListView", selectedViewType.value());
+                        editor.putString("defaultView", String.valueOf(selectedViewType.value()));
                     }
                     editor.apply();
                     if(currentLoadType==null) redrawList(selectedViewType.value());
