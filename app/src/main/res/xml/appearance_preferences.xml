@@ -33,7 +33,8 @@
 
     <CheckBoxPreference
         android:key="noAnimation"
-        android:title="Disable animations"
+        android:title="Disable screen transitions"
+        android:summary="Disables animations for opening and dismissing activities"
         android:defaultValue="false"/>
 
     <CheckBoxPreference
