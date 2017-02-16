@@ -67,4 +67,9 @@ public class BrowserActivity extends SwipeBackActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
 }

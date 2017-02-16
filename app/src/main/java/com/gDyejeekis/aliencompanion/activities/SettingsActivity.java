@@ -31,6 +31,12 @@ public class SettingsActivity extends BackNavActivity {
     private boolean dualPaneEverywhere;
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     public void onCreate(Bundle bundle) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);

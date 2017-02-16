@@ -31,6 +31,12 @@ public class SubredditActivity extends SwipeBackActivity {
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);

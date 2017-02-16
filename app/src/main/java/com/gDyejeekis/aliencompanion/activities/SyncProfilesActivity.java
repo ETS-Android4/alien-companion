@@ -30,6 +30,12 @@ public class SyncProfilesActivity extends BackNavActivity implements DialogInter
     public boolean changesMade = false;
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);

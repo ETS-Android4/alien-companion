@@ -266,8 +266,14 @@ public class LinkHandler {
         if(MyApplication.useCCT) {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             builder.setToolbarColor(MyApplication.currentColor);
-            builder.setStartAnimations(activity, -1, -1);
-            builder.setExitAnimations(activity, -1, -1);
+            if(MyApplication.disableAnimations) {
+                builder.setStartAnimations(activity, -1, -1);
+                builder.setExitAnimations(activity, -1, -1);
+            }
+            else {
+                builder.setStartAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                builder.setExitAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
 
             CustomTabsIntent customTabsIntent = builder.build();
 

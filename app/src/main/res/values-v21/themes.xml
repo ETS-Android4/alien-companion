@@ -2,7 +2,6 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">?attr/themeBackgroundColor</item>
         <item name="android:textColor">?attr/themeTextColor</item>
@@ -17,13 +16,6 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-    <!--<style name="SettingsDarkTheme">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="android:background">@drawable/touch_selector_ripple_dark</item>
-    </style>-->
 
     <style name="ToolbarTheme" parent="AppTheme">
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
@@ -52,5 +44,16 @@
         <item name="android:minWidth">64dp</item>
         <item name="android:background">?attr/themeButtonSelector</item>
         <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="MyCardViewStyle" parent="CardView">
+        <!--<item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:clickable">true</item>-->
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
     </style>
 </resources>

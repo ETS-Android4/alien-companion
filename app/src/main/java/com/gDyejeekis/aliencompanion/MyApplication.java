@@ -307,6 +307,7 @@ public class MyApplication extends Application {
         }
         activity.getTheme().applyStyle(MyApplication.fontStyle, true);
         activity.getTheme().applyStyle(MyApplication.fontFamily, true);
+        setPendingTransitions(activity);
         if(nightThemeEnabled) {
             activity.getTheme().applyStyle(R.style.PopupDarkTheme, true);
         }
@@ -326,6 +327,15 @@ public class MyApplication extends Application {
             case DARK_THEME_LOW_CONTRAST:
                 activity.getTheme().applyStyle(R.style.selectedTheme_night_low_contrast, true);
                 break;
+        }
+    }
+
+    public static void setPendingTransitions(Activity activity) {
+        if(disableAnimations) {
+            activity.overridePendingTransition(-1, -1);
+        }
+        else {
+            activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         }
     }
 

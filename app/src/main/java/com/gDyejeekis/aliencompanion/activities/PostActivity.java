@@ -73,6 +73,12 @@ public class PostActivity extends SwipeBackActivity {
         }
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
     //@Override
     //public void onConfigurationChanged(Configuration newConfig) {
     //    super.onConfigurationChanged(newConfig);

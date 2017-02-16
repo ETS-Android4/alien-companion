@@ -38,6 +38,12 @@ public class DebugActivity extends BackNavActivity {
         setupUrlTests();
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
     private void setupLinkHandlerTest() {
         final EditText urlField = (EditText) findViewById(R.id.editText_test_url);
         Button button = (Button) findViewById(R.id.button_handle_url);

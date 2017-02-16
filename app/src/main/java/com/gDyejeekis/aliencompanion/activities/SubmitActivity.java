@@ -20,6 +20,12 @@ public class SubmitActivity extends BackNavActivity implements DialogInterface.O
     private Fragment fragment;
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);

@@ -26,6 +26,12 @@ public class UserActivity extends SwipeBackActivity {
     private boolean addToSyncedVisible;
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);

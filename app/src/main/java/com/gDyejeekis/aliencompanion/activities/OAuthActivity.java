@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
@@ -17,10 +18,4 @@ public class OAuthActivity extends AppCompatActivity {
         GeneralUtils.clearCookies(this);
         setContentView(R.layout.activity_oauth);
     }
-
-    //@Override
-    //public void onDestroy() {
-    //    super.onDestroy();
-    //}
-
 }

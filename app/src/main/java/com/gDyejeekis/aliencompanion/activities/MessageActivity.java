@@ -27,6 +27,12 @@ public class MessageActivity extends SwipeBackActivity {
     private LinearLayout container;
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         isActive = true;
         MyApplication.applyCurrentTheme(this);

@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">?attr/themeBackgroundColor</item>
         <item name="android:textColor">?attr/themeTextColor</item>
@@ -42,15 +41,6 @@
 
     <style name="MainActivityTheme" parent="AppTheme">
     </style>
-
-    <!--<style name="SettingsLightTheme">
-        <item name="themeBackgroundColor">@android:color/white</item>
-    </style>
-
-    <style name="SettingsDarkTheme" parent="Theme.AppCompat.Dialog">
-        <item name="android:textColorSecondary">@color/dark_gray</item>
-        <item name="themeBackgroundColor">@android:color/black</item>
-    </style>-->
 
     <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/white</item>
