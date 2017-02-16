@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.fragments.settings_fragments.SettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.AppearanceSettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.CommentsSettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.HeadersSettingsFragment;
@@ -83,8 +82,7 @@ public class SettingsActivity extends BackNavActivity {
                 fragment = new OtherSettingsFragment();
                 break;
             default:
-                fragment = new SettingsFragment();
-                break;
+                throw new RuntimeException("No corresponding fragment for this menu type");
         }
 
         if(dualPaneEverywhere) {
