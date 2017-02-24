@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
+import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -66,6 +67,26 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public LoadCommentsTask task;
 
     private boolean updateActionBar = false;
+
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            updateToolbarOnScroll(dy);
+        }
+    };
+
+    private void updateToolbarOnScroll(int dy) {
+        if(MyApplication.autoHideToolbar) {
+            if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
+                ((ToolbarActivity)activity).hideToolbar();
+            }
+            else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
+                    || mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                ((ToolbarActivity)activity).showToolbar();
+            }
+        }
+    }
 
     //public static boolean currentlyLoading = false;
 
@@ -294,6 +315,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mLayoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addOnScrollListener(onScrollListener);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

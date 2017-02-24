@@ -1,8 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.gDyejeekis.aliencompanion.activities.UserActivity"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <include layout="@layout/my_toolbar" />
 
@@ -10,6 +8,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragmentHolder"></LinearLayout>
+        android:id="@+id/fragmentHolder">
 
-</LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
