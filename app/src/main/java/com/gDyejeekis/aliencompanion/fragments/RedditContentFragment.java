@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -366,7 +365,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         });
     }
 
-    protected void setFabNavOptions(View view) {
+    protected void initFabNavOptions(View view) {
         layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_fab_nav);
         if(MyApplication.postNavigation && hasFabNavigation()) {
             setLayoutFabNavVisible(true);
@@ -376,6 +375,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabNav = (FloatingActionButton) view.findViewById(R.id.fab_nav);
             fabNav.setBackgroundTintList(fabColor);
             fabNav.setOnClickListener(this);
+            fabNav.show();
 
             fabTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
             fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
@@ -385,14 +385,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
             fabSubmitLink = (FloatingActionButton) view.findViewById(R.id.fab_submit_link);
             fabSubmitText = (FloatingActionButton) view.findViewById(R.id.fab_submit_text);
-            fabTop.setBackgroundTintList(fabColor);
-            fabRefresh.setBackgroundTintList(fabColor);
-            fabSubmit.setBackgroundTintList(fabColor);
-            fabSync.setBackgroundTintList(fabColor);
-            fabHideRead.setBackgroundTintList(fabColor);
-            fabSearch.setBackgroundTintList(fabColor);
-            fabSubmitLink.setBackgroundTintList(fabColor);
-            fabSubmitText.setBackgroundTintList(fabColor);
             fabTop.setOnClickListener(this);
             fabRefresh.setOnClickListener(this);
             fabSubmit.setOnClickListener(this);
@@ -401,12 +393,29 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSearch.setOnClickListener(this);
             fabSubmitLink.setOnClickListener(this);
             fabSubmitText.setOnClickListener(this);
+            updateFabNavColors();
 
             setFabIndividualVisibility(false);
         }
         else {
             setLayoutFabNavVisible(false);
         }
+    }
+
+    public void updateFabNavColors() {
+        ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
+        fabTop.setBackgroundTintList(fabColor);
+        fabRefresh.setBackgroundTintList(fabColor);
+        fabSubmit.setBackgroundTintList(fabColor);
+        fabSync.setBackgroundTintList(fabColor);
+        fabHideRead.setBackgroundTintList(fabColor);
+        fabSearch.setBackgroundTintList(fabColor);
+        fabSubmitLink.setBackgroundTintList(fabColor);
+        fabSubmitText.setBackgroundTintList(fabColor);
+    }
+
+    public void updateFabNavAvailability() {
+        initFabNavOptions(activity.findViewById(android.R.id.content));
     }
 
     private void setFabIndividualVisibility(boolean showSubmitFab) {

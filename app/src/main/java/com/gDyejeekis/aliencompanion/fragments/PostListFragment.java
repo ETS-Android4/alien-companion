@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -181,7 +180,7 @@ public class PostListFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties(getCurrentViewTypeValue());
-        setFabNavOptions(view);
+        initFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
 

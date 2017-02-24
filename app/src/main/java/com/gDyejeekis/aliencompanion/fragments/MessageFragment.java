@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,15 +18,12 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadMessagesTask;
-import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.MessageCategory;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.MessageCategorySort;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +61,7 @@ public class MessageFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties();
-        setFabNavOptions(view);
+        initFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
 

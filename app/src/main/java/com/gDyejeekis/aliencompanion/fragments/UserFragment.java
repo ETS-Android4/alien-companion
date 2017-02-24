@@ -1,14 +1,11 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,20 +16,14 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
-import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
-import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserContentTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddToSyncedDialogFragment;
-import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -135,7 +126,7 @@ public class UserFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties();
-        setFabNavOptions(view);
+        initFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
 

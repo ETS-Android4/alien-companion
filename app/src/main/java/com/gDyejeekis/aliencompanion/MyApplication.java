@@ -114,9 +114,12 @@ public class MyApplication extends Application {
     public static int colorPrimaryDark;
     public static int colorPrimaryLight;
     public static int colorSecondary;
-    public static int currentColor; // TODO: 2/11/2017 delet this
+    public static int currentColor; // TODO: 2/11/2017 prolly delet this
+    // TODO: 2/24/2017 prolly move these to main activity
     public static boolean colorPrimaryChanged;
     public static boolean colorSecondaryChanged;
+    public static boolean fabPostNavChanged;
+
     public static int swipeSetting;
     public static boolean swipeRefresh;
     public static boolean postNavigation;

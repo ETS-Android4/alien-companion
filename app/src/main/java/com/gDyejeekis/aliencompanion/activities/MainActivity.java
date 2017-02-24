@@ -5,14 +5,11 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.pm.ActivityInfoCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
@@ -234,6 +230,11 @@ public class MainActivity extends ToolbarActivity {
             getNavDrawerAdapter().notifyDataSetChanged();
         }
 
+        if(MyApplication.fabPostNavChanged) {
+            MyApplication.fabPostNavChanged = false;
+            getListFragment().updateFabNavAvailability();
+        }
+
         if(setupAccount) {
             setupAccount = false;
 
@@ -307,6 +308,11 @@ public class MainActivity extends ToolbarActivity {
             drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
             listFragment.colorSchemeChanged();
             adapter.notifyDataSetChanged();
+        }
+
+        if(MyApplication.colorSecondaryChanged) {
+            MyApplication.colorSecondaryChanged = false;
+            getListFragment().updateFabNavColors();
         }
 
         if(MyApplication.drawerGravity != drawerParams.gravity) {
