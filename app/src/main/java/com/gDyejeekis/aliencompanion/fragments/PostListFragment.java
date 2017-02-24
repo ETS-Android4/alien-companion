@@ -181,7 +181,7 @@ public class PostListFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties(getCurrentViewTypeValue());
-        setFabNavOptions(this, view);
+        setFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
 
@@ -341,6 +341,7 @@ public class PostListFragment extends RedditContentFragment {
     }
 
     public void showSearchDialog() {
+        hideAllFabOptions();
         SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
         Bundle args = new Bundle();
         args.putString("subreddit", subreddit);
@@ -349,6 +350,7 @@ public class PostListFragment extends RedditContentFragment {
     }
 
     public void addToSyncQueue() {
+        hideAllFabOptions();
         String toastMessage;
         if(GeneralUtils.isNetworkAvailable(activity)) {
             if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
@@ -382,16 +384,12 @@ public class PostListFragment extends RedditContentFragment {
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(activity, SubmitActivity.class);
-                intent.putExtra("subreddit", subreddit);
                 switch (item.getItemId()) {
                     case R.id.action_submit_link:
-                        intent.putExtra("submitType", SubmitType.link);
-                        startActivity(intent);
+                        startSubmitActivity(SubmitType.link);
                         return true;
                     case R.id.action_submit_text:
-                        intent.putExtra("submitType", SubmitType.self);
-                        startActivity(intent);
+                        startSubmitActivity(SubmitType.self);
                         return true;
                     //case R.id.action_submit_image: //TODO: implement direct image posting
                     //    return true;
@@ -401,6 +399,14 @@ public class PostListFragment extends RedditContentFragment {
             }
         });
         popupMenu.show();
+    }
+
+    public void startSubmitActivity(SubmitType submitType) {
+        hideAllFabOptions();
+        Intent intent = new Intent(activity, SubmitActivity.class);
+        intent.putExtra("subreddit", subreddit);
+        intent.putExtra("submitType", submitType);
+        startActivity(intent);
     }
 
     public void showSortPopup(View v) {
@@ -500,9 +506,7 @@ public class PostListFragment extends RedditContentFragment {
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        if(fabOptionsVisible) {
-            setFabNavOptionsVisible(false);
-        }
+        hideAllFabOptions();
     }
 
     public void changeSubreddit(String subreddit, boolean isMulti, boolean isOther) {
@@ -526,9 +530,7 @@ public class PostListFragment extends RedditContentFragment {
         mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadPostsTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        if(fabOptionsVisible) {
-            setFabNavOptionsVisible(false);
-        }
+        hideAllFabOptions();
     }
 
     public void setSubreddit(String subreddit) {

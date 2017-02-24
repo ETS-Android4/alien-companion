@@ -26,6 +26,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
@@ -61,10 +62,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public SwipeRefreshLayout swipeRefreshLayout;
     public FloatingActionButton fabNav;
 
-    private LinearLayout layoutFabNav;
-    private LinearLayout layoutFabNavOptions;
-    protected boolean fabOptionsVisible;
-
     protected final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -90,6 +87,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         setHasOptionsMenu(true);
 
         dividerDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
+        initFabAnimations();
 
         loadMore = MyApplication.endlessPosts;
         //hasMore = true;
@@ -108,10 +106,12 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void goToTop() {
+        hideAllFabOptions();
         layoutManager.scrollToPosition(0);
     }
 
     public void goToBottom() {
+        hideAllFabOptions();
         layoutManager.scrollToPosition(adapter.redditItems.size()-1);
     }
 
@@ -213,6 +213,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void removeClickedPosts() {
         try {
+            hideAllFabOptions();
             List<RedditItem> notClicked = new ArrayList<>();
             for(RedditItem item : adapter.redditItems) {
                 if(item instanceof Submission && !((Submission) item).isClicked()) {
@@ -228,6 +229,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void removeClickedPosts(int viewTypeValue) {
         try {
+            hideAllFabOptions();
             List<RedditItem> notClicked = new ArrayList<>();
             for(RedditItem item : adapter.redditItems) {
                 if(item instanceof Submission && !((Submission) item).isClicked()) {
@@ -296,98 +298,170 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    protected void setFabNavOptions(RedditContentFragment fragment, View view) {
+    private LinearLayout layoutFabNav;
+    private LinearLayout layoutFabNavOptions;
+    private boolean fabOptionsVisible;
+    private boolean fabSubmitOptionsVisible;
+
+    private FloatingActionButton fabTop;
+    private FloatingActionButton fabRefresh;
+    private FloatingActionButton fabSubmit;
+    private FloatingActionButton fabSync;
+    private FloatingActionButton fabHideRead;
+    private FloatingActionButton fabSearch;
+    private FloatingActionButton fabSubmitLink;
+    private FloatingActionButton fabSubmitText;
+
+    private Animation showAnimation;
+    private Animation hideAnimation;
+
+    private void initFabAnimations() {
+        showAnimation = AnimationUtils.loadAnimation(activity, R.anim.fab_options_show);
+        showAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                layoutFabNavOptions.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        hideAnimation = AnimationUtils.loadAnimation(activity, R.anim.fab_options_hide);
+        hideAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                layoutFabNavOptions.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    protected void setFabNavOptions(View view) {
         layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_fab_nav);
-        if(MyApplication.postNavigation && fragment.hasFabNavigation()) {
+        if(MyApplication.postNavigation && hasFabNavigation()) {
             setLayoutFabNavVisible(true);
             layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);
-            layoutFabNavOptions.setVisibility(View.INVISIBLE);
+            layoutFabNavOptions.setVisibility(View.GONE);
             ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
             fabNav = (FloatingActionButton) view.findViewById(R.id.fab_nav);
             fabNav.setBackgroundTintList(fabColor);
             fabNav.setOnClickListener(this);
 
-            FloatingActionButton fabTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
-            FloatingActionButton fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
-            FloatingActionButton fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
-            FloatingActionButton fabSync = (FloatingActionButton) view.findViewById(R.id.fab_sync);
-            FloatingActionButton fabHideRead = (FloatingActionButton) view.findViewById(R.id.fab_hide_read);
-            FloatingActionButton fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
+            fabTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
+            fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
+            fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
+            fabSync = (FloatingActionButton) view.findViewById(R.id.fab_sync);
+            fabHideRead = (FloatingActionButton) view.findViewById(R.id.fab_hide_read);
+            fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
+            fabSubmitLink = (FloatingActionButton) view.findViewById(R.id.fab_submit_link);
+            fabSubmitText = (FloatingActionButton) view.findViewById(R.id.fab_submit_text);
             fabTop.setBackgroundTintList(fabColor);
             fabRefresh.setBackgroundTintList(fabColor);
             fabSubmit.setBackgroundTintList(fabColor);
             fabSync.setBackgroundTintList(fabColor);
             fabHideRead.setBackgroundTintList(fabColor);
             fabSearch.setBackgroundTintList(fabColor);
+            fabSubmitLink.setBackgroundTintList(fabColor);
+            fabSubmitText.setBackgroundTintList(fabColor);
             fabTop.setOnClickListener(this);
             fabRefresh.setOnClickListener(this);
             fabSubmit.setOnClickListener(this);
             fabSync.setOnClickListener(this);
             fabHideRead.setOnClickListener(this);
             fabSearch.setOnClickListener(this);
+            fabSubmitLink.setOnClickListener(this);
+            fabSubmitText.setOnClickListener(this);
 
-            if(fragment instanceof SearchFragment) {
-                fabSubmit.setVisibility(View.GONE);
-                fabSync.setVisibility(View.GONE);
-            }
+            setFabIndividualVisibility(false);
         }
         else {
             setLayoutFabNavVisible(false);
         }
     }
 
-    public void setFabNavOptionsVisible(boolean flag) {
+    private void setFabIndividualVisibility(boolean showSubmitFab) {
+        int submitFabsVis = showSubmitFab ? View.VISIBLE : View.GONE;
+        int subredditFabsVis = !showSubmitFab && this instanceof PostListFragment ? View.VISIBLE : View.GONE;
+        int otherFabsVis = !showSubmitFab ? View.VISIBLE : View.GONE;
+        fabSubmitLink.setVisibility(submitFabsVis);
+        fabSubmitText.setVisibility(submitFabsVis);
+        fabSubmit.setVisibility(subredditFabsVis);
+        fabSync.setVisibility(subredditFabsVis);
+        fabTop.setVisibility(otherFabsVis);
+        fabRefresh.setVisibility(otherFabsVis);
+        fabHideRead.setVisibility(otherFabsVis);
+        fabSearch.setVisibility(otherFabsVis);
+    }
+
+    private void setFabNavOptionsVisible(boolean flag) {
+        setFabIndividualVisibility(false);
         if(flag) {
             fabOptionsVisible = true;
-            fabNav.setImageResource(R.mipmap.ic_close_grey_48dp);
-            fabNav.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            // show nav options
-            Animation showAnimation = AnimationUtils.loadAnimation(activity, R.anim.fab_options_show);
-            showAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    layoutFabNavOptions.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
+            // show FAB options
             layoutFabNavOptions.startAnimation(showAnimation);
         }
         else {
             fabOptionsVisible = false;
-            fabNav.setImageResource(R.drawable.ic_navigation_white_36dp);
-            fabNav.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
-            // hide nav options
-            Animation hideAnimation = AnimationUtils.loadAnimation(activity, R.anim.fab_options_hide);
-            hideAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    layoutFabNavOptions.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
+            // hide FAB options
             layoutFabNavOptions.startAnimation(hideAnimation);
         }
     }
 
+    private void setFabSubmitOptionsVisible(boolean flag) {
+        setFabIndividualVisibility(true);
+        fabOptionsVisible = false;
+        if(flag) {
+            fabSubmitOptionsVisible = true;
+            // show submit FABs
+            layoutFabNavOptions.startAnimation(showAnimation);
+        }
+        else {
+            fabSubmitOptionsVisible = false;
+            // hide submit FABs
+            layoutFabNavOptions.startAnimation(hideAnimation);
+        }
+    }
+
+    public void showFabNavOptions() {
+        fabNav.setImageResource(R.mipmap.ic_close_grey_48dp);
+        fabNav.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+        setFabNavOptionsVisible(true);
+    }
+
+    public void hideAllFabOptions() {
+        fabNav.setImageResource(R.drawable.ic_navigation_white_36dp);
+        fabNav.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
+        if(fabOptionsVisible) {
+            setFabNavOptionsVisible(false);
+        }
+        else if(fabSubmitOptionsVisible) {
+            setFabSubmitOptionsVisible(false);
+        }
+    }
+
     private void toggleNavOptions() {
-        setFabNavOptionsVisible(!fabOptionsVisible);
+        if(fabOptionsVisible || fabSubmitOptionsVisible) {
+            hideAllFabOptions();
+        }
+        else {
+            showFabNavOptions();
+        }
     }
 
     private void setLayoutFabNavVisible(boolean flag) {
@@ -402,20 +476,16 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                 break;
             case R.id.fab_go_top:
                 goToTop();
-                setFabNavOptionsVisible(false);
                 break;
             case R.id.fab_refresh:
                 refreshList();
-                setFabNavOptionsVisible(false);
                 break;
             case R.id.fab_submit:
-                // TODO: 2/23/2017
-                setFabNavOptionsVisible(false);
+                setFabSubmitOptionsVisible(true);
                 break;
             case R.id.fab_sync:
                 // TODO: 2/24/2017 add abstraction
                 ((PostListFragment)this).addToSyncQueue();
-                setFabNavOptionsVisible(false);
                 break;
             case R.id.fab_hide_read:
                 // TODO: 2/23/2017 this class should have viewTypeValue field, add abstraction later
@@ -425,7 +495,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                 else if(this instanceof SearchFragment) {
                     removeClickedPosts();
                 }
-                setFabNavOptionsVisible(false);
                 break;
             case R.id.fab_search:
                 // TODO: 2/24/2017 add abstraction
@@ -435,7 +504,12 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                 else if(this instanceof SearchFragment) {
                     ((SearchFragment)this).showSearchDialog();
                 }
-                setFabNavOptionsVisible(false);
+                break;
+            case R.id.fab_submit_link:
+                ((PostListFragment)this).startSubmitActivity(SubmitType.link);
+                break;
+            case R.id.fab_submit_text:
+                ((PostListFragment)this).startSubmitActivity(SubmitType.self);
                 break;
         }
     }

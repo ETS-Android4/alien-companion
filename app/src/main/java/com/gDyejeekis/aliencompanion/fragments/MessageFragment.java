@@ -65,7 +65,7 @@ public class MessageFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties();
-        setFabNavOptions(this, view);
+        setFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
 

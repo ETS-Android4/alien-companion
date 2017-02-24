@@ -102,7 +102,7 @@ public class SearchFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties();
-        setFabNavOptions(this, view);
+        setFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
 
@@ -162,9 +162,7 @@ public class SearchFragment extends RedditContentFragment {
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadSearchTask(activity, this, LoadType.refresh, sort, time);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        if(fabOptionsVisible) {
-            setFabNavOptionsVisible(false);
-        }
+        hideAllFabOptions();
     }
 
     public void changeQuery(String newQuery) {
@@ -205,6 +203,7 @@ public class SearchFragment extends RedditContentFragment {
     }
 
     public void showSearchDialog() {
+        hideAllFabOptions();
         SearchRedditDialogFragment dialog = new SearchRedditDialogFragment();
         dialog.show(activity.getSupportFragmentManager(), "dialog");
     }

@@ -63,6 +63,22 @@
             android:src="@mipmap/ic_file_download_white_24dp"
             style="@style/FabMiniMargins"/>
 
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"
+            android:id="@+id/fab_submit_link"
+            android:src="@drawable/ic_link_alt_white_48dp"
+            style="@style/FabMiniMargins"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"
+            android:id="@+id/fab_submit_text"
+            android:src="@drawable/ic_text_format_white_24dp"
+            style="@style/FabMiniMargins"/>
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
