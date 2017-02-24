@@ -67,10 +67,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            updateSwipeRefreshState();
-            updateToolbarScrolledState(dy);
-            updateFabScrolledState(dy);
-            updateLoadMoreState(recyclerView);
+            updateSwipeRefreshOnScroll();
+            updateToolbarOnScroll(dy);
+            updateFabOnScroll(dy);
+            updateLoadMoreOnScroll(recyclerView);
         }
     };
 
@@ -98,7 +98,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     @Override
     public void onResume() {
         super.onResume();
-        updateSwipeRefreshState();
+        updateSwipeRefreshOnScroll();
     }
 
     @Override
@@ -117,11 +117,11 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         layoutManager.scrollToPosition(adapter.redditItems.size()-1);
     }
 
-    private void updateSwipeRefreshState() {
+    private void updateSwipeRefreshOnScroll() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
     }
 
-    private void updateToolbarScrolledState(int dy) {
+    private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
             if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
                 ((ToolbarActivity)activity).hideToolbar();
@@ -133,7 +133,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    private void updateFabScrolledState(int dy) {
+    private void updateFabOnScroll(int dy) {
         if(hasFabNavigation() && MyApplication.postNavigation && MyApplication.autoHidePostFab) {
             if(dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD) {
                 hideAllFabOptions();
@@ -146,7 +146,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    private void updateLoadMoreState(RecyclerView recyclerView) {
+    private void updateLoadMoreOnScroll(RecyclerView recyclerView) {
         int pastVisiblesItems, visibleItemCount, totalItemCount;
         visibleItemCount = layoutManager.getChildCount();
         totalItemCount = layoutManager.getItemCount();
