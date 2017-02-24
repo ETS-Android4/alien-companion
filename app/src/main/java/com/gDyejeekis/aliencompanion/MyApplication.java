@@ -55,6 +55,8 @@ public class MyApplication extends Application {
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
+    public static final int HIDE_ON_SCROLL_THRESHOLD = 10;
+
     public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
 
     public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
