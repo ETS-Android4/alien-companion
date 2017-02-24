@@ -122,9 +122,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     private void updateFabScrolledState(int dy) {
         if(hasFabNavigation() && MyApplication.postNavigation && MyApplication.autoHidePostFab) {
             if(dy > 10) {
-                if(fabOptionsVisible) {
-                    setFabNavOptionsVisible(false);
-                }
+                hideAllFabOptions();
                 fabNav.hide();
             }
             else if(dy < -10 || findFirstCompletelyVisiblePostPosition() == 0) {
