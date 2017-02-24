@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.fragments.MessageFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
@@ -24,7 +25,7 @@ public class MessageActivity extends SwipeBackActivity {
 
     private MessageFragment messageFragment;
     private FragmentManager fm;
-    private LinearLayout container;
+    private RelativeLayout container;
 
     @Override
     public void finish() {
@@ -38,9 +39,9 @@ public class MessageActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subreddit);
-        MyApplication.setupStandardToolbar(this);
 
-        container = (LinearLayout) findViewById(R.id.container);
+        toolbar = MyApplication.initToolbar(this);
+        container = (RelativeLayout) findViewById(R.id.container);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);

@@ -55,7 +55,9 @@ public class MyApplication extends Application {
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
-    public static final int HIDE_ON_SCROLL_THRESHOLD = 10;
+    public static final int FAB_HIDE_ON_SCROLL_THRESHOLD = 10;
+
+    public static final int TOOLBAR_HIDE_ON_SCROLL_THRESHOLD = 20;
 
     public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
 
@@ -121,6 +123,7 @@ public class MyApplication extends Application {
     public static boolean commentNavigation;
     public static boolean autoHidePostFab;
     public static boolean autoHideCommentFab;
+    public static boolean autoHideToolbar;
     public static int drawerGravity;
     public static boolean endlessPosts;
     public static boolean showNSFWpreview;
@@ -344,7 +347,7 @@ public class MyApplication extends Application {
         }
     }
 
-    public static void setupStandardToolbar(AppCompatActivity activity) {
+    public static Toolbar initToolbar(AppCompatActivity activity) {
         Toolbar toolbar = (Toolbar) activity.findViewById(R.id.my_toolbar);
         if(MyApplication.nightThemeEnabled) {
             toolbar.setPopupTheme(R.style.OverflowStyleDark);
@@ -356,6 +359,7 @@ public class MyApplication extends Application {
         toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
         activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        return toolbar;
     }
 
     public static int getCurrentColorIndex(int[] primaryColors) {
@@ -450,6 +454,7 @@ public class MyApplication extends Application {
         syncOverWifiOnly = prefs.getBoolean("syncWifi", true);
         preferExternalStorage = prefs.getBoolean("prefExternal", false);
         syncAlbumImgCount = Integer.valueOf(prefs.getString("syncAlbum", "5"));
+        autoHideToolbar = prefs.getBoolean("autoHideToolbar", true);
         dismissImageOnTap = prefs.getBoolean("imageTap", true);
         dismissGifOnTap = prefs.getBoolean("gifTap", true);
         dismissInfoOnTap = prefs.getBoolean("infoTap", true);

@@ -33,7 +33,7 @@ public class DebugActivity extends BackNavActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
         setupLinkHandlerTest();
         setupUrlTests();
     }

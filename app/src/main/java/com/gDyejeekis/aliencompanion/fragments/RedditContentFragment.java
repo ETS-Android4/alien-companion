@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,6 +24,7 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
@@ -67,6 +69,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             updateSwipeRefreshState();
+            updateToolbarScrolledState(dy);
             updateFabScrolledState(dy);
             updateLoadMoreState(recyclerView);
         }
@@ -119,13 +122,25 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
     }
 
+    private void updateToolbarScrolledState(int dy) {
+        if(MyApplication.autoHideToolbar) {
+            if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
+                ((ToolbarActivity)activity).hideToolbar();
+            }
+            else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
+                    || findFirstCompletelyVisiblePostPosition() == 0) {
+                ((ToolbarActivity)activity).showToolbar();
+            }
+        }
+    }
+
     private void updateFabScrolledState(int dy) {
         if(hasFabNavigation() && MyApplication.postNavigation && MyApplication.autoHidePostFab) {
-            if(dy > MyApplication.HIDE_ON_SCROLL_THRESHOLD) {
+            if(dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD) {
                 hideAllFabOptions();
                 fabNav.hide();
             }
-            else if(dy < -MyApplication.HIDE_ON_SCROLL_THRESHOLD
+            else if(dy < -MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD
                     || findFirstCompletelyVisiblePostPosition() == 0) {
                 fabNav.show();
             }

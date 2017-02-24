@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
@@ -54,7 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ToolbarActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private NavDrawerAdapter adapter;
     private DrawerLayout.LayoutParams drawerParams;
     private NavigationView scrimInsetsFrameLayout;
-    private Toolbar toolbar;
-    private LinearLayout container;
+    //private Toolbar toolbar;
+    private RelativeLayout container;
 
     public static boolean dualPaneActive;
 
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         //}
         setContentView(R.layout.activity_main_plus);
 
-        container = (LinearLayout) findViewById(R.id.container);
+        container = (RelativeLayout) findViewById(R.id.container);
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);

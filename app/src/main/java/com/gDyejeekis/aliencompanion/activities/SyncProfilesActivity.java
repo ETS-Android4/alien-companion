@@ -2,7 +2,6 @@ package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -42,7 +41,7 @@ public class SyncProfilesActivity extends BackNavActivity implements DialogInter
         setContentView(R.layout.activity_sync_profiles);
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
 
         profilesView = (RecyclerView) findViewById(R.id.recyclerView_sync_profiles);
         fab = (FloatingActionButton) findViewById(R.id.fab);

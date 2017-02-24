@@ -44,7 +44,7 @@ public class SettingsActivity extends BackNavActivity {
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
 
         menuType = (SettingsMenuType) getIntent().getSerializableExtra("menuType");
         try {

@@ -40,7 +40,7 @@ public class PendingUserActionsActivity extends BackNavActivity {
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
 
         pendingActionsView = (RecyclerView) findViewById(R.id.recyclerView_pendingActions);
         adapter = new PendingActionsAdapter(this);

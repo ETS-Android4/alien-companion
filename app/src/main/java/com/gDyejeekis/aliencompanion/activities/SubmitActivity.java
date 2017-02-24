@@ -33,7 +33,7 @@ public class SubmitActivity extends BackNavActivity implements DialogInterface.O
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
 
         setupFragment();
     }

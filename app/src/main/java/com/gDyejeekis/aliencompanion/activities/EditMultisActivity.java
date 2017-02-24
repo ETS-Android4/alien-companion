@@ -36,7 +36,7 @@ public class EditMultisActivity extends BackNavActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_edit_subreddits);
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);

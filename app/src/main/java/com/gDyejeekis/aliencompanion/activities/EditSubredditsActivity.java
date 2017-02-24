@@ -2,7 +2,6 @@ package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -46,7 +45,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }
-        MyApplication.setupStandardToolbar(this);
+        MyApplication.initToolbar(this);
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);

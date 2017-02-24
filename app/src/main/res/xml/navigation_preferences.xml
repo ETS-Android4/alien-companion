@@ -10,15 +10,20 @@
         android:defaultValue="0"/>
 
     <CheckBoxPreference
-        android:key="longTapSwitch"
-        android:title="Long tap to enter offline/online mode"
-        android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly switch between modes"
-        android:defaultValue="true"/>
-
-    <CheckBoxPreference
         android:key="swipeRefresh"
         android:title="Swipe to refresh"
         android:summary="Swipe down to refresh posts/comments"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="autoHideToolbar"
+        android:title="Hide toolbar on scroll down"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="longTapSwitch"
+        android:title="Long tap to enter offline/online mode"
+        android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly switch between modes"
         android:defaultValue="true"/>
 
     <ListPreference

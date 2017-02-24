@@ -10,9 +10,9 @@
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
-        <changelogtext>Added animations for opening and dismissing activities</changelogtext>
-        <changelogtext>Added 'Disable screen transitions' option under 'Appearance' (disabled by default)</changelogtext>
+        <changelogtext>Added 'Screen transitions' option under 'Appearance' (controls animations for opening and dismissing screens)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Hide read' option in the toolbar's overflow menu (available when browsing posts and search results)]]></changelogtext>
+        <changelogtext>Added 'Hide toolbar on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added FAB (floating action button) menu when browsing posts in subreddits/multireddits and search results]]></changelogtext>
         <changelogtext>Added 'FAB post navigation' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext>Added 'Hide post FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
