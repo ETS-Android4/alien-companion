@@ -115,7 +115,10 @@ public class MyApplication extends Application {
     public static boolean colorSecondaryChanged;
     public static int swipeSetting;
     public static boolean swipeRefresh;
+    public static boolean postNavigation;
     public static boolean commentNavigation;
+    public static boolean autoHidePostFab;
+    public static boolean autoHideCommentFab;
     public static int drawerGravity;
     public static boolean endlessPosts;
     public static boolean showNSFWpreview;
@@ -498,7 +501,10 @@ public class MyApplication extends Application {
         colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#00BCD4"));
         colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF9800"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
+        postNavigation = prefs.getBoolean("postNav", true);
         commentNavigation = prefs.getBoolean("commentNav", true);
+        autoHidePostFab = prefs.getBoolean("autoHidePostNav", true);
+        autoHideCommentFab = prefs.getBoolean("autoHideCommentNav", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         hqThumbnails = prefs.getBoolean("hqThumb", true);

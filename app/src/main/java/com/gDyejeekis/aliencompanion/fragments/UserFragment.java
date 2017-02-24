@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,6 +54,11 @@ public class UserFragment extends RedditContentFragment {
         newInstance.userContent = category;
         newInstance.hasMore = hasMore;
         return newInstance;
+    }
+
+    @Override
+    public boolean hasFabNavigation() {
+        return false;
     }
 
     @Override
@@ -129,6 +135,7 @@ public class UserFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties();
+        setFabNavOptions(this, view);
 
         contentView.addOnScrollListener(onScrollListener);
 

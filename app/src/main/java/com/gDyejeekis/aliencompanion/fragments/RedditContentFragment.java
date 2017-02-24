@@ -1,11 +1,13 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +15,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
@@ -35,11 +40,13 @@ import java.util.List;
  * Created by George on 2/9/2017.
  */
 
-public abstract class RedditContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class RedditContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     public abstract void refreshList();
 
     public abstract void extendList();
+
+    public abstract boolean hasFabNavigation();
 
     public static final String TAG = "RedditContentFragment";
 
@@ -52,12 +59,18 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public boolean hasMore;
     public ProgressBar mainProgressBar;
     public SwipeRefreshLayout swipeRefreshLayout;
+    public FloatingActionButton fabNav;
+
+    private LinearLayout layoutFabNav;
+    private LinearLayout layoutFabNavOptions;
+    protected boolean fabOptionsVisible;
 
     protected final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             updateSwipeRefreshState();
+            updateFabScrolledState(dy);
             updateLoadMoreState(recyclerView);
         }
     };
@@ -94,8 +107,30 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         this.activity = null;
     }
 
+    public void goToTop() {
+        layoutManager.scrollToPosition(0);
+    }
+
+    public void goToBottom() {
+        layoutManager.scrollToPosition(adapter.redditItems.size()-1);
+    }
+
     private void updateSwipeRefreshState() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
+    }
+
+    private void updateFabScrolledState(int dy) {
+        if(hasFabNavigation() && MyApplication.postNavigation && MyApplication.autoHidePostFab) {
+            if(dy > 10) {
+                if(fabOptionsVisible) {
+                    setFabNavOptionsVisible(false);
+                }
+                fabNav.hide();
+            }
+            else if(dy < -10 || findFirstCompletelyVisiblePostPosition() == 0) {
+                fabNav.show();
+            }
+        }
     }
 
     private void updateLoadMoreState(RecyclerView recyclerView) {
@@ -208,6 +243,9 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void redrawList() {
         try {
+            if(fabOptionsVisible) {
+                setFabNavOptionsVisible(false);
+            }
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
             adapter = new RedditItemListAdapter(activity, items);
@@ -217,6 +255,9 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void redrawList(int viewTypeValue) {
         try {
+            if(fabOptionsVisible) {
+                setFabNavOptionsVisible(false);
+            }
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
             adapter = new RedditItemListAdapter(activity, viewTypeValue, items);
@@ -252,6 +293,150 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         contentView.removeItemDecoration(dividerDecoration);
         if(flag) {
             contentView.addItemDecoration(dividerDecoration);
+        }
+    }
+
+    protected void setFabNavOptions(RedditContentFragment fragment, View view) {
+        layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_fab_nav);
+        if(MyApplication.postNavigation && fragment.hasFabNavigation()) {
+            setLayoutFabNavVisible(true);
+            layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);
+            layoutFabNavOptions.setVisibility(View.INVISIBLE);
+            ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
+            fabNav = (FloatingActionButton) view.findViewById(R.id.fab_nav);
+            fabNav.setBackgroundTintList(fabColor);
+            fabNav.setOnClickListener(this);
+
+            FloatingActionButton fabTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
+            FloatingActionButton fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
+            FloatingActionButton fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
+            FloatingActionButton fabSync = (FloatingActionButton) view.findViewById(R.id.fab_sync);
+            FloatingActionButton fabHideRead = (FloatingActionButton) view.findViewById(R.id.fab_hide_read);
+            FloatingActionButton fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
+            fabTop.setBackgroundTintList(fabColor);
+            fabRefresh.setBackgroundTintList(fabColor);
+            fabSubmit.setBackgroundTintList(fabColor);
+            fabSync.setBackgroundTintList(fabColor);
+            fabHideRead.setBackgroundTintList(fabColor);
+            fabSearch.setBackgroundTintList(fabColor);
+            fabTop.setOnClickListener(this);
+            fabRefresh.setOnClickListener(this);
+            fabSubmit.setOnClickListener(this);
+            fabSync.setOnClickListener(this);
+            fabHideRead.setOnClickListener(this);
+            fabSearch.setOnClickListener(this);
+
+            if(fragment instanceof SearchFragment) {
+                fabSubmit.setVisibility(View.GONE);
+                fabSync.setVisibility(View.GONE);
+            }
+        }
+        else {
+            setLayoutFabNavVisible(false);
+        }
+    }
+
+    public void setFabNavOptionsVisible(boolean flag) {
+        if(flag) {
+            fabOptionsVisible = true;
+            fabNav.setImageResource(R.mipmap.ic_close_grey_48dp);
+            fabNav.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+            // show nav options
+            Animation showAnimation = AnimationUtils.loadAnimation(activity, R.anim.fab_options_show);
+            showAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    layoutFabNavOptions.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            layoutFabNavOptions.startAnimation(showAnimation);
+        }
+        else {
+            fabOptionsVisible = false;
+            fabNav.setImageResource(R.drawable.ic_navigation_white_36dp);
+            fabNav.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
+            // hide nav options
+            Animation hideAnimation = AnimationUtils.loadAnimation(activity, R.anim.fab_options_hide);
+            hideAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    layoutFabNavOptions.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            layoutFabNavOptions.startAnimation(hideAnimation);
+        }
+    }
+
+    private void toggleNavOptions() {
+        setFabNavOptionsVisible(!fabOptionsVisible);
+    }
+
+    private void setLayoutFabNavVisible(boolean flag) {
+        layoutFabNav.setVisibility(flag ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_nav:
+                toggleNavOptions();
+                break;
+            case R.id.fab_go_top:
+                goToTop();
+                setFabNavOptionsVisible(false);
+                break;
+            case R.id.fab_refresh:
+                refreshList();
+                setFabNavOptionsVisible(false);
+                break;
+            case R.id.fab_submit:
+                // TODO: 2/23/2017
+                setFabNavOptionsVisible(false);
+                break;
+            case R.id.fab_sync:
+                // TODO: 2/24/2017 add abstraction
+                ((PostListFragment)this).addToSyncQueue();
+                setFabNavOptionsVisible(false);
+                break;
+            case R.id.fab_hide_read:
+                // TODO: 2/23/2017 this class should have viewTypeValue field, add abstraction later
+                if(this instanceof PostListFragment) {
+                    removeClickedPosts(((PostListFragment)this).getCurrentViewTypeValue());
+                }
+                else if(this instanceof SearchFragment) {
+                    removeClickedPosts();
+                }
+                setFabNavOptionsVisible(false);
+                break;
+            case R.id.fab_search:
+                // TODO: 2/24/2017 add abstraction
+                if(this instanceof PostListFragment) {
+                    ((PostListFragment)this).showSearchDialog();
+                }
+                else if(this instanceof SearchFragment) {
+                    ((SearchFragment)this).showSearchDialog();
+                }
+                setFabNavOptionsVisible(false);
+                break;
         }
     }
 

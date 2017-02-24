@@ -10,31 +10,10 @@
         android:defaultValue="0"/>
 
     <CheckBoxPreference
-        android:key="imageTap"
-        android:title="Dismiss images on single tap"
-        android:defaultValue="true"/>
-
-    <CheckBoxPreference
-        android:key="gifTap"
-        android:title="Dismiss GIF on single tap"
-        android:defaultValue="true"/>
-
-    <CheckBoxPreference
-        android:key="infoTap"
-        android:title="Dismiss image info on single tap"
-        android:defaultValue="true"/>
-
-    <CheckBoxPreference
         android:key="longTapSwitch"
         android:title="Long tap to enter offline/online mode"
         android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly switch between modes"
         android:defaultValue="true"/>
-
-    <CheckBoxPreference
-        android:key="commentNav"
-        android:title="FAB comment navigation"
-        android:summary="Easily navigate between top level parent comments"
-        android:defaultValue="true" />
 
     <CheckBoxPreference
         android:key="swipeRefresh"
@@ -49,5 +28,52 @@
         android:entries="@array/navDrawerSides"
         android:entryValues="@array/navDrawerSides"
         android:defaultValue="@string/left"/>
+
+    <PreferenceCategory
+        android:title="Media viewer">
+
+        <CheckBoxPreference
+            android:key="imageTap"
+            android:title="Dismiss images on single tap"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="gifTap"
+            android:title="Dismiss GIF on single tap"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="infoTap"
+            android:title="Dismiss image info on single tap"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="FAB (floating action button)">
+
+        <CheckBoxPreference
+            android:key="postNav"
+            android:title="FAB post navigation"
+            android:summary="Enables use of floating action buttons when browsing posts"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="autoHidePostNav"
+            android:title="Hide post FAB on scroll down"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="commentNav"
+            android:title="FAB comment navigation"
+            android:summary="Enables use of floating action buttons to navigate between comments"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="autoHideCommentNav"
+            android:title="Hide comment FAB on scroll down"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

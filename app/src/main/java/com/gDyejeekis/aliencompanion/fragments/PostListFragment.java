@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -180,6 +181,7 @@ public class PostListFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties(getCurrentViewTypeValue());
+        setFabNavOptions(this, view);
 
         contentView.addOnScrollListener(onScrollListener);
 
@@ -236,11 +238,7 @@ public class PostListFragment extends RedditContentFragment {
                 showSortPopup(activity.findViewById(R.id.action_sort));
                 return true;
             case R.id.action_search:
-                SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
-                Bundle args = new Bundle();
-                args.putString("subreddit", subreddit);
-                searchDialog.setArguments(args);
-                searchDialog.show(activity.getSupportFragmentManager(), "dialog");
+                showSearchDialog();
                 return true;
             case R.id.action_hide_read:
                 removeClickedPosts(getCurrentViewTypeValue());
@@ -328,26 +326,7 @@ public class PostListFragment extends RedditContentFragment {
                 activity.startActivity(intent);
                 return true;
             case R.id.action_sync_posts:
-                String toastMessage;
-                if(GeneralUtils.isNetworkAvailable(activity)) {
-                    if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
-                        toastMessage = "Syncing over mobile data connection is disabled";
-                    }
-                    else {
-                        String filename = (subreddit == null) ? "frontpage" : subreddit;
-                        toastMessage = filename + " added to sync queue";
-                        intent = new Intent(activity, DownloaderService.class);
-                        intent.putExtra("sort", submissionSort);
-                        intent.putExtra("time", timeSpan);
-                        intent.putExtra("subreddit", subreddit);
-                        intent.putExtra("isMulti", isMulti);
-                        activity.startService(intent);
-                    }
-                }
-                else {
-                    toastMessage = "Network connection unavailable";
-                }
-                ToastUtils.displayShortToast(activity, toastMessage);
+                addToSyncQueue();
                 return true;
             case R.id.action_submit_post:
                 try {
@@ -359,6 +338,37 @@ public class PostListFragment extends RedditContentFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSearchDialog() {
+        SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("subreddit", subreddit);
+        searchDialog.setArguments(args);
+        searchDialog.show(activity.getSupportFragmentManager(), "dialog");
+    }
+
+    public void addToSyncQueue() {
+        String toastMessage;
+        if(GeneralUtils.isNetworkAvailable(activity)) {
+            if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
+                toastMessage = "Syncing over mobile data connection is disabled";
+            }
+            else {
+                String filename = (subreddit == null) ? "frontpage" : subreddit;
+                toastMessage = filename + " added to sync queue";
+                Intent intent = new Intent(activity, DownloaderService.class);
+                intent.putExtra("sort", submissionSort);
+                intent.putExtra("time", timeSpan);
+                intent.putExtra("subreddit", subreddit);
+                intent.putExtra("isMulti", isMulti);
+                activity.startService(intent);
+            }
+        }
+        else {
+            toastMessage = "Network connection unavailable";
+        }
+        ToastUtils.displayShortToast(activity, toastMessage);
     }
 
     public int getCurrentViewTypeValue() {
@@ -467,15 +477,6 @@ public class PostListFragment extends RedditContentFragment {
     }
 
     @Override
-    public void refreshList() {
-        if(currentLoadType!=null) task.cancel(true);
-        currentLoadType = LoadType.refresh;
-        swipeRefreshLayout.setRefreshing(true);
-        task = new LoadPostsTask(activity, this, LoadType.refresh);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
     public void extendList() {
         currentLoadType = LoadType.extend;
         adapter.setLoadingMoreItems(true);
@@ -483,12 +484,25 @@ public class PostListFragment extends RedditContentFragment {
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    @Override
+    public boolean hasFabNavigation() {
+        return true;
+    }
+
+    @Override
+    public void refreshList() {
+        refreshList(submissionSort, timeSpan);
+    }
+
     public void refreshList(SubmissionSort sort, TimeSpan time) {
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if(fabOptionsVisible) {
+            setFabNavOptionsVisible(false);
+        }
     }
 
     public void changeSubreddit(String subreddit, boolean isMulti, boolean isOther) {
@@ -511,7 +525,10 @@ public class PostListFragment extends RedditContentFragment {
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadPostsTask(activity, this, LoadType.init);
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if(fabOptionsVisible) {
+            setFabNavOptionsVisible(false);
+        }
     }
 
     public void setSubreddit(String subreddit) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,11 @@ public class MessageFragment extends RedditContentFragment {
     }
 
     @Override
+    public boolean hasFabNavigation() {
+        return false;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
@@ -59,6 +65,7 @@ public class MessageFragment extends RedditContentFragment {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
         updateContentViewProperties();
+        setFabNavOptions(this, view);
 
         contentView.addOnScrollListener(onScrollListener);
 

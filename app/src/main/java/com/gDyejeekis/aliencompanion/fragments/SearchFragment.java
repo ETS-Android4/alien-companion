@@ -4,6 +4,7 @@ package com.gDyejeekis.aliencompanion.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,6 +47,11 @@ public class SearchFragment extends RedditContentFragment {
         newInstance.hasMore = hasMore;
         newInstance.currentLoadType = currentLoadType;
         return newInstance;
+    }
+
+    @Override
+    public boolean hasFabNavigation() {
+        return true;
     }
 
     @Override
@@ -95,9 +101,8 @@ public class SearchFragment extends RedditContentFragment {
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
 
-        setLayoutManager();
-        contentView.setHasFixedSize(true);
-        setListDividerVisible(PostViewType.hasVisibleListDivider(MyApplication.currentPostListView));
+        updateContentViewProperties();
+        setFabNavOptions(this, view);
 
         contentView.addOnScrollListener(onScrollListener);
 
@@ -139,20 +144,16 @@ public class SearchFragment extends RedditContentFragment {
     }
 
     @Override
-    public void refreshList() {
-        if(currentLoadType!=null) task.cancel(true);
-        currentLoadType = LoadType.refresh;
-        swipeRefreshLayout.setRefreshing(true);
-        task = new LoadSearchTask(activity, this, LoadType.refresh);
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
     public void extendList() {
         currentLoadType = LoadType.extend;
         adapter.setLoadingMoreItems(true);
         task = new LoadSearchTask(activity, this, LoadType.extend);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void refreshList() {
+        refreshList(searchSort, timeSpan);
     }
 
     public void refreshList(SearchSort sort, TimeSpan time) {
@@ -161,6 +162,9 @@ public class SearchFragment extends RedditContentFragment {
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadSearchTask(activity, this, LoadType.refresh, sort, time);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        if(fabOptionsVisible) {
+            setFabNavOptionsVisible(false);
+        }
     }
 
     public void changeQuery(String newQuery) {
@@ -190,8 +194,7 @@ public class SearchFragment extends RedditContentFragment {
                 removeClickedPosts();
                 return true;
             case R.id.action_search:
-                SearchRedditDialogFragment dialog = new SearchRedditDialogFragment();
-                dialog.show(activity.getSupportFragmentManager(), "dialog");
+                showSearchDialog();
                 return true;
             case R.id.action_switch_view:
                 showViewsPopup(activity.findViewById(R.id.action_refresh));
@@ -199,6 +202,11 @@ public class SearchFragment extends RedditContentFragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showSearchDialog() {
+        SearchRedditDialogFragment dialog = new SearchRedditDialogFragment();
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     public String getSubreddit() {

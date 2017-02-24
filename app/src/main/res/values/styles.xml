@@ -328,4 +328,14 @@
         <item name="cardBackgroundColor">@android:color/transparent</item>
     </style>
 
+    <style name="FabNormalMargins">
+        <item name="android:layout_marginBottom">@dimen/fab_margin</item>
+        <item name="android:layout_marginRight">@dimen/fab_margin</item>
+    </style>
+
+    <style name="FabMiniMargins">
+        <item name="android:layout_marginBottom">@dimen/fab_margin</item>
+        <item name="android:layout_marginRight">24dp</item>
+    </style>
+
 </resources>

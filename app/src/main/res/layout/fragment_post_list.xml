@@ -1,6 +1,8 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.gDyejeekis.aliencompanion.fragments.PostListFragment"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gDyejeekis.aliencompanion.fragments.PostListFragment"
     android:id="@+id/swipe_container">
 
     <!-- TODO: rename to a more fitting name -->
@@ -21,6 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"/>
+
+        <include layout="@layout/fab_post_nav"
+            android:id="@+id/layout_fab_nav"/>
+
     </RelativeLayout>
+
 
 </android.support.v4.widget.SwipeRefreshLayout>
