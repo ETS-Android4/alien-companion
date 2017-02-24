@@ -499,7 +499,7 @@ public class MyApplication extends Application {
                 break;
         }
         colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#00BCD4"));
-        colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF9800"));
+        colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF5252"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         postNavigation = prefs.getBoolean("postNav", true);
         commentNavigation = prefs.getBoolean("commentNav", true);

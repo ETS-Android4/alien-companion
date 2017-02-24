@@ -55,7 +55,7 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
         }
         else if(preference.getKey().equals("colorSecondary")) {
             ColorPicker colorPicker = new ColorPicker(getActivity());
-            colorPicker.setColors(R.array.colorPrimaryValues);
+            colorPicker.setColors(R.array.colorSecondaryValues);
             colorPicker.setDefaultColorButton(MyApplication.colorSecondary);
             colorPicker.setRoundColorButton(true);
             colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {

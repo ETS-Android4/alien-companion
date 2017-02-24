@@ -284,6 +284,25 @@
         <item>#28181818</item>
     </array>
 
+    <array name="colorSecondaryValues">
+        <item>#FF5252</item>
+        <item>#FF4081</item>
+        <item>#E040FB</item>
+        <item>#7C4DFF</item>
+        <item>#536DFE</item>
+        <item>#448AFF</item>
+        <item>#40C4FF</item>
+        <item>#18FFFF</item>
+        <item>#64FFDA</item>
+        <item>#69F0AE</item>
+        <item>#B2FF59</item>
+        <item>#EEFF41</item>
+        <item>#FFFF00</item>
+        <item>#FFD740</item>
+        <item>#FFAB40</item>
+        <item>#FF6E40</item>
+    </array>
+
     <array name="fontSizes">
         <item>@string/smallest</item>
         <item>@string/smaller</item>
