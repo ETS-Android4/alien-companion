@@ -57,7 +57,7 @@ public class MyApplication extends Application {
 
     public static final int FAB_HIDE_ON_SCROLL_THRESHOLD = 10;
 
-    public static final int TOOLBAR_HIDE_ON_SCROLL_THRESHOLD = 20;
+    public static final int TOOLBAR_HIDE_ON_SCROLL_THRESHOLD = 10;
 
     public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
 
