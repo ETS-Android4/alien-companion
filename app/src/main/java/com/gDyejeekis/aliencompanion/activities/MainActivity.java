@@ -230,6 +230,10 @@ public class MainActivity extends ToolbarActivity {
             getNavDrawerAdapter().notifyDataSetChanged();
         }
 
+        if(!toolbarVisible && !MyApplication.autoHideToolbar) {
+            showToolbar();
+        }
+
         if(MyApplication.fabPostNavChanged) {
             MyApplication.fabPostNavChanged = false;
             getListFragment().updateFabNavAvailability();
