@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -121,12 +122,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         if(MyApplication.autoHideToolbar) {
             if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
                 ((ToolbarActivity)activity).hideToolbar();
-                updateSwipeRefreshOffset();
             }
             else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
                     || findFirstCompletelyVisiblePostPosition() == 0) {
                 ((ToolbarActivity)activity).showToolbar();
-                updateSwipeRefreshOffset();
             }
         }
     }
@@ -571,6 +570,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     private void updateSwipeRefreshOnScroll() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
+        updateSwipeRefreshOffset();
     }
 
     public void colorSchemeChanged() {
