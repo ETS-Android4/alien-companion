@@ -690,6 +690,8 @@ public class GeneralUtils {
         if(domain.equals("origin.com")) return false;
         if(domain.equals("ubisoft.com")) return false;
         if(domain.equals("humblebundle.com")) return false;
+        if(domain.equals("strawpoll.me")) return false;
+        if(domain.equals("docs.google.com")) return false;
         return true;
     }
 
