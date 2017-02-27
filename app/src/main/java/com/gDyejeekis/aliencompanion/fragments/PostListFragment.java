@@ -528,6 +528,7 @@ public class PostListFragment extends RedditContentFragment {
         task = new LoadPostsTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         hideAllFabOptions();
+        activity.showToolbar();
     }
 
     public void setSubreddit(String subreddit) {

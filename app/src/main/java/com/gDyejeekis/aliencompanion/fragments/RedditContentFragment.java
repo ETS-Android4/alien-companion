@@ -53,7 +53,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public static final String TAG = "RedditContentFragment";
 
-    protected AppCompatActivity activity;
+    protected ToolbarActivity activity;
     public RecyclerView contentView;
     protected RecyclerView.LayoutManager layoutManager;
     public RedditItemListAdapter adapter;
@@ -80,7 +80,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
+        this.activity = (ToolbarActivity) activity;
     }
 
     @Override
@@ -121,11 +121,11 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
             if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
-                ((ToolbarActivity)activity).hideToolbar();
+                activity.hideToolbar();
             }
             else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
                     || findFirstCompletelyVisiblePostPosition() == 0) {
-                ((ToolbarActivity)activity).showToolbar();
+                activity.showToolbar();
             }
         }
     }
@@ -561,11 +561,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void updateSwipeRefreshOffset() {
-        if(activity instanceof ToolbarActivity) {
-            ToolbarActivity toolbarActivity = (ToolbarActivity) activity;
-            int end = toolbarActivity.toolbarVisible ? toolbarActivity.toolbar.getHeight() : 0;
-            swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
-        }
+        int end = activity.toolbarVisible ? activity.toolbar.getHeight() : 0;
+        swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
     }
 
     private void updateSwipeRefreshOnScroll() {
