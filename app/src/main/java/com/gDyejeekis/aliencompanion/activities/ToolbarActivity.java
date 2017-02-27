@@ -13,6 +13,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.TranslateAnimation;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
+
 /**
  * Created by George on 2/24/2017.
  */
@@ -21,8 +23,8 @@ public abstract class ToolbarActivity extends BackNavActivity {
 
     public static final int TOOLBAR_ANIM_DURATION = 500;
 
-    protected Toolbar toolbar;
-    protected boolean toolbarVisible;
+    public Toolbar toolbar;
+    public boolean toolbarVisible;
 
     public void hideToolbar() {
         if(toolbarVisible) {
@@ -36,6 +38,14 @@ public abstract class ToolbarActivity extends BackNavActivity {
             toolbarVisible = true;
             toolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).setDuration(TOOLBAR_ANIM_DURATION);
         }
+    }
+
+    public void  updateToolbarColor() {
+        updateToolbarColor(MyApplication.colorPrimary);
+    }
+
+    public void updateToolbarColor(int color) {
+        toolbar.setBackgroundColor(color);
     }
 
     @Override

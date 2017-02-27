@@ -121,9 +121,7 @@ public class UserFragment extends RedditContentFragment {
         mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
+        initSwipeRefreshLayout(view);
 
         updateContentViewProperties();
         initFabNavOptions(view);

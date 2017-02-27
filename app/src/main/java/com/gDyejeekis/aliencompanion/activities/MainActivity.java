@@ -61,7 +61,7 @@ public class MainActivity extends ToolbarActivity {
     private PostListFragment listFragment;
     private PostFragment postFragment;
     private RecyclerView drawerContent;
-    private NavDrawerAdapter adapter;
+    private NavDrawerAdapter navDrawerAdapter;
     private DrawerLayout.LayoutParams drawerParams;
     private NavigationView scrimInsetsFrameLayout;
     //private Toolbar toolbar;
@@ -181,13 +181,13 @@ public class MainActivity extends ToolbarActivity {
         }
 
         if(MyApplication.currentUser!=null) {
-            adapter.showUserMenuItems();
+            navDrawerAdapter.showUserMenuItems();
         }
         else {
-            adapter.hideUserMenuItems();
+            navDrawerAdapter.hideUserMenuItems();
         }
-        adapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
-        adapter.updateMultiredditItems(MyApplication.currentAccount.getMultireddits());
+        navDrawerAdapter.updateSubredditItems(MyApplication.currentAccount.getSubreddits());
+        navDrawerAdapter.updateMultiredditItems(MyApplication.currentAccount.getMultireddits());
 
         try {
             if(listFragment.isMulti) homePage();
@@ -232,6 +232,7 @@ public class MainActivity extends ToolbarActivity {
 
         if(!toolbarVisible && !MyApplication.autoHideToolbar) {
             showToolbar();
+            getListFragment().updateSwipeRefreshOffset();
         }
 
         if(MyApplication.fabPostNavChanged) {
@@ -260,7 +261,7 @@ public class MainActivity extends ToolbarActivity {
                     List<SavedAccount> accounts = new ArrayList<SavedAccount>();
                     boolean check = true;
                     //if(currentAccount != null) {
-                        for (NavDrawerAccount accountItem : adapter.accountItems) {
+                        for (NavDrawerAccount accountItem : navDrawerAdapter.accountItems) {
                             if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT || accountItem.getAccountType() == NavDrawerAccount.TYPE_LOGGED_OUT) {
                                 SavedAccount accountToSave;
                                 if (check && accountItem.getName().equals(MyApplication.currentAccount.getUsername())) {
@@ -301,7 +302,7 @@ public class MainActivity extends ToolbarActivity {
             MyApplication.colorPrimaryChanged = false;
             MyApplication.currentColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
-            toolbar.setBackgroundColor(MyApplication.colorPrimary);
+            updateToolbarColor();
             //MyApplication.colorPrimaryDark = MyApplication.getPrimaryDarkColor(MyApplication.primaryColors, MyApplication.primaryDarkColors);
             int[] primaryColors = MyApplication.getPrimaryColors(this);
             int[] primaryDarkColors = MyApplication.getPrimaryDarkColors(this);
@@ -311,7 +312,7 @@ public class MainActivity extends ToolbarActivity {
             MyApplication.colorPrimaryLight = primaryLightColors[index];
             drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
             listFragment.colorSchemeChanged();
-            adapter.notifyDataSetChanged();
+            navDrawerAdapter.notifyDataSetChanged();
         }
 
         if(MyApplication.colorSecondaryChanged) {
@@ -499,36 +500,36 @@ public class MainActivity extends ToolbarActivity {
         drawerContent.setLayoutManager(new LinearLayoutManager(this));
         drawerContent.setHasFixedSize(true);
 
-        adapter = new NavDrawerAdapter(this);
-        adapter.add(new NavDrawerHeader());
-        adapter.add(new NavDrawerEmptySpace());
-        adapter.addAll(getMenuItems());
+        navDrawerAdapter = new NavDrawerAdapter(this);
+        navDrawerAdapter.add(new NavDrawerHeader());
+        navDrawerAdapter.add(new NavDrawerEmptySpace());
+        navDrawerAdapter.addAll(getMenuItems());
 
         addNavDrawerSeparators();
 
-        adapter.add(new NavDrawerSubreddits());
-        adapter.addAll(getDefaultSubredditItems());
+        navDrawerAdapter.add(new NavDrawerSubreddits());
+        navDrawerAdapter.addAll(getDefaultSubredditItems());
 
         addNavDrawerSeparators();
 
-        adapter.add(new NavDrawerMultis());
+        navDrawerAdapter.add(new NavDrawerMultis());
 
         addNavDrawerSeparators();
 
-        adapter.add(new NavDrawerOther());
+        navDrawerAdapter.add(new NavDrawerOther());
         //if(MyApplication.offlineModeEnabled) {
-            adapter.add(new NavDrawerOtherItem("Synced"));
+            navDrawerAdapter.add(new NavDrawerOtherItem("Synced"));
         //}
 
-        drawerContent.setAdapter(adapter);
+        drawerContent.setAdapter(navDrawerAdapter);
 
-        adapter.importAccounts();
+        navDrawerAdapter.importAccounts();
     }
 
     private void addNavDrawerSeparators() {
-        adapter.add(new NavDrawerEmptySpace());
-        adapter.add(new NavDrawerSeparator());
-        adapter.add(new NavDrawerEmptySpace());
+        navDrawerAdapter.add(new NavDrawerEmptySpace());
+        navDrawerAdapter.add(new NavDrawerSeparator());
+        navDrawerAdapter.add(new NavDrawerEmptySpace());
     }
 
     private List<NavDrawerItem> getMenuItems() {
@@ -567,7 +568,7 @@ public class MainActivity extends ToolbarActivity {
     }
 
     public NavDrawerAdapter getNavDrawerAdapter() {
-        return adapter;
+        return navDrawerAdapter;
     }
 
     public DrawerLayout getDrawerLayout() {

@@ -117,18 +117,16 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         layoutManager.scrollToPosition(adapter.redditItems.size()-1);
     }
 
-    private void updateSwipeRefreshOnScroll() {
-        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
-    }
-
     private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
             if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
                 ((ToolbarActivity)activity).hideToolbar();
+                updateSwipeRefreshOffset();
             }
             else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
                     || findFirstCompletelyVisiblePostPosition() == 0) {
                 ((ToolbarActivity)activity).showToolbar();
+                updateSwipeRefreshOffset();
             }
         }
     }
@@ -552,9 +550,34 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         contentView.setLayoutManager(layoutManager);
     }
 
-    public void colorSchemeChanged() {
+    public void initSwipeRefreshLayout(View view) {
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        updateSwipeRefreshColor();
+        updateSwipeRefreshOffset();
+    }
+
+    public void updateSwipeRefreshColor() {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.colorPrimary);
-        if(adapter!=null) adapter.notifyDataSetChanged();
+    }
+
+    public void updateSwipeRefreshOffset() {
+        if(activity instanceof ToolbarActivity) {
+            ToolbarActivity toolbarActivity = (ToolbarActivity) activity;
+            int end = toolbarActivity.toolbarVisible ? toolbarActivity.toolbar.getHeight() : 0;
+            swipeRefreshLayout.setProgressViewOffset(false, 0, end + 16);
+        }
+    }
+
+    private void updateSwipeRefreshOnScroll() {
+        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
+    }
+
+    public void colorSchemeChanged() {
+        updateSwipeRefreshColor();
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     //public DialogFragment getCurrentDialogFragment() {
