@@ -564,7 +564,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         if(activity instanceof ToolbarActivity) {
             ToolbarActivity toolbarActivity = (ToolbarActivity) activity;
             int end = toolbarActivity.toolbarVisible ? toolbarActivity.toolbar.getHeight() : 0;
-            swipeRefreshLayout.setProgressViewOffset(false, 0, end + 16);
+            swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
         }
     }
 
