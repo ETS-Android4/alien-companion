@@ -423,12 +423,12 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         int otherFabsVis = !showSubmitFab ? View.VISIBLE : View.GONE;
         fabSubmitLink.setVisibility(submitFabsVis);
         fabSubmitText.setVisibility(submitFabsVis);
-        fabSubmit.setVisibility(subredditFabsVis);
+        fabSubmit.setVisibility(MyApplication.offlineModeEnabled ? View.GONE : subredditFabsVis);
         fabSync.setVisibility(subredditFabsVis);
         fabTop.setVisibility(otherFabsVis);
         fabRefresh.setVisibility(otherFabsVis);
         fabHideRead.setVisibility(otherFabsVis);
-        fabSearch.setVisibility(otherFabsVis);
+        fabSearch.setVisibility(MyApplication.offlineModeEnabled ? View.GONE : otherFabsVis);
     }
 
     private void setFabNavOptionsVisible(boolean flag) {
