@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
@@ -23,7 +24,7 @@ public class SearchActivity extends SwipeBackActivity {
     public static boolean isForeground;
     private SearchFragment searchFragment;
     private FragmentManager fm;
-    private LinearLayout container;
+    private RelativeLayout container;
 
     @Override
     public void finish() {
@@ -36,7 +37,7 @@ public class SearchActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subreddit);
-        container = (LinearLayout) findViewById(R.id.container);
+        container = (RelativeLayout) findViewById(R.id.container);
         MyApplication.initToolbar(this);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
