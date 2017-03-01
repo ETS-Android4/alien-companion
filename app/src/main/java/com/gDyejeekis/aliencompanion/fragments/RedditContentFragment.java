@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -68,7 +66,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            updateSwipeRefreshOnScroll();
+            updateSwipeRefreshState();
             updateToolbarOnScroll(dy);
             updateFabOnScroll(dy);
             updateLoadMoreOnScroll(recyclerView);
@@ -99,7 +97,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     @Override
     public void onResume() {
         super.onResume();
-        updateSwipeRefreshOnScroll();
+        updateSwipeRefreshState();
     }
 
     @Override
@@ -565,7 +563,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
     }
 
-    private void updateSwipeRefreshOnScroll() {
+    private void updateSwipeRefreshState() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
         updateSwipeRefreshOffset();
     }
