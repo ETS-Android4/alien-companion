@@ -692,6 +692,7 @@ public class GeneralUtils {
         if(domain.equals("humblebundle.com")) return false;
         if(domain.equals("strawpoll.me")) return false;
         if(domain.equals("docs.google.com")) return false;
+        if(domain.contains("mixtape.moe")) return false;
         return true;
     }
 
@@ -707,7 +708,6 @@ public class GeneralUtils {
     public static boolean isVideoLink(String url, String domain) {
         if(domain.contains("youtube") || domain.equals("youtu.be")) return true;
         if(domain.contains("streamable.com")) return true;
-        if(domain.contains("mixtape.moe")) return true;
         if(domain.contains("pomf.se")) return true;
         if(domain.contains("dailymotion")) return true;
         if(domain.contains("vimeo.com")) return true;
