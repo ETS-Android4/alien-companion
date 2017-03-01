@@ -38,7 +38,7 @@ public class SearchActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subreddit);
         container = (RelativeLayout) findViewById(R.id.container);
-        MyApplication.initToolbar(this);
+        toolbar = MyApplication.initToolbar(this);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
