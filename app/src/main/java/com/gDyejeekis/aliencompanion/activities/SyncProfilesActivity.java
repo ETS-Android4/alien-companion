@@ -20,7 +20,7 @@ import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 /**
  * Created by sound on 2/4/2016.
  */
-public class SyncProfilesActivity extends BackNavActivity implements DialogInterface.OnClickListener {
+public class SyncProfilesActivity extends ToolbarActivity implements DialogInterface.OnClickListener {
 
     private RecyclerView profilesView;
     private FloatingActionButton fab;
@@ -41,7 +41,7 @@ public class SyncProfilesActivity extends BackNavActivity implements DialogInter
         setContentView(R.layout.activity_sync_profiles);
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         profilesView = (RecyclerView) findViewById(R.id.recyclerView_sync_profiles);
         fab = (FloatingActionButton) findViewById(R.id.fab);

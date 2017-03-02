@@ -23,7 +23,7 @@ import java.util.Collections;
 /**
  * Created by sound on 10/29/2015.
  */
-public class EditSubredditsActivity extends BackNavActivity implements DialogInterface.OnClickListener {
+public class EditSubredditsActivity extends ToolbarActivity implements DialogInterface.OnClickListener {
 
     private ArrayList<String> subreddits;
     private DragSortListView dslv;
@@ -45,7 +45,7 @@ public class EditSubredditsActivity extends BackNavActivity implements DialogInt
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);

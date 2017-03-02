@@ -15,7 +15,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 
-public class SubmitActivity extends BackNavActivity implements DialogInterface.OnClickListener {
+public class SubmitActivity extends ToolbarActivity implements DialogInterface.OnClickListener {
 
     private Fragment fragment;
 
@@ -33,7 +33,7 @@ public class SubmitActivity extends BackNavActivity implements DialogInterface.O
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         setupFragment();
     }

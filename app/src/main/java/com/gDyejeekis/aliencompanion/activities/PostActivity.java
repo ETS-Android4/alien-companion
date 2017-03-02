@@ -26,7 +26,7 @@ public class PostActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
-        toolbar = MyApplication.initToolbar(this);
+        initToolbar();
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);

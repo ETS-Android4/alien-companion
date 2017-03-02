@@ -41,7 +41,7 @@ public class SubredditActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subreddit);
-        toolbar = MyApplication.initToolbar(this);
+        initToolbar();
         container = (RelativeLayout) findViewById(R.id.container);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by sound on 1/29/2016.
  */
-public class EditMultisActivity extends BackNavActivity {
+public class EditMultisActivity extends ToolbarActivity {
 
     private ArrayList<String> multireddits;
     private DragSortListView dslv;
@@ -36,7 +36,7 @@ public class EditMultisActivity extends BackNavActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(bundle);
         setContentView(R.layout.activity_edit_subreddits);
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         changesMade = false;
         dslv = (DragSortListView) findViewById(R.id.dslv);

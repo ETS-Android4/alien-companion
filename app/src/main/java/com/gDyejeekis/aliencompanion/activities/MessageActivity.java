@@ -39,8 +39,8 @@ public class MessageActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subreddit);
+        initToolbar();
 
-        toolbar = MyApplication.initToolbar(this);
         container = (RelativeLayout) findViewById(R.id.container);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);

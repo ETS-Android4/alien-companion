@@ -20,7 +20,7 @@ import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
 /**
  * Created by George on 8/4/2015.
  */
-public class SettingsActivity extends BackNavActivity {
+public class SettingsActivity extends ToolbarActivity {
 
     private SettingsMenuType menuType;
 
@@ -44,7 +44,7 @@ public class SettingsActivity extends BackNavActivity {
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
 
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         menuType = (SettingsMenuType) getIntent().getSerializableExtra("menuType");
         try {

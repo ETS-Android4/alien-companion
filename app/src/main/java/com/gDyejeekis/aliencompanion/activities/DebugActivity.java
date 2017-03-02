@@ -20,7 +20,7 @@ import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
  * Created by George on 12/4/2016.
  */
 
-public class DebugActivity extends BackNavActivity {
+public class DebugActivity extends ToolbarActivity {
 
     public static final String TAG = "DebugActivity";
 
@@ -33,7 +33,7 @@ public class DebugActivity extends BackNavActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
-        MyApplication.initToolbar(this);
+        initToolbar();
         setupLinkHandlerTest();
         setupUrlTests();
     }

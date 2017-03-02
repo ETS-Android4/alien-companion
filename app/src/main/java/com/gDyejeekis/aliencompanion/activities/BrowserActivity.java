@@ -33,7 +33,7 @@ public class BrowserActivity extends SwipeBackActivity {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);

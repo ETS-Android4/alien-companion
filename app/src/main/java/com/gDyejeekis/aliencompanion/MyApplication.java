@@ -350,21 +350,6 @@ public class MyApplication extends Application {
         }
     }
 
-    public static Toolbar initToolbar(AppCompatActivity activity) {
-        Toolbar toolbar = (Toolbar) activity.findViewById(R.id.my_toolbar);
-        if(MyApplication.nightThemeEnabled) {
-            toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        }
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
-        }
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
-        activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        return toolbar;
-    }
-
     public static int getCurrentColorIndex(int[] primaryColors) {
         int index = 0;
         for (int color : primaryColors) {

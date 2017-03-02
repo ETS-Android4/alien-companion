@@ -22,7 +22,7 @@ import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 /**
  * Created by sound on 4/9/2016.
  */
-public class PendingUserActionsActivity extends BackNavActivity {
+public class PendingUserActionsActivity extends ToolbarActivity {
 
     private RecyclerView pendingActionsView;
     private PendingActionsAdapter adapter;
@@ -40,7 +40,7 @@ public class PendingUserActionsActivity extends BackNavActivity {
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }
-        MyApplication.initToolbar(this);
+        initToolbar();
 
         pendingActionsView = (RecyclerView) findViewById(R.id.recyclerView_pendingActions);
         adapter = new PendingActionsAdapter(this);
