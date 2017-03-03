@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
@@ -65,6 +66,16 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean showFullCommentsButton;
     private LinearLayout layoutFab;
     public LoadCommentsTask task;
+
+    private RelativeLayout commentFabRoot;
+    private FloatingActionButton fabMain;
+    private FloatingActionButton fabReply;
+    private FloatingActionButton fabNavSetting;
+    private FloatingActionButton fabSearch;
+    private FloatingActionButton fabRefresh;
+    private FloatingActionButton fabGoToTop;
+    private FloatingActionButton fabNext;
+    private FloatingActionButton fabPrevious;
 
     private boolean updateActionBar = false;
 
@@ -363,41 +374,27 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return rootView;
     }
 
+    private void initFabNavOptions(View view) {
+        commentFabRoot = (RelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
+        if(MyApplication.commentNavigation) {
+            commentFabRoot.setVisibility(View.VISIBLE);
+            // TODO: 3/3/2017
+        }
+        else {
+            commentFabRoot.setVisibility(View.GONE);
+        }
+    }
+
+    private void initRecyclerView(View view) {
+        // TODO: 3/3/2017
+    }
+
     @Override public void onRefresh() {
         swipeRefreshLayout.setRefreshing(false);
         refreshComments();
     }
 
-    //@Override
-    //public void onClick(View v) {
-    //    int position = mRecyclerView.getChildPosition(v);
-    //    int previousPosition = postAdapter.selectedPosition;
-    //    postAdapter.selectedPosition = -1;
-    //    postAdapter.notifyItemChanged(previousPosition);
-    //    postAdapter.toggleGroup(position);
-    //}
-//
-    //@Override
-    //public boolean onLongClick(View v) {
-    //    int position = mRecyclerView.getChildPosition(v);
-    //    if(!postAdapter.getItemAt(position).isGroup()) {
-    //        int previousPosition = postAdapter.selectedPosition;
-    //        if (position == postAdapter.selectedPosition) postAdapter.selectedPosition = -1;
-    //        else postAdapter.selectedPosition = position;
-    //        postAdapter.notifyItemChanged(previousPosition);
-    //        postAdapter.notifyItemChanged(postAdapter.selectedPosition);
-    //        return true;
-    //    }
-    //    else {
-    //        return false;
-    //    }
-    //}
-
     private void nextParentComment() {
-        //int start = mLayoutManager.findLastCompletelyVisibleItemPosition();
-        //if(start==RecyclerView.NO_POSITION) {
-        //    start = mLayoutManager.findLastVisibleItemPosition();
-        //}
         int start = mLayoutManager.findFirstVisibleItemPosition();
         int index = postAdapter.findNextParentCommentIndex(start);
         if(index!=-1) {
@@ -409,10 +406,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void previousParentComment() {
-        //int start = mLayoutManager.findFirstCompletelyVisibleItemPosition();
-        //if(start==RecyclerView.NO_POSITION) {
-        //    start = mLayoutManager.findFirstVisibleItemPosition();
-        //}
         int start = mLayoutManager.findFirstVisibleItemPosition();
         int index = postAdapter.findPreviousParentCommentIndex(start);
         if(index!=-1) {

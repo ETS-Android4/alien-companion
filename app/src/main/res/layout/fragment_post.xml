@@ -1,7 +1,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,30 +28,7 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center_horizontal"
-        android:id="@+id/layout_fab">
+    <include layout="@layout/fab_comment_nav"
+        android:id="@+id/layout_comment_nav_root"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@mipmap/ic_expand_less_white_24dp"
-            android:layout_margin="16dp"
-            app:fabSize="mini"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_down"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:src="@mipmap/ic_expand_more_white_24dp"
-            app:fabSize="mini"/>
-    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
