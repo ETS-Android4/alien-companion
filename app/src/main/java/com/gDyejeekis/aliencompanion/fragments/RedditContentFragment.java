@@ -60,7 +60,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public boolean hasMore;
     public ProgressBar mainProgressBar;
     public SwipeRefreshLayout swipeRefreshLayout;
-    public FloatingActionButton fabNav;
+    public FloatingActionButton fabMain;
 
     protected final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -133,10 +133,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             if (MyApplication.autoHidePostFab) {
                 if (dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD) {
                     hideAllFabOptions();
-                    fabNav.hide();
+                    fabMain.hide();
                 } else if (dy < -MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD
                         || findFirstCompletelyVisiblePostPosition() == 0) {
-                    fabNav.show();
+                    fabMain.show();
                 }
             }
         }
@@ -367,12 +367,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             setLayoutFabNavVisible(true);
             layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);
             layoutFabNavOptions.setVisibility(View.GONE);
-            ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
-            fabNav = (FloatingActionButton) view.findViewById(R.id.fab_nav);
-            fabNav.setBackgroundTintList(fabColor);
-            fabNav.setOnClickListener(this);
-            fabNav.show();
 
+            fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
             fabTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
             fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
             fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
@@ -381,6 +377,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
             fabSubmitLink = (FloatingActionButton) view.findViewById(R.id.fab_submit_link);
             fabSubmitText = (FloatingActionButton) view.findViewById(R.id.fab_submit_text);
+            fabMain.setOnClickListener(this);
             fabTop.setOnClickListener(this);
             fabRefresh.setOnClickListener(this);
             fabSubmit.setOnClickListener(this);
@@ -400,6 +397,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void updateFabNavColors() {
         ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
+        fabMain.setBackgroundTintList(fabColor);
         fabTop.setBackgroundTintList(fabColor);
         fabRefresh.setBackgroundTintList(fabColor);
         fabSubmit.setBackgroundTintList(fabColor);
@@ -458,15 +456,15 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void showFabNavOptions() {
-        fabNav.setImageResource(R.mipmap.ic_close_grey_48dp);
-        fabNav.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+        fabMain.setImageResource(R.mipmap.ic_close_grey_48dp);
+        fabMain.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
         setFabNavOptionsVisible(true);
     }
 
     public void hideAllFabOptions() {
         try {
-            fabNav.setImageResource(R.drawable.ic_navigation_white_36dp);
-            fabNav.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
+            fabMain.setImageResource(R.drawable.ic_navigation_white_36dp);
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
             if (fabOptionsVisible) {
                 setFabNavOptionsVisible(false);
             } else if (fabSubmitOptionsVisible) {
