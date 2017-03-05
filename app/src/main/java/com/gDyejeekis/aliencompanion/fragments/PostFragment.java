@@ -378,6 +378,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             fabReply.setBackgroundTintList(fabColor);
             fabNext.setBackgroundTintList(fabColor);
             fabPrevious.setBackgroundTintList(fabColor);
+            setFabOptionsVisible(fabOptionsVisible);
             int fabVisibility = fabOptionsVisible ? View.VISIBLE : View.GONE;
             layoutFabOptions.setVisibility(fabVisibility);
             layoutCommentNav.setVisibility(fabVisibility);
@@ -436,9 +437,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void showFabNavOptions() {
         if(!fabOptionsVisible) {
-            fabOptionsVisible = true;
-            fabMain.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            fabMain.setImageResource(R.mipmap.ic_close_grey_48dp);
+            setFabOptionsVisible(true);
             layoutFabOptions.startAnimation(showAnimOptions);
             layoutCommentNav.startAnimation(showAnimCommentNav);
         }
@@ -446,11 +445,22 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void hideFabNavOptions() {
         if(fabOptionsVisible) {
+            setFabOptionsVisible(false);
+            layoutCommentNav.startAnimation(hideAnimCommentNav);
+            layoutFabOptions.startAnimation(hideAnimOptions);
+        }
+    }
+
+    private void setFabOptionsVisible(boolean flag) {
+        if(flag) {
+            fabOptionsVisible = true;
+            fabMain.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+            fabMain.setImageResource(R.mipmap.ic_close_grey_48dp);
+        }
+        else {
             fabOptionsVisible = false;
             fabMain.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
             fabMain.setImageResource(R.drawable.ic_navigation_white_36dp);
-            layoutCommentNav.startAnimation(hideAnimCommentNav);
-            layoutFabOptions.startAnimation(hideAnimOptions);
         }
     }
 
