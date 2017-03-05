@@ -68,7 +68,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
 
-    private boolean fabOptionsVisible;
+    private static boolean fabOptionsVisible;
     private LinearLayout layoutCommentNav;
     private LinearLayout layoutFabOptions;
     private FloatingActionButton fabMain;
@@ -378,8 +378,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             fabReply.setBackgroundTintList(fabColor);
             fabNext.setBackgroundTintList(fabColor);
             fabPrevious.setBackgroundTintList(fabColor);
-            layoutFabOptions.setVisibility(View.GONE);
-            layoutCommentNav.setVisibility(View.GONE);
+            int fabVisibility = fabOptionsVisible ? View.VISIBLE : View.GONE;
+            layoutFabOptions.setVisibility(fabVisibility);
+            layoutCommentNav.setVisibility(fabVisibility);
             commentNavSetting = CommentNavSetting.threads;
         }
         else {
