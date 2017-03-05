@@ -388,6 +388,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSubmitText.setOnClickListener(this);
             updateFabNavColors();
 
+            fabMain.show();
             setFabIndividualVisibility(false);
         }
         else {
