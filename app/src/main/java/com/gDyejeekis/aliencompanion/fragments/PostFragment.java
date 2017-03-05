@@ -69,7 +69,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private LinearLayout layoutFab;
     public LoadCommentsTask task;
 
-    private boolean fabMainVisible;
     private boolean fabOptionsVisible;
     private RelativeLayout commentFabRoot;
     private LinearLayout layoutCommentNav;
@@ -384,14 +383,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             fabMain.setVisibility(View.VISIBLE);
             layoutFabOptions.setVisibility(View.GONE);
             layoutCommentNav.setVisibility(View.GONE);
-            fabMainVisible = true;
-            fabOptionsVisible = false;
             commentNavSetting = CommentNavSetting.threads;
         }
         else {
             commentFabRoot.setVisibility(View.GONE);
-            fabMainVisible = false;
-            fabOptionsVisible = false;
         }
     }
 
@@ -471,11 +466,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void setMainFabVisible(boolean flag) {
         if(flag) {
-            fabMainVisible = true;
             fabMain.show();
         }
         else {
-            fabMainVisible = false;
             fabMain.hide();
         }
     }
