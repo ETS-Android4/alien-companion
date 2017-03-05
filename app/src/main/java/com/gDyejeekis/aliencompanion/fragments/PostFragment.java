@@ -46,7 +46,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     //private static final String GROUPS_KEY = "groups_key";
 
     public PostAdapter postAdapter;
@@ -79,11 +79,13 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private boolean updateActionBar = false;
 
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+    private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             updateToolbarOnScroll(dy);
+            updateSwipeRefreshOnScroll();
+            updateCommentNavOnScroll();
         }
     };
 
@@ -294,30 +296,30 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar2);
         progressBar.setVisibility(View.GONE);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView_postList);
-        layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
-        if(MyApplication.commentNavigation) {
-            FloatingActionButton fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
-            FloatingActionButton fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
-            ColorStateList color = (MyApplication.currentBaseTheme >= MyApplication.DARK_THEME) ?
-                    ColorStateList.valueOf(Color.parseColor("#404040")) : ColorStateList.valueOf(MyApplication.colorPrimary);
-            fab_up.setBackgroundTintList(color);
-            fab_down.setBackgroundTintList(color);
-            fab_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    previousParentComment();
-                }
-            });
-            fab_down.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    nextParentComment();
-                }
-            });
-        }
-        else {
-            layoutFab.setVisibility(View.GONE);
-        }
+        //layoutFab = (LinearLayout) rootView.findViewById(R.id.layout_fab);
+        //if(MyApplication.commentNavigation) {
+        //    FloatingActionButton fab_up = (FloatingActionButton) rootView.findViewById(R.id.fab_up);
+        //    FloatingActionButton fab_down = (FloatingActionButton) rootView.findViewById(R.id.fab_down);
+        //    ColorStateList color = (MyApplication.currentBaseTheme >= MyApplication.DARK_THEME) ?
+        //            ColorStateList.valueOf(Color.parseColor("#404040")) : ColorStateList.valueOf(MyApplication.colorPrimary);
+        //    fab_up.setBackgroundTintList(color);
+        //    fab_down.setBackgroundTintList(color);
+        //    fab_up.setOnClickListener(new View.OnClickListener() {
+        //        @Override
+        //        public void onClick(View v) {
+        //            previousParentComment();
+        //        }
+        //    });
+        //    fab_down.setOnClickListener(new View.OnClickListener() {
+        //        @Override
+        //        public void onClick(View v) {
+        //            nextParentComment();
+        //        }
+        //    });
+        //}
+        //else {
+        //    layoutFab.setVisibility(View.GONE);
+        //}
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
@@ -374,19 +376,65 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return rootView;
     }
 
+    private void initRecyclerView(View view) {
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mLayoutManager = new LinearLayoutManager(activity);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addOnScrollListener(onScrollListener);
+    }
+
+    private void initSwipeRefreshLayout(View view) {
+        // TODO: 3/4/2017
+    }
+
     private void initFabNavOptions(View view) {
         commentFabRoot = (RelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
         if(MyApplication.commentNavigation) {
             commentFabRoot.setVisibility(View.VISIBLE);
             // TODO: 3/3/2017
+            fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
+            fabGoToTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
+            fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
+            fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
+            fabNavSetting = (FloatingActionButton) view.findViewById(R.id.fab_comment_nav_setting);
+            fabReply = (FloatingActionButton) view.findViewById(R.id.fab_reply);
+            fabNext = (FloatingActionButton) view.findViewById(R.id.fab_down);
+            fabPrevious = (FloatingActionButton) view.findViewById(R.id.fab_up);
+            fabMain.setOnClickListener(this);
+            fabGoToTop.setOnClickListener(this);
+            fabRefresh.setOnClickListener(this);
+            fabSearch.setOnClickListener(this);
+            fabNavSetting.setOnClickListener(this);
+            fabReply.setOnClickListener(this);
+            fabNext.setOnClickListener(this);
+            fabPrevious.setOnClickListener(this);
         }
         else {
             commentFabRoot.setVisibility(View.GONE);
         }
     }
 
-    private void initRecyclerView(View view) {
-        // TODO: 3/3/2017
+    private void updateSwipeRefreshOnScroll() {
+        if(MyApplication.swipeRefresh) {
+            if (mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                swipeRefreshLayout.setEnabled(true);
+            }
+            else {
+                swipeRefreshLayout.setEnabled(false);
+            }
+        }
+    }
+
+    private void updateCommentNavOnScroll() {
+        if(MyApplication.commentNavigation) {
+            if (mLayoutManager.findLastCompletelyVisibleItemPosition() == postAdapter.getData().size() - 1) {
+                layoutFab.setVisibility(View.GONE);
+            } else {
+                layoutFab.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override public void onRefresh() {
@@ -482,6 +530,36 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             return "synced " + ConvertUtils.getSubmissionAge((double) postFile.lastModified() / 1000);
         }
         return "not synced";
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_nav:
+                // TODO: 3/3/2017 fab main
+                break;
+            case R.id.fab_go_top:
+                // TODO: 3/3/2017
+                break;
+            case R.id.fab_refresh:
+                // TODO: 3/3/2017
+                break;
+            case R.id.fab_search:
+                // TODO: 3/3/2017
+                break;
+            case R.id.fab_comment_nav_setting:
+                // TODO: 3/3/2017
+                break;
+            case R.id.fab_reply:
+                // TODO: 3/3/2017
+                break;
+            case R.id.fab_up:
+                // TODO: 3/3/2017
+                break;
+            case R.id.fab_down:
+                // TODO: 3/3/2017
+                break;
+        }
     }
 
 }
