@@ -618,17 +618,59 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mLayoutManager.scrollToPosition(0);
     }
 
-    private void showNavSettingDialog() {
+    private void showCommentNavDialog() {
         hideFabNavOptions();
         // TODO: 3/5/2017
     }
 
     private void nextComment() {
-        // TODO: 3/5/2017
+        switch (commentNavSetting) {
+            case threads:
+                nextTopParentComment();
+                break;
+            case ama:
+                // TODO: 3/5/2017
+                break;
+            case op:
+                // TODO: 3/5/2017
+                break;
+            case searchText:
+                // TODO: 3/5/2017
+                break;
+            case time:
+                // TODO: 3/5/2017
+                break;
+            case gilded:
+                // TODO: 3/5/2017
+                break;
+            default:
+                throw new RuntimeException("Invalid comment nav setting");
+        }
     }
 
     private void previousComment() {
-        // TODO: 3/5/2017
+        switch (commentNavSetting) {
+            case threads:
+                previousTopParentComment();
+                break;
+            case ama:
+                // TODO: 3/5/2017
+                break;
+            case op:
+                // TODO: 3/5/2017
+                break;
+            case searchText:
+                // TODO: 3/5/2017
+                break;
+            case time:
+                // TODO: 3/5/2017
+                break;
+            case gilded:
+                // TODO: 3/5/2017
+                break;
+            default:
+                throw new RuntimeException("Invalid comment nav setting");
+        }
     }
 
     @Override
@@ -644,7 +686,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 refreshComments();
                 break;
             case R.id.fab_comment_nav_setting:
-                showNavSettingDialog();
+                showCommentNavDialog();
                 break;
             case R.id.fab_reply:
                 submitComment();

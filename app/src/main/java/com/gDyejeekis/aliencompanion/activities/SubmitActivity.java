@@ -29,7 +29,7 @@ public class SubmitActivity extends ToolbarActivity implements DialogInterface.O
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_fragment);
+        setContentView(R.layout.activity_submit);
         if(MyApplication.nightThemeEnabled) {
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         }

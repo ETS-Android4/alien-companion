@@ -25,7 +25,7 @@ public class PostActivity extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_fragment);
+        setContentView(R.layout.activity_post);
         initToolbar();
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
