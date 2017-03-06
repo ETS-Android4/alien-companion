@@ -26,24 +26,6 @@
         android:layout_alignParentEnd="true">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_go_top"
-            style="@style/FabMiniMargins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_expand_less_white_24dp"
-            android:visibility="gone"
-            app:fabSize="mini" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_refresh"
-            style="@style/FabMiniMargins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_refresh_white_24dp"
-            android:visibility="gone"
-            app:fabSize="mini" />
-
-        <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fabSize="mini"

@@ -74,8 +74,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private FloatingActionButton fabMain;
     private FloatingActionButton fabReply;
     private FloatingActionButton fabNavSetting;
-    private FloatingActionButton fabRefresh;
-    private FloatingActionButton fabGoToTop;
     private FloatingActionButton fabNext;
     private FloatingActionButton fabPrevious;
     private Animation showAnimOptions;
@@ -281,7 +279,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void submitComment() {
-        hideFabNavOptions();
         Intent intent = new Intent(activity, SubmitActivity.class);
         intent.putExtra("submitType", SubmitType.comment);
         intent.putExtra("postName", post.getFullName());
@@ -357,23 +354,17 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             layoutCommentNav = (LinearLayout) view.findViewById(R.id.layout_comment_nav);
             layoutFabOptions = (LinearLayout) view.findViewById(R.id.layout_comment_fab_options);
             fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
-            fabGoToTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
-            fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
             fabNavSetting = (FloatingActionButton) view.findViewById(R.id.fab_comment_nav_setting);
             fabReply = (FloatingActionButton) view.findViewById(R.id.fab_reply);
             fabNext = (FloatingActionButton) view.findViewById(R.id.fab_down);
             fabPrevious = (FloatingActionButton) view.findViewById(R.id.fab_up);
             fabMain.setOnClickListener(this);
-            fabGoToTop.setOnClickListener(this);
-            fabRefresh.setOnClickListener(this);
             fabNavSetting.setOnClickListener(this);
             fabReply.setOnClickListener(this);
             fabNext.setOnClickListener(this);
             fabPrevious.setOnClickListener(this);
             ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
             fabMain.setBackgroundTintList(fabColor);
-            fabGoToTop.setBackgroundTintList(fabColor);
-            fabRefresh.setBackgroundTintList(fabColor);
             fabNavSetting.setBackgroundTintList(fabColor);
             fabReply.setBackgroundTintList(fabColor);
             fabNext.setBackgroundTintList(fabColor);
@@ -479,8 +470,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void hideAllFabOnScroll() {
         fabMain.hide();
-        //fabGoToTop.hide();
-        //fabRefresh.hide();
         fabReply.hide();
         fabNavSetting.hide();
         fabNext.hide();
@@ -489,8 +478,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void showAllFabOnScroll() {
         fabMain.show();
-        //fabGoToTop.show();
-        //fabRefresh.show();
         fabReply.show();
         fabNavSetting.show();
         fabNext.show();
@@ -568,7 +555,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setActionBarSubtitle();
         task = new LoadCommentsTask(activity, this);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        hideFabNavOptions();
     }
 
     public void setCommentSort(CommentSort sort) {
@@ -624,13 +610,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return "not synced";
     }
 
-    private void goToTop() {
-        hideFabNavOptions();
-        mLayoutManager.scrollToPosition(0);
-    }
-
     private void showCommentNavDialog() {
-        hideFabNavOptions();
         // TODO: 3/5/2017
     }
 
@@ -689,12 +669,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         switch (v.getId()) {
             case R.id.fab_nav:
                 toggleFabNavOptions();
-                break;
-            case R.id.fab_go_top:
-                goToTop();
-                break;
-            case R.id.fab_refresh:
-                refreshComments();
                 break;
             case R.id.fab_comment_nav_setting:
                 showCommentNavDialog();
