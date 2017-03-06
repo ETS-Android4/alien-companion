@@ -426,22 +426,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         hideAnimCommentNav.setAnimationListener(hideListener);
     }
 
-    private void showFabNavOptions() {
-        if(!fabOptionsVisible) {
-            setFabOptionsVisible(true);
-            layoutFabOptions.startAnimation(showAnimOptions);
-            layoutCommentNav.startAnimation(showAnimCommentNav);
-        }
-    }
-
-    private void hideFabNavOptions() {
-        if(fabOptionsVisible) {
-            setFabOptionsVisible(false);
-            layoutCommentNav.startAnimation(hideAnimCommentNav);
-            layoutFabOptions.startAnimation(hideAnimOptions);
-        }
-    }
-
     private void setFabOptionsVisible(boolean flag) {
         if(flag) {
             fabOptionsVisible = true;
@@ -457,10 +441,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void toggleFabNavOptions() {
         if(fabOptionsVisible) {
-            hideFabNavOptions();
+            setFabOptionsVisible(false);
+            layoutCommentNav.startAnimation(hideAnimCommentNav);
+            layoutFabOptions.startAnimation(hideAnimOptions);
         }
         else {
-            showFabNavOptions();
+            setFabOptionsVisible(true);
+            layoutFabOptions.startAnimation(showAnimOptions);
+            layoutCommentNav.startAnimation(showAnimCommentNav);
         }
     }
 
