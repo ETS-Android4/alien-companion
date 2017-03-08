@@ -40,6 +40,7 @@ public class PostCardViewHolder extends PostViewHolder  {
     public TextView scoreText;
     public TextView domain2;
     public TextView selfText;
+    public TextView goldCount;
     public ImageView upvote;
     public ImageView downvote;
     public ImageView save;
@@ -52,6 +53,7 @@ public class PostCardViewHolder extends PostViewHolder  {
     public LinearLayout layoutPostOptions;
     public LinearLayout commentsButton;
     public LinearLayout layoutSelfText;
+    public LinearLayout layoutGilded;
     public ProgressBar commentsProgress;
 
     public PostCardViewHolder(View itemView, boolean showDetails) {
@@ -64,6 +66,7 @@ public class PostCardViewHolder extends PostViewHolder  {
         }
 
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
+        goldCount = (TextView) itemView.findViewById(R.id.textView_gilded);
         commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
         postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
         linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
@@ -75,6 +78,7 @@ public class PostCardViewHolder extends PostViewHolder  {
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
 
         postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
+        layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
         commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
         domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
         fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
@@ -156,6 +160,14 @@ public class PostCardViewHolder extends PostViewHolder  {
             else {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
             }
+        }
+        // check if gilded
+        if(post.getGilded() > 0) {
+            layoutGilded.setVisibility(View.VISIBLE);
+            goldCount.setText("x" + String.valueOf(post.getGilded()));
+        }
+        else {
+            layoutGilded.setVisibility(View.GONE);
         }
         // set post details
         String detsText = post.getAuthor() + " · " + post.agePrepared + " · ";

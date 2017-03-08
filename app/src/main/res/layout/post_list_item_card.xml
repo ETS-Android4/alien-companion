@@ -23,17 +23,28 @@
             android:padding="10dp"
             android:fontFamily="?attr/defaultFontFamily" />
 
-        <TextView
+        <org.apmem.tools.layouts.FlowLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(post details here)"
-            android:id="@+id/textView_dets1"
-            android:textSize="?attr/font_small"
-            android:textColor="?attr/themeTextHintColor"
-            android:longClickable="false"
-            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingBottom="10dp"
-            android:fontFamily="?attr/defaultFontFamily" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/textView_dets1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="?attr/defaultFontFamily"
+                android:longClickable="false"
+                android:text="(post details here)"
+                android:textColor="?attr/themeTextHintColor"
+                android:textSize="?attr/font_small" />
+
+            <include layout="@layout/layout_gilded" />
+
+        </org.apmem.tools.layouts.FlowLayout>
 
         <LinearLayout
             android:orientation="vertical"

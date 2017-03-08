@@ -136,6 +136,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.setPaddingLeft(leftPadding);
                 }
 
+                //check if gilded
+                if(comment.getGilded() > 0) {
+                    cvh.layoutGilded.setVisibility(View.VISIBLE);
+                    cvh.goldCount.setText("x" + String.valueOf(comment.getGilded()));
+                }
+                else {
+                    cvh.layoutGilded.setVisibility(View.GONE);
+                }
+
                 //modify depending on if group or not
                 if (comment.isGroup()) {
                     cvh.commentHidden.setVisibility(View.VISIBLE);
@@ -530,7 +539,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView commentHidden;
         public TextView score;
         public TextView age;
+        public TextView goldCount;
         private View view;
+        public LinearLayout layoutGilded;
         public LinearLayout rootLayout;
         public LinearLayout commentLayout;
         public LinearLayout commentOptionsLayout;
@@ -548,6 +559,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);
             score = (TextView) itemView.findViewById(R.id.txtView_score);
             commentHidden = (TextView) itemView.findViewById(R.id.txtView_commentHidden);
+            goldCount = (TextView) itemView.findViewById(R.id.textView_gilded);
             age = (TextView) itemView.findViewById(R.id.txtView_age);
             colorBand = itemView.findViewById(R.id.color_band);
             hiddenCommentsCountTextView = (TextView) itemView.findViewById(R.id.hidden_comments_count_textview);
@@ -559,6 +571,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
             rootLayout = (LinearLayout) itemView.findViewById(R.id.rootLayout);
+            layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
             moreLayout = (FlowLayout) itemView.findViewById(R.id.moreLayout);
 
             commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);

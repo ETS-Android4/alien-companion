@@ -7,6 +7,7 @@
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
         <changelogtext>Added 'Subreddit specific views' option under 'Posts' (disabled by default)</changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
+        <changelogtext>Added indicator for gilded posts/comments</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>

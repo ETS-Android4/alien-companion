@@ -79,6 +79,8 @@
                     android:textColor="?attr/themeTextHintColor"
                     android:fontFamily="?attr/defaultFontFamily" />
 
+                <include layout="@layout/layout_gilded"/>
+
                 <TextView
                     android:id="@+id/hidden_comments_count_textview"
                     android:layout_width="wrap_content"
