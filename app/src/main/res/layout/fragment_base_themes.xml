@@ -39,7 +39,8 @@
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
-            android:background="@null"/>
+            android:background="@null"
+            android:buttonTint="?attr/themeTextHintColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -75,7 +76,8 @@
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
-            android:background="@null"/>
+            android:background="@null"
+            android:buttonTint="?attr/themeTextHintColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -110,7 +112,8 @@
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
-            android:background="@null"/>
+            android:background="@null"
+            android:buttonTint="?attr/themeTextHintColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -145,7 +148,8 @@
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
-            android:background="@null"/>
+            android:background="@null"
+            android:buttonTint="?attr/themeTextHintColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -180,7 +184,8 @@
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
-            android:background="@null"/>
+            android:background="@null"
+            android:buttonTint="?attr/themeTextHintColor"/>
     </LinearLayout>
 
 </LinearLayout>

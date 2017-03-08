@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -373,7 +374,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             int fabVisibility = fabOptionsVisible ? View.VISIBLE : View.GONE;
             layoutFabOptions.setVisibility(fabVisibility);
             layoutCommentNav.setVisibility(fabVisibility);
-            commentNavSetting = CommentNavSetting.threads;
+            setCommentNavSetting(CommentNavSetting.threads);
         }
         else {
             commentFabRoot.setVisibility(View.GONE);
@@ -500,6 +501,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void setCommentNavSetting(CommentNavSetting commentNavSetting) {
         this.commentNavSetting = commentNavSetting;
+        fabNavSetting.setImageResource(commentNavSetting.getIconResourceWhite());
         // TODO: 3/5/2017
     }
 
@@ -599,7 +601,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void showCommentNavDialog() {
-        // TODO: 3/5/2017
+        CommentNavDialogFragment dialog = new CommentNavDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("commentNav", commentNavSetting);
+        dialog.setArguments(bundle);
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     private void nextComment() {

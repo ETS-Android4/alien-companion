@@ -89,16 +89,12 @@ public class MainActivity extends ToolbarActivity {
         //    return;
         //}
         setContentView(R.layout.activity_main_plus);
+        initToolbar();
 
         container = (RelativeLayout) findViewById(R.id.container);
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        if(MyApplication.nightThemeEnabled) {
-            getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
-            toolbar.setPopupTheme(R.style.OverflowStyleDark);
-        }
-        toolbar.setBackgroundColor(MyApplication.currentColor);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //if(MyApplication.nightThemeEnabled) {
+        //    getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
+        //}
 
         fm = getFragmentManager();
 

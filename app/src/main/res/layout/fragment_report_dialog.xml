@@ -19,7 +19,7 @@
             android:textSize="20sp"
             android:textColor="?attr/themeTextColor"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextColor" />
+            android:buttonTint="?attr/themeTextHintColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:textSize="20sp"
             android:textColor="?attr/themeTextColor"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextColor" />
+            android:buttonTint="?attr/themeTextHintColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:textSize="20sp"
             android:textColor="?attr/themeTextColor"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextColor" />
+            android:buttonTint="?attr/themeTextHintColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:textColor="?attr/themeTextColor"
             android:textSize="20sp"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextColor" />
+            android:buttonTint="?attr/themeTextHintColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
             android:textColor="?attr/themeTextColor"
             android:textSize="20sp"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextColor" />
+            android:buttonTint="?attr/themeTextHintColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -74,7 +74,7 @@
             android:textColor="?attr/themeTextColor"
             android:textSize="20sp"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextColor" />
+            android:buttonTint="?attr/themeTextHintColor" />
 
     </RadioGroup>
 

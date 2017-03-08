@@ -31,6 +31,7 @@
         <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
         <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>[b]Bug:[/b] Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
+        <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>

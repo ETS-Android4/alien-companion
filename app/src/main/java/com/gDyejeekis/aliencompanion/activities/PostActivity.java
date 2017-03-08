@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -77,6 +78,10 @@ public class PostActivity extends SwipeBackActivity {
     public void finish() {
         super.finish();
         MyApplication.setPendingTransitions(this);
+    }
+
+    public void setCommentNav(CommentNavSetting commentNav) {
+        postFragment.setCommentNavSetting(commentNav);
     }
 
     //@Override
