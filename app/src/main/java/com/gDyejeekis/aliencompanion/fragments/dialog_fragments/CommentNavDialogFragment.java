@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
+import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 
 /**
  * Created by George on 3/8/2017.
@@ -21,33 +22,34 @@ import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 public class CommentNavDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
+        dismiss();
+        PostFragment postFragment = ((PostActivity) getActivity()).getPostFragment();
         switch (v.getId()) {
             case R.id.layout_threads:
-                ((PostActivity) getActivity()).setCommentNav(CommentNavSetting.threads);
-                // TODO: 3/8/2017
+                postFragment.setCommentNavSetting(CommentNavSetting.threads);
+                postFragment.commentNavListener.firstTopParentComment();
                 break;
             case R.id.layout_time:
-                ((PostActivity) getActivity()).setCommentNav(CommentNavSetting.time);
-                // TODO: 3/8/2017
+                postFragment.setCommentNavSetting(CommentNavSetting.time);
+                postFragment.showTimeFilterDialog();
                 break;
             case R.id.layout_search_text:
-                ((PostActivity) getActivity()).setCommentNav(CommentNavSetting.searchText);
-                // TODO: 3/8/2017
+                postFragment.setCommentNavSetting(CommentNavSetting.searchText);
+                postFragment.showSearchTextDialog();
                 break;
             case R.id.layout_op:
-                ((PostActivity) getActivity()).setCommentNav(CommentNavSetting.op);
-                // TODO: 3/8/2017
+                postFragment.setCommentNavSetting(CommentNavSetting.op);
+                postFragment.commentNavListener.firstOpComment();
                 break;
             case R.id.layout_ama:
-                ((PostActivity) getActivity()).setCommentNav(CommentNavSetting.ama);
-                // TODO: 3/8/2017
+                postFragment.setCommentNavSetting(CommentNavSetting.ama);
+                postFragment.commentNavListener.firstAmaComment();
                 break;
             case R.id.layout_gilded:
-                ((PostActivity) getActivity()).setCommentNav(CommentNavSetting.gilded);
-                // TODO: 3/8/2017
+                postFragment.setCommentNavSetting(CommentNavSetting.gilded);
+                postFragment.commentNavListener.firstGildedComment();
                 break;
         }
-        dismiss();
     }
 
     @Nullable

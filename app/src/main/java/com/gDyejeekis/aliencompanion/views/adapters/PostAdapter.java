@@ -52,6 +52,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
     public static final int VIEW_TYPE_MORE = 9;
 
+    public static final int POSITION_NOT_FOUND = -1;
+
     /**
      * This is called when the user click on an item or group.
      */
@@ -353,33 +355,133 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         }
     }
 
-    public int findNextParentCommentIndex(int start) {
-        int index = -1;
-        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
-        for(ExpIndData item : sublist) {
-            if(item.getIndentation()==0) {
-                index = getData().indexOf(item);
-                break;
+    private boolean isOpComment(String op, ExpIndData item) {
+        try {
+            if(item instanceof Comment) {
+                return ((Comment) item).getAuthor().equals(op);
             }
-        }
-        return index;
+        } catch (Exception e) {}
+        return false;
     }
 
-    public int findPreviousParentCommentIndex(int start) {
-        int index = -1;
+    private boolean isGilded(ExpIndData item) {
+        try {
+            if(item instanceof Submission) {
+                return ((Submission)item).getGilded() != 0;
+            }
+            else if(item instanceof Comment) {
+                return ((Comment)item).getGilded() != 0;
+            }
+        } catch (Exception e) {}
+        return false;
+    }
+
+    public int findFirstGildedIndex() {
+        for(ExpIndData item : getData()) {
+            if(isGilded(item)) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findNextGildedIndex(int start) {
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(isGilded(item)) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findPreviousGildedIndex(int start) {
         if(start-1>=0) {
             for(int i=start-1;i>=0;i--) {
                 ExpIndData item = getData().get(i);
-                if(item.getIndentation()==0) {
-                    index = getData().indexOf(item);
-                    break;
+                if(isGilded(item)) {
+                    return getData().indexOf(item);
+                }
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findFirstSearchResultIndex() {
+        // TODO: 3/8/2017
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findNextSearchResultIndex(int start) {
+        // TODO: 3/8/2017
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findPreviousSearchResultIndex(int start) {
+        // TODO: 3/8/2017
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findFirstOpCommentIndex() {
+        final String postAuthor = ((Submission) getItemAt(0)).getAuthor();
+        for(ExpIndData item : getData()) {
+            if(isOpComment(postAuthor, item)) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findNextOpCommentIndex(int start) {
+        final String postAuthor = ((Submission) getItemAt(0)).getAuthor();
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(isOpComment(postAuthor, item)) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findPreviousOpCommentIndex(int start) {
+        final String postAuthor = ((Submission) getItemAt(0)).getAuthor();
+        if(start-1>=0) {
+            for(int i=start-1;i>=0;i--) {
+                ExpIndData item = getData().get(i);
+                if(isOpComment(postAuthor, item)) {
+                    return getData().indexOf(item);
                 }
             }
         }
         else if(start==0) {
-            index = 0;
+            return 0;
         }
-        return index;
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findNextParentCommentIndex(int start) {
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(item.getIndentation()==0) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int findPreviousParentCommentIndex(int start) {
+        if(start-1>=0) {
+            for(int i=start-1;i>=0;i--) {
+                ExpIndData item = getData().get(i);
+                if(item.getIndentation()==0) {
+                    return getData().indexOf(item);
+                }
+            }
+        }
+        else if(start==0) {
+            return 0;
+        }
+        return POSITION_NOT_FOUND;
     }
 
     @Override

@@ -80,10 +80,6 @@ public class PostActivity extends SwipeBackActivity {
         MyApplication.setPendingTransitions(this);
     }
 
-    public void setCommentNav(CommentNavSetting commentNav) {
-        postFragment.setCommentNavSetting(commentNav);
-    }
-
     //@Override
     //public void onConfigurationChanged(Configuration newConfig) {
     //    super.onConfigurationChanged(newConfig);

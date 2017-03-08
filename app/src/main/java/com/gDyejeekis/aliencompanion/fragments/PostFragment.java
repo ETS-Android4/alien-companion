@@ -41,6 +41,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentFabNavListener;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -49,12 +50,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     //private static final String GROUPS_KEY = "groups_key";
 
     public PostAdapter postAdapter;
-    private RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
+    public RecyclerView mRecyclerView;
+    public LinearLayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ToolbarActivity activity;
     public Submission post;
@@ -81,7 +82,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private Animation showAnimCommentNav;
     private Animation hideAnimOptions;
     private Animation hideAnimCommentNav;
-    private CommentNavSetting commentNavSetting;
+    public CommentNavSetting commentNavSetting;
+    public CommentFabNavListener commentNavListener;
 
     private boolean updateActionBar = false;
 
@@ -279,7 +281,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return super.onOptionsItemSelected(item);
     }
 
-    private void submitComment() {
+    public void submitComment() {
         Intent intent = new Intent(activity, SubmitActivity.class);
         intent.putExtra("submitType", SubmitType.comment);
         intent.putExtra("postName", post.getFullName());
@@ -359,11 +361,12 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             fabReply = (FloatingActionButton) view.findViewById(R.id.fab_reply);
             fabNext = (FloatingActionButton) view.findViewById(R.id.fab_down);
             fabPrevious = (FloatingActionButton) view.findViewById(R.id.fab_up);
-            fabMain.setOnClickListener(this);
-            fabNavSetting.setOnClickListener(this);
-            fabReply.setOnClickListener(this);
-            fabNext.setOnClickListener(this);
-            fabPrevious.setOnClickListener(this);
+            commentNavListener = new CommentFabNavListener(this);
+            fabMain.setOnClickListener(commentNavListener);
+            fabNavSetting.setOnClickListener(commentNavListener);
+            fabReply.setOnClickListener(commentNavListener);
+            fabNext.setOnClickListener(commentNavListener);
+            fabPrevious.setOnClickListener(commentNavListener);
             ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
             fabMain.setBackgroundTintList(fabColor);
             fabNavSetting.setBackgroundTintList(fabColor);
@@ -440,7 +443,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    private void toggleFabNavOptions() {
+    public void toggleFabNavOptions() {
         if(fabOptionsVisible) {
             setFabOptionsVisible(false);
             layoutCommentNav.startAnimation(hideAnimCommentNav);
@@ -499,34 +502,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return mLayoutManager.findLastCompletelyVisibleItemPosition();
     }
 
-    public void setCommentNavSetting(CommentNavSetting commentNavSetting) {
-        this.commentNavSetting = commentNavSetting;
-        fabNavSetting.setImageResource(commentNavSetting.getIconResourceWhite());
-        // TODO: 3/5/2017
-    }
-
     @Override public void onRefresh() {
         swipeRefreshLayout.setRefreshing(false);
         refreshComments();
-    }
-
-    private void nextTopParentComment() {
-        int start = mLayoutManager.findFirstVisibleItemPosition();
-        int index = postAdapter.findNextParentCommentIndex(start);
-        if(index!=-1) {
-            mLayoutManager.scrollToPositionWithOffset(index, 0);
-        }
-        if(mLayoutManager.findLastCompletelyVisibleItemPosition() == postAdapter.getData().size() - 1) {
-            hideAllFabOnScroll();
-        }
-    }
-
-    private void previousTopParentComment() {
-        int start = mLayoutManager.findFirstVisibleItemPosition();
-        int index = postAdapter.findPreviousParentCommentIndex(start);
-        if(index!=-1) {
-            mLayoutManager.scrollToPositionWithOffset(index, 0);
-        }
     }
 
     public void loadFullComments() {
@@ -600,7 +578,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return "not synced";
     }
 
-    private void showCommentNavDialog() {
+    public void showCommentNavDialog() {
         CommentNavDialogFragment dialog = new CommentNavDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("commentNav", commentNavSetting);
@@ -608,75 +586,17 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
-    private void nextComment() {
-        switch (commentNavSetting) {
-            case threads:
-                nextTopParentComment();
-                break;
-            case ama:
-                // TODO: 3/5/2017
-                break;
-            case op:
-                // TODO: 3/5/2017
-                break;
-            case searchText:
-                // TODO: 3/5/2017
-                break;
-            case time:
-                // TODO: 3/5/2017
-                break;
-            case gilded:
-                // TODO: 3/5/2017
-                break;
-            default:
-                throw new RuntimeException("Invalid comment nav setting");
-        }
+    public void showSearchTextDialog() {
+        // TODO: 3/8/2017
     }
 
-    private void previousComment() {
-        switch (commentNavSetting) {
-            case threads:
-                previousTopParentComment();
-                break;
-            case ama:
-                // TODO: 3/5/2017
-                break;
-            case op:
-                // TODO: 3/5/2017
-                break;
-            case searchText:
-                // TODO: 3/5/2017
-                break;
-            case time:
-                // TODO: 3/5/2017
-                break;
-            case gilded:
-                // TODO: 3/5/2017
-                break;
-            default:
-                throw new RuntimeException("Invalid comment nav setting");
-        }
+    public void showTimeFilterDialog() {
+        // TODO: 3/8/2017
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab_nav:
-                toggleFabNavOptions();
-                break;
-            case R.id.fab_comment_nav_setting:
-                showCommentNavDialog();
-                break;
-            case R.id.fab_reply:
-                submitComment();
-                break;
-            case R.id.fab_up:
-                previousComment();
-                break;
-            case R.id.fab_down:
-                nextComment();
-                break;
-        }
+    public void setCommentNavSetting(CommentNavSetting commentNavSetting) {
+        this.commentNavSetting = commentNavSetting;
+        fabNavSetting.setImageResource(commentNavSetting.getIconResourceWhite());
     }
 
 }
