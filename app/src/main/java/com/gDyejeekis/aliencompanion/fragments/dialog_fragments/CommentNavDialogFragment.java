@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
@@ -23,7 +24,13 @@ public class CommentNavDialogFragment extends ScalableDialogFragment implements 
     @Override
     public void onClick(View v) {
         dismiss();
-        PostFragment postFragment = ((PostActivity) getActivity()).getPostFragment();
+        PostFragment postFragment;
+        if(getActivity() instanceof PostActivity) {
+            postFragment = ((PostActivity)getActivity()).getPostFragment();
+        }
+        else {
+            postFragment = ((MainActivity)getActivity()).getPostFragment();
+        }
         switch (v.getId()) {
             case R.id.layout_threads:
                 postFragment.setCommentNavSetting(CommentNavSetting.threads);
@@ -43,7 +50,7 @@ public class CommentNavDialogFragment extends ScalableDialogFragment implements 
                 break;
             case R.id.layout_ama:
                 postFragment.setCommentNavSetting(CommentNavSetting.ama);
-                postFragment.commentNavListener.firstAmaComment();
+                postFragment.showAmaModeUsernamePicker();
                 break;
             case R.id.layout_gilded:
                 postFragment.setCommentNavSetting(CommentNavSetting.gilded);

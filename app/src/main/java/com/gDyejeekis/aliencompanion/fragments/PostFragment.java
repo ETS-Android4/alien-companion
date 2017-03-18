@@ -25,11 +25,14 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
+import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -587,11 +590,27 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void showSearchTextDialog() {
-        // TODO: 3/8/2017
+        SearchTextDialogFragment dialog = new SearchTextDialogFragment();
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     public void showTimeFilterDialog() {
-        // TODO: 3/8/2017
+        HmsPickerBuilder hpb = new HmsPickerBuilder()
+                .setFragmentManager(activity.getSupportFragmentManager())
+                .setStyleResId(MyApplication.nightThemeEnabled ? R.style.BetterPickersDialogFragment : R.style.BetterPickersDialogFragment_Light);
+        hpb.addHmsPickerDialogHandler(new HmsPickerDialogFragment.HmsPickerDialogHandlerV2() {
+            @Override
+            public void onDialogHmsSet(int reference, boolean isNegative, int hours, int minutes, int seconds) {
+                long selectedTimeMilis = (hours*60*60*1000) + (minutes*60*1000) + (seconds*1000);
+                long timeFilter = System.currentTimeMillis() - selectedTimeMilis;
+                commentNavListener.setTimeFilterMilis(timeFilter);
+            }
+        });
+        hpb.show();
+    }
+
+    public void showAmaModeUsernamePicker() {
+        // TODO: 3/17/2017
     }
 
     public void setCommentNavSetting(CommentNavSetting commentNavSetting) {

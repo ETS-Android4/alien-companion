@@ -42,11 +42,17 @@ public class CommentFabNavListener implements View.OnClickListener {
     private PostFragment  postFragment;
 
     private String searchQuery;
+    private List<String> amaUsernames;
     private long timeFilterMilis;
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery = searchQuery;
         firstSearchResult();
+    }
+
+    public void setAmaUsernames(List<String> amaUsernames) {
+        this.amaUsernames = amaUsernames;
+        firstAmaComment();
     }
 
     public void setTimeFilterMilis(long timeFilterMilis) {
@@ -189,7 +195,7 @@ public class CommentFabNavListener implements View.OnClickListener {
         scrollToPosition(index);
     }
 
-    public void firstAmaComment() {
+    private void firstAmaComment() {
         // TODO: 3/8/2017
     }
 

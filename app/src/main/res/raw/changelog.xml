@@ -17,7 +17,7 @@
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added FAB (floating action button) menu when browsing posts in subreddits/multireddits and search results]]></changelogtext>
         <changelogtext>Added 'FAB post navigation' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext>Added 'Hide post FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> COMMENT FAB CHANGES HERE]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Revamped FAB comment navigation with new options (threads, search text, time, original poster, gilded and AMA mode)]]></changelogtext>
         <changelogtext>Added 'Hide comment FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default)]]></changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
