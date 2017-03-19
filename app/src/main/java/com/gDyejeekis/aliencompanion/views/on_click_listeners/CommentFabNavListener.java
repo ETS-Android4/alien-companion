@@ -1,11 +1,14 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 
+import android.util.Log;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.util.List;
 
@@ -13,7 +16,11 @@ import java.util.List;
  * Created by George on 3/8/2017.
  */
 
-public class CommentFabNavListener implements View.OnClickListener {
+public class CommentFabNavListener implements View.OnClickListener, View.OnLongClickListener {
+
+    public static final String TAG = "CommentNavListener";
+
+    public static final String NO_ADDITIONAL_ITEMS_MESSAGE = "No additional matching comments";
 
     @Override
     public void onClick(View v) {
@@ -39,16 +46,18 @@ public class CommentFabNavListener implements View.OnClickListener {
     private PostFragment  postFragment;
 
     private String searchQuery;
-    private String[] amaUsernames;
+    public boolean matchCase;
+    private List<String> amaUsernames;
     private long timeFilterMilis;
-    private int amaModeCurrentIndex;
+    private int currentAmaIndex;
 
-    public void setSearchQuery(String searchQuery) {
+    public void setSearchQuery(String searchQuery, boolean matchCase) {
         this.searchQuery = searchQuery;
+        this.matchCase = matchCase;
         firstSearchResult();
     }
 
-    public void setAmaUsernames(String[] amaUsernames) {
+    public void setAmaUsernames(List<String> amaUsernames) {
         this.amaUsernames = amaUsernames;
         firstAmaComment();
     }
@@ -63,52 +72,68 @@ public class CommentFabNavListener implements View.OnClickListener {
     }
 
     private void nextComment() {
+        int start = firstVisibleItemPosition();
+        int index;
         switch (postFragment.commentNavSetting) {
             case threads:
-                nextTopParentComment();
+                index = postFragment.postAdapter.nextTopParentCommentIndex(start);
                 break;
             case ama:
-                nextAmaComment();
+                index = postFragment.postAdapter.nextAmaIndex(start, currentAmaIndex, amaUsernames);
+                currentAmaIndex = index;
                 break;
             case op:
-                nextOpComment();
+                index = postFragment.postAdapter.nextOpCommentIndex(start);
                 break;
             case searchText:
-                nextSearchResult();
+                index = postFragment.postAdapter.nextSearchResultIndex(start, searchQuery, matchCase);
                 break;
             case time:
-                nextTimeFiltered();
+                index = postFragment.postAdapter.nextTimeFilteredIndex(start, timeFilterMilis);
                 break;
             case gilded:
-                nextGildedComment();
+                index = postFragment.postAdapter.nextGildedIndex(start);
                 break;
             default:
-                throw new RuntimeException("Invalid comment nav setting");
+                index = PostAdapter.POSITION_NOT_FOUND;
+                Log.e(TAG, "Invalid comment nav setting");
+        }
+        boolean scrolled = scrollToPosition(index);
+        if(!scrolled) {
+            ToastUtils.displayShortToast(postFragment.getActivity(), NO_ADDITIONAL_ITEMS_MESSAGE);
         }
     }
 
     private void previousComment() {
+        int start = firstVisibleItemPosition();
+        int index;
         switch (postFragment.commentNavSetting) {
             case threads:
-                previousTopParentComment();
+                index = postFragment.postAdapter.previousTopParentCommentIndex(start);
                 break;
             case ama:
-                previousAmaComment();
+                index = postFragment.postAdapter.previousAmaIndex(start, currentAmaIndex, amaUsernames);
+                currentAmaIndex = index;
                 break;
             case op:
-                previousOpComment();
+                index = postFragment.postAdapter.previousOpCommentIndex(start);
                 break;
             case searchText:
-                previousSearchResult();
+                index = postFragment.postAdapter.previousSearchResultIndex(start, searchQuery, matchCase);
                 break;
             case time:
-                previousTimeFiltered();
+                index = postFragment.postAdapter.previousTimeFilteredIndex(start, timeFilterMilis);
                 break;
             case gilded:
-                previousGildedComment();
+                index = postFragment.postAdapter.previousGildedIndex(start);
                 break;
             default:
-                throw new RuntimeException("Invalid comment nav setting");
+                index = PostAdapter.POSITION_NOT_FOUND;
+                Log.e(TAG, "Invalid comment nav setting");
+        }
+        boolean scrolled = scrollToPosition(index);
+        if(!scrolled) {
+            ToastUtils.displayShortToast(postFragment.getActivity(), NO_ADDITIONAL_ITEMS_MESSAGE);
         }
     }
 
@@ -117,28 +142,12 @@ public class CommentFabNavListener implements View.OnClickListener {
         scrollToPosition(position);
     }
 
-    private void nextTopParentComment() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.nextTopParentCommentIndex(start);
-        scrollToPosition(index);
-    }
-
-    private void previousTopParentComment() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.previousTopParentCommentIndex(start);
-        scrollToPosition(index);
-    }
-
     private void firstSearchResult() {
-        // TODO: 3/8/2017
-    }
-
-    private void nextSearchResult() {
-        // TODO: 3/8/2017
-    }
-
-    private void previousSearchResult() {
-        // TODO: 3/8/2017
+        int index = postFragment.postAdapter.firstSearchResultIndex(searchQuery, matchCase);
+        boolean scrolled = scrollToPosition(index);
+        if(!scrolled) {
+            ToastUtils.displayShortToast(postFragment.getActivity(), "Text not found in thread");
+        }
     }
 
     public void firstGildedComment() {
@@ -149,36 +158,12 @@ public class CommentFabNavListener implements View.OnClickListener {
         }
     }
 
-    private void nextGildedComment() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.nextGildedIndex(start);
-        scrollToPosition(index);
-    }
-
-    private void previousGildedComment() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.previousGildedIndex(start);
-        scrollToPosition(index);
-    }
-
     private void firstTimeFiltered() {
         int index = postFragment.postAdapter.firstTimeFilteredIndex(timeFilterMilis);
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
             ToastUtils.displayShortToast(postFragment.getActivity(), "No comments found within the specified time limit");
         }
-    }
-
-    private void nextTimeFiltered() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.nextTimeFilteredIndex(start, timeFilterMilis);
-        scrollToPosition(index);
-    }
-
-    private void previousTimeFiltered() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.previousTimeFilteredIndex(start, timeFilterMilis);
-        scrollToPosition(index);
     }
 
     public void firstOpComment() {
@@ -189,28 +174,13 @@ public class CommentFabNavListener implements View.OnClickListener {
         }
     }
 
-    private void nextOpComment() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.nextOpCommentIndex(start);
-        scrollToPosition(index);
-    }
-
-    private void previousOpComment() {
-        int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.previousOpCommentIndex(start);
-        scrollToPosition(index);
-    }
-
     private void firstAmaComment() {
-        // TODO: 3/8/2017
-    }
-
-    private void nextAmaComment() {
-        // TODO: 3/8/2017
-    }
-
-    private void previousAmaComment() {
-        // TODO: 3/8/2017
+        int index = postFragment.postAdapter.firstAmaIndex(amaUsernames);
+        currentAmaIndex = index;
+        boolean scrolled = scrollToPosition(index);
+        if(!scrolled) {
+            ToastUtils.displayShortToast(postFragment.getActivity(), "No comments found from listed users");
+        }
     }
 
     private boolean scrollToPosition(int position) {
@@ -225,4 +195,9 @@ public class CommentFabNavListener implements View.OnClickListener {
         return postFragment.mLayoutManager.findFirstVisibleItemPosition();
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        // TODO: 3/19/2017
+        return false;
+    }
 }

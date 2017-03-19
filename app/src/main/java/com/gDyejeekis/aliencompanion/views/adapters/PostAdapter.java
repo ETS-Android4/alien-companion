@@ -34,6 +34,7 @@ import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.Utils;
 import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by George on 5/17/2015.
@@ -394,6 +395,55 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return false;
     }
 
+    private boolean findText(ExpIndData item, String toFind, boolean matchCase) {
+        try {
+            String mainText = "";
+            if(item instanceof Submission) {
+                mainText = ((Submission)item).getSelftext();
+            }
+            else if(item instanceof Comment) {
+                mainText = ((Comment)item).getBody();
+            }
+
+            if(matchCase) {
+                if(mainText.contains(toFind)) {
+                    // TODO: 3/19/2017 highlight text
+                    return true;
+                }
+            }
+            else {
+                if(Pattern.compile(Pattern.quote(toFind), Pattern.CASE_INSENSITIVE).matcher(mainText).find()) {
+                    // TODO: 3/19/2017 highlight text
+                    return true;
+                }
+            }
+        } catch (Exception e) {}
+        return false;
+    }
+
+    private boolean isListedAuthor(ExpIndData item, List<String> authors) {
+        try {
+            if(item instanceof Comment) {
+                return authors.contains(((Comment)item).getAuthor().toLowerCase());
+            }
+        } catch (Exception e) {}
+        return false;
+    }
+
+    private int getParentCommentIndex(ExpIndData commentItem) {
+        try {
+            String parentName = ((Comment)commentItem).getParentId();
+            if((parentName.startsWith("t1"))) {
+                for(ExpIndData item : getData()) {
+                    if(item instanceof Comment && ((Comment)item).getFullName().equals(parentName)) {
+                        return getData().indexOf(item);
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return POSITION_NOT_FOUND;
+    }
+
     public int firstGildedIndex() {
         for(ExpIndData item : getData()) {
             if(isGilded(item)) {
@@ -456,18 +506,34 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int firstSearchResultIndex() {
-        // TODO: 3/8/2017
+    public int firstSearchResultIndex(String text, boolean matchCase) {
+        for(ExpIndData item : getData()) {
+            if(findText(item, text, matchCase)) {
+                return getData().indexOf(item);
+            }
+        }
         return POSITION_NOT_FOUND;
     }
 
-    public int nextSearchResultIndex(int start) {
-        // TODO: 3/8/2017
+    public int nextSearchResultIndex(int start, String text, boolean matchCase) {
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(findText(item, text, matchCase)) {
+                return getData().indexOf(item);
+            }
+        }
         return POSITION_NOT_FOUND;
     }
 
-    public int previousSearchResultIndex(int start) {
-        // TODO: 3/8/2017
+    public int previousSearchResultIndex(int start, String text, boolean matchCase) {
+        if(start-1>=0) {
+            for(int i=start-1;i>=0;i--) {
+                ExpIndData item = getData().get(i);
+                if(findText(item, text, matchCase)) {
+                    return getData().indexOf(item);
+                }
+            }
+        }
         return POSITION_NOT_FOUND;
     }
 
@@ -524,6 +590,43 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 ExpIndData item = getData().get(i);
                 if(item.getIndentation()==0) {
                     return getData().indexOf(item);
+                }
+            }
+        }
+        else if(start==0) {
+            return 0;
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int firstAmaIndex(List<String> usernames) {
+        for(ExpIndData item : getData()) {
+            if(isListedAuthor(item, usernames)) {
+                int parentIndex = getParentCommentIndex(item);
+                return parentIndex == POSITION_NOT_FOUND ? getData().indexOf(item) : parentIndex;
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int nextAmaIndex(int start, int currentAmaIndex, List<String> usernames) {
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(isListedAuthor(item, usernames)) {
+                int parentIndex = getParentCommentIndex(item);
+                return currentAmaIndex == parentIndex ? getData().indexOf(item) : parentIndex;
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int previousAmaIndex(int start, int currentAmaIndex, List<String> usernames) {
+        if(start-1>=0) {
+            for(int i=start;i>=0;i--) {
+                ExpIndData item = getData().get(i);
+                if(isListedAuthor(item, usernames)) {
+                    int parentIndex = getParentCommentIndex(item);
+                    return currentAmaIndex == parentIndex ? getData().indexOf(item) : parentIndex;
                 }
             }
         }

@@ -26,6 +26,15 @@
         android:textColor="?attr/themeTextColor"
         android:textColorHint="?attr/themeTextHintColor" />
 
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Match case"
+        android:id="@+id/checkBox_match_case"
+        android:layout_margin="5dp"
+        android:checked="false"
+        android:textColor="?attr/themeTextColor" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
