@@ -3,12 +3,9 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.entity.Comment;
-import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
-import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.util.List;
 
@@ -42,15 +39,16 @@ public class CommentFabNavListener implements View.OnClickListener {
     private PostFragment  postFragment;
 
     private String searchQuery;
-    private List<String> amaUsernames;
+    private String[] amaUsernames;
     private long timeFilterMilis;
+    private int amaModeCurrentIndex;
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery = searchQuery;
         firstSearchResult();
     }
 
-    public void setAmaUsernames(List<String> amaUsernames) {
+    public void setAmaUsernames(String[] amaUsernames) {
         this.amaUsernames = amaUsernames;
         firstAmaComment();
     }
@@ -121,13 +119,13 @@ public class CommentFabNavListener implements View.OnClickListener {
 
     private void nextTopParentComment() {
         int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.findNextParentCommentIndex(start);
+        int index = postFragment.postAdapter.nextTopParentCommentIndex(start);
         scrollToPosition(index);
     }
 
     private void previousTopParentComment() {
         int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.findPreviousParentCommentIndex(start);
+        int index = postFragment.postAdapter.previousTopParentCommentIndex(start);
         scrollToPosition(index);
     }
 
@@ -144,7 +142,7 @@ public class CommentFabNavListener implements View.OnClickListener {
     }
 
     public void firstGildedComment() {
-        int index = postFragment.postAdapter.findFirstGildedIndex();
+        int index = postFragment.postAdapter.firstGildedIndex();
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
             ToastUtils.displayShortToast(postFragment.getActivity(), "No gilded posts/comments found");
@@ -153,30 +151,38 @@ public class CommentFabNavListener implements View.OnClickListener {
 
     private void nextGildedComment() {
         int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.findNextGildedIndex(start);
+        int index = postFragment.postAdapter.nextGildedIndex(start);
         scrollToPosition(index);
     }
 
     private void previousGildedComment() {
         int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.findPreviousGildedIndex(start);
+        int index = postFragment.postAdapter.previousGildedIndex(start);
         scrollToPosition(index);
     }
 
     private void firstTimeFiltered() {
-        // TODO: 3/8/2017
+        int index = postFragment.postAdapter.firstTimeFilteredIndex(timeFilterMilis);
+        boolean scrolled = scrollToPosition(index);
+        if(!scrolled) {
+            ToastUtils.displayShortToast(postFragment.getActivity(), "No comments found within the specified time limit");
+        }
     }
 
     private void nextTimeFiltered() {
-        // TODO: 3/8/2017
+        int start = firstVisibleItemPosition();
+        int index = postFragment.postAdapter.nextTimeFilteredIndex(start, timeFilterMilis);
+        scrollToPosition(index);
     }
 
     private void previousTimeFiltered() {
-        // TODO: 3/8/2017
+        int start = firstVisibleItemPosition();
+        int index = postFragment.postAdapter.previousTimeFilteredIndex(start, timeFilterMilis);
+        scrollToPosition(index);
     }
 
     public void firstOpComment() {
-        int index = postFragment.postAdapter.findFirstOpCommentIndex();
+        int index = postFragment.postAdapter.firstOpCommentIndex();
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
             ToastUtils.displayShortToast(postFragment.getActivity(), "No OP comments found");
@@ -185,13 +191,13 @@ public class CommentFabNavListener implements View.OnClickListener {
 
     private void nextOpComment() {
         int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.findNextOpCommentIndex(start);
+        int index = postFragment.postAdapter.nextOpCommentIndex(start);
         scrollToPosition(index);
     }
 
     private void previousOpComment() {
         int start = firstVisibleItemPosition();
-        int index = postFragment.postAdapter.findPreviousOpCommentIndex(start);
+        int index = postFragment.postAdapter.previousOpCommentIndex(start);
         scrollToPosition(index);
     }
 

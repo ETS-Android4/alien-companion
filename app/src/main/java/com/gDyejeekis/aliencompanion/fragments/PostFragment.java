@@ -31,6 +31,7 @@ import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
@@ -610,7 +611,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void showAmaModeUsernamePicker() {
-        // TODO: 3/17/2017
+        AmaUsernamesDialogFragment dialog = new AmaUsernamesDialogFragment();
+        String author = ((Submission) postAdapter.getData().get(0)).getAuthor();
+        if(author != null && !author.equals("[deleted]")) {
+            Bundle bundle = new Bundle();
+            bundle.putString("usernames", author);
+            dialog.setArguments(bundle);
+        }
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     public void setCommentNavSetting(CommentNavSetting commentNavSetting) {

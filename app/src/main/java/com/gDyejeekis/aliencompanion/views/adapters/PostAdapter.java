@@ -385,7 +385,16 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return false;
     }
 
-    public int findFirstGildedIndex() {
+    private boolean isTimeFiltered(ExpIndData item, long timestampMilis) {
+        try {
+            if(item instanceof Comment) {
+                return ((Comment)item).getCreatedUTC()*1000 >= timestampMilis;
+            }
+        } catch (Exception e) {}
+        return false;
+    }
+
+    public int firstGildedIndex() {
         for(ExpIndData item : getData()) {
             if(isGilded(item)) {
                 return getData().indexOf(item);
@@ -394,7 +403,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findNextGildedIndex(int start) {
+    public int nextGildedIndex(int start) {
         List<ExpIndData> sublist = getData().subList(start+1, getData().size());
         for(ExpIndData item : sublist) {
             if(isGilded(item)) {
@@ -404,7 +413,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findPreviousGildedIndex(int start) {
+    public int previousGildedIndex(int start) {
         if(start-1>=0) {
             for(int i=start-1;i>=0;i--) {
                 ExpIndData item = getData().get(i);
@@ -416,22 +425,53 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findFirstSearchResultIndex() {
+    public int firstTimeFilteredIndex(long timestampMilis) {
+        for(ExpIndData item : getData()) {
+            if(isTimeFiltered(item, timestampMilis)) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int nextTimeFilteredIndex(int start, long timestampMilis) {
+        List<ExpIndData> sublist = getData().subList(start+1, getData().size());
+        for(ExpIndData item : sublist) {
+            if(isTimeFiltered(item, timestampMilis)) {
+                return getData().indexOf(item);
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int previousTimeFilteredIndex(int start, long timestampMilis) {
+        if(start-1>=0) {
+            for(int i=start-1;i>=0;i--) {
+                ExpIndData item = getData().get(i);
+                if(isTimeFiltered(item, timestampMilis)) {
+                    return getData().indexOf(item);
+                }
+            }
+        }
+        return POSITION_NOT_FOUND;
+    }
+
+    public int firstSearchResultIndex() {
         // TODO: 3/8/2017
         return POSITION_NOT_FOUND;
     }
 
-    public int findNextSearchResultIndex(int start) {
+    public int nextSearchResultIndex(int start) {
         // TODO: 3/8/2017
         return POSITION_NOT_FOUND;
     }
 
-    public int findPreviousSearchResultIndex(int start) {
+    public int previousSearchResultIndex(int start) {
         // TODO: 3/8/2017
         return POSITION_NOT_FOUND;
     }
 
-    public int findFirstOpCommentIndex() {
+    public int firstOpCommentIndex() {
         final String postAuthor = ((Submission) getItemAt(0)).getAuthor();
         for(ExpIndData item : getData()) {
             if(isOpComment(postAuthor, item)) {
@@ -441,7 +481,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findNextOpCommentIndex(int start) {
+    public int nextOpCommentIndex(int start) {
         final String postAuthor = ((Submission) getItemAt(0)).getAuthor();
         List<ExpIndData> sublist = getData().subList(start+1, getData().size());
         for(ExpIndData item : sublist) {
@@ -452,7 +492,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findPreviousOpCommentIndex(int start) {
+    public int previousOpCommentIndex(int start) {
         final String postAuthor = ((Submission) getItemAt(0)).getAuthor();
         if(start-1>=0) {
             for(int i=start-1;i>=0;i--) {
@@ -468,7 +508,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findNextParentCommentIndex(int start) {
+    public int nextTopParentCommentIndex(int start) {
         List<ExpIndData> sublist = getData().subList(start+1, getData().size());
         for(ExpIndData item : sublist) {
             if(item.getIndentation()==0) {
@@ -478,7 +518,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return POSITION_NOT_FOUND;
     }
 
-    public int findPreviousParentCommentIndex(int start) {
+    public int previousTopParentCommentIndex(int start) {
         if(start-1>=0) {
             for(int i=start-1;i>=0;i--) {
                 ExpIndData item = getData().get(i);
