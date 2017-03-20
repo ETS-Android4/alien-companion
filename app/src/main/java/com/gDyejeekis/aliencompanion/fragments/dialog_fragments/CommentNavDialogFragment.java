@@ -15,6 +15,7 @@ import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 /**
  * Created by George on 3/8/2017.
@@ -57,6 +58,8 @@ public class CommentNavDialogFragment extends ScalableDialogFragment implements 
                 postFragment.commentNavListener.firstGildedComment();
                 break;
         }
+
+        postFragment.postAdapter.clearHighlightedText();
     }
 
     @Nullable

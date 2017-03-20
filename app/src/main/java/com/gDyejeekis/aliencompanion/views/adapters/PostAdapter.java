@@ -258,11 +258,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         }
                     };
                     strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
+                    // check for highlight text
+                    if(comment.getHighlightText()!=null) {
+                        strBuilder = ConvertUtils.highlightText(strBuilder, comment.getHighlightText(), comment.highlightMatchCase());
+                    }
                     cvh.commentTextView.setText(strBuilder);
                     cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());
                 }
 
-                //user logged in
+                // user logged in
                 if (MyApplication.currentUser != null) {
                     //check user vote
                     if (comment.getLikes().equals("true")) {
@@ -407,13 +411,15 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
             if(matchCase) {
                 if(mainText.contains(toFind)) {
-                    // TODO: 3/19/2017 highlight text
+                    item.setHighlightText(toFind, true);
+                    notifyItemChanged(getData().indexOf(item));
                     return true;
                 }
             }
             else {
                 if(Pattern.compile(Pattern.quote(toFind), Pattern.CASE_INSENSITIVE).matcher(mainText).find()) {
-                    // TODO: 3/19/2017 highlight text
+                    item.setHighlightText(toFind, false);
+                    notifyItemChanged(getData().indexOf(item));
                     return true;
                 }
             }
@@ -634,6 +640,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             return 0;
         }
         return POSITION_NOT_FOUND;
+    }
+
+    public void clearHighlightedText() {
+        for(ExpIndData item : getData()) {
+            item.setHighlightText(null, false);
+        }
+        notifyDataSetChanged();
     }
 
     @Override

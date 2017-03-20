@@ -80,12 +80,14 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
     
     // Possible fields to add as well:
 //    private String bannedBy;
-    String likes;
+    private String likes;
 //    private String approvedBy;
 //    private String authorFlairCSSClass;
 //    private String authorFlairText;
 //    String num_reports = null;
 //    String distinguished = null;
+    private String highlightText;
+    private boolean matchCase;
 
     public Comment(JSONObject obj) {
     	super(safeJsonToString(obj.get("name")));
@@ -150,6 +152,20 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     public List<? extends MultiLevelExpIndListAdapter.ExpIndData> getChildren() {
         return mChildren;
+    }
+
+    @Override
+    public void setHighlightText(String text, boolean matchCase) {
+        this.highlightText = text;
+        this.matchCase = matchCase;
+    }
+
+    public String getHighlightText() {
+        return highlightText;
+    }
+
+    public boolean highlightMatchCase() {
+        return matchCase;
     }
 
     public boolean isGroup() {

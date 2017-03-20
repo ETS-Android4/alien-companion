@@ -105,6 +105,12 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
          * @param indentation The level of indentation in the range [0, n-1]
          */
         //void setIndentation(int indentation);
+
+        /**
+         * @param text The matching string that is to be highlighted
+         * @param matchCase Whether the matching string should match case sensitive
+         */
+        void setHighlightText(String text, boolean matchCase);
     }
 
     public MultiLevelExpIndListAdapter() {

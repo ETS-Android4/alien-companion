@@ -100,6 +100,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     //private String authorFlairCSSClass;
     //private String linkFlairCSSClass;
     //private String distinguished;
+	private String highlightText;
+	private boolean matchCase;
 
 	public void setSyncedComments(List<Comment> comments) {
 		syncedComments = comments;
@@ -295,6 +297,20 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	@Override
 	public int getIndentation() {
 		return 0;
+	}
+
+	@Override
+	public void setHighlightText(String text, boolean matchCase) {
+		this.highlightText = text;
+		this.matchCase = matchCase;
+	}
+
+	public String getHighlightText() {
+		return highlightText;
+	}
+
+	public boolean highlightMatchCase() {
+		return matchCase;
 	}
 
 	// this is very stinky..

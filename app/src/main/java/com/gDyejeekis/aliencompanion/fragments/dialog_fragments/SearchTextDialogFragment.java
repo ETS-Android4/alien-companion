@@ -61,6 +61,11 @@ public class SearchTextDialogFragment extends ScalableDialogFragment implements 
         matchCase = (CheckBox) view.findViewById(R.id.checkBox_match_case);
         matchCase.setChecked(getArguments().getBoolean("matchCase", false));
         searchField = (EditText) view.findViewById(R.id.editText_search);
+        String searchTerm = getArguments().getString("searchTerm", null);
+        if(searchTerm!=null) {
+            searchField.setText(searchTerm);
+            searchField.selectAll();
+        }
         searchField.requestFocus();
         searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

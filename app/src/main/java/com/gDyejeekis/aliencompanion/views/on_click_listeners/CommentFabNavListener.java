@@ -45,7 +45,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
 
     private PostFragment  postFragment;
 
-    private String searchQuery;
+    public String searchQuery;
     public boolean matchCase;
     public List<String> amaUsernames;
     private long timeFilterMilis;

@@ -595,6 +595,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void showSearchTextDialog() {
         SearchTextDialogFragment dialog = new SearchTextDialogFragment();
         Bundle bundle = new Bundle();
+        bundle.putString("searchTerm", commentNavListener.searchQuery);
         bundle.putBoolean("matchCase", commentNavListener.matchCase);
         dialog.setArguments(bundle);
         dialog.show(activity.getSupportFragmentManager(), "dialog");

@@ -116,6 +116,9 @@ public class PostCardViewHolder extends PostViewHolder  {
                     if(showDetails) {
                         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         stringBuilder = ConvertUtils.modifyURLSpan(context, stringBuilder);
+                        if(post.getHighlightText()!=null) {
+                            stringBuilder = ConvertUtils.highlightText(stringBuilder, post.getHighlightText(), post.highlightMatchCase());
+                        }
                         selfText.setText(stringBuilder);
                         selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
                     }

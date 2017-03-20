@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 
@@ -377,5 +378,20 @@ public class ConvertUtils {
             strBuilder.setSpan(plainTextClickable, plainTextSpanStart, strBuilder.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         }
         return strBuilder;
+    }
+
+    public static SpannableStringBuilder highlightText(SpannableStringBuilder stringBuilder, String toFind, boolean matchCase) {
+        String mainText = stringBuilder.toString();
+        if(!matchCase) {
+            mainText = mainText.toLowerCase();
+            toFind = toFind.toLowerCase();
+        }
+        int index = mainText.indexOf(toFind);
+        while (index>=0) {
+            stringBuilder.setSpan(new BackgroundColorSpan(Color.YELLOW), index, index+toFind.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            index = mainText.indexOf(toFind, index+1);
+        }
+
+        return stringBuilder;
     }
 }

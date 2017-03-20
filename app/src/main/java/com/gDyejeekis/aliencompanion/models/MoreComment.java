@@ -19,6 +19,11 @@ public class MoreComment extends Comment implements MultiLevelExpIndListAdapter.
         return PostAdapter.VIEW_TYPE_MORE;
     }
 
+    @Override
+    public void setHighlightText(String text, boolean matchCase) {
+
+    }
+
     private boolean loadingMore;
     private List<String> moreCommentIds;
 
