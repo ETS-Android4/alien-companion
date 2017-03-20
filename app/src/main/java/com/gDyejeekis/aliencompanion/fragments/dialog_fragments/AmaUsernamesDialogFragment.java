@@ -72,7 +72,7 @@ public class AmaUsernamesDialogFragment extends ScalableDialogFragment implement
                 return true;
             }
         });
-        String usernames = getArguments().getString("usernames");
+        String usernames = getArguments().getString("usernames", null);
         if(usernames != null) {
             usernamesField.setText(usernames);
             usernamesField.selectAll();

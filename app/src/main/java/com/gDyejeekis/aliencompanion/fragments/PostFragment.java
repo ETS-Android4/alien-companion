@@ -370,7 +370,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             commentNavListener = new CommentFabNavListener(this);
             fabMain.setOnClickListener(commentNavListener);
             fabNavSetting.setOnClickListener(commentNavListener);
+            fabNavSetting.setOnLongClickListener(commentNavListener);
             fabReply.setOnClickListener(commentNavListener);
+            fabReply.setOnLongClickListener(commentNavListener);
             fabNext.setOnClickListener(commentNavListener);
             fabPrevious.setOnClickListener(commentNavListener);
             ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
@@ -618,11 +620,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void showAmaModeUsernamePicker() {
         AmaUsernamesDialogFragment dialog = new AmaUsernamesDialogFragment();
-        String usernames = "";
-        if(commentNavListener.amaUsernames!=null && commentNavListener.amaUsernames.size() != 0) {
-            usernames = StringUtils.join(commentNavListener.amaUsernames.toArray(), ",");
-        }
-        else {
+        String usernames = commentNavListener.getAmaUsernamesString();
+        if(usernames==null) {
             String author = ((Submission) postAdapter.getData().get(0)).getAuthor();
             if(author!=null && !author.equals("[deleted]")) {
                 usernames = author;

@@ -6,9 +6,12 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
+
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
@@ -195,9 +198,46 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         return postFragment.mLayoutManager.findFirstVisibleItemPosition();
     }
 
+    public String getAmaUsernamesString() {
+        if(amaUsernames!=null && amaUsernames.size()>0) {
+            return StringUtils.join(amaUsernames.toArray(), ", ");
+        }
+        return null;
+    }
+
     @Override
     public boolean onLongClick(View v) {
-        // TODO: 3/19/2017
+        switch (v.getId()) {
+            case R.id.fab_reply:
+                ToastUtils.displayShortToast(postFragment.getActivity(), "Submit a comment");
+                return true;
+            case R.id.fab_comment_nav_setting:
+                String toastMsg = null;
+                switch (postFragment.commentNavSetting) {
+                    case threads:
+                        toastMsg = "Top level parent comments";
+                        break;
+                    case searchText:
+                        toastMsg = searchQuery == null ? "Search text in thread" : "Showing text results for '" + searchQuery + "'";
+                        break;
+                    case time:
+                        // TODO: 3/20/2017
+                        toastMsg = timeFilterMilis == 0 ? "Time filtered" : "Comments submitted in the last " + ConvertUtils.getSubmissionAge((double)timeFilterMilis).replace(" ago", "");
+                        break;
+                    case op:
+                        toastMsg = "Comments by original poster";
+                        break;
+                    case gilded:
+                        toastMsg = "Gilded posts and comments";
+                        break;
+                    case ama:
+                        String usersString = getAmaUsernamesString();
+                        toastMsg = usersString == null ? "AMA mode" : "Selected AMA participants: " + usersString;
+                        break;
+                }
+                ToastUtils.displayShortToast(postFragment.getActivity(), toastMsg);
+                return true;
+        }
         return false;
     }
 }

@@ -381,6 +381,7 @@ public class ConvertUtils {
     }
 
     public static SpannableStringBuilder highlightText(SpannableStringBuilder stringBuilder, String toFind, boolean matchCase) {
+        int highlightColor = MyApplication.nightThemeEnabled ? Color.BLUE : Color.YELLOW;
         String mainText = stringBuilder.toString();
         if(!matchCase) {
             mainText = mainText.toLowerCase();
@@ -388,7 +389,7 @@ public class ConvertUtils {
         }
         int index = mainText.indexOf(toFind);
         while (index>=0) {
-            stringBuilder.setSpan(new BackgroundColorSpan(Color.YELLOW), index, index+toFind.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            stringBuilder.setSpan(new BackgroundColorSpan(highlightColor), index, index+toFind.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             index = mainText.indexOf(toFind, index+1);
         }
 
