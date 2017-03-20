@@ -4,12 +4,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
-import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -50,8 +48,9 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
 
     public String searchQuery;
     public boolean matchCase;
-    public List<String> amaUsernames;
-    private long timeFilterMilis;
+    private List<String> amaUsernames;
+    private String timeFilterString;
+    private long timestampThresholdMilis;
     private int currentAmaIndex;
 
     public void setSearchQuery(String searchQuery, boolean matchCase) {
@@ -65,8 +64,10 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         firstAmaComment();
     }
 
-    public void setTimeFilterMilis(long timeFilterMilis) {
-        this.timeFilterMilis = timeFilterMilis;
+    public void setTimeFilter(int hours, int minutes, int seconds) {
+        long selectedTimeMilis = (hours*60*60*1000) + (minutes*60*1000) + (seconds*1000);
+        this.timestampThresholdMilis = System.currentTimeMillis() - selectedTimeMilis;
+        this.timeFilterString = ConvertUtils.getHrsMinsSecsString(hours, minutes, seconds);
         firstTimeFiltered();
     }
 
@@ -92,7 +93,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 index = postFragment.postAdapter.nextSearchResultIndex(start, searchQuery, matchCase);
                 break;
             case time:
-                index = postFragment.postAdapter.nextTimeFilteredIndex(start, timeFilterMilis);
+                index = postFragment.postAdapter.nextTimeFilteredIndex(start, timestampThresholdMilis);
                 break;
             case gilded:
                 index = postFragment.postAdapter.nextGildedIndex(start);
@@ -125,7 +126,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 index = postFragment.postAdapter.previousSearchResultIndex(start, searchQuery, matchCase);
                 break;
             case time:
-                index = postFragment.postAdapter.previousTimeFilteredIndex(start, timeFilterMilis);
+                index = postFragment.postAdapter.previousTimeFilteredIndex(start, timestampThresholdMilis);
                 break;
             case gilded:
                 index = postFragment.postAdapter.previousGildedIndex(start);
@@ -162,7 +163,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
     }
 
     private void firstTimeFiltered() {
-        int index = postFragment.postAdapter.firstTimeFilteredIndex(timeFilterMilis);
+        int index = postFragment.postAdapter.firstTimeFilteredIndex(timestampThresholdMilis);
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
             ToastUtils.displayShortToast(postFragment.getActivity(), "No comments found within the specified time limit");
@@ -212,27 +213,32 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 ToastUtils.displayShortToast(postFragment.getActivity(), "Submit a comment");
                 return true;
             case R.id.fab_comment_nav_setting:
-                String toastMsg = null;
+                String toastMsg = "Navigate between ";
                 switch (postFragment.commentNavSetting) {
                     case threads:
-                        toastMsg = "Top level parent comments";
+                        toastMsg += "top level parent comments";
                         break;
                     case searchText:
-                        toastMsg = searchQuery == null ? "Search text in thread" : "Showing text results for '" + searchQuery + "'";
+                        toastMsg += "text results";
+                        if(searchQuery!=null) {
+                            toastMsg += " for '" + searchQuery + "'";
+                        }
                         break;
                     case time:
-                        // TODO: 3/20/2017
-                        toastMsg = timeFilterMilis == 0 ? "Time filtered" : "Comments submitted in the last " + ConvertUtils.getSubmissionAge((double)timeFilterMilis).replace(" ago", "");
+                        toastMsg += timeFilterString == null ? "time filtered comments" : "comments submitted in the last " + timeFilterString;
                         break;
                     case op:
-                        toastMsg = "Comments by original poster";
+                        toastMsg += "comments submitted by the original poster";
                         break;
                     case gilded:
-                        toastMsg = "Gilded posts and comments";
+                        toastMsg += "gilded posts and comments";
                         break;
                     case ama:
+                        toastMsg += "questions and answers";
                         String usersString = getAmaUsernamesString();
-                        toastMsg = usersString == null ? "AMA mode" : "Selected AMA participants: " + usersString;
+                        if(usersString!=null) {
+                            toastMsg += " - Selected AMA participants: " + usersString;
+                        }
                         break;
                 }
                 ToastUtils.displayShortToast(postFragment.getActivity(), toastMsg);

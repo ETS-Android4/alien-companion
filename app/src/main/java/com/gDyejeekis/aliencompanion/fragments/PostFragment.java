@@ -47,8 +47,6 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentFabNavListener;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -610,9 +608,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         hpb.addHmsPickerDialogHandler(new HmsPickerDialogFragment.HmsPickerDialogHandlerV2() {
             @Override
             public void onDialogHmsSet(int reference, boolean isNegative, int hours, int minutes, int seconds) {
-                long selectedTimeMilis = (hours*60*60*1000) + (minutes*60*1000) + (seconds*1000);
-                long timeFilter = System.currentTimeMillis() - selectedTimeMilis;
-                commentNavListener.setTimeFilterMilis(timeFilter);
+                commentNavListener.setTimeFilter(hours, minutes, seconds);
             }
         });
         hpb.show();

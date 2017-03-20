@@ -15,11 +15,15 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.UrlOptionsDialog
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,6 +100,61 @@ public class ConvertUtils {
             String years = (diffYears == 1)? " year":" years";
             return Long.toString(diffYears) + years + " ago";
         }
+    }
+
+    public static String getHrsMinsSecsString(int hours, int minutes, int seconds) {
+        List<String> strings = new ArrayList<>();
+
+        String hoursString = null;
+        if(hours==1) {
+            hoursString = "hour";
+        }
+        else if(hours > 1) {
+            hoursString = hours + " hours";
+        }
+        if(hoursString!=null) {
+            strings.add(hoursString);
+        }
+
+        String minutesString = null;
+        if(minutes==1) {
+            if(hoursString==null) {
+                minutesString = "minute";
+            }
+            else {
+                minutesString = "1 minute";
+            }
+        }
+        else if(minutes > 1) {
+            minutesString = minutes + " minutes";
+        }
+        if(minutesString!=null) {
+            strings.add(minutesString);
+        }
+
+        String secondsString = null;
+        if(seconds==1) {
+            if(hoursString==null && minutesString==null) {
+                secondsString = "second";
+            }
+            else {
+                secondsString = "1 second";
+            }
+        }
+        else if(seconds > 1) {
+            secondsString = seconds + " seconds";
+        }
+        if(secondsString!=null) {
+            strings.add(secondsString);
+        }
+
+        String string = StringUtils.join(strings.toArray(), ", ");
+        int index = string.lastIndexOf(", ");
+        if(index>=0) {
+            string = new StringBuilder(string).replace(index, index+2, " and ").toString();
+        }
+
+        return string;
     }
 
     public static CharSequence noTrailingwhiteLines(CharSequence text) {
