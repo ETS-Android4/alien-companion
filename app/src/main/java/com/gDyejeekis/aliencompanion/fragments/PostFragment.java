@@ -47,6 +47,8 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentFabNavListener;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -615,12 +617,19 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void showAmaModeUsernamePicker() {
         AmaUsernamesDialogFragment dialog = new AmaUsernamesDialogFragment();
-        String author = ((Submission) postAdapter.getData().get(0)).getAuthor();
-        if(author != null && !author.equals("[deleted]")) {
-            Bundle bundle = new Bundle();
-            bundle.putString("usernames", author);
-            dialog.setArguments(bundle);
+        String usernames = "";
+        if(commentNavListener.amaUsernames!=null && commentNavListener.amaUsernames.size() != 0) {
+            usernames = StringUtils.join(commentNavListener.amaUsernames.toArray(), ",");
         }
+        else {
+            String author = ((Submission) postAdapter.getData().get(0)).getAuthor();
+            if(author!=null && !author.equals("[deleted]")) {
+                usernames = author;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("usernames", usernames);
+        dialog.setArguments(bundle);
         dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 

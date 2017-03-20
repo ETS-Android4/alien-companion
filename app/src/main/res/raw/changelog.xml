@@ -5,7 +5,7 @@
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Classic' view]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Gallery' view]]></changelogtext>
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
-        <changelogtext>Added 'Subreddit specific views' option under 'Posts' (disabled by default)</changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
         <changelogtext>Added indicator for gilded posts/comments</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
@@ -35,6 +35,11 @@
         <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
         <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.4" changeDate="Dec 15, 2016">

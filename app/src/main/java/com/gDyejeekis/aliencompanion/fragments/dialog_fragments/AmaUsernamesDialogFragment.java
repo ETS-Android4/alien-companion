@@ -75,6 +75,7 @@ public class AmaUsernamesDialogFragment extends ScalableDialogFragment implement
         String usernames = getArguments().getString("usernames");
         if(usernames != null) {
             usernamesField.setText(usernames);
+            usernamesField.selectAll();
         }
         Button cancel = (Button) view.findViewById(R.id.button_cancel);
         Button done = (Button) view.findViewById(R.id.button_done);

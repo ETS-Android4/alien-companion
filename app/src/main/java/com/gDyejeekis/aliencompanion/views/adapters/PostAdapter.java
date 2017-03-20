@@ -614,7 +614,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         for(ExpIndData item : sublist) {
             if(isListedAuthor(item, usernames)) {
                 int parentIndex = getParentCommentIndex(item);
-                return currentAmaIndex == parentIndex ? getData().indexOf(item) : parentIndex;
+                return currentAmaIndex >= parentIndex ? getData().indexOf(item) : parentIndex;
             }
         }
         return POSITION_NOT_FOUND;
