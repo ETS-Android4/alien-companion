@@ -98,7 +98,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
                     Callback callback = new Callback() {
                         @Override
                         public void onSuccess() {
-                            postImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         }
 
                         @Override
