@@ -7,7 +7,6 @@
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
-        <changelogtext>Added indicator for gilded posts/comments</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
@@ -28,10 +27,8 @@
         <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
         <changelogtext>Added spoiler tag support for posts</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
-        <changelogtext>Link flair text is now properly unescaped</changelogtext>
         <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
         <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
-        <changelogtext>[b]Bug:[/b] Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
         <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
         <changelogtext></changelogtext>
@@ -40,6 +37,23 @@
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.6.6" changeDate="Mar 16, 2017">
+        <changelogtext>Fixed 'View changelog' option not displaying changes</changelogtext>
+        <changelogtext>Fixed crash in messages screen</changelogtext>
+        <changelogtext>Fixed crash when opening albums with zero images/GIFs</changelogtext>
+        <changelogtext>Additional improvements to GIF playback</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.6.5" changeDate="Mar 14, 2017">
+        <changelogtext>Fixed issue preventing loading of additional comments in threads with a large number of replies</changelogtext>
+        <changelogtext>Flair text of posts is now properly unescaped</changelogtext>
+        <changelogtext>Improved stability of GIF playback</changelogtext>
+        <changelogtext>Fixed comments screen not opening in dual pane mode after a few rotations</changelogtext>
+        <changelogtext>Tweaked thumbnail size in 'Small cards' view</changelogtext>
+        <changelogtext>Added indicators for gilded posts (cards view) and comments</changelogtext>
+        <changelogtext>Added 'Save to pictures' functionality for synced images/GIFs in offline mode</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.4" changeDate="Dec 15, 2016">
