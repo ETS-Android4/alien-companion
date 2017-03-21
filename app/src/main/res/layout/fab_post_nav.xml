@@ -19,14 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fabSize="mini"
-            android:id="@+id/fab_go_top"
-            android:src="@mipmap/ic_expand_less_white_24dp"
-            style="@style/FabMiniMargins"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fabSize="mini"
             android:id="@+id/fab_refresh"
             android:src="@mipmap/ic_refresh_white_24dp"
             style="@style/FabMiniMargins"/>

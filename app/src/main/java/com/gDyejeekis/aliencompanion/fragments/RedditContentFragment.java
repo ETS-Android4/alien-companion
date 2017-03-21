@@ -106,16 +106,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         this.activity = null;
     }
 
-    public void goToTop() {
-        hideAllFabOptions();
-        layoutManager.scrollToPosition(0);
-    }
-
-    public void goToBottom() {
-        hideAllFabOptions();
-        layoutManager.scrollToPosition(adapter.redditItems.size()-1);
-    }
-
     private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
             if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
@@ -312,7 +302,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     private boolean fabOptionsVisible;
     private boolean fabSubmitOptionsVisible;
 
-    private FloatingActionButton fabTop;
     private FloatingActionButton fabRefresh;
     private FloatingActionButton fabSubmit;
     private FloatingActionButton fabSync;
@@ -369,7 +358,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             layoutFabNavOptions.setVisibility(View.GONE);
 
             fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
-            fabTop = (FloatingActionButton) view.findViewById(R.id.fab_go_top);
             fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
             fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
             fabSync = (FloatingActionButton) view.findViewById(R.id.fab_sync);
@@ -378,7 +366,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSubmitLink = (FloatingActionButton) view.findViewById(R.id.fab_submit_link);
             fabSubmitText = (FloatingActionButton) view.findViewById(R.id.fab_submit_text);
             fabMain.setOnClickListener(this);
-            fabTop.setOnClickListener(this);
             fabRefresh.setOnClickListener(this);
             fabSubmit.setOnClickListener(this);
             fabSync.setOnClickListener(this);
@@ -399,7 +386,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public void updateFabNavColors() {
         ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
         fabMain.setBackgroundTintList(fabColor);
-        fabTop.setBackgroundTintList(fabColor);
         fabRefresh.setBackgroundTintList(fabColor);
         fabSubmit.setBackgroundTintList(fabColor);
         fabSync.setBackgroundTintList(fabColor);
@@ -421,7 +407,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         fabSubmitText.setVisibility(submitFabsVis);
         fabSubmit.setVisibility(MyApplication.offlineModeEnabled ? View.GONE : subredditFabsVis);
         fabSync.setVisibility(subredditFabsVis);
-        fabTop.setVisibility(otherFabsVis);
         fabRefresh.setVisibility(otherFabsVis);
         fabHideRead.setVisibility(otherFabsVis);
         fabSearch.setVisibility(MyApplication.offlineModeEnabled ? View.GONE : otherFabsVis);
@@ -492,9 +477,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         switch (v.getId()) {
             case R.id.fab_nav:
                 toggleNavOptions();
-                break;
-            case R.id.fab_go_top:
-                goToTop();
                 break;
             case R.id.fab_refresh:
                 refreshList();
@@ -573,14 +555,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             adapter.notifyDataSetChanged();
         }
     }
-
-    //public DialogFragment getCurrentDialogFragment() {
-    //    try {
-    //        return (DialogFragment) activity.getFragmentManager().findFragmentByTag("dialog");
-    //    } catch (Exception e) {
-    //        return null;
-    //    }
-    //}
 
     @Override
     public void onRefresh() {
