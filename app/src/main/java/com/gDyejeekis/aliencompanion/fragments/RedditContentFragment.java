@@ -32,6 +32,7 @@ import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners.PostFabNavListener;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import java.util.List;
  * Created by George on 2/9/2017.
  */
 
-public abstract class RedditContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public abstract class RedditContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public abstract void refreshList();
 
@@ -365,14 +366,24 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
             fabSubmitLink = (FloatingActionButton) view.findViewById(R.id.fab_submit_link);
             fabSubmitText = (FloatingActionButton) view.findViewById(R.id.fab_submit_text);
-            fabMain.setOnClickListener(this);
-            fabRefresh.setOnClickListener(this);
-            fabSubmit.setOnClickListener(this);
-            fabSync.setOnClickListener(this);
-            fabHideRead.setOnClickListener(this);
-            fabSearch.setOnClickListener(this);
-            fabSubmitLink.setOnClickListener(this);
-            fabSubmitText.setOnClickListener(this);
+            PostFabNavListener listener = new PostFabNavListener(this);
+            fabMain.setOnClickListener(listener);
+            fabRefresh.setOnClickListener(listener);
+            fabSubmit.setOnClickListener(listener);
+            fabSync.setOnClickListener(listener);
+            fabHideRead.setOnClickListener(listener);
+            fabSearch.setOnClickListener(listener);
+            fabSubmitLink.setOnClickListener(listener);
+            fabSubmitText.setOnClickListener(listener);
+
+            fabRefresh.setOnLongClickListener(listener);
+            fabSubmit.setOnLongClickListener(listener);
+            fabSync.setOnLongClickListener(listener);
+            fabHideRead.setOnLongClickListener(listener);
+            fabSearch.setOnLongClickListener(listener);
+            fabSubmitLink.setOnLongClickListener(listener);
+            fabSubmitText.setOnLongClickListener(listener);
+
             updateFabNavColors();
 
             fabMain.show();
@@ -426,7 +437,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    private void setFabSubmitOptionsVisible(boolean flag) {
+    public void setFabSubmitOptionsVisible(boolean flag) {
         setFabIndividualVisibility(true);
         fabOptionsVisible = false;
         if(flag) {
@@ -459,7 +470,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         } catch (NullPointerException e) {}
     }
 
-    private void toggleNavOptions() {
+    public void toggleNavOptions() {
         if(fabOptionsVisible || fabSubmitOptionsVisible) {
             hideAllFabOptions();
         }
@@ -470,49 +481,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     private void setLayoutFabNavVisible(boolean flag) {
         layoutFabNav.setVisibility(flag ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab_nav:
-                toggleNavOptions();
-                break;
-            case R.id.fab_refresh:
-                refreshList();
-                break;
-            case R.id.fab_submit:
-                setFabSubmitOptionsVisible(true);
-                break;
-            case R.id.fab_sync:
-                // TODO: 2/24/2017 add abstraction
-                ((PostListFragment)this).addToSyncQueue();
-                break;
-            case R.id.fab_hide_read:
-                // TODO: 2/23/2017 this class should have viewTypeValue field, add abstraction later
-                if(this instanceof PostListFragment) {
-                    removeClickedPosts(((PostListFragment)this).getCurrentViewTypeValue());
-                }
-                else if(this instanceof SearchFragment) {
-                    removeClickedPosts();
-                }
-                break;
-            case R.id.fab_search:
-                // TODO: 2/24/2017 add abstraction
-                if(this instanceof PostListFragment) {
-                    ((PostListFragment)this).showSearchDialog();
-                }
-                else if(this instanceof SearchFragment) {
-                    ((SearchFragment)this).showSearchDialog();
-                }
-                break;
-            case R.id.fab_submit_link:
-                ((PostListFragment)this).startSubmitActivity(SubmitType.link);
-                break;
-            case R.id.fab_submit_text:
-                ((PostListFragment)this).startSubmitActivity(SubmitType.self);
-                break;
-        }
     }
 
     /**

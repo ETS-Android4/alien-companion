@@ -45,7 +45,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
-import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentFabNavListener;
+import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners.CommentFabNavListener;
 
 import java.io.File;
 import java.io.FilenameFilter;
