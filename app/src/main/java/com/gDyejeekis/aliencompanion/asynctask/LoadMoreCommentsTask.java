@@ -13,7 +13,9 @@ import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +27,7 @@ public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     private AppCompatActivity activity;
     private PostFragment postFragment;
     private MoreComment moreChildren;
+    private int addIndex;
 
     public LoadMoreCommentsTask(AppCompatActivity activity, MoreComment moreChildren) {
         this.activity = activity;
@@ -41,8 +44,10 @@ public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     protected List<Comment> doInBackground(Void... params) {
         try {
             Comments comments = new Comments(new PoliteRedditHttpClient(), MyApplication.currentUser);
-            return comments.moreChildren(postFragment.post.getFullName(), moreChildren.getMoreCommentIds(),
+            List<Comment> commentList = comments.moreChildren(postFragment.post.getFullName(), moreChildren.getMoreCommentIds(),
                     postFragment.commentSort);
+            commentList = processRetrievedComments(commentList);
+            return commentList;
         } catch (Exception e) {
             exception = e;
             e.printStackTrace();
@@ -50,23 +55,73 @@ public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         return null;
     }
 
+    private List<Comment> processRetrievedComments(List<Comment> comments) {
+        if(comments.size() > 0) {
+            String parentName = moreChildren.getParentId();
+            List<MultiLevelExpIndListAdapter.ExpIndData> adapterData = postFragment.postAdapter.getData();
+            // check if additional comments reply to link
+            if(parentName.startsWith("t3")) {
+                // nest and indent comments as needed
+                //List<Comment> toRemove = new ArrayList<>();
+                for(Comment c : comments) {
+                    if(!c.getParentId().startsWith("t3")) {
+                        for(Comment parent : comments) {
+                            if(c.getParentId().equals(parent.getFullName())) {
+                                c.setIndentation(parent.getIndentation()+1);
+                                parent.addChild(c);
+                                //toRemove.add(c);
+                                break;
+                            }
+                        }
+                    }
+                }
+                //for(Comment comment : toRemove) {
+                //    comments.remove(comment);
+                //}
+                addIndex = adapterData.size()-1;
+            }
+            else {
+                // otherwise find the parent of the additional comments
+                Comment parentComment = null;
+                for (MultiLevelExpIndListAdapter.ExpIndData item : adapterData) {
+                    if (item.getClass() == Comment.class) {
+                        Comment c = (Comment) item;
+                        if (c.getFullName().equals(parentName)) {
+                            parentComment = c;
+                            break;
+                        }
+                    }
+                }
+
+                // if parent is found nest and indent comments as needed
+                if (parentComment != null) {
+                    for (Comment c : comments) {
+                        c.setIndentation(parentComment.getIndentation() + 1);
+                    }
+                    parentComment.getChildren().remove(moreChildren);
+                    parentComment.addChildren(comments);
+                }
+                else {
+                    throw new RuntimeException("Parent comment not found for retrieved comments");
+                }
+                addIndex = adapterData.indexOf(moreChildren);
+            }
+        }
+        return comments;
+    }
+
     @Override
     protected void onPostExecute(List<Comment> comments) {
+        moreChildren.setLoadingMore(false);
         PostAdapter postAdapter = postFragment.postAdapter;
-        int index = postAdapter.getData().indexOf(moreChildren);
-        if(exception!=null) {
-            ToastUtils.displayShortToast(activity, "Error loading comments");
-            moreChildren.setLoadingMore(false);
-            postAdapter.notifyItemChanged(index);
-        }
-        else if(comments.size()==0) {
-            ToastUtils.displayShortToast(activity, "Replies not found");
-            moreChildren.setLoadingMore(false);
+        if(comments==null || comments.size()==0) {
+            ToastUtils.displayShortToast(activity, exception!=null ? "Error loading comments" : "Replies not found");
+            int index = postAdapter.getData().indexOf(moreChildren);
             postAdapter.notifyItemChanged(index);
         }
         else {
-            moreChildren.setLoadingMore(false);
-            postAdapter.commentsAdded(moreChildren, comments);
+            postAdapter.remove(moreChildren);
+            postAdapter.addAll(addIndex, comments);
         }
     }
 }

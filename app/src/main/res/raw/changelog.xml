@@ -29,10 +29,9 @@
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
         <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
+        <changelogtext>Fixed an issue where loading additional comments would sometimes hide the replies to those comments</changelogtext>
         <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

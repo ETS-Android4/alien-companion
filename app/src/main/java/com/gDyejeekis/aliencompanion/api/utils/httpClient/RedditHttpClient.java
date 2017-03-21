@@ -84,7 +84,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             String content = IOUtils.toString(inputStream, "UTF-8");
             IOUtils.closeQuietly(inputStream);
 
-            Log.d(TAG, "inputstream object: " + content);
+            printResponseString(content);
             Object responseObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, responseObject, connection);
 
@@ -111,78 +111,6 @@ public class RedditHttpClient implements HttpClient, Serializable {
         return null;
     }
 
-    //public Response post(String baseUrl, String apiParams, String urlPath, String cookie) {
-    //    tokenCheck();
-//
-    //    HttpURLConnection connection = null;
-    //    try {
-    //        URL url = new URL(baseUrl + urlPath);
-    //        connection = (HttpURLConnection) url.openConnection();
-    //        connection.setUseCaches(false);
-    //        connection.setRequestMethod("POST");
-    //        connection.setRequestProperty("User-Agent", userAgent);
-    //        //byte[] utf8Bytes = apiParams.getBytes("UTF-8");
-    //        //connection.setRequestProperty("Content-Length", String.valueOf(utf8Bytes.length));
-    //        if(RedditOAuth.useOAuth2 && cookie == null) {
-    //            if(MyApplication.currentAccessToken!=null) connection.setRequestProperty("Authorization", "bearer " + MyApplication.currentAccessToken);
-    //            else {
-    //                String userCredentials = RedditOAuth.MY_APP_ID + ":" + RedditOAuth.MY_APP_SECRET;
-    //                String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
-    //                connection.setRequestProperty("Authorization", basicAuth);
-    //            }
-    //        }
-    //        else connection.setRequestProperty("Cookie", "reddit_session="+cookie);
-    //        connection.setDoOutput(true);
-    //        connection.setDoInput(true);
-    //        connection.setChunkedStreamingMode(1000);
-//
-    //        Log.d("geotest", "POST request to  " + baseUrl + urlPath);
-    //        printRequestProperties(connection);
-//
-    //        OutputStream outputStream = connection.getOutputStream();
-    //        //Log.d("geotest", "response code: " + connection.getResponseCode());
-//
-    //        BufferedWriter writer = new BufferedWriter(
-    //                new OutputStreamWriter(outputStream, "UTF-8"));
-    //        writer.write(apiParams);
-//
-    //        writer.flush();
-    //        writer.close();
-    //        outputStream.close();
-//
-    //        InputStream inputStream = connection.getInputStream();
-//
-    //        String content = IOUtils.toString(inputStream, "UTF-8");
-    //        IOUtils.closeQuietly(inputStream);
-//
-    //        Log.d("inputstream object: ", content);
-    //        Object responseObject = new JSONParser().parse(content);
-//
-    //        Response result = new HttpResponse(content, responseObject, connection);
-//
-    //        printHeaderFields(connection);
-//
-    //        if (result.getResponseObject() == null) {
-    //            throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
-    //        } else {
-    //            return result;
-    //        }
-    //    } catch (IOException e) {
-    //        throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
-    //    } catch (ParseException e) {
-    //        throw new ActionFailedException("Failed to parse the response from POST request to URI path: " + baseUrl + urlPath);
-    //    } finally {
-    //        //if(outputStream != null) {
-    //        //    IOUtils.closeQuietly(outputStream);
-    //        //    IOUtils.closeQuietly(inputStream);
-    //        //}
-    //        if(connection != null) {
-    //            connection.disconnect();
-    //        }
-    //    }
-    //    //return null;
-    //}
-
     public Response post(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
         Log.d(TAG, "POST request to " + baseUrl + urlPath);
@@ -208,7 +136,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Log.d(TAG, "request headers: " + request.headers());
             Log.d(TAG, "response code: " + response.code());
             Log.d(TAG, "response headers: " + response.headers());
-            Log.d(TAG, "inputstream: " + content);
+            printResponseString(content);
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -250,7 +178,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Log.d(TAG, "request headers: " + request.headers());
             Log.d(TAG, "response code: " + response.code());
             Log.d(TAG, "response headers: " + response.headers());
-            Log.d(TAG, "inputstream: " + content);
+            printResponseString(content);
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -292,7 +220,7 @@ public class RedditHttpClient implements HttpClient, Serializable {
             Log.d(TAG, "request headers: " + request.headers());
             Log.d(TAG, "response code: " + response.code());
             Log.d(TAG, "response headers: " + response.headers());
-            Log.d(TAG, "inputstream: " + content);
+            printResponseString(content);
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -312,32 +240,6 @@ public class RedditHttpClient implements HttpClient, Serializable {
     public void setUserAgent(String agent) {
         this.userAgent = agent;
     }
-
-
-    //private void tokenCheck() {
-    //    try {
-    //        if (RedditOAuth.useOAuth2 && !MyApplication.renewingToken) {
-    //            while(MyApplication.currentAccount==null) {
-    //                Log.d(TAG, "MyApplication.currentAccount is null, waiting..");
-    //                SystemClock.sleep(100);
-    //            }
-    //            if (MyApplication.currentAccessToken == null && !MyApplication.currentAccount.loggedIn) {
-    //                MyApplication.renewingToken = true;
-    //                OAuthToken token = RedditOAuth.getApplicationToken(new RedditHttpClient());
-    //                MyApplication.currentAccount.setToken(token);
-    //                MyApplication.currentAccessToken = token.accessToken;
-    //                MyApplication.renewingToken = false;
-    //                MyApplication.accountChanges = true;
-    //            } else {
-    //                MyApplication.currentAccount.getToken().checkToken();
-    //            }
-    //        }
-    //    } catch (ActionFailedException e) {
-    //        MyApplication.renewingToken = false;
-    //        Log.e(RedditOAuth.TAG, "Error renewing oauth token");
-    //        e.printStackTrace();
-    //    }
-    //}
 
     private void tokenCheck() {
         while(MyApplication.renewingToken && !renewTokenInstance) {
@@ -377,6 +279,16 @@ public class RedditHttpClient implements HttpClient, Serializable {
             MyApplication.renewingToken = false;
             Log.e(RedditOAuth.TAG, "Error renewing oauth token");
             e.printStackTrace();
+        }
+    }
+
+    private void printResponseString(String responseString) {
+        int maxLogSize = 800;
+        for(int i = 0; i <= responseString.length() / maxLogSize; i++) {
+            int start = i * maxLogSize;
+            int end = (i+1) * maxLogSize;
+            end = end > responseString.length() ? responseString.length() : end;
+            Log.v(TAG, "response: " + responseString.substring(start, end));
         }
     }
 

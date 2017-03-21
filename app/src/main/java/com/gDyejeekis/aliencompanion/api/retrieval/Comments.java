@@ -24,6 +24,9 @@ import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.ParamFormatter;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
 /**
  * This class offers the following functionality:
  * 1) Parsing the results of a request into Comment objects (see <code>Comments.parseBreadth()</code> and <code>Comments.parseDepth()</code>).
@@ -391,25 +394,16 @@ public class Comments implements ActorDriven {
 		// Determine cookie
 		String cookie = (user == null) ? null : user.getCookie();
 
-		final int maxReplies = 950;
-
-		final int limit = (children.size()<=maxReplies) ? children.size() : maxReplies;
-
 		String replies = "";
-		for(String id : children.subList(0, limit)) {
+		for(String id : children) {
 			replies = replies.concat(id);
-			if(children.indexOf(id) != limit-1) {
+			if(children.indexOf(id) != children.size()-1) {
 				replies = replies.concat(",");
 			}
 		}
-		String params = "";
-		params = ParamFormatter.addParameter(params, "api_type", "json");
-		params = ParamFormatter.addParameter(params, "children", replies);
-		params = ParamFormatter.addParameter(params, "link_id", linkId);
-		params = ParamFormatter.addParameter(params, "sort", sort.value());
 
-		JSONObject object = (JSONObject) httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
-				String.format(ApiEndpointUtils.SUBMISSION_MORE_COMMENTS, params), cookie).getResponseObject();
+		RequestBody body = new FormBody.Builder().add("api_type", "json").add("children", replies).add("link_id", linkId).add("sort", sort.value()).build();
+		JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.SUBMISSION_MORE_COMMENTS, cookie).getResponseObject();
 
 		JSONObject json = (JSONObject) object.get("json");
 		JSONObject data = (JSONObject) json.get("data");

@@ -124,62 +124,6 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
         notifyItemChanged(index);
     }
 
-    public void commentsRefreshed(Submission post, List<Comment> comments) {
-        mData.clear();
-        mData.add(post);
-        addAll(comments);
-        notifyDataSetChanged();
-    }
-
-    public void commentsAdded(MoreComment moreChildren, List<Comment> comments) {
-        String parentName = moreChildren.getParentId();
-        if(parentName.startsWith("t3")) {
-            mData.remove(moreChildren);
-            mData.addAll(comments);
-            for(Comment c : comments) {
-                if(!c.getParentId().startsWith("t3")) {
-                    for(Comment parent : comments) {
-                        if(c.getParentId().equals(parent.getFullName())) {
-                            c.setIndentation(parent.getIndentation()+1);
-                            parent.addChild(c);
-                            break;
-                        }
-                    }
-                }
-            }
-            notifyDataSetChanged();
-            return;
-        }
-
-        Comment parentComment = null;
-        for(ExpIndData item : mData) {
-            if(item.getClass() == Comment.class) {
-                Comment c = (Comment) item;
-                if(c.getFullName().equals(parentName)) {
-                    parentComment = c;
-                    break;
-                }
-            }
-        }
-
-        if(parentComment!=null) {
-            int index = mData.indexOf(moreChildren);
-            mData.remove(moreChildren);
-            mData.addAll(index, comments);
-            for(Comment c : comments) {
-                c.setIndentation(parentComment.getIndentation()+1);
-            }
-            parentComment.getChildren().remove(moreChildren);
-            parentComment.addChildren(comments);
-            notifyDataSetChanged();
-        }
-        else {
-            moreChildren.setLoadingMore(false);
-            notifyItemChanged(mData.indexOf(moreChildren));
-            Log.d(TAG, "Failed to add more comments");
-        }
-    }
-
     public void add(ExpIndData item) {
         if (item != null) {
             mData.add(item);

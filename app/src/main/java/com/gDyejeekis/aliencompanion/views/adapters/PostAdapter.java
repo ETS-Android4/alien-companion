@@ -649,6 +649,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         notifyDataSetChanged();
     }
 
+    public void commentsRefreshed(Submission post, List<Comment> comments) {
+        getData().clear();
+        getData().add(post);
+        addAll(comments);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {
