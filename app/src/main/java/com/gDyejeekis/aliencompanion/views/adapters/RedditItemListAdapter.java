@@ -370,13 +370,18 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
             age.setText(message.agePrepared);
 
-            if(message.author.equals(MyApplication.currentUser.getUsername()) && !message.destination.equals(MyApplication.currentUser.getUsername())) {
-                dest.setText("to ");
-                author.setText(message.destination);
-            }
-            else {
+            try {
+                if (message.author.equals(MyApplication.currentUser.getUsername()) && !message.destination.equals(MyApplication.currentUser.getUsername())) {
+                    dest.setText("to ");
+                    author.setText(message.destination);
+                } else {
+                    dest.setText("from ");
+                    author.setText(message.author);
+                }
+            } catch (Exception e) { // this shouldn't throw any exceptions now but just to be safe
+                e.printStackTrace();
                 dest.setText("from ");
-                author.setText(message.author);
+                author.setText("[deleted]");
             }
 
             if(message.isNew) {
