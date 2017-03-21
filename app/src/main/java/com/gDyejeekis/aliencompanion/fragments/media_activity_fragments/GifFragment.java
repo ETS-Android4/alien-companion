@@ -70,8 +70,6 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     private boolean autoplay;
 
-    private boolean gifSaved;
-
     private MediaLoadTask loadGifTask;
 
     private RelativeLayout gifParent;
@@ -182,7 +180,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                     if (mPlayer.isPlaying()) {
                         mPlayer.pause();
                     } else {
-                        mPlayer.start();
+                        safeMediaPlayerStart();
                     }
                 }
             }
@@ -191,7 +189,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mPlayer.start();
+                safeMediaPlayerStart();
             }
         }, 10);
     }
@@ -281,9 +279,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         }
     }
 
+    //@Override
+    //public void onPause() {
+    //    super.onPause();
+    //}
+
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         if(mPlayer != null) {
             mPlayer.release(); // should cause to do less work in mPlayer.finalize()
         }
@@ -347,6 +350,18 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         }
     }
 
+    private void safeMediaPlayerStart() {
+        try {
+            mPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            activity.setMainProgressBarVisible(false);
+            videoView.setVisibility(View.GONE);
+            buttonRetry.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     public void resumePlayback() {
         if(isGif) {
             if(gifDrawable != null) {
@@ -358,7 +373,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 loadVideo();
             }
             else if(mPlayer != null) {
-                mPlayer.start();
+                safeMediaPlayerStart();
             }
         }
     }
