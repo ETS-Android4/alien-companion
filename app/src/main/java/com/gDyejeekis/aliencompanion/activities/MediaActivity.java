@@ -395,6 +395,11 @@ public class MediaActivity extends BackNavActivity {
 
     private void setupAlbumView(final List<ImgurImage> images, final boolean hasAlbumInfo, final String title, final String description) {
         albumSize = images.size();
+        if(albumSize == 0) {
+            ToastUtils.displayShortToast(this, "No items in album");
+            finish();
+            return;
+        }
         showGridviewAction = true;
         checkImgurItemInfo(images.get(0));
         invalidateOptionsMenu();
