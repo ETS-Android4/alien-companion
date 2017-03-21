@@ -48,6 +48,10 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     private MediaActivity activity;
 
+    public String getUrl() {
+        return url;
+    }
+
     private String url;
 
     private SurfaceView videoView;
@@ -378,18 +382,18 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             case R.id.action_save:
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if(activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        saveGif();
+                        activity.saveMedia();
                     }
                     else {
                         requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 12);
                     }
                 }
                 else {
-                    saveGif();
+                    activity.saveMedia();
                 }
                 return true;
             case R.id.action_share:
-                shareGif();
+                activity.shareMedia();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -400,95 +404,12 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == 12) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                saveGif();
+                activity.saveMedia();
             }
             else {
                 ToastUtils.displayShortToast(activity, "Failed to save GIF to photos (permission denied)");
             }
         }
-    }
-
-    private void saveGif() {
-        ToastUtils.displayShortToast(activity, "Saving to photos..");
-        Log.d(TAG, "Saving " + url + " to pictures directory");
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-
-        final File appFolder = new File(dir + "/AlienCompanion");
-
-        if(!appFolder.exists()) {
-            appFolder.mkdir();
-        }
-
-        final int id = UUID.randomUUID().hashCode();
-        final String filename = url.replaceAll("https?://", "").replace("/", "(s)");
-        final File file = new File(appFolder.getAbsolutePath(), filename);
-
-        showSavingGifNotif(id);
-
-        new MediaDownloadTask(url, file, activity.getCacheDir()) {
-            @Override protected void onPostExecute(Boolean success) {
-                Log.d(TAG, "Gif downloaded to file");
-                gifSaved = success;
-                Uri contentUri = null;
-                if(gifSaved) {
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    contentUri = Uri.fromFile(file);
-                    mediaScanIntent.setData(contentUri);
-                    activity.sendBroadcast(mediaScanIntent);
-                }
-                showGifSavedNotification(id, gifSaved, contentUri);
-            }
-        }.execute();
-
-    }
-
-    private void showSavingGifNotif(int id) {
-        Notification notif = new Notification.Builder(activity)
-                .setContentTitle("Saving gif..")
-                .setContentText(url)
-                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
-                .setProgress(1, 0, true)
-                .build();
-
-        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(id, notif);
-    }
-
-    private void showGifSavedNotification(int id, boolean success, Uri uri) {
-        PendingIntent pIntent = null;
-        if(success) {
-            String type = (isGif) ? "image/*" : "video/*";
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, type);
-            pIntent = PendingIntent.getActivity(activity, 0, intent, 0);
-        }
-
-        String title = (success) ? "Gif saved" : "Failed to save gif";
-        int smallIcon = (success) ? R.mipmap.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
-        Notification notif = new Notification.Builder(activity)
-                .setContentTitle(title)
-                .setContentText(url)
-                //.setSubText(url)
-                .setSmallIcon(smallIcon)
-                .setContentIntent(pIntent)
-                .setAutoCancel(true)
-                .build();
-
-        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(id, notif);
-    }
-
-    private void shareGif() {
-        String label = "Share gif to..";
-        String link;
-        if(activity.loadedFromLocal()) {
-            link = "http://" + url.substring(url.lastIndexOf("/")+1).replace("(s)", "/");
-        }
-        else {
-            link = url;
-        }
-        GeneralUtils.shareUrl(activity, label, link);
     }
 
 }

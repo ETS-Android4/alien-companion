@@ -1,6 +1,14 @@
 package com.gDyejeekis.aliencompanion.activities;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +27,7 @@ import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
 import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
 import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
 import com.gDyejeekis.aliencompanion.asynctask.ImgurTask;
+import com.gDyejeekis.aliencompanion.asynctask.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.asynctask.StreamableTask;
 import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.AlbumPagerAdapter;
 import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.GifFragment;
@@ -27,6 +36,7 @@ import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.ImageInf
 import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.VideoFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
@@ -62,6 +72,8 @@ public class MediaActivity extends BackNavActivity {
     private ProgressBar progressBar;
 
     private ViewPager viewPager;
+
+    private AlbumPagerAdapter albumPagerAdapter;
 
     private int viewPagerPosition;
 
@@ -391,7 +403,8 @@ public class MediaActivity extends BackNavActivity {
         viewPager = (ViewPager) findViewById(R.id.viewpager1);
         viewPager.setVisibility(View.VISIBLE);
         viewPager.setOffscreenPageLimit(1);
-        viewPager.setAdapter(new AlbumPagerAdapter(this, fragmentManager, images, loadFromSynced));
+        albumPagerAdapter = new AlbumPagerAdapter(this, fragmentManager, images, loadFromSynced);
+        viewPager.setAdapter(albumPagerAdapter);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -475,7 +488,7 @@ public class MediaActivity extends BackNavActivity {
         infoAction.setVisible(showInfoAction);
 
         MenuItem saveAction = menu.findItem(R.id.action_save);
-        saveAction.setVisible(showSaveAction && !loadFromSynced);
+        saveAction.setVisible(showSaveAction/* && !loadFromSynced*/);
 
         MenuItem hq_action = menu.findItem(R.id.action_high_quality);
         //hq_action.setVisible(showHqAction);
@@ -529,8 +542,146 @@ public class MediaActivity extends BackNavActivity {
         this.imageDescription = description;
     }
 
+    public Fragment getCurrentFragment() {
+        if(albumPagerAdapter != null) {
+            return albumPagerAdapter.getItem(viewPagerPosition);
+        }
+        return fragmentManager.findFragmentById(R.id.layout_fragment_holder);
+    }
+
     public boolean isInfoVisible() {
         return infoFragmentVisible;
+    }
+
+    public void shareMedia() {
+        String label = "Share via..";
+        GeneralUtils.shareUrl(this, label, url);
+    }
+
+    public void saveMedia() {
+        ToastUtils.displayShortToast(this, "Saving to pictures..");
+        Log.d(TAG, "Saving " + url + " to public pictures directory");
+
+        final File saveTarget = getSaveDestination();
+        final int saveId = url.hashCode();
+
+        showSavingMediaNotif(saveId);
+
+        if (loadFromSynced) {
+            Fragment fragment = getCurrentFragment();
+            // TODO: 3/14/2017 add abstraction
+            final File file;
+            if(fragment instanceof ImageFragment) {
+                file = new File(((ImageFragment) fragment).getUrl().replace("file:", ""));
+            }
+            else if(fragment instanceof GifFragment) {
+                file = new File(((GifFragment) fragment).getUrl().replace("file:", ""));
+            }
+            else {
+                file = null;
+            }
+            if(file != null) {
+                new AsyncTask<File, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(File... params) {
+                        return StorageUtils.copyFileToTarget(file, saveTarget);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean success) {
+                        onPostMediaSave(saveId, success, saveTarget);
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, file);
+            }
+        } else {
+            new MediaDownloadTask(url, saveTarget, getCacheDir()) {
+                @Override
+                protected void onPostExecute(Boolean success) {
+                    onPostMediaSave(saveId, success, saveTarget);
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    private void onPostMediaSave(int saveId, boolean success, File saveTarget) {
+        Log.d(TAG, url + " save operation " + (success ? "successful" : "failed"));
+        if (success) {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(saveTarget);
+            mediaScanIntent.setData(contentUri);
+            MediaActivity.this.sendBroadcast(mediaScanIntent);
+        }
+        showSavedMediaNotif(saveId, success, saveTarget);
+    }
+
+    private void showSavingMediaNotif(int id) {
+        Notification notif = new Notification.Builder(this)
+                .setContentTitle("Saving media..")
+                .setContentText(url)
+                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
+                .setProgress(1, 0, true)
+                .build();
+
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(id, notif);
+    }
+
+    private void showSavedMediaNotif(int id, boolean success, File file) {
+        PendingIntent pIntent = null;
+        Bitmap resizedBitmap = null;
+        boolean isImage = false;
+        if(success) {
+            try {
+                resizedBitmap = new BitmapTransform(640, 480).transform(GeneralUtils.getBitmapFromPath(file.getAbsolutePath()));
+                isImage = true;
+            } catch (Exception e) {
+                isImage = false;
+            }
+            String type = (isImage) ? "image/*" : "video/*";
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(file), type);
+            pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        }
+
+        String title = (success) ? "Media saved" : "Failed to save media";
+        int smallIcon = (success) ? R.mipmap.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
+        Notification.Builder notifBuilder = new Notification.Builder(this)
+                .setContentTitle(title)
+                .setSmallIcon(smallIcon)
+                .setContentIntent(pIntent)
+                .setAutoCancel(true);
+
+        if(success) {
+            if (isImage) {
+                notifBuilder.setSubText(file.getPath());
+                if(resizedBitmap != null) {
+                    notifBuilder.setStyle(new Notification.BigPictureStyle().bigPicture(resizedBitmap));
+                }
+            }
+            else {
+                notifBuilder.setContentText(file.getPath());
+            }
+        }
+
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.notify(id, notifBuilder.build());
+    }
+
+    private File getSaveDestination() {
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+
+        File appFolder = new File(dir + "/AlienCompanion");
+
+        if(!appFolder.exists()) {
+            appFolder.mkdir();
+        }
+
+        String filename = GeneralUtils.urlToFilename(url);
+        if(!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))) {
+            filename = filename.concat(".jpg");
+        }
+        return new File(appFolder.getAbsolutePath(), filename);
     }
 
 }

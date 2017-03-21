@@ -177,6 +177,25 @@ public class StorageUtils {
         return inFiles;
     }
 
+    public static boolean copyFileToTarget(File fileSource, File fileTarget) {
+        try {
+            FileInputStream inputStream = new FileInputStream(fileSource);
+            FileOutputStream outputStream = new FileOutputStream(fileTarget);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+            inputStream.close();
+            outputStream.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean moveFileInsideDisk(File file, String targetDir) {
         try {
             String oldPath = file.getAbsolutePath();

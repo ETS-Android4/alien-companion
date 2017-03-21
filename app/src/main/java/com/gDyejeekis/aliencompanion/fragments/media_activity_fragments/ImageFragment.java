@@ -47,6 +47,10 @@ public class ImageFragment extends Fragment {
 
     private MediaActivity activity;
 
+    public String getUrl() {
+        return url;
+    }
+
     private String url;
 
     private SubsamplingScaleImageView imageView;
@@ -245,18 +249,18 @@ public class ImageFragment extends Fragment {
             case R.id.action_save:
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if(activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        saveImageToPhotos();
+                        activity.saveMedia();
                     }
                     else {
                         requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
                     }
                 }
                 else {
-                    saveImageToPhotos();
+                    activity.saveMedia();
                 }
                 return true;
             case R.id.action_share:
-                shareImage();
+                activity.shareMedia();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -267,103 +271,12 @@ public class ImageFragment extends Fragment {
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == 11) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                saveImageToPhotos();
+                activity.saveMedia();
             }
             else {
                 ToastUtils.displayShortToast(activity, "Failed to save image to photos (permission denied)");
             }
         }
-    }
-
-    private void saveImageToPhotos() {
-        final int notifId = UUID.randomUUID().hashCode();
-        showSavingImgNotif(notifId);
-        final File saveTarget = getSaveDestination();
-        new MediaDownloadTask(url, saveTarget, activity.getCacheDir()) {
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-                if(success) {
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(saveTarget);
-                    mediaScanIntent.setData(contentUri);
-                    activity.sendBroadcast(mediaScanIntent);
-
-                    showImageSavedNotif(notifId, saveTarget);
-                }
-                else {
-                    showImageSaveFailedNotif(notifId);
-                }
-            }
-        }.execute();
-    }
-
-    private File getSaveDestination() {
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-
-        File appFolder = new File(dir + "/AlienCompanion");
-
-        if(!appFolder.exists()) {
-            appFolder.mkdir();
-        }
-
-        String filename = GeneralUtils.urlToFilename(url);
-        if(!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))) {
-            filename = filename.concat(".jpg");
-        }
-        return new File(appFolder.getAbsolutePath(), filename);
-    }
-
-    private void showSavingImgNotif(int id) {
-        Notification notif = new Notification.Builder(activity)
-                .setContentTitle("Saving image..")
-                .setContentText(url)
-                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
-                .setProgress(1, 0, true)
-                .build();
-
-        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(id, notif);
-    }
-
-    private void showImageSavedNotif(int id, File file) {
-        Bitmap resizedBitmap = new BitmapTransform(640, 480).transform(GeneralUtils.getBitmapFromPath(file.getAbsolutePath()));
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "image/*");
-        PendingIntent pIntent = PendingIntent.getActivity(activity, 0, intent, 0);
-
-        Notification notif = new Notification.Builder(activity)
-                .setContentTitle("Image saved")
-                //.setContentText(url)
-                .setSubText(url)
-                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
-                //.setLargeIcon(bitmap)
-                .setStyle(new Notification.BigPictureStyle().bigPicture(resizedBitmap))
-                .setContentIntent(pIntent)
-                .setAutoCancel(true)
-                .build();
-
-        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(id, notif);
-    }
-
-    private void showImageSaveFailedNotif(int id) {
-        Notification notif = new Notification.Builder(activity)
-                .setContentTitle("Failed to save image")
-                .setContentText(url)
-                .setSmallIcon(android.R.drawable.stat_notify_error)
-                .setAutoCancel(true)
-                .build();
-
-        NotificationManager nm = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.notify(id, notif);
-    }
-
-    private void shareImage() {
-        String label = "Share image to..";
-        GeneralUtils.shareUrl(activity, label, activity.getOriginalUrl());
     }
 
 }
