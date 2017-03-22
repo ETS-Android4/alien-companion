@@ -3,8 +3,10 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -110,7 +112,21 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             sf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null) {
-                ToastUtils.postsLoadError(context);
+                String message = "Search failed";
+                if(GeneralUtils.isNetworkAvailable(context)) {
+                    message += " - Reddit's servers are under heavy load. Please try again in a bit.";
+                    SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, Snackbar.LENGTH_LONG);
+                }
+                else {
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            sf.refreshList();
+                        }
+                    };
+                    SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener);
+                }
+
                 if (loadType == LoadType.extend) {
                     sf.adapter.setLoadingMoreItems(false);
                 }
@@ -128,7 +144,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case init:
                         if(submissions.size()==0) {
                             sf.updateContentViewAdapter(new RedditItemListAdapter(context));
-                            ToastUtils.noResults(context, sf.searchQuery);
+                            SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), "No results for \'" + sf.searchQuery + "\'");
                         }
                         else {
                             sf.updateContentViewAdapter(sf.adapter);
@@ -143,7 +159,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             }
                             sf.updateContentViewAdapter(sf.adapter);
                         }
-                        else ToastUtils.displayShortToast(context, "No posts found");
+                        else ToastUtils.showToast(context, "No posts found");
                         break;
                     case extend:
                         sf.adapter.setLoadingMoreItems(false);

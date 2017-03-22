@@ -87,23 +87,23 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
 
     public void executeAllActions() {
         if(GeneralUtils.isNetworkAvailable(activity)) {
-            ToastUtils.displayShortToast(activity, "Executing remaining actions..");
+            ToastUtils.showToast(activity, "Executing remaining actions..");
             Intent intent = new Intent(activity, PendingActionsService.class);
             activity.startService(intent);
         }
         else {
-            ToastUtils.displayShortToast(activity, "Network connection unavailable");
+            ToastUtils.showToast(activity, "Network connection unavailable");
         }
     }
 
     public void executeAction(int position) {
         if(GeneralUtils.isNetworkAvailable(activity)) {
-            ToastUtils.displayShortToast(activity, "Executing action..");
+            ToastUtils.showToast(activity, "Executing action..");
             ExecuteSingleActionTask task = new ExecuteSingleActionTask(activity, position);
             task.execute(pendingActions.get(position));
         }
         else {
-            ToastUtils.displayShortToast(activity, "Network connection unavailable");
+            ToastUtils.showToast(activity, "Network connection unavailable");
         }
     }
 
@@ -114,7 +114,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
     public void actionEdited(int position, OfflineUserAction newAction) {
         pendingActions.set(position, newAction);
         saveChanges();
-        ToastUtils.displayShortToast(activity, "Offline action edit successful");
+        ToastUtils.showToast(activity, "Offline action edit successful");
     }
 
     public void editAction(int position) {
@@ -214,7 +214,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
             }
             else {
                 activity.getAdapter().markActionFailed(position, true);
-                ToastUtils.displayShortToast(activity, "Error completing user action");
+                ToastUtils.showToast(activity, "Error completing user action");
             }
             activity.getAdapter().saveChanges();
         }

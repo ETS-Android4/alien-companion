@@ -74,10 +74,10 @@ public class ChangePasswordDialogFragment extends ScalableDialogFragment impleme
             String newPass = newField.getText().toString();
             String confirmPass = confirmField.getText().toString();
             if(currentPass.length()==0 || newPass.length()==0 || confirmPass.length()==0) {
-                ToastUtils.displayShortToast(getActivity(), "All fields are required");
+                ToastUtils.showToast(getActivity(), "All fields are required");
             }
             else if(!newPass.equals(confirmPass)) {
-                ToastUtils.displayShortToast(getActivity(), "Last two fields should match!");
+                ToastUtils.showToast(getActivity(), "Last two fields should match!");
             }
             else {
                 dismiss();

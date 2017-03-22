@@ -1,35 +1,39 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gDyejeekis.aliencompanion.fragments.PostListFragment"
     android:id="@+id/swipe_container">
 
-    <!-- TODO: rename to a more fitting name -->
+    <!-- TODO: rename to a more fitting name, combine with fragment_post -->
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar2"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_postList"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:clipToPadding="false"
-            android:paddingTop="?attr/actionBarSize"/>
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar2"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_postList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:clipToPadding="false"
+                android:paddingTop="?attr/actionBarSize"/>
+
+        </RelativeLayout>
 
         <include layout="@layout/fab_post_nav"
             android:id="@+id/layout_fab_nav"/>
 
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 
 </android.support.v4.widget.SwipeRefreshLayout>

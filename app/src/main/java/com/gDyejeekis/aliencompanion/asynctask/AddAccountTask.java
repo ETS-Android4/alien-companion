@@ -178,13 +178,13 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
         dialogFragment.dismiss();
         MyApplication.renewingToken = false;
         if(exception != null || account == null) {
-            ToastUtils.displayShortToast(context, "Failed to verify account");
+            ToastUtils.showToast(context, "Failed to verify account");
             try {
                 MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
             } catch (NullPointerException e) {}
         }
         else {
-            //ToastUtils.displayShortToast(context, "Logged in as " + username);
+            //ToastUtils.showToast(context, "Logged in as " + username);
             MainActivity mainActivity = (MainActivity) context;
             mainActivity.getNavDrawerAdapter().accountAdded(new NavDrawerAccount(account), currentAccountName);
             mainActivity.changeCurrentUser(account);

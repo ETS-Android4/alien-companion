@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -150,7 +151,14 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             uf.contentView.setVisibility(View.VISIBLE);
 
             if (mException != null) {
-                ToastUtils.userLoadError(activity);
+                View.OnClickListener listener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        uf.refreshList();
+                    }
+                };
+                SnackbarUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener);
+
                 if (mLoadType == LoadType.extend) {
                     uf.adapter.setLoadingMoreItems(false);
                 }
@@ -166,7 +174,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                     uf.adapter = adapter;
                 }
                 else {
-                    ToastUtils.displayShortToast(activity, "No posts found");
+                    ToastUtils.showToast(activity, "No posts found");
                 }
                 uf.hasMore = things.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (mLoadType) {

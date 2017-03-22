@@ -128,7 +128,7 @@ public class SyncProfile implements Serializable {
         }
         else {
             if(context instanceof Activity) {
-                ToastUtils.displayShortToast(context, "Network connection unavailable");
+                ToastUtils.showToast(context, "Network connection unavailable");
             }
         }
     }

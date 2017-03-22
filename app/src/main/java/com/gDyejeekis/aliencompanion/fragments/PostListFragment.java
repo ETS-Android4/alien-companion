@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -259,7 +260,7 @@ public class PostListFragment extends RedditContentFragment {
             case R.id.action_view_sidebar:
                 if(subreddit == null || subreddit.equalsIgnoreCase("all")) {
                     String string = (subreddit==null) ? "the front page" : "/r/all";
-                    ToastUtils.displayShortToast(activity, "No sidebar for " + string);
+                    ToastUtils.showToast(activity, "No sidebar for " + string);
                 }
                 else {
                     SubredditSidebarDialogFragment dialog = new SubredditSidebarDialogFragment();
@@ -312,7 +313,7 @@ public class PostListFragment extends RedditContentFragment {
                             protected void onPostExecute(Void aVoid) {
                                 dialogFragment.dismiss();
                                 String toastMessage = "Synced data for " + messageEnd + " cleared";
-                                ToastUtils.displayShortToast(activity, toastMessage);
+                                ToastUtils.showToast(activity, toastMessage);
                             }
                         }.execute();
                     }
@@ -367,7 +368,7 @@ public class PostListFragment extends RedditContentFragment {
         else {
             toastMessage = "Network connection unavailable";
         }
-        ToastUtils.displayShortToast(activity, toastMessage);
+        ToastUtils.showToast(activity, toastMessage);
     }
 
     public int getCurrentViewTypeValue() {

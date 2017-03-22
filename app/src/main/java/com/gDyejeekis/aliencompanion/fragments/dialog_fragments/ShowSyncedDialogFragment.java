@@ -112,7 +112,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
                         dialogFragment.dismiss();
                         filenames.remove(pos);
                         adapter.notifyDataSetChanged();
-                        ToastUtils.displayShortToast(getActivity(), "Synced data for '" + filename + "' cleared");
+                        ToastUtils.showToast(getActivity(), "Synced data for '" + filename + "' cleared");
                     }
                 }.execute();
             }

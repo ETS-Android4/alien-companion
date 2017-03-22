@@ -210,7 +210,7 @@ public class LinkHandler {
             }
 
         } catch (ActivityNotFoundException e) {
-            ToastUtils.displayShortToast(context, "No activity found to handle Intent");
+            ToastUtils.showToast(context, "No activity found to handle Intent");
             e.printStackTrace();
         }
         return false;
@@ -351,7 +351,7 @@ public class LinkHandler {
             }
         }
         else {
-            ToastUtils.displayShortToast(activity, "Url not supported");
+            ToastUtils.showToast(activity, "Url not supported");
         }
 
         return intent;

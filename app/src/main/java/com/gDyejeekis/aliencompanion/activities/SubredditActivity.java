@@ -81,7 +81,7 @@ public class SubredditActivity extends SwipeBackActivity {
         super.onResume();
         if(HandleUrlActivity.notifySwitchedMode) {
             HandleUrlActivity.notifySwitchedMode = false;
-            ToastUtils.displayShortToast(this, "Switched to online mode");
+            ToastUtils.showToast(this, "Switched to online mode");
         }
     }
 

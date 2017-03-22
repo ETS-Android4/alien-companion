@@ -49,7 +49,7 @@ public class AddToSyncedDialogFragment extends ScalableDialogFragment implements
             getContext().startService(intent);
         }
         else {
-            ToastUtils.displayShortToast(getContext(), "Select post count");
+            ToastUtils.showToast(getContext(), "Select post count");
         }
     }
 

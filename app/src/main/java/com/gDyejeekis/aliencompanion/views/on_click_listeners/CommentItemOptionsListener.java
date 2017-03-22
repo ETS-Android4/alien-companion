@@ -101,7 +101,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
+                else ToastUtils.showToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote:
                 if(MyApplication.currentUser!=null) {
@@ -139,7 +139,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
+                else ToastUtils.showToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_reply:
                 if(MyApplication.currentUser!=null) {
@@ -148,7 +148,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     intent.putExtra("originalComment", comment);
                     context.startActivity(intent);
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to reply");
+                else ToastUtils.showToast(context, "Must be logged in to reply");
                 break;
             case R.id.btn_view_user:
                 Intent intent = new Intent(context, UserActivity.class);
@@ -240,7 +240,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                                 task1.execute();
                             }
                         }
-                        else ToastUtils.displayShortToast(context, "Must be logged in to save");
+                        else ToastUtils.showToast(context, "Must be logged in to save");
                         return true;
                     case R.id.action_report:
                         if(MyApplication.currentUser!=null) {
@@ -250,7 +250,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                             dialog.setArguments(bundle);
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         }
-                        else ToastUtils.displayShortToast(context, "Must be logged in to report");
+                        else ToastUtils.showToast(context, "Must be logged in to report");
                         return true;
                     default:
                         return false;

@@ -1,17 +1,10 @@
 package com.gDyejeekis.aliencompanion.fragments.media_activity_fragments;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,17 +18,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.activities.MediaActivity;
-import com.gDyejeekis.aliencompanion.asynctask.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.asynctask.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
@@ -342,7 +331,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                     else {
                         gifView.setVisibility(View.GONE);
                         buttonRetry.setVisibility(View.VISIBLE);
-                        ToastUtils.displayShortToast(activity, "Error loading gif");
+                        ToastUtils.showToast(activity, "Error loading gif");
                         CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
                     }
                 }
@@ -422,7 +411,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 activity.saveMedia();
             }
             else {
-                ToastUtils.displayShortToast(activity, "Failed to save GIF to photos (permission denied)");
+                ToastUtils.showToast(activity, "Failed to save GIF to photos (permission denied)");
             }
         }
     }

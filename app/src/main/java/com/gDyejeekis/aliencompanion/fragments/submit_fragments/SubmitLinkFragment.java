@@ -60,7 +60,7 @@ public class SubmitLinkFragment extends Fragment {
             if(link.replaceAll("\\s","").length()==0) link = "";
             subreddit = subreddit.replaceAll("\\s","");
             if(title.length()==0 || link.length()==0 || subreddit.length()==0) {
-                //ToastUtils.displayShortToast(getActivity(), "All fields are required");
+                //ToastUtils.showToast(getActivity(), "All fields are required");
                 if(title.length()==0) {
                     titleField.setText("");
                     titleField.setHint("enter a title");
@@ -78,7 +78,7 @@ public class SubmitLinkFragment extends Fragment {
                 }
             }
             else {
-                ToastUtils.displayShortToast(getActivity(), "Submitting..");
+                ToastUtils.showToast(getActivity(), "Submitting..");
                 LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.submitLink, title, link, subreddit);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }

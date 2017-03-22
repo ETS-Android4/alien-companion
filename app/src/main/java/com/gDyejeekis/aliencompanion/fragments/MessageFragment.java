@@ -91,7 +91,7 @@ public class MessageFragment extends RedditContentFragment {
         switch (item.getItemId()) {
             case R.id.action_compose:
                 //start compose message activity
-                //ToastUtils.displayShortToast(activity, "Coming soon!");
+                //ToastUtils.showToast(activity, "Coming soon!");
                 Intent intent = new Intent(activity, SubmitActivity.class);
                 intent.putExtra("submitType", SubmitType.message);
                 activity.startActivity(intent);

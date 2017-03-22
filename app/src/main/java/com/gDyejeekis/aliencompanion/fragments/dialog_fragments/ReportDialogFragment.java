@@ -105,7 +105,7 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
                     break;
             }
             if(reason!=null) {
-                //ToastUtils.displayShortToast(getActivity(), reason);
+                //ToastUtils.showToast(getActivity(), reason);
                 if(GeneralUtils.isNetworkAvailable(getActivity())) {
                     LoadUserActionTask task = new LoadUserActionTask(getActivity(), postId, UserActionType.report, reason);
                     task.execute();
@@ -116,7 +116,7 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
                     task.execute();
                 }
             }
-            else if(selected!=R.id.radioButton_other) ToastUtils.displayShortToast(getActivity(), "Please select a reason");
+            else if(selected!=R.id.radioButton_other) ToastUtils.showToast(getActivity(), "Please select a reason");
         }
         else dismiss();
     }

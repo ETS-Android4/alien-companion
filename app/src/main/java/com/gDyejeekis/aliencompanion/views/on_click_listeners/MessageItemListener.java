@@ -91,7 +91,7 @@ public class MessageItemListener implements View.OnClickListener, View.OnLongCli
                         return true;
                     case R.id.action_block_user:
                         //TODO: implement this
-                        ToastUtils.displayShortToast(context, "Coming soon!");
+                        ToastUtils.showToast(context, "Coming soon!");
                         return true;
                     case R.id.action_report:
                         ReportDialogFragment dialog = new ReportDialogFragment();

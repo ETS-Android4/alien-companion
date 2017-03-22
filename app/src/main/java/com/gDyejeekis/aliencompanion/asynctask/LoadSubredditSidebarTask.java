@@ -49,7 +49,7 @@ public class LoadSubredditSidebarTask extends AsyncTask<Void, Void, SubredditInf
     protected void onPostExecute(SubredditInfo subredditInfo) {
         if(exception != null) {
             dialog.dismiss();
-            ToastUtils.displayShortToast(dialog.getActivity(), "Error retrieving subreddit sidebar");
+            ToastUtils.showToast(dialog.getActivity(), "Error retrieving subreddit sidebar");
         }
         else {
             dialog.bindData(subredditInfo);

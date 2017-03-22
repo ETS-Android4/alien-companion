@@ -43,7 +43,6 @@ import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerSubreddits;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
@@ -822,7 +821,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public void switchModeGracefully() {
         activity.getDrawerLayout().closeDrawers();
-        ToastUtils.displayShortToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
+        ToastUtils.showToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -833,7 +832,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public void switchModeGracefully(final String reddit, final boolean isMulti) {
         activity.getDrawerLayout().closeDrawers();
-        ToastUtils.displayShortToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
+        ToastUtils.showToast(activity, "Switching to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

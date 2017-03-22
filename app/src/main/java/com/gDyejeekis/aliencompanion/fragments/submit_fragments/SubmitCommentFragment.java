@@ -119,11 +119,11 @@ public class SubmitCommentFragment extends Fragment {
 
                 if (GeneralUtils.isNetworkAvailable(getActivity())) {
                     UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
-                    ToastUtils.displayShortToast(getActivity(), "Submitting..");
+                    ToastUtils.showToast(getActivity(), "Submitting..");
                     LoadUserActionTask task = new LoadUserActionTask(getActivity(), fullname, actionType, commentText);
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 } else {
-                    ToastUtils.displayShortToast(getActivity(), "Adding to pending actions..");
+                    ToastUtils.showToast(getActivity(), "Adding to pending actions..");
                     OfflineUserAction action = new CommentAction(MyApplication.currentAccount.getUsername(), fullname, commentText);
                     SaveOfflineActionTask task = new SaveOfflineActionTask(getActivity(), action);
                     task.execute();

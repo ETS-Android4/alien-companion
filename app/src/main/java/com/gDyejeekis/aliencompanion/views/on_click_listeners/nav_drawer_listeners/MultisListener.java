@@ -41,10 +41,10 @@ public class MultisListener extends NavDrawerListener {
 
     private void refreshMultis() {
         if(MyApplication.currentUser == null) {
-            ToastUtils.displayShortToast(getActivity(), "Must be logged in to do that");
+            ToastUtils.showToast(getActivity(), "Must be logged in to do that");
         }
         else {
-            ToastUtils.displayShortToast(getActivity(), "Refreshing multis...");
+            ToastUtils.showToast(getActivity(), "Refreshing multis...");
             RefreshUserMultisTask task = new RefreshUserMultisTask(getActivity());
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }

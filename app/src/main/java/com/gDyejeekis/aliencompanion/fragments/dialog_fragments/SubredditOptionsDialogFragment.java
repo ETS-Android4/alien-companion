@@ -58,7 +58,7 @@ public class SubredditOptionsDialogFragment extends ScalableDialogFragment {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.subscribe, subreddit);
                     task.execute();
                 }
-                else ToastUtils.displayShortToast(activity, "Must be logged in to subscribe");
+                else ToastUtils.showToast(activity, "Must be logged in to subscribe");
             }
         });
 
@@ -70,7 +70,7 @@ public class SubredditOptionsDialogFragment extends ScalableDialogFragment {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.unsubscribe, subreddit);
                     task.execute();
                 }
-                else ToastUtils.displayShortToast(activity, "Must be logged in to unsubscribe");
+                else ToastUtils.showToast(activity, "Must be logged in to unsubscribe");
             }
         });
 
@@ -83,7 +83,7 @@ public class SubredditOptionsDialogFragment extends ScalableDialogFragment {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.unsubscribe, subreddit);
                     task.execute();
                 }
-                else ToastUtils.displayShortToast(activity, "Must be logged in to unsubscribe");
+                else ToastUtils.showToast(activity, "Must be logged in to unsubscribe");
             }
         });
 

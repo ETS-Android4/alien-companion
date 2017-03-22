@@ -188,7 +188,7 @@ public class MainActivity extends ToolbarActivity {
             if(listFragment.isMulti) homePage();
             else listFragment.changeSubreddit(listFragment.subreddit);
             String message = (MyApplication.currentUser==null) ? "Logged out" : "Logged in as " + account.getUsername();
-            ToastUtils.displayShortToast(this, message);
+            ToastUtils.showToast(this, message);
         } catch (NullPointerException e) {}
     }
 
@@ -207,7 +207,7 @@ public class MainActivity extends ToolbarActivity {
 
         if(HandleUrlActivity.notifySwitchedMode) {
             HandleUrlActivity.notifySwitchedMode = false;
-            ToastUtils.displayShortToast(this, "Switched to online mode");
+            ToastUtils.showToast(this, "Switched to online mode");
         }
 
         if(notifySwitchedMode) {

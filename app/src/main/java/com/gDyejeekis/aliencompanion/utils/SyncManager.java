@@ -95,7 +95,7 @@ public class SyncManager {
         else {
             toastMessage = NETWORK_UNAVAIBLE_MESSAGE;
         }
-        ToastUtils.displayShortToast(context, toastMessage);
+        ToastUtils.showToast(context, toastMessage);
     }
 
     public static void pollSyncQueue(Context context) {

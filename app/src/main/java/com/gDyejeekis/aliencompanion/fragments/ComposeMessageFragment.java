@@ -81,8 +81,8 @@ public class ComposeMessageFragment extends Fragment {
             }
             else {
                 //send message here
-                //ToastUtils.displayShortToast(getActivity(), "message ready for delivery");
-                ToastUtils.displayShortToast(getActivity(), "Sending message...");
+                //ToastUtils.showToast(getActivity(), "message ready for delivery");
+                ToastUtils.showToast(getActivity(), "Sending message...");
                 LoadUserActionTask task = new LoadUserActionTask(getActivity(), recipient, subject, message);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

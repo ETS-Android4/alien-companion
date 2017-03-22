@@ -1,17 +1,9 @@
 package com.gDyejeekis.aliencompanion.fragments.media_activity_fragments;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,17 +15,12 @@ import android.widget.Button;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.gDyejeekis.aliencompanion.activities.MediaActivity;
-import com.gDyejeekis.aliencompanion.asynctask.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.asynctask.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-
-import java.io.File;
-import java.util.UUID;
 
 import magick.ColorspaceType;
 import magick.ImageInfo;
@@ -135,10 +122,10 @@ public class ImageFragment extends Fragment {
                 Log.d(TAG, "onImageLoadError()");
                 if(convertedToRgb) {
                     imageLoadError();
-                    ToastUtils.displayShortToast(activity, "Error decoding image");
+                    ToastUtils.showToast(activity, "Error decoding image");
                 }
                 else {
-                    ToastUtils.displayShortToast(activity, "Converting image to RGB..");
+                    ToastUtils.showToast(activity, "Converting image to RGB..");
                     convertAndShowImg();
                 }
             }
@@ -162,7 +149,7 @@ public class ImageFragment extends Fragment {
                     }
                     else {
                         imageLoadError();
-                        ToastUtils.displayShortToast(activity, "Error loading image");
+                        ToastUtils.showToast(activity, "Error loading image");
                         CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
                     }
                 }
@@ -205,7 +192,7 @@ public class ImageFragment extends Fragment {
             protected void onPostExecute(Boolean success) {
                 imageView.setImage(ImageSource.uri(cachedPath));
                 if(!success) {
-                    ToastUtils.displayShortToast(activity, "Error converting image");
+                    ToastUtils.showToast(activity, "Error converting image");
                 }
             }
         }.execute();
@@ -275,7 +262,7 @@ public class ImageFragment extends Fragment {
                 activity.saveMedia();
             }
             else {
-                ToastUtils.displayShortToast(activity, "Failed to save image to photos (permission denied)");
+                ToastUtils.showToast(activity, "Failed to save image to photos (permission denied)");
             }
         }
     }

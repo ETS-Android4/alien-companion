@@ -34,6 +34,7 @@ import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
+import com.gDyejeekis.aliencompanion.utils.MoveUpwardRelativeLayout;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -75,7 +76,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public LoadCommentsTask task;
 
     private static boolean fabOptionsVisible;
-    private LinearLayout layoutCommentNav;
+    private MoveUpwardRelativeLayout layoutFabRoot;
+    private LinearLayout layoutFabNav;
     private LinearLayout layoutFabOptions;
     private FloatingActionButton fabMain;
     private FloatingActionButton fabReply;
@@ -100,6 +102,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             updateFabNavOnScroll(dy);
         }
     };
+
+    public View getSnackbarParentView() {
+        return layoutFabRoot;
+    }
 
     private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
@@ -355,10 +361,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initFabNavOptions(View view) {
-        RelativeLayout commentFabRoot = (RelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
+        layoutFabRoot = (MoveUpwardRelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
         if(MyApplication.commentNavigation) {
-            commentFabRoot.setVisibility(View.VISIBLE);
-            layoutCommentNav = (LinearLayout) view.findViewById(R.id.layout_comment_nav);
+            layoutFabRoot.setVisibility(View.VISIBLE);
+            layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_comment_nav);
             layoutFabOptions = (LinearLayout) view.findViewById(R.id.layout_comment_fab_options);
             fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
             fabNavSetting = (FloatingActionButton) view.findViewById(R.id.fab_comment_nav_setting);
@@ -382,11 +388,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             setFabOptionsVisible(fabOptionsVisible);
             int fabVisibility = fabOptionsVisible ? View.VISIBLE : View.GONE;
             layoutFabOptions.setVisibility(fabVisibility);
-            layoutCommentNav.setVisibility(fabVisibility);
+            layoutFabNav.setVisibility(fabVisibility);
             setCommentNavSetting(CommentNavSetting.threads);
         }
         else {
-            commentFabRoot.setVisibility(View.GONE);
+            layoutFabRoot.setVisibility(View.GONE);
         }
     }
 
@@ -396,13 +402,13 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Animation.AnimationListener showListener = new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                layoutCommentNav.setVisibility(View.INVISIBLE);
+                layoutFabNav.setVisibility(View.INVISIBLE);
                 layoutFabOptions.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                layoutCommentNav.setVisibility(View.VISIBLE);
+                layoutFabNav.setVisibility(View.VISIBLE);
                 layoutFabOptions.setVisibility(View.VISIBLE);
             }
 
@@ -423,7 +429,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                layoutCommentNav.setVisibility(View.GONE);
+                layoutFabNav.setVisibility(View.GONE);
                 layoutFabOptions.setVisibility(View.GONE);
             }
 
@@ -452,13 +458,13 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void toggleFabNavOptions() {
         if(fabOptionsVisible) {
             setFabOptionsVisible(false);
-            layoutCommentNav.startAnimation(hideAnimCommentNav);
+            layoutFabNav.startAnimation(hideAnimCommentNav);
             layoutFabOptions.startAnimation(hideAnimOptions);
         }
         else {
             setFabOptionsVisible(true);
             layoutFabOptions.startAnimation(showAnimOptions);
-            layoutCommentNav.startAnimation(showAnimCommentNav);
+            layoutFabNav.startAnimation(showAnimCommentNav);
         }
     }
 

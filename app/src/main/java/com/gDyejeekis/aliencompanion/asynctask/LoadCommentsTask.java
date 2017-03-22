@@ -9,6 +9,7 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -129,10 +130,16 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             if (exception != null) {
                 postFragment.postAdapter.notifyItemChanged(0);
                 if (exception instanceof IOException)
-                    ToastUtils.displayShortToast(context, "No comments found");
+                    ToastUtils.showToast(context, "No comments found");
                 else {
                     postFragment.noResponseObject = true;
-                    ToastUtils.commentsLoadError(context);
+                    View.OnClickListener listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            postFragment.refreshComments();
+                        }
+                    };
+                    SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "Error loading comments", "Retry", listener);
                 }
             } else {
                 if(!postFragment.titleUpdated) postFragment.setActionBarTitle();

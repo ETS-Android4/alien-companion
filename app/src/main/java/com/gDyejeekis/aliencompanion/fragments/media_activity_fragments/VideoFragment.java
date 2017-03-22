@@ -17,7 +17,6 @@ import android.widget.VideoView;
 
 import com.gDyejeekis.aliencompanion.activities.MediaActivity;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
@@ -129,7 +128,7 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
     }
 
     private void loadError() {
-        ToastUtils.displayShortToast(activity, "Error loading video");
+        ToastUtils.showToast(activity, "Error loading video");
         activity.setMainProgressBarVisible(false);
         buttonRetry.setVisibility(View.VISIBLE);
         videoView.setVisibility(View.GONE);

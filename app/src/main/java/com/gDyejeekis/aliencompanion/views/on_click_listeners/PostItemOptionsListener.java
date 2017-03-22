@@ -113,7 +113,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
+                else ToastUtils.showToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote: case R.id.imageView_downvote_classic:
                 if(MyApplication.currentUser!=null) {
@@ -147,7 +147,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to vote");
+                else ToastUtils.showToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_save:
                 if(MyApplication.currentUser!=null) {
@@ -178,7 +178,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.displayShortToast(context, "Must be logged in to save");
+                else ToastUtils.showToast(context, "Must be logged in to save");
                 break;
             case R.id.btn_hide:
                 if(MyApplication.currentUser!=null) {
@@ -214,7 +214,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     }
                 }
                 else {
-                    ToastUtils.displayShortToast(context, "Must be logged in to hide");
+                    ToastUtils.showToast(context, "Must be logged in to hide");
                 }
                 break;
             case R.id.btn_view_user:
@@ -288,7 +288,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         else {
                             toastMessage = "Network connection unavailable";
                         }
-                        ToastUtils.displayShortToast(context, toastMessage);
+                        ToastUtils.showToast(context, toastMessage);
                         return true;
                     case R.id.action_copy_to_clipboard:
                         TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",
@@ -398,7 +398,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             bundle.putString("postId", post.getFullName());
                             dialog.setArguments(bundle);
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        } else ToastUtils.displayShortToast(context, "Must be logged in to report");
+                        } else ToastUtils.showToast(context, "Must be logged in to report");
                         return true;
                     case ACTION_REMOVE_SYNCED:
                         ((RedditItemListAdapter) recyclerAdapter).remove(post);
@@ -413,7 +413,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             @Override
                             protected void onPostExecute(Boolean success) {
                                 String message = (success) ? "Post deleted" : "Failed to delete post";
-                                ToastUtils.displayShortToast(context, message);
+                                ToastUtils.showToast(context, message);
                             }
                         }.execute(post.getIdentifier());
                         return true;

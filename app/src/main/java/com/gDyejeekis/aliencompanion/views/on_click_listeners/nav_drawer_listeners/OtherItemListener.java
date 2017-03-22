@@ -58,7 +58,7 @@ public class OtherItemListener extends NavDrawerListener {
                     showSyncedPosts();
                 } else {
                     getDrawerLayout().closeDrawers();
-                    ToastUtils.displayShortToast(getActivity(), "Switching to offline mode");
+                    ToastUtils.showToast(getActivity(), "Switching to offline mode");
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

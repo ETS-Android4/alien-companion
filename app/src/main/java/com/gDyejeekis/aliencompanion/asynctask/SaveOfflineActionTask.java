@@ -67,17 +67,17 @@ public class SaveOfflineActionTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     public void onPostExecute(Boolean actionAlreadyExists) {
         if(exception != null) {
-            ToastUtils.displayShortToast(context, "Error queueing offline action");
+            ToastUtils.showToast(context, "Error queueing offline action");
         }
         else {
             if (actionAlreadyExists) {
-                ToastUtils.displayShortToast(context, "Action already queued");
+                ToastUtils.showToast(context, "Action already queued");
             }
             else {
                 if(context instanceof SubmitActivity) {
                     ((Activity) context).finish();
                 }
-                ToastUtils.displayShortToast(context, offlineAction.getActionName() + " queued");
+                ToastUtils.showToast(context, offlineAction.getActionName() + " queued");
                 if(!MyApplication.pendingOfflineActions) {
                     MyApplication.pendingOfflineActions = true;
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();

@@ -7,7 +7,7 @@ import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
-import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 
 /**
  * Created by George on 3/21/2017.
@@ -66,32 +66,33 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
 
     @Override
     public boolean onLongClick(View v) {
-        String toastMsg = null;
+        String message = null;
         switch (v.getId()) {
             case R.id.fab_refresh:
-                toastMsg = "Refresh posts";
+                message = "Refresh posts";
                 break;
             case R.id.fab_submit:
-                toastMsg = "Submit post";
+                message = "Submit post";
                 break;
             case R.id.fab_submit_link:
-                toastMsg = "Submit link";
+                message = "Submit link";
                 break;
             case R.id.fab_submit_text:
-                toastMsg = "Submit text";
+                message = "Submit text";
                 break;
             case R.id.fab_search:
-                toastMsg = "Search reddit";
+                message = "Search reddit";
                 break;
             case R.id.fab_hide_read:
-                toastMsg = "Hide read posts and go to top";
+                message = "Hide read posts and go to top";
                 break;
             case R.id.fab_sync:
-                toastMsg = "Sync posts";
+                message = "Sync posts";
                 break;
         }
-        if(toastMsg!=null) {
-            ToastUtils.displayShortToast(fragment.getActivity(), toastMsg);
+        if(message!=null) {
+            //ToastUtils.showToast(fragment.getActivity(), message);
+            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), message);
             return true;
         }
         return false;

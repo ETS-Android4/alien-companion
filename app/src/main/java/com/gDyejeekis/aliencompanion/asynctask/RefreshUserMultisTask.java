@@ -43,7 +43,7 @@ public class RefreshUserMultisTask extends AsyncTask<Void, Void, List<String>> {
     @Override
     protected void onPostExecute(List<String> multiNames) {
         if(exception!=null) {
-            ToastUtils.displayShortToast(activity, "Error retrieving multis");
+            ToastUtils.showToast(activity, "Error retrieving multis");
             exception.printStackTrace();
         }
         else {

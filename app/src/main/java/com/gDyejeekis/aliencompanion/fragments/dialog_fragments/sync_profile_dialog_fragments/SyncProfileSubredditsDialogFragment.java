@@ -153,7 +153,7 @@ public class SyncProfileSubredditsDialogFragment extends ScalableDialogFragment 
             }
             subredditField.setText("");
             if(subreddits.contains(subreddit)) {
-                ToastUtils.displayShortToast(getActivity(), "Item already on the list");
+                ToastUtils.showToast(getActivity(), "Item already on the list");
             }
             else {
                 subreddits.add(subreddit);

@@ -18,7 +18,6 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialog
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
@@ -75,7 +74,7 @@ public class SyncSettingsFragment extends PreferenceFragment {
                             @Override
                             protected void onPostExecute(Void aVoid) {
                                 dialogFragment.dismiss();
-                                ToastUtils.displayShortToast(getActivity(), "All synced data cleared");
+                                ToastUtils.showToast(getActivity(), "All synced data cleared");
                             }
                         }.execute();
                     }

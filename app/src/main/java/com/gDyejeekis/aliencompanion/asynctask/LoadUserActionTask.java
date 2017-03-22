@@ -256,7 +256,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             }
 
             if(context instanceof Activity) {
-                ToastUtils.displayShortToast(context, "Error completing user action");
+                ToastUtils.showToast(context, "Error completing user action");
             }
         }
         else {
@@ -268,46 +268,46 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     case submitText:
                     case submitLink:
                         ((Activity) context).finish();
-                        ToastUtils.displayShortToast(context, "Submission successful");
+                        ToastUtils.showToast(context, "Submission successful");
                         break;
                     case submitComment:
                         ((Activity) context).finish();
-                        ToastUtils.displayShortToast(context, "Reply sent");
+                        ToastUtils.showToast(context, "Reply sent");
                         break;
                     case save:
-                        ToastUtils.displayShortToast(context, "Saved");
+                        ToastUtils.showToast(context, "Saved");
                         break;
                     case unsave:
-                        ToastUtils.displayShortToast(context, "Unsaved");
+                        ToastUtils.showToast(context, "Unsaved");
                         break;
                     case delete:
-                        ToastUtils.displayShortToast(context, "Deleted");
+                        ToastUtils.showToast(context, "Deleted");
                         break;
                     case edit:
                         ((Activity) context).finish();
-                        ToastUtils.displayShortToast(context, "Edit successful");
+                        ToastUtils.showToast(context, "Edit successful");
                         break;
                     case changePassword:
-                        ToastUtils.displayShortToast(context, "Password change successful");
+                        ToastUtils.showToast(context, "Password change successful");
                         break;
                     case report:
-                        ToastUtils.displayShortToast(context, "Report sent");
+                        ToastUtils.showToast(context, "Report sent");
                         break;
                     case subscribe:
                         if (dialogSidebar != null) {
                             dialogSidebar.updateSubUnsubButton(true);
                         }
-                        ToastUtils.displayShortToast(context, "Subscribed to " + subreddit);
+                        ToastUtils.showToast(context, "Subscribed to " + subreddit);
                         break;
                     case unsubscribe:
                         if (dialogSidebar != null) {
                             dialogSidebar.updateSubUnsubButton(true);
                         }
-                        ToastUtils.displayShortToast(context, "Unsubscribed from " + subreddit);
+                        ToastUtils.showToast(context, "Unsubscribed from " + subreddit);
                         break;
                     case sendMessage:
                         ((Activity) context).finish();
-                        ToastUtils.displayShortToast(context, "Message sent");
+                        ToastUtils.showToast(context, "Message sent");
                         break;
                 }
             }

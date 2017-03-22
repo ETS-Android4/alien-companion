@@ -60,7 +60,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
                     @Override
                     protected void onPostExecute(Void aVoid) {
                         dialogFragment.dismiss();
-                        ToastUtils.displayShortToast(getActivity(), "Cache cleared");
+                        ToastUtils.showToast(getActivity(), "Cache cleared");
                     }
                 }.execute();
                 return false;
@@ -96,7 +96,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
                 boolean moveToExternal = (boolean) newValue;
                 if(!StorageUtils.isExternalStorageAvailable(getActivity())) {
                     if(moveToExternal) {
-                        ToastUtils.displayShortToast(getActivity(), "External storage unavailable");
+                        ToastUtils.showToast(getActivity(), "External storage unavailable");
                         return false;
                     }
                     else {

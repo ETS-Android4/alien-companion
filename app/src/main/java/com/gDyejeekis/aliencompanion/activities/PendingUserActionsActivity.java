@@ -95,7 +95,7 @@ public class PendingUserActionsActivity extends ToolbarActivity {
 
     public static boolean checkServiceRunning(Context context) {
         if(PendingActionsService.isRunning) {
-            ToastUtils.displayShortToast(context, "Pending actions execution in progress");
+            ToastUtils.showToast(context, "Pending actions execution in progress");
             return true;
         }
         return false;

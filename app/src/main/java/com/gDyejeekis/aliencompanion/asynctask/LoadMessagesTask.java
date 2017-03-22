@@ -110,7 +110,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
             mf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null) {
-                ToastUtils.displayShortToast(context, "Error loading messages");
+                ToastUtils.showToast(context, "Error loading messages");
                 if(loadType == LoadType.extend) {
                     mf.adapter.setLoadingMoreItems(false);
                 }
@@ -120,7 +120,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
             } else {
                 if(messages.size()>0) mf.adapter = adapter;
-                else ToastUtils.displayShortToast(context, "No messages found");
+                else ToastUtils.showToast(context, "No messages found");
                 mf.hasMore = messages.size() == RedditConstants.DEFAULT_LIMIT;
                 switch (loadType) {
                     case init:
@@ -128,7 +128,7 @@ public class LoadMessagesTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             markNewMessagesRead((Message) messages.get(0));
                         } catch (Exception e) {}
                         mf.updateContentViewAdapter(mf.adapter);
-                        //if(messages.size()==0) ToastUtils.displayShortToast(context, "No messages found");
+                        //if(messages.size()==0) ToastUtils.showToast(context, "No messages found");
                         break;
                     case refresh:
                         if(messages.size()!=0) {

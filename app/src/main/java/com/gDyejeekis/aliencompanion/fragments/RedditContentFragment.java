@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,9 +27,9 @@ import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
-import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
+import com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout;
 import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
@@ -75,6 +76,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     };
 
     private DividerItemDecoration dividerDecoration;
+
+    public View getSnackbarParentView() {
+        return layoutFabNav;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -298,7 +303,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    private LinearLayout layoutFabNav;
+    private MoveUpwardLinearLayout layoutFabNav;
     private LinearLayout layoutFabNavOptions;
     private boolean fabOptionsVisible;
     private boolean fabSubmitOptionsVisible;
@@ -352,7 +357,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     protected void initFabNavOptions(View view) {
-        layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_fab_nav);
+        layoutFabNav = (MoveUpwardLinearLayout) view.findViewById(R.id.layout_fab_nav);
         if(MyApplication.postNavigation && hasFabNavigation()) {
             setLayoutFabNavVisible(true);
             layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);

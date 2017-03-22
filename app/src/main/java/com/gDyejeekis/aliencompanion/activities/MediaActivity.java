@@ -39,6 +39,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -247,7 +248,7 @@ public class MediaActivity extends BackNavActivity {
                     @Override
                     protected void onPostExecute(String rawUrl) {
                         if(rawUrl == null) {
-                            ToastUtils.displayShortToast(getContext(), "Error retrieving gyazo info");
+                            ToastUtils.showToast(getContext(), "Error retrieving gyazo info");
                         }
                         else {
                             if(rawUrl.endsWith(".jpg") || rawUrl.endsWith(".jpeg") || rawUrl.endsWith(".png")) {
@@ -267,7 +268,7 @@ public class MediaActivity extends BackNavActivity {
                 //    @Override
                 //    protected void onPostExecute(String mp4Url) {
                 //        if(mp4Url == null) {
-                //            ToastUtils.displayShortToast(getContext(), "Error retrieving giphy info");
+                //            ToastUtils.showToast(getContext(), "Error retrieving giphy info");
                 //        }
                 //        else {
                 //            addGifFragment(mp4Url);
@@ -281,7 +282,7 @@ public class MediaActivity extends BackNavActivity {
                     @Override
                     protected void onPostExecute(String url) {
                         if(url == null) {
-                            ToastUtils.displayShortToast(getContext(), "Error retrieving streamable info");
+                            ToastUtils.showToast(getContext(), "Error retrieving streamable info");
                         }
                         else {
                             addVideoFragment(url);
@@ -313,7 +314,7 @@ public class MediaActivity extends BackNavActivity {
                     @Override
                     protected void onPostExecute(ImgurItem item) {
                         if (item == null) {
-                            ToastUtils.displayShortToast(getContext(), "Error retrieving imgur info");
+                            ToastUtils.showToast(getContext(), "Error retrieving imgur info");
                         } else {
                             if (item instanceof ImgurImage) {
                                 ImgurImage image = (ImgurImage) item;
@@ -396,7 +397,7 @@ public class MediaActivity extends BackNavActivity {
     private void setupAlbumView(final List<ImgurImage> images, final boolean hasAlbumInfo, final String title, final String description) {
         albumSize = images.size();
         if(albumSize == 0) {
-            ToastUtils.displayShortToast(this, "No items in album");
+            ToastUtils.showToast(this, "No items in album");
             finish();
             return;
         }
@@ -564,7 +565,7 @@ public class MediaActivity extends BackNavActivity {
     }
 
     public void saveMedia() {
-        ToastUtils.displayShortToast(this, "Saving to pictures..");
+        ToastUtils.showToast(this, "Saving to pictures..");
         Log.d(TAG, "Saving " + url + " to public pictures directory");
 
         final File saveTarget = getSaveDestination();

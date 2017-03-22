@@ -171,7 +171,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             notifyItemChanged(position);
         } catch (Exception e) {
             e.printStackTrace();
-            ToastUtils.displayShortToast(activity, MODIFY_LIST_ERROR_MESSAGE);
+            ToastUtils.showToast(activity, MODIFY_LIST_ERROR_MESSAGE);
         }
     }
 
@@ -208,7 +208,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
             notifyItemRemoved(index);
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
-            ToastUtils.displayShortToast(activity, MODIFY_LIST_ERROR_MESSAGE);
+            ToastUtils.showToast(activity, MODIFY_LIST_ERROR_MESSAGE);
         }
     }
 
@@ -387,7 +387,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                             activity.getAdapter().deleteProfile(profile);
                             return true;
                         case R.id.action_sync_now:
-                            ToastUtils.displayShortToast(activity, profile.getName() + " added to sync queue");
+                            ToastUtils.showToast(activity, profile.getName() + " added to sync queue");
                             profile.startSync(activity);
                             return true;
                         default:

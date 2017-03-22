@@ -58,7 +58,7 @@ public class SubmitTextFragment extends Fragment {
             if(title.replaceAll("\\s","").length()==0) title = "";
             subreddit = subreddit.replaceAll("\\s","");
             if(title.length()==0 || subreddit.length()==0) {
-                //ToastUtils.displayShortToast(getActivity(), "All fields are required");
+                //ToastUtils.showToast(getActivity(), "All fields are required");
                 if(title.length()==0) {
                     titleField.setText("");
                     titleField.setHint("enter a title");
@@ -71,7 +71,7 @@ public class SubmitTextFragment extends Fragment {
                 }
             }
             else {
-                ToastUtils.displayShortToast(getActivity(), "Submitting..");
+                ToastUtils.showToast(getActivity(), "Submitting..");
                 LoadUserActionTask task = new LoadUserActionTask(getActivity(), UserActionType.submitText, title, text, subreddit);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }

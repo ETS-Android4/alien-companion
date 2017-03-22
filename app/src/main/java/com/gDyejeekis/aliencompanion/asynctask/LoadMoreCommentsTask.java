@@ -15,7 +15,6 @@ import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -115,7 +114,7 @@ public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         moreChildren.setLoadingMore(false);
         PostAdapter postAdapter = postFragment.postAdapter;
         if(comments==null || comments.size()==0) {
-            ToastUtils.displayShortToast(activity, exception!=null ? "Error loading comments" : "Replies not found");
+            ToastUtils.showToast(activity, exception!=null ? "Error loading comments" : "Replies not found");
             int index = postAdapter.getData().indexOf(moreChildren);
             postAdapter.notifyItemChanged(index);
         }

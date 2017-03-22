@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -158,8 +159,27 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     plf.adapter = new RedditItemListAdapter(context, viewTypeValue);
                     plf.updateContentView(adapter, viewTypeValue);
                 }
-                if(MyApplication.offlineModeEnabled) ToastUtils.displayShortToast(context, "No posts found");
-                else ToastUtils.postsLoadError(context);
+
+                View.OnClickListener listener;
+                if(MyApplication.offlineModeEnabled) {
+                    listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            plf.addToSyncQueue();
+                        }
+                    };
+                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener);
+                }
+                else {
+                    listener = new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            plf.refreshList();
+                        }
+                    };
+                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener);
+                }
+
             } else {
                 if(submissions.size()>0) {
                     if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
@@ -173,7 +193,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.updateContentView(new RedditItemListAdapter(context, viewTypeValue), viewTypeValue);
                             String message = "No posts found";
                             if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
-                            ToastUtils.displayShortToast(context, message);
+                            ToastUtils.showToast(context, message);
                         }
                         else {
                             plf.updateContentView(plf.adapter, viewTypeValue);
@@ -192,7 +212,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.setActionBarSubtitle();
                             plf.updateContentView(adapter, viewTypeValue);
                         }
-                        else ToastUtils.displayShortToast(context, "No posts found");
+                        else ToastUtils.showToast(context, "No posts found");
                         break;
                     case extend:
                         plf.adapter.setLoadingMoreItems(false);

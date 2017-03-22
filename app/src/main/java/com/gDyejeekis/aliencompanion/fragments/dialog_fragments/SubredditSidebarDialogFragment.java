@@ -107,7 +107,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
             }
         }
         else {
-            ToastUtils.displayShortToast(getActivity(), "Must be logged in to do that");
+            ToastUtils.showToast(getActivity(), "Must be logged in to do that");
         }
     }
 
