@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -19,15 +18,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 
-import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.services.DownloaderService;
-import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurApiEndpoints;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurGallery;
@@ -39,7 +33,6 @@ import org.json.simple.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -47,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -57,12 +49,7 @@ import java.util.List;
  * Created by sound on 10/5/2015.
  */
 public class GeneralUtils {
-
-    public static final String CURRENT_DEBUG_TAG = "CurrentDebug";
-
     public static final String TAG = "GeneralUtils";
-
-    public static final String MOBILE_USER_AGENT_STRING = "Mozilla/5.0 (Linux; U; Android 2.2.1; en-us; Nexus One Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1";
 
     public static void showChangeLog(Activity activity) {
         ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
@@ -79,14 +66,6 @@ public class GeneralUtils {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifi.isConnectedOrConnecting();
-    }
-
-    public static void deleteAccountData(Context context) {
-        context.deleteFile(MyApplication.SAVED_ACCOUNTS_FILENAME);
-        SharedPreferences.Editor editor = MyApplication.prefs.edit();
-        editor.putString("currentAccountName", "Logged out");
-        editor.apply();
-        NavDrawerAdapter.currentAccountName = "Logged out";
     }
 
     public static void addFileToMediaStore(Context context, File file) {
@@ -115,7 +94,7 @@ public class GeneralUtils {
         }
     }
 
-    public static File getActiveDir(Context context) {
+    public static File getActiveSyncedDataDir(Context context) {
         if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(context)) {
             File[] externalDirs = ContextCompat.getExternalFilesDirs(context, null);
             return ((externalDirs.length > 1) ? externalDirs[1] : externalDirs[0]);
@@ -123,8 +102,9 @@ public class GeneralUtils {
         return context.getFilesDir();
     }
 
+    // TODO: 3/22/2017 change this
     public static File getActiveMediaDir(Context context) {
-        File activeDir = getActiveDir(context);
+        File activeDir = getActiveSyncedDataDir(context);
         File mediaDir;
         if(activeDir.equals(context.getFilesDir())) {
             mediaDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
@@ -133,109 +113,6 @@ public class GeneralUtils {
             mediaDir = new File(activeDir.getAbsolutePath() + "/Pictures");
         }
         return mediaDir;
-    }
-
-    public static void clearSyncedPostsAndComments(Context context, final String subreddit) {
-        FilenameFilter filenameFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                if(filename.startsWith(subreddit)) {
-                    return true;
-                }
-                return false;
-            }
-        };
-        File[] files = context.getFilesDir().listFiles(filenameFilter);
-        for(File file : files) {
-            Log.d(TAG, "Deleting " + file.getName());
-            file.delete();
-        }
-
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                for (File file : externalDir.listFiles(filenameFilter)) {
-                    file.delete();
-                }
-            }
-        }
-    }
-
-    public static void clearSyncedPosts(Context context) {
-        for (File file : context.getFilesDir().listFiles()) {
-            //Log.d(TAG, file.getName());
-            String filename = file.getName();
-            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)
-                    && !filename.equals(MyApplication.OFFLINE_USER_ACTIONS_FILENAME)) {
-                file.delete();
-            }
-        }
-
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                for (File file : externalDir.listFiles()) {
-                    file.delete();
-                }
-            }
-        }
-
-        //Log.d(TAG, "Remaining local app files AFTER delete:");
-        //listFilesInDir(dir);
-    }
-
-    public static void clearSyncedImages(Context context) {
-        //delete in primary external public directory
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        File folder = new File(dir + "/AlienCompanion");
-        for(File file : folder.listFiles()) {
-            if(file.isDirectory()) {
-                deletePicsFromDirectory(context, file);
-            }
-        }
-
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            //delete in secondary external private directory
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File picturesDir = new File(externalDir, "Pictures");
-                if (picturesDir.isDirectory()) {
-                    for (File file : picturesDir.listFiles()) {
-                        if (file.isDirectory()) {
-                            deletePicsFromDirectory(context, file);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public static void clearSyncedImages(Context context, final String subreddit) {
-        //delete in primary external public directory
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        File folder = new File(dir + "/AlienCompanion/" + subreddit);
-        if(folder.isDirectory()) {
-            deletePicsFromDirectory(context, folder);
-        }
-
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            //delete in secondary external private directory
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File subredditDir = new File(externalDir.getAbsolutePath() + "/Pictures/" + subreddit);
-                if (subredditDir.isDirectory()) {
-                    deletePicsFromDirectory(context, subredditDir);
-                }
-            }
-        }
-    }
-
-    private static void deletePicsFromDirectory(Context context, File dir) {
-        for(File file : dir.listFiles()) {
-            if(file.isDirectory()) {
-                deletePicsFromDirectory(context, file);
-            }
-            else {
-                file.delete();
-                deleteFileFromMediaStore(context.getContentResolver(), file);
-            }
-        }
     }
 
     public static Object readObjectFromFile(File file) throws IOException, ClassNotFoundException {
@@ -255,31 +132,7 @@ public class GeneralUtils {
         oos.close();
     }
 
-    /**
-     * Search file a file in a directory. Please comment more here, your method is not that standard.
-     * @param aFile the file / folder where to look our file for.
-     * @param sDir a directory that must be in the path of the file to find
-     * @param toFind the name of file we are looking for.
-     * @return the file we were looking for. Null if no such file could be found.
-     */
-    public static File findFile( File aFile, String sDir, String toFind ){
-        if( aFile.isFile() &&
-                aFile.getAbsolutePath().contains( sDir ) &&
-                aFile.getName().contains( toFind ) ) {
-            return aFile;
-        } else if( aFile.isDirectory() ) {
-            for( File child : aFile.listFiles() ){
-                File found = findFile( child, sDir, toFind );
-                if( found != null ) {
-                    return found;
-                }//if
-            }//for
-        }//else
-        return null;
-    }//met
-
-    // Don't call on main thread
-    public static void downloadMediaToFile(String url, File file) throws IOException {
+    public static void downloadToFileSync(String url, File file) throws IOException {
         //Open a connection to that URL.
         URLConnection ucon = new URL(url).openConnection();
 
@@ -341,59 +194,6 @@ public class GeneralUtils {
         return item;
     }
 
-    public static void copy(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
-
-    /**
-     * Return the size of a directory in bytes
-     */
-    private static long dirSize(File dir, boolean recursive) {
-
-        if (dir.exists()) {
-            long result = 0;
-            File[] fileList = dir.listFiles();
-            for(int i = 0; i < fileList.length; i++) {
-                // Recursive call if it's a directory
-                if(recursive && fileList[i].isDirectory()) {
-                    result += dirSize(fileList [i], true);
-                } else {
-                    // Sum the file size in bytes
-                    result += fileList[i].length();
-                }
-            }
-            return result; // return the file size
-        }
-        return 0;
-    }
-
-    public static File oldestFileInDir(File dir) {
-        File[] files = dir.listFiles(new FileFilter() {
-            public boolean accept(File file) {
-                return file.isFile();
-            }
-        });
-        long firstMod = Long.MAX_VALUE;
-        File choice = null;
-        for (File file : files) {
-            if (file.lastModified() < firstMod) {
-                choice = file;
-                firstMod = file.lastModified();
-            }
-        }
-        return choice;
-    }
-
     public static Bitmap getBitmapFromPath(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -401,8 +201,8 @@ public class GeneralUtils {
     }
 
     public static void checkCacheSize(File cacheDir) {
-        if(dirSize(cacheDir, false) >= MyApplication.IMAGES_CACHE_LIMIT) {
-            File toDelete = oldestFileInDir(cacheDir);
+        if(StorageUtils.dirSize(cacheDir, false) >= MyApplication.IMAGES_CACHE_LIMIT) {
+            File toDelete = StorageUtils.oldestFileInDir(cacheDir);
             long length = toDelete.length();
             if(toDelete.delete()) {
                 Log.d(TAG, length + " bytes cleared from cache");
@@ -412,7 +212,7 @@ public class GeneralUtils {
     }
 
     public static String checkCacheForMedia(File cacheDir, String url) {
-        File file = findFile(cacheDir, cacheDir.getAbsolutePath(), urlToFilename(url));
+        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), urlToFilename(url));
         if(file!=null) {
             Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
@@ -421,157 +221,8 @@ public class GeneralUtils {
         return null;
     }
 
-    public static void clearMediaFromCache(File cacheDir, String url) {
-        File file = new File(cacheDir, urlToFilename(url));
-        if(file.delete()) {
-            Log.d(TAG, "Deleted " + file.getAbsolutePath() + " from cache");
-        }
-    }
-
     public static String urlToFilename(String url) {
         return url.replaceAll("https?://", "").replace("/", "(s)");
-    }
-
-    public static boolean deleteSyncedPostFromCategory(Context context, final String name, final String id) {
-        File activeDir = getActiveDir(context);
-        File postListFile = new File(activeDir, name + DownloaderService.LOCA_POST_LIST_SUFFIX);
-        String postLink = null;
-        try {
-            // modify post list file
-            List<Submission> postList = (List<Submission>) readObjectFromFile(postListFile);
-            for(Submission post : postList) {
-                if(post.getIdentifier().equals(id)) {
-                    postLink = post.getURL();
-                    postList.remove(post);
-                    break;
-                }
-            }
-            writeObjectToFile(postList, postListFile);
-
-            // delete synced files for current post
-            FilenameFilter filter = new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String filename) {
-                    return filename.contains(name) && filename.contains(id);
-                }
-            };
-            File[] files = activeDir.listFiles(filter);
-            for (File file : files) {
-                if (file.delete()) {
-                    Log.d(TAG, "Deleted " + file.getAbsolutePath());
-                }
-            }
-
-            // delete any corresponding synced media (images/GIF)
-            if(postLink!=null) {
-                if(postLink.contains("imgur.com") || postLink.contains("gfycat.com") || postLink.endsWith(".jpg") || postLink.endsWith(".jpeg") || postLink.endsWith(".png") || postLink.endsWith(".gif")) {
-                    File namedDir;
-                    // internal storage active
-                    if(activeDir.getAbsolutePath().equals(context.getFilesDir().getAbsolutePath())) {
-                        namedDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion/" + name);
-                    }
-                    // external storage active
-                    else {
-                        namedDir = new File(activeDir.getAbsolutePath() + "/Pictures/" + name);
-                    }
-                    //Log.d(TAG, "namedDir: " + namedDir.getAbsolutePath());
-
-                    if(namedDir.isDirectory()) {
-                        String toFind;
-                        if(postLink.contains("imgur.com")) {
-                            if(postLink.contains("/a/") || postLink.contains("/gallery/")) {
-                                File infoFile = findFile(activeDir, activeDir.getAbsolutePath(), LinkHandler.getImgurImgId(postLink));
-                                if(infoFile != null && infoFile.isFile()) {
-                                    ImgurItem albumInfo = (ImgurItem) readObjectFromFile(infoFile);
-                                    for(ImgurImage img : albumInfo.getImages()) {
-                                        toFind = LinkHandler.getImgurImgId(img.getLink());
-                                        findDeleteMediaInDir(context, namedDir, toFind);
-                                        findDeleteMediaInDir(context, activeDir, toFind + "-thumb");
-                                    }
-                                    if(infoFile.delete()) {
-                                        Log.d(TAG, "Deleted " + infoFile.getAbsolutePath());
-                                    }
-                                }
-                                else {
-                                    toFind = LinkHandler.getImgurImgId(postLink);
-                                    findDeleteMediaInDir(context, namedDir, toFind);
-                                }
-                            }
-                            else {
-                                toFind = LinkHandler.getImgurImgId(postLink);
-                                findDeleteMediaInDir(context, namedDir, toFind);
-                            }
-                        }
-                        else if(postLink.contains("gfycat.com")) {
-                            toFind = LinkHandler.getGfycatId(postLink);
-                            findDeleteMediaInDir(context, namedDir, toFind);
-                        }
-                        else {
-                            toFind = urlToFilename(postLink);
-                            findDeleteMediaInDir(context, namedDir, toFind);
-                        }
-
-                    }
-
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private static void findDeleteMediaInDir(Context context, File dir, String toFind) {
-        File imgFile = findFile(dir, dir.getAbsolutePath(), toFind);
-        if(imgFile!=null && imgFile.delete()) {
-            deleteFileFromMediaStore(context.getContentResolver(), imgFile);
-            Log.d(TAG, "Deleted " + imgFile.getAbsolutePath());
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    public static void clearCookies(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            //Log.d(C.TAG, "Using ClearCookies code for API >=" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-            CookieManager.getInstance().removeAllCookies(null);
-            CookieManager.getInstance().flush();
-        }
-        else {
-            //Log.d(C.TAG, "Using ClearCookies code for API <" + String.valueOf(Build.VERSION_CODES.LOLLIPOP_MR1));
-            CookieSyncManager cookieSyncMngr= CookieSyncManager.createInstance(context);
-            cookieSyncMngr.startSync();
-            CookieManager cookieManager=CookieManager.getInstance();
-            cookieManager.removeAllCookie();
-            cookieManager.removeSessionCookie();
-            cookieSyncMngr.stopSync();
-            cookieSyncMngr.sync();
-        }
-    }
-
-    public static void deleteCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e) {}
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        }
-        else if(dir!= null && dir.isFile())
-            return dir.delete();
-        else {
-            return false;
-        }
     }
 
     public static void shareUrl(Context context, String label, String url) {

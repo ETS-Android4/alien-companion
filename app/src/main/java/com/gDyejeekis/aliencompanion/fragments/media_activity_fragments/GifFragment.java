@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.asynctask.MediaDownloadTask;
 import com.gDyejeekis.aliencompanion.asynctask.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
@@ -342,7 +343,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                         gifView.setVisibility(View.GONE);
                         buttonRetry.setVisibility(View.VISIBLE);
                         ToastUtils.displayShortToast(activity, "Error loading gif");
-                        GeneralUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
+                        CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
                     }
                 }
             };
@@ -360,7 +361,6 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             buttonRetry.setVisibility(View.VISIBLE);
         }
     }
-
 
     public void resumePlayback() {
         if(isGif) {

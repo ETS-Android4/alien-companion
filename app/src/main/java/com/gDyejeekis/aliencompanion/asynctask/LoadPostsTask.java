@@ -71,7 +71,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private List<RedditItem> readPostsFromFile(String filename) {
         List<RedditItem> posts = null;
         try {
-            FileInputStream fis = new FileInputStream(new File(GeneralUtils.getActiveDir(context), filename.toLowerCase()));
+            FileInputStream fis = new FileInputStream(new File(GeneralUtils.getActiveSyncedDataDir(context), filename.toLowerCase()));
             ObjectInputStream ois = new ObjectInputStream(fis);
             posts = (List<RedditItem>) ois.readObject();
             ois.close();

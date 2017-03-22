@@ -90,7 +90,7 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
             return true;
         }
         else if(item.getItemId() == R.id.action_share) {
-            shareVideo();
+            activity.shareMedia();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -133,12 +133,6 @@ public class VideoFragment extends Fragment implements MediaPlayer.OnPreparedLis
         activity.setMainProgressBarVisible(false);
         buttonRetry.setVisibility(View.VISIBLE);
         videoView.setVisibility(View.GONE);
-    }
-
-    private void shareVideo() {
-        String label = "Share video to..";
-
-        GeneralUtils.shareUrl(activity, label, url);
     }
 
 }

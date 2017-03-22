@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
 
@@ -34,11 +35,11 @@ public class MediaDownloadTask extends AsyncTask<Void, Void, Boolean> {
             String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, GeneralUtils.urlToFilename(url));
             if(cachedPath == null) {
                 Log.d(TAG, "Didn't find media in cache, downloading to " + file.getAbsolutePath());
-                GeneralUtils.downloadMediaToFile(url, file);
+                GeneralUtils.downloadToFileSync(url, file);
             }
             else {
                 Log.d(TAG, "Found media in cache " + cachedPath + " , copying to " + file.getAbsolutePath());
-                GeneralUtils.copy(new File(cachedPath), file);
+                StorageUtils.copy(new File(cachedPath), file);
             }
             return true;
         } catch (Exception e) {

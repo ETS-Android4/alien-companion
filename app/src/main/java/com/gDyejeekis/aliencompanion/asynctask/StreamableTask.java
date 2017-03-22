@@ -38,7 +38,7 @@ public class StreamableTask extends AsyncTask<String, Void, String> {
 
             //String url = getStreamableDirectUrl(originalUrl);
             //File file = new File(context.getCacheDir(), LinkHandler.getStreamableId(originalUrl) + ".mp4");
-            //GeneralUtils.downloadMediaToFile(url, file);
+            //GeneralUtils.downloadToFileSync(url, file);
             //return file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();

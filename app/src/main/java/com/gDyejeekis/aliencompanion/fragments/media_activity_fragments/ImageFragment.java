@@ -28,6 +28,7 @@ import com.gDyejeekis.aliencompanion.asynctask.MediaLoadTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
@@ -162,7 +163,7 @@ public class ImageFragment extends Fragment {
                     else {
                         imageLoadError();
                         ToastUtils.displayShortToast(activity, "Error loading image");
-                        GeneralUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
+                        CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
                     }
                 }
             };

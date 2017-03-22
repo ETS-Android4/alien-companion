@@ -247,7 +247,7 @@ public class BrowserFragment extends Fragment {
                 loadLiveVersion();
                 return true;
             case R.id.action_share_url:
-                GeneralUtils.shareUrl(activity, "Share url to..", webView.getUrl());
+                GeneralUtils.shareUrl(activity, "Share via..", webView.getUrl());
                 return true;
         }
 

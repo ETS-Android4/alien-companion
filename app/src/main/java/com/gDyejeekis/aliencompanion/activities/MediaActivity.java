@@ -212,7 +212,7 @@ public class MediaActivity extends BackNavActivity {
             }
 
             if(toFind!=null) {
-                File file = GeneralUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
+                File file = StorageUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
                 if (file != null) {
                     Log.d(TAG, "Locally saved image found " + file.getAbsolutePath());
                     loadFromSynced = true;
@@ -376,8 +376,8 @@ public class MediaActivity extends BackNavActivity {
     }
 
     private ImgurItem findImgurItemFromFile(String id) {
-        File dir = GeneralUtils.getActiveDir(this);
-        File file = GeneralUtils.findFile(dir, dir.getAbsolutePath(), id + "-albumInfo");
+        File dir = GeneralUtils.getActiveSyncedDataDir(this);
+        File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), id + "-albumInfo");
         if(file!=null) {
             try {
                 FileInputStream fis = new FileInputStream(file);
@@ -589,7 +589,7 @@ public class MediaActivity extends BackNavActivity {
                 new AsyncTask<File, Void, Boolean>() {
                     @Override
                     protected Boolean doInBackground(File... params) {
-                        return StorageUtils.copyFileToTarget(file, saveTarget);
+                        return StorageUtils.safeCopy(file, saveTarget);
                     }
 
                     @Override

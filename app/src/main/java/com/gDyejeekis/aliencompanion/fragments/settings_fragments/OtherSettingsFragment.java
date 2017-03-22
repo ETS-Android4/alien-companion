@@ -13,6 +13,7 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.MoveAppDataDialo
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -52,7 +53,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
 
                     @Override
                     protected Void doInBackground(Void... params) {
-                        GeneralUtils.deleteCache(getActivity());
+                        CleaningUtils.clearCache(getActivity());
                         return null;
                     }
 

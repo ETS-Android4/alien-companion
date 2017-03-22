@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 /**
@@ -15,7 +16,7 @@ public class OAuthActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        GeneralUtils.clearCookies(this);
+        CleaningUtils.clearCookies(this);
         setContentView(R.layout.activity_oauth);
     }
 }

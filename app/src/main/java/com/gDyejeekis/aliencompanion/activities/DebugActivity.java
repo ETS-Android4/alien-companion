@@ -15,6 +15,7 @@ import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
+import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 
 /**
  * Created by George on 12/4/2016.
@@ -66,7 +67,7 @@ public class DebugActivity extends ToolbarActivity {
             urlsString += "<br/><br/>";
         }
         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(urlsString, null, new MyHtmlTagHandler()));
-        stringBuilder = ConvertUtils.modifyURLSpan(this, stringBuilder);
+        stringBuilder = SpanUtils.modifyURLSpan(this, stringBuilder);
         urlTests.setText(stringBuilder);
         urlTests.setMovementMethod(MyLinkMovementMethod.getInstance());
     }

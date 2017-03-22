@@ -54,7 +54,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             }
         };
 
-        File[] files = GeneralUtils.getActiveDir(context).listFiles(filenameFilter);
+        File[] files = GeneralUtils.getActiveSyncedDataDir(context).listFiles(filenameFilter);
         for(File file : files) {
             if(postFile == null) postFile = file;
             else if(file.lastModified() > postFile.lastModified()) postFile = file;

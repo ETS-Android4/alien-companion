@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
@@ -93,7 +95,7 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                                 }
                                 File[] pics = file.listFiles();
                                 for (File pic : pics) {
-                                    StorageUtils.moveFileBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
+                                    moveMediaBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
                                 }
                             }
                         }
@@ -115,7 +117,7 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                                 }
                                 File[] pics = file.listFiles();
                                 for (File pic : pics) {
-                                    StorageUtils.moveFileBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
+                                    moveMediaBetweenDisks(getActivity(), pic, subredditDir.getAbsolutePath());
                                 }
                             }
                         }
@@ -134,4 +136,13 @@ public class MoveAppDataDialogFragment extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         return view;
     }
+
+    private void moveMediaBetweenDisks(Context context, File src, String targetDir) {
+        boolean success = StorageUtils.moveFileBetweenDisks(src, targetDir);
+        if(success) {
+            GeneralUtils.deleteFileFromMediaStore(context.getContentResolver(), src);
+            GeneralUtils.addFileToMediaStore(context, new File(targetDir, src.getName()));
+        }
+    }
+
 }

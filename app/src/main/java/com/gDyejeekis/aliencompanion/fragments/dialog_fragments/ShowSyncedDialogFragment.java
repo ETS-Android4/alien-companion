@@ -18,6 +18,7 @@ import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
@@ -101,8 +102,8 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
                     @Override
                     protected Void doInBackground(Void... params) {
-                        GeneralUtils.clearSyncedPostsAndComments(getActivity(), filename);
-                        GeneralUtils.clearSyncedImages(getActivity(), filename);
+                        CleaningUtils.clearSyncedPostsAndComments(getActivity(), filename);
+                        CleaningUtils.clearSyncedImages(getActivity(), filename);
                         return null;
                     }
 
@@ -143,7 +144,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
                 }
             };
 
-            File[] files = GeneralUtils.getActiveDir(dialog.getActivity()).listFiles(filenameFilter);
+            File[] files = GeneralUtils.getActiveSyncedDataDir(dialog.getActivity()).listFiles(filenameFilter);
             if(files.length > 0) {
                 Collections.sort(Arrays.asList(files), new Comparator<File>() {
                     @Override

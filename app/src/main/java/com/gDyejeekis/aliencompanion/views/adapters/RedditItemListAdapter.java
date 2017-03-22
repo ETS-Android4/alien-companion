@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentLinkListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.MessageItemListener;
@@ -363,7 +364,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             else {
                 //parse body with fromHtml
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
-                strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder);
+                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder);
                 body.setText(strBuilder);
                 body.setMovementMethod(MyLinkMovementMethod.getInstance());
             }
@@ -448,7 +449,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 //parse html body using fromHTML
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null,
                         new MyHtmlTagHandler()));
-                strBuilder = ConvertUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
+                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
                 commentBody.setText(strBuilder);
                 commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             }

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
@@ -303,8 +303,8 @@ public class PostListFragment extends RedditContentFragment {
                                 if(isMulti) {
                                     folderName = "multi=" + folderName;
                                 }
-                                GeneralUtils.clearSyncedPostsAndComments(activity, folderName);
-                                GeneralUtils.clearSyncedImages(activity, folderName);
+                                CleaningUtils.clearSyncedPostsAndComments(activity, folderName);
+                                CleaningUtils.clearSyncedImages(activity, folderName);
                                 return null;
                             }
 
@@ -572,7 +572,7 @@ public class PostListFragment extends RedditContentFragment {
             if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
             filename += (subreddit == null) ? "frontpage" : subreddit;
             filename = filename.concat(DownloaderService.LOCA_POST_LIST_SUFFIX);
-            File file = new File(GeneralUtils.getActiveDir(activity), filename);
+            File file = new File(GeneralUtils.getActiveSyncedDataDir(activity), filename);
             //double lastModified = (double) file.lastModified();
             //return ConvertUtils.getSubmissionAge(lastModified);
             if(file.exists()) {

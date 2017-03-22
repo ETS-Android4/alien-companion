@@ -21,6 +21,7 @@ import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.SaveOfflineActionTask;
@@ -359,13 +360,13 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             choiceDialog = TwoOptionDialogFragment.newInstance("SHARE LINK", "SHARE COMMENTS", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    String label;
+                                    String label = "Share via..";
                                     String url;
                                     if (v.getId() == R.id.button_option_one) {
-                                        label = "Share post url to..";
+                                        label = "Share post url via..";
                                         url = post.getURL();
                                     } else {
-                                        label = "Share comments url to..";
+                                        label = "Share comments url via..";
                                         url = commentsUrl;
                                     }
                                     GeneralUtils.shareUrl(context, label, url);
@@ -406,7 +407,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
                             @Override
                             protected Boolean doInBackground(String... params) {
-                                return GeneralUtils.deleteSyncedPostFromCategory(context, DownloaderService.INDIVIDUALLY_SYNCED_FILENAME, params[0]);
+                                return CleaningUtils.deleteSyncedPostFromCategory(context, DownloaderService.INDIVIDUALLY_SYNCED_FILENAME, params[0]);
                             }
 
                             @Override

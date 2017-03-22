@@ -24,6 +24,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
+import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.SubredditInfo;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
@@ -129,7 +130,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         //submit text
         try {
             stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.submitTextHtml, null, tagHandler));
-            stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
+            stringBuilder = SpanUtils.modifyURLSpan(getActivity(), stringBuilder);
             textViewSubmitText.setText(stringBuilder);
             textViewSubmitText.setMovementMethod(MyLinkMovementMethod.getInstance());
         } catch (Exception e) {
@@ -139,7 +140,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         //public description
         try {
             stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.publicDescriptionHtml, null, tagHandler));
-            stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
+            stringBuilder = SpanUtils.modifyURLSpan(getActivity(), stringBuilder);
             textViewPublicDescription.setText(stringBuilder);
             textViewPublicDescription.setMovementMethod(MyLinkMovementMethod.getInstance());
         } catch (Exception e) {
@@ -149,7 +150,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         //description
         try {
             stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(info.descriptionHtml, null, tagHandler));
-            stringBuilder = ConvertUtils.modifyURLSpan(getActivity(), stringBuilder);
+            stringBuilder = SpanUtils.modifyURLSpan(getActivity(), stringBuilder);
             textViewDescription.setText(stringBuilder);
             textViewDescription.setMovementMethod(MyLinkMovementMethod.getInstance());
         } catch (Exception e) {

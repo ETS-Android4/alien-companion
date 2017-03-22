@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -115,9 +116,9 @@ public class PostCardViewHolder extends PostViewHolder  {
                 try {
                     if(showDetails) {
                         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
-                        stringBuilder = ConvertUtils.modifyURLSpan(context, stringBuilder);
+                        stringBuilder = SpanUtils.modifyURLSpan(context, stringBuilder);
                         if(post.getHighlightText()!=null) {
-                            stringBuilder = ConvertUtils.highlightText(stringBuilder, post.getHighlightText(), post.highlightMatchCase());
+                            stringBuilder = SpanUtils.highlightText(stringBuilder, post.getHighlightText(), post.highlightMatchCase());
                         }
                         selfText.setText(stringBuilder);
                         selfText.setMovementMethod(MyLinkMovementMethod.getInstance());

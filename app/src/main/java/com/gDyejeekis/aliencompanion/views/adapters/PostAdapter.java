@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.asynctask.LoadMoreCommentsTask;
+import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
@@ -257,10 +258,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                             //ds.bgColor = Color.GREEN; //enable for debugging plain text clickable spans
                         }
                     };
-                    strBuilder = ConvertUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
+                    strBuilder = SpanUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
                     // check for highlight text
                     if(comment.getHighlightText()!=null) {
-                        strBuilder = ConvertUtils.highlightText(strBuilder, comment.getHighlightText(), comment.highlightMatchCase());
+                        strBuilder = SpanUtils.highlightText(strBuilder, comment.getHighlightText(), comment.highlightMatchCase());
                     }
                     cvh.commentTextView.setText(strBuilder);
                     cvh.commentTextView.setMovementMethod(MyLinkMovementMethod.getInstance());

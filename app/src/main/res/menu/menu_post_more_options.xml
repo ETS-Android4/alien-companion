@@ -5,7 +5,7 @@
     android:orderInCategory="95" />
     <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
         android:orderInCategory="96" />-->
-    <item android:id="@+id/action_sync" android:title="@string/sync" android:orderInCategory="5" />
+    <item android:id="@+id/action_sync" android:title="@string/add_to_synced" android:orderInCategory="5" />
     <item android:id="@+id/action_copy_to_clipboard" android:title="Copy to clipboard"
         android:orderInCategory="12" />
     <item android:id="@+id/action_share" android:title="Share"

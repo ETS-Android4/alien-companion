@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
+import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -119,7 +120,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             linkTitle = StringEscapeUtils.unescapeHtml(linkTitle);
             if(!MyApplication.useMarkdownParsing) {
                 bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
-                bodyHTML = ConvertUtils.modifySpoilerHtml(bodyHTML);
+                bodyHTML = HtmlFormatUtils.modifySpoilerHtml(bodyHTML);
             }
 
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);

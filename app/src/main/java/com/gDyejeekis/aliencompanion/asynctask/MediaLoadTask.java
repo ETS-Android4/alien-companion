@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 import java.io.BufferedInputStream;
@@ -96,7 +97,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
         super.onCancelled();
 
         if(url != null) {
-            GeneralUtils.clearMediaFromCache(cacheDir, url);
+            CleaningUtils.clearMediaFromCache(cacheDir, url);
         }
     }
 

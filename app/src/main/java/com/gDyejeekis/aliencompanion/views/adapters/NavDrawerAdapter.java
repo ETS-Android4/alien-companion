@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners.AccountListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners.HeaderListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners.MenuItemListener;
@@ -245,7 +246,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         } catch (IOException | ClassNotFoundException e) {
             if(e instanceof ClassNotFoundException) {
                 Log.d("geotest", "account data deprecated or corrupt, clearing account data...");
-                GeneralUtils.deleteAccountData(activity);
+                CleaningUtils.clearAccountData(activity);
             }
             e.printStackTrace();
         }

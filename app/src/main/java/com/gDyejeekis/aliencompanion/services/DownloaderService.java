@@ -27,6 +27,7 @@ import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.models.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
@@ -745,7 +746,7 @@ public class DownloaderService extends IntentService {
             String imgId = LinkHandler.getImgurImgId(img.getLink());
             if(MyApplication.syncAlbumImgCount > 1) {
                 try {
-                    GeneralUtils.downloadMediaToFile("http://i.imgur.com/" + imgId + "s.jpg", new File(GeneralUtils.getActiveDir(this).getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
+                    GeneralUtils.downloadToFileSync("http://i.imgur.com/" + imgId + "s.jpg", new File(GeneralUtils.getActiveSyncedDataDir(this).getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -764,7 +765,7 @@ public class DownloaderService extends IntentService {
 
     private void saveAlbumInfoToFile(ImgurItem item, final String filename) {
         try {
-            FileOutputStream fos = new FileOutputStream(new File(GeneralUtils.getActiveDir(this), filename));
+            FileOutputStream fos = new FileOutputStream(new File(GeneralUtils.getActiveSyncedDataDir(this), filename));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(item);
             oos.close();
@@ -783,7 +784,7 @@ public class DownloaderService extends IntentService {
             final String filename = GeneralUtils.urlToFilename(url);
             final File file = new File(dir, filename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
-            GeneralUtils.downloadMediaToFile(url, file);
+            GeneralUtils.downloadToFileSync(url, file);
 
             GeneralUtils.addFileToMediaStore(this, file); // TODO: 1/21/2017  remove this later
             //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -800,7 +801,7 @@ public class DownloaderService extends IntentService {
             imgFilename = imgFilename.replaceAll("https?://", "").replace("/", "(s)");
             final File file = new File(dir, imgFilename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
-            GeneralUtils.downloadMediaToFile(url, file);
+            GeneralUtils.downloadToFileSync(url, file);
 
             GeneralUtils.addFileToMediaStore(this, file);
             //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -856,29 +857,12 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
-                matrix, false);
-
-        return resizedBitmap;
-    }
-
     private void deletePreviousImages(final String filename) {
-        GeneralUtils.clearSyncedImages(this, filename);
+        CleaningUtils.clearSyncedImages(this, filename);
     }
 
     private void deletePreviousComments(final String subreddit) {
-        GeneralUtils.clearSyncedPostsAndComments(this, subreddit);
+        CleaningUtils.clearSyncedPostsAndComments(this, subreddit);
     }
 
 }

@@ -7,11 +7,14 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -118,8 +121,50 @@ public class StorageUtils {
         return list;
     }
 
+    /**
+     * Search file a file in a directory. Please comment more here, your method is not that standard.
+     * @param aFile the file / folder where to look our file for.
+     * @param sDir a directory that must be in the path of the file to find
+     * @param toFind the name of file we are looking for.
+     * @return the file we were looking for. Null if no such file could be found.
+     */
+    public static File findFile( File aFile, String sDir, String toFind ){
+        if( aFile.isFile() &&
+                aFile.getAbsolutePath().contains( sDir ) &&
+                aFile.getName().contains( toFind ) ) {
+            return aFile;
+        } else if( aFile.isDirectory() ) {
+            for( File child : aFile.listFiles() ){
+                File found = findFile( child, sDir, toFind );
+                if( found != null ) {
+                    return found;
+                }//if
+            }//for
+        }//else
+        return null;
+    }//met
 
+    public static File oldestFileInDir(File dir) {
+        File[] files = dir.listFiles(new FileFilter() {
+            public boolean accept(File file) {
+                return file.isFile();
+            }
+        });
+        long firstMod = Long.MAX_VALUE;
+        File choice = null;
+        for (File file : files) {
+            if (file.lastModified() < firstMod) {
+                choice = file;
+                firstMod = file.lastModified();
+            }
+        }
+        return choice;
+    }
 
+    /**
+     * Recursively lists all files in a directory
+     * @param dir
+     */
     public static void listFilesInDir(File dir) {
         File[] files = dir.listFiles();
         for(File file : files) {
@@ -129,6 +174,29 @@ public class StorageUtils {
             else {
                 Log.d(TAG, file.getName() + " " + file.length());
             }
+        }
+    }
+
+    /**
+     * Recursively deletes a directory and all its files
+     * @param dir
+     * @return
+     */
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        }
+        else if(dir!= null && dir.isFile())
+            return dir.delete();
+        else {
+            return false;
         }
     }
 
@@ -163,6 +231,36 @@ public class StorageUtils {
         //}
     }
 
+    /**
+     *
+     * @param dir
+     * @param recursive whether to add size of subdirectories to total
+     * @return size of directory
+     */
+    public static long dirSize(File dir, boolean recursive) {
+
+        if (dir.exists()) {
+            long result = 0;
+            File[] fileList = dir.listFiles();
+            for(int i = 0; i < fileList.length; i++) {
+                // Recursive call if it's a directory
+                if(recursive && fileList[i].isDirectory()) {
+                    result += dirSize(fileList [i], true);
+                } else {
+                    // Sum the file size in bytes
+                    result += fileList[i].length();
+                }
+            }
+            return result; // return the file size
+        }
+        return 0;
+    }
+
+    /**
+     *
+     * @param parentDir
+     * @return a list of all files in a parent directory
+     */
     public static List<File> getListFiles(File parentDir) {
         ArrayList<File> inFiles = new ArrayList<File>();
         File[] files = parentDir.listFiles();
@@ -177,18 +275,23 @@ public class StorageUtils {
         return inFiles;
     }
 
-    public static boolean copyFileToTarget(File fileSource, File fileTarget) {
-        try {
-            FileInputStream inputStream = new FileInputStream(fileSource);
-            FileOutputStream outputStream = new FileOutputStream(fileTarget);
+    public static void copy(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
 
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-            inputStream.close();
-            outputStream.close();
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+
+    public static boolean safeCopy(File src, File dst) {
+        try {
+            copy(src, dst);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,9 +318,9 @@ public class StorageUtils {
         return false;
     }
 
-    public static boolean moveFileBetweenDisks(File file, String targetDir) {
+    public static boolean moveFileBetweenDisks(File src, String targetDir) {
         try{
-            File afile = file;
+            File afile = src;
             File bfile = new File(targetDir, afile.getName());
 
             FileInputStream inStream = new FileInputStream(afile);
@@ -237,52 +340,21 @@ public class StorageUtils {
             outStream.close();
 
             //delete the original file
-            afile.delete();
+            boolean deletedOriginal = afile.delete();
 
-            Log.d(TAG, "Successfully copied " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
-            return true;
-
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-        Log.d(TAG, "Failed to copy file from " + file.getAbsolutePath() + " to " + targetDir);
-        return false;
-    }
-
-    public static boolean moveFileBetweenDisks(Context context, File file, String targetDir) {
-        try{
-            File afile = file;
-            File bfile = new File(targetDir, afile.getName());
-
-            FileInputStream inStream = new FileInputStream(afile);
-            FileOutputStream outStream = new FileOutputStream(bfile);
-
-            byte[] buffer = new byte[1024];
-
-            int length;
-            //copy the file content in bytes
-            while ((length = inStream.read(buffer)) > 0){
-
-                outStream.write(buffer, 0, length);
-
+            if(deletedOriginal) {
+                Log.d(TAG, "Successfully moved " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
             }
-
-            inStream.close();
-            outStream.close();
-
-            //delete the original file
-            afile.delete();
-
-            GeneralUtils.deleteFileFromMediaStore(context.getContentResolver(), afile);
-            GeneralUtils.addFileToMediaStore(context, bfile);
-
-            Log.d(TAG, "Successfully copied " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
+            else {
+                Log.d(TAG, "Copied " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
+                Log.d(TAG, "Failed to delete original file");
+            }
             return true;
 
         } catch(IOException e){
             e.printStackTrace();
         }
-        Log.d(TAG, "Failed to copy file from " + file.getAbsolutePath() + " to " + targetDir);
+        Log.d(TAG, "Failed to move file from " + src.getAbsolutePath() + " to " + targetDir);
         return false;
     }
 
