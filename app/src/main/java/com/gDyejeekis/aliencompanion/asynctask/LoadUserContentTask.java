@@ -149,6 +149,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             uf.currentLoadType = null;
             uf.mainProgressBar.setVisibility(View.GONE);
             uf.swipeRefreshLayout.setRefreshing(false);
+            uf.dismissSnackbar();
             uf.contentView.setVisibility(View.VISIBLE);
 
             if (mException != null) {
@@ -158,7 +159,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         uf.refreshList();
                     }
                 };
-                SnackbarUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener, Snackbar.LENGTH_INDEFINITE);
+                uf.setSnackbar(SnackbarUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
 
                 if (mLoadType == LoadType.extend) {
                     uf.adapter.setLoadingMoreItems(false);

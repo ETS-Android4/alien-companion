@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,6 +74,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
+    public Snackbar currentSnackbar;
 
     private static boolean fabOptionsVisible;
     private MoveUpwardRelativeLayout layoutFabRoot;
@@ -204,6 +206,17 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         commentLinkId = postInfo[2];
         if (commentLinkId != null) showFullCommentsButton = true;
         if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
+    }
+
+    public void setSnackbar(Snackbar snackbar) {
+        this.currentSnackbar = snackbar;
+    }
+
+    public void dismissSnackbar() {
+        if(currentSnackbar!=null) {
+            currentSnackbar.dismiss();
+            currentSnackbar = null;
+        }
     }
 
     @Nullable

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -58,6 +59,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     protected RecyclerView.LayoutManager layoutManager;
     public RedditItemListAdapter adapter;
     public LoadType currentLoadType;
+    public Snackbar currentSnackbar;
     public boolean loadMore;
     public boolean hasMore;
     public ProgressBar mainProgressBar;
@@ -110,6 +112,17 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public void onDetach() {
         super.onDetach();
         this.activity = null;
+    }
+
+    public void setSnackbar(Snackbar snackbar) {
+        this.currentSnackbar = snackbar;
+    }
+
+    public void dismissSnackbar() {
+        if(currentSnackbar!=null) {
+            currentSnackbar.dismiss();
+            currentSnackbar = null;
+        }
     }
 
     private void updateToolbarOnScroll(int dy) {

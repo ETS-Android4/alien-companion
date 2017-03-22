@@ -150,6 +150,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             plf.currentLoadType = null;
             plf.mainProgressBar.setVisibility(View.GONE);
             plf.swipeRefreshLayout.setRefreshing(false);
+            plf.dismissSnackbar();
             plf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null || submissions == null) {
@@ -169,7 +170,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.addToSyncQueue();
                         }
                     };
-                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE);
+                    plf.setSnackbar(SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
                 }
                 else {
                     listener = new View.OnClickListener() {
@@ -178,7 +179,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.refreshList();
                         }
                     };
-                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener, Snackbar.LENGTH_INDEFINITE);
+                    plf.setSnackbar(SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
                 }
 
             } else {

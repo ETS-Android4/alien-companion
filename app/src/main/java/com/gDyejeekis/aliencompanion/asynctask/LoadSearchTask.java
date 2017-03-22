@@ -109,6 +109,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             sf.currentLoadType = null;
             sf.mainProgressBar.setVisibility(View.GONE);
             sf.swipeRefreshLayout.setRefreshing(false);
+            sf.dismissSnackbar();
             sf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null) {
@@ -124,7 +125,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             sf.refreshList();
                         }
                     };
-                    SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE);
+                    sf.setSnackbar(SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE));
                 }
 
                 if (loadType == LoadType.extend) {
