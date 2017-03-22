@@ -150,7 +150,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             plf.currentLoadType = null;
             plf.mainProgressBar.setVisibility(View.GONE);
             plf.swipeRefreshLayout.setRefreshing(false);
-            plf.dismissSnackbar();
             plf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null || submissions == null) {

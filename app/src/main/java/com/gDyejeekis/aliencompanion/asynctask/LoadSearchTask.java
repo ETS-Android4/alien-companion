@@ -109,7 +109,6 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             sf.currentLoadType = null;
             sf.mainProgressBar.setVisibility(View.GONE);
             sf.swipeRefreshLayout.setRefreshing(false);
-            sf.dismissSnackbar();
             sf.contentView.setVisibility(View.VISIBLE);
 
             if (exception != null) {

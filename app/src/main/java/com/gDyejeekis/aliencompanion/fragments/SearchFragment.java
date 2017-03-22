@@ -153,6 +153,7 @@ public class SearchFragment extends RedditContentFragment {
     }
 
     public void refreshList(SearchSort sort, TimeSpan time) {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
@@ -162,6 +163,7 @@ public class SearchFragment extends RedditContentFragment {
     }
 
     public void changeQuery(String newQuery) {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.init;
         searchQuery = newQuery;

@@ -546,6 +546,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void refreshPostAndComments() {
         postAdapter.selectedPosition = -1;
+        dismissSnackbar();
         swipeRefreshLayout.setRefreshing(true);
         if(!commentsLoaded) task.cancel(true);
 

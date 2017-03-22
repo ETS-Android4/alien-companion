@@ -169,6 +169,7 @@ public class UserFragment extends RedditContentFragment {
 
     @Override
     public void refreshList() {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
@@ -178,6 +179,7 @@ public class UserFragment extends RedditContentFragment {
 
     @Override
     public void extendList() {
+        dismissSnackbar();
         currentLoadType = LoadType.extend;
         adapter.setLoadingMoreItems(true);
         task = new LoadUserContentTask(activity, this, LoadType.extend);
@@ -185,6 +187,7 @@ public class UserFragment extends RedditContentFragment {
     }
 
     public void refreshUser(UserSubmissionsCategory category, UserOverviewSort sort) {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
@@ -193,6 +196,7 @@ public class UserFragment extends RedditContentFragment {
     }
 
     public void changeUser(String username) {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.init;
         this.username = username;

@@ -124,7 +124,6 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             postFragment = fragment;
             postFragment.progressBar.setVisibility(View.GONE);
             postFragment.swipeRefreshLayout.setRefreshing(false);
-            postFragment.dismissSnackbar();
             postFragment.commentsLoaded = true;
             if (!MyApplication.noThumbnails && postFragment.post.getThumbnailObject() == null) {
                 ImageLoader.preloadThumbnail(postFragment.post, context);

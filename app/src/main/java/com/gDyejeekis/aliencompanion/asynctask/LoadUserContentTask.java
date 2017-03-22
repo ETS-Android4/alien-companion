@@ -149,7 +149,6 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             uf.currentLoadType = null;
             uf.mainProgressBar.setVisibility(View.GONE);
             uf.swipeRefreshLayout.setRefreshing(false);
-            uf.dismissSnackbar();
             uf.contentView.setVisibility(View.VISIBLE);
 
             if (mException != null) {

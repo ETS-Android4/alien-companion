@@ -499,6 +499,7 @@ public class PostListFragment extends RedditContentFragment {
     }
 
     public void refreshList(SubmissionSort sort, TimeSpan time) {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
         swipeRefreshLayout.setRefreshing(true);
@@ -517,6 +518,7 @@ public class PostListFragment extends RedditContentFragment {
     }
 
     public void changeSubreddit(String subreddit) {
+        dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.init;
         this.subreddit = subreddit;
