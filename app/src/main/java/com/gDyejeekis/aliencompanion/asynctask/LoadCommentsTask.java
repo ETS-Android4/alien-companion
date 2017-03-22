@@ -122,6 +122,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
             postFragment = fragment;
             postFragment.progressBar.setVisibility(View.GONE);
+            postFragment.swipeRefreshLayout.setRefreshing(false);
             postFragment.commentsLoaded = true;
             if (!MyApplication.noThumbnails && postFragment.post.getThumbnailObject() == null) {
                 ImageLoader.preloadThumbnail(postFragment.post, context);
@@ -129,22 +130,25 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
 
             if (exception != null) {
                 postFragment.postAdapter.notifyItemChanged(0);
-                if (exception instanceof IOException)
-                    ToastUtils.showToast(context, "No comments found");
+                if (exception instanceof IOException) {
+                    SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "No synced comments found");
+                }
                 else {
                     postFragment.noResponseObject = true;
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            postFragment.refreshComments();
+                            postFragment.refreshPostAndComments();
                         }
                     };
                     SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "Error loading comments", "Retry", listener);
                 }
-            } else {
+            }
+            else {
                 if(!postFragment.titleUpdated) postFragment.setActionBarTitle();
                 postFragment.noResponseObject = false;
                 postFragment.postAdapter.commentsRefreshed(postFragment.post, comments);
+                postFragment.mLayoutManager.scrollToPosition(0);
             }
         } catch (NullPointerException e) {
             e.printStackTrace();

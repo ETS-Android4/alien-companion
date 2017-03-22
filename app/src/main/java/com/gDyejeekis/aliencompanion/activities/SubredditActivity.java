@@ -138,7 +138,7 @@ public class SubredditActivity extends SwipeBackActivity {
                         PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
                         if (postFragment != null) {
                             if (MyApplication.actionSort) postFragment.showSortPopup(v);
-                            else postFragment.refreshComments();
+                            else postFragment.refreshPostAndComments();
                         }
                         return true;
                     default:

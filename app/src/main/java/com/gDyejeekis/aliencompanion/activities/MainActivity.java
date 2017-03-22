@@ -228,6 +228,9 @@ public class MainActivity extends ToolbarActivity {
         if(!toolbarVisible && !MyApplication.autoHideToolbar) {
             showToolbar();
             getListFragment().updateSwipeRefreshOffset();
+            if(getPostFragment()!=null) {
+                getPostFragment().updateSwipeRefreshOffset();
+            }
         }
 
         if(MyApplication.fabPostNavChanged) {
@@ -388,7 +391,7 @@ public class MainActivity extends ToolbarActivity {
                         PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
                         if (postFragment != null) {
                             if (MyApplication.actionSort) postFragment.showSortPopup(v);
-                            else postFragment.refreshComments();
+                            else postFragment.refreshPostAndComments();
                         }
                         return true;
                     default:

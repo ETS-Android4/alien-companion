@@ -23,7 +23,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
@@ -61,7 +60,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public PostAdapter postAdapter;
     public RecyclerView mRecyclerView;
     public LinearLayoutManager mLayoutManager;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
     private ToolbarActivity activity;
     public Submission post;
     public CommentSort commentSort;
@@ -278,7 +277,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh_comments:
-                refreshComments();
+                refreshPostAndComments();
                 return true;
             case R.id.action_sort_comments:
                 showSortPopup(activity.findViewById(R.id.action_sort_comments));
@@ -307,35 +306,35 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 switch (item.getItemId()) {
                     case R.id.action_sort_comments_top:
                         setCommentSort(CommentSort.TOP);
-                        refreshComments();
+                        refreshPostAndComments();
                         return true;
                     case R.id.action_sort_comments_best:
                         setCommentSort(CommentSort.BEST);
-                        refreshComments();
+                        refreshPostAndComments();
                         return true;
                     case R.id.action_sort_comments_new:
                         setCommentSort(CommentSort.NEW);
-                        refreshComments();
+                        refreshPostAndComments();
                         return true;
                     case R.id.action_sort_comments_old:
                         setCommentSort(CommentSort.OLD);
-                        refreshComments();
+                        refreshPostAndComments();
                         return true;
                     case R.id.action_sort_comments_controversial:
                         setCommentSort(CommentSort.CONTROVERSIAL);
-                        refreshComments();
+                        refreshPostAndComments();
                         return true;
                     case R.id.action_sort_comments_qa:
                         setCommentSort(CommentSort.QA);
-                        refreshComments();
+                        refreshPostAndComments();
                         return true;
                     //case R.id.action_sort_comments_random:
                     //    setCommentSort(CommentSort.RANDOM);
-                    //    refreshComments();
+                    //    refreshPostAndComments();
                     //    return true;
                     //case R.id.action_sort_comments_confidence:
                     //    setCommentSort(CommentSort.CONFIDENCE);
-                    //    refreshComments();
+                    //    refreshPostAndComments();
                     //    return true;
                     default:
                         return false;
@@ -358,6 +357,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
+        updateSwipeRefreshOffset();
     }
 
     private void initFabNavOptions(View view) {
@@ -470,7 +470,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void updateSwipeRefreshState() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisibleItemPosition() == 0);
+        updateSwipeRefreshOffset();
     }
+
+    public void updateSwipeRefreshOffset() {
+        int end = activity.toolbarVisible ? activity.toolbar.getHeight() : 0;
+        swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
+    }
+
 
     private void hideAllFabOnScroll() {
         fabMain.hide();
@@ -515,22 +522,22 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(false);
-        refreshComments();
+        //swipeRefreshLayout.setRefreshing(false);
+        refreshPostAndComments();
     }
 
     public void loadFullComments() {
         commentLinkId = null;
-        refreshComments();
+        refreshPostAndComments();
     }
 
-    public void refreshComments() {
+    public void refreshPostAndComments() {
         postAdapter.selectedPosition = -1;
+        swipeRefreshLayout.setRefreshing(true);
         if(!commentsLoaded) task.cancel(true);
-        //if(!noResponseObject) {
-            commentsLoaded = false;
-            postAdapter.commentsRefreshed(post, new ArrayList<Comment>());
-        //}
+
+        commentsLoaded = false;
+        //postAdapter.commentsRefreshed(post, new ArrayList<Comment>());
 
         setActionBarSubtitle();
         task = new LoadCommentsTask(activity, this);

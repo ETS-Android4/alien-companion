@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
@@ -126,7 +125,7 @@ public class UserActivity extends SwipeBackActivity {
                         PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
                         if (postFragment != null) {
                             if (MyApplication.actionSort) postFragment.showSortPopup(v);
-                            else postFragment.refreshComments();
+                            else postFragment.refreshPostAndComments();
                         }
                         return true;
                     default:
