@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners;
 
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
@@ -214,6 +215,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 return true;
             case R.id.fab_comment_nav_setting:
                 String message = "Navigate between ";
+                int length = Snackbar.LENGTH_SHORT;
                 switch (fragment.commentNavSetting) {
                     case threads:
                         message += "top level parent comments";
@@ -222,10 +224,14 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                         message += "text results";
                         if(searchQuery!=null) {
                             message += " for \'" + searchQuery + "\'";
+                            length = Snackbar.LENGTH_LONG;
                         }
                         break;
                     case time:
                         message += timeFilterString == null ? "time filtered comments" : "comments submitted in the last " + timeFilterString;
+                        if(timeFilterString!=null) {
+                            length = Snackbar.LENGTH_LONG;
+                        }
                         break;
                     case op:
                         message += "comments submitted by the original poster";
@@ -238,10 +244,11 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                         String usersString = getAmaUsernamesString();
                         if(usersString!=null) {
                             message += " - Selected AMA participants: " + usersString;
+                            length = Snackbar.LENGTH_LONG;
                         }
                         break;
                 }
-                SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), message);
+                SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), message, length);
                 return true;
         }
         return false;

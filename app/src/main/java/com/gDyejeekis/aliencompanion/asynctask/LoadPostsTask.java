@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
@@ -168,7 +169,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.addToSyncQueue();
                         }
                     };
-                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener);
+                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE);
                 }
                 else {
                     listener = new View.OnClickListener() {
@@ -177,7 +178,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.refreshList();
                         }
                     };
-                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener);
+                    SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener, Snackbar.LENGTH_INDEFINITE);
                 }
 
             } else {

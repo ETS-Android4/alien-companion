@@ -124,7 +124,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             sf.refreshList();
                         }
                     };
-                    SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener);
+                    SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE);
                 }
 
                 if (loadType == LoadType.extend) {

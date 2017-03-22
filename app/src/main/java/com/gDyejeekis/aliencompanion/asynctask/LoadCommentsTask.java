@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
@@ -141,7 +142,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                             postFragment.refreshPostAndComments();
                         }
                     };
-                    SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "Error loading comments", "Retry", listener);
+                    SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "Error loading comments", "Retry", listener, Snackbar.LENGTH_INDEFINITE);
                 }
             }
             else {

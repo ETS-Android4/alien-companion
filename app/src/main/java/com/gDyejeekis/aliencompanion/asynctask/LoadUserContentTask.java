@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.asynctask;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
@@ -157,7 +158,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         uf.refreshList();
                     }
                 };
-                SnackbarUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener);
+                SnackbarUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener, Snackbar.LENGTH_INDEFINITE);
 
                 if (mLoadType == LoadType.extend) {
                     uf.adapter.setLoadingMoreItems(false);
