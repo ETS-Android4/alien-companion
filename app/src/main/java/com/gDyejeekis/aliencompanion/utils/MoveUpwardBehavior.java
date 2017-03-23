@@ -9,6 +9,8 @@ import android.view.View;
 public class MoveUpwardBehavior extends CoordinatorLayout.Behavior<View> {
     private static final boolean SNACKBAR_BEHAVIOR_ENABLED;
 
+    private static float initialPositionY;
+
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
         return SNACKBAR_BEHAVIOR_ENABLED && dependency instanceof Snackbar.SnackbarLayout;
@@ -16,9 +18,16 @@ public class MoveUpwardBehavior extends CoordinatorLayout.Behavior<View> {
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
+        initialPositionY = parent.getY();
         float translationY = Math.min(0, dependency.getTranslationY() - dependency.getHeight());
         child.setTranslationY(translationY);
         return true;
+    }
+
+    @Override
+    public void onDependentViewRemoved(CoordinatorLayout parent, View child, View dependency) {
+        super.onDependentViewRemoved(parent, child, dependency);
+        child.setTranslationY(initialPositionY);
     }
 
     static {
