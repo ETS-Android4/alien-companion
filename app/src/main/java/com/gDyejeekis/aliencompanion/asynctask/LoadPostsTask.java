@@ -171,13 +171,19 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
                 }
                 else {
-                    listener = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            plf.refreshList();
-                        }
-                    };
-                    plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                    String message = "Error loading posts";
+                    if(loadType!=LoadType.extend) {
+                        listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                plf.refreshList();
+                            }
+                        };
+                        plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                    }
+                    else {
+                        ToastUtils.showSnackbar(plf.getSnackbarParentView(), message);
+                    }
                 }
 
             } else {
