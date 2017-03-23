@@ -38,10 +38,12 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     private Context context;
     private PostFragment postFragment;
     private HttpClient httpClient = new PoliteRedditHttpClient();
+    private boolean initialLoad;
 
-    public LoadCommentsTask(Context context, PostFragment postFragment) {
+    public LoadCommentsTask(Context context, PostFragment postFragment, boolean initialLoad) {
         this.context = context;
         this.postFragment = postFragment;
+        this.initialLoad =  initialLoad;
     }
 
     private Submission readPostFromFile(final String postId) {
@@ -148,10 +150,13 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 if(!postFragment.titleUpdated) postFragment.setActionBarTitle();
                 postFragment.noResponseObject = false;
                 postFragment.postAdapter.commentsRefreshed(postFragment.post, comments);
-                postFragment.mLayoutManager.scrollToPosition(0);
+                if(!initialLoad) {
+                    postFragment.mLayoutManager.scrollToPosition(0);
+                }
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
+
 }

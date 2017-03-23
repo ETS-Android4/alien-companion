@@ -243,7 +243,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
             mRecyclerView.setAdapter(postAdapter);
 
-            task = new LoadCommentsTask(activity, this);
+            task = new LoadCommentsTask(activity, this, true);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             mRecyclerView.setAdapter(postAdapter);
@@ -564,7 +564,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         //postAdapter.commentsRefreshed(post, new ArrayList<Comment>());
 
         setActionBarSubtitle();
-        task = new LoadCommentsTask(activity, this);
+        task = new LoadCommentsTask(activity, this, false);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
