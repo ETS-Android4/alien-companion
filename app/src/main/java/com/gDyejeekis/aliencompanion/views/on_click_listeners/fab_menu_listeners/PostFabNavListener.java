@@ -7,7 +7,7 @@ import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
-import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
  * Created by George on 3/21/2017.
@@ -92,7 +92,7 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
         }
         if(message!=null) {
             //ToastUtils.showToast(fragment.getActivity(), message);
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), message);
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message);
             return true;
         }
         return false;

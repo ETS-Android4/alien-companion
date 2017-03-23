@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
-import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -158,7 +157,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         uf.refreshList();
                     }
                 };
-                uf.setSnackbar(SnackbarUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                uf.setSnackbar(ToastUtils.showSnackbar(uf.getSnackbarParentView(), "Error loading user", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
 
                 if (mLoadType == LoadType.extend) {
                     uf.adapter.setLoadingMoreItems(false);

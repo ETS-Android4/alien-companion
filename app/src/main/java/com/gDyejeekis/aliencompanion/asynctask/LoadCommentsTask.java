@@ -10,7 +10,6 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -132,7 +131,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             if (exception != null) {
                 postFragment.postAdapter.notifyItemChanged(0);
                 if (exception instanceof IOException) {
-                    SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "No synced comments found");
+                    ToastUtils.showSnackbar(postFragment.getSnackbarParentView(), "No synced comments found");
                 }
                 else {
                     postFragment.noResponseObject = true;
@@ -142,7 +141,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                             postFragment.refreshPostAndComments();
                         }
                     };
-                    postFragment.setSnackbar(SnackbarUtils.showSnackbar(postFragment.getSnackbarParentView(), "Error loading comments", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                    postFragment.setSnackbar(ToastUtils.showSnackbar(postFragment.getSnackbarParentView(), "Error loading comments", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
                 }
             }
             else {

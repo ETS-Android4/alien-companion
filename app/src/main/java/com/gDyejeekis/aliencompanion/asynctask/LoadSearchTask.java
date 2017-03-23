@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -115,7 +114,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 String message = "Search failed";
                 if(GeneralUtils.isNetworkAvailable(context)) {
                     message += " - Reddit's servers are under heavy load. Please try again in a bit.";
-                    SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, Snackbar.LENGTH_LONG);
+                    ToastUtils.showSnackbar(sf.getSnackbarParentView(), message, Snackbar.LENGTH_LONG);
                 }
                 else {
                     View.OnClickListener listener = new View.OnClickListener() {
@@ -124,7 +123,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             sf.refreshList();
                         }
                     };
-                    sf.setSnackbar(SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                    sf.setSnackbar(ToastUtils.showSnackbar(sf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE));
                 }
 
                 if (loadType == LoadType.extend) {
@@ -144,7 +143,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case init:
                         if(submissions.size()==0) {
                             sf.updateContentViewAdapter(new RedditItemListAdapter(context));
-                            SnackbarUtils.showSnackbar(sf.getSnackbarParentView(), "No results for \'" + sf.searchQuery + "\'");
+                            ToastUtils.showSnackbar(sf.getSnackbarParentView(), "No results for \'" + sf.searchQuery + "\'");
                         }
                         else {
                             sf.updateContentViewAdapter(sf.adapter);

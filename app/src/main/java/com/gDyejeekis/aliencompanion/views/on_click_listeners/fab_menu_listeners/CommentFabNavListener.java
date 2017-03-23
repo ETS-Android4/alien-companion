@@ -7,7 +7,7 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 
 import org.apache.commons.lang.StringUtils;
@@ -105,7 +105,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         }
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), NO_ADDITIONAL_ITEMS_MESSAGE);
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), NO_ADDITIONAL_ITEMS_MESSAGE);
         }
     }
 
@@ -138,7 +138,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         }
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), NO_ADDITIONAL_ITEMS_MESSAGE);
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), NO_ADDITIONAL_ITEMS_MESSAGE);
         }
     }
 
@@ -151,7 +151,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         int index = fragment.postAdapter.firstSearchResultIndex(searchQuery, matchCase);
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), "Text not found in thread");
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), "Text not found in thread");
         }
     }
 
@@ -159,7 +159,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         int index = fragment.postAdapter.firstGildedIndex();
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), "No gilded posts/comments found");
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), "No gilded posts/comments found");
         }
     }
 
@@ -167,7 +167,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         int index = fragment.postAdapter.firstTimeFilteredIndex(timestampThresholdMilis);
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), "No comments found within the specified time limit");
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), "No comments found within the specified time limit");
         }
     }
 
@@ -175,7 +175,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         int index = fragment.postAdapter.firstOpCommentIndex();
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), "No comments found from original poster");
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), "No comments found from original poster");
         }
     }
 
@@ -184,7 +184,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         currentAmaIndex = index;
         boolean scrolled = scrollToPosition(index);
         if(!scrolled) {
-            SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), "No comments found from listed users");
+            ToastUtils.showSnackbar(fragment.getSnackbarParentView(), "No comments found from listed users");
         }
     }
 
@@ -211,7 +211,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
     public boolean onLongClick(View v) {
         switch (v.getId()) {
             case R.id.fab_reply:
-                SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), "Submit a comment");
+                ToastUtils.showSnackbar(fragment.getSnackbarParentView(), "Submit a comment");
                 return true;
             case R.id.fab_comment_nav_setting:
                 String message = "Navigate between ";
@@ -248,7 +248,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                         }
                         break;
                 }
-                SnackbarUtils.showSnackbar(fragment.getSnackbarParentView(), message, length);
+                ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message, length);
                 return true;
         }
         return false;

@@ -7,7 +7,6 @@ import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.utils.SnackbarUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -169,7 +168,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.addToSyncQueue();
                         }
                     };
-                    plf.setSnackbar(SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
+                    plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
                 }
                 else {
                     listener = new View.OnClickListener() {
@@ -178,7 +177,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.refreshList();
                         }
                     };
-                    plf.setSnackbar(SnackbarUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                    plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "Error loading posts", "Retry", listener, Snackbar.LENGTH_INDEFINITE));
                 }
 
             } else {
