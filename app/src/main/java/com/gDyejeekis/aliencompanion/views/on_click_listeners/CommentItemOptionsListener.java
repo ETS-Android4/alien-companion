@@ -224,7 +224,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                                 actionType = UserActionType.save;
                             }
                             if(GeneralUtils.isNetworkAvailable(context)) {
-                                task = new LoadUserActionTask(context, comment.getFullName(), actionType);
+                                task = new LoadUserActionTask(context, comment, actionType);
                                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                             else {

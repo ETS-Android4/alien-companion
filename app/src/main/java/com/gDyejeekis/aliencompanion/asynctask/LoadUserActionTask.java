@@ -3,7 +3,17 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.PostActivity;
+import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
+import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.api.entity.Comment;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
+import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.models.offline_actions.CommentAction;
 import com.gDyejeekis.aliencompanion.models.offline_actions.DownvoteAction;
@@ -31,6 +41,7 @@ import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 
 /**
  * Created by sound on 8/26/2015.
@@ -40,9 +51,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private Context context;
     private HttpClient httpClient = new PoliteRedditHttpClient();
     private UserActionType userActionType;
-    private String postName;
+    private boolean notifyOnPostExecute = true;
+    private String itemName;
+    private int itemIndex = -1;
     private Exception exception;
     private Submission submission;
+    private Comment comment;
     private String text;
     private User user;
     private String currentPass, newPass;
@@ -50,6 +64,10 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private String recipient, subject, message;
     private SubredditSidebarDialogFragment dialogSidebar;
     private OfflineUserAction offlineUserAction;
+
+    public void setNotifyOnPostExecute(boolean flag) {
+        notifyOnPostExecute = flag;
+    }
 
     public LoadUserActionTask(Context context, String recipient, String subject, String message) {
         this.context = context;
@@ -59,23 +77,38 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         userActionType = UserActionType.sendMessage;
     }
 
-    public LoadUserActionTask(Context context, String postName, UserActionType userActionType) {
+    public LoadUserActionTask(Context context, String itemName, UserActionType userActionType) {
         this.context = context;
         this.userActionType = userActionType;
-        this.postName = postName;
+        this.itemName = itemName;
     }
 
-    public LoadUserActionTask(Context context, String postName, UserActionType userActionType, Submission submission) {
+    public LoadUserActionTask(Context context, Submission submission, UserActionType userActionType) {
         this.context = context;
         this.userActionType = userActionType;
-        this.postName = postName;
         this.submission = submission;
+        this.itemName = submission.getFullName();
     }
 
-    public LoadUserActionTask(Context context, String postName, UserActionType userActionType, String text) {
+    public LoadUserActionTask(Context context, Submission submission, int itemIndex, UserActionType userActionType) {
         this.context = context;
         this.userActionType = userActionType;
-        this.postName = postName;
+        this.submission = submission;
+        this.itemIndex = itemIndex;
+        this.itemName = submission.getFullName();
+    }
+
+    public LoadUserActionTask(Context context, Comment comment, UserActionType userActionType) {
+        this.context = context;
+        this.userActionType = userActionType;
+        this.comment = comment;
+        this.itemName = comment.getFullName();
+    }
+
+    public LoadUserActionTask(Context context, String itemName, UserActionType userActionType, String text) {
+        this.context = context;
+        this.userActionType = userActionType;
+        this.itemName = itemName;
         this.text = text;
     }
 
@@ -113,40 +146,40 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         this.offlineUserAction = offlineAction;
         if(offlineAction instanceof UpvoteAction) {
             userActionType = UserActionType.upvote;
-            postName = ((UpvoteAction) offlineAction).getItemFullname();
+            itemName = ((UpvoteAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof DownvoteAction) {
             userActionType = UserActionType.downvote;
-            postName = ((DownvoteAction) offlineAction).getItemFullname();
+            itemName = ((DownvoteAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof NoVoteAction) {
             userActionType = UserActionType.novote;
-            postName = ((NoVoteAction) offlineAction).getItemFullname();
+            itemName = ((NoVoteAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof SaveAction) {
             userActionType = UserActionType.save;
-            postName = ((SaveAction) offlineAction).getItemFullname();
+            itemName = ((SaveAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof UnsaveAction) {
             userActionType = UserActionType.unsave;
-            postName = ((UnsaveAction) offlineAction).getItemFullname();
+            itemName = ((UnsaveAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof HideAction) {
             userActionType = UserActionType.hide;
-            postName = ((HideAction) offlineAction).getItemFullname();
+            itemName = ((HideAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof UnhideAction) {
             userActionType = UserActionType.unhide;
-            postName = ((UnhideAction) offlineAction).getItemFullname();
+            itemName = ((UnhideAction) offlineAction).getItemFullname();
         }
         else if(offlineAction instanceof CommentAction) {
             userActionType = UserActionType.submitComment;
-            postName = ((CommentAction) offlineAction).getParentFullname();
+            itemName = ((CommentAction) offlineAction).getParentFullname();
             text = ((CommentAction) offlineAction).getCommentText();
         }
         else if(offlineAction instanceof ReportAction) {
             userActionType = UserActionType.report;
-            postName = ((ReportAction) offlineAction).getItemFullname();
+            itemName = ((ReportAction) offlineAction).getItemFullname();
             text = ((ReportAction) offlineAction).getReportReason();
         }
         else if(offlineAction instanceof SubmitTextAction) {
@@ -171,40 +204,40 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             ProfileActions profileActions = new ProfileActions(httpClient, MyApplication.currentUser);
             switch (userActionType) {
                 case novote:
-                    markActions.vote(postName, 0);
+                    markActions.vote(itemName, 0);
                     break;
                 case upvote:
-                    markActions.vote(postName, 1);
+                    markActions.vote(itemName, 1);
                     break;
                 case downvote:
-                    markActions.vote(postName, -1);
+                    markActions.vote(itemName, -1);
                     break;
                 case save:
-                    markActions.save(postName);
+                    markActions.save(itemName);
                     break;
                 case unsave:
-                    markActions.unsave(postName);
+                    markActions.unsave(itemName);
                     break;
                 case hide:
-                    markActions.hide(postName);
+                    markActions.hide(itemName);
                     break;
                 case unhide:
-                    markActions.unhide(postName);
+                    markActions.unhide(itemName);
                     break;
                 case report:
-                    markActions.report(postName, text);
+                    markActions.report(itemName, text);
                     break;
                 case edit:
-                    submitActions.editUserText(postName, text);
+                    submitActions.editUserText(itemName, text);
                     break;
                 case delete:
-                    submitActions.delete(postName);
+                    submitActions.delete(itemName);
                     break;
                 case markNSFW:
-                    markActions.markNSFW(postName);
+                    markActions.markNSFW(itemName);
                     break;
                 case unmarkNSFW:
-                    markActions.unmarkNSFW(postName);
+                    markActions.unmarkNSFW(itemName);
                     break;
                 case submitLink:
                     captcha_iden = "";
@@ -217,7 +250,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     submitActions.submitSelfPost(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitComment:
-                    submitActions.comment(postName, text);
+                    submitActions.comment(itemName, text);
                     break;
                 case changePassword:
                     //profileActions.changePassword(currentPass, newPass);
@@ -256,14 +289,14 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             }
 
             if(context instanceof Activity) {
-                ToastUtils.showToast(context, "Error completing user action");
+                ToastUtils.showSnackbar(((Activity) context).getCurrentFocus(), "Error completing user action");
             }
         }
         else {
             if(offlineUserAction != null) {
                 offlineUserAction.setActionCompleted(true);
             }
-            else {
+            else if(notifyOnPostExecute) {
                 switch (userActionType) {
                     case submitText:
                     case submitLink:
@@ -275,13 +308,43 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         ToastUtils.showToast(context, "Reply sent");
                         break;
                     case save:
-                        ToastUtils.showToast(context, "Saved");
+                        View.OnClickListener listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                setItemSaved(false);
+                                LoadUserActionTask task = new LoadUserActionTask(context, itemName, UserActionType.unsave);
+                                task.setNotifyOnPostExecute(false);
+                                task.execute();
+                            }
+                        };
+                        ToastUtils.showSnackbarOverToast(context, "Saved", "Undo", listener);
                         break;
                     case unsave:
-                        ToastUtils.showToast(context, "Unsaved");
+                        listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                setItemSaved(true);
+                                LoadUserActionTask task = new LoadUserActionTask(context, itemName, UserActionType.save);
+                                task.setNotifyOnPostExecute(false);
+                                task.execute();
+                            }
+                        };
+                        ToastUtils.showSnackbarOverToast(context, "Unsaved", "Undo", listener);
+                        break;
+                    case hide:
+                        listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                unhidePost();
+                                LoadUserActionTask task = new LoadUserActionTask(context, itemName, UserActionType.unhide);
+                                task.setNotifyOnPostExecute(false);
+                                task.execute();
+                            }
+                        };
+                        ToastUtils.showSnackbarOverToast(context, "Hidden", "Undo", listener);
                         break;
                     case delete:
-                        ToastUtils.showToast(context, "Deleted");
+                        ToastUtils.showSnackbarOverToast(context, "Deleted");
                         break;
                     case edit:
                         ((Activity) context).finish();
@@ -291,7 +354,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         ToastUtils.showToast(context, "Password change successful");
                         break;
                     case report:
-                        ToastUtils.showToast(context, "Report sent");
+                        ToastUtils.showSnackbarOverToast(context, "Report sent");
                         break;
                     case subscribe:
                         if (dialogSidebar != null) {
@@ -312,6 +375,76 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                 }
             }
         }
+    }
+
+    private void unhidePost() {
+        if(submission!=null && itemIndex!=-1) {
+            submission.setHidden(false);
+            RecyclerView.Adapter listFragmentAdapter = getListFragmentAdapter();
+            if(listFragmentAdapter!=null) {
+                ((RedditItemListAdapter) listFragmentAdapter).add(submission, itemIndex);
+                notifyDataSetChangedDelayed(listFragmentAdapter);
+            }
+            notifyDataSetChanged(getPostFragmentAdapter());
+        }
+    }
+
+    private void notifyDataSetChangedDelayed(final RecyclerView.Adapter adapter) {
+        if(adapter!=null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            }, 500);
+        }
+    }
+
+    private void notifyDataSetChanged(RecyclerView.Adapter adapter) {
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setItemSaved(boolean saved) {
+        if(submission!=null) {
+            submission.setSaved(saved);
+            notifyDataSetChanged(getListFragmentAdapter());
+            notifyDataSetChanged(getPostFragmentAdapter());
+        }
+        else if(comment!=null) {
+            comment.setSaved(saved);
+        }
+    }
+
+    public RecyclerView.Adapter getListFragmentAdapter() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getListFragment().adapter;
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getListFragment().adapter;
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getListFragment().adapter;
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    public RecyclerView.Adapter getPostFragmentAdapter() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof PostActivity) {
+                return ((PostActivity) context).getPostFragment().postAdapter;
+            }
+        } catch (Exception e) {}
+        return null;
     }
 
 }

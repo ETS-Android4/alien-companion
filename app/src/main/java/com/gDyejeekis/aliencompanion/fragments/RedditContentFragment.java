@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -293,6 +294,15 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         contentView.setHasFixedSize(true);
         setLayoutManager(viewTypeValue);
         setListDividerVisible(PostViewType.hasVisibleListDivider(viewTypeValue));
+        contentView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                try {
+                    getView().requestFocus();
+                } catch (Exception e) {}
+                return false;
+            }
+        });
     }
 
     public void updateContentViewAdapter(RedditItemListAdapter adapter) {

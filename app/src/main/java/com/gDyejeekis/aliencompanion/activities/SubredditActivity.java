@@ -22,12 +22,17 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 public class SubredditActivity extends SwipeBackActivity {
 
     private PostListFragment listFragment;
+    private PostFragment postFragment;
     private FragmentManager fm;
     private RelativeLayout container;
     //private boolean dualPaneActive;
 
     public PostListFragment getListFragment() {
         return listFragment;
+    }
+
+    public PostFragment getPostFragment() {
+        return postFragment;
     }
 
     @Override
@@ -65,6 +70,7 @@ public class SubredditActivity extends SwipeBackActivity {
     }
 
     public void setupPostFragment(PostFragment postFragment) {
+        this.postFragment = postFragment;
         fm.beginTransaction().replace(R.id.postFragmentHolder, postFragment, "postFragment").commit();
     }
 

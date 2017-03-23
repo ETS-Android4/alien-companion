@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,19 @@ import com.gDyejeekis.aliencompanion.MyApplication;
  */
 public class ToastUtils {
     public static final String TAG = "ToastUtils";
+
+    public static void showSnackbarOverToast(Context context, String message) {
+        showSnackbarOverToast(context, message, null, null);
+    }
+
+    public static void showSnackbarOverToast(Context context, String message, String actionText, View.OnClickListener listener) {
+        if(context instanceof Activity) {
+            showSnackbar(((Activity) context).getCurrentFocus(), message, actionText, listener);
+        }
+        else {
+            showToast(context, message);
+        }
+    }
 
     // Toasts
 
@@ -48,8 +62,10 @@ public class ToastUtils {
 
     public static Snackbar showSnackbar(View view, String text, String actionText, View.OnClickListener listener, int duration) {
         Snackbar snackbar = Snackbar.make(view, text, duration);
-        snackbar.setAction(actionText, listener);
-        snackbar.setActionTextColor(MyApplication.linkColor);
+        if(listener!=null) {
+            snackbar.setAction(actionText, listener);
+            snackbar.setActionTextColor(MyApplication.linkColor);
+        }
         TextView txtv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
         txtv.setTextColor(Color.WHITE);
         txtv.setMaxLines(3);

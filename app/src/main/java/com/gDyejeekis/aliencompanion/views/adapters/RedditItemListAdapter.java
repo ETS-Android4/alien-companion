@@ -122,6 +122,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     }
 
     public void add(RedditItem item) {
+        selectedPosition = -1;
         int position;
         if(redditItems.size()==0) {
             redditItems.add(item);
@@ -131,6 +132,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             position = redditItems.size()-1;
             redditItems.add(position, item);
         }
+        notifyItemInserted(position);
+    }
+
+    public void add(RedditItem item, int position) {
+        selectedPosition = -1;
+        redditItems.add(position, item);
         notifyItemInserted(position);
     }
 
@@ -330,6 +337,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public RedditItem getItemAt(int position) {
         return redditItems.get(position);
+    }
+
+    public int indexOf(RedditItem item) {
+        return redditItems.indexOf(item);
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {

@@ -22,8 +22,17 @@ public class UserActivity extends SwipeBackActivity {
 
     private FragmentManager fm;
     private UserFragment userFragment;
+    private PostFragment postFragment;
     private RelativeLayout container;
     private boolean addToSyncedVisible;
+
+    public UserFragment getListFragment() {
+        return userFragment;
+    }
+
+    public PostFragment getPostFragment() {
+        return postFragment;
+    }
 
     @Override
     public void finish() {
@@ -60,6 +69,7 @@ public class UserActivity extends SwipeBackActivity {
     }
 
     public void setupPostFragment(PostFragment postFragment) {
+        this.postFragment = postFragment;
         fm.beginTransaction().replace(R.id.postFragmentHolder, postFragment, "postFragment").commit();
     }
 

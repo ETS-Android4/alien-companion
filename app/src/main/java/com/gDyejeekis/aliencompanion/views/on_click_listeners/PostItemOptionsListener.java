@@ -20,7 +20,10 @@ import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.fragments.UserFragment;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -56,12 +59,12 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
     private Context context;
     private Submission post;
-    private RecyclerView.Adapter recyclerAdapter;
+    private RecyclerView.Adapter currentAdapter;
 
     public PostItemOptionsListener(Context context, Submission post, RecyclerView.Adapter adapter) {
         this.context = context;
         this.post = post;
-        this.recyclerAdapter = adapter;
+        this.currentAdapter = adapter;
     }
 
     private void viewUser() {
@@ -94,7 +97,8 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.upvote;
                     }
 
-                    recyclerAdapter.notifyDataSetChanged();
+                    currentAdapter.notifyDataSetChanged();
+                    notifySecondPaneChanges();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -113,7 +117,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.showToast(context, "Must be logged in to vote");
+                else ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote: case R.id.imageView_downvote_classic:
                 if(MyApplication.currentUser!=null) {
@@ -128,7 +132,8 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.downvote;
                     }
 
-                    recyclerAdapter.notifyDataSetChanged();
+                    currentAdapter.notifyDataSetChanged();
+                    notifySecondPaneChanges();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
@@ -147,7 +152,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.showToast(context, "Must be logged in to vote");
+                else ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_save:
                 if(MyApplication.currentUser!=null) {
@@ -159,10 +164,11 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.save;
                     }
 
-                    recyclerAdapter.notifyDataSetChanged();
+                    currentAdapter.notifyDataSetChanged();
+                    notifySecondPaneChanges();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
-                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task = new LoadUserActionTask(context, post, actionType);
                         task.execute();
                     }
                     else {
@@ -178,26 +184,52 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.showToast(context, "Must be logged in to save");
+                else ToastUtils.showSnackbarOverToast(context, "Must be logged in to save");
                 break;
             case R.id.btn_hide:
+                int index = -1;
+                boolean notifyOnPost = true;
                 if(MyApplication.currentUser!=null) {
                     if (post.isHidden()) {
                         post.setHidden(false);
                         actionType = UserActionType.unhide;
-                        recyclerAdapter.notifyDataSetChanged();
+                        currentAdapter.notifyDataSetChanged();
+                        // case viewing user's hidden posts
+                        if(context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
+                            notifyOnPost = false;
+                            notifySecondPaneChanges();
+                        }
                     }
                     else {
                         post.setHidden(true);
                         actionType = UserActionType.hide;
-                        if(!(context instanceof PostActivity)) {
-                            ((RedditItemListAdapter) recyclerAdapter).remove(post);
-                            notifyDataSetChangedDelayed();
+                        // case viewing user's hidden posts
+                        if(context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
+                            notifyOnPost = false;
+                            currentAdapter.notifyDataSetChanged();
+                            notifySecondPaneChanges();
+                        }
+                        else {
+                            if (!(context instanceof PostActivity) && currentAdapter instanceof RedditItemListAdapter) {
+                                index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
+                                ((RedditItemListAdapter) currentAdapter).remove(post);
+                                notifyDataSetChangedDelayed();
+                                notifySecondPaneChanges();
+                            } else {
+                                currentAdapter.notifyDataSetChanged();
+                                RecyclerView.Adapter secondPaneAdapter = getSecondPaneAdapter();
+                                if (secondPaneAdapter != null && secondPaneAdapter instanceof RedditItemListAdapter) {
+                                    index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(post);
+                                    ((RedditItemListAdapter) secondPaneAdapter).remove(post);
+                                    notifyDataSetChangedDelayed(secondPaneAdapter);
+                                }
+                            }
                         }
                     }
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
-                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task = new LoadUserActionTask(context, post, index, actionType);
+                        task.setNotifyOnPostExecute(notifyOnPost);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                     else {
@@ -214,7 +246,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     }
                 }
                 else {
-                    ToastUtils.showToast(context, "Must be logged in to hide");
+                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to hide");
                 }
                 break;
             case R.id.btn_view_user:
@@ -230,16 +262,16 @@ public class PostItemOptionsListener implements View.OnClickListener {
     }
 
     private void showMoreOptionsPopup(View v) {
-        PopupMenu popupMenu = new PopupMenu(context, v);
+        final PopupMenu popupMenu = new PopupMenu(context, v);
         //inflate the right menu layout
         final int resource;
         int labelNSFWindex = -1;
-        String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
+        final String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
         if(post.getAuthor().equals(currentUser)) {
             if(post.isSelf()) {
                 labelNSFWindex = 2;
                 if(MyApplication.currentPostListView == PostViewType.cards.value()
-                        || recyclerAdapter instanceof PostAdapter) {
+                        || currentAdapter instanceof PostAdapter) {
                     resource = R.menu.menu_self_post_card_more_options_account;
                 }
                 else {
@@ -259,10 +291,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
         else {
             if(post.isSelf()) {
                 resource = (MyApplication.currentPostListView == PostViewType.cards.value()
-                        || recyclerAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
+                        || currentAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
             }
             else {
-                resource = (MyApplication.currentPostListView == PostViewType.cards.value() || recyclerAdapter instanceof PostAdapter)
+                resource = (MyApplication.currentPostListView == PostViewType.cards.value() || currentAdapter instanceof PostAdapter)
                         ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
             }
         }
@@ -320,10 +352,11 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         context.startActivity(intent);
                         return true;
                     case R.id.action_delete:
-                        if (recyclerAdapter instanceof RedditItemListAdapter)
-                            ((RedditItemListAdapter) recyclerAdapter).remove(post);
+                        if (currentAdapter instanceof RedditItemListAdapter)
+                            ((RedditItemListAdapter) currentAdapter).remove(post);
                         LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        task.execute();
                         return true;
                     case R.id.action_mark_nsfw:
                         UserActionType actionType;
@@ -335,9 +368,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             post.setNSFW(true);
                             actionType = UserActionType.markNSFW;
                         }
-                        recyclerAdapter.notifyDataSetChanged();
+                        currentAdapter.notifyDataSetChanged();
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        task.execute();
                         return true;
                     case R.id.action_copy_link:
                         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -398,10 +432,11 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             bundle.putString("postId", post.getFullName());
                             dialog.setArguments(bundle);
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        } else ToastUtils.showToast(context, "Must be logged in to report");
+                        } else ToastUtils.showSnackbarOverToast(context, "Must be logged in to report");
                         return true;
                     case ACTION_REMOVE_SYNCED:
-                        ((RedditItemListAdapter) recyclerAdapter).remove(post);
+                        //final int index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
+                        ((RedditItemListAdapter) currentAdapter).remove(post);
                         notifyDataSetChangedDelayed();
                         new AsyncTask<String, Void, Boolean>() {
 
@@ -413,7 +448,8 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             @Override
                             protected void onPostExecute(Boolean success) {
                                 String message = (success) ? "Post deleted" : "Failed to delete post";
-                                ToastUtils.showToast(context, message);
+                                View.OnClickListener listener = null; // TODO: 3/23/2017
+                                ToastUtils.showSnackbarOverToast(context, message, "Undo", listener);
                             }
                         }.execute(post.getIdentifier());
                         return true;
@@ -432,12 +468,82 @@ public class PostItemOptionsListener implements View.OnClickListener {
     }
 
     private void notifyDataSetChangedDelayed() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                recyclerAdapter.notifyDataSetChanged();
+        notifyDataSetChangedDelayed(currentAdapter);
+    }
+
+    private void notifyDataSetChangedDelayed(final RecyclerView.Adapter adapter) {
+        if(adapter!=null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            }, 500);
+        }
+    }
+
+    private RecyclerView.Adapter getSecondPaneAdapter() {
+        RecyclerView.Adapter adapter = null;
+        if(currentAdapter instanceof PostAdapter) {
+            adapter = getListFragmentAdapter();
+        }
+        else if(currentAdapter instanceof RedditItemListAdapter)  {
+            adapter = getPostFragmentAdapter();
+        }
+        return adapter;
+    }
+
+    private void notifyDataSetChanged(RecyclerView.Adapter adapter) {
+        if(adapter!=null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void notifySecondPaneChanges() {
+        RecyclerView.Adapter secondPaneAdapter = getSecondPaneAdapter();
+        if(secondPaneAdapter!=null) {
+            if(secondPaneAdapter instanceof PostAdapter) {
+                secondPaneAdapter.notifyItemChanged(0);
             }
-        }, 500);
+            else if(secondPaneAdapter instanceof RedditItemListAdapter) {
+                int index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(post);
+                RedditItem item = ((RedditItemListAdapter) secondPaneAdapter).getItemAt(index);
+                if(item instanceof Submission) {
+                    ((Submission) item).setClicked(true);
+                    secondPaneAdapter.notifyItemChanged(index);
+                }
+            }
+        }
+    }
+
+    public RecyclerView.Adapter getListFragmentAdapter() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getListFragment().adapter;
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getListFragment().adapter;
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getListFragment().adapter;
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    public RecyclerView.Adapter getPostFragmentAdapter() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof PostActivity) {
+                return ((PostActivity) context).getPostFragment().postAdapter;
+            }
+        } catch (Exception e) {}
+        return null;
     }
 
 }
