@@ -33,13 +33,16 @@
         <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Changed 'Refresh comments' behavior to match refreshing of posts</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>
-        <changelogtext>Fixed an issue where loading additional comments would sometimes hide the replies to those comments</changelogtext>
         <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="0.6.7" changeDate="Mar 24, 2017">
+        <changelogtext>Fixed an issue where loading additional comments would sometimes hide the replies to those comments</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.6" changeDate="Mar 16, 2017">
