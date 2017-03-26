@@ -23,7 +23,8 @@
         android:id="@+id/layout_comment_fab_options"
         android:layout_above="@+id/fab_nav"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:clickable="true">
 
         <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
@@ -50,7 +51,8 @@
         android:gravity="center_horizontal"
         android:id="@+id/layout_comment_nav"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:clickable="true">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_up"

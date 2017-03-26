@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|end"
     android:gravity="bottom|end"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true">
 
     <LinearLayout
         android:id="@+id/layout_fab_nav_options"
