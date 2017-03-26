@@ -153,19 +153,6 @@ public class MessageFragment extends RedditContentFragment {
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    @Override
-    public void updateContentViewProperties() {
-        contentView.setHasFixedSize(true);
-        setLayoutManager();
-        setListDividerVisible(true);
-    }
-
-    @Override
-    public void setLayoutManager() {
-        layoutManager = new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
-    }
-
     public void showCategoryPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_message_category);

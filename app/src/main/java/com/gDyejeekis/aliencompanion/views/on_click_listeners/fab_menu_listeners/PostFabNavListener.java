@@ -38,13 +38,7 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
                 ((PostListFragment)fragment).addToSyncQueue();
                 break;
             case R.id.fab_hide_read:
-                // TODO: 2/23/2017 this class should have viewTypeValue field, add abstraction later
-                if(fragment instanceof PostListFragment) {
-                    fragment.removeClickedPosts(((PostListFragment)fragment).getCurrentViewTypeValue());
-                }
-                else if(fragment instanceof SearchFragment) {
-                    fragment.removeClickedPosts();
-                }
+                fragment.removeClickedPosts();
                 break;
             case R.id.fab_search:
                 // TODO: 2/24/2017 add abstraction

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -90,54 +89,7 @@ public class PostListFragment extends RedditContentFragment {
 
     @Override
     protected void showViewsPopup(View v) {
-        PopupMenu popupMenu = new PopupMenu(activity, v);
-        popupMenu.inflate(R.menu.menu_post_views);
-        //final int currentViewTypeValue = MyApplication.rememberPostListView ? MyApplication.prefs.getInt(MyApplication.getSubredditSpecificViewKey(subreddit, isMulti), MyApplication.currentPostListView)
-        //        : MyApplication.currentPostListView;
-        final int currentViewTypeValue = adapter.viewTypeValue;
-        popupMenu.getMenu().getItem(currentViewTypeValue).setChecked(true);
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                PostViewType selectedViewType = PostViewType.list;
-                switch (item.getItemId()) {
-                    case R.id.action_list_default:
-                        selectedViewType = PostViewType.list;
-                        break;
-                    case R.id.action_list_reversed:
-                        selectedViewType = PostViewType.listReversed;
-                        break;
-                    case R.id.action_classic:
-                        selectedViewType = PostViewType.classic;
-                        break;
-                    case R.id.action_small_cards:
-                        selectedViewType = PostViewType.smallCards;
-                        break;
-                    case R.id.action_cards:
-                        selectedViewType = PostViewType.cards;
-                        break;
-                    case R.id.action_image_board:
-                        selectedViewType = PostViewType.gallery;
-                        break;
-                }
-                // TODO: 2/10/2017 this conditional flow might need changing OR reset all subreddit specific views on option disable
-                if (selectedViewType.value() != currentViewTypeValue) {
-                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                    if(MyApplication.rememberPostListView) {
-                        editor.putInt(MyApplication.getSubredditSpecificViewKey(subreddit, isMulti), selectedViewType.value());
-                    }
-                    else {
-                        MyApplication.currentPostListView = selectedViewType.value();
-                        editor.putString("defaultView", String.valueOf(selectedViewType.value()));
-                    }
-                    editor.apply();
-                    if(currentLoadType==null) redrawList(selectedViewType.value());
-                    return true;
-                }
-                return false;
-            }
-        });
-        popupMenu.show();
+        super.showViewsPopup(v);
 
         // ask whether to remember subreddit specific views
         if(!MyApplication.askedRememberPostView) {
@@ -178,7 +130,8 @@ public class PostListFragment extends RedditContentFragment {
 
         initSwipeRefreshLayout(view);
 
-        updateContentViewProperties(getCurrentViewTypeValue());
+        updateCurrentViewType();
+        updateContentViewProperties();
         initFabNavOptions(view);
 
         contentView.addOnScrollListener(onScrollListener);
@@ -239,7 +192,7 @@ public class PostListFragment extends RedditContentFragment {
                 showSearchDialog();
                 return true;
             case R.id.action_hide_read:
-                removeClickedPosts(getCurrentViewTypeValue());
+                removeClickedPosts();
                 return true;
             case R.id.action_switch_view:
                 try {
@@ -371,11 +324,6 @@ public class PostListFragment extends RedditContentFragment {
         ToastUtils.showToast(activity, toastMessage);
     }
 
-    public int getCurrentViewTypeValue() {
-        return MyApplication.rememberPostListView ? MyApplication.prefs.getInt(MyApplication.getSubredditSpecificViewKey(subreddit, isMulti), MyApplication.currentPostListView)
-                : MyApplication.currentPostListView;
-    }
-
     private void showSubmitPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_post_type);
@@ -502,6 +450,7 @@ public class PostListFragment extends RedditContentFragment {
         dismissSnackbar();
         if(currentLoadType!=null) task.cancel(true);
         currentLoadType = LoadType.refresh;
+        updateCurrentViewType();
         swipeRefreshLayout.setRefreshing(true);
         task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -524,6 +473,7 @@ public class PostListFragment extends RedditContentFragment {
         this.subreddit = subreddit;
         this.submissionSort = SubmissionSort.HOT;
         this.timeSpan = null;
+        updateCurrentViewType();
         setActionBarTitle();
         setActionBarSubtitle();
         contentView.setVisibility(View.GONE);

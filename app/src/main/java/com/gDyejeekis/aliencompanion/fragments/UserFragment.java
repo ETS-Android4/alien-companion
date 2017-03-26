@@ -74,19 +74,6 @@ public class UserFragment extends RedditContentFragment {
     }
 
     @Override
-    public void updateContentViewProperties() {
-        contentView.setHasFixedSize(true);
-        setLayoutManager();
-        setListDividerVisible(true);
-    }
-
-    @Override
-    public void setLayoutManager() {
-        layoutManager = new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("username", username);
         outState.putSerializable("sort", userOverviewSort);
@@ -123,6 +110,7 @@ public class UserFragment extends RedditContentFragment {
 
         initSwipeRefreshLayout(view);
 
+        updateCurrentViewType();
         updateContentViewProperties();
         initFabNavOptions(view);
 

@@ -47,8 +47,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private TimeSpan time;
     private boolean changedSort;
 
-    private int viewTypeValue;
-
     public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType) {
         this.context = context;
         this.plf = plf;
@@ -56,7 +54,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         sort = plf.submissionSort;
         time = plf.timeSpan;
         changedSort = false;
-        viewTypeValue = plf.getCurrentViewTypeValue();
     }
 
     public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType, SubmissionSort sort, TimeSpan time) {
@@ -66,7 +63,6 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         this.sort = sort;
         this.time = time;
         changedSort = true;
-        viewTypeValue = plf.getCurrentViewTypeValue();
     }
 
     private List<RedditItem> readPostsFromFile(String filename) {
@@ -85,6 +81,8 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
+        // simulate network delay
+        //SystemClock.sleep(5000);
         try {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
@@ -98,7 +96,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     filename = filename + plf.subreddit.toLowerCase();
                 }
                 submissions = readPostsFromFile(filename + DownloaderService.LOCA_POST_LIST_SUFFIX);
-                if(submissions!=null) adapter = new RedditItemListAdapter(context, viewTypeValue, submissions);
+                if(submissions!=null) adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
             }
             else {
                 Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
@@ -118,7 +116,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                         else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     }
-                    adapter = new RedditItemListAdapter(context, viewTypeValue, submissions);
+                    adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
                 }
             }
             return submissions;
@@ -156,8 +154,8 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     plf.adapter.setLoadingMoreItems(false);
                 }
                 else if(loadType == LoadType.init) {
-                    plf.adapter = new RedditItemListAdapter(context, viewTypeValue);
-                    plf.updateContentView(adapter, viewTypeValue);
+                    plf.adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue);
+                    plf.updateContentView(adapter);
                 }
 
                 View.OnClickListener listener;
@@ -196,13 +194,13 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 switch (loadType) {
                     case init:
                         if(submissions.size()==0) {
-                            plf.updateContentView(new RedditItemListAdapter(context, viewTypeValue), viewTypeValue);
+                            plf.updateContentView(new RedditItemListAdapter(context, plf.currentViewTypeValue));
                             String message = "No posts found";
                             if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
                             ToastUtils.showToast(context, message);
                         }
                         else {
-                            plf.updateContentView(plf.adapter, viewTypeValue);
+                            plf.updateContentView(plf.adapter);
                         }
                         break;
                     case refresh:
@@ -216,7 +214,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             //    plf.setActionBarSubtitle();
                             //}
                             plf.setActionBarSubtitle();
-                            plf.updateContentView(adapter, viewTypeValue);
+                            plf.updateContentView(adapter);
                         }
                         else ToastUtils.showToast(context, "No posts found");
                         break;

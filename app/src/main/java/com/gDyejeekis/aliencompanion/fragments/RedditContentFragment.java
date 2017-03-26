@@ -7,7 +7,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -60,6 +59,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     protected RecyclerView.LayoutManager layoutManager;
     public RedditItemListAdapter adapter;
     public LoadType currentLoadType;
+    public int currentViewTypeValue = MyApplication.currentPostListView;
     public Snackbar currentSnackbar;
     public boolean loadMore;
     public boolean hasMore;
@@ -191,37 +191,48 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     protected void showViewsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(activity, v);
         popupMenu.inflate(R.menu.menu_post_views);
-        popupMenu.getMenu().getItem(MyApplication.currentPostListView).setChecked(true);
+        popupMenu.getMenu().getItem(currentViewTypeValue).setChecked(true);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                PostViewType viewType = PostViewType.list;
+                PostViewType selectedViewType = PostViewType.list;
                 switch (item.getItemId()) {
                     case R.id.action_list_default:
-                        viewType = PostViewType.list;
+                        selectedViewType = PostViewType.list;
                         break;
                     case R.id.action_list_reversed:
-                        viewType = PostViewType.listReversed;
+                        selectedViewType = PostViewType.listReversed;
                         break;
                     case R.id.action_classic:
-                        viewType = PostViewType.classic;
+                        selectedViewType = PostViewType.classic;
                         break;
                     case R.id.action_small_cards:
-                        viewType = PostViewType.smallCards;
+                        selectedViewType = PostViewType.smallCards;
                         break;
                     case R.id.action_cards:
-                        viewType = PostViewType.cards;
+                        selectedViewType = PostViewType.cards;
                         break;
                     case R.id.action_image_board:
-                        viewType = PostViewType.gallery;
+                        selectedViewType = PostViewType.gallery;
                         break;
                 }
-                if (viewType.value() != MyApplication.currentPostListView) {
+                // TODO: 2/10/2017 this conditional flow might need changing OR reset all subreddit specific views on option disable
+                if (selectedViewType.value() != currentViewTypeValue) {
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                    MyApplication.currentPostListView = viewType.value();
-                    editor.putString("defaultView", String.valueOf(viewType.value()));
+                    if(RedditContentFragment.this instanceof PostListFragment && MyApplication.rememberPostListView) {
+                        String viewPrefKey = MyApplication.getSubredditSpecificViewKey(((PostListFragment)RedditContentFragment.this).subreddit,
+                                ((PostListFragment)RedditContentFragment.this).isMulti);
+                        editor.putInt(viewPrefKey, selectedViewType.value());
+                    }
+                    else {
+                        MyApplication.currentPostListView = selectedViewType.value();
+                        editor.putString("defaultView", String.valueOf(selectedViewType.value()));
+                    }
                     editor.apply();
-                    if(currentLoadType==null) redrawList();
+                    updateCurrentViewType();
+                    if(currentLoadType==null) {
+                        redrawList();
+                    }
                     return true;
                 }
                 return false;
@@ -239,24 +250,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                     notClicked.add(item);
                 }
             }
-            adapter = new RedditItemListAdapter(activity, notClicked);
+            adapter = new RedditItemListAdapter(activity, currentViewTypeValue, notClicked);
             updateContentView(adapter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void removeClickedPosts(int viewTypeValue) {
-        try {
-            hideAllFabOptions();
-            List<RedditItem> notClicked = new ArrayList<>();
-            for(RedditItem item : adapter.redditItems) {
-                if(item instanceof Submission && !((Submission) item).isClicked()) {
-                    notClicked.add(item);
-                }
-            }
-            adapter = new RedditItemListAdapter(activity, viewTypeValue, notClicked);
-            updateContentView(adapter, viewTypeValue);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -269,31 +264,15 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             }
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
-            adapter = new RedditItemListAdapter(activity, items);
+            adapter = new RedditItemListAdapter(activity, currentViewTypeValue, items);
             updateContentView(adapter);
-        } catch (ArrayIndexOutOfBoundsException e) {}
+        } catch (Exception e) {}
     }
 
-    public void redrawList(int viewTypeValue) {
-        try {
-            if(fabOptionsVisible) {
-                setFabNavOptionsVisible(false);
-            }
-            List<RedditItem> items = adapter.redditItems;
-            items.remove(items.size() - 1); // remove show more item
-            adapter = new RedditItemListAdapter(activity, viewTypeValue, items);
-            updateContentView(adapter, viewTypeValue);
-        } catch (ArrayIndexOutOfBoundsException e) {}
-    }
-
-    public void updateContentViewProperties() {
-        updateContentViewProperties(MyApplication.currentPostListView);
-    }
-
-    public void updateContentViewProperties(int viewTypeValue) {
+    protected void updateContentViewProperties() {
         contentView.setHasFixedSize(true);
-        setLayoutManager(viewTypeValue);
-        setListDividerVisible(PostViewType.hasVisibleListDivider(viewTypeValue));
+        setLayoutManager();
+        updateListDividerVisibility();
         contentView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -309,20 +288,34 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         contentView.setAdapter(adapter);
     }
 
-    public void updateContentView(RedditItemListAdapter adapter, int viewTypeValue) {
-        updateContentViewAdapter(adapter);
-        updateContentViewProperties(viewTypeValue);
-    }
-
     public void updateContentView(RedditItemListAdapter adapter) {
         updateContentViewAdapter(adapter);
         updateContentViewProperties();
     }
 
-    protected void setListDividerVisible(boolean flag) {
+    private void setLayoutManager() {
+        layoutManager = currentViewTypeValue == PostViewType.gallery.value() ?
+                new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
+        contentView.setLayoutManager(layoutManager);
+    }
+
+    private void updateListDividerVisibility() {
         contentView.removeItemDecoration(dividerDecoration);
-        if(flag) {
+        if(PostViewType.hasVisibleListDivider(currentViewTypeValue)) {
             contentView.addItemDecoration(dividerDecoration);
+        }
+    }
+
+    public void updateCurrentViewType() {
+        if(this instanceof PostListFragment && MyApplication.rememberPostListView) {
+            String viewPrefKey = MyApplication.getSubredditSpecificViewKey(((PostListFragment)this).subreddit, ((PostListFragment)this).isMulti);
+            currentViewTypeValue = MyApplication.prefs.getInt(viewPrefKey, MyApplication.currentPostListView);
+        }
+        else if(this instanceof UserFragment && MyApplication.currentPostListView == PostViewType.gallery.value()) {
+            currentViewTypeValue = PostViewType.smallCards.value();
+        }
+        else {
+            currentViewTypeValue = MyApplication.currentPostListView;
         }
     }
 
@@ -509,19 +502,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     private void setLayoutFabNavVisible(boolean flag) {
         layoutFabNav.setVisibility(flag ? View.VISIBLE : View.GONE);
-    }
-
-    /**
-     * override this in UserFragment and MessageFragment
-     */
-    protected void setLayoutManager() {
-        setLayoutManager(MyApplication.currentPostListView);
-    }
-
-    protected void setLayoutManager(int viewTypeValue) {
-        layoutManager = viewTypeValue == PostViewType.gallery.value() ?
-                new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
-        contentView.setLayoutManager(layoutManager);
     }
 
     public void initSwipeRefreshLayout(View view) {
