@@ -23,13 +23,11 @@ import java.util.List;
 public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
 
     private Exception exception;
-    private AppCompatActivity activity;
     private PostFragment postFragment;
     private MoreComment moreChildren;
     private int addIndex;
 
     public LoadMoreCommentsTask(AppCompatActivity activity, MoreComment moreChildren) {
-        this.activity = activity;
         this.moreChildren = moreChildren;
         if(activity instanceof MainActivity) {
             postFragment = ((MainActivity)activity).getPostFragment();
@@ -121,6 +119,7 @@ public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         else {
             postAdapter.remove(moreChildren);
             postAdapter.addAll(addIndex, comments);
+            postFragment.updateFabNavOnScroll(0);
         }
     }
 }

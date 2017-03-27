@@ -516,7 +516,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         fabPrevious.show();
     }
 
-    private void updateFabNavOnScroll(int dy) {
+    public void updateFabNavOnScroll(int dy) {
         if(MyApplication.commentFabNavigation) {
             if(lastItemCompletelyVisible()
                     || (MyApplication.autoHideCommentFab && dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
