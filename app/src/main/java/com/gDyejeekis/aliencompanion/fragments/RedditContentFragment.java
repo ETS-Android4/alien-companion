@@ -376,7 +376,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         });
     }
 
-    protected void initFabNavOptions(View view) {
+    public void initFabNavOptions(View view) {
         layoutFabNav = (MoveUpwardLinearLayout) view.findViewById(R.id.layout_fab_nav);
         if(MyApplication.postFabNavigation && hasFabNavigation()) {
             layoutFabNav.setVisibility(View.VISIBLE);
@@ -441,10 +441,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         fabSearch.setBackgroundTintList(fabColor);
         fabSubmitLink.setBackgroundTintList(fabColor);
         fabSubmitText.setBackgroundTintList(fabColor);
-    }
-
-    public void updateFabNavAvailability() {
-        initFabNavOptions(activity.findViewById(android.R.id.content));
     }
 
     private void setFabIndividualVisibility(boolean showSubmitFab) {

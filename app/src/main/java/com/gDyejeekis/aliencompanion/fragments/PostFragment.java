@@ -382,7 +382,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         updateSwipeRefreshOffset();
     }
 
-    private void initFabNavOptions(View view) {
+    public void initFabNavOptions(View view) {
         layoutFabRoot = (MoveUpwardRelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
         if(MyApplication.commentFabNavigation) {
             layoutFabRoot.setVisibility(View.VISIBLE);

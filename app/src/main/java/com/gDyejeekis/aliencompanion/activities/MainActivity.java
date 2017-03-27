@@ -236,7 +236,14 @@ public class MainActivity extends ToolbarActivity {
 
         if(MyApplication.fabPostNavChanged) {
             MyApplication.fabPostNavChanged = false;
-            getListFragment().updateFabNavAvailability();
+            getListFragment().initFabNavOptions(findViewById(android.R.id.content));
+        }
+
+        if(MyApplication.fabCommentNavChanged) {
+            MyApplication.fabCommentNavChanged = false;
+            if(getPostFragment()!=null) {
+                getPostFragment().initFabNavOptions(findViewById(R.id.postFragmentHolder));
+            }
         }
 
         if(setupAccount) {

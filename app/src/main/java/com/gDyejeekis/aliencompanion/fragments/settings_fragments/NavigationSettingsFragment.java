@@ -18,18 +18,23 @@ public class NavigationSettingsFragment extends PreferenceFragment implements Pr
 
         Preference fabPostNav = findPreference("postNav");
         Preference autoHidePostFab = findPreference("autoHidePostNav");
+        Preference fabCommentNav = findPreference("commentNav");
+        Preference autoHideCommentNav = findPreference("autoHideCommentNav");
         fabPostNav.setOnPreferenceChangeListener(this);
         autoHidePostFab.setOnPreferenceChangeListener(this);
+        fabCommentNav.setOnPreferenceChangeListener(this);
+        autoHideCommentNav.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if(preference.getKey().equals("postNav")) {
+        String key =  preference.getKey();
+        if(key.equals("postNav") || key.equals("autoHidePostNav")) {
             MyApplication.fabPostNavChanged = true;
             return true;
         }
-        else if(preference.getKey().equals("autoHidePostNav")) {
-            MyApplication.fabPostNavChanged = true;
+        else if(key.equals("commentNav") || key.equals("autoHideCommentNav")) {
+            MyApplication.fabCommentNavChanged = true;
             return true;
         }
         return false;
