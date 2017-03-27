@@ -497,7 +497,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void hideAllFabOptions() {
         try {
-            fabMain.setImageResource(R.drawable.ic_navigation_white_36dp);
+            fabMain.setImageResource(R.mipmap.ic_add_white_24dp);
             fabMain.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
             if (fabOptionsVisible) {
                 setFabMainOptionsVisible(false);
