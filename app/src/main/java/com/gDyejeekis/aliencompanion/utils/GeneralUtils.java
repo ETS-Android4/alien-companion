@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ChangeLogDialogFragment;
@@ -66,6 +67,25 @@ public class GeneralUtils {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifi.isConnectedOrConnecting();
+    }
+
+    public static boolean isLargeScreen(Context context) {
+        return getScreenSizeInches(context) > 6.4;
+    }
+
+    public static boolean isVeryLargeScreen(Context context) {
+        return getScreenSizeInches(context) > 9.4;
+    }
+
+    public static double getScreenSizeInches(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+
+        double density = dm.density * 160;
+        double x = Math.pow(dm.widthPixels / density, 2);
+        double y = Math.pow(dm.heightPixels / density, 2);
+        double screenInches = Math.sqrt(x + y);
+
+        return screenInches;
     }
 
     public static void addFileToMediaStore(Context context, File file) {

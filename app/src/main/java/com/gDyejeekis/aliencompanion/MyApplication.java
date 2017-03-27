@@ -383,7 +383,7 @@ public class MyApplication extends Application {
             if(lastKnownVersionCode < clearAppDataVersionCode) {
                 editor.clear();
                 clearApplicationData();
-                editor.putBoolean("dualPane", getScreenSizeInches(getApplicationContext()) > 6.4);
+                editor.putBoolean("dualPane", GeneralUtils.isLargeScreen(getApplicationContext()));
             }
             if(lastKnownVersionCode < showWelcomeMsgVersionCode) {
                 editor.putBoolean("welcomeMsg", false);
@@ -420,17 +420,6 @@ public class MyApplication extends Application {
         }
 
         return dir.delete();
-    }
-
-    public static double getScreenSizeInches(Context context) {
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-
-        double density = dm.density * 160;
-        double x = Math.pow(dm.widthPixels / density, 2);
-        double y = Math.pow(dm.heightPixels / density, 2);
-        double screenInches = Math.sqrt(x + y);
-
-        return screenInches;
     }
 
     public static void getCurrentSettings() {
