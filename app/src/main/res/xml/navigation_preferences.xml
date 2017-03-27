@@ -21,6 +21,12 @@
         android:defaultValue="true"/>
 
     <CheckBoxPreference
+        android:key="volumeNav"
+        android:title="Navigate comments with volume buttons"
+        android:summary="Enables use of the volume buttons to navigate between comments (disabled in dual pane mode)"
+        android:defaultValue="false"/>
+
+    <CheckBoxPreference
         android:key="longTapSwitch"
         android:title="Long tap to enter offline/online mode"
         android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly switch between modes"

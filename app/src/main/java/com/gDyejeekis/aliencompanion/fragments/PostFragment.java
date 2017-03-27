@@ -43,7 +43,6 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
-import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
@@ -51,7 +50,6 @@ import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -169,7 +167,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setRetainInstance(true);
         setHasOptionsMenu(true);
 
-        if(MyApplication.commentNavigation) {
+        commentNavListener = new CommentFabNavListener(this);
+        if(MyApplication.commentFabNavigation) {
             initFabAnimations();
         }
 
@@ -385,7 +384,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void initFabNavOptions(View view) {
         layoutFabRoot = (MoveUpwardRelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
-        if(MyApplication.commentNavigation) {
+        if(MyApplication.commentFabNavigation) {
             layoutFabRoot.setVisibility(View.VISIBLE);
             layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_comment_nav);
             layoutFabOptions = (LinearLayout) view.findViewById(R.id.layout_comment_fab_options);
@@ -394,7 +393,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             fabReply = (FloatingActionButton) view.findViewById(R.id.fab_reply);
             fabNext = (FloatingActionButton) view.findViewById(R.id.fab_down);
             fabPrevious = (FloatingActionButton) view.findViewById(R.id.fab_up);
-            commentNavListener = new CommentFabNavListener(this);
             fabMain.setOnClickListener(commentNavListener);
             fabNavSetting.setOnClickListener(commentNavListener);
             fabNavSetting.setOnLongClickListener(commentNavListener);
@@ -519,7 +517,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void updateFabNavOnScroll(int dy) {
-        if(MyApplication.commentNavigation) {
+        if(MyApplication.commentFabNavigation) {
             if(lastItemCompletelyVisible()
                     || (MyApplication.autoHideCommentFab && dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
                 hideAllFabOnScroll();

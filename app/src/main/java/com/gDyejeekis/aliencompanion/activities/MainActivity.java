@@ -315,7 +315,7 @@ public class MainActivity extends ToolbarActivity {
 
         if(MyApplication.colorSecondaryChanged) {
             MyApplication.colorSecondaryChanged = false;
-            if(MyApplication.postNavigation) {
+            if(MyApplication.postFabNavigation) {
                 getListFragment().updateFabNavColors();
             }
         }

@@ -8,10 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -122,8 +119,9 @@ public class MyApplication extends Application {
 
     public static int swipeSetting;
     public static boolean swipeRefresh;
-    public static boolean postNavigation;
-    public static boolean commentNavigation;
+    public static boolean postFabNavigation;
+    public static boolean commentFabNavigation;
+    public static boolean volumeNavigation;
     public static boolean autoHidePostFab;
     public static boolean autoHideCommentFab;
     public static boolean autoHideToolbar;
@@ -496,8 +494,9 @@ public class MyApplication extends Application {
         colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#00BCD4"));
         colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF5252"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
-        postNavigation = prefs.getBoolean("postNav", true);
-        commentNavigation = prefs.getBoolean("commentNav", true);
+        postFabNavigation = prefs.getBoolean("postNav", true);
+        commentFabNavigation = prefs.getBoolean("commentNav", true);
+        volumeNavigation = prefs.getBoolean("volumeNav", false);
         autoHidePostFab = prefs.getBoolean("autoHidePostNav", true);
         autoHideCommentFab = prefs.getBoolean("autoHideCommentNav", true);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;

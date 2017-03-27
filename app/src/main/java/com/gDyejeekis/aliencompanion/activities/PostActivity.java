@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.activities;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -49,6 +50,21 @@ public class PostActivity extends SwipeBackActivity {
             HandleUrlActivity.notifySwitchedMode = false;
             ToastUtils.showToast(this, "Switched to online mode");
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(MyApplication.volumeNavigation) {
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                postFragment.commentNavListener.nextComment();
+                return true;
+            }
+            else if(keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                postFragment.commentNavListener.previousComment();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

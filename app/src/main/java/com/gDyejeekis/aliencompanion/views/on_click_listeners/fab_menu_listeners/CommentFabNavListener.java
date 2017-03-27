@@ -76,7 +76,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         this.fragment = postFragment;
     }
 
-    private void nextComment() {
+    public void nextComment() {
         int start = firstVisibleItemPosition();
         int index;
         switch (fragment.commentNavSetting) {
@@ -109,7 +109,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
         }
     }
 
-    private void previousComment() {
+    public void previousComment() {
         int start = firstVisibleItemPosition();
         int index;
         switch (fragment.commentNavSetting) {

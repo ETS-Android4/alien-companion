@@ -142,7 +142,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     private void updateFabOnScroll(int dy) {
-        if(MyApplication.postNavigation && hasFabNavigation()) {
+        if(MyApplication.postFabNavigation && hasFabNavigation()) {
             if (MyApplication.autoHidePostFab) {
                 if (dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD) {
                     hideAllFabOptions();
@@ -378,7 +378,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     protected void initFabNavOptions(View view) {
         layoutFabNav = (MoveUpwardLinearLayout) view.findViewById(R.id.layout_fab_nav);
-        if(MyApplication.postNavigation && hasFabNavigation()) {
+        if(MyApplication.postFabNavigation && hasFabNavigation()) {
             layoutFabNav.setVisibility(View.VISIBLE);
             updateFabLayoutGravity();
             layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);
