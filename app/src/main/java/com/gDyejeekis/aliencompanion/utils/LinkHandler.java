@@ -271,8 +271,8 @@ public class LinkHandler {
                 builder.setExitAnimations(activity, -1, -1);
             }
             else {
-                builder.setStartAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                builder.setExitAnimations(activity, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                builder.setStartAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
+                builder.setExitAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
             }
 
             CustomTabsIntent customTabsIntent = builder.build();

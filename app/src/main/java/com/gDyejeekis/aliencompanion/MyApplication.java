@@ -344,7 +344,7 @@ public class MyApplication extends Application {
             activity.overridePendingTransition(-1, -1);
         }
         else {
-            activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
 
