@@ -66,6 +66,7 @@ public class MainActivity extends ToolbarActivity {
     //private Toolbar toolbar;
     private RelativeLayout container;
 
+    // TODO: 3/27/2017 move this field to application class
     public static boolean dualPaneActive;
 
     public static boolean setupAccount = false;

@@ -25,7 +25,7 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_nav:
-                fragment.toggleNavOptions();
+                fragment.toggleFabOptions();
                 break;
             case R.id.fab_refresh:
                 fragment.refreshList();

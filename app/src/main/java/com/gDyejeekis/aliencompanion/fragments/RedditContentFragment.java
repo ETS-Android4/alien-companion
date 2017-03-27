@@ -7,12 +7,14 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +26,7 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
@@ -230,6 +233,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                     }
                     editor.apply();
                     updateCurrentViewType();
+                    updateFabLayoutGravity();
                     if(currentLoadType==null) {
                         redrawList();
                     }
@@ -260,7 +264,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public void redrawList() {
         try {
             if(fabOptionsVisible) {
-                setFabNavOptionsVisible(false);
+                setFabMainOptionsVisible(false);
             }
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
@@ -375,7 +379,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     protected void initFabNavOptions(View view) {
         layoutFabNav = (MoveUpwardLinearLayout) view.findViewById(R.id.layout_fab_nav);
         if(MyApplication.postNavigation && hasFabNavigation()) {
-            setLayoutFabNavVisible(true);
+            layoutFabNav.setVisibility(View.VISIBLE);
+            updateFabLayoutGravity();
             layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);
             layoutFabNavOptions.setVisibility(View.GONE);
 
@@ -411,8 +416,19 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             setFabIndividualVisibility(false);
         }
         else {
-            setLayoutFabNavVisible(false);
+            layoutFabNav.setVisibility(View.GONE);
         }
+    }
+
+    public void updateFabLayoutGravity() {
+        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+        if(currentViewTypeValue == PostViewType.listReversed.value() || MainActivity.dualPaneActive) {
+            params.gravity = Gravity.BOTTOM | Gravity.START;
+        }
+        else {
+            params.gravity = Gravity.BOTTOM | Gravity.END;
+        }
+        layoutFabNav.setLayoutParams(params);
     }
 
     public void updateFabNavColors() {
@@ -444,7 +460,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         fabSearch.setVisibility(MyApplication.offlineModeEnabled ? View.GONE : otherFabsVis);
     }
 
-    private void setFabNavOptionsVisible(boolean flag) {
+    private void setFabMainOptionsVisible(boolean flag) {
         setFabIndividualVisibility(false);
         if(flag) {
             fabOptionsVisible = true;
@@ -473,10 +489,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    public void showFabNavOptions() {
+    public void showFabMainOptions() {
         fabMain.setImageResource(R.mipmap.ic_close_grey_48dp);
         fabMain.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-        setFabNavOptionsVisible(true);
+        setFabMainOptionsVisible(true);
     }
 
     public void hideAllFabOptions() {
@@ -484,24 +500,20 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabMain.setImageResource(R.drawable.ic_navigation_white_36dp);
             fabMain.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
             if (fabOptionsVisible) {
-                setFabNavOptionsVisible(false);
+                setFabMainOptionsVisible(false);
             } else if (fabSubmitOptionsVisible) {
                 setFabSubmitOptionsVisible(false);
             }
         } catch (NullPointerException e) {}
     }
 
-    public void toggleNavOptions() {
+    public void toggleFabOptions() {
         if(fabOptionsVisible || fabSubmitOptionsVisible) {
             hideAllFabOptions();
         }
         else {
-            showFabNavOptions();
+            showFabMainOptions();
         }
-    }
-
-    private void setLayoutFabNavVisible(boolean flag) {
-        layoutFabNav.setVisibility(flag ? View.VISIBLE : View.GONE);
     }
 
     public void initSwipeRefreshLayout(View view) {

@@ -6,7 +6,8 @@
     android:layout_gravity="bottom|end"
     android:gravity="bottom|end"
     android:orientation="vertical"
-    android:clickable="true">
+    android:clickable="true"
+    android:paddingLeft="16dp">
 
     <LinearLayout
         android:id="@+id/layout_fab_nav_options"
