@@ -160,13 +160,18 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
                 View.OnClickListener listener;
                 if(MyApplication.offlineModeEnabled) {
-                    listener = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            plf.addToSyncQueue();
-                        }
-                    };
-                    plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
+                    if(plf.isOther && plf.subreddit!=null && plf.subreddit.equals("synced")) {
+                        showNoPostsSnackbar();
+                    }
+                    else {
+                        listener = new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                plf.addToSyncQueue();
+                            }
+                        };
+                        plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
+                    }
                 }
                 else {
                     String message = "Error loading posts";
@@ -195,9 +200,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     case init:
                         if(submissions.size()==0) {
                             plf.updateContentView(new RedditItemListAdapter(context, plf.currentViewTypeValue));
-                            String message = "No posts found";
-                            if(MyApplication.hideNSFW) message = message.concat(" (NSFW filter is enabled)");
-                            ToastUtils.showToast(context, message);
+                            showNoPostsSnackbar();
                         }
                         else {
                             plf.updateContentView(plf.adapter);
@@ -216,7 +219,9 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             plf.setActionBarSubtitle();
                             plf.updateContentView(adapter);
                         }
-                        else ToastUtils.showToast(context, "No posts found");
+                        else {
+                            showNoPostsSnackbar();
+                        }
                         break;
                     case extend:
                         plf.adapter.setLoadingMoreItems(false);
@@ -228,6 +233,14 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showNoPostsSnackbar() {
+        String message = "No posts found";
+        if (MyApplication.hideNSFW && !MyApplication.offlineModeEnabled) {
+            message = message.concat(" (NSFW filter is enabled)");
+        }
+        plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), message));
     }
 
 }
