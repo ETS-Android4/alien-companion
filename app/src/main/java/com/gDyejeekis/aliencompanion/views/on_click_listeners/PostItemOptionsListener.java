@@ -3,11 +3,13 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -55,16 +57,16 @@ import com.gDyejeekis.aliencompanion.enums.UserActionType;
  */
 public class PostItemOptionsListener implements View.OnClickListener {
 
-    public static final int ACTION_REMOVE_SYNCED = 1;
-
     private Context context;
     private Submission post;
     private RecyclerView.Adapter currentAdapter;
+    private PostViewType viewType;
 
-    public PostItemOptionsListener(Context context, Submission post, RecyclerView.Adapter adapter) {
+    public PostItemOptionsListener(Context context, Submission post, RecyclerView.Adapter adapter, PostViewType postViewType) {
         this.context = context;
         this.post = post;
         this.currentAdapter = adapter;
+        this.viewType = postViewType;
     }
 
     private void viewUser() {
@@ -263,48 +265,12 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
     private void showMoreOptionsPopup(View v) {
         final PopupMenu popupMenu = new PopupMenu(context, v);
-        //inflate the right menu layout
-        final int resource;
-        int labelNSFWindex = -1;
-        final String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
-        if(post.getAuthor().equals(currentUser)) {
-            if(post.isSelf()) {
-                labelNSFWindex = 2;
-                if(MyApplication.currentPostListView == PostViewType.cards.value()
-                        || currentAdapter instanceof PostAdapter) {
-                    resource = R.menu.menu_self_post_card_more_options_account;
-                }
-                else {
-                    resource = R.menu.menu_self_post_more_options_account;
-                }
-            }
-            else {
-                labelNSFWindex = 1;
-                if(MyApplication.currentPostListView == PostViewType.cards.value()) {
-                    resource = R.menu.menu_post_card_more_options_account;
-                }
-                else {
-                    resource = R.menu.menu_post_more_options_account;
-                }
-            }
-        }
-        else {
-            if(post.isSelf()) {
-                resource = (MyApplication.currentPostListView == PostViewType.cards.value()
-                        || currentAdapter instanceof PostAdapter) ? R.menu.menu_self_post_card_more_options : R.menu.menu_self_post_more_options;
-            }
-            else {
-                resource = (MyApplication.currentPostListView == PostViewType.cards.value() || currentAdapter instanceof PostAdapter)
-                        ? R.menu.menu_post_card_more_options : R.menu.menu_post_more_options;
-            }
-        }
-        popupMenu.inflate(resource);
-        if(labelNSFWindex != -1 && post.isNSFW()) popupMenu.getMenu().getItem(labelNSFWindex).setTitle("Unmark NSFW");
+        popupMenu.inflate(R.menu.menu_post_more_options);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_sync:
+                    case R.id.action_add_to_synced:
                         String toastMessage;
                         if(GeneralUtils.isNetworkAvailable(context)) {
                             if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
@@ -322,119 +288,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         }
                         ToastUtils.showToast(context, toastMessage);
                         return true;
-                    case R.id.action_copy_to_clipboard:
-                        TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        String stringToCopy;
-                                        String label;
-                                        if (v.getId() == R.id.button_option_one) {
-                                            stringToCopy = post.getURL();
-                                            label = "Post url";
-                                        } else {
-                                            stringToCopy = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
-                                            label = "Comments url";
-                                        }
-                                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                                        ClipData clip = ClipData.newPlainText(label, stringToCopy);
-                                        clipboard.setPrimaryClip(clip);
-                                    }
-                                });
-                        choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        return true;
-                    case R.id.action_edit:
-                        Intent intent = new Intent(context, SubmitActivity.class);
-                        intent.putExtra("submitType", SubmitType.comment);
-                        intent.putExtra("selfText", post.getSelftext());
-                        intent.putExtra("edit", true);
-                        intent.putExtra("postName", post.getFullName());
-                        context.startActivity(intent);
-                        return true;
-                    case R.id.action_delete:
-                        if (currentAdapter instanceof RedditItemListAdapter)
-                            ((RedditItemListAdapter) currentAdapter).remove(post);
-                        LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
-                        //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        task.execute();
-                        return true;
-                    case R.id.action_mark_nsfw:
-                        UserActionType actionType;
-                        if (post.isNSFW()) {
-                            post.setNSFW(false);
-                            actionType = UserActionType.unmarkNSFW;
-                        }
-                        else {
-                            post.setNSFW(true);
-                            actionType = UserActionType.markNSFW;
-                        }
-                        currentAdapter.notifyDataSetChanged();
-                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                        //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        task.execute();
-                        return true;
-                    case R.id.action_copy_link:
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Post link", post.getURL());
-                        clipboard.setPrimaryClip(clip);
-                        return true;
-                    case R.id.action_copy_permalink:
-                        String postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
-                        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        clip = ClipData.newPlainText("Post permalink", postLink);
-                        clipboard.setPrimaryClip(clip);
-                        return true;
-                    case R.id.action_open_browser:
-                        openInBrowser();
-                        return true;
-                    case R.id.action_share:
-                        final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
-                        if(post.isSelf()) GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
-                        else {
-                            choiceDialog = TwoOptionDialogFragment.newInstance("SHARE LINK", "SHARE COMMENTS", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    String label = "Share via..";
-                                    String url;
-                                    if (v.getId() == R.id.button_option_one) {
-                                        label = "Share post url via..";
-                                        url = post.getURL();
-                                    } else {
-                                        label = "Share comments url via..";
-                                        url = commentsUrl;
-                                    }
-                                    GeneralUtils.shareUrl(context, label, url);
-                                }
-                            });
-                            choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        }
-                        //postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getFullName().substring(3);
-                        //Intent sendIntent = new Intent();
-                        //sendIntent.setAction(Intent.ACTION_SEND);
-                        //sendIntent.putExtra(Intent.EXTRA_TEXT, postLink);
-                        //sendIntent.setType("text/plain");
-                        //context.startActivity(Intent.createChooser(sendIntent, "Share post to.."));
-                        return true;
-                    case R.id.action_view_user:
-                        viewUser();
-                        return true;
-                    case R.id.action_view_subreddit:
-                        intent = new Intent(context, SubredditActivity.class);
-                        intent.putExtra("subreddit", post.getSubreddit().toLowerCase());
-                        context.startActivity(intent);
-                        return true;
-                    //case R.id.action_download_comments:
-                    //    return true;
-                    case R.id.action_report:
-                        if (MyApplication.currentUser != null) {
-                            ReportDialogFragment dialog = new ReportDialogFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("postId", post.getFullName());
-                            dialog.setArguments(bundle);
-                            dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        } else ToastUtils.showSnackbarOverToast(context, "Must be logged in to report");
-                        return true;
-                    case ACTION_REMOVE_SYNCED:
+                    case R.id.action_remove_from_synced:
                         //final int index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
                         ((RedditItemListAdapter) currentAdapter).remove(post);
                         notifyDataSetChangedDelayed();
@@ -453,17 +307,177 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             }
                         }.execute(post.getIdentifier());
                         return true;
-                    default:
-                        return false;
+                    case R.id.action_open_in_browser:
+                        openInBrowser();
+                        return true;
+                    case R.id.action_copy_to_clipboard:
+                        if(post.isSelf()) {
+                            String postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
+                            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("Post permalink", postLink);
+                            clipboard.setPrimaryClip(clip);
+                        }
+                        else {
+                            TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            String stringToCopy;
+                                            String label;
+                                            if (v.getId() == R.id.button_option_one) {
+                                                stringToCopy = post.getURL();
+                                                label = "Post url";
+                                            } else {
+                                                stringToCopy = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
+                                                label = "Comments url";
+                                            }
+                                            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                            ClipData clip = ClipData.newPlainText(label, stringToCopy);
+                                            clipboard.setPrimaryClip(clip);
+                                        }
+                                    });
+                            choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
+                        }
+                        return true;
+                    case R.id.action_select_text:
+                        // TODO: 4/7/2017
+                        return true;
+                    case R.id.action_share:
+                        final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
+                        if(post.isSelf()) {
+                            GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
+                        }
+                        else {
+                            TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("SHARE LINK", "SHARE COMMENTS", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String label = "Share via..";
+                                    String url;
+                                    if (v.getId() == R.id.button_option_one) {
+                                        label = "Share post url via..";
+                                        url = post.getURL();
+                                    } else {
+                                        label = "Share comments url via..";
+                                        url = commentsUrl;
+                                    }
+                                    GeneralUtils.shareUrl(context, label, url);
+                                }
+                            });
+                            choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
+                        }
+                        return true;
+                    case R.id.action_view_user:
+                        viewUser();
+                        return true;
+                    case R.id.action_view_subreddit:
+                        Intent intent = new Intent(context, SubredditActivity.class);
+                        intent.putExtra("subreddit", post.getSubreddit().toLowerCase());
+                        context.startActivity(intent);
+                        return true;
+                    case R.id.action_mark_nsfw:
+                        UserActionType actionType;
+                        if (post.isNSFW()) {
+                            post.setNSFW(false);
+                            actionType = UserActionType.unmarkNSFW;
+                        }
+                        else {
+                            post.setNSFW(true);
+                            actionType = UserActionType.markNSFW;
+                        }
+                        currentAdapter.notifyDataSetChanged();
+                        LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        task.execute();
+                        return true;
+                    case R.id.action_mark_spoiler:
+                        // TODO: 4/7/2017
+                        return true;
+                    case R.id.action_edit:
+                        intent = new Intent(context, SubmitActivity.class);
+                        intent.putExtra("submitType", SubmitType.comment);
+                        intent.putExtra("selfText", post.getSelftext());
+                        intent.putExtra("edit", true);
+                        intent.putExtra("postName", post.getFullName());
+                        context.startActivity(intent);
+                        return true;
+                    case R.id.action_delete:
+                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (currentAdapter instanceof RedditItemListAdapter) {
+                                    ((RedditItemListAdapter) currentAdapter).remove(post);
+                                }
+                                LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
+                                //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                task.execute();
+                            }
+                        };
+                        new AlertDialog.Builder(context).setMessage("Are you sure you want to delete this post?").setPositiveButton("Yes", listener)
+                                .setNegativeButton("No", null).show();
+                        return true;
+                    case R.id.action_report:
+                        if (MyApplication.currentUser != null) {
+                            ReportDialogFragment dialog = new ReportDialogFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("postId", post.getFullName());
+                            dialog.setArguments(bundle);
+                            dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
+                        }
+                        else {
+                            ToastUtils.showSnackbarOverToast(context, "Must be logged in to report");
+                        }
+                        return true;
                 }
+                return false;
             }
         });
+
+        // update menu items
+        Menu menu = popupMenu.getMenu();
+        // check if post is in synced section
         if(MyApplication.offlineModeEnabled && context instanceof MainActivity) {
             PostListFragment fragment = ((MainActivity) context).getListFragment();
             if(fragment.isOther && fragment.subreddit.equals("synced")) {
-                popupMenu.getMenu().add(Menu.NONE, ACTION_REMOVE_SYNCED, 6, "Remove");
+                menu.findItem(R.id.action_add_to_synced).setTitle("Sync");
             }
         }
+        else {
+            menu.removeItem(R.id.action_remove_from_synced);
+        }
+
+        // check screen size (post menu bar should update depending on screen size)
+        if(viewType != PostViewType.cards && viewType != PostViewType.cardDetails) {
+            menu.removeItem(R.id.action_view_user);
+            if (GeneralUtils.isLargeScreen(context)) {
+                menu.removeItem(R.id.action_open_in_browser);
+            }
+            if (GeneralUtils.isVeryLargeScreen(context)) {
+                menu.removeItem(R.id.action_add_to_synced);
+            }
+        }
+        // check if self post
+        if(!post.isSelf()) {
+            menu.removeItem(R.id.action_select_text);
+        }
+        // check if post belongs to current user
+        final String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
+        if(post.getAuthor().equals(currentUser)) {
+            menu.removeItem(R.id.action_report);
+            if(post.isNSFW()) {
+               menu.findItem(R.id.action_mark_nsfw).setTitle("Unmark NSFW");
+            }
+            if(post.isSpoiler()) {
+                menu.findItem(R.id.action_mark_spoiler).setTitle("Unmark SPOILER");
+            }
+        }
+        else {
+            menu.removeItem(R.id.action_edit);
+            menu.removeItem(R.id.action_delete);
+            menu.removeItem(R.id.action_mark_nsfw);
+            menu.removeItem(R.id.action_mark_spoiler);
+        }
+
+        // show popup menu
         popupMenu.show();
     }
 

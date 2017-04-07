@@ -263,7 +263,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 postViewHolder.bindModel(context, post);
 
                 PostItemListener listener = new PostItemListener(context, post, this, position);
-                PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this);
+                PostItemOptionsListener optionsListener = new PostItemOptionsListener(context, post, this, PostViewType.getViewType(viewTypeValue));
                 postViewHolder.setClickListeners(listener, longListener, optionsListener);
                 postViewHolder.setPostOptionsVisible(selectedPosition == position);
                 break;

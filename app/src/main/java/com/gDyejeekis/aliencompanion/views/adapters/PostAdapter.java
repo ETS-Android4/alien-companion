@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.asynctask.LoadMoreCommentsTask;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
@@ -347,7 +348,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 postViewHolder.bindModel(activity, post);
 
                 PostItemListener listener = new PostItemListener(activity, post, this, position);
-                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this);
+                PostItemOptionsListener optionsListener = new PostItemOptionsListener(activity, post, this, PostViewType.cardDetails);
                 postViewHolder.setClickListeners(listener, null, optionsListener);
 
                 if(postFragment.showFullCommentsButton) {

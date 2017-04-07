@@ -16,6 +16,7 @@ import com.gDyejeekis.aliencompanion.fragments.settings_fragments.SyncSettingsFr
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 /**
  * Created by George on 8/4/2015.
@@ -56,8 +57,8 @@ public class SettingsActivity extends ToolbarActivity {
         PreferenceFragment fragment;
         switch (menuType) {
             case headers:
-                dualPaneEverywhere = MyApplication.getScreenSizeInches(this) > 9;
-                dualPaneInLandScape = MyApplication.getScreenSizeInches(this) > 6.4;
+                dualPaneEverywhere = GeneralUtils.isVeryLargeScreen(this);
+                dualPaneInLandScape = GeneralUtils.isLargeScreen(this);
                 fragment = new HeadersSettingsFragment();
                 break;
             case appearance:

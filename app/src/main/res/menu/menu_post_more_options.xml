@@ -1,19 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<item android:id="@+id/action_copy_link" android:title="Copy link"
-    android:orderInCategory="95" />
-    <item android:id="@+id/action_copy_permalink" android:title="Copy permalink"
-        android:orderInCategory="96" />-->
-    <item android:id="@+id/action_sync" android:title="@string/add_to_synced" android:orderInCategory="5" />
-    <item android:id="@+id/action_copy_to_clipboard" android:title="Copy to clipboard"
-        android:orderInCategory="12" />
+    <item android:id="@+id/action_add_to_synced" android:title="@string/add_to_synced"
+        android:orderInCategory="10" />
+
+    <item android:id="@+id/action_remove_from_synced" android:title="@string/remove"
+        android:orderInCategory="20" />
+
+    <item android:id="@+id/action_open_in_browser" android:title="@string/add_to_synced"
+        android:orderInCategory="50" />
+
     <item android:id="@+id/action_share" android:title="Share"
-        android:orderInCategory="97" />
+        android:orderInCategory="55" />
+
+    <item android:id="@+id/action_copy_to_clipboard" android:title="Copy to clipboard"
+        android:orderInCategory="60" />
+
+    <item android:id="@+id/action_select_text" android:title="Select text"
+        android:orderInCategory="65" />
+
+    <item android:id="@+id/action_view_user" android:title="View user"
+        android:orderInCategory="70" />
+
     <item android:id="@+id/action_view_subreddit" android:title="View subreddit"
-        android:orderInCategory="98" />
-    <!--<item android:id="@+id/action_download_comments" android:title="Download comments"
-        android:orderInCategory="99" />-->
+        android:orderInCategory="75" />
+
+    <item android:id="@+id/action_mark_nsfw" android:title="Mark NSFW"
+        android:orderInCategory="80" />
+
+    <item android:id="@+id/action_mark_spoiler" android:title="Mark SPOILER"
+        android:orderInCategory="85" />
+
+    <item android:id="@+id/action_edit" android:title="@string/edit"
+        android:orderInCategory="90" />
+
+    <item android:id="@+id/action_delete" android:title="@string/delete"
+        android:orderInCategory="95" />
+
     <item android:id="@+id/action_report" android:title="Report"
         android:orderInCategory="100" />
 
