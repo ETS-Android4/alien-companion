@@ -7,7 +7,7 @@
     <item android:id="@+id/action_remove_from_synced" android:title="@string/remove"
         android:orderInCategory="20" />
 
-    <item android:id="@+id/action_open_in_browser" android:title="@string/add_to_synced"
+    <item android:id="@+id/action_open_in_browser" android:title="@string/action_open_browser"
         android:orderInCategory="50" />
 
     <item android:id="@+id/action_share" android:title="Share"
