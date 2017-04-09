@@ -408,8 +408,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                                     ((RedditItemListAdapter) currentAdapter).remove(post);
                                 }
                                 LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
-                                //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                task.execute();
+                                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         };
                         new AlertDialog.Builder(context).setMessage("Are you sure you want to delete this post?").setPositiveButton("Yes", listener)
