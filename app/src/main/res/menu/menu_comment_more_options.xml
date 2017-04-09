@@ -2,33 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_save" android:title="Save"
-        android:orderInCategory="99" />
+        android:orderInCategory="55" />
 
     <item android:id="@+id/action_share" android:title="Share"
-        android:orderInCategory="97" />
+        android:orderInCategory="60" />
 
     <item android:id="@+id/action_open_browser" android:title="Open in browser"
-        android:orderInCategory="98" />
+        android:orderInCategory="65" />
 
     <item android:id="@+id/action_copy_link" android:title="Copy permalink"
-        android:orderInCategory="95" />
+        android:orderInCategory="70" />
 
     <item android:id="@+id/action_copy_text" android:title="Copy text"
-        android:orderInCategory="96" android:enabled="false" />
+        android:orderInCategory="75" android:enabled="false" />
 
     <item android:id="@+id/action_select_text" android:title="Select text"
-        android:orderInCategory="96" />
+        android:orderInCategory="80" />
 
     <item android:id="@+id/action_report" android:title="Report"
-        android:orderInCategory="100" />
+        android:orderInCategory="85" />
 
     <item android:id="@+id/action_edit" android:title="Edit"
-        android:orderInCategory="93" />
+        android:orderInCategory="90" />
 
     <item android:id="@+id/action_delete" android:title="Delete"
-        android:orderInCategory="94" />
+        android:orderInCategory="95" />
 
     <item android:id="@+id/action_disable_inbox_replies" android:title="Disable inbox replies"
-        android:orderInCategory="95" />
+        android:orderInCategory="100" />
 
 </menu>
