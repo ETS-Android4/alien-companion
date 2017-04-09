@@ -128,18 +128,20 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 final CommentViewHolder cvh = (CommentViewHolder) viewHolder;
                 final Comment comment = (Comment) getItemAt(position);
 
-                //modify based on indentation
+                final int leftPadding;
+                // modify based on indentation
                 if (comment.getIndentation() == 0) {
                     cvh.colorBand.setVisibility(View.GONE);
-                    cvh.setPaddingLeft(0);
-                } else {
+                    leftPadding = 0;
+                }
+                else {
                     cvh.colorBand.setVisibility(View.VISIBLE);
                     cvh.setColorBandColor(comment.getIndentation());
-                    int leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (comment.getIndentation() - 1);
-                    cvh.setPaddingLeft(leftPadding);
+                    leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (comment.getIndentation() - 1);
                 }
+                cvh.setPaddingLeft(leftPadding);
 
-                //check if gilded
+                // check if gilded
                 if(comment.getGilded() > 0) {
                     cvh.layoutGilded.setVisibility(View.VISIBLE);
                     cvh.goldCount.setText("x" + String.valueOf(comment.getGilded()));
@@ -148,7 +150,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.layoutGilded.setVisibility(View.GONE);
                 }
 
-                //modify depending on if group or not
+                // modify depending on if group or not
                 if (comment.isGroup()) {
                     cvh.commentHidden.setVisibility(View.VISIBLE);
                     int hiddenComments = comment.getGroupSize();
@@ -166,8 +168,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.commentTextView.setVisibility(View.VISIBLE);
                 }
 
-                //check if current selected position
+                // check if current selected position
                 if (selectedPosition == position) {
+                    //cvh.setPaddingLeft(0);
                     cvh.commentLayout.setBackgroundColor(MyApplication.colorPrimaryLight);
                     cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
                     CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
@@ -177,16 +180,20 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.viewUser.setOnClickListener(listener);
                     cvh.more.setOnClickListener(listener);
                 } else {
-                    //Comment permalink case
-                    if (comment.getIdentifier().equals(postFragment.commentLinkId))
+                    //cvh.setPaddingLeft(leftPadding);
+                    // Comment permalink case
+                    if (comment.getIdentifier().equals(postFragment.commentLinkId)) {
                         cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
-                    else cvh.commentLayout.setBackground(null);
+                    }
+                    else {
+                        cvh.commentLayout.setBackground(null);
+                    }
 
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
                 //cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
 
-                //set listeners
+                // set listeners
                 cvh.rootLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -213,13 +220,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     }
                 });
 
-                //bind comment data
+                // bind comment data
                 cvh.score.setText(Long.toString(comment.getScore()));
                 String ageString = " pts · " + comment.agePrepared;
                 if (comment.getEdited()) ageString += "*";
                 cvh.age.setText(ageString);
 
-                //Author textview
+                // Author textview
                 if (author.equals(comment.getAuthor()) && !author.equals("[deleted]")) {
                     cvh.authorTextView.setTextColor(Color.WHITE);
                     cvh.authorTextView.setBackgroundResource(R.drawable.rounded_corner_blue);
@@ -233,8 +240,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 }
                 else {
-                    //Comment textview
-                    //parse html body using fromHTML
+                    // Comment textview
+                    // parse html body using fromHTML
                     SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                             Html.fromHtml(comment.getBodyHTML(), null, new MyHtmlTagHandler()));
 
@@ -270,7 +277,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 // user logged in
                 if (MyApplication.currentUser != null) {
-                    //check user vote
+                    // check user vote
                     if (comment.getLikes().equals("true")) {
                         cvh.score.setTextColor(upvoteColor);
                         cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
@@ -310,13 +317,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 if (moreComment.getIndentation() == 0) {
                     moreViewHolder.colorBand.setVisibility(View.GONE);
-                    moreViewHolder.setPaddingLeft(0);
+                    leftPadding = 0;
                 } else {
                     moreViewHolder.colorBand.setVisibility(View.VISIBLE);
                     moreViewHolder.setColorBandColor(moreComment.getIndentation());
-                    int leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (moreComment.getIndentation() - 1);
-                    moreViewHolder.setPaddingLeft(leftPadding);
+                    leftPadding = Utils.getPaddingPixels(activity, mPaddingDP) * (moreComment.getIndentation() - 1);
                 }
+                moreViewHolder.setPaddingLeft(leftPadding);
 
                 if(moreComment.isLoadingMore()) {
                     moreViewHolder.rootLayout.setOnClickListener(null);
