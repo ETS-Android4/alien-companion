@@ -3,10 +3,12 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -101,7 +103,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.showToast(context, "Must be logged in to vote");
+                else {
+                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
+                }
                 break;
             case R.id.btn_downvote:
                 if(MyApplication.currentUser!=null) {
@@ -139,7 +143,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         task1.execute();
                     }
                 }
-                else ToastUtils.showToast(context, "Must be logged in to vote");
+                else {
+                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
+                }
                 break;
             case R.id.btn_reply:
                 if(MyApplication.currentUser!=null) {
@@ -148,7 +154,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     intent.putExtra("originalComment", comment);
                     context.startActivity(intent);
                 }
-                else ToastUtils.showToast(context, "Must be logged in to reply");
+                else {
+                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to reply");
+                }
                 break;
             case R.id.btn_view_user:
                 Intent intent = new Intent(context, UserActivity.class);
@@ -163,11 +171,21 @@ public class CommentItemOptionsListener implements View.OnClickListener {
 
     private void showMoreOptionsPopup(View v) {
         PopupMenu popupMenu = new PopupMenu(context, v);
-        if(MyApplication.currentUser!=null && comment.getAuthor().equals(MyApplication.currentUser.getUsername())) popupMenu.inflate(R.menu.menu_comment_more_options_account);
-        else popupMenu.inflate(R.menu.menu_comment_more_options);
+        popupMenu.inflate(R.menu.menu_comment_more_options);
 
+        Menu menu = popupMenu.getMenu();
+        // check if comment belongs to current user
+        if(MyApplication.currentUser!=null && comment.getAuthor().equals(MyApplication.currentUser.getUsername())) {
+            menu.removeItem(R.id.action_report);
+        }
+        else {
+            menu.removeItem(R.id.action_edit);
+            menu.removeItem(R.id.action_delete);
+            menu.removeItem(R.id.action_disable_inbox_replies);
+        }
+
+        // check if comment is saved
         if(comment.isSaved()) {
-            Menu menu = popupMenu.getMenu();
             menu.findItem(R.id.action_save).setTitle("Unsave");
         }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -175,9 +193,18 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_delete:
-                        if(recyclerAdapter instanceof RedditItemListAdapter) ((RedditItemListAdapter) recyclerAdapter).remove(comment);
-                        LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), UserActionType.delete);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(recyclerAdapter instanceof RedditItemListAdapter) {
+                                    ((RedditItemListAdapter) recyclerAdapter).remove(comment);
+                                }
+                                LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), UserActionType.delete);
+                                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        };
+                        new AlertDialog.Builder(context).setMessage("Are you sure you want to delete this comment?").setPositiveButton("Yes", listener)
+                                .setNegativeButton("No", null).show();
                         return true;
                     case R.id.action_edit:
                         Intent intent = new Intent(context, SubmitActivity.class);
@@ -193,6 +220,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         ClipData clip = ClipData.newPlainText("Comment permalink", commentLink);
                         clipboard.setPrimaryClip(clip);
                         return true;
+                    case R.id.action_select_text:
+                        // TODO: 4/9/2017
+                        return true;
                     case R.id.action_copy_text:
                         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                         clip = ClipData.newPlainText("Comment body", comment.getBody()); //TODO: escape markdown/HTML foramtting (maybe)
@@ -205,7 +235,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, commentLink);
                         sendIntent.setType("text/plain");
-                        context.startActivity(Intent.createChooser(sendIntent, "Share comment to.."));
+                        context.startActivity(Intent.createChooser(sendIntent, "Share comment url via.."));
                         return true;
                     case R.id.action_open_browser:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
@@ -224,7 +254,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                                 actionType = UserActionType.save;
                             }
                             if(GeneralUtils.isNetworkAvailable(context)) {
-                                task = new LoadUserActionTask(context, comment, actionType);
+                                LoadUserActionTask task = new LoadUserActionTask(context, comment, actionType);
                                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                             else {
@@ -240,7 +270,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                                 task1.execute();
                             }
                         }
-                        else ToastUtils.showToast(context, "Must be logged in to save");
+                        else {
+                            ToastUtils.showSnackbarOverToast(context, "Must be logged in to save");
+                        }
                         return true;
                     case R.id.action_report:
                         if(MyApplication.currentUser!=null) {
@@ -250,7 +282,9 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                             dialog.setArguments(bundle);
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
                         }
-                        else ToastUtils.showToast(context, "Must be logged in to report");
+                        else {
+                            ToastUtils.showSnackbarOverToast(context, "Must be logged in to report");
+                        }
                         return true;
                     default:
                         return false;
