@@ -42,8 +42,10 @@ public class BrowserActivity extends SwipeBackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        int resource = (loadFromCache) ? R.menu.menu_browser_alt : R.menu.menu_browser;
-        getMenuInflater().inflate(resource, menu);
+        getMenuInflater().inflate(R.menu.menu_browser, menu);
+        if(loadFromCache) {
+            menu.findItem(R.id.action_load_cache).setTitle("Load live version");
+        }
 
         MenuItem goBack = menu.findItem(R.id.action_back);
         goBack.setEnabled(canGoBack);
@@ -52,8 +54,9 @@ public class BrowserActivity extends SwipeBackActivity {
         goForward.setEnabled(canGoForward);
         goForward.setIcon(canGoForward ? R.mipmap.ic_arrow_forward_white_24dp : R.mipmap.ic_arrow_forward_grey_400_24dp);
 
-        if(getIntent().getSerializableExtra("post") == null)
+        if(getIntent().getSerializableExtra("post") == null) {
             menu.findItem(R.id.action_comments).setVisible(false);
+        }
         return true;
     }
 

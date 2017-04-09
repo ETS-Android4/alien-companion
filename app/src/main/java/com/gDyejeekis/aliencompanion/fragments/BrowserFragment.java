@@ -240,11 +240,16 @@ public class BrowserFragment extends Fragment {
                 intent.putExtra("post", post);
                 startActivity(intent);
                 return true;
-            case R.id.action_load_from_cache:
-                loadCachedCopy();
-                return true;
-            case R.id.action_load_live:
-                loadLiveVersion();
+            case R.id.action_load_cache:
+                if(activity instanceof BrowserActivity) {
+                    boolean loadFromCache = ((BrowserActivity) activity).loadFromCache;
+                    if(loadFromCache) {
+                        loadLiveVersion();
+                    }
+                    else {
+                        loadCachedCopy();
+                    }
+                }
                 return true;
             case R.id.action_share_url:
                 GeneralUtils.shareUrl(activity, "Share via..", webView.getUrl());
