@@ -14,7 +14,7 @@
         android:orderInCategory="70" />
 
     <item android:id="@+id/action_copy_text" android:title="Copy text"
-        android:orderInCategory="75" android:enabled="false" />
+        android:orderInCategory="75" android:visible="false" />
 
     <item android:id="@+id/action_select_text" android:title="Select text"
         android:orderInCategory="80" />
