@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/textView_sync_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="(subreddit)"
+        android:textColor="?attr/themeTextColor"
+        android:textSize="18sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal"
+        android:id="@+id/layout_sync_item_progress">
+
+        <ProgressBar
+            android:id="@+id/progressBar_sync_item"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8" />
+
+        <ImageView
+            android:id="@+id/imageView_cancel_sync_item"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_close_red_800_48dp" />
+    </LinearLayout>
+
+</LinearLayout>

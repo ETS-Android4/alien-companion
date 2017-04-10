@@ -123,6 +123,10 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Transparent"/>
         <activity
+            android:name=".activities.SyncQueueActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Sync queue"/>
+        <activity
             android:name=".activities.DebugActivity"
             android:configChanges="orientation|screenSize"
             android:label="Debug"/>
