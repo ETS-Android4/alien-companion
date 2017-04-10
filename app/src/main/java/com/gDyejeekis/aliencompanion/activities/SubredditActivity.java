@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -93,11 +94,23 @@ public class SubredditActivity extends SwipeBackActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        int menuResource;
-        if(MyApplication.offlineModeEnabled) menuResource = R.menu.menu_main_offline;
-        else menuResource = R.menu.menu_main;
-        getMenuInflater().inflate(menuResource, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if(MyApplication.offlineModeEnabled) {
+            menu.removeItem(R.id.action_sort);
+            menu.removeItem(R.id.action_search);
+            menu.removeItem(R.id.action_view_sidebar);
+            menu.removeItem(R.id.action_submit_post);
+        }
+        else {
+            menu.removeItem(R.id.action_view_synced);
+            menu.removeItem(R.id.action_pending_actions);
+            menu.removeItem(R.id.action_clear_synced);
+        }
+
+        if(!BuildConfig.DEBUG) {
+            menu.removeItem(R.id.action_debug);
+        }
         return true;
     }
 

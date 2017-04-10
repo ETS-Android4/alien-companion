@@ -2,6 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
+    <item android:id="@+id/action_view_synced" android:title="@string/view_synced"
+        android:orderInCategory="70" android:icon="@mipmap/ic_list_white_24dp" app:showAsAction="always" />
+
     <item android:id="@+id/action_sort" android:title="@string/action_sort"
         android:icon="@mipmap/ic_sort_white_24dp"
         android:orderInCategory="80" app:showAsAction="always"/>
@@ -11,16 +14,19 @@
         android:orderInCategory="90" app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_search" android:title="@string/action_search"
-        android:orderInCategory="100" app:showAsAction="never" />
-
-    <!--<item android:id="@+id/action_toggle_hidden" android:title="@string/action_show_hidden"
-        android:orderInCategory="101" app:showAsAction="never" android:checkable="true" />-->
+        android:orderInCategory="100" app:showAsAction="ifRoom" android:icon="@drawable/ic_search_white_24dp" />
 
     <item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
-        android:orderInCategory="102" app:showAsAction="never" />
+        android:orderInCategory="101" app:showAsAction="never" />
 
     <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
+        android:orderInCategory="102" app:showAsAction="never" />
+
+    <item android:id="@+id/action_pending_actions" android:title="@string/pending_actions"
         android:orderInCategory="103" app:showAsAction="never" />
+
+    <item android:id="@+id/action_clear_synced" android:title="@string/clear_synced"
+        android:orderInCategory="104" app:showAsAction="never"/>
 
     <item android:id="@+id/action_view_sidebar" android:title="@string/view_sidebar"
         android:orderInCategory="105" app:showAsAction="never" />
@@ -33,4 +39,7 @@
 
     <item android:id="@+id/action_sync_posts" android:title="@string/sync_posts"
         android:orderInCategory="120" app:showAsAction="never" />
+
+    <item android:id="@+id/action_debug" android:title="Debug"
+        android:orderInCategory="150" app:showAsAction="never" />
 </menu>

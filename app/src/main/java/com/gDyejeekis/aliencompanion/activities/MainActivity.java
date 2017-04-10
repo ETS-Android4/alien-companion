@@ -349,10 +349,22 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        int menuResource = (MyApplication.offlineModeEnabled) ? R.menu.menu_main_offline : R.menu.menu_main;
-        getMenuInflater().inflate(menuResource, menu);
-        if(BuildConfig.DEBUG) {
-            menu.add(Menu.NONE, DebugActivity.MENU_ITEM_ID, 999, "Debug");
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if(MyApplication.offlineModeEnabled) {
+            menu.removeItem(R.id.action_sort);
+            menu.removeItem(R.id.action_search);
+            menu.removeItem(R.id.action_view_sidebar);
+            menu.removeItem(R.id.action_submit_post);
+        }
+        else {
+            menu.removeItem(R.id.action_view_synced);
+            menu.removeItem(R.id.action_pending_actions);
+            menu.removeItem(R.id.action_clear_synced);
+        }
+
+        if(!BuildConfig.DEBUG) {
+            menu.removeItem(R.id.action_debug);
         }
         return true;
     }
