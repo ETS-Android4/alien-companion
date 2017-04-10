@@ -25,8 +25,6 @@ public class DebugActivity extends ToolbarActivity {
 
     public static final String TAG = "DebugActivity";
 
-    public static final int MENU_ITEM_ID = TAG.hashCode();
-
     public static final String[] URL_TESTS_HARDCODED = {"http://a.pomf.se/njqqwq.webm", "http://web.archive.org/web/20150612051901/http://a.pomf.se/dwssfz.webm", "http://a.pomf.se/dwssfz.webm"};
 
     @Override
