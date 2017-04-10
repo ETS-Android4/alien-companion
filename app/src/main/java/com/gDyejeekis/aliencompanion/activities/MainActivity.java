@@ -390,6 +390,7 @@ public class MainActivity extends ToolbarActivity {
 
         if(item.getItemId() == R.id.action_debug) {
             startActivity(new Intent(this, DebugActivity.class));
+            return true;
         }
 
         return drawerToggle.onOptionsItemSelected(item);
