@@ -371,7 +371,7 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(dualPaneActive) {
+        if(dualPaneActive && getPostFragment()!=null) {
             switch (item.getItemId()) {
                 case R.id.action_sort:
                     MyApplication.actionSort = true;
@@ -388,9 +388,8 @@ public class MainActivity extends ToolbarActivity {
             }
         }
 
-        if(item.getItemId() == DebugActivity.MENU_ITEM_ID) {
+        if(item.getItemId() == R.id.action_debug) {
             startActivity(new Intent(this, DebugActivity.class));
-            return true;
         }
 
         return drawerToggle.onOptionsItemSelected(item);

@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -116,7 +117,7 @@ public class SubredditActivity extends SwipeBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(MainActivity.dualPaneActive) {
+        if(MainActivity.dualPaneActive && getPostFragment()!= null) {
             switch (item.getItemId()) {
                 case R.id.action_sort:
                     MyApplication.actionSort = true;
@@ -133,9 +134,11 @@ public class SubredditActivity extends SwipeBackActivity {
             }
         }
         switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.action_debug:
+                startActivity(new Intent(this, DebugActivity.class));
                 return true;
             default:
                 return false;
