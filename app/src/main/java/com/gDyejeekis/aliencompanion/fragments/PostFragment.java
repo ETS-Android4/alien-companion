@@ -64,6 +64,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private ToolbarActivity activity;
     public Submission post;
     public CommentSort commentSort;
+    public CommentSort tempSort;
     public ProgressBar progressBar;
     private boolean loadFromList;
     public boolean noResponseObject; //TODO: check this variable
@@ -318,37 +319,29 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_sort_comments_top:
-                        setCommentSort(CommentSort.TOP);
-                        refreshPostAndComments();
+                        refreshPostAndComments(CommentSort.TOP);
                         return true;
                     case R.id.action_sort_comments_best:
-                        setCommentSort(CommentSort.BEST);
-                        refreshPostAndComments();
+                        refreshPostAndComments(CommentSort.BEST);
                         return true;
                     case R.id.action_sort_comments_new:
-                        setCommentSort(CommentSort.NEW);
-                        refreshPostAndComments();
+                        refreshPostAndComments(CommentSort.NEW);
                         return true;
                     case R.id.action_sort_comments_old:
-                        setCommentSort(CommentSort.OLD);
-                        refreshPostAndComments();
+                        refreshPostAndComments(CommentSort.OLD);
                         return true;
                     case R.id.action_sort_comments_controversial:
-                        setCommentSort(CommentSort.CONTROVERSIAL);
-                        refreshPostAndComments();
+                        refreshPostAndComments(CommentSort.CONTROVERSIAL);
                         return true;
                     case R.id.action_sort_comments_qa:
-                        setCommentSort(CommentSort.QA);
-                        refreshPostAndComments();
+                        refreshPostAndComments(CommentSort.QA);
                         return true;
-                    //case R.id.action_sort_comments_random:
-                    //    setCommentSort(CommentSort.RANDOM);
-                    //    refreshPostAndComments();
-                    //    return true;
-                    //case R.id.action_sort_comments_confidence:
-                    //    setCommentSort(CommentSort.CONFIDENCE);
-                    //    refreshPostAndComments();
-                    //    return true;
+                    case R.id.action_sort_comments_random:
+                        refreshPostAndComments(CommentSort.RANDOM);
+                        return true;
+                    case R.id.action_sort_comments_confidence:
+                        refreshPostAndComments(CommentSort.CONFIDENCE);
+                        return true;
                     default:
                         return false;
                 }
@@ -552,6 +545,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         refreshPostAndComments();
     }
 
+    public void refreshPostAndComments(CommentSort sort) {
+        this.tempSort = sort;
+        refreshPostAndComments();
+    }
+
     public void refreshPostAndComments() {
         postAdapter.selectedPosition = -1;
         dismissSnackbar();
@@ -561,7 +559,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         commentsLoaded = false;
         //postAdapter.commentsRefreshed(post, new ArrayList<Comment>());
 
-        setActionBarSubtitle();
+        //setActionBarSubtitle();
         task = new LoadCommentsTask(activity, this, false);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

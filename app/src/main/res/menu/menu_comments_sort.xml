@@ -13,8 +13,9 @@
         android:orderInCategory="5" />
     <item android:id="@+id/action_sort_comments_qa" android:title="@string/sort_comments_qa"
         android:orderInCategory="6" />
-    <!-- <item android:id="@+id/action_sort_comments_random" android:title="@string/sort_comments_random"
-        android:orderInCategory="6" /> -->
-    <!-- <item android:id="@+id/action_sort_comments_confidence" android:title="@string/sort_comments_confidence"
-        android:orderInCategory="7" /> -->
+    <item android:id="@+id/action_sort_comments_random" android:title="@string/sort_comments_random"
+        android:orderInCategory="7" android:visible="false" />
+    <item android:id="@+id/action_sort_comments_confidence" android:title="@string/sort_comments_confidence"
+        android:orderInCategory="8" android:visible="false" />
+
 </menu>

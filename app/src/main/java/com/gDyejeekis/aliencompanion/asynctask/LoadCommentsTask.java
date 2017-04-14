@@ -152,6 +152,8 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 postFragment.postAdapter.commentsRefreshed(postFragment.post, comments);
                 if(!initialLoad) {
                     postFragment.mLayoutManager.scrollToPosition(0);
+                    postFragment.setCommentSort(postFragment.tempSort);
+                    postFragment.setActionBarSubtitle();
                 }
             }
         } catch (NullPointerException e) {
