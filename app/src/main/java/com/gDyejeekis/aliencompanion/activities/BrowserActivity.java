@@ -64,7 +64,8 @@ public class BrowserActivity extends SwipeBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
             //NavUtils.navigateUpFromSameTask(this);
-            onBackPressed();
+            //onBackPressed();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
