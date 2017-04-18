@@ -92,4 +92,9 @@ public class ComposeMessageFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public boolean displayConfirmDialog() {
+        return !subjectField.getText().toString().isEmpty() || !messageField.getText().toString().isEmpty();
+    }
+
 }

@@ -96,6 +96,10 @@ public class SubmitActivity extends ToolbarActivity implements DialogInterface.O
             message = "Discard post?";
             showDialog = ((SubmitTextFragment) fragment).displayConfirmDialog();
         }
+        else if(fragment instanceof ComposeMessageFragment) {
+            message = "Discard message?";
+            showDialog = ((ComposeMessageFragment) fragment).displayConfirmDialog();
+        }
 
         if(showDialog) {
             new AlertDialog.Builder(this).setMessage(message).setPositiveButton("Yes", this).setNegativeButton("No", null).show();
