@@ -304,7 +304,7 @@ public class MainActivity extends ToolbarActivity {
             listFragment.redrawList();
         }
 
-        if(MyApplication.currentBaseTheme < MyApplication.DARK_THEME && MyApplication.colorPrimaryChanged /*MyApplication.currentColor != MyApplication.colorPrimary*/) {
+        if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < MyApplication.DARK_THEME)) {
             MyApplication.colorPrimaryChanged = false;
             MyApplication.currentColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;

@@ -14,7 +14,7 @@ import petrov.kristiyan.colorpicker.ColorPicker;
 /**
  * Created by George on 9/10/2016.
  */
-public class AppearanceSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+public class AppearanceSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +25,9 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
 
         Preference colorSecondaryPref = findPreference("colorSecondary");
         colorSecondaryPref.setOnPreferenceClickListener(this);
+
+        Preference colorInDarkThemesPref = findPreference("colorDarkTheme");
+        colorInDarkThemesPref.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -75,6 +78,15 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
                 }
             });
             colorPicker.show();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if(preference.getKey().equals("colorDarkTheme")) {
+            MyApplication.themeFieldsInitialized = false;
             return true;
         }
         return false;

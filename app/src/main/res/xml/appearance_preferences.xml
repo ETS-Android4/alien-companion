@@ -20,6 +20,12 @@
         android:title="Primary color"
         android:summary="Does not apply to dark themes"/>
 
+    <CheckBoxPreference
+        android:key="colorDarkTheme"
+        android:title="Use primary color in dark themes"
+        android:summary="Requires app restart to take effect"
+        android:defaultValue="false" />
+
     <Preference
         android:key="colorSecondary"
         android:title="Secondary color"/>

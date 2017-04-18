@@ -108,6 +108,7 @@ public class MyApplication extends Application {
     public static int currentFontStyle;
     public static int currentFontFamily;
     public static int colorPrimary;
+    public static boolean colorInDarkThemes;
     public static int colorPrimaryDark;
     public static int colorPrimaryLight;
     public static int colorSecondary;
@@ -236,13 +237,13 @@ public class MyApplication extends Application {
         int[] primaryColors = getPrimaryColors(context);
         int[] primaryDarkColors = getPrimaryDarkColors(context);
         int[] primaryLightColors = getPrimarLightColors(context);
+        int colorIndex = getCurrentColorIndex(primaryColors);
         switch(currentBaseTheme) {
             case LIGHT_THEME:
                 nightThemeEnabled = false;
                 currentColor = colorPrimary;
-                int index = getCurrentColorIndex(primaryColors);
-                colorPrimaryDark = primaryDarkColors[index];
-                colorPrimaryLight = primaryLightColors[index];
+                colorPrimaryDark = primaryDarkColors[colorIndex];
+                colorPrimaryLight = primaryLightColors[colorIndex];
                 textColor = Color.BLACK;
                 textHintColor = textHintLight;
                 linkColor = MyApplication.colorPrimary;
@@ -254,9 +255,8 @@ public class MyApplication extends Application {
             case MATERIAL_BLUE_THEME:
                 nightThemeEnabled = true;
                 currentColor = colorPrimary;
-                index = getCurrentColorIndex(primaryColors);
-                colorPrimaryDark = primaryDarkColors[index];
-                colorPrimaryLight = primaryLightColors[index];
+                colorPrimaryDark = primaryDarkColors[colorIndex];
+                colorPrimaryLight = primaryLightColors[colorIndex];
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
@@ -268,9 +268,8 @@ public class MyApplication extends Application {
             case MATERIAL_GREY_THEME:
                 nightThemeEnabled = true;
                 currentColor = colorPrimary;
-                index = getCurrentColorIndex(primaryColors);
-                colorPrimaryDark = primaryDarkColors[index];
-                colorPrimaryLight = primaryLightColors[index];
+                colorPrimaryDark = primaryDarkColors[colorIndex];
+                colorPrimaryLight = primaryLightColors[colorIndex];
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
                 linkColor = MyApplication.colorPrimary;
@@ -281,12 +280,12 @@ public class MyApplication extends Application {
                 break;
             case DARK_THEME:
                 nightThemeEnabled = true;
-                currentColor = context.getResources().getColor(R.color.darkPrimary);
-                colorPrimaryDark = Color.BLACK;
-                colorPrimaryLight = context.getResources().getColor(R.color.darkPrimaryLight);
+                currentColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.darkPrimary);
+                colorPrimaryDark = colorInDarkThemes ? primaryDarkColors[colorIndex] : Color.BLACK;
+                colorPrimaryLight = colorInDarkThemes ? primaryLightColors[colorIndex] : context.getResources().getColor(R.color.darkPrimaryLight);
                 textColor = Color.WHITE;
                 textHintColor = textHintDark;
-                linkColor = context.getResources().getColor(R.color.darkLinkText);
+                linkColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.darkLinkText);
                 textColorStickied = context.getResources().getColor(R.color.darkStickiedText);
                 textColorStickiedClicked = context.getResources().getColor(R.color.darkStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
@@ -295,12 +294,12 @@ public class MyApplication extends Application {
                 break;
             case DARK_THEME_LOW_CONTRAST:
                 nightThemeEnabled = true;
-                currentColor = context.getResources().getColor(R.color.darkPrimary);
-                colorPrimaryDark = Color.BLACK;
-                colorPrimaryLight = context.getResources().getColor(R.color.darkPrimaryLight);
+                currentColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.darkPrimary);
+                colorPrimaryDark = colorInDarkThemes ? primaryDarkColors[colorIndex] : Color.BLACK;
+                colorPrimaryLight = colorInDarkThemes ? primaryLightColors[colorIndex] : context.getResources().getColor(R.color.darkPrimaryLight);
                 textColor = context.getResources().getColor(R.color.lowContrastText);
                 textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
-                linkColor = context.getResources().getColor(R.color.lowContrastLinkText);
+                linkColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.lowContrastLinkText);
                 textColorStickied = context.getResources().getColor(R.color.lowContrastStickiedText);
                 textColorStickiedClicked = context.getResources().getColor(R.color.lowContrastStickiedClickedText);
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.darkCommentHighlight);
@@ -481,6 +480,7 @@ public class MyApplication extends Application {
                 fontFamily = R.style.FontFamily_SansSerifCondensedLight;
                 break;
         }
+        colorInDarkThemes = prefs.getBoolean("colorDarkTheme", false);
         colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#00BCD4"));
         colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF5252"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
