@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -77,9 +78,9 @@ public class AddSubredditDialogFragment extends ScalableDialogFragment implement
             String subreddit = subredditField.getText().toString();
             subreddit = subreddit.replaceAll("\\s","");
             if(!subreddit.equals("")) {
-                dismiss();
-                //subreddit = subreddit.toLowerCase();
-                //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
+                subredditField.setText("");
+                subredditField.setHint("subreddit");
+                subredditField.setHintTextColor(MyApplication.textHintColor);
 
                 if(subscribeCheckbox.isChecked()) {
                     LoadUserActionTask task = new LoadUserActionTask(activity, UserActionType.subscribe, subreddit);
@@ -89,8 +90,8 @@ public class AddSubredditDialogFragment extends ScalableDialogFragment implement
             }
             else {
                 subredditField.setText("");
-                subredditField.setHint(R.string.enter_subreddit);
-                subredditField.setHintTextColor(getResources().getColor(R.color.red));
+                subredditField.setHint("enter subreddit");
+                subredditField.setHintTextColor(Color.RED);
             }
         }
     }
