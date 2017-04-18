@@ -46,26 +46,21 @@ public class PostGalleryViewHolder extends PostViewHolder {
     @Override
     public void bindModel(Context context, Submission post) {
         Thumbnail thumbnailObject = post.getThumbnailObject() == null ? new Thumbnail() : post.getThumbnailObject();
+        // nsfw post (nsfw thumbnails disabled)
         if(post.isNSFW() && !MyApplication.showNSFWpreview) {
             postImage.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
-            SpannableString nsfwSpan = new SpannableString("NSFW");
+            String text = "NSFW";
+            if(post.isSpoiler()) {
+                text += "\nSPOILER";
+            }
+            SpannableString nsfwSpan = new SpannableString(text);
             int style = post.isClicked() ? R.style.nsfwLabelGalleryClicked : R.style.nsfwLabelGallery;
             nsfwSpan.setSpan(new TextAppearanceSpan(context, style), 0, 4, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
             textView.setText(nsfwSpan);
         }
-        else if(post.isSelf()) {
-            postImage.setVisibility(View.GONE);
-            textView.setVisibility(View.VISIBLE);
-            textView.setText("SELF");
-            if(post.isClicked()) {
-                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
-            }
-            else {
-                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : textColor);
-            }
-        }
-        else if(thumbnailObject.hasThumbnail()) {
+        // has thumbnail
+        else if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
             textView.setVisibility(View.GONE);
             postImage.setVisibility(View.VISIBLE);
             try {
@@ -84,11 +79,21 @@ public class PostGalleryViewHolder extends PostViewHolder {
                 e.printStackTrace();
             }
         }
+        // no thumbnail
         else {
-            textView.setVisibility(View.GONE);
-            postImage.setVisibility(View.VISIBLE);
-            postImage.setImageResource(post.isClicked() ? postLinkClickedResource : postLinkResource);
-            postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            postImage.setVisibility(View.GONE);
+            textView.setVisibility(View.VISIBLE);
+            String text = post.isSelf() ? "SELF" : "LINK";
+            if(post.isSpoiler()) {
+                text += "\nSPOILER";
+            }
+            textView.setText(text);
+            if(post.isClicked()) {
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
+            }
+            else {
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : textColor);
+            }
         }
     }
 

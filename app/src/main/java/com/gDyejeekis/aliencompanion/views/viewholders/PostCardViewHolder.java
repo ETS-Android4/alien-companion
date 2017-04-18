@@ -114,7 +114,11 @@ public class PostCardViewHolder extends PostViewHolder  {
             // parse html string using fromHtml()
             else {
                 try {
-                    if(showDetails) {
+                    if(post.getSelftextHTML().trim().isEmpty()) {
+                        layoutSelfText.setVisibility(View.GONE);
+                    }
+                    else if(showDetails) {
+                        layoutSelfText.setVisibility(View.VISIBLE);
                         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         stringBuilder = SpanUtils.modifyURLSpan(context, stringBuilder);
                         if(post.getHighlightText()!=null) {
@@ -124,17 +128,23 @@ public class PostCardViewHolder extends PostViewHolder  {
                         selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
                     }
                     else {
-                        String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
-                        if (text.length() > 200) text = text.substring(0, 200) + " ...";
-                        selfText.setText(text);
+                        if(post.isSpoiler()) {
+                            layoutSelfText.setVisibility(View.GONE);
+                        }
+                        else {
+                            layoutSelfText.setVisibility(View.VISIBLE);
+                            String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
+                            if (text.length() > 200) text = text.substring(0, 200) + " ...";
+                            selfText.setText(text);
+                        }
                     }
-                    layoutSelfText.setVisibility(View.VISIBLE);
                 } catch (NullPointerException  e) {
                     layoutSelfText.setVisibility(View.GONE);
                 }
             }
         }
-        else if(post.hasImageButton && thumbnailObject.hasThumbnail()) {
+        // case post has large thumbnail
+        else if(post.hasImageButton && thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
             layoutSelfText.setVisibility(View.GONE);
             linkButton.setVisibility(View.GONE);
             imageButton.setVisibility(View.VISIBLE);
@@ -149,7 +159,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             domain2.setText(post.getDomain());
             domain2.setTextColor(MyApplication.linkColor);
             fullUrl.setText(post.getURL());
-            if(thumbnailObject.hasThumbnail()) {
+            if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
                 if(post.isNSFW() && !MyApplication.showNSFWpreview) {
                     postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 }

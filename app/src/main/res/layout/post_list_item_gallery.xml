@@ -14,12 +14,14 @@
         android:id="@+id/imageView_post_image"/>
 
     <TextView
-        android:text="TEXT"
+        android:id="@+id/textView_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/textView_gallery"
-        android:textStyle="normal|bold"
-        android:textSize="?attr/font_large"
+        android:gravity="center"
+        android:text="TEXT"
+        android:textAlignment="center"
         android:textColor="?attr/themeTextHintColor"
-        android:gravity="center"/>
+        android:textSize="?attr/font_large"
+        android:textStyle="normal|bold" />
+
 </LinearLayout>

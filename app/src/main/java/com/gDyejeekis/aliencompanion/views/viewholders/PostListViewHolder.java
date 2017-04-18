@@ -84,7 +84,7 @@ public class PostListViewHolder extends PostViewHolder {
         }
         // set post thumbnail
         Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
-        if(thumbnailObject.hasThumbnail()) {
+        if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
             if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                 //postImage.setImageResource(R.drawable.nsfw2);
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));

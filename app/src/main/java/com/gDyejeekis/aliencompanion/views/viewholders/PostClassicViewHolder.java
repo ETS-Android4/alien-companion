@@ -96,7 +96,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
-            else if(thumbnailObject.hasThumbnail()) {
+            else if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
                 postImage.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 3f));
                 layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 12f));
                 //postImage.setBackground(null);
