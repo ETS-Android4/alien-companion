@@ -89,7 +89,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
                 postImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 postImage.setImageResource(R.drawable.nsfw2);
             }
-            else if(postThumbnail.hasThumbnail()) {
+            else if(postThumbnail.hasThumbnail() && !post.isSpoiler()) {
                 linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 2f));
                 linkButton.setPadding(10, 10, 0, 10);
                 linkButton.setBackground(null);
