@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.views.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.activities.EditSyncProfileActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileScheduleDialogFragment;
@@ -23,8 +25,10 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dia
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -96,14 +100,8 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
     private void loadSyncProfiles() {
         List<SyncProfile> savedProfiles = null;
         try {
-            FileInputStream fis = activity.openFileInput(MyApplication.SYNC_PROFILES_FILENAME);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            savedProfiles = (List<SyncProfile>) is.readObject();
-            is.close();
-            fis.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+            savedProfiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(activity.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
+        } catch (Exception e) {}
         if(savedProfiles != null) {
             this.profiles = savedProfiles;
         }
@@ -369,22 +367,15 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter implements View
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
-                        case R.id.action_edi_subreddits:
-                            activity.getAdapter().showSubredditsDialog(position, false);
-                            return true;
-                        case R.id.action_edit_sync_options:
-                            activity.getAdapter().showSyncOptionsDialog(position);
-                            return true;
-                        case R.id.edit_schedule:
-                            activity.getAdapter().showScheduleDialog(position, false);
-                            return true;
-                        case R.id.action_rename_profile:
-                            activity.getAdapter().renamingProfilePosition = position;
-                            activity.getAdapter().renameProfileAt(position);
+                        case R.id.action_edit_profile:
+                            Intent intent = new Intent(activity, EditSyncProfileActivity.class);
+                            intent.putExtra("profile", profile);
+                            activity.startActivity(intent);
                             return true;
                         case R.id.action_delete_profile:
-                            //activity.getAdapter().deleteProfileAt(position);
-                            activity.getAdapter().deleteProfile(profile);
+                            if(profile.delete(activity)) {
+                                // TODO: 4/22/2017 remove profile from list
+                            }
                             return true;
                         case R.id.action_sync_now:
                             ToastUtils.showToast(activity, profile.getName() + " added to sync queue");

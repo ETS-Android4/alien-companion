@@ -132,18 +132,29 @@ public class SyncProfileOptions implements Serializable {
 
     private boolean syncWebpages;
 
+    public int getSyncCommentLinksCount() {
+        return syncCommentLinksCount;
+    }
+
+    public void setSyncCommentLinksCount(int syncCommentLinksCount) {
+        this.syncCommentLinksCount = syncCommentLinksCount;
+    }
+
+    private int syncCommentLinksCount;
+
     @Override
     public boolean equals(Object obj) {
         SyncProfileOptions other = (SyncProfileOptions) obj;
         if(syncPostCount != other.getSyncPostCount()) return false;
-        else if(syncCommentCount != other.getSyncCommentCount()) return false;
-        else if(syncCommentDepth != other.getSyncCommentDepth()) return false;
-        else if(syncCommentSort != other.getSyncCommentSort()) return false;
-        else if(syncThumbs != other.isSyncThumbs()) return false;
-        else if(syncImages != other.isSyncImages()) return false;
-        else if(syncVideo != other.isSyncVideo()) return false;
-        else if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
-        else if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
+        if(syncCommentCount != other.getSyncCommentCount()) return false;
+        if(syncCommentDepth != other.getSyncCommentDepth()) return false;
+        if(syncCommentSort != other.getSyncCommentSort()) return false;
+        if(syncThumbs != other.isSyncThumbs()) return false;
+        if(syncImages != other.isSyncImages()) return false;
+        if(syncVideo != other.isSyncVideo()) return false;
+        if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
+        if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
+        if(syncCommentLinksCount != other.getSyncCommentLinksCount()) return false;
 
         return true;
     }

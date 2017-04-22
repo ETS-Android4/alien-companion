@@ -115,6 +115,10 @@
             android:configChanges="orientation|screenSize"
             android:label="Sync profiles"/>
         <activity
+            android:name=".activities.EditSyncProfileActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Edit sync profile"/>
+        <activity
             android:name=".activities.PendingUserActionsActivity"
             android:configChanges="orientation|screenSize"
             android:label="Pending actions"/>
