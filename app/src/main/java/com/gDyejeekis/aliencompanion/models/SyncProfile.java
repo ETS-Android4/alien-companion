@@ -117,13 +117,8 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    public void removeAllSchedules(Context context) {
-        unscheduleAllPendingIntents(context);
-        schedules.clear();
-    }
-
-    public void removeSchedule(Context context, SyncSchedule schedule) {
-        unschedulePendingIntents(context, schedule);
+    public void removeSchedule(SyncSchedule schedule) {
+        //unschedulePendingIntents(context, schedule);
         schedules.remove(schedule);
     }
 
@@ -137,13 +132,19 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    private void unscheduleAllPendingIntents(Context context) {
+    public void unscheduleAllPendingIntents(Context context) {
         for(SyncSchedule schedule : schedules) {
             unschedulePendingIntents(context, schedule);
         }
     }
 
-    private void unschedulePendingIntents(Context context, SyncSchedule schedule) {
+    public void unschedulePendingIntents(Context context, List<SyncSchedule> schedules) {
+        for(SyncSchedule schedule : schedules) {
+            unschedulePendingIntents(context, schedule);
+        }
+    }
+
+    public void unschedulePendingIntents(Context context, SyncSchedule schedule) {
         Log.d(TAG, name + " (id: " + profileId + ") - Unscheduling sync services...");
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = getSyncIntent(context);
@@ -214,8 +215,8 @@ public class SyncProfile implements Serializable {
             }
             GeneralUtils.writeObjectToFile(profiles, file);
         } catch (Exception  e) {
-            ToastUtils.showToast(context, "Error saving profile changes");
-            Log.e(TAG, "Error saving changes for " + name + " (id: " + profileId + ")");
+            ToastUtils.showToast(context, "Error saving profile");
+            Log.e(TAG, "Error saving profile " + name + " (id: " + profileId + ")");
             e.printStackTrace();
         }
     }

@@ -30,11 +30,13 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private SyncProfile profile;
     private SyncProfileOptions syncOptions;
 
+    // TODO: 4/23/2017 should probably asssign from resource arrays
     private static final String[] postCountOptions = {"10", "25", "50", "75", "100"};
     private static final String[] commentCountOptions = {"50", "100", "200", "400", "600"};
     private static final String[] commentDepthOptions = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     private static final String[] commentSortOptions = {CommentSort.TOP.value().toUpperCase(), CommentSort.BEST.value().toUpperCase(), CommentSort.NEW.value().toUpperCase(),
             CommentSort.OLD.value().toUpperCase(), CommentSort.CONTROVERSIAL.value().toUpperCase()};
+    private static final String[] commentLinkCountOptions = {"0", "5", "10", "25", "50"};
 
     private int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
 
@@ -44,6 +46,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private Spinner syncCommentDepthSpinner;
     private Spinner syncCommentSortSpinner;
     private Spinner albumImageLimitSpinner;
+    private Spinner commentLinkCountSpinner;
     private CheckBox syncThumbsCheckbox;
     private CheckBox syncImagesCheckbox;
     private CheckBox syncVideoCheckbox;
@@ -94,6 +97,11 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(syncOptions.getAlbumSyncLimit())));
         albumImageLimitSpinner.setEnabled(!useGlobal);
 
+        commentLinkCountSpinner = (Spinner) view.findViewById(R.id.spinner_syncCommentLinks);
+        commentLinkCountSpinner.setAdapter(new ArrayAdapter<>(getActivity(), dropdownResource, commentLinkCountOptions));
+        commentLinkCountSpinner.setSelection(Arrays.asList(commentLinkCountOptions).indexOf(String.valueOf(syncOptions.getSyncCommentLinkCount())));
+        commentLinkCountSpinner.setEnabled(!useGlobal);
+
         syncThumbsCheckbox = (CheckBox) view.findViewById(R.id.checkBox_syncThumbs);
         syncThumbsCheckbox.setChecked(syncOptions.isSyncThumbs());
         syncThumbsCheckbox.setEnabled(!useGlobal);
@@ -136,6 +144,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncOptions.setSyncCommentDepth(Integer.valueOf((String) syncCommentDepthSpinner.getSelectedItem()));
             syncOptions.setSyncCommentSort(CommentSort.valueOf((String) syncCommentSortSpinner.getSelectedItem()));
             syncOptions.setAlbumSyncLimit(Integer.valueOf((String) albumImageLimitSpinner.getSelectedItem()));
+            syncOptions.setSyncCommentLinkCount(Integer.valueOf((String) commentLinkCountSpinner.getSelectedItem()));
             syncOptions.setSyncThumbs(syncThumbsCheckbox.isChecked());
             syncOptions.setSyncImages(syncImagesCheckbox.isChecked());
             syncOptions.setSyncVideo(syncVideoCheckbox.isChecked());
@@ -143,14 +152,14 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncOptions.setSyncOverWifiOnly(syncWifiOnlyCheckbox.isChecked());
         }
 
-        if(profile.isUseGlobalSyncOptions() != useGlobalSwitch.isChecked()) {
-            ((SyncProfilesActivity) getActivity()).changesMade = true;
-        }
-        else if(profile.getSyncOptions()!=null) {
-            if(!profile.getSyncOptions().equals(syncOptions)) {
-                ((SyncProfilesActivity) getActivity()).changesMade = true;
-            }
-        }
+        //if(profile.isUseGlobalSyncOptions() != useGlobalSwitch.isChecked()) {
+        //    ((SyncProfilesActivity) getActivity()).changesMade = true;
+        //}
+        //else if(profile.getSyncOptions()!=null) {
+        //    if(!profile.getSyncOptions().equals(syncOptions)) {
+        //        ((SyncProfilesActivity) getActivity()).changesMade = true;
+        //    }
+        //}
 
         profile.setUseGlobalSyncOptions(useGlobalSwitch.isChecked());
         profile.setSyncOptions(syncOptions);
@@ -164,6 +173,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncCommentDepthSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncCommentDepth)));
             syncCommentSortSpinner.setSelection(Arrays.asList(commentSortOptions).indexOf(MyApplication.syncCommentSort.value().toUpperCase()));
             albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncAlbumImgCount)));
+            commentLinkCountSpinner.setSelection(Arrays.asList(commentLinkCountOptions).indexOf(String.valueOf(0))); // TODO: 4/23/2017
             syncThumbsCheckbox.setChecked(MyApplication.syncThumbnails);
             syncImagesCheckbox.setChecked(MyApplication.syncImages);
             syncVideoCheckbox.setChecked(MyApplication.syncVideo);
@@ -175,6 +185,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncCommentDepthSpinner.setEnabled(!b);
         syncCommentSortSpinner.setEnabled(!b);
         albumImageLimitSpinner.setEnabled(!b);
+        commentLinkCountSpinner.setEnabled(!b);
         syncThumbsCheckbox.setEnabled(!b);
         syncImagesCheckbox.setEnabled(!b);
         syncVideoCheckbox.setEnabled(!b);

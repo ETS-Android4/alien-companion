@@ -132,15 +132,15 @@ public class SyncProfileOptions implements Serializable {
 
     private boolean syncWebpages;
 
-    public int getSyncCommentLinksCount() {
-        return syncCommentLinksCount;
+    public int getSyncCommentLinkCount() {
+        return syncCommentLinkCount;
     }
 
-    public void setSyncCommentLinksCount(int syncCommentLinksCount) {
-        this.syncCommentLinksCount = syncCommentLinksCount;
+    public void setSyncCommentLinkCount(int syncCommentLinkCount) {
+        this.syncCommentLinkCount = syncCommentLinkCount;
     }
 
-    private int syncCommentLinksCount;
+    private int syncCommentLinkCount;
 
     @Override
     public boolean equals(Object obj) {
@@ -154,7 +154,7 @@ public class SyncProfileOptions implements Serializable {
         if(syncVideo != other.isSyncVideo()) return false;
         if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
         if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
-        if(syncCommentLinksCount != other.getSyncCommentLinksCount()) return false;
+        if(syncCommentLinkCount != other.getSyncCommentLinkCount()) return false;
 
         return true;
     }
