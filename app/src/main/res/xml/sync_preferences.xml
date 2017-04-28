@@ -65,6 +65,14 @@
         android:title="Sync post articles"
         android:defaultValue="false" />
 
+    <ListPreference
+        android:key="syncCommentLinks"
+        android:title="Sync comment links"
+        android:summary="Maximum number of links in comments per post that get synced"
+        android:entries="@array/syncCommentLinksEntries"
+        android:entryValues="@array/syncCommentLinksValues"
+        android:defaultValue="0"/>
+
     <CheckBoxPreference
         android:key="syncWifi"
         android:title="Sync over WiFi only"

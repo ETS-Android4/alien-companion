@@ -142,6 +142,7 @@ public class MyApplication extends Application {
     public static int syncPostCount;
     public static int syncCommentCount;
     public static int syncCommentDepth;
+    public static int syncCommentLinkCount;
     public static int currentPostListView;
     public static CommentSort defaultCommentSort;
     public static CommentSort syncCommentSort;
@@ -532,6 +533,7 @@ public class MyApplication extends Application {
         syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
         syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
         syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "5"));
+        syncCommentLinkCount = Integer.parseInt(prefs.getString("syncCommentLinks", "0"));
         syncThumbnails = prefs.getBoolean("syncThumb", false);
         index = Integer.parseInt(prefs.getString("syncCommentSort", "1"));
         switch (index) {
