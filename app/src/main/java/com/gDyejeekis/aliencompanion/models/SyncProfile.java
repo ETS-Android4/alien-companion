@@ -117,19 +117,19 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    public void removeSchedule(SyncSchedule schedule) {
-        //unschedulePendingIntents(context, schedule);
-        schedules.remove(schedule);
+    public void addSchedule(SyncSchedule schedule) {
+        if(schedules == null) {
+            schedules = new ArrayList<>();
+        }
+        schedules.add(schedule);
     }
 
-    public void setActive(Context context, boolean flag) {
+    public boolean removeSchedule(SyncSchedule schedule) {
+        return schedules != null && schedules.remove(schedule);
+    }
+
+    public void setActive(boolean flag) {
         isActive = flag;
-        if(flag) {
-            scheduleAllPendingIntents(context);
-        }
-        else {
-            unscheduleAllPendingIntents(context);
-        }
     }
 
     public void unscheduleAllPendingIntents(Context context) {
@@ -148,9 +148,9 @@ public class SyncProfile implements Serializable {
         Log.d(TAG, name + " (id: " + profileId + ") - Unscheduling sync services...");
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = getSyncIntent(context);
-        // cancel pending intents for all days of the week
+        // cancel pending intents for all days of the week (seven possible time windows)
         for(int i=0;i<7;i++) {
-            PendingIntent pendingIntent = PendingIntent.getService(context, profileId + schedule.getScheduleId() + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getService(context, getPendingIntentRequestCode(schedule, i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
             mgr.cancel(pendingIntent);
 
             //cancel pending intents with FLAG_ONE_SHOT (changed flag to FLAG_UPDATE_CURRENT after 0.2.2)
@@ -173,7 +173,7 @@ public class SyncProfile implements Serializable {
         for (SyncSchedule.TimeWindow timeWindow : schedule.getSyncTimeWindows()) {
             Log.d(TAG, name + " - start time: " + new Date(timeWindow.windowStart).toString() + " - time window: " + timeWindow.windowLength);
 
-            PendingIntent pendingIntent = PendingIntent.getService(context, profileId + schedule.getScheduleId() + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getService(context, getPendingIntentRequestCode(schedule, i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
             } else {
@@ -181,6 +181,11 @@ public class SyncProfile implements Serializable {
             }
             i++;
         }
+    }
+
+    // this should be unique for every time window
+    private int getPendingIntentRequestCode(SyncSchedule schedule, int timeWindow) {
+        return profileId + schedule.getScheduleId() + timeWindow;
     }
 
     private Intent getSyncIntent(Context context) {
@@ -214,6 +219,13 @@ public class SyncProfile implements Serializable {
                 profiles.set(index, this);
             }
             GeneralUtils.writeObjectToFile(profiles, file);
+
+            if(isActive) {
+                scheduleAllPendingIntents(context);
+            }
+            else {
+                unscheduleAllPendingIntents(context);
+            }
         } catch (Exception  e) {
             ToastUtils.showToast(context, "Error saving profile");
             Log.e(TAG, "Error saving profile " + name + " (id: " + profileId + ")");
@@ -232,57 +244,11 @@ public class SyncProfile implements Serializable {
             GeneralUtils.writeObjectToFile(profiles, file);
             return true;
         } catch (Exception  e) {
-            ToastUtils.showToast(context, "Error deleting profile");
             Log.e(TAG, "Error deleting profile " + name + " (id: " + profileId + ")");
             e.printStackTrace();
         }
         return false;
     }
-
-    //public void schedulePendingIntents(Context context) {
-    //    Log.d("SCHEDULE_DEBUG", "Scheduling sync services...");
-    //    AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-    //    Intent intent = new Intent(context, DownloaderService.class);
-    //    if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-    //        intent.putExtra("profileId", this.profileId);
-    //    }
-    //    else {
-    //        intent.putExtra("profile", this);
-    //    }
-    //    intent.putExtra("reschedule", true);
-    //    //intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
-//
-    //    //first cancel any previous pending intents for this profile
-    //    for(int i=0;i<7;i++) {
-    //        PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    //        mgr.cancel(pendingIntent);
-//
-    //        //cancel pending intents with FLAG_ONE_SHOT (changed flag to FLAG_UPDATE_CURRENT after 0.2.2)
-    //        pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_ONE_SHOT);
-    //        mgr.cancel(pendingIntent);
-    //    }
-//
-    //    //Then schedule new pending intents for this profile (if the profile is active)
-//
-    //    if(isActive()) {
-    //        for(SyncSchedule schedule : schedules) {
-    //            int i = 0;
-    //            for (SyncSchedule.TimeWindow timeWindow : schedule.getSyncTimeWindows()) {
-    //                Log.d("SCHEDULE_DEBUG", name + " - start time: " + new Date(timeWindow.windowStart).toString() + " - time window: " + timeWindow.windowLength);
-//
-    //                PendingIntent pendingIntent = PendingIntent.getService(context, profileId + i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-    //                    mgr.setWindow(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, timeWindow.windowLength, pendingIntent);
-    //                } else {
-    //                    mgr.set(AlarmManager.RTC_WAKEUP, timeWindow.windowStart, pendingIntent);
-    //                }
-    //                i++;
-    //            }
-    //        }
-    //    }
-//
-    //    Log.d("SCHEDULE_DEBUG", "finished scheduling");
-    //}
 
     public void setName(String name) {
         this.name = name;
@@ -336,39 +302,14 @@ public class SyncProfile implements Serializable {
         return schedules!=null && !schedules.isEmpty();
     }
 
-    //public void setActive(boolean active) {
-    //    this.isActive = active;
-    //}
-
     public boolean isActive() {
         //if(!hasTime) return false;
         return isActive;
     }
 
-    //public void setActiveDay(DaysEnum day, boolean flag) {
-    //    if(flag) {
-    //        if(!days.contains(day.value())) {
-    //            days = days.concat(day.value());
-    //        }
-    //    }
-    //    else {
-    //        days = days.replace(day.value(), "");
-    //    }
-    //}
-
     public int getProfileId() {
         return profileId;
     }
-
-    //public boolean isActiveDay(DaysEnum day) {
-    //    return days.contains(day.value());
-    //}
-
-    //public boolean toggleActiveDay(DaysEnum day) {
-    //    boolean activeState = isActiveDay(day);
-    //    setActiveDay(day, !activeState);
-    //    return !activeState;
-    //}
 
     public List<SyncSchedule> getSchedules() {
         return schedules;
@@ -376,6 +317,11 @@ public class SyncProfile implements Serializable {
 
     public void setSchedules(List<SyncSchedule> schedules) {
         this.schedules = schedules;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof SyncProfile && ((SyncProfile) o).getProfileId() == this.profileId;
     }
 
 }

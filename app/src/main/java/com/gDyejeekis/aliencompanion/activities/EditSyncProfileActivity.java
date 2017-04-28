@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -20,6 +18,8 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileOptionsDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileScheduleDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.models.SyncSchedule;
 
@@ -36,13 +36,11 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
 
     private SyncProfile profile;
     private boolean isNewProfile;
-    private EditText nameField;
     private EditText multiredditField;
     private AutoCompleteTextView subredditField;
-    private ListView schedulesListView;
-    private ArrayAdapter schedulesListAdapter;
     private TextView subredditsTextView;
     private TextView multiredditsTextView;
+    private ListView schedulesListView;
     private List<SyncSchedule> unscheduleList;
 
     @Override
@@ -59,7 +57,7 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     }
 
     private void initFields(final SyncProfile profile) {
-        nameField = (EditText) findViewById(R.id.editText_profile_name);
+        EditText nameField = (EditText) findViewById(R.id.editText_profile_name);
         multiredditField = (EditText) findViewById(R.id.editText_multireddit);
         subredditField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit);
         schedulesListView = (ListView) findViewById(R.id.listView_schedules);
@@ -104,6 +102,10 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             this.profile = new SyncProfile();
             getSupportActionBar().setTitle("Create profile");
             nameField.requestFocus();
+            String defaultName = getIntent().getStringExtra("defaultName");
+            if(defaultName!=null) {
+                nameField.setText(defaultName);
+            }
         }
         else {
             this.profile = profile;
@@ -112,8 +114,18 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             subredditsTextView.setText(StringUtils.join(profile.getSubreddits(), ", "));
             multiredditsTextView.setText(StringUtils.join(profile.getMultireddits(), ", "));
         }
-        schedulesListAdapter = new ScheduleListAdapter(this, R.layout.sync_schedule_list_item, profile==null ? new ArrayList<SyncSchedule>() : profile.getSchedules());
+        refreshSchedules();
+    }
+
+    private void refreshSchedules() {
+        ArrayAdapter schedulesListAdapter = new ScheduleListAdapter(this, R.layout.sync_schedule_list_item, this.profile.getSchedules());
         schedulesListView.setAdapter(schedulesListAdapter);
+    }
+
+    public void addSchedule(SyncSchedule schedule) {
+        profile.setActive(true);
+        profile.addSchedule(schedule);
+        refreshSchedules();
     }
 
     @Override
@@ -154,10 +166,10 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
                 }
                 break;
             case R.id.button_add_schedule:
-                // TODO: 4/19/2017
+                showScheduleDialog();
                 break;
             case R.id.button_sync_options:
-                // TODO: 4/19/2017
+                showSyncOptionsDialog();
                 break;
             case R.id.button_done:
                 if(unscheduleList!=null && !unscheduleList.isEmpty()) {
@@ -169,32 +181,51 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         }
     }
 
+    private void showScheduleDialog() {
+        SyncProfileScheduleDialogFragment dialog = new SyncProfileScheduleDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("profile", profile);
+        bundle.putBoolean("activate", true);
+        dialog.setArguments(bundle);
+        dialog.show(this.getSupportFragmentManager(), "dialog");
+    }
+
+    private void showSyncOptionsDialog() {
+        SyncProfileOptionsDialogFragment dialog = new SyncProfileOptionsDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("profile", profile);
+        dialog.setArguments(bundle);
+        dialog.show(this.getSupportFragmentManager(), "dialog");
+    }
+
     public static class ScheduleListAdapter extends ArrayAdapter {
 
-        private Context context;
+        private EditSyncProfileActivity activity;
         private int layoutResourceId;
         private List<SyncSchedule> schedules;
+        private TextView scheduleTextView;
+        //private ImageView removeScheduleBtn;
 
-        public ScheduleListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List objects) {
-            super(context, resource, objects);
-            this.context = context;
+        public ScheduleListAdapter(@NonNull EditSyncProfileActivity activity, @LayoutRes int resource, @NonNull List objects) {
+            super(activity, resource, objects);
+            this.activity = activity;
             this.layoutResourceId = resource;
             this.schedules = objects;
-        }
-
-        public void addSchedule(SyncSchedule schedule) {
-            // TODO: 4/23/2017
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             if(convertView==null) {
-                convertView = ((Activity) context).getLayoutInflater().inflate(layoutResourceId, parent, false);
+                convertView = activity.getLayoutInflater().inflate(layoutResourceId, parent, false);
+                scheduleTextView = (TextView) convertView.findViewById(R.id.textView_sync_schedule);
+                //removeScheduleBtn = (ImageView) convertView.findViewById(R.id.imageView_remove_schedule);
             }
 
-            SyncSchedule schedule = schedules.get(position);
-            // TODO: 4/23/2017
+            final SyncSchedule schedule = schedules.get(position);
+            // TODO: 4/23/2017 format this better
+            String scheduleText = schedule.getStartTime() + " - " + schedule.getEndTime() + " " + schedule.getSortedDays();
+            scheduleTextView.setText(scheduleText);
             return convertView;
         }
 

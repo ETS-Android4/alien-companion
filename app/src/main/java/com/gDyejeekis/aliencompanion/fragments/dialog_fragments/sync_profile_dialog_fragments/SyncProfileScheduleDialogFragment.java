@@ -12,12 +12,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.activities.EditSyncProfileActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
+import com.gDyejeekis.aliencompanion.models.SyncSchedule;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
  * Created by sound on 2/10/2016.
@@ -34,10 +37,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
     private int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
 
     private SyncProfile profile;
-    private boolean activateProfile;
-    private String oldDaysString;
-    private int oldFromTime;
-    private int oldToTime;
+    private SyncSchedule schedule;
     private Spinner from1;
     private Spinner from2;
     private Spinner to1;
@@ -50,25 +50,22 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
     private Button button_sat;
     private Button button_sun;
 
-    //private Button button_cancel;
-    //private Button button_done;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         profile = (SyncProfile) getArguments().getSerializable("profile");
-        activateProfile = getArguments().getBoolean("activate");
-        if(profile!=null) {
-            oldDaysString = new String(profile.getDaysString());
-            oldFromTime = new Integer(profile.getFromTime());
-            oldToTime = new Integer(profile.getToTime());
-        }
+        schedule = new SyncSchedule();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sync_profile_schedule, container, false);
+
+        Button btnAdd = (Button) view.findViewById(R.id.button_add_schedule);
+        Button btnCancel = (Button) view.findViewById(R.id.button_cancel);
+        btnAdd.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
 
         TextView title = (TextView) view.findViewById(R.id.textView_title);
         title.setText(profile.getName());
@@ -83,41 +80,6 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         to1.setAdapter(numbersAdapter);
         from2.setAdapter(periodsAdapter);
         to2.setAdapter(periodsAdapter);
-        if(profile.hasTime()) {
-            if(profile.getFromTime()==12) {
-                from1.setSelection(11);
-                from2.setSelection(1);
-            }
-            else if (profile.getFromTime()==24) {
-                from1.setSelection(11);
-                from2.setSelection(0);
-            }
-            else if(profile.getFromTime() > 12) {
-                from1.setSelection(profile.getFromTime() - 13);
-                from2.setSelection(1);
-            }
-            else {
-                from1.setSelection(profile.getFromTime() - 1);
-                from2.setSelection(0);
-            }
-
-            if(profile.getToTime()==12) {
-                to1.setSelection(11);
-                to2.setSelection(1);
-            }
-            else if (profile.getToTime()==24) {
-                to1.setSelection(11);
-                to2.setSelection(0);
-            }
-            else if(profile.getToTime() > 12) {
-                to1.setSelection(profile.getToTime() - 13);
-                to2.setSelection(1);
-            }
-            else {
-                to1.setSelection(profile.getToTime() - 1);
-                to2.setSelection(0);
-            }
-        }
 
         button_mon = (Button) view.findViewById(R.id.button_mon);
         button_tue = (Button) view.findViewById(R.id.button_tue);
@@ -133,18 +95,6 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         button_fri.setOnClickListener(this);
         button_sat.setOnClickListener(this);
         button_sun.setOnClickListener(this);
-        button_mon.setBackgroundColor((profile.isActiveDay(DaysEnum.MONDAY))? activeDayColor : inactiveDayColor);
-        button_tue.setBackgroundColor((profile.isActiveDay(DaysEnum.TUESDAY))? activeDayColor : inactiveDayColor);
-        button_wed.setBackgroundColor((profile.isActiveDay(DaysEnum.WEDNESDAY))? activeDayColor : inactiveDayColor);
-        button_thu.setBackgroundColor((profile.isActiveDay(DaysEnum.THURSDAY))? activeDayColor : inactiveDayColor);
-        button_fri.setBackgroundColor((profile.isActiveDay(DaysEnum.FRIDAY))? activeDayColor : inactiveDayColor);
-        button_sat.setBackgroundColor((profile.isActiveDay(DaysEnum.SATURDAY))? activeDayColor : inactiveDayColor);
-        button_sun.setBackgroundColor((profile.isActiveDay(DaysEnum.SUNDAY))? activeDayColor : inactiveDayColor);
-
-        //Button button_cancel = (Button) view.findViewById(R.id.button_cancel);
-        //Button button_done = (Button) view.findViewById(R.id.button_done);
-        //button_cancel.setOnClickListener(this);
-        //button_done.setOnClickListener(this);
 
         getDialog().setCanceledOnTouchOutside(true);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -155,51 +105,46 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_mon:
-                button_mon.setBackgroundColor((profile.toggleActiveDay(DaysEnum.MONDAY))? activeDayColor : inactiveDayColor);
+                button_mon.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.MONDAY))? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_tue:
-                button_tue.setBackgroundColor((profile.toggleActiveDay(DaysEnum.TUESDAY)) ? activeDayColor : inactiveDayColor);
+                button_tue.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.TUESDAY)) ? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_wed:
-                button_wed.setBackgroundColor((profile.toggleActiveDay(DaysEnum.WEDNESDAY)) ? activeDayColor : inactiveDayColor);
+                button_wed.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.WEDNESDAY)) ? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_thu:
-                button_thu.setBackgroundColor((profile.toggleActiveDay(DaysEnum.THURSDAY)) ? activeDayColor : inactiveDayColor);
+                button_thu.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.THURSDAY)) ? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_fri:
-                button_fri.setBackgroundColor((profile.toggleActiveDay(DaysEnum.FRIDAY)) ? activeDayColor : inactiveDayColor);
+                button_fri.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.FRIDAY)) ? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_sat:
-                button_sat.setBackgroundColor((profile.toggleActiveDay(DaysEnum.SATURDAY)) ? activeDayColor : inactiveDayColor);
+                button_sat.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.SATURDAY)) ? activeDayColor : inactiveDayColor);
                 break;
             case R.id.button_sun:
-                button_sun.setBackgroundColor((profile.toggleActiveDay(DaysEnum.SUNDAY)) ? activeDayColor : inactiveDayColor);
+                button_sun.setBackgroundColor((schedule.toggleActiveDay(DaysEnum.SUNDAY)) ? activeDayColor : inactiveDayColor);
                 break;
-            //case R.id.button_cancel:
-            //    break;
-            //case R.id.button_done:
-            //    break;
+            case R.id.button_cancel:
+                dismiss();
+                break;
+            case R.id.button_add_schedule:
+                addSchedule();
+                break;
         }
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        setProfileTimes();
-        if(profile.getFromTime() != oldFromTime || profile.getToTime() != oldToTime || !profile.getDaysString().equals(oldDaysString)) {
-            if(activateProfile && profile.hasTime()) {
-                profile.setActive(true);
-                ((SyncProfilesActivity) getActivity()).getAdapter().notifyProfileChanged(profile);
-            }
-            else if(!profile.hasTime() && profile.isActive()) {
-                profile.setActive(false);
-                ((SyncProfilesActivity) getActivity()).getAdapter().notifyProfileChanged(profile);
-            }
-            ((SyncProfilesActivity) getActivity()).changesMade = true;
+    private void addSchedule() {
+        if(schedule.getDays().isEmpty()) {
+            ToastUtils.showToast(getActivity(), "Must select at least one day");
+        }
+        else {
+            setScheduleTimes();
+            ((EditSyncProfileActivity) getActivity()).addSchedule(schedule);
         }
     }
 
-    private void setProfileTimes() {
+    private void setScheduleTimes() {
         int fromTime = Integer.valueOf(from1.getSelectedItem().toString());
         int toTime = Integer.valueOf(to1.getSelectedItem().toString());
         if(from2.getSelectedItemPosition()==0) {
@@ -223,10 +168,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
                 toTime = toTime + 12;
             }
         }
-        profile.setFromTime(fromTime);
-        profile.setToTime(toTime);
-        profile.setHasTime(!profile.getDaysString().equals(""));
-        //Log.d("schedule test", "from time: " + fromTime);
-        //Log.d("schedule test", "to time: " + toTime);
+        schedule.setStartTime(fromTime);
+        schedule.setEndTime(toTime);
     }
 }

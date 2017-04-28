@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.models;
 
+import com.gDyejeekis.aliencompanion.enums.DaysEnum;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +15,8 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class SyncSchedule implements Serializable {
+
+    public static final String TAG = "SyncSchedule";
 
     private static final long serialVersionUID = 1422345L;
 
@@ -154,6 +158,48 @@ public class SyncSchedule implements Serializable {
 
     public int getScheduleId() {
         return scheduleId;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
+    }
+
+    public void setActiveDay(DaysEnum day, boolean flag) {
+        if (flag) {
+            if (!days.contains(day.value())) {
+                days = days.concat(day.value());
+            }
+        } else {
+            days = days.replace(day.value(), "");
+        }
+    }
+
+    public boolean isActiveDay(DaysEnum day) {
+        return days.contains(day.value());
+    }
+
+    public boolean toggleActiveDay(DaysEnum day) {
+        boolean activeState = isActiveDay(day);
+        setActiveDay(day, !activeState);
+        return !activeState;
+    }
+
+    public String getSortedDays() {
+        // TODO: 4/29/2017
+        return days;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof SyncSchedule && ((SyncSchedule) o).getScheduleId() == this.scheduleId;
     }
 
 }
