@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="(subreddit, subreddit, subreddit)" />
+                android:text="*No subreddits in this profile" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="(multireddit, multireddit, multireddit)" />
+                android:text="*No multireddits in this profile" />
 
             <LinearLayout
                 android:layout_width="match_parent"

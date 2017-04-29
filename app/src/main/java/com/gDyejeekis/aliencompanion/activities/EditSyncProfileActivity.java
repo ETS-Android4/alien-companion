@@ -106,15 +106,17 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             this.profile = new SyncProfile();
             getSupportActionBar().setTitle("Create profile");
             nameField.requestFocus();
-            subredditsTextView.setText("*No subreddits in this profile");
-            multiredditsTextView.setText("*No multireddits in this profile");
         }
         else {
             this.profile = profile;
             getSupportActionBar().setTitle("Edit profile");
             nameField.setText(profile.getName());
-            subredditsTextView.setText(StringUtils.join(profile.getSubreddits(), ", "));
-            multiredditsTextView.setText(StringUtils.join(profile.getMultireddits(), ", "));
+            if(!profile.getSubreddits().isEmpty()) {
+                subredditsTextView.setText(StringUtils.join(profile.getSubreddits(), ", "));
+            }
+            if(!profile.getMultireddits().isEmpty()) {
+                multiredditsTextView.setText(StringUtils.join(profile.getMultireddits(), ", "));
+            }
         }
         refreshSchedules();
     }
@@ -144,6 +146,7 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         unscheduleList.add(schedule);
         // remove schedule from profile
         profile.removeSchedule(schedule);
+        refreshSchedules();
     }
 
     @Override
@@ -264,7 +267,6 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
                 @Override
                 public void onClick(View v) {
                     activity.removeSchedule(position);
-                    activity.refreshSchedules();
                 }
             });
             return convertView;
