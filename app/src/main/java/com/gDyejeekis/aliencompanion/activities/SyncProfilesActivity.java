@@ -88,7 +88,9 @@ public class SyncProfilesActivity extends ToolbarActivity {
     }
 
     private void newProfile() {
-        startActivity(new Intent(this, EditSyncProfileActivity.class));
+        Intent intent = new Intent(this, EditSyncProfileActivity.class);
+        intent.putExtra("defaultName", "Profile " + (adapter.getItemCount()+1));
+        startActivity(intent);
     }
 
 }

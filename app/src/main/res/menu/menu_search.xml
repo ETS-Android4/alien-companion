@@ -12,11 +12,13 @@
         android:orderInCategory="90" app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_search" android:title="@string/action_new_search"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:icon="@drawable/ic_search_white_24dp"
+        android:orderInCategory="100" app:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_hide_read" android:title="@string/action_hide_read"
         android:orderInCategory="102" app:showAsAction="never" />
 
     <item android:id="@+id/action_switch_view" android:title="@string/action_switch_view"
         android:orderInCategory="105" app:showAsAction="never" />
+
 </menu>

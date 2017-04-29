@@ -169,7 +169,7 @@ public class DownloaderService extends IntentService {
             }
 
             if(i.getBooleanExtra("reschedule", false)) {
-                profile.schedulePendingIntents(this);
+                profile.scheduleAllPendingIntents(this);
             }
         }
         else if(submission != null) {

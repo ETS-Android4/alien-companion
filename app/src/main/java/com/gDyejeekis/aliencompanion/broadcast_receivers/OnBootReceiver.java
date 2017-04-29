@@ -50,7 +50,7 @@ public class OnBootReceiver extends BroadcastReceiver {
 
             for(SyncProfile profile : syncProfiles) {
                 if(profile.isActive()) {
-                    profile.schedulePendingIntents(context);
+                    profile.scheduleAllPendingIntents(context);
                 }
             }
             Log.d(TAG, "Sync profiles schedules successfully");

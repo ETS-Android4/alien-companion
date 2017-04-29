@@ -141,6 +141,7 @@ public class SyncProfileScheduleDialogFragment extends ScalableDialogFragment im
         else {
             setScheduleTimes();
             ((EditSyncProfileActivity) getActivity()).addSchedule(schedule);
+            dismiss();
         }
     }
 

@@ -1,141 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <include layout="@layout/my_toolbar"/>
 
-        <TextView
-            android:id="@+id/textView29"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Name" />
-
-        <EditText
-            android:id="@+id/editText_profile_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="profile name"
-            android:inputType="text"
-            android:maxLines="1"
-            android:imeOptions="actionNext"/>
-
-        <TextView
-            android:id="@+id/textView30"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Subreddits" />
-
-        <TextView
-            android:id="@+id/textView_subreddits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="(subreddit, subreddit, subreddit)" />
+    <ScrollView
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <AutoCompleteTextView
-                android:id="@+id/editText_subreddit"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:completionThreshold="1"
-                android:ems="10"
-                android:hint="subreddit"
-                android:imeOptions="actionNext"
-                android:inputType="text"
-                android:maxLines="1" />
-
-            <Button
-                android:id="@+id/button_add_subreddit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView27"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Multireddits" />
-
-        <TextView
-            android:id="@+id/textView_multireddits"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="(multireddit, multireddit, multireddit)" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+                android:text="Name" />
 
             <EditText
-                android:id="@+id/editText_multireddit"
-                android:layout_width="0dp"
+                android:id="@+id/editText_profile_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="multireddit"
-                android:imeOptions="actionNext"
+                android:hint="profile name"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:imeOptions="actionNext"/>
 
-            <Button
-                android:id="@+id/button_add_multireddit"
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Subreddits" />
+
+            <TextView
+                android:id="@+id/textView_subreddits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add"/>
+                android:layout_weight="1"
+                android:text="(subreddit, subreddit, subreddit)" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <AutoCompleteTextView
+                    android:id="@+id/editText_subreddit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:completionThreshold="1"
+                    android:ems="10"
+                    android:hint="subreddit"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/button_add_subreddit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Multireddits" />
+
+            <TextView
+                android:id="@+id/textView_multireddits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="(multireddit, multireddit, multireddit)" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_multireddit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="multireddit"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/button_add_multireddit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Schedules" />
+
+            <ListView
+                android:id="@+id/listView_schedules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/button_add_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Add schedule" />
+
+            <Button
+                android:id="@+id/button_sync_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sync options" />
+
+            <Button
+                android:id="@+id/button_save_changes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save" />
+
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/textView32"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Schedules" />
-
-        <ListView
-            android:id="@+id/listView_schedules"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/button_add_schedule"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add schedule" />
-
-        <Button
-            android:id="@+id/button_sync_options"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Sync options" />
-
-        <Button
-            android:id="@+id/button_save_changes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

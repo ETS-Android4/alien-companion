@@ -17,6 +17,7 @@ import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -159,13 +160,13 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    private void scheduleAllPendingIntents(Context context) {
+    public void scheduleAllPendingIntents(Context context) {
         for(SyncSchedule schedule : schedules) {
             schedulePendingIntents(context, schedule);
         }
     }
 
-    private void schedulePendingIntents(Context context, SyncSchedule schedule) {
+    public void schedulePendingIntents(Context context, SyncSchedule schedule) {
         Log.d(TAG, name + " (id: " + profileId + ") - Scheduling sync services...");
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = getSyncIntent(context);
@@ -204,7 +205,14 @@ public class SyncProfile implements Serializable {
     public void saveChanges(Context context, boolean newProfile) {
         try {
             File file = new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME);
-            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(file);
+            List<SyncProfile> profiles;
+
+            try {
+                profiles  = (List<SyncProfile>) GeneralUtils.readObjectFromFile(file);
+            } catch (Exception e) {
+                profiles = new ArrayList<>();
+            }
+
             if(newProfile) {
                 profiles.add(this);
             }

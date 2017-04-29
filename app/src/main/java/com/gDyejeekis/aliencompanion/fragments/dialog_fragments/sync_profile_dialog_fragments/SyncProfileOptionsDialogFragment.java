@@ -34,6 +34,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private static final String[] postCountOptions = {"10", "25", "50", "75", "100"};
     private static final String[] commentCountOptions = {"50", "100", "200", "400", "600"};
     private static final String[] commentDepthOptions = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    private static final String[] albumLimitOptions = {"1", "2", "5", "10", "25", "50"};
     private static final String[] commentSortOptions = {CommentSort.TOP.value().toUpperCase(), CommentSort.BEST.value().toUpperCase(), CommentSort.NEW.value().toUpperCase(),
             CommentSort.OLD.value().toUpperCase(), CommentSort.CONTROVERSIAL.value().toUpperCase()};
     private static final String[] commentLinkCountOptions = {"0", "5", "10", "25", "50"};
@@ -93,8 +94,8 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncCommentSortSpinner.setEnabled(!useGlobal);
 
         albumImageLimitSpinner = (Spinner) view.findViewById(R.id.spinner_almumLimit);
-        albumImageLimitSpinner.setAdapter(new ArrayAdapter<>(getActivity(), dropdownResource, commentDepthOptions));
-        albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(syncOptions.getAlbumSyncLimit())));
+        albumImageLimitSpinner.setAdapter(new ArrayAdapter<>(getActivity(), dropdownResource, albumLimitOptions));
+        albumImageLimitSpinner.setSelection(Arrays.asList(albumLimitOptions).indexOf(String.valueOf(syncOptions.getAlbumSyncLimit())));
         albumImageLimitSpinner.setEnabled(!useGlobal);
 
         commentLinkCountSpinner = (Spinner) view.findViewById(R.id.spinner_syncCommentLinks);
@@ -173,7 +174,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncCommentDepthSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncCommentDepth)));
             syncCommentSortSpinner.setSelection(Arrays.asList(commentSortOptions).indexOf(MyApplication.syncCommentSort.value().toUpperCase()));
             albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncAlbumImgCount)));
-            commentLinkCountSpinner.setSelection(Arrays.asList(commentLinkCountOptions).indexOf(String.valueOf(0))); // TODO: 4/23/2017
+            commentLinkCountSpinner.setSelection(Arrays.asList(commentLinkCountOptions).indexOf(String.valueOf(MyApplication.syncCommentLinkCount)));
             syncThumbsCheckbox.setChecked(MyApplication.syncThumbnails);
             syncImagesCheckbox.setChecked(MyApplication.syncImages);
             syncVideoCheckbox.setChecked(MyApplication.syncVideo);

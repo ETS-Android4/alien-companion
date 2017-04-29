@@ -2,6 +2,8 @@ package com.gDyejeekis.aliencompanion.models;
 
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -193,8 +195,15 @@ public class SyncSchedule implements Serializable {
     }
 
     public String getSortedDays() {
-        // TODO: 4/29/2017
-        return days;
+        List<String> days = new ArrayList<>();
+        if(isActiveDay(DaysEnum.MONDAY)) days.add("Mon");
+        if(isActiveDay(DaysEnum.TUESDAY)) days.add("Tue");
+        if(isActiveDay(DaysEnum.WEDNESDAY)) days.add("Wed");
+        if(isActiveDay(DaysEnum.THURSDAY)) days.add("Thu");
+        if(isActiveDay(DaysEnum.FRIDAY)) days.add("Fri");
+        if(isActiveDay(DaysEnum.SATURDAY)) days.add("Sat");
+        if(isActiveDay(DaysEnum.SUNDAY)) days.add("Sun");
+        return StringUtils.join(days, ", ");
     }
 
     @Override

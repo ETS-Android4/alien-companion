@@ -19,9 +19,6 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.EditSyncProfileActivity;
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileOptionsDialogFragment;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileScheduleDialogFragment;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileSubredditsDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;

@@ -102,16 +102,6 @@ public class SyncProfileOptions implements Serializable {
 
     private boolean syncGif;
 
-    public int getSyncImagesInCommentsCount() {
-        return syncImagesInCommentsCount;
-    }
-
-    public void setSyncImagesInCommentsCount(int syncImagesInCommentsCount) {
-        this.syncImagesInCommentsCount = syncImagesInCommentsCount;
-    }
-
-    private int syncImagesInCommentsCount;
-
     public boolean isSyncOverWifiOnly() {
         return syncOverWifiOnly;
     }
@@ -171,7 +161,7 @@ public class SyncProfileOptions implements Serializable {
         this.syncOverWifiOnly = other.isSyncOverWifiOnly();
         this.syncWebpages = other.isSyncWebpages();
         this.syncGif = other.isSyncGif();
-        this.syncImagesInCommentsCount = other.getSyncImagesInCommentsCount();
+        this.syncCommentLinkCount = other.getSyncCommentLinkCount();
     }
 
     public SyncProfileOptions() {
@@ -186,7 +176,7 @@ public class SyncProfileOptions implements Serializable {
         syncOverWifiOnly = MyApplication.syncOverWifiOnly;
         syncWebpages = MyApplication.syncWebpages;
         syncGif = MyApplication.syncGif;
-        syncImagesInCommentsCount = MyApplication.syncImagesInCommentsCount;
+        syncCommentLinkCount = MyApplication.syncCommentLinkCount;
     }
 
 
