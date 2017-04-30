@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/action_about_profiles" android:title="@string/about"
+        android:icon="@mipmap/ic_add_white_24dp" android:orderInCategory="5" app:showAsAction="always"/>
+
     <item android:id="@+id/action_add_profile" android:title="@string/add"
         android:icon="@mipmap/ic_add_white_24dp" android:orderInCategory="10" app:showAsAction="always"/>
-
-    <!--<item android:id="@+id/action_sort_by_alpha" android:title="@string/action_sort_by_alpha"
-        android:icon="@mipmap/ic_sort_by_alpha_white_24dp" android:orderInCategory="5" app:showAsAction="ifRoom" />-->
 
 </menu>

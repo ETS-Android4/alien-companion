@@ -2,18 +2,14 @@ package com.gDyejeekis.aliencompanion.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,6 +40,9 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     private AutoCompleteTextView subredditField;
     private TextView subredditsTextView;
     private TextView multiredditsTextView;
+    private TextView schedulesTextView;
+    private ListView subredditsListView;
+    private ListView multiredditsListView;
     private ListView schedulesListView;
     private List<SyncSchedule> unscheduleList;
 
@@ -67,9 +66,12 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         nameField = (EditText) findViewById(R.id.editText_profile_name);
         multiredditField = (EditText) findViewById(R.id.editText_multireddit);
         subredditField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit);
+        subredditsListView = (ListView) findViewById(R.id.listView_subreddits);
+        multiredditsListView = (ListView) findViewById(R.id.listView_multireddits);
         schedulesListView = (ListView) findViewById(R.id.listView_schedules);
         subredditsTextView = (TextView) findViewById(R.id.textView_subreddits);
         multiredditsTextView = (TextView) findViewById(R.id.textView_multireddits);
+        schedulesTextView = (TextView) findViewById(R.id.textView_schedules);
         Button addSubredditButton = (Button) findViewById(R.id.button_add_subreddit);
         Button addMultiredditButton = (Button) findViewById(R.id.button_add_multireddit);
         Button addScheduleButton = (Button) findViewById(R.id.button_add_schedule);
@@ -88,6 +90,24 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 addMultireddit();
                 return true;
+            }
+        });
+        subredditsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                removeSubreddit(position);
+            }
+        });
+        multiredditsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                removeMultireddit(position);
+            }
+        });
+        schedulesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                removeSchedule(position);
             }
         });
         addSubredditButton.setOnClickListener(this);
@@ -111,20 +131,54 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             this.profile = profile;
             getSupportActionBar().setTitle("Edit profile");
             nameField.setText(profile.getName());
-            if(!profile.getSubreddits().isEmpty()) {
-                subredditsTextView.setText(StringUtils.join(profile.getSubreddits(), ", "));
-            }
-            if(!profile.getMultireddits().isEmpty()) {
-                multiredditsTextView.setText(StringUtils.join(profile.getMultireddits(), ", "));
-            }
         }
+        refreshSubreddits();
+        refreshMultireddits();
         refreshSchedules();
     }
 
+    private void refreshSubreddits() {
+        if(profile.getSubreddits()==null || profile.getSubreddits().isEmpty()) {
+            subredditsTextView.setVisibility(View.VISIBLE);
+            subredditsListView.setVisibility(View.GONE);
+        }
+        else {
+            subredditsTextView.setVisibility(View.GONE);
+            subredditsListView.setVisibility(View.VISIBLE);
+            subredditsListView.setAdapter(new ArrayAdapter<>(this, R.layout.simple_list_item_profile, profile.getSubreddits()));
+            GeneralUtils.setListViewHeightBasedOnChildren(subredditsListView);
+        }
+    }
+
+    private void refreshMultireddits() {
+        if(profile.getMultireddits()==null || profile.getMultireddits().isEmpty()) {
+            multiredditsTextView.setVisibility(View.VISIBLE);
+            multiredditsListView.setVisibility(View.GONE);
+        }
+        else {
+            multiredditsTextView.setVisibility(View.GONE);
+            multiredditsListView.setVisibility(View.VISIBLE);
+            multiredditsListView.setAdapter(new ArrayAdapter<>(this, R.layout.simple_list_item_profile, profile.getMultireddits()));
+            GeneralUtils.setListViewHeightBasedOnChildren(multiredditsListView);
+        }
+    }
+
     private void refreshSchedules() {
-        ArrayAdapter schedulesListAdapter = new ScheduleListAdapter(this, R.layout.sync_schedule_list_item, this.profile.getSchedules());
-        schedulesListView.setAdapter(schedulesListAdapter);
-        GeneralUtils.setListViewHeightBasedOnChildren(schedulesListView);
+        if(profile.getSchedules() == null || profile.getSchedules().isEmpty()) {
+            schedulesTextView.setVisibility(View.VISIBLE);
+            schedulesListView.setVisibility(View.GONE);
+        }
+        else {
+            schedulesTextView.setVisibility(View.GONE);
+            schedulesListView.setVisibility(View.VISIBLE);
+            List<String> formattedSchedules = new ArrayList<>();
+            for(SyncSchedule schedule : profile.getSchedules()) {
+                // TODO: 4/30/2017 maybe tweak this
+                formattedSchedules.add(schedule.getStartTime() + ":00 - " + schedule.getEndTime() + ":00 " + schedule.getSortedDays());
+            }
+            schedulesListView.setAdapter(new ArrayAdapter<>(this, R.layout.simple_list_item_profile, formattedSchedules));
+            GeneralUtils.setListViewHeightBasedOnChildren(schedulesListView);
+        }
     }
 
     public void addSchedule(SyncSchedule schedule) {
@@ -192,13 +246,18 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             subredditField.setHintTextColor(MyApplication.textHintColor);
 
             profile.addSubreddit(subreddit);
-            subredditsTextView.setText(StringUtils.join(profile.getSubreddits(), ", "));
+            refreshSubreddits();
         }
         else {
             subredditField.setText("");
             subredditField.setHint("enter subreddit");
             subredditField.setHintTextColor(Color.RED);
         }
+    }
+
+    private void removeSubreddit(int position) {
+        profile.removeSubreddit(position);
+        refreshSubreddits();
     }
 
     private void addMultireddit() {
@@ -210,13 +269,18 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
             multiredditField.setHintTextColor(MyApplication.textHintColor);
 
             profile.addMultireddit(multireddit);
-            multiredditsTextView.setText(StringUtils.join(profile.getMultireddits(), ", "));
+            refreshMultireddits();
         }
         else {
             multiredditField.setText("");
             multiredditField.setHint("enter multireddit");
             multiredditField.setHintTextColor(Color.RED);
         }
+    }
+
+    private void removeMultireddit(int position) {
+        profile.removeMultireddit(position);
+        refreshMultireddits();
     }
 
     private void showScheduleDialog() {
@@ -236,41 +300,41 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         dialog.show(this.getSupportFragmentManager(), "dialog");
     }
 
-    public static class ScheduleListAdapter extends ArrayAdapter {
-
-        private EditSyncProfileActivity activity;
-        private int layoutResourceId;
-        private List<SyncSchedule> schedules;
-        private TextView scheduleTextView;
-        private ImageView removeScheduleBtn;
-
-        public ScheduleListAdapter(@NonNull EditSyncProfileActivity activity, @LayoutRes int resource, @NonNull List objects) {
-            super(activity, resource, objects);
-            this.activity = activity;
-            this.layoutResourceId = resource;
-            this.schedules = objects;
-        }
-
-        @NonNull
-        @Override
-        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            if(convertView==null) {
-                convertView = activity.getLayoutInflater().inflate(layoutResourceId, parent, false);
-                scheduleTextView = (TextView) convertView.findViewById(R.id.textView_sync_schedule);
-                removeScheduleBtn = (ImageView) convertView.findViewById(R.id.imageView_remove_schedule);
-            }
-
-            final SyncSchedule schedule = schedules.get(position);
-            String scheduleText = schedule.getStartTime() + ":00 - " + schedule.getEndTime() + ":00 " + schedule.getSortedDays();
-            scheduleTextView.setText(scheduleText);
-            removeScheduleBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    activity.removeSchedule(position);
-                }
-            });
-            return convertView;
-        }
-
-    }
+    //public static class ScheduleListAdapter extends ArrayAdapter {
+//
+    //    private EditSyncProfileActivity activity;
+    //    private int layoutResourceId;
+    //    private List<SyncSchedule> schedules;
+    //    private TextView scheduleTextView;
+    //    private ImageView removeScheduleBtn;
+//
+    //    public ScheduleListAdapter(@NonNull EditSyncProfileActivity activity, @LayoutRes int resource, @NonNull List objects) {
+    //        super(activity, resource, objects);
+    //        this.activity = activity;
+    //        this.layoutResourceId = resource;
+    //        this.schedules = objects;
+    //    }
+//
+    //    @NonNull
+    //    @Override
+    //    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    //        if(convertView==null) {
+    //            convertView = activity.getLayoutInflater().inflate(layoutResourceId, parent, false);
+    //            scheduleTextView = (TextView) convertView.findViewById(R.id.textView_sync_schedule);
+    //            removeScheduleBtn = (ImageView) convertView.findViewById(R.id.imageView_remove_schedule);
+    //        }
+//
+    //        final SyncSchedule schedule = schedules.get(position);
+    //        String scheduleText = schedule.getStartTime() + ":00 - " + schedule.getEndTime() + ":00 " + schedule.getSortedDays();
+    //        scheduleTextView.setText(scheduleText);
+    //        removeScheduleBtn.setOnClickListener(new View.OnClickListener() {
+    //            @Override
+    //            public void onClick(View v) {
+    //                activity.removeSchedule(position);
+    //            }
+    //        });
+    //        return convertView;
+    //    }
+//
+    //}
 }

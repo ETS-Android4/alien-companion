@@ -281,11 +281,35 @@ public class SyncProfile implements Serializable {
         subreddits.add(subreddit);
     }
 
+    public boolean removeSubreddit(int index) {
+        if(subreddits!=null) {
+            subreddits.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeSubreddit(String subreddit) {
+        return subreddits != null && subreddits.remove(subreddit);
+    }
+
     public void addMultireddit(String multireddit) {
         if(multireddits==null) {
             multireddits = new ArrayList<>();
         }
         multireddits.add(multireddit);
+    }
+
+    public boolean removeMultireddit(int index) {
+        if(multireddits!=null) {
+            multireddits.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeMultireddit(String multireddit) {
+        return multireddits != null && multireddits.remove(multireddit);
     }
 
     public void setMultireddits(List<String> multireddits) {

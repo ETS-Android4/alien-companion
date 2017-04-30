@@ -84,6 +84,10 @@ public class SyncProfilesActivity extends ToolbarActivity {
             newProfile();
             return true;
         }
+        else if(item.getItemId() == R.id.action_about_profiles) {
+            // TODO: 4/30/2017 show info dialog
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

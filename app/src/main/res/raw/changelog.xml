@@ -3,7 +3,7 @@
 
     <changelogversion versionName="1.0" changeDate="unset">
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Classic' view]]></changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Gallery' view]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Gallery' view (long tap for comments)]]></changelogtext>
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
@@ -28,7 +28,9 @@
         <changelogtext>Added streamable.com link handling support</changelogtext>
         <changelogtext>Added *.mp4 link handling support</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable and *.mp4 links)]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in comments' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE CHANGES HERE]]></changelogtext>
         <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>

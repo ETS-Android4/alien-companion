@@ -67,7 +67,7 @@
 
     <ListPreference
         android:key="syncCommentLinks"
-        android:title="Sync comment links"
+        android:title="Sync links in comments"
         android:summary="Maximum number of links in comments per post that get synced"
         android:entries="@array/syncCommentLinksEntries"
         android:entryValues="@array/syncCommentLinksValues"
