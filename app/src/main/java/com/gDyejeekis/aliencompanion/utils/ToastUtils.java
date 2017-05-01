@@ -14,6 +14,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
  * Created by George on 6/19/2015.
  */
 public class ToastUtils {
+
     public static final String TAG = "ToastUtils";
 
     public static void showSnackbarOverToast(Context context, String message) {
@@ -48,12 +49,15 @@ public class ToastUtils {
     }
 
     public static Snackbar showSnackbar(View view, String text, int duration) {
-        Snackbar snackbar = Snackbar.make(view, text, duration);
-        TextView txtv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        txtv.setTextColor(Color.WHITE);
-        txtv.setMaxLines(3);
-        snackbar.show();
-        return snackbar;
+        try {
+            Snackbar snackbar = Snackbar.make(view, text, duration);
+            TextView txtv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            txtv.setTextColor(Color.WHITE);
+            txtv.setMaxLines(3);
+            snackbar.show();
+            return snackbar;
+        } catch (Exception e) {}
+        return null;
     }
 
     public static Snackbar showSnackbar(View view, String text, String actionText, View.OnClickListener listener) {
@@ -61,15 +65,19 @@ public class ToastUtils {
     }
 
     public static Snackbar showSnackbar(View view, String text, String actionText, View.OnClickListener listener, int duration) {
-        Snackbar snackbar = Snackbar.make(view, text, duration);
-        if(listener!=null) {
-            snackbar.setAction(actionText, listener);
-            snackbar.setActionTextColor(MyApplication.linkColor);
-        }
-        TextView txtv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-        txtv.setTextColor(Color.WHITE);
-        txtv.setMaxLines(3);
-        snackbar.show();
-        return snackbar;
+        try {
+            Snackbar snackbar = Snackbar.make(view, text, duration);
+            if (listener != null) {
+                snackbar.setAction(actionText, listener);
+                snackbar.setActionTextColor(MyApplication.linkColor);
+            }
+            TextView txtv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            txtv.setTextColor(Color.WHITE);
+            txtv.setMaxLines(3);
+            snackbar.show();
+            return snackbar;
+        } catch (Exception e) {}
+        return null;
     }
+
 }
