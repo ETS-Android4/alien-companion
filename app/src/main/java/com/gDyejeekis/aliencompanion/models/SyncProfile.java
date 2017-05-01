@@ -184,19 +184,20 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    // this should be unique for every time window
+    // this should be unique for every single time window of schedule
     private int getPendingIntentRequestCode(SyncSchedule schedule, int timeWindow) {
         return profileId + schedule.getScheduleId() + timeWindow;
     }
 
     private Intent getSyncIntent(Context context) {
         Intent intent = new Intent(context, DownloaderService.class);
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            intent.putExtra("profileId", this.profileId);
-        }
-        else {
-            intent.putExtra("profile", this);
-        }
+        //if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        //    intent.putExtra("profileId", this.profileId);
+        //}
+        //else {
+        //    intent.putExtra("profile", this);
+        //}
+        intent.putExtra("profileId", this.profileId);
         intent.putExtra("reschedule", true);
 
         return intent;
@@ -354,6 +355,30 @@ public class SyncProfile implements Serializable {
     @Override
     public boolean equals(Object o) {
         return o instanceof SyncProfile && ((SyncProfile) o).getProfileId() == this.profileId;
+    }
+
+    public static SyncProfile getSyncProfileByIndex(Context context, int index) {
+        try {
+            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
+            return profiles.get(index);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static SyncProfile getSyncProfileById(Context context, int id) {
+        try {
+            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
+            for(SyncProfile profile : profiles) {
+                if(profile.getProfileId() == id) {
+                    return profile;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

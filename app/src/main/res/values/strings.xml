@@ -7,6 +7,12 @@
     <string name="welcome_message">
         (Update message)
     </string>
+    <string name="about_sync_profiles_title">
+        About sync profiles
+    </string>
+    <string name="about_sync_profiles">
+        (Sync profiles explanation here)
+    </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
     <string name="title_activity_options">SettingsActivity</string>
@@ -213,5 +219,6 @@
     <string name="image_board">Image board</string>
     <string name="gallery">Gallery</string>
     <string name="about">About</string>
+    <string name="got_it">Got it</string>
 
 </resources>

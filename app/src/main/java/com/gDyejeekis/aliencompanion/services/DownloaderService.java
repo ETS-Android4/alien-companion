@@ -107,7 +107,6 @@ public class DownloaderService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        //MAX_PROGRESS = MyApplication.syncPostCount + 1;
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -123,15 +122,14 @@ public class DownloaderService extends IntentService {
     public void onHandleIntent(Intent i) {
         MyApplication.checkAccountInit(this, httpClient);
 
-        //List<String> subreddits = i.getStringArrayListExtra("subreddits");
-        SyncProfile profile;
+        SyncProfile profile = null;
         int profileId = i.getIntExtra("profileId", -1);
         if(profileId!=-1) {
-            profile = MyApplication.getSyncProfileById(this, profileId);
+            profile = SyncProfile.getSyncProfileById(this, profileId);
         }
-        else {
-            profile = (SyncProfile) i.getSerializableExtra("profile");
-        }
+        //else {
+        //    profile = (SyncProfile) i.getSerializableExtra("profile");
+        //}
 
         Submission submission = (Submission) i.getSerializableExtra("post");
         int savedCount = i.getIntExtra("savedCount", 0);
@@ -147,24 +145,25 @@ public class DownloaderService extends IntentService {
             MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
 
             if(!(syncOptions.isSyncOverWifiOnly() && !GeneralUtils.isConnectedOverWifi(this))) {
+                String filename;
+                notifBuilder = new NotificationCompat.Builder(this);
+                // sync subreddits first
                 for (String subreddit : profile.getSubreddits()) {
                     progress = 0;
-                    String filename;
-                    String subredditName;
-                    boolean isMulti = false;
-                    if (subreddit.endsWith(" (multi)")) {
-                        subredditName = subreddit.replace(" (multi)", "");
-                        filename = MyApplication.MULTIREDDIT_FILE_PREFIX + subredditName.toLowerCase();
-                        isMulti = true;
-                    } else {
-                        subredditName = subreddit;
-                        filename = subreddit.toLowerCase();
-                    }
-                    notifBuilder = new NotificationCompat.Builder(this);
+                    filename = subreddit.toLowerCase();
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
                     acquireWakelock();
 
-                    syncSubreddit(filename, notifBuilder, subredditName, SubmissionSort.HOT, null, isMulti, syncOptions);
+                    syncSubreddit(filename, notifBuilder, subreddit, SubmissionSort.HOT, null, false, syncOptions);
+                }
+                // sync multireddits
+                for(String multireddit : profile.getMultireddits()) {
+                    progress = 0;
+                    filename = MyApplication.MULTIREDDIT_FILE_PREFIX + multireddit.toLowerCase();
+                    startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
+                    acquireWakelock();
+
+                    syncSubreddit(filename, notifBuilder, multireddit, SubmissionSort.HOT, null, true, syncOptions);
                 }
             }
 
@@ -230,7 +229,7 @@ public class DownloaderService extends IntentService {
 
         if(wifiLock == null) {
             Log.d(TAG, "Acquiring wifilock..");
-            WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL, "downloaderServiceWifilock");
             wifiLock.acquire();
             message = (wifiLock.isHeld()) ? "Wifilock acquired" : "Failed to acquire wifilock";

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.views.adapters.SyncProfileListAdapter;
 import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -85,7 +86,7 @@ public class SyncProfilesActivity extends ToolbarActivity {
             return true;
         }
         else if(item.getItemId() == R.id.action_about_profiles) {
-            // TODO: 4/30/2017 show info dialog
+            showInfo();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -95,6 +96,15 @@ public class SyncProfilesActivity extends ToolbarActivity {
         Intent intent = new Intent(this, EditSyncProfileActivity.class);
         intent.putExtra("defaultName", "Profile " + (adapter.getItemCount()+1));
         startActivity(intent);
+    }
+
+    private void showInfo() {
+        InfoDialogFragment dialog = new InfoDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getResources().getString(R.string.about_sync_profiles_title));
+        bundle.putString("info", getResources().getString(R.string.about_sync_profiles));
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), "dialog");
     }
 
 }
