@@ -13,7 +13,10 @@
         android:textColor="?attr/themeTextColor"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginBottom="6dp"/>
+        android:layout_marginBottom="6dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="6dp"/>
 
     <TextView
         android:id="@+id/textView_info"
@@ -21,12 +24,14 @@
         android:layout_height="wrap_content"
         android:text="(Info text here)"
         android:textColor="?attr/themeTextColor"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:padding="6dp"/>
 
     <Button
         android:id="@+id/button_got_it"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:text="@string/got_it"
         style="@style/DialogButtonStyle"/>
+
 </LinearLayout>
