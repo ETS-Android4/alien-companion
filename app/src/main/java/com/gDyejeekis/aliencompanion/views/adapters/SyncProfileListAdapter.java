@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -179,7 +180,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter {
                                     }
                                 }
                             };
-                            new AlertDialog.Builder(activity).setMessage("Delete " + profile.getName() + "?").setPositiveButton("Yes", listener)
+                            new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage("Delete " + profile.getName() + "?").setPositiveButton("Yes", listener)
                                     .setNegativeButton("No", null).show();
                             return true;
                         case R.id.action_sync_now:

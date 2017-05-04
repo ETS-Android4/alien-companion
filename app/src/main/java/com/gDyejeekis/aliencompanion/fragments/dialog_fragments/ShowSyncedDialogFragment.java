@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         final String filename = adapter.getItem(i).toString();
         final int pos = i;
         String message = "Delete all synced posts, comments, images and articles for " + filename + "?";
-        new AlertDialog.Builder(getActivity()).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle)).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 final PleaseWaitDialogFragment dialogFragment = new PleaseWaitDialogFragment();

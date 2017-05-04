@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,7 +126,7 @@ public class EditSubredditsActivity extends ToolbarActivity implements DialogInt
     }
 
     private void showSaveChangesDialog() {
-        new AlertDialog.Builder(this).setMessage("Save changes?").setPositiveButton("Yes", this).setNegativeButton("No", this).show();
+        new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAlertDialogStyle)).setMessage("Save changes?").setPositiveButton("Yes", this).setNegativeButton("No", this).show();
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -203,7 +204,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         };
-                        new AlertDialog.Builder(context).setMessage("Are you sure you want to delete this comment?").setPositiveButton("Yes", listener)
+                        new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.MyAlertDialogStyle)).setMessage("Are you sure you want to delete this comment?").setPositiveButton("Yes", listener)
                                 .setNegativeButton("No", null).show();
                         return true;
                     case R.id.action_edit:

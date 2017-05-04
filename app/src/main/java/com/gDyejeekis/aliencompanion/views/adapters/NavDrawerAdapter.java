@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -802,7 +803,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 switchMode();
             }
         };
-        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+        new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage(text).setPositiveButton("Yes", listener)
                 .setNegativeButton("No", null).show();
     }
 
@@ -850,7 +851,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 switchMode(subreddit, isMulti, isOther, sort, timeSpan);
             }
         };
-        new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Yes", listener)
+        new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage(text).setPositiveButton("Yes", listener)
                 .setNegativeButton("No", null).show();
     }
 

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -106,7 +107,7 @@ public class PostListFragment extends RedditContentFragment {
                     editor.apply();
                 }
             };
-            new AlertDialog.Builder(activity).setMessage(text).setPositiveButton("Remember", listener)
+            new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage(text).setPositiveButton("Remember", listener)
                     .setNegativeButton("Cancel", null).show();
         }
     }
@@ -239,7 +240,7 @@ public class PostListFragment extends RedditContentFragment {
                     messageEnd = "'" + subreddit + "'";
                 }
                 final String message = "Delete all synced posts, comments, images and articles for " + messageEnd + "?";
-                new AlertDialog.Builder(activity).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final PleaseWaitDialogFragment dialogFragment = new PleaseWaitDialogFragment();
