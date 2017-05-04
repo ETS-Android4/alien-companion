@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public static final String TAG = "SplashActivity";
 
-    public static final int SPLASH_DISPLAY_LENGTH = 0;
+    public static final int SPLASH_DISPLAY_DURATION = 100;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     startMainActivity();
                 }
-            }, SPLASH_DISPLAY_LENGTH);
+            }, SPLASH_DISPLAY_DURATION);
         }
         else {
             setContentView(R.layout.splash_screen_welcome);
@@ -62,8 +62,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void startMainActivity() {
         Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-        SplashActivity.this.startActivity(mainIntent);
-        SplashActivity.this.finish();
-        SplashActivity.this.overridePendingTransition(0, android.R.anim.fade_in);
+        startActivity(mainIntent);
+        finish();
     }
 }
