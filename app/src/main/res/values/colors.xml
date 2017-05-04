@@ -39,7 +39,7 @@
 
     <color name="materialBlueDrawerItemSelected">#445863</color>
 
-    <color name="materialBlueDivider">#3a4b54</color>
+    <color name="materialBlueDivider">#34434b</color>
 
     <color name="materialBlueCommentHighlight">@color/materialBlueBackgroundPressed</color>
 
@@ -65,7 +65,7 @@
 
     <color name="materialGreyDrawerItemSelected">#666666</color>
 
-    <color name="materialGreyDivider">#5b5b5b</color>
+    <color name="materialGreyDivider">#505050</color>
 
     <color name="materialGreyCommentHighlight">@color/materialGreyBackgroundPressed</color>
 
