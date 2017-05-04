@@ -83,9 +83,9 @@
 
     <color name="darkBackgroundPressed">#232323</color>
 
-    <color name="darkCommentButtonBackground">#232323</color>
+    <color name="darkCommentButtonBackground">#1d1d1d</color>
 
-    <color name="darkCommentButtonBackgroundPressed">#333333</color>
+    <color name="darkCommentButtonBackgroundPressed">#303030</color>
 
     <color name="darkDrawerBackground">@color/primary_dark</color>
 
@@ -95,7 +95,7 @@
 
     <color name="darkDialogBackground">@color/darker_gray</color>
 
-    <color name="darkDivider">#404040</color>
+    <color name="darkDivider">#262626</color>
 
     <color name="darkHintText">#b0b0b0</color>
 

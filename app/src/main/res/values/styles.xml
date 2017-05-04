@@ -204,7 +204,7 @@
         <item name="themeDrawerBackgroundColor">@color/materialBlueDrawerBackground</item>
         <item name="themeDrawerSelector">@drawable/touch_selector_material_blue</item>
         <item name="themeDialogBackgroundColor">@color/materialBlueDialogBackground</item>
-        <item name="themeDivider">@color/materialBlueDivider</item>
+        <item name="themeDivider">@drawable/divider_material_blue</item>
         <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_blue</item>
@@ -220,7 +220,7 @@
         <item name="themeDrawerBackgroundColor">@color/materialGreyDrawerBackground</item>
         <item name="themeDrawerSelector">@drawable/touch_selector_material_grey</item>
         <item name="themeDialogBackgroundColor">@color/materialGreyDialogBackground</item>
-        <item name="themeDivider">@color/materialGreyDivider</item>
+        <item name="themeDivider">@drawable/divider_material_grey</item>
         <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_grey</item>

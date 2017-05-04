@@ -57,7 +57,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/themeTextHintColor"
+                android:background="?attr/themeDivider"
                 android:layout_marginBottom="5dp" />
 
             <LinearLayout
@@ -103,7 +103,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/themeTextHintColor"
+                android:background="?attr/themeDivider"
                 android:layout_marginTop="5dp" />
 
         </LinearLayout>
@@ -125,7 +125,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/themeTextHintColor"
+                android:background="?attr/themeDivider"
                 android:layout_marginBottom="10dp" />
 
             <TextView
@@ -140,7 +140,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/themeTextHintColor"
+                android:background="?attr/themeDivider"
                 android:layout_marginTop="10dp" />
 
         </LinearLayout>
