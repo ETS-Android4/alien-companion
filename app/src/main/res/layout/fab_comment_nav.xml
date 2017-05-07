@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             app:fabSize="mini"
             android:id="@+id/fab_reply"
-            android:src="@mipmap/ic_reply_white_48dp"
+            android:src="@drawable/ic_reply_white_48dp"
             style="@style/FabMiniMargins"/>
 
         <android.support.design.widget.FloatingActionButton

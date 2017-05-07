@@ -143,4 +143,8 @@
 
     <color name="dialogButtonTextColor">#03A9F4</color>
 
+    <color name="upvoteColor">#ff8b60</color>
+
+    <color name="downvoteColor">#9494ff</color>
+
 </resources>

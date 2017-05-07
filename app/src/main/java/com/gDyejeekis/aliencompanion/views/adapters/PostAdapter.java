@@ -277,38 +277,38 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
                 // user logged in
                 if (MyApplication.currentUser != null) {
+                    cvh.reply.setAlpha(cvh.defaultIconOpacity);
                     // check user vote
                     if (comment.getLikes().equals("true")) {
                         cvh.score.setTextColor(upvoteColor);
-                        cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
-                        }
-                        else {
-                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
-                        }
+                        cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_upvote_orange_48dp);
+                        cvh.upvote.setAlpha(1f);
+                        cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
+                        cvh.downvote.setAlpha(cvh.defaultIconOpacity);
                     }
                     else if (comment.getLikes().equals("false")) {
                         cvh.score.setTextColor(downvoteColor);
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
-                        }
-                        else {
-                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
-                        }
-                        cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
+                        cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                        cvh.upvote.setAlpha(cvh.defaultIconOpacity);
+                        cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_downvote_blue_48dp);
+                        cvh.downvote.setAlpha(1f);
                     }
                     else {
                         cvh.score.setTextColor(MyApplication.textHintColor);
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
-                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
-                        }
-                        else {
-                            cvh.upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
-                            cvh.downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
-                        }
+                        cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                        cvh.upvote.setAlpha(cvh.defaultIconOpacity);
+                        cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
+                        cvh.downvote.setAlpha(cvh.defaultIconOpacity);
                     }
+                }
+                // logged out
+                else {
+                    cvh.reply.setAlpha(cvh.defaultIconOpacityDisabled);
+                    cvh.score.setTextColor(MyApplication.textHintColor);
+                    cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                    cvh.upvote.setAlpha(cvh.defaultIconOpacityDisabled);
+                    cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
+                    cvh.downvote.setAlpha(cvh.defaultIconOpacityDisabled);
                 }
                 break;
             case VIEW_TYPE_MORE:
@@ -724,8 +724,12 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public ImageView viewUser;
         public ImageView more;
 
+        public float defaultIconOpacity, defaultIconOpacityDisabled;
+
         public CommentViewHolder(View itemView) {
             super(itemView);
+            defaultIconOpacity = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
+            defaultIconOpacityDisabled = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
             view = itemView;
             authorTextView = (TextView) itemView.findViewById(R.id.author_textview);
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);
@@ -748,11 +752,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
             commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
 
-            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                viewUser.setImageResource(R.mipmap.ic_person_light_grey_48dp);
-                reply.setImageResource(R.mipmap.ic_reply_light_grey_48dp);
-                more.setImageResource(R.mipmap.ic_more_vert_light_grey_48dp);
-            }
+            viewUser.setAlpha(defaultIconOpacity);
+            more.setAlpha(defaultIconOpacity);
         }
 
         public void setColorBandColor(int indentation) {

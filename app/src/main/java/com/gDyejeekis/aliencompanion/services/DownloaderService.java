@@ -496,7 +496,7 @@ public class DownloaderService extends IntentService {
         PendingIntent pIntent = PendingIntent.getBroadcast(context, CHANGE_STATE_REQUEST_CODE,
                 new Intent(SyncStateReceiver.SYNC_CANCEL), PendingIntent.FLAG_CANCEL_CURRENT);
 
-        return new android.support.v4.app.NotificationCompat.Action(R.mipmap.ic_close_white_48dp, "Cancel", pIntent);
+        return new android.support.v4.app.NotificationCompat.Action(R.drawable.ic_close_white_48dp, "Cancel", pIntent);
     }
     
     private void writePostsToFile(List<RedditItem> posts, String filename) {

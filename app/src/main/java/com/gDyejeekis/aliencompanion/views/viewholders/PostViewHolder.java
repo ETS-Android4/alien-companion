@@ -51,8 +51,8 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
                 viewUserResource = R.drawable.ic_person_white_48dp;
                 openBrowserResource = R.drawable.ic_open_in_browser_white_48dp;
                 moreResource = R.drawable.ic_more_vert_white_48dp;
-                upvoteResourceOrange = R.mipmap.ic_arrow_upward_orange_48dp;
-                downvoteResourceBlue = R.mipmap.ic_arrow_downward_blue_48dp;
+                upvoteResourceOrange = R.drawable.ic_arrow_upward_upvote_orange_48dp;
+                downvoteResourceBlue = R.drawable.ic_arrow_downward_downvote_blue_48dp;
                 break;
             case cards:
             case cardDetails:
@@ -68,13 +68,13 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
                     if (viewType == PostViewType.classic) {
                         upvoteResource = R.drawable.ic_expand_less_white_48dp;
                         downvoteResource = R.drawable.ic_expand_more_white_48dp;
-                        upvoteResourceOrange = R.mipmap.ic_upvote_classic_orange_48dp;
-                        downvoteResourceBlue = R.mipmap.ic_downvote_classic_blue_48dp;
+                        upvoteResourceOrange = R.drawable.ic_expand_less_upvote_orange_48dp;
+                        downvoteResourceBlue = R.drawable.ic_expand_more_downvote_blue_48dp;
                     } else {
                         upvoteResource = R.drawable.ic_arrow_upward_white_48dp;
                         downvoteResource = R.drawable.ic_arrow_downward_white_48dp;
-                        upvoteResourceOrange = R.mipmap.ic_arrow_upward_orange_48dp;
-                        downvoteResourceBlue = R.mipmap.ic_arrow_downward_blue_48dp;
+                        upvoteResourceOrange = R.drawable.ic_arrow_upward_upvote_orange_48dp;
+                        downvoteResourceBlue = R.drawable.ic_arrow_downward_downvote_blue_48dp;
                     }
                 }
                 // light background
@@ -88,13 +88,13 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
                     if (viewType == PostViewType.classic) {
                         upvoteResource = R.drawable.ic_expand_less_black_48dp;
                         downvoteResource = R.drawable.ic_expand_more_black_48dp;
-                        upvoteResourceOrange = R.mipmap.ic_upvote_classic_orange_48dp;
-                        downvoteResourceBlue = R.mipmap.ic_downvote_classic_blue_48dp;
+                        upvoteResourceOrange = R.drawable.ic_expand_less_upvote_orange_48dp;
+                        downvoteResourceBlue = R.drawable.ic_expand_more_downvote_blue_48dp;
                     } else {
                         upvoteResource = R.drawable.ic_arrow_upward_black_48dp;
                         downvoteResource = R.drawable.ic_arrow_downward_black_48dp;
-                        upvoteResourceOrange = R.mipmap.ic_arrow_upward_orange_48dp;
-                        downvoteResourceBlue = R.mipmap.ic_arrow_downward_blue_48dp;
+                        upvoteResourceOrange = R.drawable.ic_arrow_upward_upvote_orange_48dp;
+                        downvoteResourceBlue = R.drawable.ic_arrow_downward_downvote_blue_48dp;
                     }
                 }
                 break;

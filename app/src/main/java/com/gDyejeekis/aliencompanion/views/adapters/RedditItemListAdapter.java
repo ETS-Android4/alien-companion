@@ -423,12 +423,13 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public ImageView reply;
         public ImageView viewUser;
         public ImageView more;
-        private static int upvoteColor, downvoteColor;
+
+        private float defaultIconOpacity, defaultIconOpacityDisabled;
 
         public UserCommentViewHolder(View itemView) {
             super(itemView);
-            upvoteColor = Color.parseColor("#ff8b60");
-            downvoteColor = Color.parseColor("#9494ff");
+            defaultIconOpacity = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
+            defaultIconOpacityDisabled = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
             layoutComment = (LinearLayout) itemView.findViewById(R.id.layout_comment);
             layoutCommentOptions = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);
             postTitle = (TextView) itemView.findViewById(R.id.txtView_postTitle);
@@ -442,11 +443,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
 
-            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                viewUser.setImageResource(R.mipmap.ic_person_light_grey_48dp);
-                reply.setImageResource(R.mipmap.ic_reply_light_grey_48dp);
-                more.setImageResource(R.mipmap.ic_more_vert_light_grey_48dp);
-            }
+            viewUser.setAlpha(defaultIconOpacity);
+            more.setAlpha(defaultIconOpacity);
         }
 
         public void bindModel(Context context, Comment comment, MyClickableSpan plainTextClickable) {
@@ -471,40 +469,40 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             layoutComment.setOnClickListener(new CommentLinkListener(context, comment));
 
             layoutCommentOptions.setBackgroundColor(MyApplication.currentColor);
-            //user logged in
+            // user logged in
             if(MyApplication.currentUser != null) {
-                //check user vote
+                reply.setAlpha(defaultIconOpacity);
+                // check user vote
                 if (comment.getLikes().equals("true")) {
-                    commentScore.setTextColor(upvoteColor);
-                    upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
-                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                        downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
-                    }
-                    else {
-                        downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
-                    }
+                    commentScore.setTextColor(MyApplication.upvoteColor);
+                    upvote.setImageResource(R.drawable.ic_arrow_upward_upvote_orange_48dp);
+                    upvote.setAlpha(1f);
+                    downvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                    downvote.setAlpha(defaultIconOpacity);
                 }
                 else if (comment.getLikes().equals("false")) {
-                    commentScore.setTextColor(downvoteColor);
-                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                        upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
-                    }
-                    else {
-                        upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
-                    }
-                    downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
+                    commentScore.setTextColor(MyApplication.downvoteColor);
+                    upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                    upvote.setAlpha(defaultIconOpacity);
+                    downvote.setImageResource(R.drawable.ic_arrow_downward_downvote_blue_48dp);
+                    downvote.setAlpha(1f);
                 }
                 else {
                     commentScore.setTextColor(MyApplication.textHintColor);
-                    if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                        upvote.setImageResource(R.mipmap.ic_arrow_upward_light_grey_48dp);
-                        downvote.setImageResource(R.mipmap.ic_arrow_downward_light_grey_48dp);
-                    }
-                    else {
-                        upvote.setImageResource(R.mipmap.ic_arrow_upward_white_48dp);
-                        downvote.setImageResource(R.mipmap.ic_arrow_downward_white_48dp);
-                    }
+                    upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                    downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
+                    upvote.setAlpha(defaultIconOpacity);
+                    downvote.setAlpha(defaultIconOpacity);
                 }
+            }
+            // logged out
+            else {
+                reply.setAlpha(defaultIconOpacityDisabled);
+                commentScore.setTextColor(MyApplication.textHintColor);
+                upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
+                downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
+                upvote.setAlpha(defaultIconOpacityDisabled);
+                downvote.setAlpha(defaultIconOpacityDisabled);
             }
         }
 

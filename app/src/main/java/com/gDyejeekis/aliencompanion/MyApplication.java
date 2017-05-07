@@ -138,6 +138,8 @@ public class MyApplication extends Application {
     public static int linkColor;
     public static int textColorStickied;
     public static int textColorStickiedClicked;
+    public static int upvoteColor;
+    public static int downvoteColor;
     public static int commentPermaLinkBackgroundColor;
     public static int syncPostCount;
     public static int syncCommentCount;
@@ -239,6 +241,8 @@ public class MyApplication extends Application {
         int[] primaryDarkColors = getPrimaryDarkColors(context);
         int[] primaryLightColors = getPrimarLightColors(context);
         int colorIndex = getCurrentColorIndex(primaryColors);
+        upvoteColor = context.getResources().getColor(R.color.upvoteColor);
+        downvoteColor = context.getResources().getColor(R.color.downvoteColor);
         switch(currentBaseTheme) {
             case LIGHT_THEME:
                 nightThemeEnabled = false;

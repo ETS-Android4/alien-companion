@@ -239,7 +239,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             int scoreEnd = post.getScore().toString().length();
             if (post.getLikes().equals("true")) {
                 scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), 0, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                upvote.setImageResource(R.mipmap.ic_arrow_upward_orange_48dp);
+                upvote.setImageResource(R.drawable.ic_arrow_upward_upvote_orange_48dp);
                 upvote.setAlpha(1f);
                 downvote.setImageResource(downvoteResource);
                 downvote.setAlpha(defaultIconOpacity);
@@ -248,7 +248,7 @@ public class PostCardViewHolder extends PostViewHolder  {
                 scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), 0, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvote.setImageResource(upvoteResource);
                 upvote.setAlpha(defaultIconOpacity);
-                downvote.setImageResource(R.mipmap.ic_arrow_downward_blue_48dp);
+                downvote.setImageResource(R.drawable.ic_arrow_downward_downvote_blue_48dp);
                 downvote.setAlpha(1f);
             }
             else {
