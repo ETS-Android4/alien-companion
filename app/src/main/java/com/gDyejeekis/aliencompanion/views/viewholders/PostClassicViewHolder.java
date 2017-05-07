@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
+import android.media.Image;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -30,8 +32,8 @@ public class PostClassicViewHolder extends PostViewHolder  {
     public TextView postDets2;
     public TextView scoreText;
     public ImageView postImage;
-    public ImageView upvote;
-    public ImageView downvote;
+    //public ImageView upvote;
+    //public ImageView downvote;
     public ImageView save;
     public ImageView hide;
     public ImageView viewUser;
@@ -45,7 +47,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
     public LinearLayout layoutPostOptions;
     public LinearLayout commentsButton;
 
-    private int postLinkResource, commentsResource;
+    private float defaultIconOpacity, defaultIconOpacityDisabled;
 
     public PostClassicViewHolder(View itemView) {
         super(itemView);
@@ -55,15 +57,19 @@ public class PostClassicViewHolder extends PostViewHolder  {
         postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
         //linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
         layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_options);
-        upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
         upvoteClassic = (ImageView) itemView.findViewById(R.id.imageView_upvote_classic);
-        downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
         downvoteClassic = (ImageView) itemView.findViewById(R.id.imageView_downvote_classic);
         save =  (ImageView) itemView.findViewById(R.id.btn_save);
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
         viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
         openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
+
+        // hide upvote/downvote buttons from post menu bar
+        ImageView upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
+        upvote.setVisibility(View.GONE);
+        ImageView downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
+        downvote.setVisibility(View.GONE);
 
         layoutPostInfo = (LinearLayout) itemView.findViewById(R.id.layout_postInfo);
         postDets1 = (TextView) itemView.findViewById(R.id.small_card_details_1);
@@ -72,6 +78,33 @@ public class PostClassicViewHolder extends PostViewHolder  {
         commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
 
         initIcons();
+    }
+
+    private void initIcons() {
+        initIconResources(PostViewType.classic);
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.LIGHT_THEME:
+                defaultIconOpacity = 0.54f;
+                defaultIconOpacityDisabled = 0.38f;
+                break;
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                defaultIconOpacity = 0.6f;
+                defaultIconOpacityDisabled = 0.3f;
+                break;
+            default:
+                defaultIconOpacity = 1f;
+                defaultIconOpacityDisabled = 0.5f;
+                break;
+        }
+        // set unchanging properties of icons
+        viewUser.setImageResource(viewUserResource);
+        openBrowser.setImageResource(openBrowserResource);
+        moreOptions.setImageResource(moreResource);
+        commentsIcon.setImageResource(commentsResource);
+        viewUser.setAlpha(defaultIconOpacity);
+        openBrowser.setAlpha(defaultIconOpacity);
+        moreOptions.setAlpha(defaultIconOpacity);
+        commentsIcon.setAlpha(defaultIconOpacity);
     }
 
     @Override
@@ -144,42 +177,56 @@ public class PostClassicViewHolder extends PostViewHolder  {
             if (post.getLikes().equals("true")) {
                 scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyleClassic), 0, scoreSpannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvoteClassic.setImageResource(upvoteResourceOrange);
+                upvoteClassic.setAlpha(1f);
                 downvoteClassic.setImageResource(downvoteResource);
+                upvoteClassic.setAlpha(defaultIconOpacity);
             }
             else if (post.getLikes().equals("false")) {
                 scoreSpannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyleClassic), 0, scoreSpannable.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvoteClassic.setImageResource(upvoteResource);
+                upvoteClassic.setAlpha(defaultIconOpacity);
                 downvoteClassic.setImageResource(downvoteResourceBlue);
+                downvoteClassic.setAlpha(1f);
             }
             else {
                 scoreText.setTextColor(MyApplication.textHintColor);
                 upvoteClassic.setImageResource(upvoteResource);
+                upvoteClassic.setAlpha(defaultIconOpacity);
                 downvoteClassic.setImageResource(downvoteResource);
+                downvoteClassic.setAlpha(defaultIconOpacity);
             }
             // check saved post
-            if(post.isSaved()) save.setImageResource(saveResourceYellow);
-            else save.setImageResource(saveResource);
+            if(post.isSaved()) {
+                save.setImageResource(saveResourceYellow);
+                save.setAlpha(1f);
+            }
+            else {
+                save.setImageResource(saveResource);
+                save.setAlpha(defaultIconOpacity);
+            }
             // check hidden post
-            if(post.isHidden()) hide.setImageResource(hideResourceRed);
-            else hide.setImageResource(hideResource);
+            if(post.isHidden()) {
+                hide.setImageResource(hideResourceRed);
+                hide.setAlpha(1f);
+            }
+            else {
+                hide.setImageResource(hideResource);
+                hide.setAlpha(defaultIconOpacity);
+            }
         }
         else {
             upvoteClassic.setImageResource(upvoteResource);
             downvoteClassic.setImageResource(downvoteResource);
             save.setImageResource(saveResource);
             hide.setImageResource(hideResource);
+            upvoteClassic.setAlpha(defaultIconOpacityDisabled);
+            downvoteClassic.setAlpha(defaultIconOpacityDisabled);
+            save.setAlpha(defaultIconOpacityDisabled);
+            hide.setAlpha(defaultIconOpacityDisabled);
         }
         scoreText.setText(scoreSpannable);
-        // hide post options default upvote/downvote buttons
-        upvote.setVisibility(View.GONE);
-        downvote.setVisibility(View.GONE);
-        // set post options background color
+        // set post menu bar background color
         layoutPostOptions.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
-        // set remaining icon resources
-        viewUser.setImageResource(viewUserResource);
-        openBrowser.setImageResource(openBrowserResource);
-        moreOptions.setImageResource(moreResource);
-        commentsIcon.setImageResource(commentsResource);
     }
 
     private String getCondensedScore(long score) {
@@ -222,46 +269,4 @@ public class PostClassicViewHolder extends PostViewHolder  {
         }
     }
 
-    private void initIcons() {
-        upvoteResourceOrange = R.mipmap.ic_upvote_classic_orange_48dp;
-        downvoteResourceBlue = R.mipmap.ic_downvote_classic_blue_48dp;
-        switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
-                initGreyColorIcons();
-                break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
-                initLightGreyColorIcons();
-                break;
-            default:
-                initWhiteColorIcons();
-                break;
-        }
-    }
-
-    @Override
-    protected void initWhiteColorIcons() {
-        super.initWhiteColorIcons();
-        upvoteResource = R.mipmap.ic_upvote_classic_white_48dp;
-        downvoteResource = R.mipmap.ic_downvote_classic_white_48dp;
-        postLinkResource = R.drawable.ic_link_white_48dp;
-        commentsResource = R.mipmap.ic_comment_white_24dp;
-    }
-
-    @Override
-    protected void initGreyColorIcons() {
-        super.initGreyColorIcons();
-        upvoteResource = R.mipmap.ic_upvote_classic_grey_48dp;
-        downvoteResource = R.mipmap.ic_downvote_classic_grey_48dp;
-        postLinkResource = R.drawable.ic_link_grey_48dp;
-        commentsResource = R.mipmap.ic_comment_grey_600_24dp;
-    }
-
-    @Override
-    protected void initLightGreyColorIcons() {
-        super.initLightGreyColorIcons();
-        upvoteResource = R.mipmap.ic_upvote_classic_light_grey_48dp;
-        downvoteResource = R.mipmap.ic_downvote_classic_light_grey_48dp;
-        postLinkResource = R.drawable.ic_link_light_grey_48dp;
-        commentsResource = R.mipmap.ic_comment_light_grey_24dp;
-    }
 }

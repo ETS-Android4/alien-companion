@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
@@ -33,15 +34,33 @@ public class PostGalleryViewHolder extends PostViewHolder {
 
     private final int textColor = MyApplication.textHintColor;
     private final int clickedTextColor = ConvertUtils.adjustAlpha(textColor, 0.75f);
-    private int postLinkResource, postLinkClickedResource;
+    //private float defaultIconOpacity, defaultIconOpacityClicked;
 
     public PostGalleryViewHolder(View itemView) {
         super(itemView);
         //layout = (LinearLayout) itemView.findViewById(R.id.gallery_container);
         postImage = (ImageView) itemView.findViewById(R.id.imageView_post_image);
         textView = (TextView) itemView.findViewById(R.id.textView_gallery);
-        initIcons();
+        //initIcons();
     }
+
+    //private void initIcons() {
+    //    initIconResources(PostViewType.gallery);
+    //    switch (MyApplication.currentBaseTheme) {
+    //        case MyApplication.LIGHT_THEME:
+    //            defaultIconOpacity = 0.54f;
+    //            defaultIconOpacityClicked = 0.38f;
+    //            break;
+    //        case MyApplication.DARK_THEME_LOW_CONTRAST:
+    //            defaultIconOpacity = 0.6f;
+    //            defaultIconOpacityClicked = 0.3f;
+    //            break;
+    //        default:
+    //            defaultIconOpacity = 1f;
+    //            defaultIconOpacityClicked = 0.5f;
+    //            break;
+    //    }
+    //}
 
     @Override
     public void bindModel(Context context, Submission post) {
@@ -110,20 +129,4 @@ public class PostGalleryViewHolder extends PostViewHolder {
 
     }
 
-    private void initIcons() {
-        switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
-                postLinkResource = R.drawable.ic_link_alt_grey_600_48dp;
-                postLinkClickedResource = R.drawable.ic_link_alt_light_grey_48dp;
-                break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
-                postLinkResource = R.drawable.ic_link_alt_light_grey_48dp;
-                postLinkClickedResource = R.drawable.ic_link_alt_grey_600_48dp;
-                break;
-            default:
-                postLinkResource = R.drawable.ic_link_alt_white_48dp;
-                postLinkClickedResource = R.drawable.ic_link_alt_light_grey_48dp;
-                break;
-        }
-    }
 }

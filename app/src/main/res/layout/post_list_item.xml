@@ -93,10 +93,11 @@
                 android:fontFamily="?attr/defaultFontFamily" />
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:id="@+id/imgView_commentsIcon"
-                android:src="@mipmap/ic_comment_grey_600_24dp" />
+                android:src="@drawable/ic_comment_black_48dp"
+                android:alpha="0.5"/>
         </LinearLayout>
     </LinearLayout>
 

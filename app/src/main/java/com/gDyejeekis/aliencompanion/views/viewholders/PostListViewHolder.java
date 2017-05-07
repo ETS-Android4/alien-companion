@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -41,7 +42,7 @@ public class PostListViewHolder extends PostViewHolder {
     public LinearLayout layoutPostOptions;
     public LinearLayout commentsButton;
 
-    private int commentsResource, commentsResourceClicked;
+    private float defaultIconOpacity, defaultIconOpacityDisabled, commentIconOpacity, commentIconOpacityClicked;
 
     public PostListViewHolder(View itemView) {
         super(itemView);
@@ -56,7 +57,6 @@ public class PostListViewHolder extends PostViewHolder {
         save =  (ImageView) itemView.findViewById(R.id.btn_save);
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
-
         viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
         openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
         commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
@@ -67,6 +67,39 @@ public class PostListViewHolder extends PostViewHolder {
         initIcons();
     }
 
+    private void initIcons() {
+        initIconResources(PostViewType.list);
+
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                defaultIconOpacity = 0.6f;
+                defaultIconOpacityDisabled = 0.3f;
+                commentIconOpacity = 0.6f;
+                commentIconOpacityClicked = 0.4f;
+                break;
+            case MyApplication.LIGHT_THEME:
+                defaultIconOpacity = 1f;
+                defaultIconOpacityDisabled = 0.5f;
+                commentIconOpacity = 0.44f;
+                commentIconOpacityClicked = 0.28f;
+                break;
+            default:
+                defaultIconOpacity = 1f;
+                defaultIconOpacityDisabled = 0.5f;
+                commentIconOpacity = 0.9f;
+                commentIconOpacityClicked = 0.45f;
+                break;
+        }
+        // set unchanging properties of icons
+        commentsIcon.setImageResource(commentsResource);
+        viewUser.setImageResource(viewUserResource);
+        openBrowser.setImageResource(openBrowserResource);
+        moreOptions.setImageResource(moreResource);
+        viewUser.setAlpha(defaultIconOpacity);
+        openBrowser.setAlpha(defaultIconOpacity);
+        moreOptions.setAlpha(defaultIconOpacity);
+    }
+
     @Override
     public void bindModel(Context context, Submission post) {
         // set title
@@ -75,12 +108,12 @@ public class PostListViewHolder extends PostViewHolder {
         if(post.isClicked()) {
             title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
             commentsText.setTextColor(clickedTextColor);
-            commentsIcon.setImageResource(commentsResourceClicked);
+            commentsIcon.setAlpha(commentIconOpacityClicked);
         }
         else {
             title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textColor);
             commentsText.setTextColor(MyApplication.textColor);
-            commentsIcon.setImageResource(commentsResource);
+            commentsIcon.setAlpha(commentIconOpacity);
         }
         // set post thumbnail
         Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
@@ -122,30 +155,50 @@ public class PostListViewHolder extends PostViewHolder {
             if (post.getLikes().equals("true")) {
                 detsOneSpannable.setSpan(new TextAppearanceSpan(context, R.style.upvotedStyle), scoreStart, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvote.setImageResource(upvoteResourceOrange);
+                upvote.setAlpha(1f);
                 downvote.setImageResource(downvoteResource);
+                downvote.setAlpha(defaultIconOpacity);
             }
             else if (post.getLikes().equals("false")) {
                 detsOneSpannable.setSpan(new TextAppearanceSpan(context, R.style.downvotedStyle), scoreStart, scoreEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 upvote.setImageResource(upvoteResource);
+                upvote.setAlpha(defaultIconOpacity);
                 downvote.setImageResource(downvoteResourceBlue);
+                downvote.setAlpha(1f);
             }
             else {
                 postDets1.setTextColor(MyApplication.textHintColor);
                 upvote.setImageResource(upvoteResource);
+                upvote.setAlpha(defaultIconOpacity);
                 downvote.setImageResource(downvoteResource);
+                downvote.setAlpha(defaultIconOpacity);
             }
             // check saved post
-            if(post.isSaved()) save.setImageResource(saveResourceYellow);
-            else save.setImageResource(saveResource);
+            if(post.isSaved()) {
+                save.setImageResource(saveResourceYellow);
+                save.setAlpha(1f);
+            } else {
+                save.setImageResource(saveResource);
+                save.setAlpha(defaultIconOpacity);
+            }
             // check hidden post
-            if(post.isHidden()) hide.setImageResource(hideResourceRed);
-            else hide.setImageResource(hideResource);
+            if(post.isHidden()) {
+                hide.setImageResource(hideResourceRed);
+                hide.setAlpha(1f);
+            } else {
+                hide.setImageResource(hideResource);
+                hide.setAlpha(defaultIconOpacity);
+            }
         }
         else {
             upvote.setImageResource(upvoteResource);
             downvote.setImageResource(downvoteResource);
             save.setImageResource(saveResource);
             hide.setImageResource(hideResource);
+            upvote.setAlpha(defaultIconOpacityDisabled);
+            downvote.setAlpha(defaultIconOpacityDisabled);
+            save.setAlpha(defaultIconOpacityDisabled);
+            hide.setAlpha(defaultIconOpacityDisabled);
         }
         postDets1.setText(detsOneSpannable);
         // set second row of post details
@@ -159,12 +212,9 @@ public class PostListViewHolder extends PostViewHolder {
         }
         // set comments text
         commentsText.setText(post.getCommentCount().toString());
-        // set post options backgound color
+
+        // set post menu bar backgound color
         layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
-        // set remaining icon resources
-        viewUser.setImageResource(viewUserResource);
-        openBrowser.setImageResource(openBrowserResource);
-        moreOptions.setImageResource(moreResource);
     }
 
     @Override
@@ -193,39 +243,4 @@ public class PostListViewHolder extends PostViewHolder {
         }
     }
 
-    private void initIcons() {
-        upvoteResourceOrange = R.mipmap.ic_arrow_upward_orange_48dp;
-        downvoteResourceBlue = R.mipmap.ic_arrow_downward_blue_48dp;
-        switch (MyApplication.currentBaseTheme) {
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
-                initLightGreyColorIcons();
-                commentsResource = R.mipmap.ic_comment_light_grey_24dp;
-                commentsResourceClicked = R.mipmap.ic_comment_grey_600_24dp;
-                break;
-            case MyApplication.LIGHT_THEME:
-                initWhiteColorIcons();
-                commentsResource = R.mipmap.ic_comment_grey_600_24dp;
-                commentsResourceClicked = R.mipmap.ic_comment_light_grey_24dp;
-                break;
-            default:
-                initWhiteColorIcons();
-                commentsResource = R.mipmap.ic_comment_white_24dp;
-                commentsResourceClicked = R.mipmap.ic_comment_light_grey_24dp;
-                break;
-        }
-    }
-
-    @Override
-    protected void initWhiteColorIcons() {
-        super.initWhiteColorIcons();
-        upvoteResource = R.mipmap.ic_arrow_upward_white_48dp;
-        downvoteResource = R.mipmap.ic_arrow_downward_white_48dp;
-    }
-
-    @Override
-    protected void initLightGreyColorIcons() {
-        super.initLightGreyColorIcons();
-        upvoteResource = R.mipmap.ic_arrow_upward_light_grey_48dp;
-        downvoteResource = R.mipmap.ic_arrow_downward_light_grey_48dp;
-    }
 }
