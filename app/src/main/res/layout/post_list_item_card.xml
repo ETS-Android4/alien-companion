@@ -134,7 +134,7 @@
                 android:text="(Self text preview here)"
                 android:id="@+id/txtView_selfTextPreview"
                 android:textColor="?attr/themeTextHintColor"
-                android:textSize="?attr/font_medium"
+                android:textSize="?attr/font_selfText"
                 android:fontFamily="?attr/defaultFontFamily" />
 
             <View
