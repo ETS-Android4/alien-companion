@@ -9,13 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
 import com.gDyejeekis.aliencompanion.services.MessageCheckService;
 import com.gDyejeekis.aliencompanion.services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -80,10 +78,6 @@ public class MyApplication extends Application {
 
     public static final int DARK_THEME_LOW_CONTRAST = 4;
 
-    public static int textHintDark;
-
-    public static int textHintLight;
-
     public static int smallCardLinkBackground;
 
     public static boolean actionSort = false;
@@ -133,7 +127,8 @@ public class MyApplication extends Application {
     public static boolean hideNSFW;
     public static int initialCommentCount;
     public static int initialCommentDepth;
-    public static int textColor;
+    public static int textPrimaryColor;
+    public static int textSecondaryColor;
     public static int textHintColor;
     public static int linkColor;
     public static int textColorStickied;
@@ -209,8 +204,6 @@ public class MyApplication extends Application {
     }
 
     private void initStaticFields() {
-        textHintDark = getResources().getColor(R.color.darkHintText);
-        textHintLight = getResources().getColor(R.color.lightHintText);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         checkAppVersion();
         getDeviceId();
@@ -249,8 +242,9 @@ public class MyApplication extends Application {
                 currentColor = colorPrimary;
                 colorPrimaryDark = primaryDarkColors[colorIndex];
                 colorPrimaryLight = primaryLightColors[colorIndex];
-                textColor = Color.BLACK;
-                textHintColor = textHintLight;
+                textPrimaryColor = context.getResources().getColor(R.color.lightPrimaryText);
+                textSecondaryColor = context.getResources().getColor(R.color.lightSecondaryText);
+                textHintColor = context.getResources().getColor(R.color.lightHintText);
                 linkColor = MyApplication.colorPrimary;
                 textColorStickied = context.getResources().getColor(R.color.lightStickiedText);
                 textColorStickiedClicked = context.getResources().getColor(R.color.lightStickiedClickedText);
@@ -262,8 +256,9 @@ public class MyApplication extends Application {
                 currentColor = colorPrimary;
                 colorPrimaryDark = primaryDarkColors[colorIndex];
                 colorPrimaryLight = primaryLightColors[colorIndex];
-                textColor = Color.WHITE;
-                textHintColor = textHintDark;
+                textPrimaryColor = context.getResources().getColor(R.color.materialBluePrimaryText);
+                textSecondaryColor = context.getResources().getColor(R.color.materialBlueSecondaryText);
+                textHintColor = context.getResources().getColor(R.color.materialBlueHintText);
                 linkColor = MyApplication.colorPrimary;
                 textColorStickied = context.getResources().getColor(R.color.materialBlueStickiedText);
                 textColorStickiedClicked = context.getResources().getColor(R.color.materialBlueStickiedClickedText);
@@ -275,8 +270,9 @@ public class MyApplication extends Application {
                 currentColor = colorPrimary;
                 colorPrimaryDark = primaryDarkColors[colorIndex];
                 colorPrimaryLight = primaryLightColors[colorIndex];
-                textColor = Color.WHITE;
-                textHintColor = textHintDark;
+                textPrimaryColor = context.getResources().getColor(R.color.materialGreyPrimaryText);
+                textSecondaryColor = context.getResources().getColor(R.color.materialGreySecondaryText);
+                textHintColor = context.getResources().getColor(R.color.materialGreyHintText);
                 linkColor = MyApplication.colorPrimary;
                 textColorStickied = context.getResources().getColor(R.color.materialGreyStickiedText);
                 textColorStickiedClicked = context.getResources().getColor(R.color.materialGreyStickiedClickedText);
@@ -288,8 +284,9 @@ public class MyApplication extends Application {
                 currentColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = colorInDarkThemes ? primaryDarkColors[colorIndex] : Color.BLACK;
                 colorPrimaryLight = colorInDarkThemes ? primaryLightColors[colorIndex] : context.getResources().getColor(R.color.darkPrimaryLight);
-                textColor = Color.WHITE;
-                textHintColor = textHintDark;
+                textPrimaryColor = context.getResources().getColor(R.color.darkPrimaryText);
+                textSecondaryColor = context.getResources().getColor(R.color.darkSecondaryText);
+                textHintColor = context.getResources().getColor(R.color.darkHintText);
                 linkColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.darkLinkText);
                 textColorStickied = context.getResources().getColor(R.color.darkStickiedText);
                 textColorStickiedClicked = context.getResources().getColor(R.color.darkStickiedClickedText);
@@ -302,7 +299,8 @@ public class MyApplication extends Application {
                 currentColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = colorInDarkThemes ? primaryDarkColors[colorIndex] : Color.BLACK;
                 colorPrimaryLight = colorInDarkThemes ? primaryLightColors[colorIndex] : context.getResources().getColor(R.color.darkPrimaryLight);
-                textColor = context.getResources().getColor(R.color.lowContrastText);
+                textPrimaryColor = context.getResources().getColor(R.color.lowContrastPrimaryText);
+                textSecondaryColor = context.getResources().getColor(R.color.lowContrastSecondaryText);
                 textHintColor = context.getResources().getColor(R.color.lowContrastHintText);
                 linkColor = colorInDarkThemes ? colorPrimary : context.getResources().getColor(R.color.lowContrastLinkText);
                 textColorStickied = context.getResources().getColor(R.color.lowContrastStickiedText);

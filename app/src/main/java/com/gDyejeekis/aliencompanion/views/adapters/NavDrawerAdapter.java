@@ -663,7 +663,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     highlightSelectedItem(subredditRowViewHolder);
                 }
                 else {
-                    subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
+                    subredditRowViewHolder.name.setTextColor(MyApplication.textPrimaryColor);
                     setBackgroundSelector(subredditRowViewHolder);
                 }
                 break;
@@ -693,7 +693,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     highlightSelectedItem(subredditRowViewHolder);
                 }
                 else {
-                    subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
+                    subredditRowViewHolder.name.setTextColor(MyApplication.textPrimaryColor);
                     setBackgroundSelector(subredditRowViewHolder);
                 }
                 break;
@@ -708,7 +708,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     highlightSelectedItem(subredditRowViewHolder);
                 }
                 else {
-                    subredditRowViewHolder.name.setTextColor(MyApplication.textColor);
+                    subredditRowViewHolder.name.setTextColor(MyApplication.textPrimaryColor);
                     setBackgroundSelector(subredditRowViewHolder);
                 }
                 break;
@@ -756,11 +756,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.materialGreyDrawerItemSelected));
                 break;
             case MyApplication.DARK_THEME:
-                vHolder.name.setTextColor(MyApplication.colorInDarkThemes ? MyApplication.colorPrimary : MyApplication.textColor);
+                vHolder.name.setTextColor(MyApplication.colorInDarkThemes ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
                 break;
             case MyApplication.DARK_THEME_LOW_CONTRAST:
-                vHolder.name.setTextColor(MyApplication.colorInDarkThemes ? MyApplication.colorPrimary : MyApplication.textColor);
+                vHolder.name.setTextColor(MyApplication.colorInDarkThemes ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
                 break;
         }

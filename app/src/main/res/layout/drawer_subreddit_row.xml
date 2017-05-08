@@ -13,7 +13,7 @@
         android:text="(Subreddit)"
         android:id="@+id/txtView_subreddit"
         android:layout_gravity="center_vertical"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:paddingLeft="16dp"
         android:paddingTop="6dp"
         android:textAppearance="?android:attr/textAppearanceMedium"

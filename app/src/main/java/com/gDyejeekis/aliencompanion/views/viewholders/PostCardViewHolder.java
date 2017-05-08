@@ -121,10 +121,10 @@ public class PostCardViewHolder extends PostViewHolder  {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked() && !showDetails) {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
         }
         else {
-            title.setTextColor(post.isStickied() && (post.showAsStickied || showDetails) ? MyApplication.textColorStickied : MyApplication.textColor);
+            title.setTextColor(post.isStickied() && (post.showAsStickied || showDetails) ? MyApplication.textColorStickied : MyApplication.textPrimaryColor);
         }
         // set post thumbnail or self text
         Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
@@ -148,7 +148,7 @@ public class PostCardViewHolder extends PostViewHolder  {
                         if(post.getHighlightText()!=null) {
                             stringBuilder = SpanUtils.highlightText(stringBuilder, post.getHighlightText(), post.highlightMatchCase());
                         }
-                        selfText.setTextColor(MyApplication.textColor);
+                        selfText.setTextColor(MyApplication.textPrimaryColor);
                         selfText.setText(stringBuilder);
                         selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
                     }
@@ -160,7 +160,7 @@ public class PostCardViewHolder extends PostViewHolder  {
                             layoutSelfText.setVisibility(View.VISIBLE);
                             String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
                             if (text.length() > 200) text = text.substring(0, 200) + " ...";
-                            selfText.setTextColor(MyApplication.textHintColor);
+                            selfText.setTextColor(MyApplication.textSecondaryColor);
                             selfText.setText(text);
                         }
                     }
@@ -252,7 +252,7 @@ public class PostCardViewHolder extends PostViewHolder  {
                 downvote.setAlpha(1f);
             }
             else {
-                scoreText.setTextColor(MyApplication.textHintColor);
+                scoreText.setTextColor(MyApplication.textSecondaryColor);
                 upvote.setImageResource(upvoteResource);
                 upvote.setAlpha(defaultIconOpacity);
                 downvote.setImageResource(downvoteResource);

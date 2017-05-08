@@ -11,7 +11,7 @@
         android:text="(confirmation text here)"
         android:id="@+id/textView_confirmation"
         android:textSize="15sp"
-        android:textColor="?attr/themeTextColor" />
+        android:textColor="?attr/themeTextPrimaryColor" />
 
     <LinearLayout
         android:orientation="horizontal"

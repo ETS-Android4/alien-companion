@@ -14,7 +14,7 @@
         android:hint="title"
         android:singleLine="true"
         android:imeOptions="actionNext"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor" />
 
     <EditText
@@ -26,7 +26,7 @@
         android:singleLine="true"
         android:imeOptions="actionNext"
         android:inputType="textUri"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor" />
 
     <EditText
@@ -37,6 +37,6 @@
         android:layout_marginTop="10dp"
         android:singleLine="true"
         android:imeOptions="actionNext"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor" />
 </LinearLayout>

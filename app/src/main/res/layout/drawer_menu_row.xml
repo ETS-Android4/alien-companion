@@ -22,7 +22,7 @@
         android:text="Sample Option"
         android:id="@+id/txtView_option"
         android:gravity="center|left"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:layout_weight="6"
         android:layout_gravity="center"
         android:paddingLeft="26dp"

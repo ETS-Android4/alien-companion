@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:text="(subreddit)"
         android:gravity="center_vertical"
-        android:textColor="?attr/themeTextColor" />
+        android:textColor="?attr/themeTextPrimaryColor" />
     <ImageView
         android:id="@id/click_remove"
         android:layout_weight="1"

@@ -15,7 +15,7 @@
         android:id="@+id/textView_action_descr"
         android:layout_weight="1"
         android:textSize="16sp"
-        android:textColor="?attr/themeTextColor" />
+        android:textColor="?attr/themeTextPrimaryColor" />
 
     <TextView
         android:layout_width="match_parent"

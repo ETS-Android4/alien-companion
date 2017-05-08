@@ -16,7 +16,7 @@
         android:id="@+id/textView_createMulti"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp" />
 
@@ -36,7 +36,7 @@
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:completionThreshold="1"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor" />
 
     <LinearLayout

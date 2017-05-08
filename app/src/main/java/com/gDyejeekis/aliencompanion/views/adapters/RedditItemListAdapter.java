@@ -488,7 +488,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     downvote.setAlpha(1f);
                 }
                 else {
-                    commentScore.setTextColor(MyApplication.textHintColor);
+                    commentScore.setTextColor(MyApplication.textSecondaryColor);
                     upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
                     downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
                     upvote.setAlpha(defaultIconOpacity);
@@ -498,7 +498,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             // logged out
             else {
                 reply.setAlpha(defaultIconOpacityDisabled);
-                commentScore.setTextColor(MyApplication.textHintColor);
+                commentScore.setTextColor(MyApplication.textSecondaryColor);
                 upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
                 downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
                 upvote.setAlpha(defaultIconOpacityDisabled);

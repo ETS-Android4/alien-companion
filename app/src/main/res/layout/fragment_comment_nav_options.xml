@@ -27,13 +27,13 @@
             android:text="Threads"
             android:id="@+id/radio_btn_threads"
             android:layout_weight="1"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
             android:background="@null"
-            android:buttonTint="?attr/themeTextHintColor"/>
+            android:buttonTint="?attr/themeTextSecondaryColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -62,9 +62,9 @@
             android:checked="false"
             android:clickable="false"
             android:text="Threads"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="16sp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -93,9 +93,9 @@
             android:checked="false"
             android:clickable="false"
             android:text="Threads"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="16sp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -124,9 +124,9 @@
             android:checked="false"
             android:clickable="false"
             android:text="Threads"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="16sp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -155,9 +155,9 @@
             android:checked="false"
             android:clickable="false"
             android:text="Threads"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="16sp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
     </LinearLayout>
 
     <LinearLayout
@@ -186,9 +186,9 @@
             android:checked="false"
             android:clickable="false"
             android:text="Threads"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="16sp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
     </LinearLayout>
 
 </LinearLayout>

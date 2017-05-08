@@ -36,7 +36,7 @@
                 android:id="@+id/textView_score_classic"
                 android:gravity="center_vertical|center_horizontal"
                 android:fontFamily="?attr/defaultFontFamily"
-                android:textColor="?attr/themeTextHintColor"
+                android:textColor="?attr/themeTextSecondaryColor"
                 android:textSize="?attr/font_comments"/>
 
             <ImageView

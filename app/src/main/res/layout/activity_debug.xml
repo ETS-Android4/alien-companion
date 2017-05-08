@@ -29,7 +29,7 @@
             android:id="@+id/editText_test_url"
             android:textSize="14sp"
             android:hint="enter url here"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textColorHint="?attr/themeTextHintColor"
             android:nextFocusUp="@id/editText_test_url"
             android:nextFocusLeft="@id/editText_test_url"/>

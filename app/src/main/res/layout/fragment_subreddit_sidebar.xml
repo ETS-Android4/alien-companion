@@ -42,7 +42,7 @@
                             android:text="##############"
                             android:id="@+id/textView_subs"
                             android:textSize="18sp"
-                            android:textColor="?attr/themeTextColor"
+                            android:textColor="?attr/themeTextPrimaryColor"
                             android:textStyle="bold" />
 
                         <TextView
@@ -51,7 +51,7 @@
                             android:text=" readers"
                             android:id="@+id/textView4"
                             android:textSize="18sp"
-                            android:textColor="?attr/themeTextColor" />
+                            android:textColor="?attr/themeTextPrimaryColor" />
                     </org.apmem.tools.layouts.FlowLayout>
 
                     <org.apmem.tools.layouts.FlowLayout
@@ -65,7 +65,7 @@
                             android:text="##############"
                             android:id="@+id/textView_active_accounts"
                             android:textSize="18sp"
-                            android:textColor="?attr/themeTextColor"
+                            android:textColor="?attr/themeTextPrimaryColor"
                             android:textStyle="bold" />
 
                         <TextView
@@ -74,7 +74,7 @@
                             android:text=" here now"
                             android:id="@+id/textView5"
                             android:textSize="18sp"
-                            android:textColor="?attr/themeTextColor" />
+                            android:textColor="?attr/themeTextPrimaryColor" />
                     </org.apmem.tools.layouts.FlowLayout>
                 </LinearLayout>
 
@@ -96,7 +96,7 @@
                 android:text="(public description)"
                 android:id="@+id/textView_public_descr"
                 android:textSize="16sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:padding="5dp" />
 
             <TextView
@@ -105,7 +105,7 @@
                 android:text="(submit text)"
                 android:id="@+id/textView_submit_text"
                 android:textSize="16sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:padding="5dp" />
 
             <TextView
@@ -114,7 +114,7 @@
                 android:text="(description)"
                 android:id="@+id/textView_description"
                 android:textSize="16sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:padding="5dp" />
         </LinearLayout>
 

@@ -39,7 +39,8 @@
     </declare-styleable>
 
     <declare-styleable name="selectedTheme">
-        <attr name="themeTextColor" format="color"/>
+        <attr name="themeTextPrimaryColor" format="color"/>
+        <attr name="themeTextSecondaryColor" format="color"/>
         <attr name="themeTextHintColor" format="color"/>
         <attr name="themeTextBackgroundColor" format="color"/>
         <attr name="themeBackgroundColor" format="color"/>
@@ -51,7 +52,7 @@
         <attr name="themeDragHandle" format="reference"/>
         <attr name="themeButtonSelector" format="reference"/>
         <attr name="themeCommentsButtonBackground" format="reference"/>
-        <attr name="themeCardBorderColor" format="color" />
+        <!--<attr name="themeCardBorderColor" format="color" />-->
     </declare-styleable>
 
     <attr name="SwipeBackLayoutStyle" format="reference"/>

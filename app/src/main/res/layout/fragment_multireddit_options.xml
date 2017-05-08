@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="(multireddit)"
         android:id="@+id/textView_title"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="20sp"
         android:padding="10dp" />
 
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Rename"
         android:id="@+id/textView_rename"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:background="?attr/themeSelector"
         android:padding="10dp" />
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Remove"
         android:id="@+id/textView_remove"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:background="?attr/themeSelector"
         android:padding="10dp" />
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:text="Delete"
         android:id="@+id/textView_delete"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:background="?attr/themeSelector"
         android:padding="10dp" />

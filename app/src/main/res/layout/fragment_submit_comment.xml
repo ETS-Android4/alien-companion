@@ -32,7 +32,7 @@
                 android:textSize="20sp"
                 android:padding="10dp"
                 android:textIsSelectable="true"
-                android:textColor="?attr/themeTextColor" />
+                android:textColor="?attr/themeTextPrimaryColor" />
         </com.gDyejeekis.aliencompanion.views.ScrollViewWithMaxHeight>
     </LinearLayout>
 
@@ -50,7 +50,7 @@
             android:id="@+id/editText_reply"
             android:hint="Your comment"
             android:textSize="20sp"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textColorHint="?attr/themeTextHintColor" />
     </LinearLayout>
 

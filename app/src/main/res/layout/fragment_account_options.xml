@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="(username)"
         android:id="@+id/textView_title"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="20sp"
         android:padding="10dp" />
 
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Remove"
         android:id="@+id/textView_removeAccount"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:padding="10dp"
         android:background="?attr/themeSelector" />
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="...more options coming!"
         android:id="@+id/textView_changePassowrd"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:padding="10dp"
         android:background="?attr/themeSelector" />

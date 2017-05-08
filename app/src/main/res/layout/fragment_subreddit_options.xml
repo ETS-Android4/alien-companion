@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="(subreddit)"
         android:id="@+id/textView_title"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="20sp"
         android:padding="10dp" />
 
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Remove"
         android:id="@+id/textView_remove"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:padding="10dp"
         android:background="?attr/themeSelector" />
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Subscribe"
         android:id="@+id/textView_sub"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:padding="10dp"
         android:background="?attr/themeSelector" />
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:text="Unsubscribe"
         android:id="@+id/textView_unsub"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:padding="10dp"
         android:background="?attr/themeSelector" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="Remove and unsubscribe"
         android:id="@+id/textView_remove_unsub"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="15sp"
         android:padding="10dp"
         android:background="?attr/themeSelector" />

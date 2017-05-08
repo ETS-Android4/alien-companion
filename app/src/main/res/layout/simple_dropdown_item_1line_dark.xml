@@ -8,4 +8,4 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:ellipsize="marquee"
     android:background="@drawable/touch_selector_dropdown_dark"
-    android:textColor="?attr/themeTextColor"/>
+    android:textColor="?attr/themeTextPrimaryColor"/>

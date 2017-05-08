@@ -22,8 +22,6 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
 public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
-    static final int clickedTextColor = MyApplication.textHintColor;
-
     int saveResource, hideResource, moreResource, viewUserResource, openBrowserResource, saveResourceYellow, hideResourceRed,
             upvoteResource, downvoteResource, upvoteResourceOrange, downvoteResourceBlue, commentsResource, linkResource;
 

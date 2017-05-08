@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Moving synced data to external memory"
         android:id="@+id/textView_operation"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:layout_marginLeft="12dp"
         android:textSize="20sp" />
 </LinearLayout>

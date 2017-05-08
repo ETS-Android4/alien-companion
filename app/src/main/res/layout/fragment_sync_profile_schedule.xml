@@ -12,7 +12,7 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:text="(profile name)"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="20sp"
         android:textStyle="bold"
         android:visibility="gone" />
@@ -26,7 +26,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textStyle="italic" />
 
     <org.apmem.tools.layouts.FlowLayout
@@ -53,7 +53,7 @@
             android:text="to"
             android:id="@+id/textView8"
             android:textSize="18sp"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:paddingTop="20dp" />
@@ -80,7 +80,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textStyle="italic" />
 
     <org.apmem.tools.layouts.FlowLayout

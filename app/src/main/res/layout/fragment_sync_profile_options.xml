@@ -17,7 +17,7 @@
             android:text="Use global sync options"
             android:id="@+id/switch_global_options"
             android:checked="true"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginBottom="5dp"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
                 android:text="Sync post count"
                 android:id="@+id/textView6"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
 
@@ -60,7 +60,7 @@
                 android:text="Sync comment count"
                 android:id="@+id/textView15"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
 
@@ -85,7 +85,7 @@
                 android:text="Sync comment depth"
                 android:id="@+id/textView16"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
 
@@ -110,7 +110,7 @@
                 android:text="Sync comment sort"
                 android:id="@+id/textView18"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
 
@@ -137,7 +137,7 @@
                 android:text="Sync thumbnails"
                 android:id="@+id/textView22"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_weight="1"
                 android:labelFor="@+id/checkBox_syncThumbs" />
 
@@ -163,7 +163,7 @@
                 android:text="Sync post images and GIFs"
                 android:id="@+id/textView21"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_weight="1"
                 android:labelFor="@+id/checkBox_syncImages"/>
 
@@ -187,7 +187,7 @@
                 android:text="Imgur album limit"
                 android:id="@+id/textView19"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
 
@@ -214,7 +214,7 @@
                 android:text="Sync post videos"
                 android:id="@+id/textView26"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_weight="1"
                 android:labelFor="@+id/checkBox_syncImages"/>
 
@@ -240,7 +240,7 @@
                 android:text="Sync post articles"
                 android:id="@+id/textView23"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_weight="1"
                 android:labelFor="@+id/checkBox_syncArticles" />
 
@@ -264,7 +264,7 @@
                 android:text="Sync links in comments"
                 android:id="@+id/textView24"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
 
@@ -292,7 +292,7 @@
                 android:text="Sync over WiFi only"
                 android:id="@+id/textView20"
                 android:textSize="18sp"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:layout_weight="1"
                 android:labelFor="@+id/checkBox_syncWifiOnly"/>
 

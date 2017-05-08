@@ -1,12 +1,8 @@
 package com.gDyejeekis.aliencompanion.views.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +24,6 @@ import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -131,7 +126,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter {
 
         public void bindModel(final SyncProfilesActivity activity, final SyncProfile profile, final int position) {
             name.setText(profile.getName());
-            name.setTextColor((profile.isActive()) ? MyApplication.textColor : MyApplication.textHintColor);
+            name.setTextColor((profile.isActive()) ? MyApplication.textPrimaryColor : MyApplication.textSecondaryColor);
             moreButton.setImageResource(moreButtonResource);
             moreButton.setOnClickListener(new View.OnClickListener() {
                 @Override

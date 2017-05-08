@@ -32,8 +32,8 @@ public class PostGalleryViewHolder extends PostViewHolder {
     private ImageView postImage;
     private TextView textView;
 
-    private final int textColor = MyApplication.textHintColor;
-    private final int clickedTextColor = ConvertUtils.adjustAlpha(textColor, 0.75f);
+    //private final int textColor = MyApplication.textHintColor;
+    //private final int clickedTextColor = ConvertUtils.adjustAlpha(textColor, 0.75f);
     //private float defaultIconOpacity, defaultIconOpacityClicked;
 
     public PostGalleryViewHolder(View itemView) {
@@ -108,10 +108,10 @@ public class PostGalleryViewHolder extends PostViewHolder {
             }
             textView.setText(text);
             if(post.isClicked()) {
-                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
             }
             else {
-                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : textColor);
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textPrimaryColor);
             }
         }
     }

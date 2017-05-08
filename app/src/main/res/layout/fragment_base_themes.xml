@@ -34,13 +34,13 @@
             android:text="Light"
             android:id="@+id/radioButtonLight"
             android:layout_weight="1"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
             android:background="@null"
-            android:buttonTint="?attr/themeTextHintColor"/>
+            android:buttonTint="?attr/themeTextSecondaryColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -71,13 +71,13 @@
             android:text="Material blue grey"
             android:id="@+id/radioButtonMaterialBlue"
             android:layout_weight="1"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
             android:background="@null"
-            android:buttonTint="?attr/themeTextHintColor"/>
+            android:buttonTint="?attr/themeTextSecondaryColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -107,13 +107,13 @@
             android:text="Material grey"
             android:id="@+id/radioButtonMaterialGrey"
             android:layout_weight="1"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
             android:background="@null"
-            android:buttonTint="?attr/themeTextHintColor"/>
+            android:buttonTint="?attr/themeTextSecondaryColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -143,13 +143,13 @@
             android:text="Dark"
             android:id="@+id/radioButtonDark"
             android:layout_weight="1"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
             android:background="@null"
-            android:buttonTint="?attr/themeTextHintColor"/>
+            android:buttonTint="?attr/themeTextSecondaryColor"/>
     </LinearLayout>
 
     <LinearLayout
@@ -168,7 +168,7 @@
             app:cv_fillRadius="1"
             app:cv_titleText="E"
             app:cv_subtitleText=""
-            app:cv_titleColor="@color/lowContrastText"
+            app:cv_titleColor="@color/lowContrastPrimaryText"
             app:cv_titleSize="10dp"
             app:cv_strokeColorValue="@color/primary_dark"
             app:cv_strokeWidthSize="2"/>
@@ -179,13 +179,13 @@
             android:text="Dark (low contrast)"
             android:id="@+id/radioButtonDarkLowContrast"
             android:layout_weight="1"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:layout_marginLeft="12dp"
             android:textSize="16sp"
             android:checked="false"
             android:clickable="false"
             android:background="@null"
-            android:buttonTint="?attr/themeTextHintColor"/>
+            android:buttonTint="?attr/themeTextSecondaryColor"/>
     </LinearLayout>
 
 </LinearLayout>

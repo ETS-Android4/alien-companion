@@ -24,7 +24,7 @@
                 android:text="(#######)"
                 android:id="@+id/txtView_linkKarma"
                 android:textSize="?attr/font_xlarge"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
@@ -33,7 +33,7 @@
                 android:text="Post Karma"
                 android:id="@+id/txtView_linkKarma_label"
                 android:textSize="?attr/font_medium"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
         </LinearLayout>
 
@@ -50,7 +50,7 @@
                 android:text="(#######)"
                 android:id="@+id/txtView_commentKarma"
                 android:textSize="?attr/font_xlarge"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:text="Comment Karma"
                 android:id="@+id/txtView_commentKarma_label"
                 android:textSize="?attr/font_medium"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
         </LinearLayout>
     </LinearLayout>

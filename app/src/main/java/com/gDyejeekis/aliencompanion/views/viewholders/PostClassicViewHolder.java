@@ -1,7 +1,6 @@
 package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
-import android.media.Image;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -113,10 +112,10 @@ public class PostClassicViewHolder extends PostViewHolder  {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
         }
         else {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textPrimaryColor);
         }
         // set post thumbnail
         if(post.isSelf()) {
@@ -189,7 +188,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
                 downvoteClassic.setAlpha(1f);
             }
             else {
-                scoreText.setTextColor(MyApplication.textHintColor);
+                scoreText.setTextColor(MyApplication.textSecondaryColor);
                 upvoteClassic.setImageResource(upvoteResource);
                 upvoteClassic.setAlpha(defaultIconOpacity);
                 downvoteClassic.setImageResource(downvoteResource);

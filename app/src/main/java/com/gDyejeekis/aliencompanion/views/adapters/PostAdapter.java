@@ -294,7 +294,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.downvote.setAlpha(1f);
                     }
                     else {
-                        cvh.score.setTextColor(MyApplication.textHintColor);
+                        cvh.score.setTextColor(MyApplication.textSecondaryColor);
                         cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
                         cvh.upvote.setAlpha(cvh.defaultIconOpacity);
                         cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
@@ -304,7 +304,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 // logged out
                 else {
                     cvh.reply.setAlpha(cvh.defaultIconOpacityDisabled);
-                    cvh.score.setTextColor(MyApplication.textHintColor);
+                    cvh.score.setTextColor(MyApplication.textSecondaryColor);
                     cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
                     cvh.upvote.setAlpha(cvh.defaultIconOpacityDisabled);
                     cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);

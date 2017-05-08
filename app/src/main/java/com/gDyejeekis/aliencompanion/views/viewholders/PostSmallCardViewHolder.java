@@ -92,10 +92,10 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
         }
         else {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textPrimaryColor);
         }
         // set post thumbnail
         if(post.isSelf()) {
@@ -187,7 +187,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
                 downvote.setAlpha(1f);
             }
             else {
-                postDets2.setTextColor(MyApplication.textHintColor);
+                postDets2.setTextColor(MyApplication.textSecondaryColor);
                 upvote.setImageResource(upvoteResource);
                 upvote.setAlpha(defaultIconOpacity);
                 downvote.setImageResource(downvoteResource);

@@ -74,8 +74,8 @@ public class PostListViewHolder extends PostViewHolder {
             case MyApplication.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
                 defaultIconOpacityDisabled = 0.3f;
-                commentIconOpacity = 0.6f;
-                commentIconOpacityClicked = 0.4f;
+                commentIconOpacity = 0.4f;
+                commentIconOpacityClicked = 0.2f;
                 break;
             case MyApplication.LIGHT_THEME:
                 defaultIconOpacity = 1f;
@@ -86,8 +86,8 @@ public class PostListViewHolder extends PostViewHolder {
             default:
                 defaultIconOpacity = 1f;
                 defaultIconOpacityDisabled = 0.5f;
-                commentIconOpacity = 0.9f;
-                commentIconOpacityClicked = 0.45f;
+                commentIconOpacity = 0.6f;
+                commentIconOpacityClicked = 0.3f;
                 break;
         }
         // set unchanging properties of icons
@@ -106,13 +106,13 @@ public class PostListViewHolder extends PostViewHolder {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : clickedTextColor);
-            commentsText.setTextColor(clickedTextColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
+            commentsText.setTextColor(MyApplication.textHintColor);
             commentsIcon.setAlpha(commentIconOpacityClicked);
         }
         else {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textColor);
-            commentsText.setTextColor(MyApplication.textColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textPrimaryColor);
+            commentsText.setTextColor(MyApplication.textPrimaryColor);
             commentsIcon.setAlpha(commentIconOpacity);
         }
         // set post thumbnail
@@ -167,7 +167,7 @@ public class PostListViewHolder extends PostViewHolder {
                 downvote.setAlpha(1f);
             }
             else {
-                postDets1.setTextColor(MyApplication.textHintColor);
+                postDets1.setTextColor(MyApplication.textSecondaryColor);
                 upvote.setImageResource(upvoteResource);
                 upvote.setAlpha(defaultIconOpacity);
                 downvote.setImageResource(downvoteResource);

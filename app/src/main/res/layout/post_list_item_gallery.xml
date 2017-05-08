@@ -20,7 +20,7 @@
         android:gravity="center"
         android:text="TEXT"
         android:textAlignment="center"
-        android:textColor="?attr/themeTextHintColor"
+        android:textColor="?attr/themeTextSecondaryColor"
         android:textSize="?attr/font_large"
         android:textStyle="normal|bold" />
 

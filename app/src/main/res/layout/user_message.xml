@@ -37,7 +37,7 @@
                 android:id="@+id/txtView_msgSubject"
                 android:textSize="?attr/font_medium"
                 android:textStyle="bold"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
         </org.apmem.tools.layouts.FlowLayout>
@@ -53,7 +53,7 @@
                 android:text="from "
                 android:id="@+id/textView_dest"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
@@ -71,7 +71,7 @@
                 android:text=" · sent "
                 android:id="@+id/textView17"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
             <TextView
@@ -80,7 +80,7 @@
                 android:text="(age)"
                 android:id="@+id/txtView_messageAge"
                 android:textSize="?attr/font_small"
-                android:textColor="?attr/themeTextColor"
+                android:textColor="?attr/themeTextPrimaryColor"
                 android:fontFamily="?attr/defaultFontFamily" />
 
         </LinearLayout>
@@ -91,7 +91,7 @@
             android:text="(Message body here)"
             android:id="@+id/txtView_messageBody"
             android:textSize="?attr/font_medium"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:fontFamily="?attr/defaultFontFamily" />
 
     </LinearLayout>

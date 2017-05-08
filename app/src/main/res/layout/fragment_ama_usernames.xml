@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
-        android:textColor="?attr/themeTextColor" />
+        android:textColor="?attr/themeTextPrimaryColor" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
         android:textStyle="italic"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="15dp"
-        android:textColor="?attr/themeTextColor" />
+        android:textColor="?attr/themeTextPrimaryColor" />
 
     <EditText
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
         android:layout_margin="5dp"
         android:singleLine="true"
         android:imeOptions="actionDone"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor" />
 
     <LinearLayout

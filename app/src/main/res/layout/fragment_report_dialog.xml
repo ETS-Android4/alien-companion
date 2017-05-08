@@ -17,9 +17,9 @@
             android:id="@+id/radioButton_spam"
             android:checked="false"
             android:textSize="20sp"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -28,9 +28,9 @@
             android:id="@+id/radioButton_vote_manip"
             android:checked="false"
             android:textSize="20sp"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -39,9 +39,9 @@
             android:id="@+id/radioButton_personal_info"
             android:checked="false"
             android:textSize="20sp"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -49,10 +49,10 @@
             android:text="sexualizing minors"
             android:id="@+id/radioButton_minors"
             android:checked="false"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="20sp"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -60,10 +60,10 @@
             android:text="breaking reddit"
             android:id="@+id/radioButton_broke_reddit"
             android:checked="false"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="20sp"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
 
         <RadioButton
             android:layout_width="match_parent"
@@ -71,10 +71,10 @@
             android:text="other (max 100 characters):"
             android:id="@+id/radioButton_other"
             android:checked="false"
-            android:textColor="?attr/themeTextColor"
+            android:textColor="?attr/themeTextPrimaryColor"
             android:textSize="20sp"
             android:padding="5dp"
-            android:buttonTint="?attr/themeTextHintColor" />
+            android:buttonTint="?attr/themeTextSecondaryColor" />
 
     </RadioGroup>
 
@@ -82,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_other_reason"
-        android:textColor="?attr/themeTextColor"
+        android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor"
         android:hint="your reason"
         android:maxLength="100"
