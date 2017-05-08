@@ -108,7 +108,7 @@ public class SyncProfile implements Serializable {
         if(GeneralUtils.isNetworkAvailable(context)) {
             Intent intent = new Intent(context, DownloaderService.class);
             //intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
-            intent.putExtra("profile", this);
+            intent.putExtra("profileId", this.profileId);
             context.startService(intent);
         }
         else {
