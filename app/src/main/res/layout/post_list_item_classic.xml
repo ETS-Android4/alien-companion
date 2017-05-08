@@ -26,7 +26,8 @@
             <ImageView
                 android:layout_width="?attr/font_xlarge"
                 android:layout_height="?attr/font_xlarge"
-                app:srcCompat="@mipmap/ic_expand_less_grey_24dp"
+                android:src="@drawable/ic_expand_less_black_48dp"
+                android:alpha="0.54"
                 android:id="@+id/imageView_upvote_classic"/>
 
             <TextView
@@ -42,7 +43,8 @@
             <ImageView
                 android:layout_width="?attr/font_xlarge"
                 android:layout_height="?attr/font_xlarge"
-                app:srcCompat="@mipmap/ic_expand_more_grey_24dp"
+                android:src="@drawable/ic_expand_more_black_48dp"
+                android:alpha="0.54"
                 android:id="@+id/imageView_downvote_classic"/>
         </LinearLayout>
 

@@ -231,9 +231,6 @@ public class ImageFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_high_quality:
-                //blank
-                return true;
             case R.id.action_save:
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if(activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

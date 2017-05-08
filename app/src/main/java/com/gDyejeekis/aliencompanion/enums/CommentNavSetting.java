@@ -57,7 +57,7 @@ public enum CommentNavSetting {
                     return R.mipmap.ic_person_light_grey_48dp;
                 }
                 else {
-                    return R.mipmap.ic_person_white_48dp;
+                    return R.drawable.ic_person_white_48dp;
                 }
             case searchText:
                 if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
@@ -101,7 +101,7 @@ public enum CommentNavSetting {
             case ama:
                 return R.drawable.ic_people_white_24dp;
             case op:
-                return R.mipmap.ic_person_white_48dp;
+                return R.drawable.ic_person_white_48dp;
             case searchText:
                 return R.drawable.ic_search_white_24dp;
             case time:

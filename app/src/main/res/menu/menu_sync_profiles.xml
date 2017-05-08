@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_about_profiles" android:title="@string/about"
-        android:icon="@mipmap/ic_info_outline_white_24dp" android:orderInCategory="5" app:showAsAction="always"/>
+        android:icon="@drawable/ic_info_outline_white_24dp" android:orderInCategory="5" app:showAsAction="always"/>
 
     <item android:id="@+id/action_add_profile" android:title="@string/add"
-        android:icon="@mipmap/ic_add_white_24dp" android:orderInCategory="10" app:showAsAction="always"/>
+        android:icon="@drawable/ic_add_white_24dp" android:orderInCategory="10" app:showAsAction="always"/>
 
 </menu>

@@ -82,7 +82,7 @@ public class MessageCheckService extends IntentService {
         if(count > 1) title = title.concat("s");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setSmallIcon(R.mipmap.ic_mail_white_48dp)
+                .setSmallIcon(R.drawable.ic_mail_white_48dp)
                 .setContentTitle(title)
                 .setContentText("Last message received " + ConvertUtils.getSubmissionAge(lastMessageUtc))
                 .setContentIntent(pIntent);

@@ -104,6 +104,16 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     private NavDrawerOtherItem saved;
     private boolean userMenuItemsVisible;
 
+    private float defaultIconOpacity;
+    private int profileResource;
+    private int messagesResource;
+    private int userResource;
+    private int subredditResource;
+    private int settingsResource;
+    private int expandMoreResource;
+    private int expandLessResource;
+
+
     public NavDrawerAdapter(MainActivity activity) {
         items = new ArrayList<>();
         this.activity = activity;
@@ -118,6 +128,42 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         saved = new NavDrawerOtherItem("Saved");
         //importAccounts();
         Log.d("current account name", "at init : " + currentAccountName);
+        initIcons();
+    }
+
+    // TODO: 5/8/2017 replace subreddit icon
+    private void initIcons() {
+        if(MyApplication.nightThemeEnabled) {
+            profileResource = R.drawable.ic_account_circle_white_48dp;
+            messagesResource = R.drawable.ic_mail_white_48dp;
+            userResource = R.drawable.ic_person_white_48dp;
+            //subredditResource = ;
+            settingsResource = R.drawable.ic_settings_white_48dp;
+            expandMoreResource = R.drawable.ic_expand_more_white_48dp;
+            expandLessResource = R.drawable.ic_expand_less_white_48dp;
+        } else {
+            profileResource = R.drawable.ic_account_circle_black_48dp;
+            messagesResource = R.drawable.ic_email_black_48dp;
+            userResource = R.drawable.ic_person_black_48dp;
+            //subredditResource = ;
+            settingsResource = R.drawable.ic_settings_black_48dp;
+            expandMoreResource = R.drawable.ic_expand_more_black_48dp;
+            expandLessResource = R.drawable.ic_expand_less_black_48dp;
+        }
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                defaultIconOpacity = 0.6f;
+                subredditResource = R.mipmap.ic_subreddit_light_grey_48dp;
+                break;
+            case MyApplication.LIGHT_THEME:
+                defaultIconOpacity = 0.54f;
+                subredditResource = R.mipmap.ic_subreddit_grey_48dp;
+                break;
+            default:
+                defaultIconOpacity = 1f;
+                subredditResource = R.mipmap.ic_subreddit_white_48dp;
+                break;
+        }
     }
 
     public void setCurrentAccountName(String name) {
@@ -568,8 +614,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                     }
                 });
 
-                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_up_white_24dp);
-                else headerViewHolder.toggle.setImageResource(R.mipmap.ic_arrow_drop_down_white_24dp);
+                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+                else headerViewHolder.toggle.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
                 break;
             case VIEW_TYPE_MENU_ITEM:
                 MenuRowViewHolder menuRowViewHolder= (MenuRowViewHolder) viewHolder;
@@ -577,74 +623,41 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 menuRowViewHolder.name.setText(menuItem.getMenuType().value());
                 switch (menuItem.getMenuType()) {
                     case profile:
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_light_grey_48dp);
-                        }
-                        else {
-                            if (MyApplication.nightThemeEnabled)
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_white_48dp);
-                            else
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_account_circle_grey_48dp);
-                        }
+                        menuRowViewHolder.image.setImageResource(profileResource);
+                        menuRowViewHolder.image.setAlpha(defaultIconOpacity);
                         break;
                     case messages:
                         if(MyApplication.newMessages) {
-                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_orange_48dp);
+                            menuRowViewHolder.image.setImageResource(R.drawable.ic_mail_orangered_48dp);
+                            menuRowViewHolder.image.setAlpha(1f);
                         }
                         else {
-                            if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_light_grey_48dp);
-                            }
-                            else {
-                                if (MyApplication.nightThemeEnabled)
-                                    menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_white_48dp);
-                                else
-                                    menuRowViewHolder.image.setImageResource(R.mipmap.ic_mail_grey_48dp);
-                            }
+                            menuRowViewHolder.image.setImageResource(messagesResource);
+                            menuRowViewHolder.image.setAlpha(defaultIconOpacity);
                         }
                         break;
                     case user:
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_light_grey_48dp);
-                        }
-                        else {
-                            if (MyApplication.nightThemeEnabled)
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_white_48dp);
-                            else
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_person_grey_48dp);
-                        }
+                        menuRowViewHolder.image.setImageResource(userResource);
+                        menuRowViewHolder.image.setAlpha(defaultIconOpacity);
                         break;
                     case subreddit:
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_light_grey_48dp);
-                        }
-                        else {
-                            if (MyApplication.nightThemeEnabled)
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_white_48dp);
-                            else
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_subreddit_grey_48dp);
-                        }
+                        menuRowViewHolder.image.setImageResource(subredditResource);
+                        //menuRowViewHolder.image.setAlpha(defaultIconOpacity);
                         break;
                     case settings:
-                        if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                            menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_light_grey_48dp);
-                        }
-                        else {
-                            if (MyApplication.nightThemeEnabled)
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_white_48dp);
-                            else
-                                menuRowViewHolder.image.setImageResource(R.mipmap.ic_settings_grey_48dp);
-                        }
-                        break;
-                    case cached:
-                        menuRowViewHolder.image.setImageResource(R.mipmap.ic_action_cached_grey);
+                        menuRowViewHolder.image.setImageResource(settingsResource);
+                        menuRowViewHolder.image.setAlpha(defaultIconOpacity);
                         break;
                 }
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                if(subredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_less_grey_24dp);
-                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_more_grey_24dp);
+                if(subredditItemsVisible) {
+                    subredditsViewHolder.imgToggle.setImageResource(expandLessResource);
+                } else {
+                    subredditsViewHolder.imgToggle.setImageResource(expandMoreResource);
+                }
+                subredditsViewHolder.imgToggle.setAlpha(defaultIconOpacity);
                 SubredditsListener listener = new SubredditsListener(activity);
                 subredditsViewHolder.layoutToggle.setOnClickListener(listener);
                 subredditsViewHolder.layoutEdit.setOnClickListener(listener);
@@ -676,8 +689,13 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MULTIS:
                 subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                if(multiredditItemsVisible) subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_less_grey_24dp);
-                else subredditsViewHolder.imgToggle.setImageResource(R.mipmap.ic_expand_more_grey_24dp);
+                if(multiredditItemsVisible) {
+                    subredditsViewHolder.imgToggle.setImageResource(expandLessResource);
+                }
+                else {
+                    subredditsViewHolder.imgToggle.setImageResource(expandMoreResource);
+                }
+                subredditsViewHolder.imgToggle.setAlpha(defaultIconOpacity);
                 MultisListener multisListener = new MultisListener(activity);
                 subredditsViewHolder.layoutToggle.setOnClickListener(multisListener);
                 subredditsViewHolder.layoutEdit.setOnClickListener(multisListener);

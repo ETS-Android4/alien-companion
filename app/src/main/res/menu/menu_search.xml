@@ -4,11 +4,11 @@
     tools:context="com.gDyejeekis.aliencompanion.activities.SearchActivity">
 
     <item android:id="@+id/action_sort" android:title="@string/action_sort"
-        android:icon="@mipmap/ic_sort_white_24dp"
+        android:icon="@drawable/ic_sort_white_24dp"
         android:orderInCategory="80" app:showAsAction="always"/>
 
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_refresh_white_24dp"
+        android:icon="@drawable/ic_refresh_white_24dp"
         android:orderInCategory="90" app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_search" android:title="@string/action_new_search"

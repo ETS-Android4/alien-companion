@@ -118,7 +118,7 @@ public class SyncProfileListAdapter extends RecyclerView.Adapter {
 
         public SyncProfileViewHolder(View itemView) {
             super(itemView);
-            moreButtonResource = (MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp;
+            moreButtonResource = (MyApplication.nightThemeEnabled) ? R.drawable.ic_more_vert_white_24dp : R.drawable.ic_more_vert_black_24dp;
             name = (TextView) itemView.findViewById(R.id.textView_profile_name);
             moreButton = (ImageView) itemView.findViewById(R.id.imageView_profile_more);
             state = (Button) itemView.findViewById(R.id.button_state);

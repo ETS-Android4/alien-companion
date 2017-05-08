@@ -486,14 +486,16 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void showFabMainOptions() {
-        fabMain.setImageResource(R.mipmap.ic_close_grey_48dp);
+        fabMain.setImageResource(R.drawable.ic_close_black_48dp);
+        fabMain.setImageAlpha(138);
         fabMain.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
         setFabMainOptionsVisible(true);
     }
 
     public void hideAllFabOptions() {
         try {
-            fabMain.setImageResource(R.mipmap.ic_add_white_24dp);
+            fabMain.setImageResource(R.drawable.ic_add_white_48dp);
+            fabMain.setImageAlpha(255);
             fabMain.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
             if (fabOptionsVisible) {
                 setFabMainOptionsVisible(false);

@@ -59,7 +59,7 @@
     </style>
 
     <style name="OverFlow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:src">@mipmap/ic_more_vert_white_24dp</item>
+        <item name="android:src">@drawable/ic_more_vert_white_24dp</item>
     </style>
 
     <style name="ToolbarTheme" parent="AppTheme">
@@ -204,7 +204,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector</item>
         <item name="themeDialogBackgroundColor">@android:color/white</item>
         <item name="themeDivider">@drawable/divider_light_theme</item>
-        <item name="themeDragHandle">@mipmap/ic_drag_handle_grey_500_48dp</item>
+        <item name="themeDragHandle">@drawable/ic_drag_handle_black_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_light</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_light</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
@@ -221,7 +221,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector_material_blue</item>
         <item name="themeDialogBackgroundColor">@color/materialBlueDialogBackground</item>
         <item name="themeDivider">@drawable/divider_material_blue</item>
-        <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
+        <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_blue</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
@@ -238,7 +238,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector_material_grey</item>
         <item name="themeDialogBackgroundColor">@color/materialGreyDialogBackground</item>
         <item name="themeDivider">@drawable/divider_material_grey</item>
-        <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
+        <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_grey</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
@@ -255,7 +255,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
         <item name="themeDialogBackgroundColor">@color/darkDialogBackground</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
-        <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
+        <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
         <!--<item name="themeCardBorderColor">@color/darker_gray</item>-->
@@ -272,7 +272,7 @@
         <item name="themeDrawerSelector">@drawable/touch_selector_drawer_dark_theme</item>
         <item name="themeDialogBackgroundColor">@color/darkDialogBackground</item>
         <item name="themeDivider">@drawable/divider_dark_low_contrast_theme</item>
-        <item name="themeDragHandle">@mipmap/ic_drag_handle_white_48dp</item>
+        <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
         <item name="themeButtonSelector">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
         <!--<item name="themeCardBorderColor">@color/darker_gray</item>-->

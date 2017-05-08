@@ -235,7 +235,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
         }
 
         public void bindModel(final Context context, final OfflineUserAction action) {
-            options.setImageResource((MyApplication.nightThemeEnabled) ? R.mipmap.ic_more_vert_white_24dp : R.mipmap.ic_more_vert_black_24dp);
+            options.setImageResource((MyApplication.nightThemeEnabled) ? R.drawable.ic_more_vert_white_24dp : R.drawable.ic_more_vert_black_24dp);
 
             description.setText(action.getActionName() + " - " + action.getActionPreview());
 

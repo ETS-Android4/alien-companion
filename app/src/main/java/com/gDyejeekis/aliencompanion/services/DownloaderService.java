@@ -482,14 +482,14 @@ public class DownloaderService extends IntentService {
         PendingIntent pIntent = PendingIntent.getBroadcast(context, CHANGE_STATE_REQUEST_CODE,
                 new Intent(SyncStateReceiver.SYNC_PAUSE), PendingIntent.FLAG_CANCEL_CURRENT);
 
-        return new android.support.v4.app.NotificationCompat.Action(R.mipmap.ic_pause_white_48dp, "Pause", pIntent);
+        return new android.support.v4.app.NotificationCompat.Action(R.drawable.ic_pause_white_48dp, "Pause", pIntent);
     }
 
     public static android.support.v4.app.NotificationCompat.Action createResumeAction(Context context) {
         PendingIntent pIntent = PendingIntent.getBroadcast(context, CHANGE_STATE_REQUEST_CODE,
                 new Intent(SyncStateReceiver.SYNC_RESUME), PendingIntent.FLAG_CANCEL_CURRENT);
 
-        return new android.support.v4.app.NotificationCompat.Action(R.mipmap.ic_resume_white_48dp, "Resume", pIntent);
+        return new android.support.v4.app.NotificationCompat.Action(R.drawable.ic_play_arrow_white_48dp, "Resume", pIntent);
     }
 
     public static android.support.v4.app.NotificationCompat.Action createCancelAction(Context context) {

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_add_multi" android:title="@string/add"
-        android:icon="@mipmap/ic_add_white_24dp" app:showAsAction="always"/>
+        android:icon="@drawable/ic_add_white_24dp" app:showAsAction="always"/>
 
     <item android:id="@+id/action_refresh_multis" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_refresh_white_24dp" app:showAsAction="always"/>
+        android:icon="@drawable/ic_refresh_white_24dp" app:showAsAction="always"/>
 </menu>

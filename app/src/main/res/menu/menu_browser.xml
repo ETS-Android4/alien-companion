@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_arrow_forward_white_24dp" app:showAsAction="always"/>
 
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
-        android:icon="@mipmap/ic_action_refresh" android:orderInCategory="99"
+        android:icon="@drawable/ic_refresh_white_24dp" android:orderInCategory="99"
         app:showAsAction="never" />
 
     <item android:id="@+id/action_open_browser" android:title="@string/action_open_browser"

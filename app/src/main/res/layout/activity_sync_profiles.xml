@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@mipmap/ic_add_white_24dp"
+        android:src="@drawable/ic_add_white_48dp"
         app:layout_anchor="@id/recyclerView_sync_profiles"
         app:layout_anchorGravity="bottom|right|end"/>
 

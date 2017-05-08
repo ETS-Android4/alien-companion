@@ -460,12 +460,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if(flag) {
             fabOptionsVisible = true;
             fabMain.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-            fabMain.setImageResource(R.mipmap.ic_close_grey_48dp);
+            fabMain.setImageResource(R.drawable.ic_close_black_48dp);
+            fabMain.setImageAlpha(138);
         }
         else {
             fabOptionsVisible = false;
             fabMain.setBackgroundTintList(ColorStateList.valueOf(MyApplication.colorSecondary));
-            fabMain.setImageResource(R.drawable.ic_navigation_white_36dp);
+            fabMain.setImageResource(R.drawable.ic_navigation_white_48dp);
+            fabMain.setImageAlpha(255);
         }
     }
 

@@ -31,6 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView_action_options"
-        android:src="@mipmap/ic_more_vert_white_24dp" />
+        android:src="@drawable/ic_more_vert_white_24dp" />
 
 </LinearLayout>

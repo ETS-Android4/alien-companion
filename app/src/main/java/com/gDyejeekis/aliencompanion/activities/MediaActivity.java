@@ -81,8 +81,6 @@ public class MediaActivity extends BackNavActivity {
 
     private int albumSize = -1;
 
-    private boolean showHqAction;
-
     private boolean showGridviewAction;
 
     private boolean showSaveAction = true;
@@ -116,7 +114,7 @@ public class MediaActivity extends BackNavActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(Color.parseColor("#78000000"));
         toolbar.setTitle("");
-        toolbar.setNavigationIcon(R.mipmap.ic_close_white_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(Color.BLACK);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -495,10 +493,6 @@ public class MediaActivity extends BackNavActivity {
         MenuItem saveAction = menu.findItem(R.id.action_save);
         saveAction.setVisible(showSaveAction/* && !loadFromSynced*/);
 
-        MenuItem hq_action = menu.findItem(R.id.action_high_quality);
-        //hq_action.setVisible(showHqAction);
-        hq_action.setVisible(false);
-
         MenuItem gridview_action = menu.findItem(R.id.action_album_gridview);
         gridview_action.setVisible(showGridviewAction);
         //gridview_action.setVisible(albumSize != -1);
@@ -623,7 +617,7 @@ public class MediaActivity extends BackNavActivity {
         Notification notif = new Notification.Builder(this)
                 .setContentTitle("Saving media..")
                 .setContentText(url)
-                .setSmallIcon(R.mipmap.ic_photo_white_24dp)
+                .setSmallIcon(R.drawable.ic_photo_white_24dp)
                 .setProgress(1, 0, true)
                 .build();
 
@@ -650,7 +644,7 @@ public class MediaActivity extends BackNavActivity {
         }
 
         String title = (success) ? "Media saved" : "Failed to save media";
-        int smallIcon = (success) ? R.mipmap.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
+        int smallIcon = (success) ? R.drawable.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
         Notification.Builder notifBuilder = new Notification.Builder(this)
                 .setContentTitle(title)
                 .setSmallIcon(smallIcon)

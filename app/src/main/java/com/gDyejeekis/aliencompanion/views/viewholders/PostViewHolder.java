@@ -100,8 +100,8 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
             //    linkResource = MyApplication.nightThemeEnabled ? R.drawable.ic_link_white_48dp : R.drawable.ic_link_black_48dp;
             //    break;
         }
-        saveResourceYellow = R.mipmap.ic_star_border_yellow_500_48dp;
-        hideResourceRed = R.mipmap.ic_close_red_800_48dp;
+        saveResourceYellow = R.drawable.ic_star_border_yellow_500_48dp;
+        hideResourceRed = R.drawable.ic_close_red_600_48dp;
     }
 
     void appendNsfwLabel(Context context, TextView textView) {

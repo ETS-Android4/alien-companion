@@ -19,7 +19,7 @@
             style="@style/FabMiniMargins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_refresh_white_24dp"
+            android:src="@drawable/ic_refresh_white_24dp"
             app:fabSize="mini" />
 
         <android.support.design.widget.FloatingActionButton
@@ -43,7 +43,7 @@
             style="@style/FabMiniMargins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_create_white_24dp"
+            android:src="@drawable/ic_create_white_24dp"
             app:fabSize="mini" />
 
         <android.support.design.widget.FloatingActionButton
@@ -51,7 +51,7 @@
             style="@style/FabMiniMargins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_file_download_white_24dp"
+            android:src="@drawable/ic_file_download_white_24dp"
             app:fabSize="mini" />
 
         <android.support.design.widget.FloatingActionButton
@@ -77,7 +77,7 @@
         style="@style/FabNormalMargins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_add_white_24dp"
+        android:src="@drawable/ic_add_white_48dp"
         app:fabSize="normal" />
 
 </com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout>
