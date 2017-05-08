@@ -31,7 +31,7 @@
             android:src="@drawable/ic_expand_less_black_48dp"
             android:alpha="0.54"
             android:paddingLeft="12dp"
-            android:paddingTop="6dp"/>
+            android:paddingTop="5dp"/>
 
     </LinearLayout>
 
