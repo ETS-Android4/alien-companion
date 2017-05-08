@@ -27,68 +27,31 @@ public enum CommentNavSetting {
         return value;
     }
 
+    public static float getIconOpacity() {
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                return 0.6f;
+            case MyApplication.LIGHT_THEME:
+                return 0.54f;
+            default:
+                return 1f;
+        }
+    }
+
     public int getIconResource() {
         switch (this) {
             case threads:
-                if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
-                    return R.drawable.ic_forum_grey_600_24dp;
-                }
-                else if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                    return R.drawable.ic_forum_light_grey_24dp;
-                }
-                else {
-                    return R.drawable.ic_forum_white_24dp;
-                }
+                return MyApplication.nightThemeEnabled ? R.drawable.ic_forum_white_24dp : R.drawable.ic_forum_black_24dp;
             case ama:
-                if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
-                    return R.drawable.ic_people_grey_600_24dp;
-                }
-                else if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                    return R.drawable.ic_people_light_grey_24dp;
-                }
-                else {
-                    return R.drawable.ic_people_white_24dp;
-                }
+                return MyApplication.nightThemeEnabled ? R.drawable.ic_people_white_24dp : R.drawable.ic_people_black_24dp;
             case op:
-                if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
-                    return R.mipmap.ic_person_grey_48dp;
-                }
-                else if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                    return R.mipmap.ic_person_light_grey_48dp;
-                }
-                else {
-                    return R.drawable.ic_person_white_48dp;
-                }
+                return MyApplication.nightThemeEnabled ? R.drawable.ic_person_white_48dp : R.drawable.ic_person_black_48dp;
             case searchText:
-                if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
-                    return R.drawable.ic_search_grey_600_24dp;
-                }
-                else if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                    return R.drawable.ic_search_light_grey_24dp;
-                }
-                else {
-                    return R.drawable.ic_search_white_24dp;
-                }
+                return MyApplication.nightThemeEnabled ? R.drawable.ic_search_white_24dp : R.drawable.ic_search_black_24dp;
             case time:
-                if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
-                    return R.drawable.ic_access_time_grey_600_24dp;
-                }
-                else if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                    return R.drawable.ic_access_time_light_grey_24dp;
-                }
-                else {
-                    return R.drawable.ic_access_time_white_24dp;
-                }
+                return MyApplication.nightThemeEnabled ? R.drawable.ic_access_time_white_24dp : R.drawable.ic_access_time_black_24dp;
             case gilded:
-                if(MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) {
-                    return R.drawable.ic_star_grey_600_24dp;
-                }
-                else if(MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) {
-                    return R.drawable.ic_star_light_grey_24dp;
-                }
-                else {
-                    return R.drawable.ic_star_white_24dp;
-                }
+                return MyApplication.nightThemeEnabled ? R.drawable.ic_star_white_24dp : R.drawable.ic_star_black_24dp;
             default:
                 throw new RuntimeException("No icon resource found for enum value");
         }

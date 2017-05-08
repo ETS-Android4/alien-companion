@@ -92,6 +92,13 @@ public class CommentNavDialogFragment extends ScalableDialogFragment implements 
         opImg.setImageResource(CommentNavSetting.op.getIconResource());
         amaImg.setImageResource(CommentNavSetting.ama.getIconResource());
         gildedImg.setImageResource(CommentNavSetting.gilded.getIconResource());
+        final float opacity = CommentNavSetting.getIconOpacity();
+        threadsImg.setAlpha(opacity);
+        timeImg.setAlpha(opacity);
+        searchImg.setAlpha(opacity);
+        opImg.setAlpha(opacity);
+        amaImg.setAlpha(opacity);
+        gildedImg.setAlpha(opacity);
 
         RadioButton threadsRdo = (RadioButton) view.findViewById(R.id.radio_btn_threads);
         RadioButton timeRdo = (RadioButton) view.findViewById(R.id.radio_btn_time);

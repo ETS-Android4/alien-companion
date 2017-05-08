@@ -19,7 +19,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/imageView_threads"
-            android:src="@drawable/ic_forum_grey_600_24dp"/>
+            android:src="@drawable/ic_forum_black_24dp"/>
 
         <RadioButton
             android:layout_width="0dp"
@@ -50,7 +50,7 @@
             android:id="@+id/imageView_search_text"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_forum_grey_600_24dp" />
+            android:src="@drawable/ic_forum_black_24dp" />
 
         <RadioButton
             android:id="@+id/radio_btn_search_text"
@@ -81,7 +81,7 @@
             android:id="@+id/imageView_time"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_forum_grey_600_24dp" />
+            android:src="@drawable/ic_forum_black_24dp" />
 
         <RadioButton
             android:id="@+id/radio_btn_time"
@@ -112,7 +112,7 @@
             android:id="@+id/imageView_op"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_forum_grey_600_24dp" />
+            android:src="@drawable/ic_forum_black_24dp" />
 
         <RadioButton
             android:id="@+id/radio_btn_op"
@@ -143,7 +143,7 @@
             android:id="@+id/imageView_gilded"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_forum_grey_600_24dp" />
+            android:src="@drawable/ic_forum_black_24dp" />
 
         <RadioButton
             android:id="@+id/radio_btn_gilded"
@@ -174,7 +174,7 @@
             android:id="@+id/imageView_ama"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_forum_grey_600_24dp" />
+            android:src="@drawable/ic_forum_black_24dp" />
 
         <RadioButton
             android:id="@+id/radio_btn_ama"
