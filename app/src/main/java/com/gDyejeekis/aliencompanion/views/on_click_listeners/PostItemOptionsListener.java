@@ -296,12 +296,6 @@ public class PostItemOptionsListener implements View.OnClickListener {
     private void showMoreOptionsPopup(View v) {
         final PopupMenu popupMenu = new PopupMenu(context, v);
         popupMenu.inflate(R.menu.menu_post_more_options);
-        if(PostViewHolder.shareIconVisible) {
-            popupMenu.getMenu().removeItem(R.id.action_share);
-        }
-        if(PostViewHolder.openBrowserIconVisible) {
-            popupMenu.getMenu().removeItem(R.id.action_open_in_browser);
-        }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -459,14 +453,13 @@ public class PostItemOptionsListener implements View.OnClickListener {
             menu.removeItem(R.id.action_remove_from_synced);
         }
 
-        // check screen size (post menu bar should update depending on screen size)
-        if(viewType != PostViewType.cards && viewType != PostViewType.cardDetails) {
-            menu.removeItem(R.id.action_view_user);
-            if (GeneralUtils.isLargeScreen(context)) {
-                menu.removeItem(R.id.action_open_in_browser);
+        // update popup menu item visibility depending on post menu bar items // TODO: 5/9/2017 update card view options depending on available size
+        if(viewType != PostViewType.cards && viewType != PostViewType.cardDetails) { // TODO: 5/9/2017 remove this check
+            if (PostViewHolder.shareIconVisible) {
+                menu.removeItem(R.id.action_share);
             }
-            if (GeneralUtils.isVeryLargeScreen(context)) {
-                menu.removeItem(R.id.action_add_to_synced);
+            if (PostViewHolder.openBrowserIconVisible) {
+                menu.removeItem(R.id.action_open_in_browser);
             }
         }
         // check if self post
