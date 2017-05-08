@@ -66,7 +66,7 @@ public class MyApplication extends Application {
 
     public static final String REMEMBER_VIEW_SUFFIX = "-view";
 
-    public static final int homeAsUpIndicator = R.mipmap.ic_arrow_back_white_24dp;
+    public static final int homeAsUpIndicator = R.drawable.ic_arrow_back_white_24dp;
 
     public static final int LIGHT_THEME = 0;
 

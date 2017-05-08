@@ -95,7 +95,8 @@
                         android:layout_width="?attr/font_comments"
                         android:layout_height="?attr/font_comments"
                         android:id="@+id/imageView_comments_icon"
-                        android:src="@mipmap/ic_comment_grey_600_24dp"
+                        android:src="@drawable/ic_comment_black_48dp"
+                        android:alpha="0.54"
                         android:layout_marginRight="4dp"
                         android:layout_marginTop="4dp"/>
 

@@ -49,10 +49,10 @@ public class BrowserActivity extends SwipeBackActivity {
 
         MenuItem goBack = menu.findItem(R.id.action_back);
         goBack.setEnabled(canGoBack);
-        goBack.setIcon(canGoBack ? R.mipmap.ic_arrow_back_white_24dp : R.mipmap.ic_arrow_back_grey_400_24dp);
+        goBack.setIcon(canGoBack ? R.drawable.ic_arrow_back_white_24dp : R.drawable.ic_arrow_back_white_disabled_24dp);
         MenuItem goForward = menu.findItem(R.id.action_forward);
         goForward.setEnabled(canGoForward);
-        goForward.setIcon(canGoForward ? R.mipmap.ic_arrow_forward_white_24dp : R.mipmap.ic_arrow_forward_grey_400_24dp);
+        goForward.setIcon(canGoForward ? R.drawable.ic_arrow_forward_white_24dp : R.drawable.ic_arrow_forward_white_disabled_24dp);
 
         if(getIntent().getSerializableExtra("post") == null) {
             menu.findItem(R.id.action_comments).setVisible(false);
