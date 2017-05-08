@@ -108,7 +108,7 @@ public class PostGalleryViewHolder extends PostViewHolder {
             }
             textView.setText(text);
             if(post.isClicked()) {
-                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
+                textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textSecondaryColor);
             }
             else {
                 textView.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickied : MyApplication.textPrimaryColor);

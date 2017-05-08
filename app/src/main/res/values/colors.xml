@@ -25,7 +25,7 @@
 
     <color name="lightStickiedText">#228822</color>
 
-    <color name="lightStickiedClickedText">#96228822</color>
+    <color name="lightStickiedClickedText">#aa228822</color>
 
     <!-- MATERIAL BLUE THEME -->
 
@@ -57,7 +57,7 @@
 
     <color name="materialBlueStickiedText">#2dae2d</color>
 
-    <color name="materialBlueStickiedClickedText">#c82dae2d</color>
+    <color name="materialBlueStickiedClickedText">#aa2dae2d</color>
 
     <!-- MATERIAL GREY THEME -->
 
@@ -89,7 +89,7 @@
 
     <color name="materialGreyStickiedText">#2dae2d</color>
 
-    <color name="materialGreyStickiedClickedText">#c82dae2d</color>
+    <color name="materialGreyStickiedClickedText">#aa2dae2d</color>
 
     <!-- DARK THEME -->
 
@@ -127,7 +127,7 @@
 
     <color name="darkStickiedText">#2dae2d</color>
 
-    <color name="darkStickiedClickedText">#c82dae2d</color>
+    <color name="darkStickiedClickedText">#aa2dae2d</color>
 
     <!-- DARK LOW CONTRAST THEME -->
 

@@ -106,8 +106,8 @@ public class PostListViewHolder extends PostViewHolder {
         title.setText(post.getTitle());
         // check if post is clicked
         if(post.isClicked()) {
-            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textHintColor);
-            commentsText.setTextColor(MyApplication.textHintColor);
+            title.setTextColor(post.isStickied() && post.showAsStickied ? MyApplication.textColorStickiedClicked : MyApplication.textSecondaryColor);
+            commentsText.setTextColor(MyApplication.textSecondaryColor);
             commentsIcon.setAlpha(commentIconOpacityClicked);
         }
         else {
