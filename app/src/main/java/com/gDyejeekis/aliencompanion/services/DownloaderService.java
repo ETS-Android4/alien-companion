@@ -146,11 +146,11 @@ public class DownloaderService extends IntentService {
 
             if(!(syncOptions.isSyncOverWifiOnly() && !GeneralUtils.isConnectedOverWifi(this))) {
                 String filename;
-                notifBuilder = new NotificationCompat.Builder(this);
                 // sync subreddits first
                 for (String subreddit : profile.getSubreddits()) {
                     progress = 0;
                     filename = subreddit.toLowerCase();
+                    notifBuilder = new NotificationCompat.Builder(this);
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
                     acquireWakelock();
 
@@ -160,6 +160,7 @@ public class DownloaderService extends IntentService {
                 for(String multireddit : profile.getMultireddits()) {
                     progress = 0;
                     filename = MyApplication.MULTIREDDIT_FILE_PREFIX + multireddit.toLowerCase();
+                    notifBuilder = new NotificationCompat.Builder(this);
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
                     acquireWakelock();
 
