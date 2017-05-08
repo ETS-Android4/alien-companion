@@ -171,16 +171,16 @@
 
     <color name="downvoteColor">#9494ff</color>
 
-    <color name="iconLightActiveFocused">#de000000</color>
+    <color name="iconDarkActiveFocused">#de000000</color>
 
-    <color name="iconLightActiveUnfocused">#8a000000</color>
+    <color name="iconDarkActiveUnfocused">#8a000000</color>
 
-    <color name="iconLightInactive">#61000000</color>
+    <color name="iconDarkInactive">#61000000</color>
 
-    <color name="iconDarktActiveFocused">#ffffff</color>
+    <color name="iconLightActiveFocused">#ffffff</color>
 
-    <color name="iconDarkActiveUnfocused">#b2ffffff</color>
+    <color name="iconLightActiveUnfocused">#b2ffffff</color>
 
-    <color name="iconDarkInactive">#7fffffff</color>
+    <color name="iconLightInactive">#7fffffff</color>
 
 </resources>
