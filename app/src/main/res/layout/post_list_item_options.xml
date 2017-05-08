@@ -50,6 +50,14 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="40dp"
+        android:id="@+id/btn_share"
+        android:layout_weight="1"
+        android:src="@drawable/ic_share_black_48dp"
+        android:padding="5dp" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:id="@+id/btn_open_browser"
         android:layout_weight="1"
         android:src="@drawable/ic_open_in_browser_black_48dp"

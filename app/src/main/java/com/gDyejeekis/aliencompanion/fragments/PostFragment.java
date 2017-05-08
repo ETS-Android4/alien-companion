@@ -261,6 +261,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(postAdapter != null) {
+            postAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (ToolbarActivity) activity;

@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -10,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -36,6 +40,7 @@ public class PostListViewHolder extends PostViewHolder {
     public ImageView hide;
     public ImageView moreOptions;
     public ImageView viewUser;
+    public ImageView share;
     public ImageView openBrowser;
     public ImageView commentsIcon;
     public LinearLayout linkButton;
@@ -58,6 +63,7 @@ public class PostListViewHolder extends PostViewHolder {
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
         viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+        share = (ImageView) itemView.findViewById(R.id.btn_share);
         openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
         commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
         commentsIcon = (ImageView) itemView.findViewById(R.id.imgView_commentsIcon);
@@ -93,9 +99,11 @@ public class PostListViewHolder extends PostViewHolder {
         // set unchanging properties of icons
         commentsIcon.setImageResource(commentsResource);
         viewUser.setImageResource(viewUserResource);
+        share.setImageResource(shareResource);
         openBrowser.setImageResource(openBrowserResource);
         moreOptions.setImageResource(moreResource);
         viewUser.setAlpha(defaultIconOpacity);
+        share.setAlpha(defaultIconOpacity);
         openBrowser.setAlpha(defaultIconOpacity);
         moreOptions.setAlpha(defaultIconOpacity);
     }
@@ -215,6 +223,24 @@ public class PostListViewHolder extends PostViewHolder {
 
         // set post menu bar backgound color
         layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
+
+        //change menu bar item visibility depending on available space
+        boolean islandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if((MyApplication.isLargeScreen || islandscape)) {
+            shareIconVisible = MyApplication.isLargeScreen || !MainActivity.dualPaneActive;
+            if(MyApplication.isVeryLargeScreen || (MyApplication.isLargeScreen && islandscape)) {
+                openBrowserIconVisible = MyApplication.isVeryLargeScreen || !MainActivity.dualPaneActive;
+            }
+            else {
+                openBrowserIconVisible = false;
+            }
+        }
+        else {
+            shareIconVisible = false;
+            openBrowserIconVisible = false;
+        }
+        share.setVisibility(shareIconVisible ? View.VISIBLE : View.GONE);
+        openBrowser.setVisibility(openBrowserIconVisible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -229,6 +255,7 @@ public class PostListViewHolder extends PostViewHolder {
         save.setOnClickListener(optionsListener);
         hide.setOnClickListener(optionsListener);
         viewUser.setOnClickListener(optionsListener);
+        share.setOnClickListener(optionsListener);
         openBrowser.setOnClickListener(optionsListener);
         moreOptions.setOnClickListener(optionsListener);
     }

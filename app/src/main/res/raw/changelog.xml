@@ -13,7 +13,7 @@
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
         <changelogtext>Replaced toast notifications with snackbar notifications on some instances</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Changed post menu bar to show options depending on available space</changelogtext>
         <changelogtext>Added 'Screen transitions' option under 'Appearance' (controls animations for opening and dismissing screens)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Hide read' option in the toolbar's overflow menu (available when browsing posts and search results)]]></changelogtext>
         <changelogtext>Added 'Hide toolbar on scroll down' option under 'Navigation' (enabled by default)</changelogtext>

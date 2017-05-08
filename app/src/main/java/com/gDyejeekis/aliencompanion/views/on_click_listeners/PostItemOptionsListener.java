@@ -52,6 +52,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostViewHolder;
 
 /**
  * Created by George on 8/9/2015.
@@ -74,6 +75,31 @@ public class PostItemOptionsListener implements View.OnClickListener {
         Intent intent = new Intent(context, UserActivity.class);
         intent.putExtra("username", post.getAuthor());
         context.startActivity(intent);
+    }
+
+    private void sharePost() {
+        final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
+        if(post.isSelf()) {
+            GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
+        }
+        else {
+            TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("SHARE LINK", "SHARE COMMENTS", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String label = "Share via..";
+                    String url;
+                    if (v.getId() == R.id.button_option_one) {
+                        label = "Share post url via..";
+                        url = post.getURL();
+                    } else {
+                        label = "Share comments url via..";
+                        url = commentsUrl;
+                    }
+                    GeneralUtils.shareUrl(context, label, url);
+                }
+            });
+            choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
+        }
     }
 
     private void openInBrowser() {
@@ -255,6 +281,9 @@ public class PostItemOptionsListener implements View.OnClickListener {
             case R.id.btn_view_user:
                 viewUser();
                 break;
+            case R.id.btn_share:
+                sharePost();
+                break;
             case R.id.btn_open_browser:
                 openInBrowser();
                 break;
@@ -267,6 +296,12 @@ public class PostItemOptionsListener implements View.OnClickListener {
     private void showMoreOptionsPopup(View v) {
         final PopupMenu popupMenu = new PopupMenu(context, v);
         popupMenu.inflate(R.menu.menu_post_more_options);
+        if(PostViewHolder.shareIconVisible) {
+            popupMenu.getMenu().removeItem(R.id.action_share);
+        }
+        if(PostViewHolder.openBrowserIconVisible) {
+            popupMenu.getMenu().removeItem(R.id.action_open_in_browser);
+        }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -344,28 +379,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         // TODO: 4/7/2017
                         return true;
                     case R.id.action_share:
-                        final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
-                        if(post.isSelf()) {
-                            GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
-                        }
-                        else {
-                            TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("SHARE LINK", "SHARE COMMENTS", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    String label = "Share via..";
-                                    String url;
-                                    if (v.getId() == R.id.button_option_one) {
-                                        label = "Share post url via..";
-                                        url = post.getURL();
-                                    } else {
-                                        label = "Share comments url via..";
-                                        url = commentsUrl;
-                                    }
-                                    GeneralUtils.shareUrl(context, label, url);
-                                }
-                            });
-                            choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        }
+                        sharePost();
                         return true;
                     case R.id.action_view_user:
                         viewUser();

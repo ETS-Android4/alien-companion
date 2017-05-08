@@ -165,6 +165,8 @@ public class MyApplication extends Application {
     public static boolean rememberPostListView;
     public static boolean askedRememberPostView;
     public static boolean disableAnimations;
+    public static boolean isLargeScreen;
+    public static boolean isVeryLargeScreen;
 
     public static int currentBaseTheme;
 
@@ -229,6 +231,8 @@ public class MyApplication extends Application {
 
     public static void setThemeRelatedFields(Context context) {
         themeFieldsInitialized = true;
+        isLargeScreen = GeneralUtils.isLargeScreen(context);
+        isVeryLargeScreen = GeneralUtils.isVeryLargeScreen(context);
         currentBaseTheme = prefs.getInt("baseTheme", LIGHT_THEME);
         int[] primaryColors = getPrimaryColors(context);
         int[] primaryDarkColors = getPrimaryDarkColors(context);

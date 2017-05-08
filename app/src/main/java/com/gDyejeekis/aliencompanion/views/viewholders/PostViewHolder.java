@@ -22,7 +22,9 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
 public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
-    int saveResource, hideResource, moreResource, viewUserResource, openBrowserResource, saveResourceYellow, hideResourceRed,
+    public static boolean shareIconVisible, openBrowserIconVisible;
+
+    int saveResource, hideResource, moreResource, viewUserResource, shareResource, openBrowserResource, saveResourceYellow, hideResourceRed,
             upvoteResource, downvoteResource, upvoteResourceOrange, downvoteResourceBlue, commentsResource, linkResource;
 
     PostViewHolder(View itemView) {
@@ -47,6 +49,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
                 saveResource = R.drawable.ic_star_border_white_48dp;
                 hideResource = R.drawable.ic_close_white_48dp;
                 viewUserResource = R.drawable.ic_person_white_48dp;
+                shareResource = R.drawable.ic_share_white_48dp;
                 openBrowserResource = R.drawable.ic_open_in_browser_white_48dp;
                 moreResource = R.drawable.ic_more_vert_white_48dp;
                 upvoteResourceOrange = R.drawable.ic_arrow_upward_upvote_orange_48dp;
@@ -61,6 +64,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
                     saveResource = R.drawable.ic_star_border_white_48dp;
                     hideResource = R.drawable.ic_close_white_48dp;
                     viewUserResource = R.drawable.ic_person_white_48dp;
+                    shareResource = R.drawable.ic_share_white_48dp;
                     openBrowserResource = R.drawable.ic_open_in_browser_white_48dp;
                     moreResource = R.drawable.ic_more_vert_white_48dp;
                     if (viewType == PostViewType.classic) {
@@ -81,6 +85,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
                     saveResource = R.drawable.ic_star_border_black_48dp;
                     hideResource = R.drawable.ic_close_black_48dp;
                     viewUserResource = R.drawable.ic_person_black_48dp;
+                    shareResource = R.drawable.ic_share_black_48dp;
                     openBrowserResource = R.drawable.ic_open_in_browser_black_48dp;
                     moreResource = R.drawable.ic_more_vert_black_48dp;
                     if (viewType == PostViewType.classic) {

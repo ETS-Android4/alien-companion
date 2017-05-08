@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -110,6 +111,14 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public void onResume() {
         super.onResume();
         updateSwipeRefreshState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
