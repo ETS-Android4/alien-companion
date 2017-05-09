@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
@@ -33,6 +35,8 @@ import com.squareup.picasso.Picasso;
 
 public class PostCardViewHolder extends PostViewHolder  {
 
+    public static boolean viewUserIconVisible, shareIconVisible;
+
     private final boolean showDetails;
 
     public TextView title;
@@ -47,6 +51,8 @@ public class PostCardViewHolder extends PostViewHolder  {
     public ImageView downvote;
     public ImageView save;
     public ImageView hide;
+    public ImageView viewUser;
+    public ImageView share;
     public ImageView moreOptions;
     public ImageView postImage;
     public RoundedImageView imageButton;
@@ -79,8 +85,9 @@ public class PostCardViewHolder extends PostViewHolder  {
         downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
         save =  (ImageView) itemView.findViewById(R.id.btn_save);
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
+        viewUser =  (ImageView) itemView.findViewById(R.id.btn_view_user);
+        share =  (ImageView) itemView.findViewById(R.id.btn_share);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
-
         postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
         layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
         commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
@@ -111,7 +118,11 @@ public class PostCardViewHolder extends PostViewHolder  {
                 break;
         }
         // set unchanging properties of icons
+        viewUser.setImageResource(viewUserResource);
+        share.setImageResource(shareResource);
         moreOptions.setImageResource(moreResource);
+        viewUser.setAlpha(defaultIconOpacity);
+        share.setAlpha(defaultIconOpacity);
         moreOptions.setAlpha(defaultIconOpacity);
     }
 
@@ -288,6 +299,19 @@ public class PostCardViewHolder extends PostViewHolder  {
         scoreText.setText(scoreSpannable);
         // set post comments
         commentsText.setText(post.getCommentCount() + " comments");
+
+        //change menu bar item visibility depending on available space
+        boolean islandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if((MyApplication.isLargeScreen || islandscape)) {
+            viewUserIconVisible = MyApplication.isLargeScreen || !MainActivity.dualPaneActive;
+            shareIconVisible = MyApplication.isLargeScreen || !MainActivity.dualPaneActive;
+        }
+        else {
+            viewUserIconVisible = false;
+            shareIconVisible = false;
+        }
+        viewUser.setVisibility(viewUserIconVisible ? View.VISIBLE : View.GONE);
+        share.setVisibility(shareIconVisible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -306,6 +330,8 @@ public class PostCardViewHolder extends PostViewHolder  {
         downvote.setOnClickListener(postItemOptionsListener);
         save.setOnClickListener(postItemOptionsListener);
         hide.setOnClickListener(postItemOptionsListener);
+        viewUser.setOnClickListener(postItemOptionsListener);
+        share.setOnClickListener(postItemOptionsListener);
         moreOptions.setOnClickListener(postItemOptionsListener);
     }
 

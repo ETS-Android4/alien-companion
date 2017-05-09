@@ -22,8 +22,6 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
 public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
-    public static boolean shareIconVisible, openBrowserIconVisible;
-
     int saveResource, hideResource, moreResource, viewUserResource, shareResource, openBrowserResource, saveResourceYellow, hideResourceRed,
             upvoteResource, downvoteResource, upvoteResourceOrange, downvoteResourceBlue, commentsResource, linkResource;
 
@@ -120,4 +118,5 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         spoilerSpan.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 2, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.append(spoilerSpan);
     }
+
 }

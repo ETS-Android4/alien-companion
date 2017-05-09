@@ -52,6 +52,10 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostCardViewHolder;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostClassicViewHolder;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostListViewHolder;
+import com.gDyejeekis.aliencompanion.views.viewholders.PostSmallCardViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostViewHolder;
 
 /**
@@ -453,12 +457,33 @@ public class PostItemOptionsListener implements View.OnClickListener {
             menu.removeItem(R.id.action_remove_from_synced);
         }
 
-        // update popup menu item visibility depending on post menu bar items // TODO: 5/9/2017 update card view options depending on available size
-        if(viewType != PostViewType.cards && viewType != PostViewType.cardDetails) { // TODO: 5/9/2017 remove this check
-            if (PostViewHolder.shareIconVisible) {
+        // update popup menu item visibility depending on post menu bar items
+        if(viewType == PostViewType.cards || viewType == PostViewType.cardDetails) {
+            if(PostCardViewHolder.viewUserIconVisible) {
+                menu.removeItem(R.id.action_view_user);
+            }
+            if (PostCardViewHolder.shareIconVisible) {
                 menu.removeItem(R.id.action_share);
             }
-            if (PostViewHolder.openBrowserIconVisible) {
+        }
+        else if(viewType == PostViewType.classic) {
+            menu.removeItem(R.id.action_view_user);
+            menu.removeItem(R.id.action_share);
+            menu.removeItem(R.id.action_open_in_browser);
+        }
+        else if(viewType == PostViewType.list || viewType == PostViewType.listReversed) {
+            if(PostListViewHolder.shareIconVisible) {
+                menu.removeItem(R.id.action_share);
+            }
+            if(PostListViewHolder.openBrowserIconVisible) {
+                menu.removeItem(R.id.action_open_in_browser);
+            }
+        }
+        else if(viewType == PostViewType.smallCards) {
+            if(PostSmallCardViewHolder.shareIconVisible) {
+                menu.removeItem(R.id.action_share);
+            }
+            if(PostSmallCardViewHolder.openBrowserIconVisible) {
                 menu.removeItem(R.id.action_open_in_browser);
             }
         }

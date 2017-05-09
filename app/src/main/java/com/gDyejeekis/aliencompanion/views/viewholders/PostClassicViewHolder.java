@@ -36,6 +36,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
     public ImageView save;
     public ImageView hide;
     public ImageView viewUser;
+    public ImageView share;
     public ImageView openBrowser;
     public ImageView moreOptions;
     public ImageView upvoteClassic;
@@ -61,6 +62,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         save =  (ImageView) itemView.findViewById(R.id.btn_save);
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
         viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+        share = (ImageView) itemView.findViewById(R.id.btn_share);
         openBrowser = (ImageView) itemView.findViewById(R.id.btn_open_browser);
         moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
 
@@ -97,10 +99,12 @@ public class PostClassicViewHolder extends PostViewHolder  {
         }
         // set unchanging properties of icons
         viewUser.setImageResource(viewUserResource);
+        share.setImageResource(shareResource);
         openBrowser.setImageResource(openBrowserResource);
         moreOptions.setImageResource(moreResource);
         commentsIcon.setImageResource(commentsResource);
         viewUser.setAlpha(defaultIconOpacity);
+        share.setAlpha(defaultIconOpacity);
         openBrowser.setAlpha(defaultIconOpacity);
         moreOptions.setAlpha(defaultIconOpacity);
         commentsIcon.setAlpha(defaultIconOpacity);
@@ -254,6 +258,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         save.setOnClickListener(optionsListener);
         hide.setOnClickListener(optionsListener);
         viewUser.setOnClickListener(optionsListener);
+        share.setOnClickListener(optionsListener);
         openBrowser.setOnClickListener(optionsListener);
         moreOptions.setOnClickListener(optionsListener);
     }

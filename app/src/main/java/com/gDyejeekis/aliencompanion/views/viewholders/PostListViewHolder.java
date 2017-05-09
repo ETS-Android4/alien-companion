@@ -29,6 +29,8 @@ import com.squareup.picasso.Picasso;
 
 public class PostListViewHolder extends PostViewHolder {
 
+    public static boolean shareIconVisible, openBrowserIconVisible;
+
     public TextView title;
     public TextView commentsText;
     public TextView postDets1;
