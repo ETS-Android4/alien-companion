@@ -472,6 +472,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             menu.removeItem(R.id.action_open_in_browser);
         }
         else if(viewType == PostViewType.list || viewType == PostViewType.listReversed) {
+            menu.removeItem(R.id.action_view_user);
             if(PostListViewHolder.shareIconVisible) {
                 menu.removeItem(R.id.action_share);
             }
@@ -480,6 +481,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
             }
         }
         else if(viewType == PostViewType.smallCards) {
+            menu.removeItem(R.id.action_view_user);
             if(PostSmallCardViewHolder.shareIconVisible) {
                 menu.removeItem(R.id.action_share);
             }
@@ -487,10 +489,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 menu.removeItem(R.id.action_open_in_browser);
             }
         }
-        // check if self post
-        if(!post.isSelf()) {
-            menu.removeItem(R.id.action_select_text);
-        }
+        //// check if self post (disabled for now)
+        //if(!post.isSelf()) {
+        //    menu.removeItem(R.id.action_select_text);
+        //}
         // check if post belongs to current user
         final String currentUser = (MyApplication.currentUser!=null) ? MyApplication.currentUser.getUsername() : "";
         if(post.getAuthor().equals(currentUser)) {

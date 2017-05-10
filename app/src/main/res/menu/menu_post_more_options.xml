@@ -17,7 +17,7 @@
         android:orderInCategory="60" />
 
     <item android:id="@+id/action_select_text" android:title="Select text"
-        android:orderInCategory="65" />
+        android:orderInCategory="65" android:visible="false"/>
 
     <item android:id="@+id/action_view_user" android:title="View user"
         android:orderInCategory="70" />
