@@ -14,17 +14,18 @@
         android:layout_height="wrap_content"
         android:text="Create multireddit"
         android:id="@+id/textView_createMulti"
-        android:textSize="25sp"
+        android:textSize="20sp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:textStyle="bold"
-        android:textColor="?attr/themeTextPrimaryColor"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp" />
+        android:textColor="?attr/themeTextPrimaryColor" />
 
     <com.gDyejeekis.aliencompanion.views.ListViewMaxHeight
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listView_subreddits"
-        android:layout_margin="5dp"
+        android:layout_margin="6dp"
         app:listViewMaxHeight="250dp"/>
 
     <AutoCompleteTextView
@@ -32,7 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
         android:hint="add subreddit"
-        android:layout_margin="5dp"
+        android:layout_margin="6dp"
         android:singleLine="true"
         android:imeOptions="actionDone"
         android:completionThreshold="1"

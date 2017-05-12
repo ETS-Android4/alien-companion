@@ -11,19 +11,20 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:text="Add subreddit(s)"
         android:textColor="?attr/themeTextPrimaryColor"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <AutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
         android:hint="subreddit"
-        android:layout_margin="5dp"
+        android:layout_margin="6dp"
         android:singleLine="true"
         android:imeOptions="actionNext"
         android:completionThreshold="1"
@@ -36,6 +37,8 @@
         android:text="Subscribe"
         android:id="@+id/checkBox_subscribe"
         android:checked="false"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:textColor="?attr/themeTextPrimaryColor" />
 
     <LinearLayout

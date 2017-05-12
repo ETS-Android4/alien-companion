@@ -12,10 +12,11 @@
         android:layout_height="wrap_content"
         android:text="View subreddit"
         android:id="@+id/textView"
-        android:textSize="25sp"
+        android:textSize="20sp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:textStyle="bold"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
         android:textColor="?attr/themeTextPrimaryColor" />
 
     <AutoCompleteTextView
@@ -28,14 +29,15 @@
         android:completionThreshold="1"
         android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor"
-        android:layout_margin="5dp" />
+        android:layout_margin="6dp" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View in a new window"
         android:id="@+id/checkBox_new_window"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
         android:checked="false"
         android:textColor="?attr/themeTextPrimaryColor" />
 
