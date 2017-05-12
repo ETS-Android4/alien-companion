@@ -26,7 +26,8 @@
                 android:layout_weight="1"
                 android:text="Name"
                 android:textColor="?attr/themeTextSecondaryColor"
-                android:paddingTop="6dp"/>
+                android:layout_marginTop="6dp"
+                android:textStyle="italic"/>
 
             <EditText
                 android:id="@+id/editText_profile_name"
@@ -47,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Subreddits (tap to remove)"
+                android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor" />
 
             <TextView
@@ -95,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Multireddits (tap to remove)"
+                android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor" />
 
             <TextView
@@ -143,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Schedules (tap to remove)"
+                android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
 
             <TextView
@@ -178,7 +182,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Save" />
+                android:text="Save"
+                android:layout_marginBottom="6dp"/>
 
         </LinearLayout>
     </ScrollView>
