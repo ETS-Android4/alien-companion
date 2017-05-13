@@ -176,7 +176,7 @@
 
         <Button
             android:id="@+id/button_cancel"
-            style="@style/DialogButtonStyle"
+            style="@style/FlatButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CANCEL" />
@@ -184,7 +184,7 @@
 
         <Button
             android:id="@+id/button_add_schedule"
-            style="@style/DialogButtonStyle"
+            style="@style/FlatButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ADD" />

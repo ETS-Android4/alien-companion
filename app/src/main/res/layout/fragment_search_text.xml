@@ -46,13 +46,13 @@
             android:layout_height="wrap_content"
             android:text="CANCEL"
             android:id="@+id/button_cancel"
-            style="@style/DialogButtonStyle" />
+            style="@style/FlatButtonStyle" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SEARCH"
             android:id="@+id/button_search"
-            style="@style/DialogButtonStyle" />
+            style="@style/FlatButtonStyle" />
     </LinearLayout>
 </LinearLayout>

@@ -50,7 +50,7 @@
         <attr name="themeDialogBackgroundColor" format="color"/>
         <attr name="themeDivider" format="reference"/>
         <attr name="themeDragHandle" format="reference"/>
-        <attr name="themeButtonSelector" format="reference"/>
+        <attr name="themeFlatButtonBackground" format="reference"/>
         <attr name="themeCommentsButtonBackground" format="reference"/>
         <!--<attr name="themeCardBorderColor" format="color" />-->
     </declare-styleable>

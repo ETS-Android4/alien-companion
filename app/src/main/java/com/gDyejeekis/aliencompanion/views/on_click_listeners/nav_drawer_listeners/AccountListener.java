@@ -9,7 +9,6 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.OAuthActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AccountOptionsDialogFragment;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
@@ -41,8 +40,8 @@ public class AccountListener extends NavDrawerListener {
                             getActivity().startActivity(intent);
                         }
                         else {
-                            AddAccountDialogFragment dialogFragment = new AddAccountDialogFragment();
-                            dialogFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+                            //AddAccountDialogFragment dialogFragment = new AddAccountDialogFragment();
+                            //dialogFragment.show(getActivity().getSupportFragmentManager(), "dialog");
                         }
                     }
                 }, MyApplication.NAV_DRAWER_CLOSE_TIME + 75);

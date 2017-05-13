@@ -31,6 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/got_it"
-        style="@style/DialogButtonStyle"/>
+        style="@style/FlatButtonStyle"/>
 
 </LinearLayout>

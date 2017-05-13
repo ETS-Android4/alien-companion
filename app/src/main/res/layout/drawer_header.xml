@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Dark mode"
             android:id="@+id/button_theme_switch"
-            style="@style/DialogButtonStyle"
+            style="@style/FlatButtonStyle"
             android:textColor="@android:color/white"
             android:background="@android:color/transparent" />
 
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Go offline"
             android:id="@+id/button_offline_switch"
-            style="@style/DialogButtonStyle"
+            style="@style/FlatButtonStyle"
             android:textColor="@android:color/white"
             android:background="@android:color/transparent" />
 
