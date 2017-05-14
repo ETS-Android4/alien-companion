@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/spinner_dark"
-    android:textSize="18sp"
-    android:padding="20dp">
+    android:padding="14dp"
+    android:textSize="16sp"
+    android:textAlignment="viewEnd"
+    android:gravity="end">
 
 </TextView>
