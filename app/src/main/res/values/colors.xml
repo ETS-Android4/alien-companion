@@ -35,7 +35,7 @@
 
     <color name="materialBlueButtonBackground">#0D2029</color>
 
-    <color name="materialBlueButtonHighlight">#182A33</color>
+    <color name="materialBlueButtonHighlight">#40525B</color>
 
     <color name="materialBlueBackground">#263238</color>
 
@@ -71,7 +71,7 @@
 
     <color name="materialGreyButtonBackground">#353535</color>
 
-    <color name="materialGreyButtonHighlight">#393939</color>
+    <color name="materialGreyButtonHighlight">#5c5c5c</color>
 
     <color name="materialGreyBackground">#424242</color>
 
@@ -153,7 +153,7 @@
 
     <color name="lowContrastHintText">#39ffffff</color>
 
-    <color name="lowContrastDivider">#14ffffff</color>
+    <color name="lowContrastDivider">#1effffff</color>
 
     <color name="lowContrastLinkText">#004cff</color>
 
