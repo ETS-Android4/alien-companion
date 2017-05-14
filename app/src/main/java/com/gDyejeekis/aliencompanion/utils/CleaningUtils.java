@@ -117,11 +117,10 @@ public class CleaningUtils {
         //listFilesInDir(dir);
     }
 
-    public static void clearSyncedImages(Context context) {
-        // delete in primary external public directory
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        File folder = new File(dir + "/AlienCompanion");
-        for(File file : folder.listFiles()) {
+    public static void clearSyncedMedia(Context context) {
+        // delete in private internal media directory
+        File internalMediaDir = new File(context.getFilesDir(), MyApplication.SYNCED_MEDIA_FILENAME);
+        for(File file : internalMediaDir.listFiles()) {
             if(file.isDirectory()) {
                 deleteMediaFromDir(context, file);
             }
@@ -130,9 +129,9 @@ public class CleaningUtils {
         if(StorageUtils.isExternalStorageAvailable(context)) {
             // delete in secondary external private directory
             for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File picturesDir = new File(externalDir, "Pictures");
-                if (picturesDir.isDirectory()) {
-                    for (File file : picturesDir.listFiles()) {
+                File externalMediaDir = new File(externalDir, MyApplication.SYNCED_MEDIA_FILENAME);
+                if (externalMediaDir.isDirectory()) {
+                    for (File file : externalMediaDir.listFiles()) {
                         if (file.isDirectory()) {
                             deleteMediaFromDir(context, file);
                         }
@@ -142,20 +141,20 @@ public class CleaningUtils {
         }
     }
 
-    public static void clearSyncedImages(Context context, final String subreddit) {
-        // delete in primary external public directory
-        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-        File folder = new File(dir + "/AlienCompanion/" + subreddit);
-        if(folder.isDirectory()) {
-            deleteMediaFromDir(context, folder);
+    public static void clearSyncedMedia(Context context, final String subreddit) {
+        String subredditDir = "/" + MyApplication.SYNCED_MEDIA_FILENAME + "/" + subreddit;
+        // delete in private internal media directory
+        File internalSubredditDir = new File(context.getFilesDir().getAbsolutePath() + subredditDir);
+        if(internalSubredditDir.isDirectory()) {
+            deleteMediaFromDir(context, internalSubredditDir);
         }
 
         if(StorageUtils.isExternalStorageAvailable(context)) {
             //delete in secondary external private directory
             for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File subredditDir = new File(externalDir.getAbsolutePath() + "/Pictures/" + subreddit);
-                if (subredditDir.isDirectory()) {
-                    deleteMediaFromDir(context, subredditDir);
+                File externalSubredditDir = new File(externalDir.getAbsolutePath() + subredditDir);
+                if (externalSubredditDir.isDirectory()) {
+                    deleteMediaFromDir(context, externalSubredditDir);
                 }
             }
         }
@@ -211,18 +210,10 @@ public class CleaningUtils {
             // delete any corresponding synced media (images/GIF)
             if(postLink!=null) {
                 if(postLink.contains("imgur.com") || postLink.contains("gfycat.com") || postLink.endsWith(".jpg") || postLink.endsWith(".jpeg") || postLink.endsWith(".png") || postLink.endsWith(".gif")) {
-                    File namedDir;
-                    // internal storage active
-                    if(activeDir.getAbsolutePath().equals(context.getFilesDir().getAbsolutePath())) {
-                        namedDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion/" + name);
-                    }
-                    // external storage active
-                    else {
-                        namedDir = new File(activeDir.getAbsolutePath() + "/Pictures/" + name);
-                    }
-                    //Log.d(TAG, "namedDir: " + namedDir.getAbsolutePath());
+                    File namedMediaDir = new File(GeneralUtils.getActiveMediaDir(context).getAbsolutePath() + "/" + name);
+                    //Log.d(TAG, "namedMediaDir: " + namedMediaDir.getAbsolutePath());
 
-                    if(namedDir.isDirectory()) {
+                    if(namedMediaDir.isDirectory()) {
                         String toFind;
                         if(postLink.contains("imgur.com")) {
                             if(postLink.contains("/a/") || postLink.contains("/gallery/")) {
@@ -231,7 +222,7 @@ public class CleaningUtils {
                                     ImgurItem albumInfo = (ImgurItem) GeneralUtils.readObjectFromFile(infoFile);
                                     for(ImgurImage img : albumInfo.getImages()) {
                                         toFind = LinkHandler.getImgurImgId(img.getLink());
-                                        findDeleteMediaInDir(context, namedDir, toFind);
+                                        findDeleteMediaInDir(context, namedMediaDir, toFind);
                                         findDeleteMediaInDir(context, activeDir, toFind + "-thumb");
                                     }
                                     if(infoFile.delete()) {
@@ -240,21 +231,21 @@ public class CleaningUtils {
                                 }
                                 else {
                                     toFind = LinkHandler.getImgurImgId(postLink);
-                                    findDeleteMediaInDir(context, namedDir, toFind);
+                                    findDeleteMediaInDir(context, namedMediaDir, toFind);
                                 }
                             }
                             else {
                                 toFind = LinkHandler.getImgurImgId(postLink);
-                                findDeleteMediaInDir(context, namedDir, toFind);
+                                findDeleteMediaInDir(context, namedMediaDir, toFind);
                             }
                         }
                         else if(postLink.contains("gfycat.com")) {
                             toFind = LinkHandler.getGfycatId(postLink);
-                            findDeleteMediaInDir(context, namedDir, toFind);
+                            findDeleteMediaInDir(context, namedMediaDir, toFind);
                         }
                         else {
                             toFind = GeneralUtils.urlToFilename(postLink);
-                            findDeleteMediaInDir(context, namedDir, toFind);
+                            findDeleteMediaInDir(context, namedMediaDir, toFind);
                         }
 
                     }

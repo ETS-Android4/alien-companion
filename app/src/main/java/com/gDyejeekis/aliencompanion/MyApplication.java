@@ -62,6 +62,8 @@ public class MyApplication extends Application {
 
     public static final String OFFLINE_USER_ACTIONS_FILENAME = "OfflineActions";
 
+    public static final String SYNCED_MEDIA_FILENAME = "Media";
+
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
 
     public static final String REMEMBER_VIEW_SUFFIX = "-view";

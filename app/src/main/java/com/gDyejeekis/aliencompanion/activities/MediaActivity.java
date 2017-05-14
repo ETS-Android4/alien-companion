@@ -129,15 +129,7 @@ public class MediaActivity extends BackNavActivity {
         String domain = getIntent().getStringExtra("domain");
 
         if(MyApplication.offlineModeEnabled) {
-            File appFolder;
-            if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
-                File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
-                String dir = (externalDirs.length > 1) ? externalDirs[1].getAbsolutePath() : externalDirs[0].getAbsolutePath();
-                appFolder = new File(dir + "/Pictures");
-            }
-            else {
-                appFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
-            }
+            File appFolder = GeneralUtils.getActiveMediaDir(this);
 
             String toFind = null;
             boolean hasSound = false;
@@ -605,10 +597,7 @@ public class MediaActivity extends BackNavActivity {
     private void onPostMediaSave(int saveId, boolean success, File saveTarget) {
         Log.d(TAG, url + " save operation " + (success ? "successful" : "failed"));
         if (success) {
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri contentUri = Uri.fromFile(saveTarget);
-            mediaScanIntent.setData(contentUri);
-            MediaActivity.this.sendBroadcast(mediaScanIntent);
+            GeneralUtils.addFileToMediaStore(this, saveTarget);
         }
         showSavedMediaNotif(saveId, success, saveTarget);
     }

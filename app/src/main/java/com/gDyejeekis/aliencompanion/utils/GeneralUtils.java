@@ -150,17 +150,9 @@ public class GeneralUtils {
         return context.getFilesDir();
     }
 
-    // TODO: 3/22/2017 change this
     public static File getActiveMediaDir(Context context) {
         File activeDir = getActiveSyncedDataDir(context);
-        File mediaDir;
-        if(activeDir.equals(context.getFilesDir())) {
-            mediaDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/AlienCompanion");
-        }
-        else {
-            mediaDir = new File(activeDir.getAbsolutePath() + "/Pictures");
-        }
-        return mediaDir;
+        return new File(activeDir, MyApplication.SYNCED_MEDIA_FILENAME);
     }
 
     public static Object readObjectFromFile(File file) throws IOException, ClassNotFoundException {

@@ -258,7 +258,7 @@ public class PostListFragment extends RedditContentFragment {
                                     folderName = "multi=" + folderName;
                                 }
                                 CleaningUtils.clearSyncedPostsAndComments(activity, folderName);
-                                CleaningUtils.clearSyncedImages(activity, folderName);
+                                CleaningUtils.clearSyncedMedia(activity, folderName);
                                 return null;
                             }
 

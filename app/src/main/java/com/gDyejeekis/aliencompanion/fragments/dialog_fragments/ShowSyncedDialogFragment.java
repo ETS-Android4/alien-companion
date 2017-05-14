@@ -104,7 +104,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
                     @Override
                     protected Void doInBackground(Void... params) {
                         CleaningUtils.clearSyncedPostsAndComments(getActivity(), filename);
-                        CleaningUtils.clearSyncedImages(getActivity(), filename);
+                        CleaningUtils.clearSyncedMedia(getActivity(), filename);
                         return null;
                     }
 

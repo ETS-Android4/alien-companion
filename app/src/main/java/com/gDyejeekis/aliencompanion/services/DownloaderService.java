@@ -8,9 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.wifi.WifiManager;
-import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
@@ -597,18 +595,7 @@ public class DownloaderService extends IntentService {
         String url = post.getURL();
         String domain = post.getDomain();
 
-        File parentFolder;
-        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
-            File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
-            //pictures folder within external files dir
-            parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");
-        }
-        else {
-            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-            //app folder inside public pictures directory
-            parentFolder = new File(dir, "AlienCompanion");
-        }
+        File parentFolder = GeneralUtils.getActiveMediaDir(this);
 
         if(!parentFolder.exists()) {
             parentFolder.mkdir();
@@ -640,18 +627,7 @@ public class DownloaderService extends IntentService {
         String url = post.getURL();
         String domain = post.getDomain();
 
-        File parentFolder;
-        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
-            File[] externalDirs = ContextCompat.getExternalFilesDirs(this, null);
-            //pictures folder within external files dir
-            parentFolder = (externalDirs.length > 1) ? new File(externalDirs[1], "Pictures") : new File(externalDirs[0], "Pictures");
-        }
-        else {
-            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-            //app folder inside public pictures directory
-            parentFolder = new File(dir, "AlienCompanion");
-        }
+        File parentFolder = GeneralUtils.getActiveMediaDir(this);
 
         if(!parentFolder.exists()) {
             parentFolder.mkdir();
@@ -757,7 +733,6 @@ public class DownloaderService extends IntentService {
         item.setImages(new ArrayList<ImgurImage>(item.getImages().subList(0, indexExlusive)));
         for(ImgurImage img : item.getImages()) {
             String imgLink = (img.isAnimated()) ? img.getMp4() : img.getLink();
-            //img.setLink("file:" + folderPath + "/" + imgLink.replaceAll("https?://", "").replace("/", "(s)"));
             img.setLink(imgLink);
         }
         saveAlbumInfoToFile(item, filename + "-" + item.getId() + "-albumInfo");
@@ -785,29 +760,16 @@ public class DownloaderService extends IntentService {
             final File file = new File(dir, filename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadToFileSync(url, file);
-
-            GeneralUtils.addFileToMediaStore(this, file); // TODO: 1/21/2017  remove this later
-            //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            //Uri contentUri = Uri.fromFile(file);
-            //mediaScanIntent.setData(contentUri);
-            //sendBroadcast(mediaScanIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void downloadPostImageToFile(String url, String dir, String imgFilename) {
+    private void downloadPostImageToFile(String url, String dir, String filename) {
         try {
-            imgFilename = imgFilename.replaceAll("https?://", "").replace("/", "(s)");
-            final File file = new File(dir, imgFilename);
+            final File file = new File(dir, filename);
             Log.d("DownloaderService", "Downloading " + url + " to " + file.getAbsolutePath());
             GeneralUtils.downloadToFileSync(url, file);
-
-            GeneralUtils.addFileToMediaStore(this, file);
-            //Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            //Uri contentUri = Uri.fromFile(file);
-            //mediaScanIntent.setData(contentUri);
-            //sendBroadcast(mediaScanIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -858,7 +820,7 @@ public class DownloaderService extends IntentService {
     }
 
     private void deletePreviousImages(final String filename) {
-        CleaningUtils.clearSyncedImages(this, filename);
+        CleaningUtils.clearSyncedMedia(this, filename);
     }
 
     private void deletePreviousComments(final String subreddit) {

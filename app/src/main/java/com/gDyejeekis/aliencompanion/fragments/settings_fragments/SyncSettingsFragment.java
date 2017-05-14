@@ -68,7 +68,7 @@ public class SyncSettingsFragment extends PreferenceFragment {
                             @Override
                             protected Void doInBackground(Void... params) {
                                 CleaningUtils.clearSyncedPosts(getActivity());
-                                CleaningUtils.clearSyncedImages(getActivity());
+                                CleaningUtils.clearSyncedMedia(getActivity());
                                 return null;
                             }
 
