@@ -3,11 +3,15 @@
 
     <!-- LIGHT THEME -->
 
+    <color name="lightButtonBackground">#0a000000</color>
+
+    <color name="lightButtonHighlight">#1e000000</color>
+
     <color name="lightBackgroundPressed">#14000000</color>
 
-    <color name="lightCommentButtonBackground">#0a000000</color>
+    <!--<color name="lightCommentButtonBackground">#0a000000</color>
 
-    <color name="lightCommentButtonBackgroundPressed">#28000000</color>
+    <color name="lightCommentButtonBackgroundPressed">#28000000</color>-->
 
     <color name="lightDrawerItemSelected">#d8d8d8</color>
 
@@ -29,17 +33,21 @@
 
     <!-- MATERIAL BLUE THEME -->
 
+    <color name="materialBlueButtonBackground">#0D2029</color>
+
+    <color name="materialBlueButtonHighlight">#182A33</color>
+
     <color name="materialBlueBackground">#263238</color>
 
-    <color name="materialBlueBackgroundPressed">#394b53</color>
+    <color name="materialBlueBackgroundPressed">#40525B</color>
 
     <color name="materialBlueDrawerBackground">#263238</color>
 
     <color name="materialBlueDialogBackground">@color/darker_gray</color>
 
-    <color name="materialBlueCommentButtonBackground">#1e282d</color>
+    <!--<color name="materialBlueCommentButtonBackground">#1e282d</color>
 
-    <color name="materialBlueCommentButtonBackgroundPressed">#32434b</color>
+    <color name="materialBlueCommentButtonBackgroundPressed">#32434b</color>-->
 
     <color name="materialBlueDrawerItemSelected">#445863</color>
 
@@ -61,6 +69,10 @@
 
     <!-- MATERIAL GREY THEME -->
 
+    <color name="materialGreyButtonBackground">#353535</color>
+
+    <color name="materialGreyButtonHighlight">#393939</color>
+
     <color name="materialGreyBackground">#424242</color>
 
     <color name="materialGreyBackgroundPressed">#5c5c5c</color>
@@ -69,9 +81,9 @@
 
     <color name="materialGreyDialogBackground">@color/darker_gray</color>
 
-    <color name="materialGreyCommentButtonBackground">#353535</color>
+    <!--<color name="materialGreyCommentButtonBackground">#353535</color>
 
-    <color name="materialGreyCommentButtonBackgroundPressed">#515151</color>
+    <color name="materialGreyCommentButtonBackgroundPressed">#515151</color>-->
 
     <color name="materialGreyDrawerItemSelected">#666666</color>
 
@@ -93,15 +105,19 @@
 
     <!-- DARK THEME -->
 
+    <color name="darkButtonBackground">#1d1d1d</color>
+
+    <color name="darkButtonHighlight">#393939</color>
+
     <color name="darkPrimary">#181818</color>
 
     <color name="darkPrimaryLight">#232323</color>
 
     <color name="darkBackgroundPressed">#232323</color>
 
-    <color name="darkCommentButtonBackground">#1d1d1d</color>
+    <!--<color name="darkCommentButtonBackground">#1d1d1d</color>
 
-    <color name="darkCommentButtonBackgroundPressed">#303030</color>
+    <color name="darkCommentButtonBackgroundPressed">#303030</color>-->
 
     <color name="darkDrawerBackground">@color/primary_dark</color>
 

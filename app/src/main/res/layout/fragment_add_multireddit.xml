@@ -43,7 +43,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="52dp">
+        android:layout_height="52dp"
+        android:padding="8dp">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -70,7 +71,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="right">
+            android:gravity="right"
+            android:padding="8dp">
 
             <Button
                 android:layout_width="wrap_content"

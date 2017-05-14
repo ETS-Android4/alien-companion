@@ -34,7 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DISABLED"
-            android:id="@+id/button_state" />
+            android:id="@+id/button_state"
+            style="@style/RaisedButtonStyle"
+            android:minWidth="88dp"/>
 
     </LinearLayout>
 

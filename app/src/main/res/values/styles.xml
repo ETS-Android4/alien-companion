@@ -205,6 +205,7 @@
         <item name="themeDialogBackgroundColor">@android:color/white</item>
         <item name="themeDivider">@drawable/divider_light_theme</item>
         <item name="themeDragHandle">@drawable/ic_drag_handle_black_48dp</item>
+        <item name="themeRaisedButtonBackground">@drawable/light_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_light</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_light</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
@@ -222,6 +223,7 @@
         <item name="themeDialogBackgroundColor">@color/materialBlueDialogBackground</item>
         <item name="themeDivider">@drawable/divider_material_blue</item>
         <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
+        <item name="themeRaisedButtonBackground">@drawable/material_blue_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_blue</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
@@ -239,6 +241,7 @@
         <item name="themeDialogBackgroundColor">@color/materialGreyDialogBackground</item>
         <item name="themeDivider">@drawable/divider_material_grey</item>
         <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
+        <item name="themeRaisedButtonBackground">@drawable/material_grey_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_grey</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
@@ -256,6 +259,7 @@
         <item name="themeDialogBackgroundColor">@color/darkDialogBackground</item>
         <item name="themeDivider">@drawable/divider_dark_theme</item>
         <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
+        <item name="themeRaisedButtonBackground">@drawable/dark_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
         <!--<item name="themeCardBorderColor">@color/darker_gray</item>-->
@@ -273,6 +277,7 @@
         <item name="themeDialogBackgroundColor">@color/darkDialogBackground</item>
         <item name="themeDivider">@drawable/divider_dark_low_contrast_theme</item>
         <item name="themeDragHandle">@drawable/ic_drag_handle_white_48dp</item>
+        <item name="themeRaisedButtonBackground">@drawable/dark_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
         <!--<item name="themeCardBorderColor">@color/darker_gray</item>-->
@@ -313,13 +318,20 @@
         <item name="android:textSize">?attr/font_comments</item>
     </style>
 
-    <style name="FlatButtonStyle" parent="Widget.AppCompat.Button.Small">
-        <item name="android:textColor">@color/dialogButtonTextColor</item>
-        <item name="android:layout_margin">8dp</item>
+    <style name="ButtonStyle">
         <item name="android:paddingRight">8dp</item>
         <item name="android:paddingLeft">8dp</item>
-        <item name="android:height">36dp</item>
+        <item name="android:layout_height">36dp</item>
         <item name="android:minWidth">64dp</item>
+    </style>
+
+    <style name="RaisedButtonStyle" parent="ButtonStyle">
+        <item name="android:textColor">?attr/themeTextPrimaryColor</item>
+        <item name="android:background">?attr/themeRaisedButtonBackground</item>
+    </style>
+
+    <style name="FlatButtonStyle" parent="ButtonStyle">
+        <item name="android:textColor">@color/dialogButtonTextColor</item>
         <item name="android:background">?attr/themeFlatButtonBackground</item>
     </style>
 

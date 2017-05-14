@@ -16,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="6dp"
-            android:paddingRight="6dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
             <TextView
                 android:id="@+id/textView29"
@@ -26,7 +26,7 @@
                 android:layout_weight="1"
                 android:text="Name"
                 android:textColor="?attr/themeTextSecondaryColor"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:textStyle="italic"/>
 
             <EditText
@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Subreddits (tap to remove)"
+                android:layout_marginTop="8dp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor" />
 
@@ -88,7 +89,8 @@
                     android:id="@+id/button_add_subreddit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add"/>
+                    android:text="Add"
+                    style="@style/RaisedButtonStyle"/>
             </LinearLayout>
 
             <TextView
@@ -97,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Multireddits (tap to remove)"
+                android:layout_marginTop="8dp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor" />
 
@@ -137,7 +140,8 @@
                     android:id="@+id/button_add_multireddit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add"/>
+                    android:text="Add"
+                    style="@style/RaisedButtonStyle"/>
             </LinearLayout>
 
             <TextView
@@ -146,6 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Schedules (tap to remove)"
+                android:layout_marginTop="8dp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
 
@@ -168,14 +173,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Add schedule" />
+                android:text="Add schedule"
+                android:layout_marginTop="8dp"
+                style="@style/RaisedButtonStyle" />
 
             <Button
                 android:id="@+id/button_sync_options"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sync options" />
+                android:text="Sync options"
+                android:layout_marginTop="8dp"
+                style="@style/RaisedButtonStyle" />
 
             <Button
                 android:id="@+id/button_save_changes"
@@ -183,7 +192,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Save"
-                android:layout_marginBottom="6dp"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                style="@style/RaisedButtonStyle"/>
 
         </LinearLayout>
     </ScrollView>
