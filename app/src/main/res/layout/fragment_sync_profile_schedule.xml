@@ -1,194 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/themeDialogBackgroundColor">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/textView_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:text="(profile name)"
-        android:textColor="?attr/themeTextPrimaryColor"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Time window"
-        android:id="@+id/textView12"
-        android:textSize="18sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:textColor="?attr/themeTextPrimaryColor"
-        android:textStyle="italic" />
-
-    <org.apmem.tools.layouts.FlowLayout
-        android:orientation="horizontal"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:background="?attr/themeDialogBackgroundColor">
 
-        <Spinner
+        <TextView
+            android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_from1"
-            android:spinnerMode="dropdown"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_from2"
-            android:spinnerMode="dropdown" />
+            android:text="(profile name)"
+            android:textColor="?attr/themeTextPrimaryColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="to"
-            android:id="@+id/textView8"
+            android:text="Time window"
+            android:id="@+id/textView12"
             android:textSize="18sp"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:paddingTop="20dp" />
+            android:textColor="?attr/themeTextSecondaryColor"
+            android:textStyle="italic"
+            android:padding="8dp"/>
 
-        <Spinner
+        <org.apmem.tools.layouts.FlowLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_from1"
+                android:spinnerMode="dropdown"
+                android:textAlignment="viewEnd"
+                android:gravity="end"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_from2"
+                android:spinnerMode="dropdown"
+                android:textAlignment="viewEnd"
+                android:gravity="end" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TO"
+                android:id="@+id/textView8"
+                android:textSize="16sp"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:paddingTop="14dp"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_to1"
+                android:spinnerMode="dropdown"
+                android:textAlignment="viewEnd"
+                android:gravity="end" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_to2"
+                android:spinnerMode="dropdown"
+                android:textAlignment="viewEnd"
+                android:gravity="end" />
+
+        </org.apmem.tools.layouts.FlowLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_to1"
-            android:spinnerMode="dropdown" />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_to2"
-            android:spinnerMode="dropdown" />
-    </org.apmem.tools.layouts.FlowLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Days"
-        android:id="@+id/textView14"
-        android:textSize="18sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:textColor="?attr/themeTextPrimaryColor"
-        android:textStyle="italic" />
-
-    <org.apmem.tools.layouts.FlowLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_marginBottom="5dp">
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mon"
-            android:id="@+id/button_mon"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
+            android:text="Days"
+            android:id="@+id/textView14"
             android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            android:textColor="?attr/themeTextSecondaryColor"
+            android:textStyle="italic"
+            android:padding="8dp"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+        <org.apmem.tools.layouts.FlowLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tue"
-            android:id="@+id/button_tue"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            android:padding="8dp">
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wed"
-            android:id="@+id/button_wed"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mon"
+                android:id="@+id/button_mon"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thu"
-            android:id="@+id/button_thu"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tue"
+                android:id="@+id/button_tue"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fri"
-            android:id="@+id/button_fri"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wed"
+                android:id="@+id/button_wed"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sat"
-            android:id="@+id/button_sat"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thu"
+                android:id="@+id/button_thu"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sun"
-            android:id="@+id/button_sun"
-            android:layout_marginLeft="5dp"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"/>
-    </org.apmem.tools.layouts.FlowLayout>
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fri"
+                android:id="@+id/button_fri"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:gravity="right">
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sat"
+                android:id="@+id/button_sat"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp"/>
 
-        <Button
-            android:id="@+id/button_cancel"
-            style="@style/FlatButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CANCEL" />
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sun"
+                android:id="@+id/button_sun"
+                android:textColor="@android:color/black"
+                android:background="#d9d9d9"
+                android:textSize="16sp"
+                android:layout_margin="6dp"/>
+
+        </org.apmem.tools.layouts.FlowLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="right"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/button_cancel"
+                style="@style/FlatButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CANCEL" />
 
 
-        <Button
-            android:id="@+id/button_add_schedule"
-            style="@style/FlatButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ADD" />
+            <Button
+                android:id="@+id/button_add_schedule"
+                style="@style/FlatButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ADD" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
