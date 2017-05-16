@@ -10,7 +10,7 @@ import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -202,7 +202,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
 
     public String getAmaUsernamesString() {
         if(amaUsernames!=null && amaUsernames.size()>0) {
-            return StringUtils.join(amaUsernames.toArray(), ", ");
+            return StringUtils.join(amaUsernames, ", ");
         }
         return null;
     }

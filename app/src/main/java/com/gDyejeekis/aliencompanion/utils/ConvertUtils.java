@@ -1,21 +1,8 @@
 package com.gDyejeekis.aliencompanion.utils;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.URLSpan;
-import android.view.View;
 
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.UrlOptionsDialogFragment;
-import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.R;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -24,8 +11,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by George on 6/19/2015.
@@ -112,7 +97,7 @@ public class ConvertUtils {
             strings.add(secondsString);
         }
 
-        String string = StringUtils.join(strings.toArray(), ", ");
+        String string = StringUtils.join(strings, ", ");
         int index = string.lastIndexOf(", ");
         if(index>=0) {
             string = new StringBuilder(string).replace(index, index+2, " and ").toString();
