@@ -211,9 +211,9 @@ public class PostListFragment extends RedditContentFragment {
             //    postListAdapter.hideReadPosts();
             //    return true;
             case R.id.action_view_sidebar:
-                if(subreddit == null || subreddit.equalsIgnoreCase("all")) {
-                    String string = (subreddit==null) ? "the front page" : "/r/all";
-                    ToastUtils.showToast(activity, "No sidebar for " + string);
+                if(subreddit == null || subreddit.equalsIgnoreCase("all") || subreddit.equalsIgnoreCase("popular")) {
+                    String string = (subreddit==null) ? "the front page" : "/r/" + subreddit;
+                    ToastUtils.showSnackbarOverToast(activity, "No sidebar for " + string);
                 }
                 else {
                     SubredditSidebarDialogFragment dialog = new SubredditSidebarDialogFragment();
