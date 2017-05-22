@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -121,7 +122,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
         }
         //PostFragment.currentlyLoading = false;
         try {
-            PostFragment fragment = (PostFragment) ((Activity) context).getFragmentManager().findFragmentByTag("postFragment");
+            PostFragment fragment = (PostFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("postFragment");
             postFragment = fragment;
             postFragment.progressBar.setVisibility(View.GONE);
             postFragment.swipeRefreshLayout.setRefreshing(false);

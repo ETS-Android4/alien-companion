@@ -1,12 +1,12 @@
 package com.gDyejeekis.aliencompanion.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -96,7 +96,7 @@ public class MainActivity extends ToolbarActivity {
         //    getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         //}
 
-        fm = getFragmentManager();
+        fm = getSupportFragmentManager();
 
         initNavDrawer();
 

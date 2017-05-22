@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -91,7 +92,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
     @Override
     protected void onCancelled(List<RedditItem> submissions) {
         try {
-            SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            SearchFragment fragment = (SearchFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("listFragment");
             fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
@@ -103,7 +104,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
             GeneralUtils.saveAccountChanges(context);
         }
         try {
-            SearchFragment fragment = (SearchFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            SearchFragment fragment = (SearchFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("listFragment");
             sf = fragment;
             sf.currentLoadType = null;
             sf.mainProgressBar.setVisibility(View.GONE);

@@ -23,6 +23,14 @@
             app:fabSize="mini" />
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_view_synced"
+            style="@style/FabMiniMargins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_list_white_24dp"
+            app:fabSize="mini" />
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_search"
             style="@style/FabMiniMargins"
             android:layout_width="wrap_content"

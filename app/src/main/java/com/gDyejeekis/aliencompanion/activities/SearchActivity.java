@@ -1,9 +1,9 @@
 package com.gDyejeekis.aliencompanion.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +42,7 @@ public class SearchActivity extends SwipeBackActivity {
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
 
-        fm = getFragmentManager();
+        fm = getSupportFragmentManager();
 
         int resource;
         if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -76,10 +76,10 @@ public class SearchActivity extends SwipeBackActivity {
     }
 
     private void setupMainFragment(int container) {
-        searchFragment = (SearchFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
+        searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentHolder);
         if(searchFragment == null) {
             searchFragment = new SearchFragment();
-            getFragmentManager().beginTransaction().add(container, searchFragment, "listFragment").commit();
+            getSupportFragmentManager().beginTransaction().add(container, searchFragment, "listFragment").commit();
         }
     }
 

@@ -8,7 +8,7 @@ import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
@@ -89,7 +89,7 @@ public class Message extends Thing implements RedditItem {
                 destination = "[deleted]";
             }
 
-            if(!MyApplication.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+            if(!MyApplication.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
 
             //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);

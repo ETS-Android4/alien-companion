@@ -36,10 +36,10 @@ public class PostActivity extends SwipeBackActivity {
     }
 
     private void setupFragment() {
-        postFragment = (PostFragment) getFragmentManager().findFragmentById(R.id.fragmentHolder);
+        postFragment = (PostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentHolder);
         if(postFragment == null) {
             postFragment = new PostFragment();
-            getFragmentManager().beginTransaction().add(R.id.fragmentHolder, postFragment, "postFragment").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolder, postFragment, "postFragment").commit();
         }
     }
 

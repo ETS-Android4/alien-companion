@@ -17,7 +17,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -117,9 +117,9 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             this.setLinkTitle(safeJsonToString(obj.get("link_title")));
             setLikes(safeJsonToString(obj.get("likes")));
 
-            linkTitle = StringEscapeUtils.unescapeHtml(linkTitle);
+            linkTitle = StringEscapeUtils.unescapeHtml4(linkTitle);
             if(!MyApplication.useMarkdownParsing) {
-                bodyHTML = StringEscapeUtils.unescapeHtml(bodyHTML);
+                bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
                 bodyHTML = HtmlFormatUtils.modifySpoilerHtml(bodyHTML);
             }
 

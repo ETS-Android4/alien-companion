@@ -120,7 +120,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
-        final PostFragment postFragment = (PostFragment) activity.getFragmentManager()
+        final PostFragment postFragment = (PostFragment) activity.getSupportFragmentManager()
                 .findFragmentByTag("postFragment");
         int viewType = getItemViewType(position);
         switch (viewType) {

@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
@@ -41,7 +42,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     private Exception mException;
     private LoadType mLoadType;
     //private UserSubmissionsCategory userContent;
-    private Activity activity;
+    private AppCompatActivity activity;
     private UserFragment uf;
     private HttpClient httpClient = new RedditHttpClient();
     private RedditItemListAdapter adapter;
@@ -49,7 +50,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     private UserOverviewSort userSort;
     private boolean changedSort;
 
-    public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType) {
+    public LoadUserContentTask(AppCompatActivity activity, UserFragment userFragment, LoadType loadType) {
         this.activity = activity;
         this.uf = userFragment;
         mLoadType = loadType;
@@ -58,7 +59,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
         changedSort = false;
     }
 
-    public LoadUserContentTask(Activity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory category, UserOverviewSort sort) {
+    public LoadUserContentTask(AppCompatActivity activity, UserFragment userFragment, LoadType loadType, UserSubmissionsCategory category, UserOverviewSort sort) {
         this.activity = activity;
         this.uf = userFragment;
         mLoadType = loadType;
@@ -131,7 +132,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
     @Override
     protected void onCancelled(List<RedditItem> submissions) {
         try {
-            UserFragment fragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
+            UserFragment fragment = (UserFragment) activity.getSupportFragmentManager().findFragmentByTag("listFragment");
             fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
@@ -143,7 +144,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             GeneralUtils.saveAccountChanges(activity);
         }
         try {
-            UserFragment userFragment = (UserFragment) activity.getFragmentManager().findFragmentByTag("listFragment");
+            UserFragment userFragment = (UserFragment) activity.getSupportFragmentManager().findFragmentByTag("listFragment");
             uf = userFragment;
             uf.currentLoadType = null;
             uf.mainProgressBar.setVisibility(View.GONE);

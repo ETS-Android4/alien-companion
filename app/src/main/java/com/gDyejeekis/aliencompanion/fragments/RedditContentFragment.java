@@ -1,7 +1,7 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,10 +29,13 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
+import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout;
@@ -174,7 +178,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) { // TODO: 2/7/2017  maybe change this constant for gallery view
                 loadMore = false;
                 //Log.d("scroll listener", "load more now");
-                ShowMoreListener listener = new ShowMoreListener(activity.getFragmentManager().findFragmentByTag("listFragment"));
+                ShowMoreListener listener = new ShowMoreListener(activity.getSupportFragmentManager().findFragmentByTag("listFragment"));
                 listener.onClick(recyclerView);
             }
         }
@@ -344,6 +348,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     private FloatingActionButton fabSearch;
     private FloatingActionButton fabSubmitLink;
     private FloatingActionButton fabSubmitText;
+    private FloatingActionButton fabViewSynced;
 
     private Animation showAnimation;
     private Animation hideAnimation;
@@ -395,6 +400,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
             fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
             fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
+            fabViewSynced = (FloatingActionButton) view.findViewById(R.id.fab_view_synced);
             fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
             fabSync = (FloatingActionButton) view.findViewById(R.id.fab_sync);
             fabHideRead = (FloatingActionButton) view.findViewById(R.id.fab_hide_read);
@@ -404,6 +410,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             PostFabNavListener listener = new PostFabNavListener(this);
             fabMain.setOnClickListener(listener);
             fabRefresh.setOnClickListener(listener);
+            fabViewSynced.setOnClickListener(listener);
             fabSubmit.setOnClickListener(listener);
             fabSync.setOnClickListener(listener);
             fabHideRead.setOnClickListener(listener);
@@ -412,6 +419,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             fabSubmitText.setOnClickListener(listener);
 
             fabRefresh.setOnLongClickListener(listener);
+            fabViewSynced.setOnLongClickListener(listener);
             fabSubmit.setOnLongClickListener(listener);
             fabSync.setOnLongClickListener(listener);
             fabHideRead.setOnLongClickListener(listener);
@@ -444,6 +452,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
         fabMain.setBackgroundTintList(fabColor);
         fabRefresh.setBackgroundTintList(fabColor);
+        fabViewSynced.setBackgroundTintList(fabColor);
         fabSubmit.setBackgroundTintList(fabColor);
         fabSync.setBackgroundTintList(fabColor);
         fabHideRead.setBackgroundTintList(fabColor);
@@ -463,6 +472,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         fabRefresh.setVisibility(otherFabsVis);
         fabHideRead.setVisibility(otherFabsVis);
         fabSearch.setVisibility(MyApplication.offlineModeEnabled ? View.GONE : otherFabsVis);
+        fabViewSynced.setVisibility(MyApplication.offlineModeEnabled ? subredditFabsVis : View.GONE);
     }
 
     private void setFabMainOptionsVisible(boolean flag) {
@@ -554,5 +564,20 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     @Override
     public void onRefresh() {
         refreshList();
+    }
+
+    public void showSyncedReddits() {
+        ShowSyncedDialogFragment syncedDialog = new ShowSyncedDialogFragment();
+        syncedDialog.show(activity.getSupportFragmentManager(), "dialog");
+    }
+
+    public void showSyncProfiles() {
+        Intent intent = new Intent(activity, SyncProfilesActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public void showPendingActions() {
+        Intent intent = new Intent(activity, PendingUserActionsActivity.class);
+        activity.startActivity(intent);
     }
 }

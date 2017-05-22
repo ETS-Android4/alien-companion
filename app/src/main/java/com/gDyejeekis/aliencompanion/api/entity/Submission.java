@@ -7,7 +7,7 @@ import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToDouble;
 import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToLong;
 import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
@@ -249,10 +249,10 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setClicked(safeJsonToBoolean(obj.get("clicked")));
 			setLikes(safeJsonToString(obj.get("likes")));
 
-			title = StringEscapeUtils.unescapeHtml(title);
-			linkFlairText = StringEscapeUtils.unescapeHtml(linkFlairText);
+			title = StringEscapeUtils.unescapeHtml4(title);
+			linkFlairText = StringEscapeUtils.unescapeHtml4(linkFlairText);
 			if(!MyApplication.useMarkdownParsing) {
-				selftextHTML = StringEscapeUtils.unescapeHtml(selftextHTML);
+				selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
 				selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);
 			}
 

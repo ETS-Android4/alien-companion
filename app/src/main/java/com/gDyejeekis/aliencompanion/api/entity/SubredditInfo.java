@@ -1,9 +1,8 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToBoolean;
@@ -33,11 +32,11 @@ public class SubredditInfo {
             publicDescriptionHtml = safeJsonToString(obj.get("public_description_html"));
             headerImgUrl = safeJsonToString(obj.get("header_img"));
 
-            submitTextHtml = StringEscapeUtils.unescapeHtml(submitTextHtml);
+            submitTextHtml = StringEscapeUtils.unescapeHtml4(submitTextHtml);
             submitTextHtml = HtmlFormatUtils.modifySpoilerHtml(submitTextHtml);
-            descriptionHtml = StringEscapeUtils.unescapeHtml(descriptionHtml);
+            descriptionHtml = StringEscapeUtils.unescapeHtml4(descriptionHtml);
             descriptionHtml = HtmlFormatUtils.modifySpoilerHtml(descriptionHtml);
-            publicDescriptionHtml = StringEscapeUtils.unescapeHtml(publicDescriptionHtml);
+            publicDescriptionHtml = StringEscapeUtils.unescapeHtml4(publicDescriptionHtml);
         } catch (Exception e) {
             e.printStackTrace();
         }

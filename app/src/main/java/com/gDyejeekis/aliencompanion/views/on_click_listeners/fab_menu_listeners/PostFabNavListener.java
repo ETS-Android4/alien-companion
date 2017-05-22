@@ -7,6 +7,7 @@ import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
@@ -55,6 +56,9 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
             case R.id.fab_submit_text:
                 ((PostListFragment)fragment).startSubmitActivity(SubmitType.self);
                 break;
+            case R.id.fab_view_synced:
+                fragment.showSyncedReddits();
+                break;
         }
     }
 
@@ -82,6 +86,9 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
                 break;
             case R.id.fab_sync:
                 message = "Sync posts";
+                break;
+            case R.id.fab_view_synced:
+                message = "View synced subreddits/multireddits";
                 break;
         }
         if(message!=null) {

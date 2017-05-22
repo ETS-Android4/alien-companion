@@ -17,15 +17,12 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
-import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
-import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.asynctask.LoadPostsTask;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
@@ -201,15 +198,6 @@ public class PostListFragment extends RedditContentFragment {
                     showViewsPopup(activity.findViewById(R.id.action_refresh));
                 } //TODO: find a more suitable anchor
                 return true;
-            //case R.id.action_toggle_hidden:
-            //    MainActivity.showHiddenPosts = !MainActivity.showHiddenPosts;
-            //    if(MainActivity.showHiddenPosts) item.setChecked(true);
-            //    else item.setChecked(false);
-            //    refreshList();
-            //    return true;
-            //case R.id.action_hide_read:
-            //    postListAdapter.hideReadPosts();
-            //    return true;
             case R.id.action_view_sidebar:
                 if(subreddit == null || subreddit.equalsIgnoreCase("all") || subreddit.equalsIgnoreCase("popular")) {
                     String string = (subreddit==null) ? "the front page" : "/r/" + subreddit;
@@ -224,12 +212,10 @@ public class PostListFragment extends RedditContentFragment {
                 }
                 return true;
             case R.id.action_view_synced:
-                ShowSyncedDialogFragment syncedDialog = new ShowSyncedDialogFragment();
-                syncedDialog.show(activity.getSupportFragmentManager(), "dialog");
+                showSyncedReddits();
                 break;
             case R.id.action_pending_actions:
-                Intent intent = new Intent(activity, PendingUserActionsActivity.class);
-                activity.startActivity(intent);
+                showPendingActions();
                 break;
             case R.id.action_clear_synced:
                 final String messageEnd;
@@ -273,8 +259,7 @@ public class PostListFragment extends RedditContentFragment {
                 }).show();
                 return true;
             case R.id.action_sync_profiles:
-                intent = new Intent(activity, SyncProfilesActivity.class);
-                activity.startActivity(intent);
+                showSyncProfiles();
                 return true;
             case R.id.action_sync_posts:
                 addToSyncQueue();

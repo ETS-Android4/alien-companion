@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -130,7 +131,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
     @Override
     protected void onCancelled(List<RedditItem> submissions) {
         try {
-            PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            PostListFragment fragment = (PostListFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("listFragment");
             fragment.loadMore = MyApplication.endlessPosts;
         } catch (NullPointerException e) {}
     }
@@ -142,7 +143,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             GeneralUtils.saveAccountChanges(context);
         }
         try {
-            PostListFragment fragment = (PostListFragment) ((Activity) context).getFragmentManager().findFragmentByTag("listFragment");
+            PostListFragment fragment = (PostListFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("listFragment");
             plf = fragment;
             plf.currentLoadType = null;
             plf.mainProgressBar.setVisibility(View.GONE);

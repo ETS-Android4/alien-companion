@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.views.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -306,8 +307,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_SHOW_MORE:
                 FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
-                Activity activity = (Activity) context;
-                footerViewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(activity.getFragmentManager().findFragmentByTag("listFragment")));
+                AppCompatActivity activity = (AppCompatActivity) context;
+                footerViewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(activity.getSupportFragmentManager().findFragmentByTag("listFragment")));
                 if(loadingMoreItems) {
                     footerViewHolder.showMoreProgress.setVisibility(View.VISIBLE);
                     footerViewHolder.showMoreButton.setVisibility(View.GONE);
