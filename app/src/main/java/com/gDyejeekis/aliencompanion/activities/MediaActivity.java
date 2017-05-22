@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -549,7 +551,26 @@ public class MediaActivity extends BackNavActivity {
         GeneralUtils.shareUrl(this, label, url);
     }
 
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        if(requestCode == 119871) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                saveMedia();
+            }
+            else {
+                ToastUtils.showToast(this, "Failed to save media (permission denied)");
+            }
+        }
+    }
+
     public void saveMedia() {
+        // checek for permission on android M+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 119871);
+                return;
+            }
+        }
         ToastUtils.showToast(this, "Saving to pictures..");
         Log.d(TAG, "Saving " + url + " to public pictures directory");
 
@@ -628,7 +649,7 @@ public class MediaActivity extends BackNavActivity {
             String type = (isImage) ? "image/*" : "video/*";
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(file), type);
+            intent.setDataAndType(FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", file), type);
             pIntent = PendingIntent.getActivity(this, 0, intent, 0);
         }
 

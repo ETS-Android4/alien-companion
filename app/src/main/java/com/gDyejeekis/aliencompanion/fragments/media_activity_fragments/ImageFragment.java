@@ -232,35 +232,13 @@ public class ImageFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(activity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        activity.saveMedia();
-                    }
-                    else {
-                        requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 11);
-                    }
-                }
-                else {
-                    activity.saveMedia();
-                }
+                activity.saveMedia();
                 return true;
             case R.id.action_share:
                 activity.shareMedia();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        if(requestCode == 11) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                activity.saveMedia();
-            }
-            else {
-                ToastUtils.showToast(activity, "Failed to save image to photos (permission denied)");
-            }
         }
     }
 

@@ -26,29 +26,10 @@ import com.gDyejeekis.aliencompanion.utils.ToastUtils;
  */
 public class SyncSettingsFragment extends PreferenceFragment {
 
-    private CheckBoxPreference syncImages;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.sync_preferences);
-
-        syncImages = (CheckBoxPreference) findPreference("syncImg");
-        syncImages.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object o) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        return true;
-                    }
-                    else {
-                        requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 20);
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
 
         Preference clearSynced = findPreference("clearSynced");
         clearSynced.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -100,20 +81,4 @@ public class SyncSettingsFragment extends PreferenceFragment {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        if(requestCode == 20) {
-            boolean flag;
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                flag = true;
-            }
-            else {
-                flag = false;
-            }
-            SharedPreferences.Editor editor = MyApplication.prefs.edit();
-            editor.putBoolean("syncImg", flag);
-            editor.apply();
-            syncImages.setChecked(flag);
-        }
-    }
 }
