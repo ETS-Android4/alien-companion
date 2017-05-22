@@ -103,6 +103,7 @@
                 android:paddingRight="16dp"
                 android:layout_below="@id/author_textview"
                 android:text="comment"
+                android:textIsSelectable="false"
                 android:paddingBottom="16dp"
                 android:textSize="?attr/font_comments"
                 android:textColor="?attr/themeTextPrimaryColor"

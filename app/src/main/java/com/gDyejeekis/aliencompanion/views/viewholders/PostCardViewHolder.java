@@ -154,6 +154,7 @@ public class PostCardViewHolder extends PostViewHolder  {
                     }
                     else if(showDetails) {
                         layoutSelfText.setVisibility(View.VISIBLE);
+                        selfText.setTextIsSelectable(true);
                         SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
                         stringBuilder = SpanUtils.modifyURLSpan(context, stringBuilder);
                         if(post.getHighlightText()!=null) {
@@ -169,6 +170,7 @@ public class PostCardViewHolder extends PostViewHolder  {
                         }
                         else {
                             layoutSelfText.setVisibility(View.VISIBLE);
+                            selfText.setTextIsSelectable(false);
                             String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
                             if (text.length() > 200) text = text.substring(0, 200) + " ...";
                             selfText.setTextColor(MyApplication.textSecondaryColor);

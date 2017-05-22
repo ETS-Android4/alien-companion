@@ -9,6 +9,7 @@
         <changelogtext>Stickied posts now have different title colors</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext>Small tweaks to font sizes</changelogtext>
+        <changelogtext>Self text and comment text is now selectable</changelogtext>
         <changelogtext>Added 'Use primary color in dark themes' option under 'Appearance' (disabled by default)</changelogtext>
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
