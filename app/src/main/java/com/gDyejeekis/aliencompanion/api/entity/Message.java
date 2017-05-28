@@ -91,7 +91,6 @@ public class Message extends Thing implements RedditItem {
 
             if(!MyApplication.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
 
-            //bodyPrepared = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(bodyHTML, null, new MyHtmlTagHandler()));
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
         } catch (Exception e) {
             e.printStackTrace();

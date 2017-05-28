@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
@@ -23,7 +24,6 @@ import com.gDyejeekis.aliencompanion.models.Thumbnail;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -154,13 +154,15 @@ public class PostCardViewHolder extends PostViewHolder  {
                     }
                     else if(showDetails) {
                         layoutSelfText.setVisibility(View.VISIBLE);
-                        selfText.setTextIsSelectable(true);
-                        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null, new MyHtmlTagHandler()));
+                        //selfText.setTextIsSelectable(true);
+                        selfText.setTextColor(MyApplication.textPrimaryColor);
+
+                        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML(), null,
+                                new HtmlTagHandler(selfText.getPaint())));
                         stringBuilder = SpanUtils.modifyURLSpan(context, stringBuilder);
                         if(post.getHighlightText()!=null) {
                             stringBuilder = SpanUtils.highlightText(stringBuilder, post.getHighlightText(), post.highlightMatchCase());
                         }
-                        selfText.setTextColor(MyApplication.textPrimaryColor);
                         selfText.setText(stringBuilder);
                         selfText.setMovementMethod(MyLinkMovementMethod.getInstance());
                     }
@@ -170,10 +172,11 @@ public class PostCardViewHolder extends PostViewHolder  {
                         }
                         else {
                             layoutSelfText.setVisibility(View.VISIBLE);
-                            selfText.setTextIsSelectable(false);
+                            //selfText.setTextIsSelectable(false);
+                            selfText.setTextColor(MyApplication.textSecondaryColor);
+
                             String text = ConvertUtils.noTrailingwhiteLines(Html.fromHtml(post.getSelftextHTML())).toString();
                             if (text.length() > 200) text = text.substring(0, 200) + " ...";
-                            selfText.setTextColor(MyApplication.textSecondaryColor);
                             selfText.setText(text);
                         }
                     }

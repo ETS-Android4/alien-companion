@@ -2,7 +2,6 @@ package com.gDyejeekis.aliencompanion.views.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -22,6 +21,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentLinkListener;
@@ -33,7 +33,6 @@ import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.ShowMore;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.MyClickableSpan;
-import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
@@ -375,7 +374,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             }
             else {
                 //parse body with fromHtml
-                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null, new MyHtmlTagHandler()));
+                SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(message.bodyHTML, null,
+                        new HtmlTagHandler(body.getPaint())));
                 strBuilder = SpanUtils.modifyURLSpan(context, strBuilder);
                 body.setText(strBuilder);
                 body.setMovementMethod(MyLinkMovementMethod.getInstance());
@@ -458,8 +458,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             else {
                 //parse html body using fromHTML
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null,
-                        new MyHtmlTagHandler()));
-                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
+                        new HtmlTagHandler(commentBody.getPaint())));
+                // TODO: 5/28/2017 re-enable this later
+                //strBuilder = SpanUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
+                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder);
                 commentBody.setText(strBuilder);
                 commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             }

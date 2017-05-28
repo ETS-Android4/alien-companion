@@ -126,6 +126,7 @@ public class SpanUtils {
         return strBuilder;
     }
 
+    // TODO: 5/28/2017 needs to be reworked to accomodate clickable table spans
     public static SpannableStringBuilder modifyURLSpan(final Context context, CharSequence sequence,
                                                        final MyClickableSpan plainTextClickable) {
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);

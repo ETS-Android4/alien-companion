@@ -22,7 +22,7 @@ import com.gDyejeekis.aliencompanion.asynctask.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
+import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -125,7 +125,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         //active accounts
         textViewActiveCount.setText(String.valueOf(info.activeAccounts));
 
-        Html.TagHandler tagHandler = new MyHtmlTagHandler();
+        Html.TagHandler tagHandler = new HtmlTagHandler(textViewSubmitText.getPaint());
         SpannableStringBuilder stringBuilder;
         //submit text
         try {

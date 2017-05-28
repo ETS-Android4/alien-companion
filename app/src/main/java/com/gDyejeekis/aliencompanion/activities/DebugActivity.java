@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
-import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 
@@ -64,7 +64,7 @@ public class DebugActivity extends ToolbarActivity {
             urlsString += "<a href=\""+ URL_TESTS_HARDCODED[i] + "\">" + URL_TESTS_HARDCODED[i] + "</a>";
             urlsString += "<br/><br/>";
         }
-        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(urlsString, null, new MyHtmlTagHandler()));
+        SpannableStringBuilder stringBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(urlsString, null, new HtmlTagHandler(urlTests.getPaint())));
         stringBuilder = SpanUtils.modifyURLSpan(this, stringBuilder);
         urlTests.setText(stringBuilder);
         urlTests.setMovementMethod(MyLinkMovementMethod.getInstance());

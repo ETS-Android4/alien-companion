@@ -24,7 +24,7 @@ public abstract class ScalableDialogFragment extends DialogFragment {
         setDialogWidth();
     }
 
-    private void setDialogWidth() {
+    protected void setDialogWidth() {
         boolean isLandscape = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         float widthFactor;
         if(MyApplication.isLargeScreen) {

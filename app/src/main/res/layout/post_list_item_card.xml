@@ -17,8 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="(Title here)"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:id="@+id/txtView_postTitle"
             android:textSize="?attr/font_large"
             android:textColor="?attr/themeTextPrimaryColor"

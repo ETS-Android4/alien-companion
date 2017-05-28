@@ -21,7 +21,7 @@ import com.gDyejeekis.aliencompanion.models.offline_actions.CommentAction;
 import com.gDyejeekis.aliencompanion.models.offline_actions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.utils.MyHtmlTagHandler;
+import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -91,7 +91,8 @@ public class SubmitCommentFragment extends Fragment {
 
             }
             else {
-                originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null, new MyHtmlTagHandler())));
+                originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null,
+                        new HtmlTagHandler(originalCommentTextView.getPaint()))));
             }
         }
 

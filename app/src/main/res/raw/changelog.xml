@@ -7,9 +7,12 @@
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
+        <changelogtext>Self text is now selectable [MAYBE NOT]</changelogtext>
+        <changelogtext>Added support for tables</changelogtext>
+        <changelogtext>Added support for inline code text [NOT OPTIMALLY FORMATTED]</changelogtext>
+        <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext>Small tweaks to font sizes</changelogtext>
-        <changelogtext>Self text is now selectable</changelogtext>
         <changelogtext>Added 'Use primary color in dark themes' option under 'Appearance' (disabled by default)</changelogtext>
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
@@ -34,7 +37,6 @@
         <changelogtext>Synced post articles now use the improved interface/format</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE CHANGES HERE]]></changelogtext>
         <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
-        <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
         <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
@@ -43,8 +45,6 @@
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
         <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
     </changelogversion>
