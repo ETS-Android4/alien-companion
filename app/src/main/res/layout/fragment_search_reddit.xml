@@ -23,7 +23,7 @@
         android:id="@+id/editText_subreddit"
         android:hint="search term"
         android:layout_margin="6dp"
-        android:maxLines="1"
+        android:singleLine="true"
         android:imeOptions="actionSearch"
         android:textColor="?attr/themeTextPrimaryColor"
         android:textColorHint="?attr/themeTextHintColor" />
