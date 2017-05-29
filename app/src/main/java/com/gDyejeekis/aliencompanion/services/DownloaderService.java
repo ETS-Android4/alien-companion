@@ -57,10 +57,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import xyz.klinker.android.article.ArticleUtils;
-import xyz.klinker.android.article.data.Article;
-import xyz.klinker.android.article.data.DataSource;
-
 /**
  * Created by sound on 9/25/2015.
  */
@@ -582,13 +578,7 @@ public class DownloaderService extends IntentService {
     }
 
     private void downloadPostArticle(Submission post, String filename) {
-        try {
-            ArticleUtils articleUtils = new ArticleUtils(LinkHandler.ARTICLE_API_KEY);
-            Article article = articleUtils.loadArticleSync(post.getURL(), DataSource.getInstance(this), null, null);
-            post.hasSyncedArticle = (article != null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // TODO: 5/29/2017
     }
 
     private void downloadPostVideo(Submission post, String filename) {

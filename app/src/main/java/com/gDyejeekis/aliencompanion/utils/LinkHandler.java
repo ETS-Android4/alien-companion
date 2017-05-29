@@ -24,8 +24,6 @@ import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import xyz.klinker.android.article.ArticleIntent;
-
 /**
  * Created by George on 6/11/2015.
  */
@@ -217,49 +215,7 @@ public class LinkHandler {
     }
 
     private void openImprovedArticle() {
-        ArticleIntent intent = new ArticleIntentBuilder(context, ARTICLE_API_KEY)
-                .setToolbarColor(MyApplication.currentColor)
-                //.setAccentColor(accentColor)
-                .setTheme(getArticleViewTheme())
-                .setTextSize(getArticleViewTextSize())     // 15 SP (default)
-                .build();
-
-        intent.launchUrl(context, Uri.parse(url));
-    }
-
-    private int getArticleViewTheme() {
-        return (MyApplication.nightThemeEnabled) ? ArticleIntent.THEME_DARK : ArticleIntent.THEME_LIGHT;
-    }
-
-    private int getArticleViewTextSize() {
-        int textSize;
-        switch (MyApplication.fontStyle) {
-            case R.style.FontStyle_Smallest:
-                textSize = 13;
-                break;
-            case R.style.FontStyle_Smaller:
-                textSize = 14;
-                break;
-            case R.style.FontStyle_Small:
-                textSize = 15;
-                break;
-            case R.style.FontStyle_Medium:
-                textSize = 16;
-                break;
-            case R.style.FontStyle_Large:
-                textSize = 17;
-                break;
-            case R.style.FontStyle_Larger:
-                textSize = 18;
-                break;
-            case R.style.FontStyle_Largest:
-                textSize = 19;
-                break;
-            default:
-                textSize = 16;
-                break;
-        }
-        return textSize;
+        // TODO: 5/29/2017
     }
 
     public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {

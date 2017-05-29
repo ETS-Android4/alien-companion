@@ -88,10 +88,6 @@
             android:name=".activities.SubmitActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_submit_post"/>
-        <activity
-            android:name=".activities.ArticleActivityExtended"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/ArticleTheme"/>
 
         <service
             android:name=".services.DownloaderService"

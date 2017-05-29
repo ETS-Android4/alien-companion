@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/androidlibmagick/androidlibmagick.iml" filepath="$PROJECT_DIR$/androidlibmagick/androidlibmagick.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/articleandroid/articleandroid.iml" filepath="$PROJECT_DIR$/articleandroid/articleandroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/redditreader.iml" filepath="$PROJECT_DIR$/redditreader.iml" />
     </modules>
   </component>
