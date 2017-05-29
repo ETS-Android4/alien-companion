@@ -46,6 +46,8 @@ android {
                     project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 10 + android.defaultConfig.versionCode
         }
     }
+
+    useLibrary  'org.apache.http.legacy'
 }
 
 dependencies {
@@ -72,4 +74,5 @@ dependencies {
     compile 'petrov.kristiyan.colorpicker:colorpicker-library:1.1.2'
     compile 'com.code-troopers.betterpickers:library:3.1.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
+    compile 'org.jsoup:jsoup:1.10.2'
 }
