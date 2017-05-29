@@ -7,7 +7,7 @@
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
-        <changelogtext>Self text is now selectable [MAYBE NOT]</changelogtext>
+        <changelogtext>Self text is now selectable -MAYBE NOT-</changelogtext>
         <changelogtext>Added support for tables</changelogtext>
         <changelogtext>Added support for inline code text [NOT OPTIMALLY FORMATTED]</changelogtext>
         <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
@@ -27,7 +27,7 @@
         <changelogtext>Added 'Hide post FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Revamped FAB comment navigation with new options (threads, search text, time, original poster, gilded and AMA mode)]]></changelogtext>
         <changelogtext>Added 'Hide comment FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default)]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default) -MAYBE NOT-]]></changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
         <changelogtext>Added giphy.com link handling support</changelogtext>
         <changelogtext>Added streamable.com link handling support</changelogtext>

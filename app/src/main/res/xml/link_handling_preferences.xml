@@ -30,6 +30,7 @@
         android:key="handleArticles"
         android:title="Improved post articles"
         android:summary="Shows stripped down versions of article pages for easier reading and faster loading"
-        android:defaultValue="false"/>
+        android:defaultValue="false"
+        android:visibility="gone"/>
 
 </PreferenceScreen>

@@ -566,7 +566,7 @@ public class MyApplication extends Application {
         handleTwitter = prefs.getBoolean("handleTwitter", true);
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
-        handleArticles = prefs.getBoolean("handleArticles", false);
+        handleArticles = false;//prefs.getBoolean("handleArticles", false);
 
         newMessages = prefs.getBoolean("newMessages", false);
         messageCheckInterval = Integer.valueOf(prefs.getString("messageCheckInterval", "15"));
