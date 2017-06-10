@@ -62,7 +62,15 @@ public class MyApplication extends Application {
 
     public static final String OFFLINE_USER_ACTIONS_FILENAME = "OfflineActions";
 
-    public static final String SYNCED_MEDIA_FILENAME = "Media";
+    public static final String SYNCED_MEDIA_DIR_NAME = "Media";
+
+    public static final String SYNCED_ARTICLES_DIR_NAME = "Articles";
+
+    public static final String SYNCED_REDDIT_DATA_DIR_NAME = "RedditData";
+
+    public static final String SYNCED_ARTICLE_DATA_SUFFIX = "-article";
+
+    public static final String SYNCED_ARTICLE_IMAGE_SUFFIX = "-image.jpg";
 
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
 

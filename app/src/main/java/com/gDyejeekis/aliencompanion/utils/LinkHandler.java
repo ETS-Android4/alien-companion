@@ -182,16 +182,12 @@ public class LinkHandler {
                     intent = new Intent(activity, PostActivity.class);
                     intent.putExtra("postId", getShortRedditId(url));
                 }
+                else if(MyApplication.offlineModeEnabled && post!=null && post.hasSyncedArticle) {
+                    startBrowserActivity(activity, post, url, domain);
+                }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
-                        if( post != null &&
-                                ( post.hasSyncedArticle || (MyApplication.handleArticles && GeneralUtils.isArticleLink(url, domain)) ) ) {
-                            openImprovedArticle();
-                            return true;
-                        }
-                        else {
-                            startInAppBrowser(activity, post, url, domain);
-                        }
+                        startInAppBrowser(activity, post, url, domain);
                     }
                 }
                 else {
@@ -220,32 +216,40 @@ public class LinkHandler {
 
     public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {
         if(MyApplication.useCCT) {
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-            builder.setToolbarColor(MyApplication.currentColor);
-            if(MyApplication.disableAnimations) {
-                builder.setStartAnimations(activity, -1, -1);
-                builder.setExitAnimations(activity, -1, -1);
-            }
-            else {
-                builder.setStartAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
-                builder.setExitAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
-            }
-
-            CustomTabsIntent customTabsIntent = builder.build();
-
-            customTabsIntent.launchUrl(activity, Uri.parse(url));
+           startChromeCustomTabs(activity, post, url, domain);
         }
         else {
-            Intent intent = new Intent(activity, BrowserActivity.class);
-            if (post != null) {
-                intent.putExtra("post", post);
-            }
-            else {
-                intent.putExtra("url", url);
-                intent.putExtra("domain", domain);
-            }
-            activity.startActivity(intent);
+            startBrowserActivity(activity, post, url, domain);
         }
+    }
+
+    public static void startChromeCustomTabs(Activity activity, Submission post, String url, String domain) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(MyApplication.currentColor);
+        if(MyApplication.disableAnimations) {
+            builder.setStartAnimations(activity, -1, -1);
+            builder.setExitAnimations(activity, -1, -1);
+        }
+        else {
+            builder.setStartAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
+            builder.setExitAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
+        }
+
+        CustomTabsIntent customTabsIntent = builder.build();
+
+        customTabsIntent.launchUrl(activity, Uri.parse(url));
+    }
+
+    public static void startBrowserActivity(Activity activity, Submission post, String url, String domain) {
+        Intent intent = new Intent(activity, BrowserActivity.class);
+        if (post != null) {
+            intent.putExtra("post", post);
+        }
+        else {
+            intent.putExtra("url", url);
+            intent.putExtra("domain", domain);
+        }
+        activity.startActivity(intent);
     }
 
     private Intent getMediaActivityIntent(Activity activity, String url, String domain) {

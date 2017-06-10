@@ -509,7 +509,7 @@ public class PostListFragment extends RedditContentFragment {
             String filename = "";
             if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
             filename += (subreddit == null) ? "frontpage" : subreddit;
-            filename = filename.concat(DownloaderService.LOCA_POST_LIST_SUFFIX);
+            filename = filename.concat(DownloaderService.LOCAL_POST_LIST_SUFFIX);
             File file = new File(GeneralUtils.getActiveSyncedDataDir(activity), filename);
             //double lastModified = (double) file.lastModified();
             //return ConvertUtils.getSubmissionAge(lastModified);

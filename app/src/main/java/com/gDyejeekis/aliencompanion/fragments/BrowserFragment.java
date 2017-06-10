@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +19,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.OAuthActivity;
-import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -114,14 +114,14 @@ public class BrowserFragment extends Fragment {
         }
     }
 
-    public BrowserFragment newInstance(Submission post) {
-        BrowserFragment newInstance = new BrowserFragment();
-        newInstance.post = post;
-        newInstance.url = post.getURL();
-        newInstance.domain = post.getDomain();
-
-        return newInstance;
-    }
+    //public static BrowserFragment newInstance(Submission post) {
+    //    BrowserFragment newInstance = new BrowserFragment();
+    //    newInstance.post = post;
+    //    newInstance.url = post.getURL();
+    //    newInstance.domain = post.getDomain();
+//
+    //    return newInstance;
+    //}
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -234,12 +234,6 @@ public class BrowserFragment extends Fragment {
             case R.id.action_refresh:
                 webView.reload();
                 return true;
-            case R.id.action_comments:
-                MainActivity.dualPaneActive = false; //set to false to open comments in a new activity
-                Intent intent = new Intent(activity, PostActivity.class);
-                intent.putExtra("post", post);
-                startActivity(intent);
-                return true;
             case R.id.action_load_cache:
                 if(activity instanceof BrowserActivity) {
                     boolean loadFromCache = ((BrowserActivity) activity).loadFromCache;
@@ -260,14 +254,23 @@ public class BrowserFragment extends Fragment {
     }
 
     private void loadCachedCopy() {
-        ((BrowserActivity) activity).loadFromCache = true;
+        // load article from synced data
+        if (MyApplication.offlineModeEnabled && post.hasSyncedArticle) {
+            ((BrowserActivity) activity).loadSyncedArticle();
+        }
+        // load cached copy from cache
+        else {
+            ((BrowserActivity) activity).loadFromCache = true;
+            ((BrowserActivity) activity).loadSyncedArticle = false;
+            webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
+            webView.reload();
+        }
         activity.invalidateOptionsMenu();
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ONLY);
-        webView.reload();
     }
 
     private void loadLiveVersion() {
         ((BrowserActivity) activity).loadFromCache = false;
+        ((BrowserActivity) activity).loadSyncedArticle = false;
         activity.invalidateOptionsMenu();
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.reload();
@@ -290,8 +293,8 @@ public class BrowserFragment extends Fragment {
     }
 
     private void updateMenuItems() {
-        Log.d(TAG, "can go back " + webView.canGoBack());
-        Log.d(TAG, "can go forward " + webView.canGoForward());
+        //Log.d(TAG, "can go back " + webView.canGoBack());
+        //Log.d(TAG, "can go forward " + webView.canGoForward());
         BrowserActivity browserActivity = (BrowserActivity) activity;
         browserActivity.canGoBack = webView.canGoBack();
         browserActivity.canGoForward = webView.canGoForward();

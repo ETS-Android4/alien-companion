@@ -14,7 +14,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
@@ -40,7 +39,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -150,9 +148,16 @@ public class GeneralUtils {
         return context.getFilesDir();
     }
 
-    public static File getActiveMediaDir(Context context) {
-        File activeDir = getActiveSyncedDataDir(context);
-        return new File(activeDir, MyApplication.SYNCED_MEDIA_FILENAME);
+    public static File getSyncedMediaDir(Context context) {
+        return new File(getActiveSyncedDataDir(context), MyApplication.SYNCED_MEDIA_DIR_NAME);
+    }
+
+    public static File getSyncedArticlesDir(Context context) {
+        return new File(getActiveSyncedDataDir(context), MyApplication.SYNCED_ARTICLES_DIR_NAME);
+    }
+
+    public static File getSyncedRedditDataDir(Context context) {
+        return new File(getActiveSyncedDataDir(context), MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
     }
 
     public static Object readObjectFromFile(File file) throws IOException, ClassNotFoundException {

@@ -1,9 +1,7 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
@@ -66,13 +63,13 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                 File[] externalDirs = ContextCompat.getExternalFilesDirs(getActivity(), null);
                 File activeExternalDir = (externalDirs.length > 1) ? externalDirs[1] : externalDirs[0];
                 //Media folder inside secondary external directory
-                File externalMediaDir = new File(activeExternalDir, MyApplication.SYNCED_MEDIA_FILENAME);
+                File externalMediaDir = new File(activeExternalDir, MyApplication.SYNCED_MEDIA_DIR_NAME);
                 if(!externalMediaDir.exists()) {
                     externalMediaDir.mkdir();
                 }
 
                 //private internal storage media directory
-                File mediaDir = new File(getActivity().getFilesDir(), MyApplication.SYNCED_MEDIA_FILENAME);
+                File mediaDir = new File(getActivity().getFilesDir(), MyApplication.SYNCED_MEDIA_DIR_NAME);
                 if(!mediaDir.exists()) {
                     mediaDir.mkdir();
                 }

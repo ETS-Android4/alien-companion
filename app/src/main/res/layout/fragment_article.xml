@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/themeBackgroundColor"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ProgressBar
+        android:id="@+id/progressBar_article"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:id="@+id/layout_article">
+
+            <ImageView
+                android:id="@+id/imageView_article_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_launcher"
+                android:layout_marginTop="12dp"
+                android:adjustViewBounds="true"/>
+
+            <TextView
+                android:id="@+id/textView_article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(Article title)"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textStyle="bold"
+                android:textSize="?attr/font_large"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/textView_article_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(article body)"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="?attr/font_selfText"
+                android:layout_marginBottom="12dp"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

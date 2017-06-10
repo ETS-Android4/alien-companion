@@ -140,7 +140,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
             FilenameFilter filenameFilter = new FilenameFilter() {
                 @Override
                 public boolean accept(File file, String s) {
-                    if(s.endsWith(DownloaderService.LOCA_POST_LIST_SUFFIX)) return true;
+                    if(s.endsWith(DownloaderService.LOCAL_POST_LIST_SUFFIX)) return true;
                     return false;
                 }
             };

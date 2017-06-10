@@ -8,14 +8,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -131,7 +129,7 @@ public class MediaActivity extends BackNavActivity {
         String domain = getIntent().getStringExtra("domain");
 
         if(MyApplication.offlineModeEnabled) {
-            File appFolder = GeneralUtils.getActiveMediaDir(this);
+            File appFolder = GeneralUtils.getSyncedMediaDir(this);
 
             String toFind = null;
             boolean hasSound = false;

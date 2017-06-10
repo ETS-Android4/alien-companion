@@ -3,7 +3,6 @@ package com.gDyejeekis.aliencompanion.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -119,7 +118,7 @@ public class CleaningUtils {
 
     public static void clearSyncedMedia(Context context) {
         // delete in private internal media directory
-        File internalMediaDir = new File(context.getFilesDir(), MyApplication.SYNCED_MEDIA_FILENAME);
+        File internalMediaDir = new File(context.getFilesDir(), MyApplication.SYNCED_MEDIA_DIR_NAME);
         for(File file : internalMediaDir.listFiles()) {
             if(file.isDirectory()) {
                 deleteMediaFromDir(context, file);
@@ -129,7 +128,7 @@ public class CleaningUtils {
         if(StorageUtils.isExternalStorageAvailable(context)) {
             // delete in secondary external private directory
             for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File externalMediaDir = new File(externalDir, MyApplication.SYNCED_MEDIA_FILENAME);
+                File externalMediaDir = new File(externalDir, MyApplication.SYNCED_MEDIA_DIR_NAME);
                 if (externalMediaDir.isDirectory()) {
                     for (File file : externalMediaDir.listFiles()) {
                         if (file.isDirectory()) {
@@ -142,7 +141,7 @@ public class CleaningUtils {
     }
 
     public static void clearSyncedMedia(Context context, final String subreddit) {
-        String subredditDir = "/" + MyApplication.SYNCED_MEDIA_FILENAME + "/" + subreddit;
+        String subredditDir = "/" + MyApplication.SYNCED_MEDIA_DIR_NAME + "/" + subreddit;
         // delete in private internal media directory
         File internalSubredditDir = new File(context.getFilesDir().getAbsolutePath() + subredditDir);
         if(internalSubredditDir.isDirectory()) {
@@ -179,7 +178,7 @@ public class CleaningUtils {
 
     public static boolean deleteSyncedPostFromCategory(Context context, final String name, final String id) {
         File activeDir = GeneralUtils.getActiveSyncedDataDir(context);
-        File postListFile = new File(activeDir, name + DownloaderService.LOCA_POST_LIST_SUFFIX);
+        File postListFile = new File(activeDir, name + DownloaderService.LOCAL_POST_LIST_SUFFIX);
         String postLink = null;
         try {
             // modify post list file
@@ -210,7 +209,7 @@ public class CleaningUtils {
             // delete any corresponding synced media (images/GIF)
             if(postLink!=null) {
                 if(postLink.contains("imgur.com") || postLink.contains("gfycat.com") || postLink.endsWith(".jpg") || postLink.endsWith(".jpeg") || postLink.endsWith(".png") || postLink.endsWith(".gif")) {
-                    File namedMediaDir = new File(GeneralUtils.getActiveMediaDir(context).getAbsolutePath() + "/" + name);
+                    File namedMediaDir = new File(GeneralUtils.getSyncedMediaDir(context).getAbsolutePath() + "/" + name);
                     //Log.d(TAG, "namedMediaDir: " + namedMediaDir.getAbsolutePath());
 
                     if(namedMediaDir.isDirectory()) {

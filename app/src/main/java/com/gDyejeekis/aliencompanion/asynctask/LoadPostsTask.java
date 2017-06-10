@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.asynctask;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.SystemClock;
@@ -96,7 +95,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     if(plf.isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
                     filename = filename + plf.subreddit.toLowerCase();
                 }
-                submissions = readPostsFromFile(filename + DownloaderService.LOCA_POST_LIST_SUFFIX);
+                submissions = readPostsFromFile(filename + DownloaderService.LOCAL_POST_LIST_SUFFIX);
                 if(submissions!=null) adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
             }
             else {
