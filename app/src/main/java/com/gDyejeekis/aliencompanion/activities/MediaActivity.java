@@ -129,7 +129,7 @@ public class MediaActivity extends BackNavActivity {
         String domain = getIntent().getStringExtra("domain");
 
         if(MyApplication.offlineModeEnabled) {
-            File mediaDir = GeneralUtils.getSyncedMediaDir(this);
+            File mediaDir = GeneralUtils.checkSyncedMediaDir(this);
 
             String toFind = null;
             boolean hasSound = false;
@@ -366,9 +366,9 @@ public class MediaActivity extends BackNavActivity {
     }
 
     private ImgurItem findImgurItemFromFile(String id) {
-        File dir = GeneralUtils.getPreferredSyncDir(this);
-        File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), id + "-albumInfo");
-        if(file!=null) {
+        File dir = GeneralUtils.checkSyncedMediaDir(this);
+        if(dir!=null) {
+            File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), id + MyApplication.IMGUR_INFO_FILE_NAME);
             try {
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);

@@ -33,7 +33,7 @@ public class LoadSyncedArticleTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
         try {
             String postId = fragment.post.getIdentifier();
-            File parentDir = GeneralUtils.getSyncedArticlesDir(fragment.getActivity());
+            File parentDir = GeneralUtils.checkSyncedArticlesDir(fragment.getActivity());
             File articleFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), postId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
             article = (Article) GeneralUtils.readObjectFromFile(articleFile);
             try {

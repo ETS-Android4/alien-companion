@@ -149,27 +149,47 @@ public class GeneralUtils {
     }
 
     public static File getSyncedMediaDir(Context context) {
-        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_MEDIA_DIR_NAME);
+        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_MEDIA_DIR_NAME);
+    }
+
+    public static File checkSyncedMediaDir(Context context) {
+        File file = getSyncedMediaDir(context);
         return checkDir(file) ? file : null;
     }
 
     public static File getSyncedArticlesDir(Context context) {
-        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_ARTICLES_DIR_NAME);
+        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_ARTICLES_DIR_NAME);
+    }
+
+    public static File checkSyncedArticlesDir(Context context) {
+        File file = getSyncedArticlesDir(context);
         return checkDir(file) ? file : null;
     }
 
     public static File getSyncedRedditDataDir(Context context) {
-        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
+        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
+    }
+
+    public static File checkSyncedRedditDataDir(Context context) {
+        File file = getSyncedRedditDataDir(context);
         return checkDir(file) ? file : null;
     }
 
     public static File getSyncedThumbnailsDir(Context context) {
-        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_THUMBNAILS_DIR_NAME);
+        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_THUMBNAILS_DIR_NAME);
+    }
+
+    public static File checkSyncedThumbnailsDir(Context context) {
+        File file = getSyncedThumbnailsDir(context);
         return checkDir(file) ? file : null;
     }
 
     public static File getNamedDir(File parentDir, String name) {
-        File file = new File(parentDir, name);
+        return new File(parentDir, name);
+    }
+
+    public static File checkNamedDir(File parentDir, String name) {
+        File file = getNamedDir(parentDir, name);
         return checkDir(file) ? file : null;
     }
 

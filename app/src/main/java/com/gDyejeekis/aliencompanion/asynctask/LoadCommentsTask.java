@@ -22,8 +22,8 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -49,10 +49,10 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     }
 
     private Submission readPostFromFile(final String postId) {
-        FilenameFilter filenameFilter = new FilenameFilter() {
+        FileFilter fileFilter = new FileFilter() {
             @Override
-            public boolean accept(File dir, String filename) {
-                return filename.equals(postId);
+            public boolean accept(File file) {
+                return file.isDirectory() || file.getName().equals(postId);
             }
         };
 
@@ -60,7 +60,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             File postFile = null;
             List<File> files = new ArrayList<>();
             StorageUtils.listFilesRecursive(GeneralUtils.getSyncedRedditDataDir(context),
-                    filenameFilter, files);
+                    fileFilter, files);
             for(File file : files) {
                 // always keep the last updated matching post file
                 if(postFile == null || file.lastModified() > postFile.lastModified())

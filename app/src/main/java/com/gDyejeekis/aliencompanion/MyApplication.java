@@ -78,9 +78,11 @@ public class MyApplication extends Application {
 
     public static final String SYNCED_POST_LIST_SUFFIX = "-posts";
 
-    public static final String SYNCED_THUMNAIL_SUFFIX = "-thumb";
+    public static final String SYNCED_THUMBNAIL_SUFFIX = "-thumb";
 
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
+
+    public static final String IMGUR_INFO_FILE_NAME = "-imgurInfo";
 
     public static final String REMEMBER_VIEW_SUFFIX = "-view";
 

@@ -157,7 +157,7 @@ public class StorageUtils {
         }
     }
 
-    public static void listFilesRecursive(File dir, FilenameFilter filter, List<File> files) {
+    public static void listFilesRecursive(File dir, FileFilter filter, List<File> files) {
         File[] fList = dir.listFiles(filter);
         for (File file : fList) {
             if (file.isFile()) {

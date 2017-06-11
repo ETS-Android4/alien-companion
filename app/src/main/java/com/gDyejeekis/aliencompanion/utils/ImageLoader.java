@@ -9,7 +9,6 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.List;
 
 /**
@@ -79,7 +78,7 @@ public class ImageLoader {
             return new Thumbnail("nsfw");
         }
         else {
-            File thumbsDir = GeneralUtils.getSyncedThumbnailsDir(context);
+            File thumbsDir = GeneralUtils.checkSyncedThumbnailsDir(context);
             if(thumbsDir != null) {
                 File thumbFile = StorageUtils.findFile(thumbsDir, thumbsDir.getAbsolutePath(), post.getIdentifier());
                 if (thumbFile != null) {

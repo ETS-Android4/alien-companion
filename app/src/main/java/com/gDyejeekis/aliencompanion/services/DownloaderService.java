@@ -363,7 +363,7 @@ public class DownloaderService extends IntentService {
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             cmntsRetrieval.setSyncRetrieval(true);
             if (syncOptions.isSyncThumbs()) {
-                downloadPostThumbnail(submission, filename + submission.getIdentifier() + MyApplication.SYNCED_THUMNAIL_SUFFIX);
+                downloadPostThumbnail(submission, filename);
             }
             List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
             submission.setSyncedComments(comments);
@@ -489,7 +489,7 @@ public class DownloaderService extends IntentService {
     
     private void writePostListToFile(List<RedditItem> posts, String filename) {
         try {
-            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename);
+            File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), filename);
             File file = new File(dir, filename + MyApplication.SYNCED_POST_LIST_SUFFIX);
             Log.d(TAG, "Writing post list to " + file.getAbsolutePath());
 
@@ -507,7 +507,7 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
-            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename);
+            File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), filename);
             File file = new File(dir, post.getIdentifier());
             Log.d(TAG, "Writing post to " + file.getAbsolutePath());
 
@@ -564,7 +564,7 @@ public class DownloaderService extends IntentService {
     private void downloadPostArticle(Submission post, String filename) {
         Log.d(TAG, "Syncing article for " + post.getIdentifier() + ", src: " + post.getURL());
 
-        File subredditDir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedArticlesDir(this), filename);
+        File subredditDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedArticlesDir(this), filename);
         if(subredditDir == null) {
             return;
         }
@@ -602,7 +602,7 @@ public class DownloaderService extends IntentService {
     private void downloadPostVideo(Submission post, String filename) {
         Log.d(TAG, "Syncing video for " + post.getIdentifier() + ", src: " + post.getURL());
 
-        File file = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(this), filename);
+        File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
             return;
         }
@@ -628,7 +628,7 @@ public class DownloaderService extends IntentService {
     private void downloadPostImage(Submission post, String filename) {
         Log.d(TAG, "Syncing image for " + post.getIdentifier() + ", src: " + post.getURL());
 
-        File file = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(this), filename);
+        File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
             return;
         }
@@ -731,12 +731,14 @@ public class DownloaderService extends IntentService {
             String imgLink = (img.isAnimated()) ? img.getMp4() : img.getLink();
             img.setLink(imgLink);
         }
-        saveAlbumInfoToFile(item, filename + "-" + item.getId() + "-albumInfo");
+        saveAlbumInfoToFile(item, filename);
     }
 
     private void saveAlbumInfoToFile(ImgurItem item, final String filename) {
         try {
-            FileOutputStream fos = new FileOutputStream(new File(GeneralUtils.getPreferredSyncDir(this), filename));
+            File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
+            File file = new File(dir, filename + "-" + item.getId() + MyApplication.IMGUR_INFO_FILE_NAME);
+            FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(item);
             oos.close();
@@ -773,7 +775,8 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostThumbnail(Submission post, String filename) {
         if(!post.isSelf()) {
-            File file = GeneralUtils.getNamedDir(GeneralUtils.getSyncedThumbnailsDir(this), filename);
+            File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedThumbnailsDir(this), filename);
+            File file = new File(dir, post.getIdentifier() + MyApplication.SYNCED_THUMBNAIL_SUFFIX);
             saveBitmapToDisk(getBitmapFromURL(post.getThumbnail()), file);
         }
     }

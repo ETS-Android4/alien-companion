@@ -36,6 +36,7 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDial
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardRelativeLayout;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -49,7 +50,9 @@ import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners.CommentFabNavListener;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -604,20 +607,21 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+    // TODO: 6/11/2017 might need to move this to a background thread or make it faster
     private String getOfflineSubtitle() {
-        File postFile = null;
-
-        FilenameFilter filenameFilter = new FilenameFilter() {
+        FileFilter fileFilter = new FileFilter() {
             @Override
-            public boolean accept(File dir, String filename) {
-                if(filename.endsWith(post.getIdentifier())) return true;
-                return false;
+            public boolean accept(File file) {
+                return file.isDirectory() || file.getName().equals(post.getIdentifier());
             }
         };
-        File[] files = GeneralUtils.getPreferredSyncDir(activity).listFiles(filenameFilter);
+        File postFile = null;
+        List<File> files = new ArrayList<>();
+        StorageUtils.listFilesRecursive(GeneralUtils.getSyncedRedditDataDir(activity),
+                fileFilter, files);
         for(File file : files) {
-            if(postFile == null) postFile = file;
-            else if(file.lastModified() > postFile.lastModified()) postFile = file;
+            if(postFile == null || file.lastModified() > postFile.lastModified())
+                postFile = file;
         }
 
         if(postFile!=null) {

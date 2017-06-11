@@ -19,15 +19,14 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.services.DownloaderService;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -90,7 +89,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
         final String filename = adapter.getItem(i).toString();
         final int pos = i;
-        String message = "Delete all synced posts, comments, images and articles for " + filename + "?";
+        String message = "Delete all synced posts, comments, images and articles for '" + filename + "'?";
         new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle)).setMessage(message).setNegativeButton("No", null).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -104,8 +103,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
                     @Override
                     protected Void doInBackground(Void... params) {
-                        CleaningUtils.clearSyncedRedditData(getActivity(), filename);
-                        CleaningUtils.clearSyncedMedia(getActivity(), filename);
+                        CleaningUtils.clearAllSyncedData(getActivity(), filename);
                         return null;
                     }
 
@@ -138,16 +136,17 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
         @Override
         public List<String> doInBackground(Void... unused) {
-            FilenameFilter filenameFilter = new FilenameFilter() {
+            FileFilter fileFilter = new FileFilter() {
                 @Override
-                public boolean accept(File file, String s) {
-                    return s.endsWith(MyApplication.SYNCED_POST_LIST_SUFFIX);
+                public boolean accept(File pathname) {
+                    return pathname.isDirectory() || pathname.getName().endsWith(MyApplication.SYNCED_POST_LIST_SUFFIX);
                 }
             };
 
-            File[] files = GeneralUtils.getSyncedRedditDataDir(dialog.getActivity()).listFiles(filenameFilter);
-            if(files.length > 0) {
-                Collections.sort(Arrays.asList(files), new Comparator<File>() {
+            List<File> files = new ArrayList<>();
+            StorageUtils.listFilesRecursive(GeneralUtils.checkSyncedRedditDataDir(dialog.getActivity()), fileFilter, files);
+            if(files.size() > 0) {
+                Collections.sort(files, new Comparator<File>() {
                     @Override
                     public int compare(File f1, File f2) {
                         return Long.valueOf(f2.lastModified()).compareTo(Long.valueOf(f1.lastModified()));
