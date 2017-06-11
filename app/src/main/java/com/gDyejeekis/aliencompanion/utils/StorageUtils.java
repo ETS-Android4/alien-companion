@@ -363,10 +363,9 @@ public class StorageUtils {
             inStream.close();
             outStream.close();
 
-            //delete the original file
-            boolean deletedOriginal = afile.delete();
-
-            if(deletedOriginal) {
+            // delete the original file
+            boolean success = afile.delete();
+            if(success) {
                 Log.d(TAG, "Successfully moved " + afile.getAbsolutePath() + " to " + bfile.getAbsolutePath());
             }
             else {
@@ -378,7 +377,46 @@ public class StorageUtils {
         } catch(IOException e){
             e.printStackTrace();
         }
-        Log.d(TAG, "Failed to move file from " + src.getAbsolutePath() + " to " + targetDir);
+        Log.e(TAG, "Failed to move file from " + src.getAbsolutePath() + " to " + targetDir);
+        return false;
+    }
+
+    public static boolean moveFileBetweenDisksRecursive(File src, String targetDir) {
+        try {
+            if(src.isDirectory()) {
+                File aDir = src;
+                File bDir = new File(targetDir, aDir.getName());
+                if(!bDir.exists()) {
+                    boolean success = bDir.mkdir();
+                    if(!success) {
+                        Log.e(TAG, "Failed to create directory " + bDir.getAbsolutePath());
+                        return false;
+                    }
+                }
+
+                File[] files = aDir.listFiles();
+                for(File file : files) {
+                    moveFileBetweenDisksRecursive(file, bDir.getAbsolutePath());
+                }
+
+                // delete the original dir
+                boolean success = aDir.delete();
+                if(success) {
+                    Log.d(TAG, "Successfully moved " + aDir.getAbsolutePath() + " to " + bDir.getAbsolutePath());
+                }
+                else {
+                    Log.d(TAG, "Copied " + aDir.getAbsolutePath() + " to " + bDir.getAbsolutePath());
+                    Log.d(TAG, "Failed to delete original directory");
+                }
+                return true;
+            }
+            else {
+                return moveFileBetweenDisks(src, targetDir);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.e(TAG, "Failed to move file from " + src.getAbsolutePath() + " to " + targetDir);
         return false;
     }
 

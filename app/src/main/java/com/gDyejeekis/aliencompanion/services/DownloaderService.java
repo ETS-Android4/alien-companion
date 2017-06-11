@@ -492,14 +492,7 @@ public class DownloaderService extends IntentService {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), filename);
             File file = new File(dir, filename + MyApplication.SYNCED_POST_LIST_SUFFIX);
             Log.d(TAG, "Writing post list to " + file.getAbsolutePath());
-
-            FileOutputStream fos;
-            ObjectOutputStream oos;
-            fos = new FileOutputStream(file);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(posts);
-            oos.close();
-            fos.close();
+            GeneralUtils.writeObjectToFile(posts, file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -510,14 +503,7 @@ public class DownloaderService extends IntentService {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), filename);
             File file = new File(dir, post.getIdentifier());
             Log.d(TAG, "Writing post to " + file.getAbsolutePath());
-
-            FileOutputStream fos;
-            ObjectOutputStream oos;
-            fos = new FileOutputStream(file);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(post);
-            oos.close();
-            fos.close();
+            GeneralUtils.writeObjectToFile(post, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -738,11 +724,7 @@ public class DownloaderService extends IntentService {
         try {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
             File file = new File(dir, filename + "-" + item.getId() + MyApplication.IMGUR_INFO_FILE_NAME);
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(item);
-            oos.close();
-            fos.close();
+            GeneralUtils.writeObjectToFile(item, file);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -776,44 +758,9 @@ public class DownloaderService extends IntentService {
     private void downloadPostThumbnail(Submission post, String filename) {
         if(!post.isSelf()) {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedThumbnailsDir(this), filename);
-            File file = new File(dir, post.getIdentifier() + MyApplication.SYNCED_THUMBNAIL_SUFFIX);
-            saveBitmapToDisk(getBitmapFromURL(post.getThumbnail()), file);
-        }
-    }
-
-    private void saveBitmapToDisk(Bitmap bmp, File file) {
-        FileOutputStream out = null;
-        try {
-            //out = openFileOutput(filename, Context.MODE_PRIVATE);
-            out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(dir!=null) {
+                downloadPostImageToFile(post.getThumbnail(), dir.getAbsolutePath(), post.getIdentifier() + MyApplication.SYNCED_THUMBNAIL_SUFFIX);
             }
-        }
-    }
-
-    private Bitmap getBitmapFromURL(String src) {
-        try {
-            java.net.URL url = new java.net.URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 

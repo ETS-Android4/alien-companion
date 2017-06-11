@@ -61,63 +61,12 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                 File internalDir = getActivity().getFilesDir();
                 //secondary external dir
                 File[] externalDirs = ContextCompat.getExternalFilesDirs(getActivity(), null);
-                File activeExternalDir = (externalDirs.length > 1) ? externalDirs[1] : externalDirs[0];
-                //Media folder inside secondary external directory
-                File externalMediaDir = new File(activeExternalDir, MyApplication.SYNCED_MEDIA_DIR_NAME);
-                if(!externalMediaDir.exists()) {
-                    externalMediaDir.mkdir();
-                }
-
-                //private internal storage media directory
-                File mediaDir = new File(getActivity().getFilesDir(), MyApplication.SYNCED_MEDIA_DIR_NAME);
-                if(!mediaDir.exists()) {
-                    mediaDir.mkdir();
-                }
+                File externalDir = (externalDirs.length > 1) ? externalDirs[1] : externalDirs[0];
                 if(moveToExternal) {
-                    //first move all synced data (excluding pictures)
-                    File[] syncedData = internalDir.listFiles(filter);
-                    for(File file : syncedData) {
-                        StorageUtils.moveFileBetweenDisks(file, activeExternalDir.getAbsolutePath());
-                    }
 
-                    //find any media in primary external directory and move them to secondary (SD card)
-                    File[] mediaDirs = mediaDir.listFiles();
-                    if(mediaDirs!=null && mediaDirs.length!=0) {
-                        for (File file : mediaDirs) {
-                            if (file.isDirectory()) {
-                                File subredditDir = new File(externalMediaDir + "/" + file.getName());
-                                if (!subredditDir.exists()) {
-                                    subredditDir.mkdir();
-                                }
-                                File[] pics = file.listFiles();
-                                for (File pic : pics) {
-                                    StorageUtils.moveFileBetweenDisks(pic, subredditDir.getAbsolutePath());
-                                }
-                            }
-                        }
-                    }
                 }
                 else {
-                    File[] syncedData = activeExternalDir.listFiles(filter);
-                    for(File file : syncedData) {
-                        StorageUtils.moveFileBetweenDisks(file, internalDir.getAbsolutePath());
-                    }
 
-                    File[] mediaDirs = externalMediaDir.listFiles();
-                    if(mediaDirs!=null && mediaDirs.length!=0) {
-                        for (File file : mediaDirs) {
-                            if (file.isDirectory()) {
-                                File subredditDir = new File(mediaDir + "/" + file.getName());
-                                if (!subredditDir.exists()) {
-                                    subredditDir.mkdir();
-                                }
-                                File[] pics = file.listFiles();
-                                for (File pic : pics) {
-                                    StorageUtils.moveFileBetweenDisks(pic, subredditDir.getAbsolutePath());
-                                }
-                            }
-                        }
-                    }
                 }
                 return null;
             }
