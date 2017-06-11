@@ -69,93 +69,73 @@ public class CleaningUtils {
         NavDrawerAdapter.currentAccountName = "Logged out";
     }
 
-    public static void clearSyncedPostsAndComments(Context context, final String subreddit) {
-        FilenameFilter filenameFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                if(filename.startsWith(subreddit)) {
-                    return true;
-                }
-                return false;
-            }
-        };
-        File[] files = context.getFilesDir().listFiles(filenameFilter);
-        for(File file : files) {
-            Log.d(TAG, "Deleting " + file.getName());
-            file.delete();
-        }
+    public static void clearAllSyncedData(Context context, final String name) {
+        clearSyncedRedditData(context, name);
+        clearSyncedThumbnails(context, name);
+        clearSyncedMedia(context, name);
+        clearSyncedArticles(context, name);
+    }
 
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                for (File file : externalDir.listFiles(filenameFilter)) {
-                    file.delete();
-                }
-            }
+    public static void clearAllSyncedData(Context context) {
+        clearSyncedRedditData(context);
+        clearSyncedThumbnails(context);
+        clearSyncedMedia(context);
+        clearSyncedArticles(context);
+    }
+
+    public static void clearSyncedArticles(Context context, final String name) {
+        File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedArticlesDir(context), name);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
         }
     }
 
-    public static void clearSyncedPosts(Context context) {
-        for (File file : context.getFilesDir().listFiles()) {
-            //Log.d(TAG, file.getName());
-            String filename = file.getName();
-            if (!filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME) && !filename.equals(MyApplication.SYNC_PROFILES_FILENAME)
-                    && !filename.equals(MyApplication.OFFLINE_USER_ACTIONS_FILENAME)) {
-                file.delete();
-            }
+    public static void clearSyncedArticles(Context context) {
+        File dir = GeneralUtils.getSyncedArticlesDir(context);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
         }
+    }
 
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                for (File file : externalDir.listFiles()) {
-                    file.delete();
-                }
-            }
+    public static void clearSyncedThumbnails(Context context, final String name) {
+        File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedThumbnailsDir(context), name);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
         }
+    }
 
-        //Log.d(TAG, "Remaining local app files AFTER delete:");
-        //listFilesInDir(dir);
+    public static void clearSyncedThumbnails(Context context) {
+        File dir = GeneralUtils.getSyncedThumbnailsDir(context);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
+        }
+    }
+
+    public static void clearSyncedRedditData(Context context, final String name) {
+        File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(context), name);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
+        }
+    }
+
+    public static void clearSyncedRedditData(Context context) {
+        File dir = GeneralUtils.getSyncedRedditDataDir(context);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
+        }
     }
 
     public static void clearSyncedMedia(Context context) {
-        // delete in private internal media directory
-        File internalMediaDir = new File(context.getFilesDir(), MyApplication.SYNCED_MEDIA_DIR_NAME);
-        for(File file : internalMediaDir.listFiles()) {
-            if(file.isDirectory()) {
-                deleteMediaFromDir(context, file);
-            }
-        }
-
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            // delete in secondary external private directory
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File externalMediaDir = new File(externalDir, MyApplication.SYNCED_MEDIA_DIR_NAME);
-                if (externalMediaDir.isDirectory()) {
-                    for (File file : externalMediaDir.listFiles()) {
-                        if (file.isDirectory()) {
-                            deleteMediaFromDir(context, file);
-                        }
-                    }
-                }
-            }
+        File dir = GeneralUtils.getSyncedMediaDir(context);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
         }
     }
 
-    public static void clearSyncedMedia(Context context, final String subreddit) {
-        String subredditDir = "/" + MyApplication.SYNCED_MEDIA_DIR_NAME + "/" + subreddit;
-        // delete in private internal media directory
-        File internalSubredditDir = new File(context.getFilesDir().getAbsolutePath() + subredditDir);
-        if(internalSubredditDir.isDirectory()) {
-            deleteMediaFromDir(context, internalSubredditDir);
-        }
-
-        if(StorageUtils.isExternalStorageAvailable(context)) {
-            //delete in secondary external private directory
-            for (File externalDir : ContextCompat.getExternalFilesDirs(context, null)) {
-                File externalSubredditDir = new File(externalDir.getAbsolutePath() + subredditDir);
-                if (externalSubredditDir.isDirectory()) {
-                    deleteMediaFromDir(context, externalSubredditDir);
-                }
-            }
+    public static void clearSyncedMedia(Context context, final String name) {
+        File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(context), name);
+        if(dir!=null) {
+            StorageUtils.deleteRecursive(dir);
         }
     }
 
@@ -177,8 +157,8 @@ public class CleaningUtils {
     }
 
     public static boolean deleteSyncedPostFromCategory(Context context, final String name, final String id) {
-        File activeDir = GeneralUtils.getActiveSyncedDataDir(context);
-        File postListFile = new File(activeDir, name + DownloaderService.LOCAL_POST_LIST_SUFFIX);
+        File activeDir = GeneralUtils.getPreferredSyncDir(context);
+        File postListFile = new File(activeDir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
         String postLink = null;
         try {
             // modify post list file
@@ -209,10 +189,10 @@ public class CleaningUtils {
             // delete any corresponding synced media (images/GIF)
             if(postLink!=null) {
                 if(postLink.contains("imgur.com") || postLink.contains("gfycat.com") || postLink.endsWith(".jpg") || postLink.endsWith(".jpeg") || postLink.endsWith(".png") || postLink.endsWith(".gif")) {
-                    File namedMediaDir = new File(GeneralUtils.getSyncedMediaDir(context).getAbsolutePath() + "/" + name);
+                    File namedMediaDir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(context), name);
                     //Log.d(TAG, "namedMediaDir: " + namedMediaDir.getAbsolutePath());
 
-                    if(namedMediaDir.isDirectory()) {
+                    if(namedMediaDir!=null) {
                         String toFind;
                         if(postLink.contains("imgur.com")) {
                             if(postLink.contains("/a/") || postLink.contains("/gallery/")) {

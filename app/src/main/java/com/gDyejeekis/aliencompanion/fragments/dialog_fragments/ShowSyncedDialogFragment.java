@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.R;
@@ -75,7 +76,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         String filename = adapter.getItem(i).toString();
         String subreddit = (filename.equals("frontpage")) ? null : filename;
         boolean isMulti = filename.startsWith("multi=");
-        boolean isOther = filename.equals(DownloaderService.INDIVIDUALLY_SYNCED_FILENAME);
+        boolean isOther = filename.equals(MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME);
         if(getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit, isMulti, isOther);
             ((MainActivity) getActivity()).getNavDrawerAdapter().notifyDataSetChanged();
@@ -103,7 +104,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
                     @Override
                     protected Void doInBackground(Void... params) {
-                        CleaningUtils.clearSyncedPostsAndComments(getActivity(), filename);
+                        CleaningUtils.clearSyncedRedditData(getActivity(), filename);
                         CleaningUtils.clearSyncedMedia(getActivity(), filename);
                         return null;
                     }
@@ -140,12 +141,11 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
             FilenameFilter filenameFilter = new FilenameFilter() {
                 @Override
                 public boolean accept(File file, String s) {
-                    if(s.endsWith(DownloaderService.LOCAL_POST_LIST_SUFFIX)) return true;
-                    return false;
+                    return s.endsWith(MyApplication.SYNCED_POST_LIST_SUFFIX);
                 }
             };
 
-            File[] files = GeneralUtils.getActiveSyncedDataDir(dialog.getActivity()).listFiles(filenameFilter);
+            File[] files = GeneralUtils.getSyncedRedditDataDir(dialog.getActivity()).listFiles(filenameFilter);
             if(files.length > 0) {
                 Collections.sort(Arrays.asList(files), new Comparator<File>() {
                     @Override

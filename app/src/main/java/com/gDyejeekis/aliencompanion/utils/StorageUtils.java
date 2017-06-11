@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -144,6 +145,29 @@ public class StorageUtils {
         return null;
     }//met
 
+    public static void deleteRecursive(File file) {
+        if(file.isDirectory()) {
+            File[] files = file.listFiles();
+            for(File file1 : files) {
+                deleteRecursive(file1);
+            }
+        }
+        else {
+            file.delete();
+        }
+    }
+
+    public static void listFilesRecursive(File dir, FilenameFilter filter, List<File> files) {
+        File[] fList = dir.listFiles(filter);
+        for (File file : fList) {
+            if (file.isFile()) {
+                files.add(file);
+            } else if (file.isDirectory()) {
+                listFilesRecursive(file, filter, files);
+            }
+        }
+    }
+
     public static File oldestFileInDir(File dir) {
         File[] files = dir.listFiles(new FileFilter() {
             public boolean accept(File file) {
@@ -162,14 +186,14 @@ public class StorageUtils {
     }
 
     /**
-     * Recursively lists all files in a directory
+     * Recursively logs all file names and their size in a directory
      * @param dir
      */
-    public static void listFilesInDir(File dir) {
+    public static void logFilesInDir(File dir) {
         File[] files = dir.listFiles();
         for(File file : files) {
             if(file.isDirectory()) {
-                listFilesInDir(file);
+                logFilesInDir(file);
             }
             else {
                 Log.d(TAG, file.getName() + " " + file.length());

@@ -72,34 +72,28 @@ public class ImageLoader {
     }
 
     public static Thumbnail getOfflineThumbnailObject(Context context, final Submission post) {
-        Thumbnail thumbnail;
         if(post.isSelf()) {
-            thumbnail = new Thumbnail("self");
+            return new Thumbnail("self");
         }
         else if(post.isNSFW() && !MyApplication.showNSFWpreview) {
-            thumbnail = new Thumbnail("nsfw");
+            return new Thumbnail("nsfw");
         }
         else {
-            FilenameFilter filenameFilter = new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String filename) {
-                    if (filename.endsWith("thumb") && filename.contains(post.getIdentifier()))
-                        return true;
-                    return false;
+            File thumbsDir = GeneralUtils.getSyncedThumbnailsDir(context);
+            if(thumbsDir != null) {
+                File thumbFile = StorageUtils.findFile(thumbsDir, thumbsDir.getAbsolutePath(), post.getIdentifier());
+                if (thumbFile != null) {
+                    Thumbnail thumbnail = new Thumbnail("file:" + thumbFile.getAbsolutePath());
+                    boolean hasThumbnail = false;
+                    try {
+                        hasThumbnail = !ConvertUtils.getDomainName(post.getThumbnail()).equals("null");
+                    } catch (Exception e) {}
+                    thumbnail.setHasThumbnail(hasThumbnail);
+                    return thumbnail;
                 }
-            };
-            File[] files = GeneralUtils.getActiveSyncedDataDir(context).listFiles(filenameFilter);
-            if(files.length!=0) {
-                thumbnail = new Thumbnail("file:" + files[0].getAbsolutePath());
-                boolean hasThumbnail = false;
-                try {
-                    hasThumbnail = !ConvertUtils.getDomainName(post.getThumbnail()).equals("null");
-                } catch (Exception e) {}
-                thumbnail.setHasThumbnail(hasThumbnail);
             }
-            else thumbnail = new Thumbnail();
         }
-        return thumbnail;
+        return new Thumbnail();
     }
 
     public static void preloadThumbnail(Submission submission, Context context) {

@@ -35,7 +35,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
                     image.setLink("file:" + imgFile.getAbsolutePath());
                 }
 
-                File activeDir = GeneralUtils.getActiveSyncedDataDir(activity);
+                File activeDir = GeneralUtils.getPreferredSyncDir(activity);
                 File file = StorageUtils.findFile(activeDir, activeDir.getAbsolutePath(), image.getId() + "-thumb");
                 if(file!=null) {
                     thumbUrls.add("file:" + file.getAbsolutePath());

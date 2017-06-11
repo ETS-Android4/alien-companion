@@ -129,7 +129,7 @@ public class MediaActivity extends BackNavActivity {
         String domain = getIntent().getStringExtra("domain");
 
         if(MyApplication.offlineModeEnabled) {
-            File appFolder = GeneralUtils.getSyncedMediaDir(this);
+            File mediaDir = GeneralUtils.getSyncedMediaDir(this);
 
             String toFind = null;
             boolean hasSound = false;
@@ -202,7 +202,7 @@ public class MediaActivity extends BackNavActivity {
             }
 
             if(toFind!=null) {
-                File file = StorageUtils.findFile(appFolder, appFolder.getAbsolutePath(), toFind);
+                File file = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), toFind);
                 if (file != null) {
                     Log.d(TAG, "Locally saved image found " + file.getAbsolutePath());
                     loadFromSynced = true;
@@ -366,7 +366,7 @@ public class MediaActivity extends BackNavActivity {
     }
 
     private ImgurItem findImgurItemFromFile(String id) {
-        File dir = GeneralUtils.getActiveSyncedDataDir(this);
+        File dir = GeneralUtils.getPreferredSyncDir(this);
         File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), id + "-albumInfo");
         if(file!=null) {
             try {

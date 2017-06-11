@@ -2,12 +2,8 @@ package com.gDyejeekis.aliencompanion.fragments.settings_fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
@@ -16,7 +12,6 @@ import android.support.v7.view.ContextThemeWrapper;
 
 import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
-import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -48,8 +43,7 @@ public class SyncSettingsFragment extends PreferenceFragment {
 
                             @Override
                             protected Void doInBackground(Void... params) {
-                                CleaningUtils.clearSyncedPosts(getActivity());
-                                CleaningUtils.clearSyncedMedia(getActivity());
+                                CleaningUtils.clearAllSyncedData(getActivity());
                                 return null;
                             }
 
@@ -64,7 +58,7 @@ public class SyncSettingsFragment extends PreferenceFragment {
                 //Log.d(GeneralUtils.TAG, "Remaining local app files BEFORE delete:");
                 //GeneralUtils.listFilesInDir(getActivity().getFilesDir());
 
-                new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle)).setMessage("Delete all synced posts, comments, images and articles?").setPositiveButton("Yes", listener)
+                new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle)).setMessage("Delete all synced posts, comments, media and articles?").setPositiveButton("Yes", listener)
                         .setNegativeButton("No", null).show();
                 return false;
             }

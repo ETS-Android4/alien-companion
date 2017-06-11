@@ -239,12 +239,11 @@ public class PostListFragment extends RedditContentFragment {
 
                             @Override
                             protected Void doInBackground(Void... params) {
-                                String folderName = (subreddit==null) ? "frontpage" : subreddit;
+                                String name = (subreddit==null) ? "frontpage" : subreddit;
                                 if(isMulti) {
-                                    folderName = "multi=" + folderName;
+                                    name = "multi=" + name;
                                 }
-                                CleaningUtils.clearSyncedPostsAndComments(activity, folderName);
-                                CleaningUtils.clearSyncedMedia(activity, folderName);
+                                CleaningUtils.clearAllSyncedData(activity, name);
                                 return null;
                             }
 
@@ -506,15 +505,13 @@ public class PostListFragment extends RedditContentFragment {
 
     private String getOfflineSubtitle() {
         try {
-            String filename = "";
-            if(isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
-            filename += (subreddit == null) ? "frontpage" : subreddit;
-            filename = filename.concat(DownloaderService.LOCAL_POST_LIST_SUFFIX);
-            File file = new File(GeneralUtils.getActiveSyncedDataDir(activity), filename);
-            //double lastModified = (double) file.lastModified();
-            //return ConvertUtils.getSubmissionAge(lastModified);
+            String name = "";
+            if(isMulti)
+                name = MyApplication.MULTIREDDIT_FILE_PREFIX;
+            name += (subreddit == null) ? "frontpage" : subreddit;
+            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(activity), name);
+            File file = new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
             if(file.exists()) {
-                //return new Date(file.lastModified()).toString();
                 return ((isOther) ? "updated " : "synced ") + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
             }
         } catch (Exception e) {

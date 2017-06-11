@@ -614,7 +614,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 return false;
             }
         };
-        File[] files = GeneralUtils.getActiveSyncedDataDir(activity).listFiles(filenameFilter);
+        File[] files = GeneralUtils.getPreferredSyncDir(activity).listFiles(filenameFilter);
         for(File file : files) {
             if(postFile == null) postFile = file;
             else if(file.lastModified() > postFile.lastModified()) postFile = file;

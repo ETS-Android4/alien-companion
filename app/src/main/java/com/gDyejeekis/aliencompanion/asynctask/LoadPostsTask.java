@@ -11,7 +11,6 @@ import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.services.DownloaderService;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
@@ -65,10 +64,11 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         changedSort = true;
     }
 
-    private List<RedditItem> readPostsFromFile(String filename) {
+    private List<RedditItem> readPostListFromFile(String name) {
         List<RedditItem> posts = null;
         try {
-            FileInputStream fis = new FileInputStream(new File(GeneralUtils.getActiveSyncedDataDir(context), filename.toLowerCase()));
+            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(context), name);
+            FileInputStream fis = new FileInputStream(new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX));
             ObjectInputStream ois = new ObjectInputStream(fis);
             posts = (List<RedditItem>) ois.readObject();
             ois.close();
@@ -89,14 +89,17 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 // wait until nav drawer is closed to start
                 SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 50);
 
-                String filename = "";
-                if(plf.subreddit == null) filename = "frontpage";
+                String name = "";
+                if(plf.subreddit == null)
+                    name = "frontpage";
                 else {
-                    if(plf.isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
-                    filename = filename + plf.subreddit.toLowerCase();
+                    if(plf.isMulti)
+                        name = MyApplication.MULTIREDDIT_FILE_PREFIX;
+                    name = name + plf.subreddit.toLowerCase();
                 }
-                submissions = readPostsFromFile(filename + DownloaderService.LOCAL_POST_LIST_SUFFIX);
-                if(submissions!=null) adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
+                submissions = readPostListFromFile(name);
+                if(submissions!=null)
+                    adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
             }
             else {
                 Submissions subms = new Submissions(httpClient, MyApplication.currentUser);

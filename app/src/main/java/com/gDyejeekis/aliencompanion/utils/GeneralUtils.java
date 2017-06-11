@@ -140,7 +140,7 @@ public class GeneralUtils {
         }
     }
 
-    public static File getActiveSyncedDataDir(Context context) {
+    public static File getPreferredSyncDir(Context context) {
         if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(context)) {
             File[] externalDirs = ContextCompat.getExternalFilesDirs(context, null);
             return ((externalDirs.length > 1) ? externalDirs[1] : externalDirs[0]);
@@ -149,15 +149,41 @@ public class GeneralUtils {
     }
 
     public static File getSyncedMediaDir(Context context) {
-        return new File(getActiveSyncedDataDir(context), MyApplication.SYNCED_MEDIA_DIR_NAME);
+        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_MEDIA_DIR_NAME);
+        return checkDir(file) ? file : null;
     }
 
     public static File getSyncedArticlesDir(Context context) {
-        return new File(getActiveSyncedDataDir(context), MyApplication.SYNCED_ARTICLES_DIR_NAME);
+        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_ARTICLES_DIR_NAME);
+        return checkDir(file) ? file : null;
     }
 
     public static File getSyncedRedditDataDir(Context context) {
-        return new File(getActiveSyncedDataDir(context), MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
+        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
+        return checkDir(file) ? file : null;
+    }
+
+    public static File getSyncedThumbnailsDir(Context context) {
+        File file = new File(getPreferredSyncDir(context), MyApplication.SYNCED_THUMBNAILS_DIR_NAME);
+        return checkDir(file) ? file : null;
+    }
+
+    public static File getNamedDir(File parentDir, String name) {
+        File file = new File(parentDir, name);
+        return checkDir(file) ? file : null;
+    }
+
+    public static boolean checkDir(File file) {
+        if(file.exists() && file.isDirectory()) {
+            return true;
+        }
+        else {
+            boolean success = file.mkdir();
+            if(!success) {
+                Log.e(TAG, "Failed to create directory " + file.getAbsolutePath());
+            }
+            return success;
+        }
     }
 
     public static Object readObjectFromFile(File file) throws IOException, ClassNotFoundException {

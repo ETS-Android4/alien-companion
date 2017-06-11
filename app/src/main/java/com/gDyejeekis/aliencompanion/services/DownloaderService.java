@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -29,7 +28,6 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
-import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -71,14 +69,6 @@ public class DownloaderService extends IntentService {
     private static final int FOREGROUND_ID = 574974;
 
     private static final int CHANGE_STATE_REQUEST_CODE = 59392;
-
-    public static final String MEDIA_DIRECTORY_NAME = "synced_media";
-
-    public static final String INDIVIDUALLY_SYNCED_FILENAME = "synced";
-
-    public static final String LOCAL_POST_LIST_SUFFIX = "-posts";
-
-    public static final String LOCAL_THUMNAIL_SUFFIX = "thumb";
 
     private int MAX_PROGRESS;
 
@@ -178,7 +168,7 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, title, true));
             acquireWakelock();
 
-            syncPost(notifBuilder, submission, INDIVIDUALLY_SYNCED_FILENAME, title, new SyncProfileOptions());
+            syncPost(notifBuilder, submission, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
             addToIndividuallySyncedPosts(submission);
         }
         else if(savedCount != 0) {
@@ -186,12 +176,11 @@ public class DownloaderService extends IntentService {
             progress = 0;
 
             SyncProfileOptions syncOptions = new SyncProfileOptions();
-            String filename = INDIVIDUALLY_SYNCED_FILENAME;
             notifBuilder = new NotificationCompat.Builder(this);
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, "saved", false));
             acquireWakelock();
 
-            syncSaved(filename, notifBuilder, savedCount, syncOptions);
+            syncSaved(MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, notifBuilder, savedCount, syncOptions);
         }
         else {
             MAX_PROGRESS = MyApplication.syncPostCount + 1;
@@ -258,18 +247,14 @@ public class DownloaderService extends IntentService {
     }
 
     private void addToIndividuallySyncedPosts(Submission submission) {
-        if(submission.getSyncedComments() == null) {
-            Log.e(TAG, "Failed to retrieve comments for " + submission.getIdentifier());
-            showFailedNotification("Error retrieving comments");
-            return;
-        }
         try {
             submission.setSyncedComments(null);
             List<Submission> submissions;
 
-            File file = getPreferredStorageFile(INDIVIDUALLY_SYNCED_FILENAME + LOCAL_POST_LIST_SUFFIX);
+            File syncedListFile = new File(GeneralUtils.getPreferredSyncDir(this), MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME +
+                    MyApplication.SYNCED_POST_LIST_SUFFIX);
             try {
-                submissions = (List<Submission>) GeneralUtils.readObjectFromFile(file);
+                submissions = (List<Submission>) GeneralUtils.readObjectFromFile(syncedListFile);
             } catch (Exception e) {
                 submissions = new ArrayList<>();
             }
@@ -280,7 +265,7 @@ public class DownloaderService extends IntentService {
                 }
             }
             submissions.add(0, submission);
-            GeneralUtils.writeObjectToFile(submissions, file);
+            GeneralUtils.writeObjectToFile(submissions, syncedListFile);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Error updating individually synced posts list");
@@ -314,7 +299,12 @@ public class DownloaderService extends IntentService {
                 }
 
                 if(s != null) {
-                    addToIndividuallySyncedPosts(s);
+                    if(s.getSyncedComments() != null) {
+                        addToIndividuallySyncedPosts(s);
+                    }
+                    else {
+                        Log.e(TAG, "Failed to retrieve comments for " + s.getIdentifier());
+                    }
                 }
                 else {
                     Log.e(TAG, "Failed to sync saved post");
@@ -344,14 +334,17 @@ public class DownloaderService extends IntentService {
             }
 
             if(posts!=null) {
-                deletePreviousComments(filename);
-                deletePreviousImages(filename);
+                CleaningUtils.clearAllSyncedData(this, filename);
                 MAX_PROGRESS = posts.size() + 1;
+                writePostListToFile(posts, filename);
                 increaseProgress(builder, filename);
                 for (RedditItem post : posts) {
                     syncPost(builder, (Submission) post, filename, filename, syncOptions);
+                    if(!manuallyCancelled) {
+                        // update post list after syncing each post
+                        writePostListToFile(posts, filename);
+                    }
                 }
-                writePostListToFile(posts, filename + LOCAL_POST_LIST_SUFFIX);
             }
 
         } catch (RetrievalFailedException | RedditError e) {
@@ -370,7 +363,7 @@ public class DownloaderService extends IntentService {
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             cmntsRetrieval.setSyncRetrieval(true);
             if (syncOptions.isSyncThumbs()) {
-                downloadPostThumbnail(submission, filename + submission.getIdentifier() + LOCAL_THUMNAIL_SUFFIX);
+                downloadPostThumbnail(submission, filename + submission.getIdentifier() + MyApplication.SYNCED_THUMNAIL_SUFFIX);
             }
             List<Comment> comments = cmntsRetrieval.ofSubmission(submission, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
             submission.setSyncedComments(comments);
@@ -389,7 +382,7 @@ public class DownloaderService extends IntentService {
                 }
             }
 
-            writePostToFile(submission, filename + "-" + submission.getIdentifier());
+            writePostToFile(submission, filename);
             increaseProgress(builder, displayName);
         } catch (RetrievalFailedException | RedditError e) {
             //e.printStackTrace();
@@ -496,8 +489,9 @@ public class DownloaderService extends IntentService {
     
     private void writePostListToFile(List<RedditItem> posts, String filename) {
         try {
-            File file = getPreferredStorageFile(filename);
-            Log.d(TAG, "Writing to " + file.getAbsolutePath());
+            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename);
+            File file = new File(dir, filename + MyApplication.SYNCED_POST_LIST_SUFFIX);
+            Log.d(TAG, "Writing post list to " + file.getAbsolutePath());
 
             FileOutputStream fos;
             ObjectOutputStream oos;
@@ -513,8 +507,9 @@ public class DownloaderService extends IntentService {
 
     private void writePostToFile(Submission post, String filename) {
         try {
-            File file = getPreferredStorageFile(filename);
-            Log.d(TAG, "Writing to " + file.getAbsolutePath());
+            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename);
+            File file = new File(dir, post.getIdentifier());
+            Log.d(TAG, "Writing post to " + file.getAbsolutePath());
 
             FileOutputStream fos;
             ObjectOutputStream oos;
@@ -528,19 +523,6 @@ public class DownloaderService extends IntentService {
         }
         // set comments to null to garbage collect and not keep in post list file
         post.setSyncedComments(null);
-    }
-
-    // todo maybe replace this
-    private File getPreferredStorageFile(String filename) {
-        File file;
-        if(MyApplication.preferExternalStorage && StorageUtils.isExternalStorageAvailable(this)) {
-            File[] dirs = ContextCompat.getExternalFilesDirs(this, null);
-            file = (dirs.length > 1) ? new File(dirs[1], filename) : new File(dirs[0], filename);
-        }
-        else {
-            file = new File(getFilesDir(), filename);
-        }
-        return file;
     }
 
     private Submission syncLinkedRedditPost(String url, String domain, String filename, Comments commentsRetrieval, SyncProfileOptions syncOptions) {
@@ -569,7 +551,7 @@ public class DownloaderService extends IntentService {
             }
 
             if (linkedpost != null) {
-                writePostToFile(linkedpost, filename + "-" + linkedpost.getIdentifier());
+                writePostToFile(linkedpost, filename);
             }
         } catch (RetrievalFailedException | RedditError e) {
             //e.printStackTrace();
@@ -581,23 +563,10 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostArticle(Submission post, String filename) {
         Log.d(TAG, "Syncing article for " + post.getIdentifier() + ", src: " + post.getURL());
-        boolean success;
-        File articlesDir = GeneralUtils.getSyncedArticlesDir(this);
-        if(!articlesDir.exists()) {
-            success = articlesDir.mkdir();
-            if(!success) {
-                Log.e(TAG, "Failed to create directory in " + articlesDir.getAbsolutePath());
-                return;
-            }
-        }
 
-        File subredditDir = new File(articlesDir, filename);
-        if(!subredditDir.exists()) {
-            success = subredditDir.mkdir();
-            if(!success) {
-                Log.e(TAG, "Failed to create directory in " + subredditDir.getAbsolutePath());
-                return;
-            }
+        File subredditDir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedArticlesDir(this), filename);
+        if(subredditDir == null) {
+            return;
         }
 
         try {
@@ -632,31 +601,15 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostVideo(Submission post, String filename) {
         Log.d(TAG, "Syncing video for " + post.getIdentifier() + ", src: " + post.getURL());
-        boolean success;
+
+        File file = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(this), filename);
+        if(file == null) {
+            return;
+        }
+        final String path = file.getAbsolutePath();
+
         String url = post.getURL();
         String domain = post.getDomain();
-
-        File mediaDir = GeneralUtils.getSyncedMediaDir(this);
-
-        if(!mediaDir.exists()) {
-            success = mediaDir.mkdir();
-            if(!success) {
-                Log.e(TAG, "Failed to create directory in " + mediaDir.getAbsolutePath());
-                return;
-            }
-        }
-        //folder for the corresponding subreddit
-        File subredditDir = new File(mediaDir, filename);
-        if(!subredditDir.exists()) {
-            success = subredditDir.mkdir();
-            if(!success) {
-                Log.e(TAG, "Failed to create directory in " + subredditDir.getAbsolutePath());
-                return;
-            }
-        }
-
-        final String path = subredditDir.getAbsolutePath();
-
         // VIDEOS
         if(url.endsWith(".mp4")) {
             downloadPostMediaToPath(url, path);
@@ -674,35 +627,20 @@ public class DownloaderService extends IntentService {
 
     private void downloadPostImage(Submission post, String filename) {
         Log.d(TAG, "Syncing image for " + post.getIdentifier() + ", src: " + post.getURL());
-        boolean success;
+
+        File file = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(this), filename);
+        if(file == null) {
+            return;
+        }
+        final String path = file.getAbsolutePath();
+
         String url = post.getURL();
         String domain = post.getDomain();
-
-        File mediaDir = GeneralUtils.getSyncedMediaDir(this);
-        if(!mediaDir.exists()) {
-            success = mediaDir.mkdir();
-            if(!success) {
-                Log.e(TAG, "Failed to create directory in " + mediaDir.getAbsolutePath());
-                return;
-            }
-        }
-        //folder for the corresponding subreddit
-        File subredditDir = new File(mediaDir, filename);
-        if(!subredditDir.exists()) {
-            success = subredditDir.mkdir();
-            if(!success) {
-                Log.e(TAG, "Failed to create directory in " + subredditDir.getAbsolutePath());
-                return;
-            }
-        }
-
-        final String downloadPath = subredditDir.getAbsolutePath();
-
         // GFYCAT
         if (domain.contains("gfycat.com")) {
             try {
                 url = GfycatTask.getGfycatDirectUrlSimple(url);
-                downloadPostMediaToPath(url, downloadPath);
+                downloadPostMediaToPath(url, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -711,7 +649,7 @@ public class DownloaderService extends IntentService {
         else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
             try {
                 url = GyazoTask.getGyazoDirectUrl(url);
-                downloadPostMediaToPath(url, downloadPath);
+                downloadPostMediaToPath(url, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -720,19 +658,19 @@ public class DownloaderService extends IntentService {
         else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
             try {
                 url = GiphyTask.getGiphyDirectUrlSimple(url);
-                downloadPostMediaToPath(url, downloadPath);
+                downloadPostMediaToPath(url, path);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         // REDDIT
         else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-            downloadPostImageToFile(url, downloadPath, LinkHandler.getReddituploadsFilename(url));
+            downloadPostImageToFile(url, path, LinkHandler.getReddituploadsFilename(url));
         }
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
             url = url.replaceAll("\\?(\\d+)?", "");
-            downloadPostMediaToPath(url, downloadPath);
+            downloadPostMediaToPath(url, path);
         }
         // GIFs
         else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
@@ -741,7 +679,7 @@ public class DownloaderService extends IntentService {
                 url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
                 //url = url.replace(".gif", ".mp4");
             }
-            downloadPostMediaToPath(url, downloadPath);
+            downloadPostMediaToPath(url, path);
         }
         // IMGUR
         else if (domain.contains("imgur.com")) {
@@ -754,19 +692,19 @@ public class DownloaderService extends IntentService {
             if(item instanceof ImgurImage) {
                 ImgurImage image = (ImgurImage) item;
                 String link = (image.isAnimated()) ? image.getMp4() : image.getLink();
-                downloadPostMediaToPath(link, downloadPath);
+                downloadPostMediaToPath(link, path);
             }
             else if(item instanceof ImgurAlbum) {
-                downloadAlbumImages(item, filename, downloadPath);
+                downloadAlbumImages(item, filename, path);
             }
             else if(item instanceof ImgurGallery) {
                 ImgurGallery gallery = (ImgurGallery) item;
                 if(gallery.isAlbum()) {
-                    downloadAlbumImages(gallery, filename, downloadPath);
+                    downloadAlbumImages(gallery, filename, path);
                 }
                 else {
                     String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
-                    downloadPostMediaToPath(link, downloadPath);
+                    downloadPostMediaToPath(link, path);
                 }
             }
         }
@@ -780,7 +718,7 @@ public class DownloaderService extends IntentService {
             String imgId = LinkHandler.getImgurImgId(img.getLink());
             if(MyApplication.syncAlbumImgCount > 1) {
                 try {
-                    GeneralUtils.downloadToFileSync("http://i.imgur.com/" + imgId + "s.jpg", new File(GeneralUtils.getActiveSyncedDataDir(this).getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
+                    GeneralUtils.downloadToFileSync("http://i.imgur.com/" + imgId + "s.jpg", new File(GeneralUtils.getPreferredSyncDir(this).getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -798,7 +736,7 @@ public class DownloaderService extends IntentService {
 
     private void saveAlbumInfoToFile(ImgurItem item, final String filename) {
         try {
-            FileOutputStream fos = new FileOutputStream(new File(GeneralUtils.getActiveSyncedDataDir(this), filename));
+            FileOutputStream fos = new FileOutputStream(new File(GeneralUtils.getPreferredSyncDir(this), filename));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(item);
             oos.close();
@@ -834,9 +772,8 @@ public class DownloaderService extends IntentService {
     }
 
     private void downloadPostThumbnail(Submission post, String filename) {
-
         if(!post.isSelf()) {
-            File file = getPreferredStorageFile(filename);
+            File file = GeneralUtils.getNamedDir(GeneralUtils.getSyncedThumbnailsDir(this), filename);
             saveBitmapToDisk(getBitmapFromURL(post.getThumbnail()), file);
         }
     }
@@ -875,14 +812,6 @@ public class DownloaderService extends IntentService {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private void deletePreviousImages(final String filename) {
-        CleaningUtils.clearSyncedMedia(this, filename);
-    }
-
-    private void deletePreviousComments(final String subreddit) {
-        CleaningUtils.clearSyncedPostsAndComments(this, subreddit);
     }
 
 }

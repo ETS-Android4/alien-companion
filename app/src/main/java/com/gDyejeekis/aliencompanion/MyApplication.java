@@ -68,9 +68,17 @@ public class MyApplication extends Application {
 
     public static final String SYNCED_REDDIT_DATA_DIR_NAME = "RedditData";
 
+    public static final String SYNCED_THUMBNAILS_DIR_NAME = "Thumbs";
+
+    public static final String INDIVIDUALLY_SYNCED_DIR_NAME = "synced";
+
     public static final String SYNCED_ARTICLE_DATA_SUFFIX = "-article";
 
     public static final String SYNCED_ARTICLE_IMAGE_SUFFIX = "-image.jpg";
+
+    public static final String SYNCED_POST_LIST_SUFFIX = "-posts";
+
+    public static final String SYNCED_THUMNAIL_SUFFIX = "-thumb";
 
     public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
 

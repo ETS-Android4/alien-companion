@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.asynctask;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -11,6 +10,7 @@ import android.view.View;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,29 +49,30 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     }
 
     private Submission readPostFromFile(final String postId) {
-        File postFile = null;
-
         FilenameFilter filenameFilter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                if(filename.endsWith(postId)) return true;
-                return false;
+                return filename.equals(postId);
             }
         };
 
-        File[] files = GeneralUtils.getActiveSyncedDataDir(context).listFiles(filenameFilter);
-        for(File file : files) {
-            if(postFile == null) postFile = file;
-            else if(file.lastModified() > postFile.lastModified()) postFile = file;
-        }
-
         try {
+            File postFile = null;
+            List<File> files = new ArrayList<>();
+            StorageUtils.listFilesRecursive(GeneralUtils.getSyncedRedditDataDir(context),
+                    filenameFilter, files);
+            for(File file : files) {
+                // always keep the last updated matching post file
+                if(postFile == null || file.lastModified() > postFile.lastModified())
+                    postFile = file;
+            }
+
             Log.d(TAG, "reading comments from " + postFile.getAbsolutePath());
             FileInputStream fis = new FileInputStream(postFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Submission post = (Submission) ois.readObject();
             return post;
-        } catch (IOException | ClassNotFoundException | NullPointerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             exception = e;
         }

@@ -25,7 +25,6 @@ import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
-import com.gDyejeekis.aliencompanion.fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
@@ -53,10 +52,8 @@ import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostCardViewHolder;
-import com.gDyejeekis.aliencompanion.views.viewholders.PostClassicViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostListViewHolder;
 import com.gDyejeekis.aliencompanion.views.viewholders.PostSmallCardViewHolder;
-import com.gDyejeekis.aliencompanion.views.viewholders.PostViewHolder;
 
 /**
  * Created by George on 8/9/2015.
@@ -330,7 +327,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
                             @Override
                             protected Boolean doInBackground(String... params) {
-                                return CleaningUtils.deleteSyncedPostFromCategory(context, DownloaderService.INDIVIDUALLY_SYNCED_FILENAME, params[0]);
+                                return CleaningUtils.deleteSyncedPostFromCategory(context, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, params[0]);
                             }
 
                             @Override
