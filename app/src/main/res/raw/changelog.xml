@@ -27,7 +27,6 @@
         <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
-        <changelogtext>Self text and comment text is now selectable -MAYBE NOT-</changelogtext>
         <changelogtext>Added support for tables</changelogtext>
         <changelogtext>Added support for inline code text [NOT OPTIMALLY FORMATTED]</changelogtext>
         <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
