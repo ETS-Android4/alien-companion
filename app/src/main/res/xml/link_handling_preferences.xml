@@ -26,11 +26,10 @@
         android:title="Use Chrome custom tabs"
         android:defaultValue="false"/>
 
-    <CheckBoxPreference
+    <!--<CheckBoxPreference
         android:key="handleArticles"
         android:title="Improved post articles"
         android:summary="Shows stripped down versions of article pages for easier reading and faster loading"
-        android:defaultValue="false"
-        android:visibility="gone"/>
+        android:defaultValue="false"/>-->
 
 </PreferenceScreen>
