@@ -2,23 +2,19 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="1.0" changeDate="unset">
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Classic' view]]></changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Gallery' view (long tap for comments)]]></changelogtext>
-        <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
-        <changelogtext>Stickied posts now have different title colors</changelogtext>
-        <changelogtext>Self text is now selectable -MAYBE NOT-</changelogtext>
-        <changelogtext>Added support for tables</changelogtext>
-        <changelogtext>Added support for inline code text [NOT OPTIMALLY FORMATTED]</changelogtext>
-        <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
+        <!-- appearance changes -->
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added two new post views, Classic view and Gallery view (long tap for comments)]]></changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
         <changelogtext>Small tweaks to font sizes</changelogtext>
         <changelogtext>Added 'Use primary color in dark themes' option under 'Appearance' (disabled by default)</changelogtext>
         <changelogtext>Added 'Secondary color' option under 'Appearance'</changelogtext>
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
         <changelogtext>Replaced toast notifications with snackbar notifications on some instances</changelogtext>
+        <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
+        <changelogtext>Added 'Disable screen transitions' option under 'Appearance' (disables animations for opening and dismissing activities)</changelogtext>
+        <changelogtext>Various small visual tweaks</changelogtext>
+        <!-- navigation changes -->
         <changelogtext>Changed post menu bar to show options depending on available space</changelogtext>
-        <changelogtext>Added 'Screen transitions' option under 'Appearance' (controls animations for opening and dismissing screens)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Hide read' option in the toolbar's overflow menu (available when browsing posts and search results)]]></changelogtext>
         <changelogtext>Added 'Hide toolbar on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Navigate comments with volume buttons' option under 'Navigation' (disabled by default)]]></changelogtext>
@@ -27,24 +23,32 @@
         <changelogtext>Added 'Hide post FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Revamped FAB comment navigation with new options (threads, search text, time, original poster, gilded and AMA mode)]]></changelogtext>
         <changelogtext>Added 'Hide comment FAB on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Improved post articles' under 'Link handling' options (disabled by default) -MAYBE NOT-]]></changelogtext>
-        <changelogtext>Added gyazo.com link handling support</changelogtext>
-        <changelogtext>Added giphy.com link handling support</changelogtext>
-        <changelogtext>Added streamable.com link handling support</changelogtext>
-        <changelogtext>Added *.mp4 link handling support</changelogtext>
+        <!-- post and comment changes -->
+        <changelogtext>Added 'Default view' option under 'Posts'</changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
+        <changelogtext>Stickied posts now have different title colors</changelogtext>
+        <changelogtext>Self text and comment text is now selectable -MAYBE NOT-</changelogtext>
+        <changelogtext>Added support for tables</changelogtext>
+        <changelogtext>Added support for inline code text [NOT OPTIMALLY FORMATTED]</changelogtext>
+        <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
+        <!-- sync changes changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable and *.mp4 links)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in comments' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext>Updated synced article view to use the selected theme background and font size</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE CHANGES HERE]]></changelogtext>
         <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
+        <!-- link handling changes -->
+        <changelogtext>Added gyazo.com link handling support</changelogtext>
+        <changelogtext>Added giphy.com link handling support</changelogtext>
+        <changelogtext>Added streamable.com link handling support</changelogtext>
+        <changelogtext>Added *.mp4 link handling support</changelogtext>
+        <!-- other changes -->
+        <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
-        <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
-        <changelogtext>Pressing the system's back button when using the in-app browser will now load the previous page (if there is one)</changelogtext>
-        <changelogtext>Changed 'Refresh comments' behavior to match refreshing of posts</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
-        <changelogtext>Various small visual tweaks</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
+
         <changelogtext></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
     </changelogversion>

@@ -22,7 +22,7 @@ import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
-import com.gDyejeekis.aliencompanion.asynctask.LoadPostsTask;
+import com.gDyejeekis.aliencompanion.asynctask.LoadPostListTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
@@ -51,7 +51,7 @@ public class PostListFragment extends RedditContentFragment {
     public SubmissionSort submissionSort;
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
-    public LoadPostsTask task;
+    public LoadPostListTask task;
 
     public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, boolean isMulti, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
@@ -141,7 +141,7 @@ public class PostListFragment extends RedditContentFragment {
                 //setSubmissionSort(SubmissionSort.HOT);
                 if(submissionSort==null) submissionSort = SubmissionSort.HOT;
                 setActionBarSubtitle();
-                task = new LoadPostsTask(activity, this, LoadType.init);
+                task = new LoadPostListTask(activity, this, LoadType.init);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 setActionBarSubtitle();
@@ -416,7 +416,7 @@ public class PostListFragment extends RedditContentFragment {
     public void extendList() {
         currentLoadType = LoadType.extend;
         adapter.setLoadingMoreItems(true);
-        task = new LoadPostsTask(activity, this, LoadType.extend);
+        task = new LoadPostListTask(activity, this, LoadType.extend);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -436,7 +436,7 @@ public class PostListFragment extends RedditContentFragment {
         currentLoadType = LoadType.refresh;
         updateCurrentViewType();
         swipeRefreshLayout.setRefreshing(true);
-        task = new LoadPostsTask(activity, this, LoadType.refresh, sort, time);
+        task = new LoadPostListTask(activity, this, LoadType.refresh, sort, time);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         hideAllFabOptions();
     }
@@ -462,7 +462,7 @@ public class PostListFragment extends RedditContentFragment {
         setActionBarSubtitle();
         contentView.setVisibility(View.GONE);
         mainProgressBar.setVisibility(View.VISIBLE);
-        task = new LoadPostsTask(activity, this, LoadType.init);
+        task = new LoadPostListTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         hideAllFabOptions();
         activity.showToolbar();
@@ -494,7 +494,7 @@ public class PostListFragment extends RedditContentFragment {
     public void setActionBarSubtitle() {
         String subtitle;
         if(MyApplication.offlineModeEnabled) {
-            subtitle = getOfflineSubtitle();
+            subtitle = "loading";
         }
         else {
             if (timeSpan == null) subtitle = submissionSort.value();
@@ -503,21 +503,8 @@ public class PostListFragment extends RedditContentFragment {
         activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
-    private String getOfflineSubtitle() {
-        try {
-            String name = "";
-            if(isMulti)
-                name = MyApplication.MULTIREDDIT_FILE_PREFIX;
-            name += (subreddit == null) ? "frontpage" : subreddit;
-            File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(activity), name);
-            File file = new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
-            if(file.exists()) {
-                return ((isOther) ? "updated " : "synced ") + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ((isOther) ? "no posts" : "not synced");
+    public void setActionBarSubtitle(String subtitle) {
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
 }

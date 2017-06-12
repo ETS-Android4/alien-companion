@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
@@ -62,12 +63,39 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                 //secondary external dir
                 File[] externalDirs = ContextCompat.getExternalFilesDirs(getActivity(), null);
                 File externalDir = (externalDirs.length > 1) ? externalDirs[1] : externalDirs[0];
-                if(moveToExternal) {
 
+                File srcDir;
+                String targetPath;
+                File redditDataDir;
+                File mediaDir;
+                File articlesDir;
+                File thumbsDir;
+                if(moveToExternal) {
+                    srcDir = internalDir;
+                    targetPath = externalDir.getAbsolutePath();
                 }
                 else {
-
+                    srcDir = externalDir;
+                    targetPath = internalDir.getAbsolutePath();
                 }
+                redditDataDir = new File(srcDir, MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
+                mediaDir = new File(srcDir, MyApplication.SYNCED_MEDIA_DIR_NAME);
+                articlesDir = new File(srcDir, MyApplication.SYNCED_ARTICLES_DIR_NAME);
+                thumbsDir = new File(srcDir, MyApplication.SYNCED_THUMBNAILS_DIR_NAME);
+
+                if(redditDataDir.exists()) {
+                    StorageUtils.moveFileBetweenDisksRecursive(redditDataDir, targetPath);
+                }
+                if(mediaDir.exists()){
+                    StorageUtils.moveFileBetweenDisksRecursive(mediaDir, targetPath);
+                }
+                if(articlesDir.exists()) {
+                    StorageUtils.moveFileBetweenDisksRecursive(articlesDir, targetPath);
+                }
+                if(thumbsDir.exists()) {
+                    StorageUtils.moveFileBetweenDisksRecursive(thumbsDir, targetPath);
+                }
+
                 return null;
             }
 

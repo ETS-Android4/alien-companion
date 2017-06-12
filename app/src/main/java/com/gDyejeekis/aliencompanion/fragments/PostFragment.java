@@ -95,7 +95,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentNavSetting commentNavSetting;
     public CommentFabNavListener commentNavListener;
 
-    private boolean updateActionBar = false;
+    //public boolean updateActionBar; // TODO: 6/12/2017 maybe delete this
 
     private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -189,7 +189,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
         else {
             if(post==null) {
-                updateActionBar = true;
+                //updateActionBar = true;
                 initPostFromUrl(postInfo);
             }
         }
@@ -295,7 +295,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setActionBarTitle();
         if(commentSort == null) commentSort = CommentSort.TOP;
         setActionBarSubtitle();
-        updateActionBar = false;
+        //updateActionBar = false;
     }
 
     @Override
@@ -582,7 +582,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void setActionBarTitle() {
-        if(!MainActivity.dualPaneActive || updateActionBar) {
+        if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
             String title;
             if (post.getSubreddit() != null) {
                 title = post.getSubreddit().toLowerCase();
@@ -596,9 +596,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void setActionBarSubtitle() {
-        if(!MainActivity.dualPaneActive || updateActionBar) {
+        if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
             String subtitle;
-            if (MyApplication.offlineModeEnabled) subtitle = getOfflineSubtitle();
+            if (MyApplication.offlineModeEnabled) {
+                subtitle = "loading";
+            }
             else {
                 if(commentSort==null) commentSort = CommentSort.TOP;
                 subtitle = commentSort.value();
@@ -607,28 +609,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    // TODO: 6/11/2017 might need to move this to a background thread or make it faster
-    private String getOfflineSubtitle() {
-        FileFilter fileFilter = new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory() || file.getName().equals(post.getIdentifier());
-            }
-        };
-        File postFile = null;
-        List<File> files = new ArrayList<>();
-        StorageUtils.listFilesRecursive(GeneralUtils.getSyncedRedditDataDir(activity),
-                fileFilter, files);
-        for(File file : files) {
-            if(postFile == null || file.lastModified() > postFile.lastModified())
-                postFile = file;
+    public void setActionBarSubtitle(String subtitle) {
+        if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
+            activity.getSupportActionBar().setSubtitle(subtitle);
         }
-
-        if(postFile!=null) {
-            //return new Date(postFile.lastModified()).toString();
-            return "synced " + ConvertUtils.getSubmissionAge((double) postFile.lastModified() / 1000);
-        }
-        return "not synced";
     }
 
     public void showCommentNavDialog() {

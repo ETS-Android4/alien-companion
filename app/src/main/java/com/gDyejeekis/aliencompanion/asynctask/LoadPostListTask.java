@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -34,30 +35,31 @@ import java.util.List;
 /**
  * Created by George on 8/1/2015.
  */
-public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
+public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     private Exception exception;
     private LoadType loadType;
     private Context context;
-    private PostListFragment plf;
+    private PostListFragment fragment;
     private HttpClient httpClient = new PoliteRedditHttpClient();
     private RedditItemListAdapter adapter;
     private SubmissionSort sort;
     private TimeSpan time;
     private boolean changedSort;
+    private String offlineSubtitle;
 
-    public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType) {
+    public LoadPostListTask(Context context, PostListFragment fragment, LoadType loadType) {
         this.context = context;
-        this.plf = plf;
+        this.fragment = fragment;
         this.loadType = loadType;
-        sort = plf.submissionSort;
-        time = plf.timeSpan;
+        sort = fragment.submissionSort;
+        time = fragment.timeSpan;
         changedSort = false;
     }
 
-    public LoadPostsTask(Context context, PostListFragment plf, LoadType loadType, SubmissionSort sort, TimeSpan time) {
+    public LoadPostListTask(Context context, PostListFragment fragment, LoadType loadType, SubmissionSort sort, TimeSpan time) {
         this.context = context;
-        this.plf = plf;
+        this.fragment = fragment;
         this.loadType = loadType;
         this.sort = sort;
         this.time = time;
@@ -68,12 +70,15 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         List<RedditItem> posts = null;
         try {
             File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(context), name);
-            FileInputStream fis = new FileInputStream(new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX));
+            File file = new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
+            FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis);
             posts = (List<RedditItem>) ois.readObject();
             ois.close();
             fis.close();
+            offlineSubtitle = fragment.isOther ? "updated " : "synced " + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
         } catch (IOException | ClassNotFoundException e) {
+            offlineSubtitle = fragment.isOther ? "no posts" : "not synced";
             e.printStackTrace();
         }
         return posts;
@@ -90,36 +95,36 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 50);
 
                 String name = "";
-                if(plf.subreddit == null)
+                if(fragment.subreddit == null)
                     name = "frontpage";
                 else {
-                    if(plf.isMulti)
+                    if(fragment.isMulti)
                         name = MyApplication.MULTIREDDIT_FILE_PREFIX;
-                    name = name + plf.subreddit.toLowerCase();
+                    name = name + fragment.subreddit.toLowerCase();
                 }
                 submissions = readPostListFromFile(name);
                 if(submissions!=null)
-                    adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
+                    adapter = new RedditItemListAdapter(context, fragment.currentViewTypeValue, submissions);
             }
             else {
                 Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
 
                 if (loadType == LoadType.extend) { // extend case
-                    if (plf.subreddit == null) {
-                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                    if (fragment.subreddit == null) {
+                        submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) fragment.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     } else {
-                        if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
-                        else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) plf.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        if(fragment.isMulti) submissions = subms.ofMultireddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) fragment.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
+                        else submissions = subms.ofSubreddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) fragment.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     }
-                    adapter = plf.adapter;
+                    adapter = fragment.adapter;
                 } else { // init or refresh case
-                    if (plf.subreddit == null) {
+                    if (fragment.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     } else {
-                        if(plf.isMulti) submissions = subms.ofMultireddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
-                        else submissions = subms.ofSubreddit(plf.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
+                        if(fragment.isMulti) submissions = subms.ofMultireddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
+                        else submissions = subms.ofSubreddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     }
-                    adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue, submissions);
+                    adapter = new RedditItemListAdapter(context, fragment.currentViewTypeValue, submissions);
                 }
             }
             return submissions;
@@ -144,36 +149,40 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
             MyApplication.accountChanges = false;
             GeneralUtils.saveAccountChanges(context);
         }
+
         try {
             PostListFragment fragment = (PostListFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("listFragment");
-            plf = fragment;
-            plf.currentLoadType = null;
-            plf.mainProgressBar.setVisibility(View.GONE);
-            plf.swipeRefreshLayout.setRefreshing(false);
-            plf.contentView.setVisibility(View.VISIBLE);
+            this.fragment = fragment;
+            this.fragment.currentLoadType = null;
+            this.fragment.mainProgressBar.setVisibility(View.GONE);
+            this.fragment.swipeRefreshLayout.setRefreshing(false);
+            this.fragment.contentView.setVisibility(View.VISIBLE);
+            if(offlineSubtitle!=null) {
+                this.fragment.setActionBarSubtitle(offlineSubtitle);
+            }
 
             if (exception != null || submissions == null) {
                 if(loadType == LoadType.extend) {
-                    plf.adapter.setLoadingMoreItems(false);
+                    this.fragment.adapter.setLoadingMoreItems(false);
                 }
                 else if(loadType == LoadType.init) {
-                    plf.adapter = new RedditItemListAdapter(context, plf.currentViewTypeValue);
-                    plf.updateContentView(adapter);
+                    this.fragment.adapter = new RedditItemListAdapter(context, this.fragment.currentViewTypeValue);
+                    this.fragment.updateContentView(adapter);
                 }
 
                 View.OnClickListener listener;
                 if(MyApplication.offlineModeEnabled) {
-                    if(plf.isOther && plf.subreddit!=null && plf.subreddit.equals("synced")) {
+                    if(this.fragment.isOther && this.fragment.subreddit!=null && this.fragment.subreddit.equals("synced")) {
                         showNoPostsSnackbar();
                     }
                     else {
                         listener = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                plf.addToSyncQueue();
+                                LoadPostListTask.this.fragment.addToSyncQueue();
                             }
                         };
-                        plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
+                        this.fragment.setSnackbar(ToastUtils.showSnackbar(this.fragment.getSnackbarParentView(), "No synced posts found", "Sync", listener, Snackbar.LENGTH_INDEFINITE));
                     }
                 }
                 else {
@@ -182,54 +191,51 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         listener = new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                plf.refreshList();
+                                LoadPostListTask.this.fragment.refreshList();
                             }
                         };
-                        plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE));
+                        this.fragment.setSnackbar(ToastUtils.showSnackbar(this.fragment.getSnackbarParentView(), message, "Retry", listener, Snackbar.LENGTH_INDEFINITE));
                     }
                     else {
-                        ToastUtils.showSnackbar(plf.getSnackbarParentView(), message);
+                        ToastUtils.showSnackbar(this.fragment.getSnackbarParentView(), message);
                     }
                 }
 
             } else {
                 if(submissions.size()>0) {
                     if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
-                    plf.adapter = adapter;
+                    this.fragment.adapter = adapter;
                 }
-                plf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
+                this.fragment.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
 
                 switch (loadType) {
                     case init:
                         if(submissions.size()==0) {
-                            plf.updateContentView(new RedditItemListAdapter(context, plf.currentViewTypeValue));
+                            this.fragment.updateContentView(new RedditItemListAdapter(context, this.fragment.currentViewTypeValue));
                             showNoPostsSnackbar();
                         }
                         else {
-                            plf.updateContentView(plf.adapter);
+                            this.fragment.updateContentView(this.fragment.adapter);
                         }
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
                             if(changedSort) {
-                                plf.submissionSort = sort;
-                                plf.timeSpan = time;
-                                //plf.setActionBarSubtitle();
+                                this.fragment.submissionSort = sort;
+                                this.fragment.timeSpan = time;
                             }
-                            //else if(MyApplication.offlineModeEnabled) {
-                            //    plf.setActionBarSubtitle();
-                            //}
-                            plf.setActionBarSubtitle();
-                            plf.updateContentView(adapter);
+                            if(!MyApplication.offlineModeEnabled)
+                                this.fragment.setActionBarSubtitle();
+                            this.fragment.updateContentView(adapter);
                         }
                         else {
                             showNoPostsSnackbar();
                         }
                         break;
                     case extend:
-                        plf.adapter.setLoadingMoreItems(false);
-                        plf.adapter.addAll(submissions);
-                        plf.loadMore = MyApplication.endlessPosts;
+                        this.fragment.adapter.setLoadingMoreItems(false);
+                        this.fragment.adapter.addAll(submissions);
+                        this.fragment.loadMore = MyApplication.endlessPosts;
                         break;
                 }
             }
@@ -243,7 +249,7 @@ public class LoadPostsTask extends AsyncTask<Void, Void, List<RedditItem>> {
         if (MyApplication.hideNSFW && !MyApplication.offlineModeEnabled) {
             message = message.concat(" (NSFW filter is enabled)");
         }
-        plf.setSnackbar(ToastUtils.showSnackbar(plf.getSnackbarParentView(), message));
+        fragment.setSnackbar(ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message));
     }
 
 }
