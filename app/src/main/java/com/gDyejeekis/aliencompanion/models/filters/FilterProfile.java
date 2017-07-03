@@ -49,35 +49,7 @@ public class FilterProfile extends Profile implements Serializable {
         if(filters == null) {
             filters = new ArrayList<>();
         }
-        return filters.add(filter);
-    }
-
-    public boolean addFilter(Class<? extends Filter> cls, String filterText) {
-        if(filters == null) {
-            filters = new ArrayList<>();
-        }
-
-        Filter filter = null;
-        if(cls == DomainFilter.class) {
-            filter = new DomainFilter(filterText);
-        }
-        else if(cls == TitleFilter.class) {
-            filter = new TitleFilter(filterText);
-        }
-        else if(cls == FlairFilter.class) {
-            filter = new FlairFilter(filterText);
-        }
-        else if(cls == SelfTextFilter.class) {
-            filter = new SelfTextFilter(filterText);
-        }
-        else if(cls == SubredditFilter.class) {
-            filter = new SubredditFilter(filterText);
-        }
-        else if(cls == UserFilter.class) {
-            filter = new UserFilter(filterText);
-        }
-
-        return filters.add(filter);
+        return filter.isValid() && filters.add(filter);
     }
 
     public boolean removeFilter(Filter filter) {

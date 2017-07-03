@@ -5,4 +5,8 @@ package com.gDyejeekis.aliencompanion.utils;
  */
 
 public class FilterUtils {
+
+    public static final String TAG = "FilterUtils";
+
+
 }

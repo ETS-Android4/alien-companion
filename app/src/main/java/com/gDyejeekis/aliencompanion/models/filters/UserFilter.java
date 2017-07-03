@@ -22,6 +22,16 @@ public class UserFilter extends Filter implements Serializable {
     }
 
     @Override
+    public boolean isValid() {
+        return false;
+    }
+
+    @Override
+    public String getTextRequirements() {
+        return null;
+    }
+
+    @Override
     public String getHeader() {
         return HEADER;
     }

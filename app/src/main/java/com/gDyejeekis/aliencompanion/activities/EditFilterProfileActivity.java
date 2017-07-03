@@ -277,8 +277,21 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         }
         else {
             clearField(field, hint);
-            profile.addFilter(cls, filterText);
-            refreshFilters(cls);
+            Filter filter = Filter.newInstance(cls, filterText);
+            boolean added = profile.addFilter(filter);
+            if(added) {
+                refreshFilters(cls);
+            }
+            else {
+                String message;
+                if(!filter.isValid()) {
+                    message = filter.getTextRequirements();
+                }
+                else {
+                    message = "Failed to add filter";
+                }
+                ToastUtils.showSnackbarOverToast(this, message);
+            }
         }
     }
 
