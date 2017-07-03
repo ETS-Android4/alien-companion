@@ -27,6 +27,7 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
     private EditText editText;
     private CheckBox checkBox;
     private String subreddit;
+    private boolean isMulti;
     private SearchFragment searchFragment;
 
     @Override
@@ -35,8 +36,10 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
 
         activity = (AppCompatActivity) getActivity();
         searchFragment = null;
-        if(!SearchActivity.isForeground)
+        if(!SearchActivity.isForeground) {
             subreddit = getArguments().getString("subreddit");
+            isMulti = getArguments().getBoolean("isMulti", false);
+        }
         else {
             searchFragment = ((SearchActivity) activity).getSearchFragment();
             subreddit = searchFragment.getSubreddit();
@@ -50,11 +53,13 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);
         checkBox = (CheckBox) view.findViewById(R.id.checkBox);
-        if(subreddit == null) {
+        if(subreddit == null || isMulti || subreddit.equalsIgnoreCase("all")) {
             checkBox.setChecked(false);
             checkBox.setVisibility(View.GONE);
         }
-        else checkBox.setText("Limit to " + subreddit);
+        else {
+            checkBox.setText("Limit to " + subreddit);
+        }
         editText = (EditText) view.findViewById(R.id.editText_subreddit);
         editText.requestFocus();
 
@@ -75,18 +80,6 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
         return view;
     }
 
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    setDialogWidth();
-    //}
-//
-    //private void setDialogWidth() {
-    //    Window window = getDialog().getWindow();
-    //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
-    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    //}
-
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_cancel) {
@@ -94,16 +87,13 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
         }
         else {
             String query = editText.getText().toString();
-            //query = query.replaceAll("\\s","");
-            if(!query.replaceAll("\\s","").equals("")) {
+            if(!query.trim().isEmpty()) {
                 dismiss();
-                //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
                 if(!SearchActivity.isForeground) {
                     Intent intent = new Intent(activity, SearchActivity.class);
                     intent.putExtra("query", query);
                     if (checkBox.isChecked()) {
                         intent.putExtra("subreddit", subreddit);
-                        //Log.d("subreddit extra", "sent");
                     }
                     activity.startActivity(intent);
                 }
@@ -111,9 +101,6 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
                     if(checkBox.isChecked()) searchFragment.subreddit = subreddit;
                     else searchFragment.subreddit = null;
                     searchFragment.changeQuery(query);
-                    //searchFragment.setSearchQuery(query);
-                    //searchFragment.setActionBarTitle();
-                    //searchFragment.refreshList();
                 }
             }
             else {

@@ -280,6 +280,7 @@ public class PostListFragment extends RedditContentFragment {
         SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
         Bundle args = new Bundle();
         args.putString("subreddit", subreddit);
+        args.putBoolean("isMulti", isMulti);
         searchDialog.setArguments(args);
         searchDialog.show(activity.getSupportFragmentManager(), "dialog");
     }
