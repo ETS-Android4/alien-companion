@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.models.filters;
 
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+
 import java.io.Serializable;
 
 /**
@@ -13,7 +15,7 @@ public class DomainFilter extends Filter implements Serializable {
     public static final String HEADER = "Domain filter";
 
     public DomainFilter(String filterText) {
-        super(filterText);
+        super(filterText.replaceAll("\\s",""));
     }
 
     @Override
@@ -23,12 +25,12 @@ public class DomainFilter extends Filter implements Serializable {
 
     @Override
     public boolean isValid() {
-        return false;
+        return GeneralUtils.isValidDomain(filterText);
     }
 
     @Override
     public String getTextRequirements() {
-        return null;
+        return "Text must be a valid domain";
     }
 
     @Override

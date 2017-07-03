@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.models.filters;
 
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+
 import java.io.Serializable;
 
 /**
@@ -13,7 +15,7 @@ public class SubredditFilter extends Filter implements Serializable {
     public static final String HEADER = "Subreddit filter";
 
     public SubredditFilter(String filterText) {
-        super(filterText);
+        super(filterText.replaceAll("\\s",""));
     }
 
     @Override
@@ -23,12 +25,12 @@ public class SubredditFilter extends Filter implements Serializable {
 
     @Override
     public boolean isValid() {
-        return false;
+        return GeneralUtils.isAlphaNumeric(filterText);
     }
 
     @Override
     public String getTextRequirements() {
-        return null;
+        return "Subreddit must contain only alphanumeric characters";
     }
 
     @Override

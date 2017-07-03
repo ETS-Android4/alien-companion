@@ -265,8 +265,7 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
 
     private void addFilter(Class<? extends Filter> cls, EditText field, String hint, String warning) {
         String filterText = field.getText().toString();
-        filterText = filterText.replaceAll("\\s","");
-        if(filterText.isEmpty()) {
+        if(filterText.trim().isEmpty()) {
             field.setText("");
             field.setHint(warning);
             field.setHintTextColor(Color.RED);
@@ -310,11 +309,11 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     }
 
     private void addTitleFilter() {
-        addFilter(TitleFilter.class, titleField, "keyword / phrase", "enter a keyword or phrase");
+        addFilter(TitleFilter.class, titleField, "title keyword / phrase", "enter a keyword or phrase");
     }
 
     private void addSelfTextFilter() {
-        addFilter(SelfTextFilter.class, selfTextField, "keyword / phrase", "enter a keyword or phrase");
+        addFilter(SelfTextFilter.class, selfTextField, "self-text keyword / phrase", "enter a keyword or phrase");
     }
 
     private void addSubredditFilter() {

@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.models.filters;
 
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+
 import java.io.Serializable;
 
 /**
@@ -23,12 +25,12 @@ public class SelfTextFilter extends Filter implements Serializable {
 
     @Override
     public boolean isValid() {
-        return false;
+        return GeneralUtils.containsAlphaNumeric(filterText);
     }
 
     @Override
     public String getTextRequirements() {
-        return null;
+        return "Text must contain alphanumeric characters";
     }
 
     @Override

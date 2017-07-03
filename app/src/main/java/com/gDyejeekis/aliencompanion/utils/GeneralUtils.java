@@ -47,6 +47,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by sound on 10/5/2015.
@@ -394,6 +395,21 @@ public class GeneralUtils {
             return context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
+    }
+
+    public static boolean isAlphaNumeric(String s){
+        String pattern = "^[a-zA-Z0-9]*$";
+        return s.matches(pattern);
+    }
+
+    public static boolean containsAlphaNumeric(String s){
+        String pattern = ".*[a-zA-Z0-9]+.*";
+        return s.matches(pattern);
+    }
+
+    public static boolean isValidDomain(String s) {
+        String pattern = "^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\\.[a-zA-Z]{2,})+$";
+        return s.matches(pattern);
     }
 
     public static boolean isImageLink(String url, String domain) {

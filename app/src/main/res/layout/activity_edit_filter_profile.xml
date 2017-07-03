@@ -22,7 +22,7 @@
                 android:layout_weight="1"
                 android:text="Profile name"
                 android:textColor="?attr/themeTextSecondaryColor"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textStyle="italic"
                 android:textSize="16sp"/>
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Domain filters"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title filters"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="keyword / phrase"
+                    android:hint="title keyword / phrase"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -130,7 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Flair filters"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -173,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Self-text filters"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="keyword / phrase"
+                    android:hint="self-text keyword / phrase"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -216,7 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Subreddit filters"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -259,7 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="User filters"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -302,7 +302,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Restrict profile to subreddits"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
@@ -345,7 +345,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Restrict profile to multireddits"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"/>
