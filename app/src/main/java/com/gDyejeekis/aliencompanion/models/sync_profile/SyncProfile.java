@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.models;
+package com.gDyejeekis.aliencompanion.models.sync_profile;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -9,35 +9,27 @@ import android.os.Build;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.utils.StorageUtils;
-import com.gDyejeekis.aliencompanion.views.adapters.SyncProfileListAdapter;
+import com.gDyejeekis.aliencompanion.models.Profile;
+import com.gDyejeekis.aliencompanion.views.adapters.ProfileListAdapter;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.enums.DaysEnum;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by sound on 1/21/2016.
  */
-public class SyncProfile implements Serializable {
+public class SyncProfile extends Profile implements Serializable {
 
     public static final String TAG = "SyncProfile";
 
     private static final long serialVersionUID = 1234542L;
 
-    private final int profileId;
-    private String name;
     private List<String> subreddits;
     private List<String> multireddits;
     private List<SyncSchedule> schedules;
@@ -64,8 +56,7 @@ public class SyncProfile implements Serializable {
     private SyncProfileOptions syncOptions;
 
     public SyncProfile() {
-        profileId = UUID.randomUUID().hashCode();
-        this.name = "";
+        super("");
         this.subreddits = new ArrayList<>();
         this.multireddits = new ArrayList<>();
         this.schedules = new ArrayList<>();
@@ -74,8 +65,7 @@ public class SyncProfile implements Serializable {
     }
 
     public SyncProfile(SyncProfile profile) {
-        profileId = UUID.randomUUID().hashCode();
-        this.name = profile.getName();
+        super(profile.getName());
         this.subreddits = profile.getSubreddits();
         this.multireddits = profile.getMultireddits();
         this.schedules = profile.getSchedules();
@@ -85,8 +75,7 @@ public class SyncProfile implements Serializable {
     }
 
     public SyncProfile(String name) {
-        profileId = UUID.randomUUID().hashCode();
-        this.name = name;
+        super(name);
         this.subreddits = new ArrayList<>();
         this.multireddits = new ArrayList<>();
         this.schedules = new ArrayList<>();
@@ -95,8 +84,7 @@ public class SyncProfile implements Serializable {
     }
 
     public SyncProfile(String name, List<String> subreddits, List<String> multireddits, List<SyncSchedule> schedules) {
-        profileId = UUID.randomUUID().hashCode();
-        this.name = name;
+        super(name);
         this.subreddits = subreddits;
         this.multireddits = multireddits;
         this.schedules = schedules;
@@ -118,11 +106,11 @@ public class SyncProfile implements Serializable {
         }
     }
 
-    public void addSchedule(SyncSchedule schedule) {
+    public boolean addSchedule(SyncSchedule schedule) {
         if(schedules == null) {
             schedules = new ArrayList<>();
         }
-        schedules.add(schedule);
+        return schedules.add(schedule);
     }
 
     public boolean removeSchedule(SyncSchedule schedule) {
@@ -203,60 +191,27 @@ public class SyncProfile implements Serializable {
         return intent;
     }
 
-    public void saveChanges(Context context, boolean newProfile) {
-        try {
-            File file = new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME);
-            List<SyncProfile> profiles;
-
-            try {
-                profiles  = (List<SyncProfile>) GeneralUtils.readObjectFromFile(file);
-            } catch (Exception e) {
-                profiles = new ArrayList<>();
-            }
-
-            if(newProfile) {
-                profiles.add(this);
-            }
-            else {
-                int index = -1;
-                for (SyncProfile profile : profiles) {
-                    if (profile.getProfileId() == this.getProfileId()) {
-                        index = profiles.indexOf(profile);
-                        break;
-                    }
-                }
-                profiles.set(index, this);
-            }
-            GeneralUtils.writeObjectToFile(profiles, file);
-
+    @Override
+    public boolean save(Context context, boolean newProfile) {
+        boolean saved = super.save(context, newProfile);
+        if(saved) {
             if(isActive) {
                 scheduleAllPendingIntents(context);
             }
             else {
                 unscheduleAllPendingIntents(context);
             }
-        } catch (Exception  e) {
-            ToastUtils.showToast(context, "Error saving profile");
-            Log.e(TAG, "Error saving profile " + name + " (id: " + profileId + ")");
-            e.printStackTrace();
         }
+        return saved;
     }
 
+    @Override
     public boolean delete(Context context) {
-        try {
-            File file = new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME);
-            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(file);
-            boolean removed = profiles.remove(this);
-            if(!removed) {
-                throw new RuntimeException("Profile not found");
-            }
-            GeneralUtils.writeObjectToFile(profiles, file);
-            return true;
-        } catch (Exception  e) {
-            Log.e(TAG, "Error deleting profile " + name + " (id: " + profileId + ")");
-            e.printStackTrace();
+        boolean deleted = super.delete(context);
+        if(deleted) {
+            unscheduleAllPendingIntents(context);
         }
-        return false;
+        return deleted;
     }
 
     public void setName(String name) {
@@ -275,42 +230,34 @@ public class SyncProfile implements Serializable {
         return subreddits;
     }
 
-    public void addSubreddit(String subreddit) {
+    public boolean addSubreddit(String subreddit) {
         if(subreddits==null) {
             subreddits = new ArrayList<>();
         }
-        subreddits.add(subreddit);
+        return subreddits.add(subreddit);
     }
 
     public boolean removeSubreddit(int index) {
-        if(subreddits!=null) {
+        if(subreddits!=null && subreddits.size()>index) {
             subreddits.remove(index);
             return true;
         }
         return false;
     }
 
-    public boolean removeSubreddit(String subreddit) {
-        return subreddits != null && subreddits.remove(subreddit);
-    }
-
-    public void addMultireddit(String multireddit) {
+    public boolean addMultireddit(String multireddit) {
         if(multireddits==null) {
             multireddits = new ArrayList<>();
         }
-        multireddits.add(multireddit);
+        return multireddits.add(multireddit);
     }
 
     public boolean removeMultireddit(int index) {
-        if(multireddits!=null) {
+        if(multireddits!=null && multireddits.size()>index) {
             multireddits.remove(index);
             return true;
         }
         return false;
-    }
-
-    public boolean removeMultireddit(String multireddit) {
-        return multireddits != null && multireddits.remove(multireddit);
     }
 
     public void setMultireddits(List<String> multireddits) {
@@ -328,7 +275,7 @@ public class SyncProfile implements Serializable {
     }
 
     public int getViewType() {
-        return SyncProfileListAdapter.VIEW_TYPE_PROFILE_ITEM;
+        return ProfileListAdapter.VIEW_TYPE_PROFILE_ITEM;
     }
 
     public boolean hasSchedule() {
@@ -350,35 +297,6 @@ public class SyncProfile implements Serializable {
 
     public void setSchedules(List<SyncSchedule> schedules) {
         this.schedules = schedules;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof SyncProfile && ((SyncProfile) o).getProfileId() == this.profileId;
-    }
-
-    public static SyncProfile getSyncProfileByIndex(Context context, int index) {
-        try {
-            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
-            return profiles.get(index);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static SyncProfile getSyncProfileById(Context context, int id) {
-        try {
-            List<SyncProfile> profiles = (List<SyncProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
-            for(SyncProfile profile : profiles) {
-                if(profile.getProfileId() == id) {
-                    return profile;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

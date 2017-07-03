@@ -30,7 +30,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
-import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
@@ -572,7 +572,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void showSyncProfiles() {
-        Intent intent = new Intent(activity, SyncProfilesActivity.class);
+        Intent intent = new Intent(activity, ProfilesActivity.class);
+        intent.putExtra(ProfilesActivity.PROFILES_TYPE_EXTRA, ProfilesActivity.SYNC_PROFILES);
         activity.startActivity(intent);
     }
 

@@ -24,10 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Name"
+                android:text="Profile name"
                 android:textColor="?attr/themeTextSecondaryColor"
                 android:layout_marginTop="8dp"
-                android:textStyle="italic"/>
+                android:textStyle="italic"
+                android:textSize="16sp"/>
 
             <EditText
                 android:id="@+id/editText_profile_name"
@@ -35,29 +36,32 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="profile name"
+                android:hint="name"
                 android:inputType="text"
                 android:maxLines="1"
                 android:imeOptions="actionNext"
                 android:textColor="?attr/themeTextPrimaryColor"
-                android:textColorHint="?attr/themeTextHintColor"/>
+                android:textColorHint="?attr/themeTextHintColor"
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/textView30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Subreddits (tap to remove)"
+                android:text="Subreddits"
                 android:layout_marginTop="8dp"
                 android:textStyle="italic"
-                android:textColor="?attr/themeTextSecondaryColor" />
+                android:textColor="?attr/themeTextSecondaryColor"
+                android:textSize="16sp"/>
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView_subreddits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="*No subreddits in this profile" />
+                android:text="*No subreddits in this profile"
+                android:textColor="?attr/themeTextPrimaryColor" />-->
 
             <ListView
                 android:id="@+id/listView_subreddits"
@@ -69,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <AutoCompleteTextView
@@ -83,14 +88,15 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="?attr/themeTextPrimaryColor"
-                    android:textColorHint="?attr/themeTextHintColor" />
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
 
-                <Button
+                <ImageView
                     android:id="@+id/button_add_subreddit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add"
-                    style="@style/RaisedButtonStyle"/>
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp" />
+
             </LinearLayout>
 
             <TextView
@@ -98,18 +104,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Multireddits (tap to remove)"
+                android:text="Multireddits"
                 android:layout_marginTop="8dp"
                 android:textStyle="italic"
-                android:textColor="?attr/themeTextSecondaryColor" />
+                android:textColor="?attr/themeTextSecondaryColor"
+                android:textSize="16sp" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView_multireddits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="*No multireddits in this profile"
-                android:textColor="?attr/themeTextPrimaryColor"/>
+                android:textColor="?attr/themeTextPrimaryColor"/>-->
 
             <ListView
                 android:id="@+id/listView_multireddits"
@@ -121,6 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <EditText
@@ -134,14 +142,15 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="?attr/themeTextPrimaryColor"
-                    android:textColorHint="?attr/themeTextHintColor" />
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
 
-                <Button
+                <ImageView
                     android:id="@+id/button_add_multireddit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add"
-                    style="@style/RaisedButtonStyle"/>
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
             </LinearLayout>
 
             <TextView
@@ -149,18 +158,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Schedules (tap to remove)"
+                android:text="Schedules"
                 android:layout_marginTop="8dp"
                 android:textStyle="italic"
-                android:textColor="?attr/themeTextSecondaryColor"/>
+                android:textColor="?attr/themeTextSecondaryColor"
+                android:textSize="16sp"/>
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView_schedules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="*No schedules in this profile"
-                android:textColor="?attr/themeTextPrimaryColor"/>
+                android:textColor="?attr/themeTextPrimaryColor"/>-->
 
             <ListView
                 android:id="@+id/listView_schedules"
@@ -197,6 +207,7 @@
                 style="@style/RaisedButtonStyle"/>
 
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>

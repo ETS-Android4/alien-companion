@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 
 import java.io.FileInputStream;

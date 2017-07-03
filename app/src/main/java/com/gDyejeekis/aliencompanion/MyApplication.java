@@ -60,6 +60,8 @@ public class MyApplication extends Application {
 
     public static final String SYNC_PROFILES_FILENAME = "SyncProfiles";
 
+    public static final String FILTER_PROFILES_FILENAME = "FilterProfiles";
+
     public static final String OFFLINE_USER_ACTIONS_FILENAME = "OfflineActions";
 
     public static final String SYNCED_MEDIA_DIR_NAME = "Media";

@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,11 +18,11 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileScheduleDialogFragment;
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
-import com.gDyejeekis.aliencompanion.models.SyncSchedule;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncSchedule;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-
-import org.apache.commons.lang3.StringUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.adapters.RemovableItemListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +31,16 @@ import java.util.List;
  * Created by George on 4/19/2017.
  */
 
-public class EditSyncProfileActivity extends ToolbarActivity implements View.OnClickListener {
+public class EditSyncProfileActivity extends ToolbarActivity implements View.OnClickListener, TextView.OnEditorActionListener {
 
     private SyncProfile profile;
     private boolean isNewProfile;
     private EditText nameField;
     private EditText multiredditField;
     private AutoCompleteTextView subredditField;
-    private TextView subredditsTextView;
-    private TextView multiredditsTextView;
-    private TextView schedulesTextView;
+    //private TextView subredditsTextView;
+    //private TextView multiredditsTextView;
+    //private TextView schedulesTextView;
     private ListView subredditsListView;
     private ListView multiredditsListView;
     private ListView schedulesListView;
@@ -59,77 +59,51 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         setContentView(R.layout.activity_edit_sync_profile);
         initToolbar();
 
-        initFields((SyncProfile) getIntent().getSerializableExtra("profile"));
+        initFields();
+        initProfile((SyncProfile) getIntent().getSerializableExtra("profile"));
     }
 
-    private void initFields(final SyncProfile profile) {
+    private void initFields() {
         nameField = (EditText) findViewById(R.id.editText_profile_name);
         multiredditField = (EditText) findViewById(R.id.editText_multireddit);
         subredditField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit);
         subredditsListView = (ListView) findViewById(R.id.listView_subreddits);
         multiredditsListView = (ListView) findViewById(R.id.listView_multireddits);
         schedulesListView = (ListView) findViewById(R.id.listView_schedules);
-        subredditsTextView = (TextView) findViewById(R.id.textView_subreddits);
-        multiredditsTextView = (TextView) findViewById(R.id.textView_multireddits);
-        schedulesTextView = (TextView) findViewById(R.id.textView_schedules);
-        Button addSubredditButton = (Button) findViewById(R.id.button_add_subreddit);
-        Button addMultiredditButton = (Button) findViewById(R.id.button_add_multireddit);
+        //subredditsTextView = (TextView) findViewById(R.id.textView_subreddits);
+        //multiredditsTextView = (TextView) findViewById(R.id.textView_multireddits);
+        //schedulesTextView = (TextView) findViewById(R.id.textView_schedules);
+        ImageView addSubredditButton = (ImageView) findViewById(R.id.button_add_subreddit);
+        ImageView addMultiredditButton = (ImageView) findViewById(R.id.button_add_multireddit);
         Button addScheduleButton = (Button) findViewById(R.id.button_add_schedule);
         Button syncOptionsButton = (Button) findViewById(R.id.button_sync_options);
-        Button doneButton = (Button) findViewById(R.id.button_save_changes);
+        Button saveButton = (Button) findViewById(R.id.button_save_changes);
 
-        subredditField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                addSubreddit();
-                return true;
-            }
-        });
-        multiredditField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                addMultireddit();
-                return true;
-            }
-        });
-        subredditsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                removeSubreddit(position);
-            }
-        });
-        multiredditsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                removeMultireddit(position);
-            }
-        });
-        schedulesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                removeSchedule(position);
-            }
-        });
+        subredditField.setOnEditorActionListener(this);
+        multiredditField.setOnEditorActionListener(this);
+
         addSubredditButton.setOnClickListener(this);
         addMultiredditButton.setOnClickListener(this);
         addScheduleButton.setOnClickListener(this);
         syncOptionsButton.setOnClickListener(this);
-        doneButton.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
 
         int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, dropdownResource, RedditConstants.popularSubreddits);
         subredditField.setAdapter(adapter);
+    }
 
+    private void initProfile(SyncProfile profile) {
         isNewProfile = (profile==null);
 
         if(isNewProfile) {
             this.profile = new SyncProfile();
-            getSupportActionBar().setTitle("Create profile");
+            getSupportActionBar().setTitle("Create sync profile");
             nameField.requestFocus();
         }
         else {
             this.profile = profile;
-            getSupportActionBar().setTitle("Edit profile");
+            getSupportActionBar().setTitle("Edit sync profile");
             nameField.setText(profile.getName());
         }
         refreshSubreddits();
@@ -139,51 +113,50 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
 
     private void refreshSubreddits() {
         if(profile.getSubreddits()==null || profile.getSubreddits().isEmpty()) {
-            subredditsTextView.setVisibility(View.VISIBLE);
+            //subredditsTextView.setVisibility(View.VISIBLE);
             subredditsListView.setVisibility(View.GONE);
         }
         else {
-            subredditsTextView.setVisibility(View.GONE);
+            //subredditsTextView.setVisibility(View.GONE);
             subredditsListView.setVisibility(View.VISIBLE);
-            subredditsListView.setAdapter(new ArrayAdapter<>(this, R.layout.simple_list_item_profile, profile.getSubreddits()));
+            subredditsListView.setAdapter(new RemovableItemListAdapter(this, profile.getSubreddits(), RemovableItemListAdapter.SUBREDDITS));
             GeneralUtils.setListViewHeightBasedOnChildren(subredditsListView);
         }
     }
 
     private void refreshMultireddits() {
         if(profile.getMultireddits()==null || profile.getMultireddits().isEmpty()) {
-            multiredditsTextView.setVisibility(View.VISIBLE);
+            //multiredditsTextView.setVisibility(View.VISIBLE);
             multiredditsListView.setVisibility(View.GONE);
         }
         else {
-            multiredditsTextView.setVisibility(View.GONE);
+            //multiredditsTextView.setVisibility(View.GONE);
             multiredditsListView.setVisibility(View.VISIBLE);
-            multiredditsListView.setAdapter(new ArrayAdapter<>(this, R.layout.simple_list_item_profile, profile.getMultireddits()));
+            multiredditsListView.setAdapter(new RemovableItemListAdapter(this, profile.getMultireddits(), RemovableItemListAdapter.MULTIREDDITS));
             GeneralUtils.setListViewHeightBasedOnChildren(multiredditsListView);
         }
     }
 
     private void refreshSchedules() {
         if(profile.getSchedules() == null || profile.getSchedules().isEmpty()) {
-            schedulesTextView.setVisibility(View.VISIBLE);
+            //schedulesTextView.setVisibility(View.VISIBLE);
             schedulesListView.setVisibility(View.GONE);
         }
         else {
-            schedulesTextView.setVisibility(View.GONE);
+            //schedulesTextView.setVisibility(View.GONE);
             schedulesListView.setVisibility(View.VISIBLE);
             List<String> formattedSchedules = new ArrayList<>();
             for(SyncSchedule schedule : profile.getSchedules()) {
                 // TODO: 4/30/2017 maybe tweak this
                 formattedSchedules.add(schedule.getStartTime() + ":00 - " + schedule.getEndTime() + ":00 " + schedule.getSortedDays());
             }
-            schedulesListView.setAdapter(new ArrayAdapter<>(this, R.layout.simple_list_item_profile, formattedSchedules));
+            schedulesListView.setAdapter(new RemovableItemListAdapter(this, formattedSchedules, RemovableItemListAdapter.SYNC_SCHEDULES));
             GeneralUtils.setListViewHeightBasedOnChildren(schedulesListView);
         }
     }
 
     public void addSchedule(SyncSchedule schedule) {
-        profile.setActive(true);
-        profile.addSchedule(schedule);
+        profile.setActive(profile.addSchedule(schedule));
         refreshSchedules();
     }
 
@@ -192,15 +165,29 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     }
 
     public void removeSchedule(SyncSchedule schedule) {
-        // init unschedule list if needed
-        if(unscheduleList==null) {
-            unscheduleList = new ArrayList<SyncSchedule>();
+        if(profile.removeSchedule(schedule)) {
+            // init unschedule list if needed and add the removed schedule
+            if(unscheduleList == null) {
+                unscheduleList = new ArrayList<>();
+            }
+            unscheduleList.add(schedule);
+            // check if profile has any remaining schedules
+            profile.setActive(profile.hasSchedule());
         }
-        // add schedule to the list to be unscheduled
-        unscheduleList.add(schedule);
-        // remove schedule from profile
-        profile.removeSchedule(schedule);
         refreshSchedules();
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        switch (v.getId()) {
+            case R.id.editText_subreddit:
+                addSubreddit();
+                return true;
+            case R.id.editText_multireddit:
+                addMultireddit();
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -231,31 +218,38 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
                 if(unscheduleList!=null && !unscheduleList.isEmpty()) {
                     profile.unschedulePendingIntents(this, unscheduleList);
                 }
-                profile.saveChanges(this, isNewProfile);
+                profile.save(this, isNewProfile);
                 finish();
                 break;
         }
     }
 
+    private void clearField(EditText field, String hint) {
+        field.setText("");
+        field.setHint(hint);
+        field.setHintTextColor(MyApplication.textHintColor);
+    }
+
     private void addSubreddit() {
         String subreddit = subredditField.getText().toString();
         subreddit = subreddit.replaceAll("\\s","");
-        if(!subreddit.isEmpty()) {
-            subredditField.setText("");
-            subredditField.setHint("subreddit");
-            subredditField.setHintTextColor(MyApplication.textHintColor);
-
-            profile.addSubreddit(subreddit);
-            refreshSubreddits();
-        }
-        else {
+        if(subreddit.isEmpty()) {
             subredditField.setText("");
             subredditField.setHint("enter subreddit");
             subredditField.setHintTextColor(Color.RED);
         }
+        else if(profile.getSubreddits().contains(subreddit)) {
+            clearField(subredditField, "subreddit");
+            ToastUtils.showSnackbarOverToast(this, "Subreddit already in list");
+        }
+        else {
+            clearField(subredditField, "subreddit");
+            profile.addSubreddit(subreddit);
+            refreshSubreddits();
+        }
     }
 
-    private void removeSubreddit(int position) {
+    public void removeSubreddit(int position) {
         profile.removeSubreddit(position);
         refreshSubreddits();
     }
@@ -263,22 +257,23 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     private void addMultireddit() {
         String multireddit = multiredditField.getText().toString();
         multireddit = multireddit.replaceAll("\\s","");
-        if(!multireddit.isEmpty()) {
-            multiredditField.setText("");
-            multiredditField.setHint("multireddit");
-            multiredditField.setHintTextColor(MyApplication.textHintColor);
-
-            profile.addMultireddit(multireddit);
-            refreshMultireddits();
-        }
-        else {
+        if(multireddit.isEmpty()) {
             multiredditField.setText("");
             multiredditField.setHint("enter multireddit");
             multiredditField.setHintTextColor(Color.RED);
         }
+        else if(profile.getMultireddits().contains(multireddit)) {
+            clearField(multiredditField, "multireddit");
+            ToastUtils.showSnackbarOverToast(this, "Multireddit already in list");
+        }
+        else {
+            clearField(multiredditField, "multireddit");
+            profile.addMultireddit(multireddit);
+            refreshMultireddits();
+        }
     }
 
-    private void removeMultireddit(int position) {
+    public void removeMultireddit(int position) {
         profile.removeMultireddit(position);
         refreshMultireddits();
     }

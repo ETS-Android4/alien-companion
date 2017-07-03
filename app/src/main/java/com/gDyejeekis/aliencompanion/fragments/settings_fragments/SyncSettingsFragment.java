@@ -10,7 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 
-import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
+import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
@@ -60,7 +60,7 @@ public class SyncSettingsFragment extends PreferenceFragment {
 
                 new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle)).setMessage("Delete all synced posts, comments, media and articles?").setPositiveButton("Yes", listener)
                         .setNegativeButton("No", null).show();
-                return false;
+                return true;
             }
         });
 
@@ -68,8 +68,10 @@ public class SyncSettingsFragment extends PreferenceFragment {
         profiles.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                getActivity().startActivity(new Intent(getActivity(), SyncProfilesActivity.class));
-                return false;
+                Intent intent = new Intent(getActivity(), ProfilesActivity.class);
+                intent.putExtra(ProfilesActivity.PROFILES_TYPE_EXTRA, ProfilesActivity.SYNC_PROFILES);
+                getActivity().startActivity(intent);
+                return true;
             }
         });
 

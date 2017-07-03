@@ -116,13 +116,17 @@
             android:configChanges="orientation|screenSize"
             android:label="My multireddits"/>
         <activity
-            android:name=".activities.SyncProfilesActivity"
+            android:name=".activities.ProfilesActivity"
             android:configChanges="orientation|screenSize"
-            android:label="Sync profiles"/>
+            android:label="Profiles"/>
         <activity
             android:name=".activities.EditSyncProfileActivity"
             android:configChanges="orientation|screenSize"
             android:label="Edit sync profile"/>
+        <activity
+            android:name=".activities.EditFilterProfileActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Edit filter profile"/>
         <activity
             android:name=".activities.PendingUserActionsActivity"
             android:configChanges="orientation|screenSize"

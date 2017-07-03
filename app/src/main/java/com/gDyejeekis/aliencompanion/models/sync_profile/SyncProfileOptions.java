@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.models;
+package com.gDyejeekis.aliencompanion.models.sync_profile;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_edit_profile" android:title="@string/edit" android:orderInCategory="100"/>
+
+    <item android:id="@+id/action_delete_profile" android:title="@string/delete" android:orderInCategory="120"/>
+
+</menu>

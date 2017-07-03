@@ -11,19 +11,30 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
-import com.gDyejeekis.aliencompanion.views.adapters.SyncProfileListAdapter;
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.Profile;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.views.adapters.ProfileListAdapter;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 
+import java.io.File;
+import java.util.List;
+
 /**
  * Created by sound on 2/4/2016.
  */
-public class SyncProfilesActivity extends ToolbarActivity {
+public class ProfilesActivity extends ToolbarActivity {
+
+    public static final String PROFILES_TYPE_EXTRA = "profilesType";
+
+    public static final int SYNC_PROFILES = 0;
+
+    public static final int FILTER_PROFILES = 1;
 
     private RecyclerView profilesView;
-    private SyncProfileListAdapter adapter;
+    private ProfileListAdapter adapter;
+    private int profilesType;
 
     @Override
     public void finish() {
@@ -35,7 +46,7 @@ public class SyncProfilesActivity extends ToolbarActivity {
     public void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sync_profiles);
+        setContentView(R.layout.activity_profiles);
         if(MyApplication.nightThemeEnabled)
             getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
         initToolbar();
@@ -51,7 +62,37 @@ public class SyncProfilesActivity extends ToolbarActivity {
         });
         profilesView.setLayoutManager(new LinearLayoutManager(this));
         profilesView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+
+        profilesType = getIntent().getIntExtra(PROFILES_TYPE_EXTRA, -1);
+        setActionBarTitle();
         refreshProfiles();
+    }
+
+    private void setActionBarTitle() {
+        switch (profilesType) {
+            case SYNC_PROFILES:
+                getSupportActionBar().setTitle("Sync profiles");
+                break;
+            case FILTER_PROFILES:
+                getSupportActionBar().setTitle("Filter profiles");
+                break;
+        }
+    }
+
+    private List<Profile> getProfiles() {
+        try {
+            String filename = "";
+            if(profilesType == ProfilesActivity.SYNC_PROFILES) {
+                filename = MyApplication.SYNC_PROFILES_FILENAME;
+            }
+            else if(profilesType == ProfilesActivity.FILTER_PROFILES) {
+                filename = MyApplication.FILTER_PROFILES_FILENAME;
+            }
+            return (List<Profile>) GeneralUtils.readObjectFromFile(new File(getFilesDir(), filename));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -60,12 +101,16 @@ public class SyncProfilesActivity extends ToolbarActivity {
         refreshProfiles();
     }
 
+    public int getProfilesType() {
+        return profilesType;
+    }
+
     private void refreshProfiles() {
-        adapter = new SyncProfileListAdapter(this);
+        adapter = new ProfileListAdapter(this, getProfiles());
         profilesView.setAdapter(adapter);
     }
 
-    public void removeProfile(SyncProfile profile) {
+    public void removeProfile(Profile profile) {
         adapter.removeProfile(profile);
     }
 
@@ -75,7 +120,7 @@ public class SyncProfilesActivity extends ToolbarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_sync_profiles, menu);
+        getMenuInflater().inflate(R.menu.menu_profiles, menu);
         return true;
     }
 
@@ -93,16 +138,39 @@ public class SyncProfilesActivity extends ToolbarActivity {
     }
 
     private void newProfile() {
-        Intent intent = new Intent(this, EditSyncProfileActivity.class);
+        Class cls;
+        switch (profilesType) {
+            case SYNC_PROFILES:
+                cls = EditSyncProfileActivity.class;
+                break;
+            case FILTER_PROFILES:
+                cls = EditFilterProfileActivity.class;
+                break;
+            default:
+                return;
+        }
+        Intent intent = new Intent(this, cls);
         intent.putExtra("defaultName", "Profile " + (adapter.getItemCount()+1));
         startActivity(intent);
     }
 
     private void showInfo() {
+        String title = "";
+        String info = "";
+        switch (profilesType) {
+            case SYNC_PROFILES:
+                title = getResources().getString(R.string.about_sync_profiles_title);
+                info = getResources().getString(R.string.about_sync_profiles);
+                break;
+            case FILTER_PROFILES:
+                title = getResources().getString(R.string.about_filter_profiles_title);
+                info = getResources().getString(R.string.about_filter_profiles);
+                break;
+        }
         InfoDialogFragment dialog = new InfoDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("title", getResources().getString(R.string.about_sync_profiles_title));
-        bundle.putString("info", getResources().getString(R.string.about_sync_profiles));
+        bundle.putString("title", title);
+        bundle.putString("info", info);
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), "dialog");
     }

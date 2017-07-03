@@ -6,8 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -20,9 +18,10 @@ import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
 import com.gDyejeekis.aliencompanion.asynctask.StreamableTask;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.SyncStateReceiver;
 import com.gDyejeekis.aliencompanion.models.Article;
+import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
-import com.gDyejeekis.aliencompanion.models.SyncProfileOptions;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
@@ -47,11 +46,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -113,7 +108,7 @@ public class DownloaderService extends IntentService {
         SyncProfile profile = null;
         int profileId = i.getIntExtra("profileId", -1);
         if(profileId!=-1) {
-            profile = SyncProfile.getSyncProfileById(this, profileId);
+            profile = (SyncProfile) Profile.getProfileById(profileId, new File(getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
         }
         //else {
         //    profile = (SyncProfile) i.getSerializableExtra("profile");

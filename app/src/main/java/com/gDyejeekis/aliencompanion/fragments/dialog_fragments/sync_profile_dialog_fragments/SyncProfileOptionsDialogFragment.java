@@ -12,10 +12,9 @@ import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
-import com.gDyejeekis.aliencompanion.models.SyncProfileOptions;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
@@ -154,11 +153,11 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         }
 
         //if(profile.isUseGlobalSyncOptions() != useGlobalSwitch.isChecked()) {
-        //    ((SyncProfilesActivity) getActivity()).changesMade = true;
+        //    ((ProfilesActivity) getActivity()).changesMade = true;
         //}
         //else if(profile.getSyncOptions()!=null) {
         //    if(!profile.getSyncOptions().equals(syncOptions)) {
-        //        ((SyncProfilesActivity) getActivity()).changesMade = true;
+        //        ((ProfilesActivity) getActivity()).changesMade = true;
         //    }
         //}
 

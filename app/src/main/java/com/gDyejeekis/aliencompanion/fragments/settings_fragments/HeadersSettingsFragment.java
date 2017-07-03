@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.SettingsActivity;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
@@ -31,7 +32,7 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.appearance);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
 
@@ -46,7 +47,7 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.navigation);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
 
@@ -61,7 +62,7 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.posts);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
 
@@ -76,7 +77,7 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.comments);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
 
@@ -91,7 +92,7 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.sync);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
 
@@ -106,7 +107,17 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.linkHandling);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
+            }
+        });
+
+        findPreference("filters").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), ProfilesActivity.class);
+                intent.putExtra(ProfilesActivity.PROFILES_TYPE_EXTRA, ProfilesActivity.FILTER_PROFILES);
+                getActivity().startActivity(intent);
+                return true;
             }
         });
 
@@ -121,7 +132,7 @@ public class HeadersSettingsFragment extends PreferenceFragment {
                     intent.putExtra("menuType", SettingsMenuType.other);
                     getActivity().startActivity(intent);
                 }
-                return false;
+                return true;
             }
         });
     }

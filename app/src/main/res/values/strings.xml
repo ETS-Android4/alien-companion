@@ -13,6 +13,12 @@
     <string name="about_sync_profiles">
         (Sync profiles explanation here)
     </string>
+    <string name="about_filter_profiles_title">
+        About filter profiles
+    </string>
+    <string name="about_filter_profiles">
+        (Filter profiles explanation here)
+    </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
     <string name="title_activity_options">SettingsActivity</string>

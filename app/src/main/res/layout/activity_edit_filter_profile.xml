@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/my_toolbar"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Profile name"
+                android:textColor="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="8dp"
+                android:textStyle="italic"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/editText_profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:imeOptions="actionNext"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textColorHint="?attr/themeTextHintColor"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Domain filters"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_domain_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_domain_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="domain"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_domain_filter"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title filters"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_title_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_title_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="keyword / phrase"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_title_filter"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Flair filters"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_flair_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_flair_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="flair"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_flair_filter"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Self-text filters"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_self_text_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_self_text_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="keyword / phrase"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_self_text_filter"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subreddit filters"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_subreddit_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_subreddit_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="subreddit"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_subreddit_filter"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User filters"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_user_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_user_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="user"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_user_filter"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restrict profile to subreddits"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_subreddit_restrictions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_subreddit_restrction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="subreddit restriction"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_subreddit_restrction"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Restrict profile to multireddits"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:textColor="?attr/themeTextSecondaryColor"/>
+
+            <ListView
+                android:id="@+id/listView_multireddit_restrictions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText_multireddit_restrction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="multireddit restriction"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/button_add_multireddit_restrction"
+                    android:layout_width="36sp"
+                    android:layout_height="18sp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_save_changes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                style="@style/RaisedButtonStyle"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

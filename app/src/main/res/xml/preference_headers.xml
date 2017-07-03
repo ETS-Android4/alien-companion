@@ -25,6 +25,10 @@
         android:title="Link handling"
         android:summary="Choose how external links are handled"/>
     <Preference
+        android:key="filters"
+        android:title="Filters"
+        android:summary="Create filter profiles and filter content by title, subreddit, flair, etc"/>
+    <Preference
         android:key="other"
         android:title="Other"
         android:summary="Everything else"/>

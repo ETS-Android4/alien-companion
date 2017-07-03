@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,13 +12,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.EditSyncProfileActivity;
-import com.gDyejeekis.aliencompanion.activities.SyncProfilesActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
-import com.gDyejeekis.aliencompanion.models.SyncProfile;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.DaysEnum;
-import com.gDyejeekis.aliencompanion.models.SyncSchedule;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncSchedule;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
