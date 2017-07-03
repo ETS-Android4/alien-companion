@@ -461,6 +461,10 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
             profile.setName(name);
         }
 
+        if(isNewProfile && profile.hasFilters()) {
+            profile.setActive(true);
+        }
+
         profile.save(this, isNewProfile);
         finish();
     }
