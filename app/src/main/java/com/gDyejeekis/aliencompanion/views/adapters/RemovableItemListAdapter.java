@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.EditFilterProfileActivity;
 import com.gDyejeekis.aliencompanion.activities.EditSyncProfileActivity;
@@ -51,6 +52,24 @@ public class RemovableItemListAdapter extends ArrayAdapter {
         tv.setText((String) getItem(position));
 
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView_item_remove);
+        int drawable;
+        float alpha;
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.LIGHT_THEME:
+                drawable = R.drawable.ic_close_black_48dp;
+                alpha = 0.54f;
+                break;
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                drawable = R.drawable.ic_close_white_48dp;
+                alpha = 0.6f;
+                break;
+            default:
+                drawable = R.drawable.ic_close_white_48dp;
+                alpha = 1f;
+                break;
+        }
+        imageView.setImageResource(drawable);
+        imageView.setAlpha(alpha);
         View.OnClickListener listener = null;
         if(context instanceof EditSyncProfileActivity) {
             listener = new View.OnClickListener() {

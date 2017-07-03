@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,6 +72,12 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         initProfile((FilterProfile) getIntent().getSerializableExtra("profile"));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
+        return true;
+    }
+
     private void initFields() {
         nameField = (EditText) findViewById(R.id.editText_profile_name);
         domainField = (EditText) findViewById(R.id.editText_domain_filter);
@@ -98,6 +106,15 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         ImageView addMultiRestr = (ImageView) findViewById(R.id.button_add_multireddit_restrction);
         Button saveButton = (Button) findViewById(R.id.button_save_changes);
 
+        styleAddImageView(addDomain);
+        styleAddImageView(addTitle);
+        styleAddImageView(addSelfText);
+        styleAddImageView(addFlair);
+        styleAddImageView(addSubreddit);
+        styleAddImageView(addUser);
+        styleAddImageView(addSubRestr);
+        styleAddImageView(addMultiRestr);
+
         domainField.setOnEditorActionListener(this);
         titleField.setOnEditorActionListener(this);
         flairField.setOnEditorActionListener(this);
@@ -117,6 +134,27 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         addMultiRestr.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
+    }
+
+    private void styleAddImageView(ImageView imageView) {
+        int drawable;
+        float alpha;
+        switch (MyApplication.currentBaseTheme) {
+            case MyApplication.LIGHT_THEME:
+                drawable = R.drawable.ic_add_circle_outline_black_24dp;
+                alpha = 0.54f;
+                break;
+            case MyApplication.DARK_THEME_LOW_CONTRAST:
+                drawable = R.drawable.ic_add_circle_outline_white_24dp;
+                alpha = 0.6f;
+                break;
+            default:
+                drawable = R.drawable.ic_add_circle_outline_white_24dp;
+                alpha = 1f;
+                break;
+        }
+        imageView.setImageResource(drawable);
+        imageView.setAlpha(alpha);
     }
 
     private void initProfile(FilterProfile profile) {
@@ -356,17 +394,7 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
                 addMultiredditRestrction();
                 break;
             case R.id.button_save_changes:
-                String name = nameField.getText().toString();
-                if(name.trim().isEmpty()) {
-                    if(isNewProfile) {
-                        profile.setName(getIntent().getStringExtra("defaultName"));
-                    }
-                } else {
-                    profile.setName(name);
-                }
-
-                profile.save(this, isNewProfile);
-                finish();
+                saveProfile();
                 break;
         }
     }
@@ -400,6 +428,29 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_save_profile) {
+            saveProfile();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveProfile() {
+        String name = nameField.getText().toString();
+        if(name.trim().isEmpty()) {
+            if(isNewProfile) {
+                profile.setName(getIntent().getStringExtra("defaultName"));
+            }
+        } else {
+            profile.setName(name);
+        }
+
+        profile.save(this, isNewProfile);
+        finish();
     }
 
 }
