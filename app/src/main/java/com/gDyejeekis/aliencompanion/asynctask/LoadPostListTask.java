@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.FilterUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -42,7 +43,6 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private Context context;
     private PostListFragment fragment;
     private HttpClient httpClient = new PoliteRedditHttpClient();
-    private RedditItemListAdapter adapter;
     private SubmissionSort sort;
     private TimeSpan time;
     private boolean changedSort;
@@ -86,8 +86,6 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     @Override
     protected List<RedditItem> doInBackground(Void... unused) {
-        // simulate network delay
-        //SystemClock.sleep(5000);
         try {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
@@ -103,8 +101,6 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     name = name + fragment.subreddit.toLowerCase();
                 }
                 submissions = readPostListFromFile(name);
-                if(submissions!=null)
-                    adapter = new RedditItemListAdapter(context, fragment.currentViewTypeValue, submissions);
             }
             else {
                 Submissions subms = new Submissions(httpClient, MyApplication.currentUser);
@@ -116,7 +112,6 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         if(fragment.isMulti) submissions = subms.ofMultireddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) fragment.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                         else submissions = subms.ofSubreddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, (Submission) fragment.adapter.getLastItem(), null, MyApplication.showHiddenPosts);
                     }
-                    adapter = fragment.adapter;
                 } else { // init or refresh case
                     if (fragment.subreddit == null) {
                         submissions = subms.frontpage(sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
@@ -124,9 +119,9 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         if(fragment.isMulti) submissions = subms.ofMultireddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                         else submissions = subms.ofSubreddit(fragment.subreddit, sort, time, -1, RedditConstants.DEFAULT_LIMIT, null, null, MyApplication.showHiddenPosts);
                     }
-                    adapter = new RedditItemListAdapter(context, fragment.currentViewTypeValue, submissions);
                 }
             }
+            submissions = FilterUtils.checkProfiles(context, submissions, fragment.subreddit == null ? "frontpage" : fragment.subreddit, fragment.isMulti);
             return submissions;
         } catch (RetrievalFailedException | RedditError | NullPointerException e) {
             exception = e;
@@ -166,8 +161,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     this.fragment.adapter.setLoadingMoreItems(false);
                 }
                 else if(loadType == LoadType.init) {
-                    this.fragment.adapter = new RedditItemListAdapter(context, this.fragment.currentViewTypeValue);
-                    this.fragment.updateContentView(adapter);
+                    this.fragment.updateContentView(new RedditItemListAdapter(context, this.fragment.currentViewTypeValue));
                 }
 
                 View.OnClickListener listener;
@@ -204,7 +198,6 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
             } else {
                 if(submissions.size()>0) {
                     if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
-                    this.fragment.adapter = adapter;
                 }
                 this.fragment.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
 
@@ -215,7 +208,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             showNoPostsSnackbar();
                         }
                         else {
-                            this.fragment.updateContentView(this.fragment.adapter);
+                            this.fragment.updateContentView(new RedditItemListAdapter(context, this.fragment.currentViewTypeValue, submissions));
                         }
                         break;
                     case refresh:
@@ -226,7 +219,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                             }
                             if(!MyApplication.offlineModeEnabled)
                                 this.fragment.setActionBarSubtitle();
-                            this.fragment.updateContentView(adapter);
+                            this.fragment.updateContentView(new RedditItemListAdapter(context, this.fragment.currentViewTypeValue, submissions));
                         }
                         else {
                             showNoPostsSnackbar();

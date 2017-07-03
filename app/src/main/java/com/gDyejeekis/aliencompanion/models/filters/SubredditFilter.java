@@ -19,11 +19,6 @@ public class SubredditFilter extends Filter implements Serializable {
     }
 
     @Override
-    public boolean match(String text) {
-        return false;
-    }
-
-    @Override
     public boolean isValid() {
         return GeneralUtils.isAlphaNumeric(filterText);
     }
@@ -36,6 +31,11 @@ public class SubredditFilter extends Filter implements Serializable {
     @Override
     public String getHeader() {
         return HEADER;
+    }
+
+    @Override
+    public boolean match(String text) {
+        return text.equalsIgnoreCase(filterText);
     }
 
 }

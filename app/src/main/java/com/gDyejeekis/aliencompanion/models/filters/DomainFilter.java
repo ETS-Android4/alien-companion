@@ -19,11 +19,6 @@ public class DomainFilter extends Filter implements Serializable {
     }
 
     @Override
-    public boolean match(String text) {
-        return false;
-    }
-
-    @Override
     public boolean isValid() {
         return GeneralUtils.isValidDomain(filterText);
     }

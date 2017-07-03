@@ -267,8 +267,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                     notClicked.add(item);
                 }
             }
-            adapter = new RedditItemListAdapter(activity, currentViewTypeValue, notClicked);
-            updateContentView(adapter);
+            updateContentView(new RedditItemListAdapter(activity, currentViewTypeValue, notClicked));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -281,8 +280,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             }
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
-            adapter = new RedditItemListAdapter(activity, currentViewTypeValue, items);
-            updateContentView(adapter);
+            updateContentView(new RedditItemListAdapter(activity, currentViewTypeValue, items));
         } catch (Exception e) {}
     }
 
@@ -302,6 +300,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void updateContentViewAdapter(RedditItemListAdapter adapter) {
+        this.adapter = adapter;
         contentView.setAdapter(adapter);
     }
 

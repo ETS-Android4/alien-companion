@@ -19,11 +19,6 @@ public class FlairFilter extends Filter implements Serializable {
     }
 
     @Override
-    public boolean match(String text) {
-        return false;
-    }
-
-    @Override
     public boolean isValid() {
         return GeneralUtils.containsAlphaNumeric(filterText);
     }

@@ -25,6 +25,7 @@ import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
+import com.gDyejeekis.aliencompanion.utils.FilterUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -329,6 +330,7 @@ public class DownloaderService extends IntentService {
             }
 
             if(posts!=null) {
+                posts = FilterUtils.checkProfiles(this, posts, subreddit == null ? "frontpage" : subreddit, isMulti);
                 CleaningUtils.clearAllSyncedData(this, filename);
                 MAX_PROGRESS = posts.size() + 1;
                 writePostListToFile(posts, filename);

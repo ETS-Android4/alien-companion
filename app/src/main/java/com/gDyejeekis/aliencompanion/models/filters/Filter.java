@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.models.filters;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -15,8 +17,6 @@ public abstract class Filter implements Serializable {
         this.filterText = filterText;
     }
 
-    public abstract boolean match(String text);
-
     public abstract boolean isValid();
 
     public abstract String getTextRequirements();
@@ -25,6 +25,10 @@ public abstract class Filter implements Serializable {
 
     public String getFilterText() {
         return filterText;
+    }
+
+    public boolean match(String text) {
+        return StringUtils.containsIgnoreCase(text, filterText);
     }
 
     @Override
