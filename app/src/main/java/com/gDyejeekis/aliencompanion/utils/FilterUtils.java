@@ -75,11 +75,10 @@ public class FilterUtils {
                     } else if (filter instanceof UserFilter) {
                         match = filter.match(post.getAuthor());
                     }
+                    if(match) break;
                 }
             }
-            if(!match) {
-                filteredItems.add(item);
-            }
+            if(!match) filteredItems.add(item);
         }
         return filteredItems;
     }
