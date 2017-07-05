@@ -243,26 +243,22 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         }
     }
 
-    private void clearField(EditText field, String hint) {
-        field.setText("");
-        field.setHint(hint);
-        field.setHintTextColor(MyApplication.textHintColor);
-    }
-
     private void addSubreddit() {
         String subreddit = subredditField.getText().toString();
         subreddit = subreddit.replaceAll("\\s","");
         if(subreddit.isEmpty()) {
-            subredditField.setText("");
-            subredditField.setHint("enter subreddit");
-            subredditField.setHintTextColor(Color.RED);
+            GeneralUtils.clearField(subredditField, "enter subreddit", Color.RED);
         }
         else if(profile.getSubreddits().contains(subreddit)) {
-            clearField(subredditField, "subreddit");
+            GeneralUtils.clearField(subredditField, "subreddit");
             ToastUtils.showSnackbarOverToast(this, "Subreddit already in list");
         }
+        else if(!GeneralUtils.isAlphaNumeric(subreddit)) {
+            GeneralUtils.clearField(subredditField, "subreddit");
+            ToastUtils.showSnackbarOverToast(this, "Subreddit must contain only alphanumeric characters");
+        }
         else {
-            clearField(subredditField, "subreddit");
+            GeneralUtils.clearField(subredditField, "subreddit");
             profile.addSubreddit(subreddit);
             refreshSubreddits();
         }
@@ -277,16 +273,18 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         String multireddit = multiredditField.getText().toString();
         multireddit = multireddit.replaceAll("\\s","");
         if(multireddit.isEmpty()) {
-            multiredditField.setText("");
-            multiredditField.setHint("enter multireddit");
-            multiredditField.setHintTextColor(Color.RED);
+            GeneralUtils.clearField(multiredditField, "enter multireddit", Color.RED);
         }
         else if(profile.getMultireddits().contains(multireddit)) {
-            clearField(multiredditField, "multireddit");
+            GeneralUtils.clearField(multiredditField, "multireddit");
             ToastUtils.showSnackbarOverToast(this, "Multireddit already in list");
         }
+        else if(!GeneralUtils.isAlphaNumeric(multireddit)) {
+            GeneralUtils.clearField(multiredditField, "multireddit");
+            ToastUtils.showSnackbarOverToast(this, "Multireddit must contain only alphanumeric characters");
+        }
         else {
-            clearField(multiredditField, "multireddit");
+            GeneralUtils.clearField(multiredditField, "multireddit");
             profile.addMultireddit(multireddit);
             refreshMultireddits();
         }

@@ -1,8 +1,10 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.KeyEvent;
@@ -24,22 +26,16 @@ import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EnterRedditDialogFragment extends ScalableDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private MainActivity activity;
     private AutoCompleteTextView subredditField;
     private CheckBox newWindowCheckbox;
-
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-
-        activity = (MainActivity) getActivity();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +43,7 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
         View view = inflater.inflate(R.layout.fragment_enter_reddit, container, false);
 
         int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, dropdownResource, RedditConstants.popularSubreddits);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.popularSubreddits);
 
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);
@@ -77,24 +73,6 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
         return view;
     }
 
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    setDialogWidth();
-    //}
-//
-    //@Override
-    //public void onConfigurationChanged(Configuration newConfig) {
-    //    super.onConfigurationChanged(newConfig);
-    //    setDialogWidth();
-    //}
-//
-    //private void setDialogWidth() {
-    //    Window window = getDialog().getWindow();
-    //    int width = 3 * getResources().getDisplayMetrics().widthPixels / 4;
-    //    window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
-    //}
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         SharedPreferences.Editor editor = MyApplication.prefs.edit();
@@ -110,27 +88,29 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
         else {
             String subreddit = subredditField.getText().toString();
             subreddit = subreddit.replaceAll("\\s","");
-            if(!subreddit.equals("")) {
+            if(subreddit.isEmpty()) {
+                GeneralUtils.clearField(subredditField, "enter subreddit", Color.RED);
+            }
+            else if(!GeneralUtils.isAlphaNumeric(subreddit)) {
+                GeneralUtils.clearField(subredditField, "subreddit");
+                ToastUtils.showToast(getActivity(), "Subreddit must contain only alphanumeric characters");
+            }
+            else {
                 dismiss();
                 subreddit = subreddit.toLowerCase();
-                //String capitalized = Character.toUpperCase(subreddit.charAt(0)) + subreddit.substring(1);
                 if(MyApplication.prefs.getBoolean("newSubredditWindow", false)) {
-                    Intent intent = new Intent(activity, SubredditActivity.class);
+                    Intent intent = new Intent(getActivity(), SubredditActivity.class);
                     intent.putExtra("subreddit", subreddit);
                     startActivity(intent);
                 }
                 else {
+                    MainActivity activity = (MainActivity) getActivity();
                     activity.getNavDrawerAdapter().notifyDataSetChanged();
                     PostListFragment listFragment = activity.getListFragment();
                     listFragment.isMulti = false;
                     listFragment.isOther = false;
                     listFragment.changeSubreddit(subreddit);
                 }
-            }
-            else {
-                subredditField.setText("");
-                subredditField.setHint(R.string.enter_subreddit);
-                subredditField.setHintTextColor(getResources().getColor(R.color.red));
             }
         }
     }

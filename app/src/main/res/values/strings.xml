@@ -78,9 +78,6 @@
     <string name="options_comments_sub">Comment specific options</string>
     <string name="options_other_sub">Everything else</string>
     <!-- Other Strings -->
-    <string name="enter_subreddit">enter subreddit</string>
-    <string name="enter_user">enter user</string>
-    <string name="frontpage_title">Frontpage</string>
     <string name="title_activity_browser">BrowserActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="user_overview">Overview</string>

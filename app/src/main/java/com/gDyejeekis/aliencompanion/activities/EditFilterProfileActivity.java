@@ -271,11 +271,11 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
             field.setHintTextColor(Color.RED);
         }
         else if(profile.containsFilter(cls, filterText)) {
-            clearField(field, hint);
+            GeneralUtils.clearField(field, hint);
             ToastUtils.showSnackbarOverToast(this, "Filter already in list");
         }
         else {
-            clearField(field, hint);
+            GeneralUtils.clearField(field, hint);
             Filter filter = Filter.newInstance(cls, filterText);
             boolean added = profile.addFilter(filter);
             if(added) {
@@ -292,12 +292,6 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
                 ToastUtils.showSnackbarOverToast(this, message);
             }
         }
-    }
-
-    private void clearField(EditText field, String hint) {
-        field.setText("");
-        field.setHint(hint);
-        field.setHintTextColor(MyApplication.textHintColor);
     }
 
     private void addDomainFilter() {
@@ -328,16 +322,18 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         String restriction = subRestrField.getText().toString();
         restriction = restriction.replaceAll("\\s","");
         if(restriction.isEmpty()) {
-            subRestrField.setText("");
-            subRestrField.setHint("enter subreddit");
-            subRestrField.setHintTextColor(Color.RED);
+            GeneralUtils.clearField(subRestrField, "enter subreddit", Color.RED);
         }
         else if(profile.containsSubredditRestriction(restriction)) {
-            clearField(subRestrField, "subreddit");
+            GeneralUtils.clearField(subRestrField, "subreddit");
             ToastUtils.showSnackbarOverToast(this, "Subreddit already in list");
         }
+        else if(!GeneralUtils.isAlphaNumeric(restriction)) {
+            GeneralUtils.clearField(subRestrField, "subreddit");
+            ToastUtils.showSnackbarOverToast(this, "Subreddit must contain only alphanumeric characters");
+        }
         else {
-            clearField(subRestrField, "subreddit");
+            GeneralUtils.clearField(subRestrField, "subreddit");
             profile.addSubredditRestriction(restriction);
             refreshSubredditRestrctions();
         }
@@ -347,16 +343,18 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         String restriction = multiRestrField.getText().toString();
         restriction = restriction.replaceAll("\\s","");
         if(restriction.isEmpty()) {
-            multiRestrField.setText("");
-            multiRestrField.setHint("enter multireddit");
-            multiRestrField.setHintTextColor(Color.RED);
+            GeneralUtils.clearField(multiRestrField, "enter multireddit", Color.RED);
         }
         else if(profile.containsMultiredditRestrction(restriction)) {
-            clearField(multiRestrField, "multireddit");
+            GeneralUtils.clearField(multiRestrField, "multireddit");
             ToastUtils.showSnackbarOverToast(this, "Multireddit already in list");
         }
+        else if(!GeneralUtils.isAlphaNumeric(restriction)) {
+            GeneralUtils.clearField(multiRestrField, "multireddit");
+            ToastUtils.showSnackbarOverToast(this, "Multireddit must contain only alphanumeric characters");
+        }
         else {
-            clearField(multiRestrField, "multireddit");
+            GeneralUtils.clearField(multiRestrField, "multireddit");
             profile.addMultiredditRestriction(restriction);
             refreshMultiredditRestrctions();
         }

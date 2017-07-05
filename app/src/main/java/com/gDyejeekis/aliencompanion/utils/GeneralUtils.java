@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -410,6 +412,16 @@ public class GeneralUtils {
     public static boolean isValidDomain(String s) {
         String pattern = "^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\\.[a-zA-Z]{2,})+$";
         return s.matches(pattern);
+    }
+
+    public static void clearField(EditText field, String hint) {
+        clearField(field, hint, MyApplication.textHintColor);
+    }
+
+    public static void clearField(EditText field, String hint, int color) {
+        field.setText("");
+        field.setHint(hint);
+        field.setHintTextColor(color);
     }
 
     public static boolean isImageLink(String url, String domain) {
