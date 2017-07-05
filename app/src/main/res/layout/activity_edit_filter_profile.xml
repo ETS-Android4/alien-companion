@@ -233,11 +233,12 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/editText_subreddit_filter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:completionThreshold="1"
                     android:ems="10"
                     android:hint="subreddit"
                     android:imeOptions="actionNext"
@@ -319,11 +320,12 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/editText_subreddit_restrction"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:completionThreshold="1"
                     android:ems="10"
                     android:hint="subreddit restriction"
                     android:imeOptions="actionNext"

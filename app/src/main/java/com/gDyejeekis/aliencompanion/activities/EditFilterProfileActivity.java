@@ -7,6 +7,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.models.filters.DomainFilter;
 import com.gDyejeekis.aliencompanion.models.filters.Filter;
 import com.gDyejeekis.aliencompanion.models.filters.FilterProfile;
@@ -42,9 +45,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     private EditText titleField;
     private EditText flairField;
     private EditText selfTextField;
-    private EditText subredditField;
+    private AutoCompleteTextView subredditField;
     private EditText userField;
-    private EditText subRestrField;
+    private AutoCompleteTextView subRestrField;
     private EditText multiRestrField;
     private ListView domains;
     private ListView titles;
@@ -84,9 +87,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         titleField = (EditText) findViewById(R.id.editText_title_filter);
         flairField = (EditText) findViewById(R.id.editText_flair_filter);
         selfTextField = (EditText) findViewById(R.id.editText_self_text_filter);
-        subredditField = (EditText) findViewById(R.id.editText_subreddit_filter);
+        subredditField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit_filter);
         userField = (EditText) findViewById(R.id.editText_user_filter);
-        subRestrField = (EditText) findViewById(R.id.editText_subreddit_restrction);
+        subRestrField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit_restrction);
         multiRestrField = (EditText) findViewById(R.id.editText_multireddit_restrction);
         domains = (ListView) findViewById(R.id.listView_domain_filters);
         titles = (ListView) findViewById(R.id.listView_title_filters);
@@ -134,6 +137,10 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         addMultiRestr.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
+        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, dropdownResource, RedditConstants.popularSubreddits);
+        subredditField.setAdapter(adapter);
+        subRestrField.setAdapter(adapter);
     }
 
     private void styleAddImageView(ImageView imageView) {
