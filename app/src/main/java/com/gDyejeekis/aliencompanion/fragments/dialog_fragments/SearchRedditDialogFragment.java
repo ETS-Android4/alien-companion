@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.activities.SearchActivity;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 /**
  * Created by George on 6/22/2015.
@@ -87,7 +89,10 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
         }
         else {
             String query = editText.getText().toString();
-            if(!query.trim().isEmpty()) {
+            if(query.trim().isEmpty()) {
+                GeneralUtils.clearField(editText, "enter search term", Color.RED);
+            }
+            else {
                 dismiss();
                 if(!SearchActivity.isForeground) {
                     Intent intent = new Intent(activity, SearchActivity.class);
@@ -102,11 +107,6 @@ public class SearchRedditDialogFragment extends ScalableDialogFragment implement
                     else searchFragment.subreddit = null;
                     searchFragment.changeQuery(query);
                 }
-            }
-            else {
-                editText.setText("");
-                editText.setHint(R.string.enter_search_term);
-                editText.setHintTextColor(getResources().getColor(R.color.red));
             }
         }
     }
