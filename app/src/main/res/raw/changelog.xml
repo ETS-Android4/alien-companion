@@ -35,7 +35,8 @@
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in comments' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync new posts only' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext>Updated synced article view to use the selected theme background and font size</changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE CHANGES HERE]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE UI CHANGES HERE]]></changelogtext>
+        <changelogtext>It is now possible for a sync profile to have multiple schedules</changelogtext>
         <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
         <!-- link handling changes -->
         <changelogtext>Added gyazo.com link handling support</changelogtext>
