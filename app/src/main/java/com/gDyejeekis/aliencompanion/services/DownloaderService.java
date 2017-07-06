@@ -45,6 +45,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -331,12 +332,21 @@ public class DownloaderService extends IntentService {
 
             if(posts!=null) {
                 posts = FilterUtils.checkProfiles(this, posts, subreddit == null ? "frontpage" : subreddit, isMulti);
-                CleaningUtils.clearAllSyncedData(this, filename);
+                if(!syncOptions.isSyncNewPostsOnly()) {
+                    CleaningUtils.clearAllSyncedData(this, filename);
+                }
                 MAX_PROGRESS = posts.size() + 1;
                 writePostListToFile(posts, filename);
                 increaseProgress(builder, filename);
                 for (RedditItem post : posts) {
-                    syncPost(builder, (Submission) post, filename, filename, syncOptions);
+                    if(syncOptions.isSyncNewPostsOnly() && isPostSynced((Submission) post, filename)) {
+                        Log.d(TAG, "Skipping post (already synced)");
+                        increaseProgress(builder, filename);
+                    }
+                    else {
+                        syncPost(builder, (Submission) post, filename, filename, syncOptions);
+                    }
+
                     if(!manuallyCancelled) {
                         // update post list after syncing each post
                         writePostListToFile(posts, filename);
@@ -349,6 +359,12 @@ public class DownloaderService extends IntentService {
             pauseSync(builder);
             syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
         }
+    }
+
+    private boolean isPostSynced(Submission post, String filename) {
+        File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename);
+        File file = new File(dir, post.getIdentifier());
+        return file.exists();
     }
 
     private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncProfileOptions syncOptions) {

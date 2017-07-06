@@ -132,6 +132,16 @@ public class SyncProfileOptions implements Serializable {
 
     private int syncCommentLinkCount;
 
+    public boolean isSyncNewPostsOnly() {
+        return syncNewPostsOnly;
+    }
+
+    public void setSyncNewPostsOnly(boolean syncNewPostsOnly) {
+        this.syncNewPostsOnly = syncNewPostsOnly;
+    }
+
+    private boolean syncNewPostsOnly;
+
     @Override
     public boolean equals(Object obj) {
         SyncProfileOptions other = (SyncProfileOptions) obj;
@@ -145,6 +155,7 @@ public class SyncProfileOptions implements Serializable {
         if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
         if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
         if(syncCommentLinkCount != other.getSyncCommentLinkCount()) return false;
+        if(syncNewPostsOnly != other.isSyncNewPostsOnly()) return false;
 
         return true;
     }
@@ -162,6 +173,7 @@ public class SyncProfileOptions implements Serializable {
         this.syncWebpages = other.isSyncWebpages();
         this.syncGif = other.isSyncGif();
         this.syncCommentLinkCount = other.getSyncCommentLinkCount();
+        this.syncNewPostsOnly = other.isSyncNewPostsOnly();
     }
 
     public SyncProfileOptions() {
@@ -177,6 +189,7 @@ public class SyncProfileOptions implements Serializable {
         syncWebpages = MyApplication.syncWebpages;
         syncGif = MyApplication.syncGif;
         syncCommentLinkCount = MyApplication.syncCommentLinkCount;
+        syncNewPostsOnly = MyApplication.syncNewPostsOnly;
     }
 
 

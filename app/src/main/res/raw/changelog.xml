@@ -33,6 +33,7 @@
         <!-- sync changes changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable and *.mp4 links)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in comments' option under 'Sync options' (disabled by default)]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync new posts only' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext>Updated synced article view to use the selected theme background and font size</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE CHANGES HERE]]></changelogtext>
         <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>

@@ -52,6 +52,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private CheckBox syncVideoCheckbox;
     private CheckBox syncArticlesCheckbox;
     private CheckBox syncWifiOnlyCheckbox;
+    private CheckBox syncNewPostsOnlyCheckbox;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -114,6 +115,10 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncVideoCheckbox.setChecked(syncOptions.isSyncVideo());
         syncVideoCheckbox.setEnabled(!useGlobal);
 
+        syncNewPostsOnlyCheckbox = (CheckBox) view.findViewById(R.id.checkBox_sync_new_only);
+        syncNewPostsOnlyCheckbox.setChecked(syncOptions.isSyncNewPostsOnly());
+        syncNewPostsOnlyCheckbox.setEnabled(!useGlobal);
+
         syncWifiOnlyCheckbox = (CheckBox) view.findViewById(R.id.checkBox_syncWifiOnly);
         syncWifiOnlyCheckbox.setChecked(syncOptions.isSyncOverWifiOnly());
         syncWifiOnlyCheckbox.setEnabled(!useGlobal);
@@ -149,17 +154,9 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncOptions.setSyncImages(syncImagesCheckbox.isChecked());
             syncOptions.setSyncVideo(syncVideoCheckbox.isChecked());
             syncOptions.setSyncWebpages(syncArticlesCheckbox.isChecked());
+            syncOptions.setSyncNewPostsOnly(syncNewPostsOnlyCheckbox.isChecked());
             syncOptions.setSyncOverWifiOnly(syncWifiOnlyCheckbox.isChecked());
         }
-
-        //if(profile.isUseGlobalSyncOptions() != useGlobalSwitch.isChecked()) {
-        //    ((ProfilesActivity) getActivity()).changesMade = true;
-        //}
-        //else if(profile.getSyncOptions()!=null) {
-        //    if(!profile.getSyncOptions().equals(syncOptions)) {
-        //        ((ProfilesActivity) getActivity()).changesMade = true;
-        //    }
-        //}
 
         profile.setUseGlobalSyncOptions(useGlobalSwitch.isChecked());
         profile.setSyncOptions(syncOptions);
@@ -178,6 +175,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncImagesCheckbox.setChecked(MyApplication.syncImages);
             syncVideoCheckbox.setChecked(MyApplication.syncVideo);
             syncArticlesCheckbox.setChecked(MyApplication.syncWebpages);
+            syncNewPostsOnlyCheckbox.setChecked(MyApplication.syncNewPostsOnly);
             syncWifiOnlyCheckbox.setChecked(MyApplication.syncOverWifiOnly);
         }
         syncPostCountSpinner.setEnabled(!b);
@@ -190,6 +188,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncImagesCheckbox.setEnabled(!b);
         syncVideoCheckbox.setEnabled(!b);
         syncArticlesCheckbox.setEnabled(!b);
+        syncNewPostsOnlyCheckbox.setEnabled(!b);
         syncWifiOnlyCheckbox.setEnabled(!b);
     }
 

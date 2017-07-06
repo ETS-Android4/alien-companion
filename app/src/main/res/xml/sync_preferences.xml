@@ -58,12 +58,12 @@
         android:key="syncVideo"
         android:title="Sync post videos"
         android:summary="Supports streamable and *.mp4 links"
-        android:defaultValue="false" />
+        android:defaultValue="false"/>
 
     <CheckBoxPreference
         android:key="syncWeb"
         android:title="Sync post articles"
-        android:defaultValue="false" />
+        android:defaultValue="false"/>
 
     <ListPreference
         android:key="syncCommentLinks"
@@ -74,9 +74,15 @@
         android:defaultValue="0"/>
 
     <CheckBoxPreference
+        android:key="syncNewOnly"
+        android:title="Sync new posts only"
+        android:summary="When enabled only new posts will be synced to significantly reduce sync times and save data"
+        android:defaultValue="false"/>
+
+    <CheckBoxPreference
         android:key="syncWifi"
         android:title="Sync over WiFi only"
-        android:defaultValue="true" />
+        android:defaultValue="true"/>
 
     <Preference
         android:key="clearSynced"
