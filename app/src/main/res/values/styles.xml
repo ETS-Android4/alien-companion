@@ -11,6 +11,10 @@
         <!--<item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>-->
     </style>
 
+    <style name="MainActivityTheme" parent="AppTheme">
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
     <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -49,9 +53,6 @@
 
     <style name="myPopupMenuTextAppearanceLarge" parent="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
         <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="MainActivityTheme" parent="AppTheme">
     </style>
 
     <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">

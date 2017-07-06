@@ -2,6 +2,7 @@
 <resources>
 
     <style name="MainActivityTheme" parent="AppTheme">
+        <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
