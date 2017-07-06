@@ -16,6 +16,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -25,17 +26,21 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+
         <receiver android:name=".broadcast_receivers.OnBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".broadcast_receivers.ConnectivityChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".broadcast_receivers.SyncStateReceiver">
+
+        <receiver android:name=".broadcast_receivers.SyncStateReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.gDyejeekis.aliencompanion.SYNC_CANCEL" />
                 <action android:name="com.gDyejeekis.aliencompanion.SYNC_PAUSE" />
@@ -45,45 +50,52 @@
 
         <activity
             android:name=".activities.SplashActivity"
-            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/MainActivityTheme"/>
+            android:launchMode="singleTask"
+            android:theme="@style/MainActivityTheme">
+        </activity>
+
         <activity
             android:name=".activities.PostActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post"/>
+
         <activity
             android:name=".activities.BrowserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_browser"/>
+
         <activity
             android:name=".activities.UserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_user"/>
+
         <activity
             android:name=".activities.SearchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_search"/>
+
         <activity
             android:name=".activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_prefs"
             android:windowSoftInputMode="stateAlwaysHidden"/>
+
         <activity
             android:name=".activities.SubredditActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_subreddit"/>
+
         <activity
             android:name=".activities.SubmitActivity"
             android:configChanges="orientation|screenSize"
@@ -92,9 +104,11 @@
         <service
             android:name=".services.DownloaderService"
             android:enabled="true"/>
+
         <service
             android:name=".services.MessageCheckService"
             android:enabled="true" />
+
         <service
             android:name=".services.PendingActionsService"
             android:enabled="true" />
@@ -103,46 +117,57 @@
             android:name=".activities.MessageActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_message"/>
+
         <activity
             android:name=".activities.OAuthActivity"
             android:configChanges="orientation|screenSize"
             android:label="OAuthActivity"/>
+
         <activity
             android:name=".activities.EditSubredditsActivity"
             android:configChanges="orientation|screenSize"
             android:label="My subreddits"/>
+
         <activity
             android:name=".activities.EditMultisActivity"
             android:configChanges="orientation|screenSize"
             android:label="My multireddits"/>
+
         <activity
             android:name=".activities.ProfilesActivity"
             android:configChanges="orientation|screenSize"
             android:label="Profiles"/>
+
         <activity
             android:name=".activities.EditSyncProfileActivity"
             android:configChanges="orientation|screenSize"
             android:label="Edit sync profile"/>
+
         <activity
             android:name=".activities.EditFilterProfileActivity"
             android:configChanges="orientation|screenSize"
             android:label="Edit filter profile"/>
+
         <activity
             android:name=".activities.PendingUserActionsActivity"
             android:configChanges="orientation|screenSize"
             android:label="Pending actions"/>
+
         <activity
             android:name=".activities.MediaActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Transparent"/>
+
         <activity
             android:name=".activities.SyncQueueActivity"
             android:configChanges="orientation|screenSize"
             android:label="Sync queue"/>
+
         <activity
             android:name=".activities.DebugActivity"
             android:configChanges="orientation|screenSize"
             android:label="Debug"/>
+
         <activity android:name=".activities.HandleUrlActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -172,6 +197,7 @@
                 <!--<data android:host="*" android:pathPattern=".*" android:scheme="https"/>-->
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
