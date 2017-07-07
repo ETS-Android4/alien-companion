@@ -619,8 +619,8 @@ public class DownloaderService extends IntentService {
             String text = res.getText();
             String title = res.getTitle();
             String imageUrl = res.getImageUrl();
-            Article article = new Article(title, text, imageUrl);
-            if(article!= null) {
+            if(text!=null && !text.trim().isEmpty()) {
+                Article article = new Article(title, text, imageUrl);
                 GeneralUtils.writeObjectToFile(article, new File(subredditDir, post.getIdentifier() + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX));
                 // catch all exceptions related to article image download, not as important
                 try {
