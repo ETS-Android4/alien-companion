@@ -524,16 +524,20 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void updateFabNavOnScroll(int dy) {
         if(MyApplication.commentFabNavigation) {
-            if(lastItemCompletelyVisible()
+            if(postAdapter.getItemCount() == 1 || lastItemCompletelyVisible()
                     || (MyApplication.autoHideCommentFab && dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
                 hideAllFabOnScroll();
             }
-            else if(findFirstCompletelyVisibleItemPosition() == 0
+            else if(firstItemCompletelyVisible()
                     || (MyApplication.autoHideCommentFab && dy < -MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)
                     || (!MyApplication.autoHideCommentFab && !lastItemCompletelyVisible())) {
                 showAllFabOnScroll();
             }
         }
+    }
+
+    private boolean firstItemCompletelyVisible() {
+        return findFirstCompletelyVisibleItemPosition() == 0;
     }
 
     private boolean lastItemCompletelyVisible() {
