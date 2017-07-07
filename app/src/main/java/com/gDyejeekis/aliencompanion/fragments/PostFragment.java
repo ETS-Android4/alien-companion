@@ -120,7 +120,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 activity.hideToolbar();
             }
             else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
-                    || mLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                    || isScrolledTop()) {
                 activity.showToolbar();
             }
         }
@@ -544,7 +544,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     || (MyApplication.autoHideCommentFab && dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
                 hideAllFabOnScroll();
             }
-            else if(firstItemCompletelyVisible()
+            else if(isScrolledTop()
                     || (MyApplication.autoHideCommentFab && dy < -MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)
                     || (!MyApplication.autoHideCommentFab && !lastItemCompletelyVisible())) {
                 showAllFabOnScroll();
@@ -552,20 +552,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    private boolean firstItemCompletelyVisible() {
-        return findFirstCompletelyVisibleItemPosition() == 0;
-    }
-
     private boolean lastItemCompletelyVisible() {
-        return findLastCompletelyVisibleItemPosition() == postAdapter.getItemCount() - 1;
-    }
-
-    private int findFirstCompletelyVisibleItemPosition() {
-        return mLayoutManager.findFirstCompletelyVisibleItemPosition();
-    }
-
-    private int findLastCompletelyVisibleItemPosition() {
-        return mLayoutManager.findLastCompletelyVisibleItemPosition();
+        return mLayoutManager.findLastCompletelyVisibleItemPosition() == postAdapter.getItemCount() - 1;
     }
 
     @Override public void onRefresh() {
