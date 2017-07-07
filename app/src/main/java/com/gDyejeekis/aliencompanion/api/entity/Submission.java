@@ -10,6 +10,7 @@ import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -260,7 +261,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 				url = url.replace("&amp;", "&");
 			}
 
-			agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
+			updateAgePrepared();
 
 		} catch (Exception e) {
 			Log.e("Api error", "Error creating/updating submission from JSON object");
@@ -288,9 +289,19 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setSpoiler(updated.isSpoiler());
 			setHidden(updated.isHidden());
 			setLikes(updated.getLikes());
-			agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
+
+			updateAgePrepared();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void updateAgePrepared() {
+		agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
+		if(syncedComments!=null) {
+			for(Comment comment : syncedComments) {
+				comment.agePrepared = ConvertUtils.getSubmissionAge(comment.getCreatedUTC());
+			}
 		}
 	}
 
