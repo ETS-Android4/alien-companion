@@ -263,7 +263,33 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
 		} catch (Exception e) {
-			Log.e("Api error", "Error creating Submission");
+			Log.e("Api error", "Error creating/updating submission from JSON object");
+			e.printStackTrace();
+		}
+	}
+
+	public void updateSubmission(Submission updated) {
+		try {
+			setLinkFlairText(updated.getLinkFlairText());
+			setScore(updated.getScore());
+			setCommentCount(updated.getCommentCount());
+			setSelftext(updated.getSelftext());
+			setSelftextHTML(updated.getSelftextHTML());
+			setBannedBy(updated.getBannedBy());
+			setApprovedBy(updated.getApprovedBy());
+			setGilded(updated.getGilded());
+			setReportCount(updated.getReportCount());
+			setUpVotes(updated.getUpVotes());
+			setDownVotes(updated.getDownVotes());
+			setSaved(updated.isSaved());
+			setEdited(updated.isEdited());
+			setStickied(updated.isStickied());
+			setNSFW(updated.isNSFW());
+			setSpoiler(updated.isSpoiler());
+			setHidden(updated.isHidden());
+			setLikes(updated.getLikes());
+			agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

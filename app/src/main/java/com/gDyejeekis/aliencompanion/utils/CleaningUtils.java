@@ -173,7 +173,7 @@ public class CleaningUtils {
         }
     }
 
-    public static boolean deleteSyncedPostFromCategory(Context context, final String name, final String id) {
+    public static boolean clearSyncedPostFromCategory(Context context, final String name, final String id) {
         File redditDataDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(context), name);
         File postListFile = new File(redditDataDir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
         String postLink = null;

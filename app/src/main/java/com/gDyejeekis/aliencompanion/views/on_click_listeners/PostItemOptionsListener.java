@@ -327,7 +327,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
                             @Override
                             protected Boolean doInBackground(String... params) {
-                                return CleaningUtils.deleteSyncedPostFromCategory(context, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, params[0]);
+                                return CleaningUtils.clearSyncedPostFromCategory(context, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, params[0]);
                             }
 
                             @Override

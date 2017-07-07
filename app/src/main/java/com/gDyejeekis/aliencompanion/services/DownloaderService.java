@@ -45,9 +45,9 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
-import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -332,7 +332,10 @@ public class DownloaderService extends IntentService {
 
             if(posts!=null) {
                 posts = FilterUtils.checkProfiles(this, posts, subreddit == null ? "frontpage" : subreddit, isMulti);
-                if(!syncOptions.isSyncNewPostsOnly()) {
+                if(syncOptions.isSyncNewPostsOnly()) {
+                    clearUnlistedSyncedPosts(posts, filename);
+                }
+                else {
                     CleaningUtils.clearAllSyncedData(this, filename);
                 }
                 MAX_PROGRESS = posts.size() + 1;
@@ -340,7 +343,7 @@ public class DownloaderService extends IntentService {
                 increaseProgress(builder, filename);
                 for (RedditItem post : posts) {
                     if(syncOptions.isSyncNewPostsOnly() && isPostSynced((Submission) post, filename)) {
-                        Log.d(TAG, "Skipping post (already synced)");
+                        updateSyncedPostDetails((Submission) post, filename);
                         increaseProgress(builder, filename);
                     }
                     else {
@@ -358,6 +361,44 @@ public class DownloaderService extends IntentService {
             //e.printStackTrace();
             pauseSync(builder);
             syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
+        }
+    }
+
+    private void clearUnlistedSyncedPosts(List<RedditItem> posts, String filename) {
+        File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename);
+        FilenameFilter filter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return !name.endsWith(MyApplication.SYNCED_POST_LIST_SUFFIX);
+            }
+        };
+        File[] files = dir.listFiles(filter);
+        if(files!=null) {
+            for (File file : files) {
+                boolean isListed = false;
+                for (RedditItem post : posts) {
+                    if (post instanceof Submission && ((Submission) post).getIdentifier().equals(file.getName())) {
+                        isListed = true;
+                        break;
+                    }
+                }
+                if (!isListed) {
+                    Log.d(TAG, "Clearing unlisted synced post " + file.getName());
+                    CleaningUtils.clearSyncedPostFromCategory(this, filename, file.getName());
+                }
+            }
+        }
+    }
+
+    private void updateSyncedPostDetails(Submission updated, String filename) {
+        Log.d(TAG, "Updating synced post details " + updated.getIdentifier());
+        try {
+            File file = new File(GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(this), filename), updated.getIdentifier());
+            Submission post = (Submission) GeneralUtils.readObjectFromFile(file);
+            post.updateSubmission(updated);
+            GeneralUtils.writeObjectToFile(post, file);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
