@@ -47,6 +47,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
     private TimeSpan time;
     private boolean changedSort;
     private String offlineSubtitle;
+    private boolean randomSubreddit = false;
 
     public LoadPostListTask(Context context, PostListFragment fragment, LoadType loadType) {
         this.context = context;
@@ -121,6 +122,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                     }
                 }
             }
+            checkIfRandomSubreddit(submissions);
             submissions = FilterUtils.checkProfiles(context, submissions, fragment.subreddit == null ? "frontpage" : fragment.subreddit, fragment.isMulti);
             return submissions;
         } catch (RetrievalFailedException | RedditError | NullPointerException e) {
@@ -128,6 +130,14 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void checkIfRandomSubreddit(List<RedditItem> items) {
+        if(fragment.subreddit!=null && fragment.subreddit.equalsIgnoreCase("random")) {
+            randomSubreddit = true;
+            Submission post = (Submission) items.get(0);
+            fragment.subreddit = post.getSubreddit().toLowerCase();
+        }
     }
 
     @Override
@@ -209,6 +219,10 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         }
                         else {
                             this.fragment.updateContentView(new RedditItemListAdapter(context, this.fragment.currentViewTypeValue, submissions));
+                        }
+
+                        if(randomSubreddit) {
+                            fragment.setActionBarTitle();
                         }
                         break;
                     case refresh:
