@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -94,6 +95,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private Animation hideAnimCommentNav;
     public CommentNavSetting commentNavSetting;
     public CommentFabNavListener commentNavListener;
+
+    private int topPos = -1;
 
     //public boolean updateActionBar; // TODO: 6/12/2017 maybe delete this
 
@@ -496,8 +499,21 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void updateSwipeRefreshState() {
-        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisibleItemPosition() == 0);
+        swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && isScrolledTop());
         updateSwipeRefreshOffset();
+    }
+
+    private boolean isScrolledTop() {
+        try {
+            int currentTop = mLayoutManager.getChildAt(0).getTop();
+            if(currentTop>topPos) {
+                topPos = currentTop;
+            }
+            return topPos == currentTop;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void updateSwipeRefreshOffset() {
