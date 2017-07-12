@@ -335,9 +335,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
             GeneralUtils.clearField(subRestrField, "subreddit");
             ToastUtils.showSnackbarOverToast(this, "Subreddit already in list");
         }
-        else if(!GeneralUtils.isAlphaNumeric(restriction)) {
+        else if(!GeneralUtils.isValidSubreddit(restriction)) {
             GeneralUtils.clearField(subRestrField, "subreddit");
-            ToastUtils.showSnackbarOverToast(this, "Subreddit must contain only alphanumeric characters");
+            ToastUtils.showSnackbarOverToast(this, "Subreddit can contain only alphanumeric characters (a-z,0-9) and underscores (_)");
         }
         else {
             GeneralUtils.clearField(subRestrField, "subreddit");
@@ -356,9 +356,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
             GeneralUtils.clearField(multiRestrField, "multireddit");
             ToastUtils.showSnackbarOverToast(this, "Multireddit already in list");
         }
-        else if(!GeneralUtils.isAlphaNumeric(restriction)) {
+        else if(!GeneralUtils.isValidSubreddit(restriction)) {
             GeneralUtils.clearField(multiRestrField, "multireddit");
-            ToastUtils.showSnackbarOverToast(this, "Multireddit must contain only alphanumeric characters");
+            ToastUtils.showSnackbarOverToast(this, "Multireddit can contain only alphanumeric characters (a-z,0-9) and underscores (_)");
         }
         else {
             GeneralUtils.clearField(multiRestrField, "multireddit");

@@ -20,12 +20,12 @@ public class SubredditFilter extends Filter implements Serializable {
 
     @Override
     public boolean isValid() {
-        return GeneralUtils.isAlphaNumeric(filterText);
+        return GeneralUtils.isValidSubreddit(filterText);
     }
 
     @Override
     public String getTextRequirements() {
-        return "Subreddit must contain only alphanumeric characters";
+        return "Subreddit must contain only alphanumeric characters (a-z,0-9) and underscores (_)";
     }
 
     @Override

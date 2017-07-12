@@ -66,9 +66,9 @@ public class EnterUserDialogFragment extends ScalableDialogFragment implements V
             if(user.isEmpty()) {
                 GeneralUtils.clearField(editText, "enter user", Color.RED);
             }
-            else if(!GeneralUtils.isAlphaNumeric(user)) {
+            else if(!GeneralUtils.isValidUsername(user)) {
                 GeneralUtils.clearField(editText, "user");
-                ToastUtils.showToast(getActivity(), "User must contain only alphanumeric characters");
+                ToastUtils.showToast(getActivity(), "User can contain only alphanumeric characters (a-z,0-9), underscores (_) and dashes (-)");
             }
             else {
                 dismiss();

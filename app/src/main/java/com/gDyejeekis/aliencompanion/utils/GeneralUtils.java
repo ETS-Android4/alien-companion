@@ -399,6 +399,16 @@ public class GeneralUtils {
         return true;
     }
 
+    public static boolean isValidSubreddit(String s) {
+        String pattern = "^[a-zA-Z0-9\\_]*$";
+        return s.matches(pattern);
+    }
+
+    public static boolean isValidUsername(String s) {
+        String pattern = "^[a-zA-Z0-9\\_\\-]*$";
+        return s.matches(pattern);
+    }
+
     public static boolean isAlphaNumeric(String s){
         String pattern = "^[a-zA-Z0-9]*$";
         return s.matches(pattern);

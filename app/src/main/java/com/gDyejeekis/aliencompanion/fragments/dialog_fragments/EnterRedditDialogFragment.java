@@ -91,9 +91,9 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
             if(subreddit.isEmpty()) {
                 GeneralUtils.clearField(subredditField, "enter subreddit", Color.RED);
             }
-            else if(!GeneralUtils.isAlphaNumeric(subreddit)) {
+            else if(!GeneralUtils.isValidSubreddit(subreddit)) {
                 GeneralUtils.clearField(subredditField, "subreddit");
-                ToastUtils.showToast(getActivity(), "Subreddit must contain only alphanumeric characters");
+                ToastUtils.showToast(getActivity(), "Subreddit can contain only alphanumeric characters (a-z,0-9) and underscores (_)");
             }
             else {
                 dismiss();

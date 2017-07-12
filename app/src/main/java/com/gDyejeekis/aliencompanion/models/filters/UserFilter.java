@@ -20,12 +20,12 @@ public class UserFilter extends Filter implements Serializable {
 
     @Override
     public boolean isValid() {
-        return GeneralUtils.isAlphaNumeric(filterText);
+        return GeneralUtils.isValidUsername(filterText);
     }
 
     @Override
     public String getTextRequirements() {
-        return "User must contain only alphanumeric characters";
+        return "User must contain only alphanumeric characters (a-z,0-9), underscores (_) and dashes (-)";
     }
 
     @Override
