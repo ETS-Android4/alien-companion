@@ -94,6 +94,12 @@ public class MediaActivity extends BackNavActivity {
     private String imageDescription;
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(-1, -1);
+    }
+
+    @Override
     public void onBackPressed() {
         if(infoFragmentVisible) {
             removeInfoFragment();
