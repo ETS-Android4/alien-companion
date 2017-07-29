@@ -49,7 +49,6 @@
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>
         <changelogtext>Fixed swipe to refresh gesture when the post view isn't completely visible</changelogtext>
-        <changelogtext>Fixed home button behavior</changelogtext>
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
 
