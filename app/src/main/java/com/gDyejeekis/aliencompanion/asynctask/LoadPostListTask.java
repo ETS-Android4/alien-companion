@@ -72,13 +72,9 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
         try {
             File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(context), name);
             File file = new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            posts = (List<RedditItem>) ois.readObject();
-            ois.close();
-            fis.close();
+            posts = (List<RedditItem>) GeneralUtils.readObjectFromFile(file);
             if(posts == null || posts.isEmpty()) {
-                throw new RuntimeException("Empty post list");
+                throw new RuntimeException("Nonexistant/empty post list");
             }
             else {
                 offlineSubtitle = fragment.isOther ? "updated " : "synced ";
