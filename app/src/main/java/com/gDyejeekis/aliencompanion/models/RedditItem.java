@@ -5,6 +5,8 @@ package com.gDyejeekis.aliencompanion.models;
  */
 public interface RedditItem {
 
+    public String getIdentifier();
+
     public int getViewType();
 
     public String getThumbnail();

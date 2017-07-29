@@ -21,6 +21,11 @@ import java.util.List;
  */
 public class UserInfo implements RedditItem {
 
+    @Override
+    public String getIdentifier() {
+        return id;
+    }
+
     public int getViewType(){
         return RedditItemListAdapter.VIEW_TYPE_USER_INFO;
     }

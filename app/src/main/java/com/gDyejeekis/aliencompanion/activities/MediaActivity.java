@@ -143,7 +143,7 @@ public class MediaActivity extends BackNavActivity {
                 toFind = LinkHandler.getGfycatId(url);
             }
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-                toFind = LinkHandler.getReddituploadsFilename(url);
+                toFind = GeneralUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
             }
             else if(domain.contains("gyazo.com")) {
                 toFind = LinkHandler.getGyazoId(url);

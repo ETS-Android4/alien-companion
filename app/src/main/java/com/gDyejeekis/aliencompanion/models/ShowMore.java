@@ -9,8 +9,13 @@ import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
  */
 public class ShowMore implements RedditItem {
 
-    public ShowMore() {
+    public static final String ID = "SHOW_MORE_ITEM";
 
+    public ShowMore() {}
+
+    @Override
+    public String getIdentifier() {
+        return ID;
     }
 
     public int getViewType() {

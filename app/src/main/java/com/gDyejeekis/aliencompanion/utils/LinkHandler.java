@@ -447,10 +447,6 @@ public class LinkHandler {
         return "";
     }
 
-    public static String getReddituploadsFilename(String url) {
-        return url.substring(0, url.indexOf("?")).replaceAll("https?://", "").replace("/", "(s)").concat(".jpg");
-    }
-
     private static String decodeURL(String url) {
         try {
             String decodedurl = URLDecoder.decode(url, "UTF-8");

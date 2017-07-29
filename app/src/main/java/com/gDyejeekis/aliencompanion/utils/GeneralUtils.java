@@ -316,7 +316,16 @@ public class GeneralUtils {
     }
 
     public static String urlToFilename(String url) {
-        return url.replaceAll("https?://", "").replace("/", "(s)");
+        String filename = removeUrlParameters(url);
+        filename = filename.replaceAll("https?://", "").replace("/", "(s)");
+        return filename;
+    }
+
+    public static String removeUrlParameters(String url) {
+        try {
+            url = url.substring(0, url.lastIndexOf("?"));
+        } catch (Exception e) {}
+        return url;
     }
 
     public static void shareUrl(Context context, String label, String url) {
