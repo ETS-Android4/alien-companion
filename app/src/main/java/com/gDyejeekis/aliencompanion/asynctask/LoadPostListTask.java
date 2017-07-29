@@ -77,8 +77,14 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
             posts = (List<RedditItem>) ois.readObject();
             ois.close();
             fis.close();
-            offlineSubtitle = fragment.isOther ? "updated " : "synced " + ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
-        } catch (IOException | ClassNotFoundException e) {
+            if(posts == null || posts.isEmpty()) {
+                throw new RuntimeException("Empty post list");
+            }
+            else {
+                offlineSubtitle = fragment.isOther ? "updated " : "synced ";
+                offlineSubtitle += ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
+            }
+        } catch (Exception e) {
             offlineSubtitle = fragment.isOther ? "no posts" : "not synced";
             e.printStackTrace();
         }
