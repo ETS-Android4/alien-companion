@@ -39,11 +39,11 @@ public class BrowserFragment extends Fragment {
 
     public WebView webView;
     private ProgressBar progressBar;
-    private Submission post;
     private AppCompatActivity activity;
-    private Bundle webViewBundle;
+    private Submission post;
     private String url;
     private String domain;
+    private Bundle webViewBundle;
 
     private class MyWebViewClient extends WebViewClient {
         @Override
@@ -114,35 +114,17 @@ public class BrowserFragment extends Fragment {
         }
     }
 
-    //public static BrowserFragment newInstance(Submission post) {
-    //    BrowserFragment newInstance = new BrowserFragment();
-    //    newInstance.post = post;
-    //    newInstance.url = post.getURL();
-    //    newInstance.domain = post.getDomain();
-//
-    //    return newInstance;
-    //}
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-
-        post = (Submission) activity.getIntent().getSerializableExtra("post");
-        if (post != null) {
-            url = post.getUrl();
-            domain = post.getDomain();
-        } else {
-            url = activity.getIntent().getStringExtra("url");
-            domain = activity.getIntent().getStringExtra("domain");
+        this.activity = (AppCompatActivity) getActivity();
+        if(activity instanceof BrowserActivity) {
+            this.post = ((BrowserActivity) activity).post;
+            this.url = ((BrowserActivity) activity).url;
+            this.domain = ((BrowserActivity) activity).domain;
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
     }
 
     @Override
@@ -249,13 +231,12 @@ public class BrowserFragment extends Fragment {
                 GeneralUtils.shareUrl(activity, "Share via..", webView.getUrl());
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     private void loadCachedCopy() {
         // load article from synced data
-        if (MyApplication.offlineModeEnabled && post.hasSyncedArticle) {
+        if (MyApplication.offlineModeEnabled && ((BrowserActivity) activity).syncedArticleExists()) {
             ((BrowserActivity) activity).loadSyncedArticle();
         }
         // load cached copy from cache

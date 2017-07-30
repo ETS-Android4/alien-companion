@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.asynctask.LoadSyncedArticleTask;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 /**
@@ -31,25 +33,25 @@ public class ArticleFragment extends Fragment {
     public static final String TAG = "ArticleFragment";
 
     public Submission post;
+    public String url;
+    public String domain;
     public ProgressBar progressBar;
     public LinearLayout articleLayout;
     public ImageView image;
     public TextView title;
     public TextView body;
 
-    //public static ArticleFragment newInstance(Submission post) {
-    //    ArticleFragment fragment = new ArticleFragment();
-    //    fragment.setPost(post);
-    //    return fragment;
-    //}
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-
-        post = (Submission) getActivity().getIntent().getSerializableExtra("post");
+        if(getActivity() instanceof BrowserActivity) {
+            BrowserActivity activity = (BrowserActivity) getActivity();
+            this.post = activity.post;
+            this.url = activity.url;
+            this.domain = activity.domain;
+        }
     }
 
     @Nullable
@@ -74,8 +76,10 @@ public class ArticleFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         try {
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            actionBar.setTitle(post.getDomain());
-            actionBar.setSubtitle(post.getCommentCount() + " comments");
+            actionBar.setTitle(domain);
+            if(post!=null) {
+                actionBar.setSubtitle(post.getCommentCount() + " comments");
+            }
         } catch (Exception e) {}
     }
 
@@ -86,10 +90,10 @@ public class ArticleFragment extends Fragment {
                 ((BrowserActivity) getActivity()).loadOriginalPage();
                 return true;
             case R.id.action_open_browser:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(post.getURL())));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 return true;
             case R.id.action_share_url:
-                GeneralUtils.shareUrl(getActivity(), "Share via..", post.getURL());
+                GeneralUtils.shareUrl(getActivity(), "Share via..", url);
                 return true;
         }
         return super.onOptionsItemSelected(item);

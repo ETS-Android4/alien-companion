@@ -182,7 +182,8 @@ public class LinkHandler {
                     intent = new Intent(activity, PostActivity.class);
                     intent.putExtra("postId", getShortRedditId(url));
                 }
-                else if(MyApplication.offlineModeEnabled && post!=null && post.hasSyncedArticle) {
+                // if in offline mode start browser activity to look for synced artocle
+                else if(MyApplication.offlineModeEnabled && GeneralUtils.isArticleLink(urlLC, domainLC)) { // TODO: 7/30/2017 maybe check if synced article exists here instead of checking the link
                     startBrowserActivity(activity, post, url, domain);
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {

@@ -32,12 +32,12 @@ public class LoadSyncedArticleTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            String postId = fragment.post.getIdentifier();
-            File parentDir = GeneralUtils.checkSyncedArticlesDir(fragment.getActivity());
-            File articleFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), postId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
+            File parentDir = GeneralUtils.getSyncedArticlesDir(fragment.getActivity());
+            final String articleId = String.valueOf(fragment.url.hashCode());
+            File articleFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
             article = (Article) GeneralUtils.readObjectFromFile(articleFile);
             try {
-                File imageFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), postId + MyApplication.SYNCED_ARTICLE_IMAGE_SUFFIX);
+                File imageFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), articleId + MyApplication.SYNCED_ARTICLE_IMAGE_SUFFIX);
                 bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
             } catch (Exception e) {
                 //e.printStackTrace();

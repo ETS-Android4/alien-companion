@@ -676,22 +676,21 @@ public class DownloaderService extends IntentService {
             String imageUrl = res.getImageUrl();
             if(text!=null && !text.trim().isEmpty()) {
                 Log.d(TAG, "Syncing article for " + post.getIdentifier() + ", src: " + post.getURL());
+                final String articleId = String.valueOf(post.getURL().hashCode());
                 Article article = new Article(title, text, imageUrl);
-                GeneralUtils.writeObjectToFile(article, new File(subredditDir, post.getIdentifier() + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX));
+                GeneralUtils.writeObjectToFile(article, new File(subredditDir, articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX));
                 // catch all exceptions related to article image download, not as important
                 try {
                     String imageSource = article.getImageSource();
                     //Log.d(TAG, "article image source: " + imageSource);
-                    GeneralUtils.downloadToFileSync(imageSource, new File(subredditDir, post.getIdentifier() +
+                    GeneralUtils.downloadToFileSync(imageSource, new File(subredditDir, articleId +
                     MyApplication.SYNCED_ARTICLE_IMAGE_SUFFIX));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                post.hasSyncedArticle = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            post.hasSyncedArticle = false;
         }
     }
 

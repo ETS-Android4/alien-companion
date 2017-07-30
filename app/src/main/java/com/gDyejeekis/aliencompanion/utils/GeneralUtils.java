@@ -482,6 +482,8 @@ public class GeneralUtils {
         if(domain.equals("strawpoll.me")) return false;
         if(domain.equals("docs.google.com")) return false;
         if(domain.contains("mixtape.moe")) return false;
+        if(domain.equals("play.google.com")) return false;
+        if(url.endsWith(".pdf")) return false;
         return true;
     }
 

@@ -12,6 +12,10 @@ import com.gDyejeekis.aliencompanion.fragments.ArticleFragment;
 import com.gDyejeekis.aliencompanion.fragments.BrowserFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.StorageUtils;
+
+import java.io.File;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
@@ -20,10 +24,11 @@ public class BrowserActivity extends SwipeBackActivity {
 
     public static final String TAG = "BrowserActivity";
 
+    public Submission post;
+    public String url;
+    public String domain;
     public boolean loadFromCache;
-
     public boolean loadSyncedArticle;
-
     public boolean canGoBack, canGoForward;
 
     @Override
@@ -47,14 +52,29 @@ public class BrowserActivity extends SwipeBackActivity {
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
 
+        post = (Submission) getIntent().getSerializableExtra("post");
+        if (post != null) {
+            url = post.getURL();
+            domain = post.getDomain();
+        } else {
+            url = getIntent().getStringExtra("url");
+            domain = getIntent().getStringExtra("domain");
+        }
+
         setupMainFragment();
     }
 
     private void setupMainFragment() {
-        Submission post = (Submission) getIntent().getSerializableExtra("post");
-        loadSyncedArticle = (MyApplication.offlineModeEnabled && post.hasSyncedArticle);
+        loadSyncedArticle = (MyApplication.offlineModeEnabled && syncedArticleExists());
         Fragment fragment = (loadSyncedArticle) ? new ArticleFragment() : new BrowserFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.layout_fragment_holder, fragment).commitAllowingStateLoss();
+    }
+
+    public boolean syncedArticleExists() {
+        final String articleId = String.valueOf(url.hashCode());
+        File dir = GeneralUtils.getSyncedArticlesDir(this);
+        File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
+        return file!=null;
     }
 
     public void loadSyncedArticle() {
@@ -92,7 +112,7 @@ public class BrowserActivity extends SwipeBackActivity {
         MenuItem refresh = menu.findItem(R.id.action_refresh);
         refresh.setVisible(!loadSyncedArticle);
 
-        if(getIntent().getSerializableExtra("post") == null) {
+        if(post == null) {
             menu.findItem(R.id.action_comments).setVisible(false);
         }
         return true;
@@ -100,17 +120,16 @@ public class BrowserActivity extends SwipeBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        else if(item.getItemId() == R.id.action_comments) {
-            MainActivity.dualPaneActive = false; //set to false to open comments in a new activity
-            Intent intent = new Intent(this, PostActivity.class);
-            Submission post = (Submission) getIntent().getSerializableExtra("post");
-            intent.putExtra("post", post);
-            startActivity(intent);
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_comments:
+                MainActivity.dualPaneActive = false; //set to false to open comments in a new activity
+                Intent intent = new Intent(this, PostActivity.class);
+                intent.putExtra("post", post);
+                startActivity(intent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
