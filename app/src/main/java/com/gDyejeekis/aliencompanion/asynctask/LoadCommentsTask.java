@@ -153,9 +153,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 }
             }
             else {
-                if(!this.fragment.titleUpdated && !MyApplication.offlineModeEnabled) {
-                    this.fragment.setActionBarTitle();
-                }
+                this.fragment.setActionBarTitle();
                 this.fragment.noResponseObject = false;
                 this.fragment.postAdapter.commentsRefreshed(this.fragment.post, comments);
                 if(!initialLoad) {

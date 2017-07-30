@@ -74,7 +74,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean noResponseObject; //TODO: check this variable
     public String commentLinkId;
     public int parentsShown = -1;
-    public boolean titleUpdated;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
@@ -97,8 +96,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentFabNavListener commentNavListener;
 
     private int topPos = -1;
-
-    //public boolean updateActionBar; // TODO: 6/12/2017 maybe delete this
 
     private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -162,7 +159,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         PostFragment postFragment = new PostFragment();
         postFragment.loadFromList = false;
 
-        postFragment.titleUpdated = false;
         postFragment.post = new Submission(postId);
 
         return postFragment;
@@ -192,7 +188,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
         else {
             if(post==null) {
-                //updateActionBar = true;
                 initPostFromUrl(postInfo);
             }
         }
@@ -202,7 +197,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         if (postInfo != null) {
             initPostFromInfoArray(postInfo);
         } else {
-            titleUpdated = false;
             post = new Submission(activity.getIntent().getStringExtra("postId"));
         }
     }
@@ -254,8 +248,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         } else {
             mRecyclerView.setAdapter(postAdapter);
         }
-
-        //if(!titleUpdated) setActionBarTitle(); //TODO: test for nullpointerexception
 
         return view;
     }
@@ -594,10 +586,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             String title;
             if (post.getSubreddit() != null) {
                 title = post.getSubreddit().toLowerCase();
-                titleUpdated = true;
             } else {
                 title = "Loading..";
-                titleUpdated = false;
             }
             activity.getSupportActionBar().setTitle(title);
         }
