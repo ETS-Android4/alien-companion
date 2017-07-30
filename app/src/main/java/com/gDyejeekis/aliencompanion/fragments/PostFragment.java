@@ -71,7 +71,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentSort tempSort;
     public ProgressBar progressBar;
     private boolean loadFromList;
-    public boolean noResponseObject; //TODO: check this variable
     public String commentLinkId;
     public int parentsShown = -1;
     public boolean commentsLoaded;

@@ -142,7 +142,6 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                     ToastUtils.showSnackbar(this.fragment.getSnackbarParentView(), "No synced comments found");
                 }
                 else {
-                    this.fragment.noResponseObject = true;
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -154,7 +153,6 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             }
             else {
                 this.fragment.setActionBarTitle();
-                this.fragment.noResponseObject = false;
                 this.fragment.postAdapter.commentsRefreshed(this.fragment.post, comments);
                 if(!initialLoad) {
                     this.fragment.mLayoutManager.scrollToPosition(0);
