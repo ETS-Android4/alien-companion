@@ -443,6 +443,11 @@ public class GeneralUtils {
         field.setHintTextColor(color);
     }
 
+
+    public static boolean isRedditPostUrl(String url) {
+        return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches(".*redd\\.it\\/\\w+.*");
+    }
+
     public static boolean isImageLink(String url, String domain) {
         if(domain.contains("imgur.com")) return true;
         if(domain.contains("gfycat.com")) return true;

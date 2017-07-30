@@ -278,7 +278,7 @@ public class DownloaderService extends IntentService {
     }
 
     /*
-     * syncs user's saved list, checks for pause/cancellation, increments progress
+     * syncs user's saved list, checks for pause/cancellation, auto-pauses on error, increments progress
      */
     private void syncSaved(String filename, NotificationCompat.Builder builder, int savedCount, SyncProfileOptions syncOptions) {
         checkManuallyPaused();
@@ -338,7 +338,7 @@ public class DownloaderService extends IntentService {
     }
 
     /*
-     * syncs and returns given saved post/comment, checks for pause/cancellation, increments progress
+     * syncs and returns given saved post/comment, checks for pause/cancellation, auto-pauses on error, increments progress
      */
     private Submission syncSavedPost(RedditItem item, String filename, NotificationCompat.Builder builder, String displayName, SyncProfileOptions syncOptions) {
         Submission s;
@@ -350,16 +350,14 @@ public class DownloaderService extends IntentService {
         else {
             Comment comment = (Comment) item;
             String url = "https://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().split("_")[1] + "/title_text/" + comment.getIdentifier(); //+ "?context=" + syncOptions.getSyncCommentCount();
-            Comments comments =  new Comments(httpClient, MyApplication.currentUser);
-            comments.setSyncRetrieval(true);
-            s = syncLinkedRedditPost(url, "reddit.com", filename, comments, syncOptions);
+            s = syncLinkedRedditPost(url, "reddit.com", filename, syncOptions);
             increaseProgress(builder, displayName);
         }
         return s;
     }
 
     /*
-     * syncs given subreddit/multireddit, checks for pause/cancellation, increments progress
+     * syncs given subreddit/multireddit, checks for pause/cancellation, auto-pauses on error, increments progress
      */
     private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
         checkManuallyPaused();
@@ -431,13 +429,14 @@ public class DownloaderService extends IntentService {
     }
 
     /*
-     * syncs given submission, checks for pause/cancellation, increments progress
+     * syncs given submission, checks for pause/cancellation, auto-pauses on error, increments progress
      */
     private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncProfileOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return;
         }
+
         try {
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             cmntsRetrieval.setSyncRetrieval(true);
@@ -449,17 +448,7 @@ public class DownloaderService extends IntentService {
             writePostToFile(submission, filename);
 
             if(!submission.isSelf()) {
-                String url = submission.getURL();
-                String domain = submission.getDomain();
-                if (domain.contains("reddit.com") || domain.equals("redd.it")) {
-                    syncLinkedRedditPost(url, domain, filename, cmntsRetrieval, syncOptions);
-                } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
-                    downloadPostImage(submission, filename);
-                } else if (syncOptions.isSyncVideo() && GeneralUtils.isVideoLink(url, domain)) {
-                    downloadPostVideo(submission, filename);
-                } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
-                    downloadPostArticle(submission, filename);
-                }
+                syncUrl(submission.getURL(), submission.getDomain(), filename, syncOptions);
             }
 
             increaseProgress(builder, displayName);
@@ -471,18 +460,42 @@ public class DownloaderService extends IntentService {
     }
 
     /*
-     * syncs and returns given reddit post url as a linked post (just the comments, no links), checks for pause/cancellation
+     * syncs the given url depending on sync options used, checks for pause/cancellation
      */
-    private Submission syncLinkedRedditPost(String url, String domain, String filename, Comments commentsRetrieval, SyncProfileOptions syncOptions) {
+    private void syncUrl(String url, String domain, String filename, SyncProfileOptions syncOptions) {
+        checkManuallyPaused();
+        if(manuallyCancelled) {
+            return;
+        }
+
+        url = url.toLowerCase();
+        domain = domain.toLowerCase();
+        if (GeneralUtils.isRedditPostUrl(url)) {
+            syncLinkedRedditPost(url, domain, filename, syncOptions);
+        } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
+            syncImage(url, filename);
+        } else if (syncOptions.isSyncVideo() && GeneralUtils.isVideoLink(url, domain)) {
+            syncVideo(url, filename);
+        } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
+            syncArticle(url, filename);
+        }
+    }
+
+    /*
+     * syncs and returns given reddit post url as a linked post (just the comments, no links), checks for pause/cancellation, auto-pauses on error
+     */
+    private Submission syncLinkedRedditPost(String url, String domain, String filename, SyncProfileOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return null;
         }
         Submission linkedPost = null;
         try {
+            Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
+            cmntsRetrieval.setSyncRetrieval(true);
             if (domain.equals("redd.it")) {
                 linkedPost = new Submission(LinkHandler.getShortRedditId(url));
-                List<Comment> comments = commentsRetrieval.ofSubmission(linkedPost, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(),
+                List<Comment> comments = cmntsRetrieval.ofSubmission(linkedPost, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(),
                         syncOptions.getSyncCommentSort());
                 linkedPost.setSyncedComments(comments);
             } else {
@@ -491,19 +504,23 @@ public class DownloaderService extends IntentService {
                     linkedPost = new Submission(postInfo[1]);
                     linkedPost.setSubreddit(postInfo[0]);
                     int parentsShown = (postInfo[3] == null) ? -1 : Integer.valueOf(postInfo[3]);
-                    List<Comment> comments = commentsRetrieval.ofSubmission(linkedPost, postInfo[2], parentsShown, syncOptions.getSyncCommentDepth(),
+                    List<Comment> comments = cmntsRetrieval.ofSubmission(linkedPost, postInfo[2], parentsShown, syncOptions.getSyncCommentDepth(),
                             syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
                     linkedPost.setSyncedComments(comments);
                 }
             }
 
             if (linkedPost != null) {
+                // TODO: 7/30/2017 thumbnails don't seem to sync or load properly here
+                //if (syncOptions.isSyncThumbs()) {
+                //    downloadPostThumbnail(linkedPost, filename);
+                //}
                 writePostToFile(linkedPost, filename);
             }
         } catch (RetrievalFailedException | RedditError e) {
             //e.printStackTrace();
             pauseSync(notifBuilder);
-            syncLinkedRedditPost(url, domain, filename, commentsRetrieval, syncOptions);
+            syncLinkedRedditPost(url, domain, filename, syncOptions);
         }
         return linkedPost;
     }
@@ -658,7 +675,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadPostArticle(Submission post, String filename) {
+    private void syncArticle(String url, String filename) {
         File subredditDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedArticlesDir(this), filename);
         if(subredditDir == null) {
             return;
@@ -670,13 +687,13 @@ public class DownloaderService extends IntentService {
             // fetcher.setCache(new MapMaker().concurrencyLevel(20).maximumSize(count).
             //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
 
-            JResult res = fetcher.fetchAndExtract(post.getURL(), 5000, true);
+            JResult res = fetcher.fetchAndExtract(url, 5000, true);
             String text = res.getText();
             String title = res.getTitle();
             String imageUrl = res.getImageUrl();
             if(text!=null && !text.trim().isEmpty()) {
-                Log.d(TAG, "Syncing article for " + post.getIdentifier() + ", src: " + post.getURL());
-                final String articleId = String.valueOf(post.getURL().hashCode());
+                Log.d(TAG, "Syncing article from src: " + url);
+                final String articleId = String.valueOf(url.hashCode());
                 Article article = new Article(title, text, imageUrl);
                 GeneralUtils.writeObjectToFile(article, new File(subredditDir, articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX));
                 // catch all exceptions related to article image download, not as important
@@ -694,14 +711,13 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadPostVideo(Submission post, String filename) {
+    private void syncVideo(String url, String filename) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
             return;
         }
 
         final String path = file.getAbsolutePath();
-        String url = post.getURL();
         // VIDEOS
         if(url.endsWith(".mp4")) {
             downloadMediaToPath(url, path);
@@ -717,14 +733,13 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadPostImage(Submission post, String filename) {
+    private void syncImage(String url, String filename) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
             return;
         }
 
         final String path = file.getAbsolutePath();
-        String url = post.getURL();
         // GFYCAT
         if (url.contains("gfycat.com")) {
             try {
