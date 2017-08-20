@@ -25,6 +25,7 @@ import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.FilterUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
@@ -45,6 +46,11 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -451,12 +457,58 @@ public class DownloaderService extends IntentService {
                 syncUrl(submission.getURL(), submission.getDomain(), filename, syncOptions);
             }
 
+            if(syncOptions.getSyncCommentLinkCount() > 0) {
+                syncCommentLinks(submission, filename, syncOptions);
+            }
+
             increaseProgress(builder, displayName);
         } catch (RetrievalFailedException | RedditError e) {
             //e.printStackTrace();
             pauseSync(builder);
             syncPost(builder, submission, filename, displayName, syncOptions);
         }
+    }
+
+    /*
+     * syncs urls from the (synced) comments of the given post, checks for pause/cancellation
+     */
+    private void syncCommentLinks(Submission post, String filename, SyncProfileOptions syncOptions) {
+        final int syncLimit = syncOptions.getSyncCommentLinkCount();
+        int syncCount = 0;
+        for(Comment comment : post.getSyncedComments()) {
+            syncCount = syncCommentLinksRecursive(comment, syncCount, syncLimit, filename, syncOptions);
+        }
+    }
+
+
+    /*
+     * syncs comment links and links in replies recursively, returns current sync count, checks for pause/cancellation
+     */
+    private int syncCommentLinksRecursive(Comment comment, int syncCount, final int syncLimit, String filename, SyncProfileOptions syncOptions) {
+        if(syncCount < syncLimit) {
+            Document doc = Jsoup.parse(comment.getBodyHTML());
+            Elements links = doc.select("a[href]");
+            for (Element element : links) {
+                try {
+                    String url = element.attr("href");
+                    syncUrl(url, ConvertUtils.getDomainName(url), filename, syncOptions);
+                    syncCount++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(syncCount >= syncLimit) {
+                    return syncCount;
+                }
+            }
+
+            if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
+                for (Comment c : comment.getReplies()) {
+                    syncCount = syncCommentLinksRecursive(c, syncCount, syncLimit, filename, syncOptions);
+                }
+            }
+
+        }
+        return syncCount;
     }
 
     /*
@@ -468,12 +520,10 @@ public class DownloaderService extends IntentService {
             return;
         }
 
-        url = url.toLowerCase();
-        domain = domain.toLowerCase();
         if (GeneralUtils.isRedditPostUrl(url)) {
             syncLinkedRedditPost(url, domain, filename, syncOptions);
         } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
-            syncImage(url, filename);
+            syncImage(url, filename, syncOptions);
         } else if (syncOptions.isSyncVideo() && GeneralUtils.isVideoLink(url, domain)) {
             syncVideo(url, filename);
         } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
@@ -733,7 +783,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void syncImage(String url, String filename) {
+    private void syncImage(String url, String filename, SyncProfileOptions syncOptions) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
             return;
@@ -799,12 +849,12 @@ public class DownloaderService extends IntentService {
                 downloadMediaToPath(link, path);
             }
             else if(item instanceof ImgurAlbum) {
-                downloadAlbumImages(item, filename, path);
+                downloadAlbumImages(item, filename, path, syncOptions);
             }
             else if(item instanceof ImgurGallery) {
                 ImgurGallery gallery = (ImgurGallery) item;
                 if(gallery.isAlbum()) {
-                    downloadAlbumImages(gallery, filename, path);
+                    downloadAlbumImages(gallery, filename, path, syncOptions);
                 }
                 else {
                     String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
@@ -814,22 +864,27 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void downloadAlbumImages(ImgurItem item, String filename, String folderPath) {
+    private void downloadAlbumImages(ImgurItem item, String filename, String path, SyncProfileOptions syncOptions) {
+        final int albumSyncLimit = syncOptions.getAlbumSyncLimit();
         int i = 0;
         for(ImgurImage img : item.getImages()) {
-            if(i >= MyApplication.syncAlbumImgCount) break;
-            downloadMediaToPath((img.isAnimated()) ? img.getMp4() : img.getLink(), folderPath);
-            String imgId = LinkHandler.getImgurImgId(img.getLink());
-            if(MyApplication.syncAlbumImgCount > 1) {
+            if(i >= albumSyncLimit) {
+                break;
+            }
+            downloadMediaToPath((img.isAnimated()) ? img.getMp4() : img.getLink(), path);
+            if(albumSyncLimit > 1) {
+                // sync album thumbnails for grid view
                 try {
-                    GeneralUtils.downloadToFileSync("http://i.imgur.com/" + imgId + "s.jpg", new File(GeneralUtils.getPreferredSyncDir(this).getAbsolutePath(), filename + "-" + imgId + "-thumb.jpg"));
+                    String imgId = LinkHandler.getImgurImgId(img.getLink());
+                    File thumbsDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedThumbnailsDir(this), filename);
+                    GeneralUtils.downloadToFileSync("http://i.imgur.com/" + imgId + "s.jpg", new File(thumbsDir, imgId + "-thumb"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
             i++;
         }
-        int indexExlusive = (MyApplication.syncAlbumImgCount > item.getImages().size()) ? item.getImages().size() : MyApplication.syncAlbumImgCount;
+        int indexExlusive = (albumSyncLimit > item.getImages().size()) ? item.getImages().size() : albumSyncLimit;
         item.setImages(new ArrayList<ImgurImage>(item.getImages().subList(0, indexExlusive)));
         for(ImgurImage img : item.getImages()) {
             String imgLink = (img.isAnimated()) ? img.getMp4() : img.getLink();

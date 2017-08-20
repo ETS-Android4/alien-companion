@@ -445,7 +445,7 @@ public class GeneralUtils {
 
 
     public static boolean isRedditPostUrl(String url) {
-        return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches(".*redd\\.it\\/\\w+.*");
+        return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches("(https?:\\/\\/)?redd\\.it\\/\\w+.*");
     }
 
     public static boolean isImageLink(String url, String domain) {
