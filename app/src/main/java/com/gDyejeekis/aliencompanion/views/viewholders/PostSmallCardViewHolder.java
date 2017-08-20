@@ -160,7 +160,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
             detsOneText += post.getSubreddit() + " · " + post.getDomain();
         }
         SpannableString detsOneSpannable;
-        if(post.getLinkFlairText() != null) {
+        if(post.getLinkFlairText() != null && !post.getLinkFlairText().trim().isEmpty()) {
             detsOneSpannable = new SpannableString(post.getLinkFlairText() + " · " + detsOneText);
             detsOneSpannable.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }

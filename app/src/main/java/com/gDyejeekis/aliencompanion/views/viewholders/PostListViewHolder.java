@@ -147,7 +147,7 @@ public class PostListViewHolder extends PostViewHolder {
         String detsOneText = post.getScore() + " · " + post.agePrepared + " · " + post.getAuthor();
         int scoreStart;
         int scoreEnd;
-        if(post.getLinkFlairText() != null) {
+        if(post.getLinkFlairText() != null && !post.getLinkFlairText().trim().isEmpty()) {
             detsOneText = post.getLinkFlairText() + " · " + detsOneText;
             detsOneSpannable = new SpannableString(detsOneText);
             detsOneSpannable.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);

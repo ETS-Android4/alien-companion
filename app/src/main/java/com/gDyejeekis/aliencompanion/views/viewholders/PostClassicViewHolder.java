@@ -156,7 +156,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         else {
             dets1 += post.getSubreddit() + " · " + post.getDomain();
         }
-        if(post.getLinkFlairText() != null) {
+        if(post.getLinkFlairText() != null && !post.getLinkFlairText().trim().isEmpty()) {
             dets1Spannable = new SpannableString(post.getLinkFlairText() + " · " + dets1);
             dets1Spannable.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }

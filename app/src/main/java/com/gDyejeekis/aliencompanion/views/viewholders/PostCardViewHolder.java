@@ -234,7 +234,7 @@ public class PostCardViewHolder extends PostViewHolder  {
         else {
             detsText += post.getSubreddit() + " · " + post.getDomain();
         }
-        if(post.getLinkFlairText() != null) {
+        if(post.getLinkFlairText() != null && !post.getLinkFlairText().trim().isEmpty()) {
             detsSpannable = new SpannableString(post.getLinkFlairText() + " · " + detsText);
             detsSpannable.setSpan(new ForegroundColorSpan(MyApplication.linkColor), 0, post.getLinkFlairText().length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
