@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.customtabs.CustomTabsIntent;
 import android.util.Log;
@@ -71,7 +73,7 @@ public class LinkHandler {
         }
     }
 
-    //returns false if the url is to be handled by the webview, true for custom handling
+    // returns false if the url is to be handled by the webview, true for custom handling
     public boolean handleIt() {
         boolean setImplicitIntent = false;
         try {
@@ -186,6 +188,9 @@ public class LinkHandler {
                 else if(MyApplication.offlineModeEnabled && GeneralUtils.isArticleLink(urlLC, domainLC)) { // TODO: 7/30/2017 maybe check if synced article exists here instead of checking the link
                     startBrowserActivity(activity, post, url, domain);
                 }
+                else if(urlLC.startsWith("intent://")) {
+                    return handleAppLink();
+                }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
                         startInAppBrowser(activity, post, url, domain);
@@ -206,6 +211,31 @@ public class LinkHandler {
 
         } catch (ActivityNotFoundException e) {
             ToastUtils.showToast(context, "No activity found to handle Intent");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean handleAppLink() {
+        try {
+            Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+            if(intent!=null) {
+                PackageManager packageManager = context.getPackageManager();
+                ResolveInfo info = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                if (info != null) {
+                    context.startActivity(intent);
+                } else {
+                    String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+                    //url = fallbackUrl;
+                    //return false;
+
+                    // or call external broswer
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fallbackUrl));
+                    context.startActivity(browserIntent);
+                }
+                return true;
+            }
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         return false;
