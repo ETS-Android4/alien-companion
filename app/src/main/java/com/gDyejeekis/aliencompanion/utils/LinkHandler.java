@@ -65,6 +65,9 @@ public class LinkHandler {
 
     public LinkHandler(Context context, String url) {
         this.context = context;
+        if(!url.matches("http(s)?\\:\\/\\/.*")) {
+            url = "http://" + url;
+        }
         this.url = url;
         try {
             this.domain = ConvertUtils.getDomainName(url);
