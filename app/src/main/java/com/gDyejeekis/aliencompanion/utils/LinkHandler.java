@@ -398,7 +398,7 @@ public class LinkHandler {
     }
 
     public static String getGfycatId(String url) {
-        String pattern = "gfycat\\.com/(\\w+)";
+        String pattern = "gfycat\\.com\\/(?:gifs\\/detail\\/)?(\\w+)";
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = compiledPattern.matcher(url);
 
