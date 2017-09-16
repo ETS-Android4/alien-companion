@@ -43,6 +43,7 @@
         <changelogtext>Added giphy.com link handling support</changelogtext>
         <changelogtext>Added streamable.com link handling support</changelogtext>
         <changelogtext>Added *.mp4 link handling support</changelogtext>
+        <changelogtext>Added email link handling support</changelogtext>
         <!-- other changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> FILTERS FEATURE HERE]]></changelogtext>
         <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>

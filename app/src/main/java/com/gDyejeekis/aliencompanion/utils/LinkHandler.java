@@ -65,20 +65,26 @@ public class LinkHandler {
 
     public LinkHandler(Context context, String url) {
         this.context = context;
-        if(!url.matches("http(s)?\\:\\/\\/.*")) {
-            url = "http://" + url;
+        if(GeneralUtils.isEmailAddress(url)) {
+            this.url = url;
+            this.domain = url.substring(url.indexOf("@"));
         }
-        this.url = url;
-        try {
-            this.domain = ConvertUtils.getDomainName(url);
-        } catch (URISyntaxException | NullPointerException e) {
-            e.printStackTrace();
+        else {
+            if (!url.matches("http(s)?\\:\\/\\/.*")) {
+                url = "http://" + url;
+            }
+            this.url = url;
+            try {
+                this.domain = ConvertUtils.getDomainName(url);
+            } catch (URISyntaxException | NullPointerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     // returns false if the url is to be handled by the webview, true for custom handling
     public boolean handleIt() {
-        boolean setImplicitIntent = false;
+        boolean setImplicitViewIntent = false;
         try {
             Intent intent = null;
             Activity activity = (Activity) context;
@@ -97,7 +103,7 @@ public class LinkHandler {
                             String playlistId = getYoutubePlaylistId(url);
                             if(playlistId.equals("")) {
                                 Log.e(TAG, "Unable to validate YouTube playlist ID");
-                                setImplicitIntent = true;
+                                setImplicitViewIntent = true;
                             }
                             else {
                                 Log.d(TAG, "YouTube playlist ID: " + playlistId);
@@ -109,7 +115,7 @@ public class LinkHandler {
                             String videoId = getYoutubeVideoId(url);
                             if(videoId.equals("")) {
                                 Log.e(TAG, "Unable to validate YouTube video ID");
-                                setImplicitIntent = true;
+                                setImplicitViewIntent = true;
                             }
                             else {
                                 Log.d(TAG, "YouTube video ID: " + videoId);
@@ -118,14 +124,14 @@ public class LinkHandler {
                             }
                         }
                     }
-                    else setImplicitIntent = true;
+                    else setImplicitViewIntent = true;
                 }
                 else if(domainLC.contains("imgur.com")) {
                     if(MyApplication.handleImgur) {
                         //startInAppBrowser(activity, post, url, domain);
                         intent = getMediaActivityIntent(activity, url, domain);
                     }
-                    else setImplicitIntent = true;
+                    else setImplicitViewIntent = true;
                 }
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
                         || domainLC.contains("gyazo.com")) {
@@ -143,7 +149,7 @@ public class LinkHandler {
                             startInAppBrowser(activity, post, url, domain);
                         }
                     }
-                    else setImplicitIntent = true;
+                    else setImplicitViewIntent = true;
                 }
                 else if (domainLC.matches("^(\\w+\\.)?reddit\\.com") /*domainLC.equals("reddit.com") || domainLC.substring(2).equals("reddit.com") || domainLC.substring(3).equals("reddit.com")*/) {
                     //case (subreddit).reddit.com link
@@ -165,7 +171,7 @@ public class LinkHandler {
                                 startInAppBrowser(activity, post, url, domain);
                             }
                         }
-                        else setImplicitIntent = true;
+                        else setImplicitViewIntent = true;
                     }
                     //case post link
                     else { // prepare explicit intent for reddit link
@@ -194,17 +200,22 @@ public class LinkHandler {
                 else if(urlLC.startsWith("intent://")) {
                     return handleAppLink();
                 }
+                else if(GeneralUtils.isEmailAddress(urlLC)) {
+                    intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
+                    activity.startActivity(intent);
+                    return true;
+                }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
                     if(!browserActive) {
                         startInAppBrowser(activity, post, url, domain);
                     }
                 }
                 else {
-                    setImplicitIntent = true;
+                    setImplicitViewIntent = true;
                 }
             }
 
-            if(setImplicitIntent) {
+            if(setImplicitViewIntent) {
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             }
             if(intent!=null) {

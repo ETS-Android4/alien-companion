@@ -433,6 +433,11 @@ public class GeneralUtils {
         return s.matches(pattern);
     }
 
+    // TODO: 9/16/2017 maybe write this properly (as long as input is a link reddit probably already validates email adresses)
+    public static boolean isEmailAddress(String link) {
+        return link.contains("@");
+    }
+
     public static void clearField(EditText field, String hint) {
         clearField(field, hint, MyApplication.textHintColor);
     }
@@ -442,7 +447,6 @@ public class GeneralUtils {
         field.setHint(hint);
         field.setHintTextColor(color);
     }
-
 
     public static boolean isRedditPostUrl(String url) {
         return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches("(https?:\\/\\/)?redd\\.it\\/\\w+.*");
