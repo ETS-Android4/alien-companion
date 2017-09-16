@@ -161,6 +161,7 @@ public class MyApplication extends Application {
     public static int syncPostCount;
     public static int syncCommentCount;
     public static int syncCommentDepth;
+    public static int syncSelfTextLinkCount;
     public static int syncCommentLinkCount;
     public static boolean syncNewPostsOnly;
     public static int currentPostListView;
@@ -562,6 +563,7 @@ public class MyApplication extends Application {
         syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
         syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
         syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "5"));
+        syncSelfTextLinkCount = Integer.parseInt(prefs.getString("syncSelfTextLinks", "0"));
         syncCommentLinkCount = Integer.parseInt(prefs.getString("syncCommentLinks", "0"));
         syncThumbnails = prefs.getBoolean("syncThumb", false);
         syncNewPostsOnly = prefs.getBoolean("syncNewOnly", false);

@@ -122,6 +122,16 @@ public class SyncProfileOptions implements Serializable {
 
     private boolean syncWebpages;
 
+    public int getSyncSelfTextLinkCount() {
+        return syncSelfTextLinkCount;
+    }
+
+    public void setSyncSelfTextLinkCount(int syncSelfTextLinkCount) {
+        this.syncSelfTextLinkCount = syncSelfTextLinkCount;
+    }
+
+    private int syncSelfTextLinkCount;
+
     public int getSyncCommentLinkCount() {
         return syncCommentLinkCount;
     }
@@ -154,6 +164,7 @@ public class SyncProfileOptions implements Serializable {
         if(syncVideo != other.isSyncVideo()) return false;
         if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
         if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
+        if(syncSelfTextLinkCount != other.getSyncSelfTextLinkCount()) return false;
         if(syncCommentLinkCount != other.getSyncCommentLinkCount()) return false;
         if(syncNewPostsOnly != other.isSyncNewPostsOnly()) return false;
 
@@ -172,6 +183,7 @@ public class SyncProfileOptions implements Serializable {
         this.syncOverWifiOnly = other.isSyncOverWifiOnly();
         this.syncWebpages = other.isSyncWebpages();
         this.syncGif = other.isSyncGif();
+        this.syncSelfTextLinkCount = other.getSyncSelfTextLinkCount();
         this.syncCommentLinkCount = other.getSyncCommentLinkCount();
         this.syncNewPostsOnly = other.isSyncNewPostsOnly();
     }
@@ -188,6 +200,7 @@ public class SyncProfileOptions implements Serializable {
         syncOverWifiOnly = MyApplication.syncOverWifiOnly;
         syncWebpages = MyApplication.syncWebpages;
         syncGif = MyApplication.syncGif;
+        syncSelfTextLinkCount = MyApplication.syncSelfTextLinkCount;
         syncCommentLinkCount = MyApplication.syncCommentLinkCount;
         syncNewPostsOnly = MyApplication.syncNewPostsOnly;
     }

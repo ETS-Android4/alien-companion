@@ -252,6 +252,31 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="Sync links in self-text"
+                android:textSize="16sp"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_syncSelfTextLinks"
+                android:spinnerMode="dropdown"
+                android:textAlignment="viewEnd"
+                android:gravity="end" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:text="Sync links in comments"
                 android:textSize="16sp"
                 android:textColor="?attr/themeTextPrimaryColor"

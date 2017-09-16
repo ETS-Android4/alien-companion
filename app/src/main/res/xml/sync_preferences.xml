@@ -66,11 +66,19 @@
         android:defaultValue="false"/>
 
     <ListPreference
+        android:key="syncSelfTextLinks"
+        android:title="Sync links in self-text"
+        android:summary="Maximum number of links in self-text per self-post that get synced"
+        android:entries="@array/syncLinksInTextEntries"
+        android:entryValues="@array/syncLinksInTextValues"
+        android:defaultValue="0"/>
+
+    <ListPreference
         android:key="syncCommentLinks"
         android:title="Sync links in comments"
         android:summary="Maximum number of links in comments per post that get synced"
-        android:entries="@array/syncCommentLinksEntries"
-        android:entryValues="@array/syncCommentLinksValues"
+        android:entries="@array/syncLinksInTextEntries"
+        android:entryValues="@array/syncLinksInTextValues"
         android:defaultValue="0"/>
 
     <CheckBoxPreference

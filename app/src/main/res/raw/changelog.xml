@@ -32,7 +32,7 @@
         <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
         <!-- sync changes changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable and *.mp4 links)]]></changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in comments' option under 'Sync options' (disabled by default)]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in self-text' and 'Sync links in comments' options under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync new posts only' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext>Updated synced article view to use the selected theme background and font size</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE UI CHANGES HERE]]></changelogtext>
@@ -48,8 +48,9 @@
         <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>
-        <changelogtext>Fixed /r/random issues</changelogtext>
+        <changelogtext>Fixed inconsistent behavior when browsing /r/random</changelogtext>
         <changelogtext>Fixed swipe to refresh gesture when the post view isn't completely visible</changelogtext>
+        <changelogtext>Fixed various link handling issues</changelogtext>
         <changelogtext>Fixed 'Open in app' links not opening from the in-app browser</changelogtext>
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>

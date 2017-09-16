@@ -36,7 +36,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private static final String[] albumLimitOptions = {"1", "2", "5", "10", "25", "50"};
     private static final String[] commentSortOptions = {CommentSort.TOP.value().toUpperCase(), CommentSort.BEST.value().toUpperCase(), CommentSort.NEW.value().toUpperCase(),
             CommentSort.OLD.value().toUpperCase(), CommentSort.CONTROVERSIAL.value().toUpperCase()};
-    private static final String[] commentLinkCountOptions = {"0", "5", "10", "25", "50"};
+    private static final String[] syncLinksInTextOptions = {"0", "5", "10", "25", "50"};
 
     private int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.spinner_dropdown_item_dark : R.layout.spinner_dropdown_item_light;
 
@@ -46,6 +46,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private Spinner syncCommentDepthSpinner;
     private Spinner syncCommentSortSpinner;
     private Spinner albumImageLimitSpinner;
+    private Spinner selfTextLinkCountSpinner;
     private Spinner commentLinkCountSpinner;
     private CheckBox syncThumbsCheckbox;
     private CheckBox syncImagesCheckbox;
@@ -98,9 +99,14 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         albumImageLimitSpinner.setSelection(Arrays.asList(albumLimitOptions).indexOf(String.valueOf(syncOptions.getAlbumSyncLimit())));
         albumImageLimitSpinner.setEnabled(!useGlobal);
 
+        selfTextLinkCountSpinner = (Spinner) view.findViewById(R.id.spinner_syncSelfTextLinks);
+        selfTextLinkCountSpinner.setAdapter(new ArrayAdapter<>(getActivity(), dropdownResource, syncLinksInTextOptions));
+        selfTextLinkCountSpinner.setSelection(Arrays.asList(syncLinksInTextOptions).indexOf(String.valueOf(syncOptions.getSyncSelfTextLinkCount())));
+        selfTextLinkCountSpinner.setEnabled(!useGlobal);
+
         commentLinkCountSpinner = (Spinner) view.findViewById(R.id.spinner_syncCommentLinks);
-        commentLinkCountSpinner.setAdapter(new ArrayAdapter<>(getActivity(), dropdownResource, commentLinkCountOptions));
-        commentLinkCountSpinner.setSelection(Arrays.asList(commentLinkCountOptions).indexOf(String.valueOf(syncOptions.getSyncCommentLinkCount())));
+        commentLinkCountSpinner.setAdapter(new ArrayAdapter<>(getActivity(), dropdownResource, syncLinksInTextOptions));
+        commentLinkCountSpinner.setSelection(Arrays.asList(syncLinksInTextOptions).indexOf(String.valueOf(syncOptions.getSyncCommentLinkCount())));
         commentLinkCountSpinner.setEnabled(!useGlobal);
 
         syncThumbsCheckbox = (CheckBox) view.findViewById(R.id.checkBox_syncThumbs);
@@ -149,6 +155,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncOptions.setSyncCommentDepth(Integer.valueOf((String) syncCommentDepthSpinner.getSelectedItem()));
             syncOptions.setSyncCommentSort(CommentSort.valueOf((String) syncCommentSortSpinner.getSelectedItem()));
             syncOptions.setAlbumSyncLimit(Integer.valueOf((String) albumImageLimitSpinner.getSelectedItem()));
+            syncOptions.setSyncSelfTextLinkCount(Integer.valueOf((String) selfTextLinkCountSpinner.getSelectedItem()));
             syncOptions.setSyncCommentLinkCount(Integer.valueOf((String) commentLinkCountSpinner.getSelectedItem()));
             syncOptions.setSyncThumbs(syncThumbsCheckbox.isChecked());
             syncOptions.setSyncImages(syncImagesCheckbox.isChecked());
@@ -170,7 +177,8 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
             syncCommentDepthSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncCommentDepth)));
             syncCommentSortSpinner.setSelection(Arrays.asList(commentSortOptions).indexOf(MyApplication.syncCommentSort.value().toUpperCase()));
             albumImageLimitSpinner.setSelection(Arrays.asList(commentDepthOptions).indexOf(String.valueOf(MyApplication.syncAlbumImgCount)));
-            commentLinkCountSpinner.setSelection(Arrays.asList(commentLinkCountOptions).indexOf(String.valueOf(MyApplication.syncCommentLinkCount)));
+            selfTextLinkCountSpinner.setSelection(Arrays.asList(syncLinksInTextOptions).indexOf(String.valueOf(MyApplication.syncSelfTextLinkCount)));
+            commentLinkCountSpinner.setSelection(Arrays.asList(syncLinksInTextOptions).indexOf(String.valueOf(MyApplication.syncCommentLinkCount)));
             syncThumbsCheckbox.setChecked(MyApplication.syncThumbnails);
             syncImagesCheckbox.setChecked(MyApplication.syncImages);
             syncVideoCheckbox.setChecked(MyApplication.syncVideo);
@@ -183,6 +191,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
         syncCommentDepthSpinner.setEnabled(!b);
         syncCommentSortSpinner.setEnabled(!b);
         albumImageLimitSpinner.setEnabled(!b);
+        selfTextLinkCountSpinner.setEnabled(!b);
         commentLinkCountSpinner.setEnabled(!b);
         syncThumbsCheckbox.setEnabled(!b);
         syncImagesCheckbox.setEnabled(!b);

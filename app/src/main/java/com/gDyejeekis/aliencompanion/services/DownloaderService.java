@@ -456,6 +456,9 @@ public class DownloaderService extends IntentService {
             if(!submission.isSelf()) {
                 syncUrl(submission.getURL(), submission.getDomain(), filename, syncOptions);
             }
+            else if(syncOptions.getSyncSelfTextLinkCount() > 0) {
+                syncSelfTextLinks(submission, filename, syncOptions);
+            }
 
             if(syncOptions.getSyncCommentLinkCount() > 0) {
                 syncCommentLinks(submission, filename, syncOptions);
@@ -466,6 +469,30 @@ public class DownloaderService extends IntentService {
             //e.printStackTrace();
             pauseSync(builder);
             syncPost(builder, submission, filename, displayName, syncOptions);
+        }
+    }
+
+    /*
+     * syncs urls from the (synced) self-text of the given self-post, checks for pause/cancellation
+     */
+    private void syncSelfTextLinks(Submission post, String filename, SyncProfileOptions syncOptions) {
+        final int syncLimit = syncOptions.getSyncSelfTextLinkCount();
+        int syncCount = 0;
+        Document doc = Jsoup.parse(post.getSelftextHTML());
+        Elements links = doc.select("a[href]");
+        for(Element element : links) {
+            if(syncCount < syncLimit) {
+                try {
+                    String url = element.attr("href");
+                    syncUrl(url, ConvertUtils.getDomainName(url), filename, syncOptions);
+                    syncCount++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                break;
+            }
         }
     }
 
