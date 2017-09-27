@@ -69,6 +69,10 @@ public class LinkHandler {
             this.url = url;
             this.domain = url.substring(url.indexOf("@"));
         }
+        else if(GeneralUtils.isIntentLink(url)) {
+            this.url = url;
+            this.domain = "";
+        }
         else {
             if (!url.matches("http(s)?\\:\\/\\/.*")) {
                 url = "http://" + url;
@@ -197,10 +201,10 @@ public class LinkHandler {
                 else if(MyApplication.offlineModeEnabled && GeneralUtils.isArticleLink(urlLC, domainLC)) { // TODO: 7/30/2017 maybe check if synced article exists here instead of checking the link
                     startBrowserActivity(activity, post, url, domain);
                 }
-                else if(urlLC.startsWith("intent://")) {
+                else if(GeneralUtils.isIntentLink(url)) {
                     return handleAppLink();
                 }
-                else if(GeneralUtils.isEmailAddress(urlLC)) {
+                else if(GeneralUtils.isEmailAddress(url)) {
                     intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
                     activity.startActivity(intent);
                     return true;

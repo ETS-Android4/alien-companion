@@ -438,6 +438,10 @@ public class GeneralUtils {
         return link.contains("@");
     }
 
+    public static boolean isIntentLink(String url) {
+        return url.toLowerCase().startsWith("intent://");
+    }
+
     public static void clearField(EditText field, String hint) {
         clearField(field, hint, MyApplication.textHintColor);
     }
