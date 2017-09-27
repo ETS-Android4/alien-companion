@@ -172,6 +172,7 @@
     <string name="left">Left</string>
     <string name="right">Right</string>
     <string name="action_share">Share</string>
+    <string name="action_copy_to_clipboard">Copy to clipboard</string>
     <string name="action_copy_link">Copy link address</string>
     <string name="remove">Remove</string>
     <string name="change_password">Change password</string>
