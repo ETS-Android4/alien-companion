@@ -73,10 +73,10 @@ public class StreamableTask extends AsyncTask<String, Void, String> {
         String directUrl = safeJsonToString(mp4.get("url"));
         if(!directUrl.matches("http(s)?\\:\\/\\/.*")) {
             if(directUrl.startsWith("//")) {
-                return "http:" + directUrl;
+                return "https:" + directUrl;
             }
             else {
-                return "http://" + directUrl;
+                return "https://" + directUrl;
             }
         }
         return directUrl;

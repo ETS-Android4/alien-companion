@@ -127,10 +127,11 @@ public class ConvertUtils {
 
     public static String getDomainName(String url) throws URISyntaxException {
         try {
-            URI uri = new URI(url);
-            String domain = uri.getHost();
+            URI uri = new URI(url.replace("_", ""));
+            String domain = uri.getHost(); // underscore character will cause getHost() to return null
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         } catch (NullPointerException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -142,6 +143,25 @@ public class ConvertUtils {
             e.printStackTrace();
         }
         return string;
+    }
+
+    public static String urlToFilename(String url) {
+        String filename = removeUrlParameters(url);
+        filename = filename.substring(filename.lastIndexOf("/") + 1);
+        return filename;
+    }
+
+    public static String urlToFilenameOld(String url) {
+        String filename = removeUrlParameters(url);
+        filename = filename.replaceAll("https?://", "").replace("/", "(s)");
+        return filename;
+    }
+
+    public static String removeUrlParameters(String url) {
+        try {
+            url = url.substring(0, url.lastIndexOf("?"));
+        } catch (Exception e) {}
+        return url;
     }
 
 }

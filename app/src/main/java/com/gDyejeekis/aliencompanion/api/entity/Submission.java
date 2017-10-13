@@ -10,6 +10,7 @@ import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
+import com.gDyejeekis.aliencompanion.models.RedditVideo;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -92,6 +93,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	private List<Comment> syncedComments;
 
+	private RedditVideo redditVideo;
+
 	public boolean hasImageButton;
 
 	public boolean showAsStickied;
@@ -120,6 +123,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	//public void setImgurUrls(List<Image> images) {
 	//	this.imgurs = images;
 	//}
+
+	public RedditVideo getRedditVideo() {
+		return redditVideo;
+	}
+
+	public void setRedditVideo(RedditVideo redditVideo) {
+		this.redditVideo = redditVideo;
+	}
 
     /**
 	 * @return the approvedBy
@@ -224,7 +235,24 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 			setSelftext(safeJsonToString(obj.get("selftext")));
 			setSelftextHTML(safeJsonToString(obj.get("selftext_html")));
+
 			setDomain(safeJsonToString(obj.get("domain")));
+			if(domain.equals("i.reddituploads.com")) {
+				setURL(url.replace("&amp;", "&"));
+			}
+			else if(domain.equals("v.redd.it")) {
+				try {
+					JSONObject media = ((JSONObject) obj.get("media"));
+					JSONObject video = ((JSONObject) media.get("reddit_video"));
+					RedditVideo redditVideo = new RedditVideo(video);
+					//setURL(redditVideo.getFallbackUrl());
+					setRedditVideo(redditVideo);
+				} catch (Exception e) {
+					e.printStackTrace();
+					Log.e("Api error", "Error retrieving reddit video metadata from json response");
+				}
+			}
+
 			setBannedBy(safeJsonToString(obj.get("banned_by")));
 			setApprovedBy(safeJsonToString(obj.get("approved_by")));
 
@@ -254,10 +282,6 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			if(!MyApplication.useMarkdownParsing) {
 				selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
 				selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);
-			}
-
-			if(domain.equals("i.reddituploads.com")) {
-				url = url.replace("&amp;", "&");
 			}
 
 			updateAgePrepared();

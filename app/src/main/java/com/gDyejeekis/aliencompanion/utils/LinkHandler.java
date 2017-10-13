@@ -137,6 +137,16 @@ public class LinkHandler {
                     }
                     else setImplicitViewIntent = true;
                 }
+                else if(domainLC.equals("v.redd.it")) {
+                    if(post == null) {
+                        intent = new Intent(context, PostActivity.class);
+                        intent.putExtra("url", url);
+                    }
+                    else {
+                        intent = new Intent(context, MediaActivity.class);
+                        intent.putExtra("redditVideo", post.getRedditVideo());
+                    }
+                }
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
                         || domainLC.contains("gyazo.com")) {
                     intent = getMediaActivityIntent(activity, url, domain);

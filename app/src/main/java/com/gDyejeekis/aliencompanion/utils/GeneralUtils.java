@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -226,32 +227,86 @@ public class GeneralUtils {
         oos.close();
     }
 
-    public static void downloadToFileSync(String url, File file) throws IOException {
-        //Open a connection to that URL.
-        URLConnection ucon = new URL(url).openConnection();
+    //public static void downloadToFileSync(String url, File file) throws IOException {
+    //    // Open a connection to that URL.
+    //    URLConnection ucon = new URL(url).openConnection();
+//
+    //    // this timeout affects how long it takes for the app to realize there's a connection problem
+    //    ucon.setReadTimeout(5000);
+    //    ucon.setConnectTimeout(5000);
+//
+    //    // Define InputStreams to read from the URLConnection.
+    //    // uses 3KB download buffer
+    //    InputStream is = ucon.getInputStream();
+    //    BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
+    //    FileOutputStream outStream = new FileOutputStream(file);
+    //    byte[] buff = new byte[5 * 1024];
+//
+    //    // Read bytes (and store them) until there is nothing more to read(-1)
+    //    int len;
+    //    while ((len = inStream.read(buff)) != -1) {
+    //        outStream.write(buff, 0, len);
+    //    }
+//
+    //    // clean up
+    //    outStream.flush();
+    //    outStream.close();
+    //    inStream.close();
+    //}
 
-        //this timeout affects how long it takes for the app to realize there's a connection problem
-        ucon.setReadTimeout(5000);
-        ucon.setConnectTimeout(10000);
+    public static void downloadToFileSync(String fileURL, File file) throws IOException {
+        final int BUFFER_SIZE = 4096;
+        URL url = new URL(fileURL);
+        HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+        int responseCode = httpConn.getResponseCode();
 
-        //Define InputStreams to read from the URLConnection.
-        // uses 3KB download buffer
-        InputStream is = ucon.getInputStream();
-        BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
-        FileOutputStream outStream = new FileOutputStream(file);
-        byte[] buff = new byte[5 * 1024];
+        // always check HTTP response code first
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            //String fileName = ConvertUtils.urlToFilename(fileURL);
+            String disposition = httpConn.getHeaderField("Content-Disposition");
+            String contentType = httpConn.getContentType();
+            int contentLength = httpConn.getContentLength();
 
-        //Read bytes (and store them) until there is nothing more to read(-1)
-        int len;
-        while ((len = inStream.read(buff)) != -1) {
-            outStream.write(buff, 0, len);
-            //Log.d(TAG, "writing buffer to file..");
+            //if (disposition != null) {
+            //    // extracts file name from header field
+            //    int index = disposition.indexOf("filename=");
+            //    if (index > 0) {
+            //        fileName = disposition.substring(index + 10,
+            //                disposition.length() - 1);
+            //    }
+            //} else {
+            //    // extracts file name from URL
+            //    fileName = ConvertUtils.urlToFilename(fileURL);
+            //}
+
+            Log.d(TAG, "Content-Type = " + contentType);
+            Log.d(TAG, "Content-Disposition = " + disposition);
+            Log.d(TAG, "Content-Length = " + contentLength);
+            Log.d(TAG, "fileName = " + file.getName());
+
+            // opens input stream from the HTTP connection
+            InputStream inputStream = httpConn.getInputStream();
+            //String saveFilePath = saveDir + File.separator + fileName;
+
+            // opens an output stream to save into file
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            int bytesRead = -1;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            Log.d(TAG, "File downloaded");
+        } else {
+            Log.d(TAG, "No file to download. Server replied HTTP code: " + responseCode);
+
+            //Log.d(TAG, "New location: " + httpConn.getHeaderField("Location"));
         }
-
-        //clean up
-        outStream.flush();
-        outStream.close();
-        inStream.close();
+        httpConn.disconnect();
     }
 
     public static ImgurItem getImgurDataFromUrl(ImgurHttpClient httpClient, String url) { //run on background thread
@@ -306,26 +361,13 @@ public class GeneralUtils {
     }
 
     public static String checkCacheForMedia(File cacheDir, String url) {
-        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), urlToFilename(url));
+        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), ConvertUtils.urlToFilename(url));
         if(file!=null) {
             Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
         }
         Log.d(TAG, "Didn't find media from " + url + " in cache");
         return null;
-    }
-
-    public static String urlToFilename(String url) {
-        String filename = removeUrlParameters(url);
-        filename = filename.replaceAll("https?://", "").replace("/", "(s)");
-        return filename;
-    }
-
-    public static String removeUrlParameters(String url) {
-        try {
-            url = url.substring(0, url.lastIndexOf("?"));
-        } catch (Exception e) {}
-        return url;
     }
 
     public static void shareUrl(Context context, String label, String url) {
@@ -473,6 +515,7 @@ public class GeneralUtils {
         if(domain.equals("i.redd.it")) return true;
         if(domain.equals("i.reddituploads.com")) return true;
         if(domain.equals("i.redditmedia.com")) return true;
+        if(domain.equals("v.redd.it")) return true;
         String urlLc = url.toLowerCase();
         if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif") || urlLc.endsWith(".jpeg")) return true;
         return false;

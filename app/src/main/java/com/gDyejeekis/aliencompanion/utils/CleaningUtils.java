@@ -33,7 +33,7 @@ public class CleaningUtils {
     }
 
     public static void clearMediaFromCache(File cacheDir, String url) {
-        File file = new File(cacheDir, GeneralUtils.urlToFilename(url));
+        File file = new File(cacheDir, ConvertUtils.urlToFilename(url));
         if(file.delete()) {
             Log.d(TAG, "Deleted " + file.getAbsolutePath() + " from cache");
         }
@@ -250,7 +250,7 @@ public class CleaningUtils {
                             findDeleteFile(namedMediaDir, toFind);
                         }
                         else {
-                            toFind = GeneralUtils.urlToFilename(postLink);
+                            toFind = ConvertUtils.urlToFilename(postLink);
                             findDeleteFile(namedMediaDir, toFind);
                         }
 

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
 import java.io.BufferedInputStream;
@@ -40,7 +41,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
         url = params[0];
         String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, url);
         if(cachedPath==null) {
-            cachedPath = downloadToCache(new File(cacheDir, GeneralUtils.urlToFilename(url)));
+            cachedPath = downloadToCache(new File(cacheDir, ConvertUtils.urlToFilename(url)));
             GeneralUtils.checkCacheSize(cacheDir);
         }
         return cachedPath;

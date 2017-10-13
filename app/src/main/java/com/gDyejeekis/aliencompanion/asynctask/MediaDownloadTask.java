@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
@@ -32,7 +33,7 @@ public class MediaDownloadTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... unused) {
         try {
-            String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, GeneralUtils.urlToFilename(url));
+            String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, ConvertUtils.urlToFilename(url));
             if(cachedPath == null) {
                 Log.d(TAG, "Didn't find media in cache, downloading to " + file.getAbsolutePath());
                 GeneralUtils.downloadToFileSync(url, file);

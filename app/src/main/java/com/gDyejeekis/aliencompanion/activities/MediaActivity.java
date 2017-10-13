@@ -36,7 +36,9 @@ import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.ImageInf
 import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.VideoFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.models.RedditVideo;
 import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
@@ -131,8 +133,18 @@ public class MediaActivity extends BackNavActivity {
     }
 
     private void setupFragments() {
-        url = getIntent().getStringExtra("url");
-        String domain = getIntent().getStringExtra("domain");
+        String domain;
+        //boolean isGif = false;
+        RedditVideo redditVideo = (RedditVideo) getIntent().getSerializableExtra("redditVideo");
+        if(redditVideo != null) {
+            domain = "v.redd.it";
+            //isGif = redditVideo.getGif();
+            url = redditVideo.getFallbackUrl(); // TODO: 10/11/2017 properly support v.redd.it videos with sound
+        }
+        else {
+            domain = getIntent().getStringExtra("domain");
+            url = getIntent().getStringExtra("url");
+        }
 
         if(MyApplication.offlineModeEnabled) {
             File mediaDir = GeneralUtils.checkSyncedMediaDir(this);
@@ -143,7 +155,10 @@ public class MediaActivity extends BackNavActivity {
                 toFind = LinkHandler.getGfycatId(url);
             }
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-                toFind = GeneralUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
+                toFind = ConvertUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
+            }
+            else if(domain.equals("v.redd.it")) {
+                toFind = ConvertUtils.urlToFilename(url); // TODO: 10/11/2017 maybe use video id
             }
             else if(domain.contains("gyazo.com")) {
                 toFind = LinkHandler.getGyazoId(url);
@@ -288,6 +303,13 @@ public class MediaActivity extends BackNavActivity {
             // REDDIT (SMH FAM)
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
                 addImageFragment(url);
+            }
+            // REDDIT VIDEO (>.<)
+            else if(domain.equals("v.redd.it")) {
+                // TODO: 10/11/2017
+                //if(isGif) addGifFragment(url);
+                //else addVideoFragment(url);
+                addGifFragment(url);
             }
             // IMAGES
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
@@ -690,7 +712,7 @@ public class MediaActivity extends BackNavActivity {
             appFolder.mkdir();
         }
 
-        String filename = GeneralUtils.urlToFilename(url);
+        String filename = ConvertUtils.urlToFilename(url);
         if(!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))) {
             filename = filename.concat(".jpg");
         }

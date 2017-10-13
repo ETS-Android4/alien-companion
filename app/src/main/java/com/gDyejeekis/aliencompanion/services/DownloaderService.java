@@ -846,7 +846,14 @@ public class DownloaderService extends IntentService {
         }
         // REDDIT
         else if(url.contains("i.reddituploads.com") || url.contains("i.redditmedia.com")) {
-            downloadMediaToPath(url, path, GeneralUtils.urlToFilename(url).concat(".jpg"));
+            downloadMediaToPath(url, path, ConvertUtils.urlToFilename(url).concat(".jpg"));
+        }
+        // REDDIT VIDEO
+        else if(url.contains("v.redd.it")) {
+            if(!url.toLowerCase().endsWith("/DASH_2_4_M")) {
+                url += "/DASH_2_4_M";
+            }
+            downloadMediaToPath(url, path, ConvertUtils.urlToFilename(url).concat(".mp4"));
         }
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
@@ -941,7 +948,7 @@ public class DownloaderService extends IntentService {
     }
 
     private void downloadMediaToPath(String url, String path) {
-        downloadMediaToPath(url, path, GeneralUtils.urlToFilename(url));
+        downloadMediaToPath(url, path, ConvertUtils.urlToFilename(url));
     }
 
     private void downloadPostThumbnail(Submission post, String filename) {

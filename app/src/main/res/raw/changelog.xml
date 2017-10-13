@@ -39,6 +39,7 @@
         <changelogtext>It is now possible for a sync profile to have multiple schedules</changelogtext>
         <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
         <!-- link handling changes -->
+        <changelogtext>Added v.redd.it link handling support</changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
         <changelogtext>Added giphy.com link handling support</changelogtext>
         <changelogtext>Added streamable.com link handling support</changelogtext>
