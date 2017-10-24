@@ -149,7 +149,7 @@ public class LinkHandler {
                         intent.putExtra("redditVideo", post.getRedditVideo());
                     }
                     else {
-                        setImplicitViewIntent = true;
+                        ToastUtils.showToast(context, "Api error - reddit video url not found");
                     }
                 }
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
