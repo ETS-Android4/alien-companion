@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
@@ -52,7 +53,7 @@ public class StreamableTask extends AsyncTask<String, Void, String> {
 
     // this method makes an API call to api.streamable.com (synchronously)
     public static String getStreamableDirectUrl(String originalUrl) throws IOException, ParseException {
-        String url = "https://api.streamable.com/videos/" + LinkHandler.getStreamableId(originalUrl);
+        String url = "https://api.streamable.com/videos/" + LinkUtils.getStreamableId(originalUrl);
         Log.d("Streamable", "GET request to " + url);
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setUseCaches(true);

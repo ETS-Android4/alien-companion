@@ -16,6 +16,7 @@ import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.retrieval.Subreddits;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -114,7 +115,7 @@ public class User implements Serializable {
      */
     public void connect() throws IOException, ParseException {
         if(!RedditOAuth.useOAuth2) {
-            ArrayList<String> hashCookiePair = hashCookiePair(ConvertUtils.URLEncodeString(username), ConvertUtils.URLEncodeString(password));
+            ArrayList<String> hashCookiePair = hashCookiePair(LinkUtils.URLEncodeString(username), LinkUtils.URLEncodeString(password));
             this.modhash = hashCookiePair.get(0);
             this.cookie = hashCookiePair.get(1);
         }

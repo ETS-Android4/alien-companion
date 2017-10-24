@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
@@ -48,7 +49,7 @@ public class GfycatTask extends AsyncTask<String, Void, String> {
 
     // this method makes an API call to gfycat.com (synchronously)
     public static String getGfycatDirectUrl(String desktopUrl) throws IOException, ParseException {
-        String url = "http://gfycat.com/cajax/get/" + LinkHandler.getGfycatId(desktopUrl);
+        String url = "http://gfycat.com/cajax/get/" + LinkUtils.getGfycatId(desktopUrl);
         Log.d("Gfycat", "GET request to " + url);
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setUseCaches(true);
@@ -72,7 +73,7 @@ public class GfycatTask extends AsyncTask<String, Void, String> {
 
     // simple modify url method for GFYCAT
     public static String getGfycatDirectUrlSimple(String desktopUrl) {
-        String id = LinkHandler.getGfycatId(desktopUrl);
+        String id = LinkUtils.getGfycatId(desktopUrl);
         return "http://thumbs.gfycat.com/" + id + "-mobile.mp4";
     }
 }

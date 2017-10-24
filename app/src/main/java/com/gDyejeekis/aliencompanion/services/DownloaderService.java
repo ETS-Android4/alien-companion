@@ -25,10 +25,8 @@ import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.FilterUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
@@ -46,6 +44,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -484,7 +483,7 @@ public class DownloaderService extends IntentService {
             if(syncCount < syncLimit) {
                 try {
                     String url = element.attr("href");
-                    syncUrl(url, ConvertUtils.getDomainName(url), filename, syncOptions);
+                    syncUrl(url, LinkUtils.getDomainName(url), filename, syncOptions);
                     syncCount++;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -518,7 +517,7 @@ public class DownloaderService extends IntentService {
             for (Element element : links) {
                 try {
                     String url = element.attr("href");
-                    syncUrl(url, ConvertUtils.getDomainName(url), filename, syncOptions);
+                    syncUrl(url, LinkUtils.getDomainName(url), filename, syncOptions);
                     syncCount++;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -547,13 +546,13 @@ public class DownloaderService extends IntentService {
             return;
         }
 
-        if (GeneralUtils.isRedditPostUrl(url)) {
+        if (LinkUtils.isRedditPostUrl(url)) {
             syncLinkedRedditPost(url, domain, filename, syncOptions);
-        } else if (syncOptions.isSyncImages() && GeneralUtils.isImageLink(url, domain)) {
+        } else if (syncOptions.isSyncImages() && LinkUtils.isImageLink(url, domain)) {
             syncImage(url, filename, syncOptions);
-        } else if (syncOptions.isSyncVideo() && GeneralUtils.isVideoLink(url, domain)) {
+        } else if (syncOptions.isSyncVideo() && LinkUtils.isVideoLink(url, domain)) {
             syncVideo(url, filename);
-        } else if (syncOptions.isSyncWebpages() && GeneralUtils.isArticleLink(url, domain)) {
+        } else if (syncOptions.isSyncWebpages() && LinkUtils.isArticleLink(url, domain)) {
             syncArticle(url, filename);
         }
     }
@@ -570,24 +569,12 @@ public class DownloaderService extends IntentService {
         try {
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             cmntsRetrieval.setSyncRetrieval(true);
-            if (domain.equals("redd.it")) {
-                linkedPost = new Submission(LinkHandler.getShortRedditId(url));
-                List<Comment> comments = cmntsRetrieval.ofSubmission(linkedPost, null, -1, syncOptions.getSyncCommentDepth(), syncOptions.getSyncCommentCount(),
-                        syncOptions.getSyncCommentSort());
-                linkedPost.setSyncedComments(comments);
-            } else {
-                String[] postInfo = LinkHandler.getRedditPostInfo(url);
-                if (postInfo != null) {
-                    linkedPost = new Submission(postInfo[1]);
-                    linkedPost.setSubreddit(postInfo[0]);
-                    int parentsShown = (postInfo[3] == null) ? -1 : Integer.valueOf(postInfo[3]);
-                    List<Comment> comments = cmntsRetrieval.ofSubmission(linkedPost, postInfo[2], parentsShown, syncOptions.getSyncCommentDepth(),
-                            syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
-                    linkedPost.setSyncedComments(comments);
-                }
-            }
 
+            linkedPost = LinkUtils.getRedditPostFromUrl(url);
             if (linkedPost != null) {
+                List<Comment> comments = cmntsRetrieval.ofSubmission(linkedPost, linkedPost.getLinkedCommentId(), linkedPost.getParentsShown(), syncOptions.getSyncCommentDepth(),
+                        syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
+                linkedPost.setSyncedComments(comments);
                 // TODO: 7/30/2017 thumbnails don't seem to sync or load properly here
                 //if (syncOptions.isSyncThumbs()) {
                 //    downloadPostThumbnail(linkedPost, filename);
@@ -827,7 +814,7 @@ public class DownloaderService extends IntentService {
             }
         }
         // GYAZO
-        else if(url.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
+        else if(url.contains("gyazo.com") && !LinkUtils.isRawGyazoUrl(url)) {
             try {
                 url = GyazoTask.getGyazoDirectUrl(url);
                 downloadMediaToPath(url, path);
@@ -836,7 +823,7 @@ public class DownloaderService extends IntentService {
             }
         }
         // GIPHY
-        else if(url.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
+        else if(url.contains("giphy.com") && !LinkUtils.isMp4Giphy(url)) {
             try {
                 url = GiphyTask.getGiphyDirectUrlSimple(url);
                 downloadMediaToPath(url, path);
@@ -846,14 +833,14 @@ public class DownloaderService extends IntentService {
         }
         // REDDIT
         else if(url.contains("i.reddituploads.com") || url.contains("i.redditmedia.com")) {
-            downloadMediaToPath(url, path, ConvertUtils.urlToFilename(url).concat(".jpg"));
+            downloadMediaToPath(url, path, LinkUtils.urlToFilename(url).concat(".jpg"));
         }
         // REDDIT VIDEO
         else if(url.contains("v.redd.it")) {
             if(!url.toLowerCase().endsWith("/DASH_2_4_M")) {
                 url += "/DASH_2_4_M";
             }
-            downloadMediaToPath(url, path, ConvertUtils.urlToFilename(url).concat(".mp4"));
+            downloadMediaToPath(url, path, LinkUtils.urlToFilename(url).concat(".mp4"));
         }
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
@@ -909,7 +896,7 @@ public class DownloaderService extends IntentService {
             if(albumSyncLimit > 1) {
                 // sync album thumbnails for grid view
                 try {
-                    String imgId = LinkHandler.getImgurImgId(img.getLink());
+                    String imgId = LinkUtils.getImgurImgId(img.getLink());
                     File thumbsDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedThumbnailsDir(this), filename);
                     GeneralUtils.downloadToFileSync("http://i.imgur.com/" + imgId + "s.jpg", new File(thumbsDir, imgId + "-thumb"));
                 } catch (IOException e) {
@@ -948,7 +935,7 @@ public class DownloaderService extends IntentService {
     }
 
     private void downloadMediaToPath(String url, String path) {
-        downloadMediaToPath(url, path, ConvertUtils.urlToFilename(url));
+        downloadMediaToPath(url, path, LinkUtils.urlToFilename(url));
     }
 
     private void downloadPostThumbnail(Submission post, String filename) {

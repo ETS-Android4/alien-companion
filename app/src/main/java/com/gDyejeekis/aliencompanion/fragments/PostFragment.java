@@ -15,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,24 +35,17 @@ import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardRelativeLayout;
-import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners.CommentFabNavListener;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,9 +62,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentSort commentSort;
     public CommentSort tempSort;
     public ProgressBar progressBar;
-    private boolean loadFromList;
-    public String commentLinkId;
-    public int parentsShown = -1;
+    private boolean loadFromUrl = false;
+    public String redditVideoUrl;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
@@ -127,7 +118,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public static PostFragment newInstance(Submission post) {
         PostFragment postFragment = new PostFragment();
         postFragment.post = post;
-        postFragment.loadFromList = true;
+        postFragment.loadFromUrl = false;
 
         return postFragment;
     }
@@ -141,24 +132,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return newInstance;
     }
 
-    public static PostFragment newInstance(String[] postInfo) {
+    public static PostFragment newInstance(String url) {
         PostFragment postFragment = new PostFragment();
-        postFragment.loadFromList = false;
-
-        postFragment.post = new Submission(postInfo[1]);
-        postFragment.post.setSubreddit(postInfo[0]);
-        postFragment.commentLinkId = postInfo[2];
-        if (postFragment.commentLinkId != null) postFragment.showFullCommentsButton = true;
-        if (postInfo[3] != null) postFragment.parentsShown = Integer.valueOf(postInfo[3]);
-
-        return postFragment;
-    }
-
-    public static PostFragment newInstance(String postId) {
-        PostFragment postFragment = new PostFragment();
-        postFragment.loadFromList = false;
-
-        postFragment.post = new Submission(postId);
+        postFragment.loadFromUrl = true;
+        postFragment.post = LinkUtils.getRedditPostFromUrl(url);
 
         return postFragment;
     }
@@ -174,38 +151,30 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             initFabAnimations();
         }
 
-        String[] postInfo = activity.getIntent().getStringArrayExtra("postInfo");
-
         if(!MainActivity.dualPaneActive) {
-            post = (Submission) activity.getIntent().getSerializableExtra("post");
-            loadFromList = (post != null);
-
-            if (!loadFromList) {
-                initPostFromUrl(postInfo);
-            }
-            if(MyApplication.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) MainActivity.dualPaneActive = true;
-        }
-        else {
-            if(post==null) {
-                initPostFromUrl(postInfo);
+            if(MyApplication.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                MainActivity.dualPaneActive = true;
             }
         }
-    }
 
-    private void initPostFromUrl(String[] postInfo) {
-        if (postInfo != null) {
-            initPostFromInfoArray(postInfo);
-        } else {
-            post = new Submission(activity.getIntent().getStringExtra("postId"));
+        String url = activity.getIntent().getStringExtra("url");
+        Submission post = (Submission) activity.getIntent().getSerializableExtra("post");
+
+        if(post == null && url != null) {
+            loadFromUrl = true;
+            this.post = LinkUtils.getRedditPostFromUrl(url);
+            if(this.post==null) {
+                if(url.contains("v.redd.it")) {
+                    redditVideoUrl = url;
+                }
+            }
+            else {
+                showFullCommentsButton = this.post.getLinkedCommentId() != null;
+            }
         }
-    }
-
-    private void initPostFromInfoArray(String[] postInfo) {
-        post = new Submission(postInfo[1]);
-        post.setSubreddit(postInfo[0]);
-        commentLinkId = postInfo[2];
-        if (commentLinkId != null) showFullCommentsButton = true;
-        if (postInfo[3] != null) parentsShown = Integer.valueOf(postInfo[3]);
+        else if(post != null) {
+            this.post = post;
+        }
     }
 
     public void setSnackbar(Snackbar snackbar) {
@@ -237,8 +206,12 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             //currentlyLoading = true;
             postAdapter = new PostAdapter(activity);
 
-            if (loadFromList) postAdapter.add(post);
-            else progressBar.setVisibility(View.VISIBLE);
+            if(loadFromUrl || post==null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+            else {
+                postAdapter.add(post);
+            }
 
             mRecyclerView.setAdapter(postAdapter);
 
@@ -553,7 +526,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void loadFullComments() {
-        commentLinkId = null;
+        post.setLinkedCommentId(null);
         refreshPostAndComments();
     }
 
@@ -583,10 +556,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void setActionBarTitle() {
         if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
             String title;
-            if (post.getSubreddit() != null) {
+            if (post!=null && post.getSubreddit() != null) {
                 title = post.getSubreddit().toLowerCase();
             } else {
-                title = "Loading..";
+                title = "loading..";
             }
             activity.getSupportActionBar().setTitle(title);
         }

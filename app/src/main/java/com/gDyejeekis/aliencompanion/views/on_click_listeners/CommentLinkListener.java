@@ -15,26 +15,27 @@ import com.gDyejeekis.aliencompanion.api.entity.Comment;
  */
 public class CommentLinkListener implements View.OnClickListener {
 
-    //private Activity activity;
+    public static final int DEFAULT_COMMENT_PARENTS_SHOWN = 5;
+
     private Context context;
     private Comment comment;
 
     public CommentLinkListener(Context context, Comment comment) {
-        //this.activity = activity;
         this.context = context;
         this.comment = comment;
     }
 
     @Override
     public void onClick(View v) {
-        String postInfo[] = {comment.getSubreddit(), comment.getLinkId().substring(3), comment.getIdentifier(), "5"};
+        String url = "https://wwww.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3) + "/title/" + comment.getIdentifier()
+                + "/?context=" + DEFAULT_COMMENT_PARENTS_SHOWN;
         if(MainActivity.dualPaneActive) {
-            PostFragment fragment = PostFragment.newInstance(postInfo);
+            PostFragment fragment = PostFragment.newInstance(url);
             ((UserActivity) context).setupPostFragment(fragment);
         }
         else {
             Intent intent = new Intent(context, PostActivity.class);
-            intent.putExtra("postInfo", postInfo);
+            intent.putExtra("url", url);
             context.startActivity(intent);
         }
     }

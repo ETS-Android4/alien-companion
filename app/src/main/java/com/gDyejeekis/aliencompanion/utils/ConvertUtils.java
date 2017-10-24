@@ -2,6 +2,8 @@ package com.gDyejeekis.aliencompanion.utils;
 
 import android.graphics.Color;
 
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -11,6 +13,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by George on 6/19/2015.
@@ -123,45 +127,6 @@ public class ConvertUtils {
         int green = Color.green(color);
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
-    }
-
-    public static String getDomainName(String url) throws URISyntaxException {
-        try {
-            URI uri = new URI(url.replace("_", ""));
-            String domain = uri.getHost(); // underscore character will cause getHost() to return null
-            return domain.startsWith("www.") ? domain.substring(4) : domain;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static String URLEncodeString(String string) {
-        try {
-            return URLEncoder.encode(string, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return string;
-    }
-
-    public static String urlToFilename(String url) {
-        String filename = removeUrlParameters(url);
-        filename = filename.substring(filename.lastIndexOf("/") + 1);
-        return filename;
-    }
-
-    public static String urlToFilenameOld(String url) {
-        String filename = removeUrlParameters(url);
-        filename = filename.replaceAll("https?://", "").replace("/", "(s)");
-        return filename;
-    }
-
-    public static String removeUrlParameters(String url) {
-        try {
-            url = url.substring(0, url.lastIndexOf("?"));
-        } catch (Exception e) {}
-        return url;
     }
 
 }

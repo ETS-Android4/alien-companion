@@ -28,12 +28,6 @@ public abstract class Thing implements Comparable<Thing>, java.io.Serializable {
 		this.identifier = split[1];
 	}
 
-    public Thing() {
-        this.fullName = null;
-        this.kind = null;
-        this.identifier = null;
-    }
-
     public Thing(String name, JSONArray jsonArray) {
         if(name!=null && name.contains("_")) {
             this.fullName = name;
@@ -45,10 +39,6 @@ public abstract class Thing implements Comparable<Thing>, java.io.Serializable {
         String[] split = name.split("_");
         this.kind = split[0];
         this.identifier = split[1];
-    }
-
-    public void setName(JSONObject obj) {
-        safeJsonToString(obj.get("name"));
     }
 	
     /**

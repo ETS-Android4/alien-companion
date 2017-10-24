@@ -17,18 +17,18 @@ public class ThumbnailUtils {
     public static final String BASE_GFYCAT_THUMB_URL = "http://thumbs.gfycat.com/";
 
     public static String getYoutubeThumbnail(String url, YoutubeThumbnailSize size) {
-        String id = LinkHandler.getYoutubeVideoId(url);
+        String id = LinkUtils.getYoutubeVideoId(url);
 
         return BASE_YOUTUBE_THUMB_URL_SHORT + id + "/" + size.value() + "default.jpg";
     }
 
     public static String getImgurThumbnail(String url, ImgurThumbnailSize size) {
-        String id = LinkHandler.getImgurImgId(url);
+        String id = LinkUtils.getImgurImgId(url);
         if (!id.equals("")) return BASE_IMGUR_THUMB_URL + id + size.value() + ".jpg";
         return "";
     }
 
     public static String getGfycatThumbnail(String url) {
-        return BASE_GFYCAT_THUMB_URL + LinkHandler.getGfycatId(url) + "-thumb360.jpg";
+        return BASE_GFYCAT_THUMB_URL + LinkUtils.getGfycatId(url) + "-thumb360.jpg";
     }
 }

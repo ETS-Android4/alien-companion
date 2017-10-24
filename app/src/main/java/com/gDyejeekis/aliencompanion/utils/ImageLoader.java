@@ -85,7 +85,7 @@ public class ImageLoader {
                     Thumbnail thumbnail = new Thumbnail("file:" + thumbFile.getAbsolutePath());
                     boolean hasThumbnail = false;
                     try {
-                        hasThumbnail = !ConvertUtils.getDomainName(post.getThumbnail()).equals("null");
+                        hasThumbnail = !LinkUtils.getDomainName(post.getThumbnail()).equals("null");
                     } catch (Exception e) {}
                     thumbnail.setHasThumbnail(hasThumbnail);
                     return thumbnail;

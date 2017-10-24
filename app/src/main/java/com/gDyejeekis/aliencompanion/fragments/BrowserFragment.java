@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,7 +80,7 @@ public class BrowserFragment extends Fragment {
             super.onPageStarted(view, url, favicon);
             try {
                 if(!(activity instanceof OAuthActivity)) {
-                    setActionbarTitle(ConvertUtils.getDomainName(url));
+                    setActionbarTitle(LinkUtils.getDomainName(url));
                     updateMenuItems();
                 }
             } catch (Exception e) {

@@ -11,6 +11,7 @@ import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.Response;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -70,7 +71,7 @@ public class ProfileActions implements ActorDriven {
     public boolean changePassword(String currentPassword, String newPassword) throws ActionFailedException {
 
         // Make the request
-        JSONObject object = (JSONObject) update(ConvertUtils.URLEncodeString(currentPassword), "", ConvertUtils.URLEncodeString(newPassword)).getResponseObject();
+        JSONObject object = (JSONObject) update(LinkUtils.URLEncodeString(currentPassword), "", LinkUtils.URLEncodeString(newPassword)).getResponseObject();
 
         // User required
         if (object.toJSONString().contains(".error.USER_REQUIRED")) {

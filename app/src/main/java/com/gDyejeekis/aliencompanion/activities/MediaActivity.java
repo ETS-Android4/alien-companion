@@ -41,6 +41,7 @@ import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -152,26 +153,26 @@ public class MediaActivity extends BackNavActivity {
             String toFind = null;
             boolean hasSound = false;
             if(domain.contains("gfycat.com")) {
-                toFind = LinkHandler.getGfycatId(url);
+                toFind = LinkUtils.getGfycatId(url);
             }
             else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-                toFind = ConvertUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
+                toFind = LinkUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
             }
             else if(domain.equals("v.redd.it")) {
-                toFind = ConvertUtils.urlToFilename(url); // TODO: 10/11/2017 maybe use video id
+                toFind = LinkUtils.urlToFilename(url); // TODO: 10/11/2017 maybe use video id
             }
             else if(domain.contains("gyazo.com")) {
-                toFind = LinkHandler.getGyazoId(url);
+                toFind = LinkUtils.getGyazoId(url);
             }
             else if(domain.contains("giphy.com")) {
-                toFind = LinkHandler.getGiphyId(url);
+                toFind = LinkUtils.getGiphyId(url);
             }
             else if(domain.contains("streamable.com")) {
-                toFind = LinkHandler.getStreamableId(url);
+                toFind = LinkUtils.getStreamableId(url);
                 hasSound = true;
             }
             else if(domain.contains("imgur.com")) {
-                String id = LinkHandler.getImgurImgId(url);
+                String id = LinkUtils.getImgurImgId(url);
                 if(url.contains("/a/")) {
                     ImgurAlbum album = (ImgurAlbum) findImgurItemFromFile(id);
                     if(album!=null) {
@@ -253,7 +254,7 @@ public class MediaActivity extends BackNavActivity {
                 addGifFragment(GfycatTask.getGfycatDirectUrlSimple(url));
             }
             // GYAZO
-            else if(domain.contains("gyazo.com") && !LinkHandler.isRawGyazoUrl(url)) {
+            else if(domain.contains("gyazo.com") && !LinkUtils.isRawGyazoUrl(url)) {
                 new GyazoTask(this) {
                     @Override
                     protected void onPostExecute(String rawUrl) {
@@ -272,7 +273,7 @@ public class MediaActivity extends BackNavActivity {
                 }.execute(url);
             }
             // GIPHY
-            else if(domain.contains("giphy.com") && !LinkHandler.isMp4Giphy(url)) {
+            else if(domain.contains("giphy.com") && !LinkUtils.isMp4Giphy(url)) {
                 addGifFragment(GiphyTask.getGiphyDirectUrlSimple(url));
                 //new GiphyTask(this) {
                 //    @Override
@@ -306,7 +307,7 @@ public class MediaActivity extends BackNavActivity {
             }
             // REDDIT VIDEO (>.<)
             else if(domain.equals("v.redd.it")) {
-                // TODO: 10/11/2017
+                // TODO: 10/11/2017 add approriate fragment (sound or no sound)
                 //if(isGif) addGifFragment(url);
                 //else addVideoFragment(url);
                 addGifFragment(url);
@@ -712,7 +713,7 @@ public class MediaActivity extends BackNavActivity {
             appFolder.mkdir();
         }
 
-        String filename = ConvertUtils.urlToFilename(url);
+        String filename = LinkUtils.urlToFilename(url);
         if(!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))) {
             filename = filename.concat(".jpg");
         }

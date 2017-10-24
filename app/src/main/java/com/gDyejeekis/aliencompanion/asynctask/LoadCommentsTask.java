@@ -11,6 +11,7 @@ import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.utils.ImageLoader;
@@ -101,15 +102,20 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 }
             }
             else {
+                if(fragment.post==null && fragment.redditVideoUrl!=null) {
+                    String url = GeneralUtils.getFinalUrlRedirect(fragment.redditVideoUrl);
+                    fragment.post = LinkUtils.getRedditPostFromUrl(url);
+                }
+
                 Comments cmnts = new Comments(httpClient, MyApplication.currentUser);
-                int depth = (fragment.commentLinkId!=null) ? 999 : MyApplication.initialCommentDepth;
-                comments = cmnts.ofSubmission(fragment.post, fragment.commentLinkId, fragment.parentsShown, depth,
+                int depth = (fragment.post.getLinkedCommentId()!=null) ? 999 : MyApplication.initialCommentDepth;
+                comments = cmnts.ofSubmission(fragment.post, fragment.post.getLinkedCommentId(), fragment.post.getParentsShown(), depth,
                         MyApplication.initialCommentCount, fragment.commentSort);
             }
             Comments.indentCommentTree(comments);
 
             return comments;
-        } catch (RetrievalFailedException | RedditError | NullPointerException | IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             exception = e;
         }

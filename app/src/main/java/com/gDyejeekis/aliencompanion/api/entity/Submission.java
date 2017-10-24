@@ -89,6 +89,9 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     private Boolean hidden;
     private Boolean clicked;
 
+	private String linkedCommentId;
+	private Integer parentsShown = -1;
+
 	private Thumbnail thumbnailObject;
 
 	private List<Comment> syncedComments;
@@ -123,6 +126,22 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	//public void setImgurUrls(List<Image> images) {
 	//	this.imgurs = images;
 	//}
+
+	public String getLinkedCommentId() {
+		return linkedCommentId;
+	}
+
+	public void setLinkedCommentId(String linkedCommentId) {
+		this.linkedCommentId = linkedCommentId;
+	}
+
+	public Integer getParentsShown() {
+		return parentsShown;
+	}
+
+	public void setParentsShown(Integer parentsShown) {
+		this.parentsShown = parentsShown;
+	}
 
 	public RedditVideo getRedditVideo() {
 		return redditVideo;
@@ -176,10 +195,6 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	public Submission(String id) {
 		super("t3_"+id);
-	}
-
-	public Submission() {
-		super();
 	}
 
 	/**

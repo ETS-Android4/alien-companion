@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
@@ -47,7 +48,7 @@ public class GiphyTask extends AsyncTask<String, Void, String> {
 
     // this method makes an API call to api.giphy.com (synchronously)
     public static String getGiphyDirectUrl(String originalUrl) throws IOException, ParseException {
-        String url = "http://api.giphy.com/v1/gifs/" + LinkHandler.getGiphyId(originalUrl) + "?api_key=" + LinkHandler.GIPHY_API_KEY;
+        String url = "http://api.giphy.com/v1/gifs/" + LinkUtils.getGiphyId(originalUrl) + "?api_key=" + LinkHandler.GIPHY_API_KEY;
         Log.d("Giphy", "GET request to " + url);
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setUseCaches(true);
@@ -71,6 +72,6 @@ public class GiphyTask extends AsyncTask<String, Void, String> {
 
     // simple modify url method for GIPHY
     public static String getGiphyDirectUrlSimple(String originalUrl) {
-        return "http://media.giphy.com/media/" + LinkHandler.getGiphyId(originalUrl) + "/giphy.mp4";
+        return "http://media.giphy.com/media/" + LinkUtils.getGiphyId(originalUrl) + "/giphy.mp4";
     }
 }

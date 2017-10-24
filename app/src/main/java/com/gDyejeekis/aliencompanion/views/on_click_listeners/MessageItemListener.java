@@ -39,14 +39,13 @@ public class MessageItemListener implements View.OnClickListener, View.OnLongCli
     @Override
     public void onClick(View v) {
         if(message.wasComment) {
-            String[] postInfo = LinkHandler.getRedditPostInfo(message.context);
             if(MainActivity.dualPaneActive) {
-                PostFragment fragment = PostFragment.newInstance(postInfo);
+                PostFragment fragment = PostFragment.newInstance(message.context);
                 ((MessageActivity) context).setupPostFragment(fragment);
             }
             else {
                 Intent intent = new Intent(context, PostActivity.class);
-                intent.putExtra("postInfo", postInfo);
+                intent.putExtra("url", message.context);
                 context.startActivity(intent);
             }
         }

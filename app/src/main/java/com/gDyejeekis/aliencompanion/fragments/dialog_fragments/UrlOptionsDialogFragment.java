@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import java.net.URISyntaxException;
 
@@ -31,7 +32,7 @@ public class UrlOptionsDialogFragment extends ScalableDialogFragment {
 
         url = getArguments().getString("url");
         try {
-            if (ConvertUtils.getDomainName(url) == null)
+            if (LinkUtils.getDomainName(url) == null)
                 url = ApiEndpointUtils.REDDIT_BASE_URL + url;
         } catch (URISyntaxException e) {}
     }

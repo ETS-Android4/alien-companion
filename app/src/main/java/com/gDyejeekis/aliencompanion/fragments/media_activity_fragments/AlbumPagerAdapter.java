@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
         for(ImgurImage image : images) {
             if(loadFromLocal) {
                 File mediaDir = GeneralUtils.getSyncedMediaDir(activity);
-                File imgFile = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), LinkHandler.getImgurImgId(image.getLink()));
+                File imgFile = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), LinkUtils.getImgurImgId(image.getLink()));
                 if(imgFile!=null) {
                     image.setLink("file:" + imgFile.getAbsolutePath());
                 }
@@ -45,7 +46,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
                 }
             }
             else {
-                thumbUrls.add("http://i.imgur.com/" + LinkHandler.getImgurImgId(image.getLink()) + "s.jpg");
+                thumbUrls.add("http://i.imgur.com/" + LinkUtils.getImgurImgId(image.getLink()) + "s.jpg");
             }
         }
     }

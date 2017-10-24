@@ -33,7 +33,7 @@ public class CleaningUtils {
     }
 
     public static void clearMediaFromCache(File cacheDir, String url) {
-        File file = new File(cacheDir, ConvertUtils.urlToFilename(url));
+        File file = new File(cacheDir, LinkUtils.urlToFilename(url));
         if(file.delete()) {
             Log.d(TAG, "Deleted " + file.getAbsolutePath() + " from cache");
         }
@@ -224,11 +224,11 @@ public class CleaningUtils {
                         if(postLink.contains("imgur.com")) {
                             if(postLink.contains("/a/") || postLink.contains("/gallery/")) {
                                 File infoFile = StorageUtils.findFile(namedMediaDir, namedMediaDir.getAbsolutePath(),
-                                        LinkHandler.getImgurImgId(postLink) + MyApplication.IMGUR_INFO_FILE_NAME);
+                                        LinkUtils.getImgurImgId(postLink) + MyApplication.IMGUR_INFO_FILE_NAME);
                                 if(infoFile != null && infoFile.isFile()) {
                                     ImgurItem albumInfo = (ImgurItem) GeneralUtils.readObjectFromFile(infoFile);
                                     for(ImgurImage img : albumInfo.getImages()) {
-                                        toFind = LinkHandler.getImgurImgId(img.getLink());
+                                        toFind = LinkUtils.getImgurImgId(img.getLink());
                                         findDeleteFile(namedMediaDir, toFind);
                                     }
                                     if(infoFile.delete()) {
@@ -236,21 +236,21 @@ public class CleaningUtils {
                                     }
                                 }
                                 else {
-                                    toFind = LinkHandler.getImgurImgId(postLink);
+                                    toFind = LinkUtils.getImgurImgId(postLink);
                                     findDeleteFile(namedMediaDir, toFind);
                                 }
                             }
                             else {
-                                toFind = LinkHandler.getImgurImgId(postLink);
+                                toFind = LinkUtils.getImgurImgId(postLink);
                                 findDeleteFile(namedMediaDir, toFind);
                             }
                         }
                         else if(postLink.contains("gfycat.com")) {
-                            toFind = LinkHandler.getGfycatId(postLink);
+                            toFind = LinkUtils.getGfycatId(postLink);
                             findDeleteFile(namedMediaDir, toFind);
                         }
                         else {
-                            toFind = ConvertUtils.urlToFilename(postLink);
+                            toFind = LinkUtils.urlToFilename(postLink);
                             findDeleteFile(namedMediaDir, toFind);
                         }
 

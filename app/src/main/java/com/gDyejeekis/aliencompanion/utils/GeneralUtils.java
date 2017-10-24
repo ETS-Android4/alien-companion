@@ -309,10 +309,38 @@ public class GeneralUtils {
         httpConn.disconnect();
     }
 
+    public static String getFinalUrlRedirect(String urlString) {
+        HttpURLConnection con = null;
+        try {
+            URL url = new URL(urlString);
+            con = (HttpURLConnection) (url.openConnection());
+            con.setInstanceFollowRedirects(false);
+            con.connect();
+            int resCode = con.getResponseCode();
+            if (resCode == HttpURLConnection.HTTP_SEE_OTHER
+                    || resCode == HttpURLConnection.HTTP_MOVED_PERM
+                    || resCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+                String location = con.getHeaderField("Location");
+                if (location.startsWith("/")) {
+                    location = url.getProtocol() + "://" + url.getHost() + location;
+                }
+                Log.d(TAG, "Redirect location: " + location);
+                return getFinalUrlRedirect(location);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(con!=null) {
+                con.disconnect();
+            }
+        }
+        return urlString;
+    }
+
     public static ImgurItem getImgurDataFromUrl(ImgurHttpClient httpClient, String url) { //run on background thread
         ImgurItem item;
         String urlLC = url.toLowerCase();
-        String id = LinkHandler.getImgurImgId(url);
+        String id = LinkUtils.getImgurImgId(url);
         if (urlLC.contains("/a/") || urlLC.contains("/topic/")) {
             JSONObject response = (JSONObject) httpClient.get(String.format(ImgurApiEndpoints.ALBUM, id)).getResponseObject();
             JSONObject object = (JSONObject) response.get("data");
@@ -361,7 +389,7 @@ public class GeneralUtils {
     }
 
     public static String checkCacheForMedia(File cacheDir, String url) {
-        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), ConvertUtils.urlToFilename(url));
+        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), LinkUtils.urlToFilename(url));
         if(file!=null) {
             Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();
@@ -451,37 +479,28 @@ public class GeneralUtils {
     }
 
     public static boolean isValidSubreddit(String s) {
-        String pattern = "^[a-zA-Z0-9\\_]*$";
+        final String pattern = "^[a-zA-Z0-9\\_]*$";
         return s.matches(pattern);
     }
 
     public static boolean isValidUsername(String s) {
-        String pattern = "^[a-zA-Z0-9\\_\\-]*$";
+        final String pattern = "^[a-zA-Z0-9\\_\\-]*$";
         return s.matches(pattern);
     }
 
     public static boolean isAlphaNumeric(String s){
-        String pattern = "^[a-zA-Z0-9]*$";
+        final String pattern = "^[a-zA-Z0-9]*$";
         return s.matches(pattern);
     }
 
     public static boolean containsAlphaNumeric(String s){
-        String pattern = ".*[a-zA-Z0-9]+.*";
+        final String pattern = ".*[a-zA-Z0-9]+.*";
         return s.matches(pattern);
     }
 
     public static boolean isValidDomain(String s) {
-        String pattern = "^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\\.[a-zA-Z]{2,})+$";
+        final String pattern = "^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\\.[a-zA-Z]{2,})+$";
         return s.matches(pattern);
-    }
-
-    // TODO: 9/16/2017 maybe write this properly (as long as input is a link reddit probably already validates email adresses)
-    public static boolean isEmailAddress(String link) {
-        return link.contains("@");
-    }
-
-    public static boolean isIntentLink(String url) {
-        return url.toLowerCase().startsWith("intent://");
     }
 
     public static void clearField(EditText field, String hint) {
@@ -492,81 +511,6 @@ public class GeneralUtils {
         field.setText("");
         field.setHint(hint);
         field.setHintTextColor(color);
-    }
-
-    public static boolean isRedditPostUrl(String url) {
-        return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches("(https?:\\/\\/)?redd\\.it\\/\\w+.*");
-    }
-
-    public static boolean isImageLink(String url, String domain) {
-        if(domain.contains("imgur.com")) return true;
-        if(domain.contains("gfycat.com")) return true;
-        if(domain.contains("giphy.com")) return true;
-        if(domain.contains("gyazo.com")) return true;
-        if(domain.contains("flickr.com")) return true;
-        if(domain.contains("twimg.com")) return true;
-        if(domain.contains("photobucket.com")) return true;
-        if(domain.contains("deviantart.com")) return true;
-        if(domain.equals("instagram.com")) return true;
-        if(domain.equals("snapchat.com")) return true;
-        if(domain.equals("trbimg.com")) return true;
-        if(domain.equals("imgfly.net")) return true;
-        if(domain.equals("9gag.com")) return true;
-        if(domain.equals("i.redd.it")) return true;
-        if(domain.equals("i.reddituploads.com")) return true;
-        if(domain.equals("i.redditmedia.com")) return true;
-        if(domain.equals("v.redd.it")) return true;
-        String urlLc = url.toLowerCase();
-        if(urlLc.endsWith(".jpg") || urlLc.endsWith(".png") || urlLc.endsWith(".gif") || urlLc.endsWith(".jpeg")) return true;
-        return false;
-    }
-
-    public static boolean isArticleLink(String url, String domain) {
-        if(isImageLink(url, domain)) return false;
-        if(isVideoLink(url, domain)) return false;
-        if(domain.contains("reddit.com") || domain.equals("redd.it")) return false;
-        if(domain.equals("twitter.com")) return false;
-        if(domain.contains("facebook")) return false;
-        if(domain.contains("github.com")) return false;
-        if(domain.equals("bitbucket.org")) return false;
-        if(domain.equals("gitlab.com")) return false;
-        if(domain.equals("store.steampowered.com")) return false;
-        if(domain.equals("steamcommunity.com")) return false;
-        if(domain.equals("origin.com")) return false;
-        if(domain.equals("ubisoft.com")) return false;
-        if(domain.equals("humblebundle.com")) return false;
-        if(domain.equals("strawpoll.me")) return false;
-        if(domain.equals("docs.google.com")) return false;
-        if(domain.contains("mixtape.moe")) return false;
-        if(domain.equals("play.google.com")) return false;
-        if(url.endsWith(".pdf")) return false;
-        return true;
-    }
-
-    public static boolean isGifLink(String url, String domain) {
-        if(domain.contains("gfycat.com")) return true;
-        if(domain.contains("giphy.com")) return true;
-        String urlLc = url.toLowerCase();
-        if(domain.contains("imgur.com") && urlLc.endsWith(".mp4")) return true;
-        if(urlLc.endsWith(".gif") || urlLc.endsWith(".gifv")) return true;
-        return false;
-    }
-
-    public static boolean isVideoLink(String url, String domain) {
-        if(domain.contains("youtube") || domain.equals("youtu.be")) return true;
-        if(domain.contains("streamable.com")) return true;
-        if(domain.contains("pomf.se")) return true;
-        if(domain.contains("dailymotion")) return true;
-        if(domain.contains("vimeo.com")) return true;
-        if(domain.equals("vid.me")) return true;
-        if(domain.equals("vine.co")) return true;
-        if(domain.equals("liveleak.com")) return true;
-        if(domain.contains("twitch.tv")) return true;
-        if(domain.equals("hitbox.tv")) return true;
-        if(domain.equals("oddshot.tv")) return true;
-        String urlLc = url.toLowerCase();
-        if(urlLc.endsWith(".webm") || urlLc.endsWith(".mp4"))  return true;
-        return false;
     }
 
 }

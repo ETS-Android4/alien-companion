@@ -181,7 +181,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 } else {
                     //cvh.setPaddingLeft(leftPadding);
                     // Comment permalink case
-                    if (comment.getIdentifier().equals(postFragment.commentLinkId)) {
+                    if (comment.getIdentifier().equals(postFragment.post.getLinkedCommentId())) {
                         cvh.commentLayout.setBackgroundColor(MyApplication.commentPermaLinkBackgroundColor);
                     }
                     else {
