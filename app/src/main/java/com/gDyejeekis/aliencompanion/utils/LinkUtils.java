@@ -198,9 +198,8 @@ public class LinkUtils {
         return timeMillis;
     }
 
-    // TODO: 9/16/2017 maybe write this properly (as long as input is a link reddit probably already validates email adresses)
     public static boolean isEmailAddress(String link) {
-        return link.contains("@");
+        return link.contains("@") && !link.contains("/");
     }
 
     public static boolean isIntentLink(String url) {
