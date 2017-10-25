@@ -144,12 +144,17 @@ public class LinkHandler {
                         intent.putExtra("url", url);
                         intent.putExtra("domain", domainLC);
                     }
-                    else if(post.getRedditVideo()!=null) { // link is from post object so open media viewer
+                    else if(post.getRedditVideo()!=null) { // reddit video object found in post object so pass that as extra to media activity
                         intent = new Intent(context, MediaActivity.class);
                         intent.putExtra("redditVideo", post.getRedditVideo());
                     }
-                    else {
-                        ToastUtils.showToast(context, "Api error - reddit video url not found");
+                    else { // post isn't null but redditVideo object is null, manually edit reddit video url and pass to media activity
+                        intent = new Intent(context, MediaActivity.class);
+                        if(!urlLC.endsWith("/DASH_2_4_M")) {
+                            url += "/DASH_2_4_M";
+                        }
+                        intent.putExtra("url", url);
+                        intent.putExtra("domain", domainLC);
                     }
                 }
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
