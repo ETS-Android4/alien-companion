@@ -53,6 +53,8 @@ import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners
 public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     //private static final String GROUPS_KEY = "groups_key";
 
+    public static final CommentSort DEFAULT_COMMENT_SORT = CommentSort.TOP;
+
     public PostAdapter postAdapter;
     public RecyclerView mRecyclerView;
     public LinearLayoutManager mLayoutManager;
@@ -159,6 +161,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         String url = activity.getIntent().getStringExtra("url");
         Submission post = (Submission) activity.getIntent().getSerializableExtra("post");
+        CommentSort commentSort = (CommentSort) activity.getIntent().getSerializableExtra("commentSort");
+
+        if(commentSort != null) {
+            this.commentSort = tempSort = commentSort;
+        }
+        else if(this.commentSort == null) {
+            this.commentSort = tempSort = DEFAULT_COMMENT_SORT;
+        }
 
         if(post == null && url != null) {
             loadFromUrl = true;
@@ -199,8 +209,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         initRecyclerView(view);
         initSwipeRefreshLayout(view);
         initFabNavOptions(view);
-
-        setCommentSort(MyApplication.defaultCommentSort); //TODO: change this for orientation changes
 
         if (postAdapter == null) {
             //currentlyLoading = true;
@@ -260,7 +268,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
-        if(commentSort == null) commentSort = CommentSort.TOP;
         setActionBarSubtitle();
         //updateActionBar = false;
     }
@@ -572,7 +579,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 subtitle = "loading";
             }
             else {
-                if(commentSort==null) commentSort = CommentSort.TOP;
+                // redundant
+                //if(commentSort==null) {
+                //    commentSort = CommentSort.TOP;
+                //}
                 subtitle = commentSort.value();
             }
             activity.getSupportActionBar().setSubtitle(subtitle);

@@ -110,7 +110,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 Comments cmnts = new Comments(httpClient, MyApplication.currentUser);
                 int depth = (fragment.post.getLinkedCommentId()!=null) ? 999 : MyApplication.initialCommentDepth;
                 comments = cmnts.ofSubmission(fragment.post, fragment.post.getLinkedCommentId(), fragment.post.getParentsShown(), depth,
-                        MyApplication.initialCommentCount, fragment.commentSort);
+                        MyApplication.initialCommentCount, fragment.tempSort);
             }
             Comments.indentCommentTree(comments);
 
