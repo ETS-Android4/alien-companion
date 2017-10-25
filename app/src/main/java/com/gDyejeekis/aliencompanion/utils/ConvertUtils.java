@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.utils;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.util.TypedValue;
 
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
@@ -127,6 +129,20 @@ public class ConvertUtils {
         int green = Color.green(color);
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
+    }
+
+    public static String intColorToHex(int intColor) {
+        return String.format("#%06X", 0xFFFFFF & intColor);
+    }
+
+    public static int convertDpToPixels(float dp, Context context) {
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+        return px;
+    }
+
+    public static int convertSpToPixels(float sp, Context context) {
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
+        return px;
     }
 
 }
