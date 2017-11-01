@@ -252,7 +252,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setSelftextHTML(safeJsonToString(obj.get("selftext_html")));
 
 			setDomain(safeJsonToString(obj.get("domain")));
-			if(domain.equals("i.reddituploads.com")) {
+			if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
 				setURL(url.replace("&amp;", "&"));
 			}
 			else if(domain.equals("v.redd.it")) {
