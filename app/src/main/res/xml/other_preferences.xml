@@ -29,6 +29,10 @@
         android:title="Clear app cache"/>
 
     <Preference
+        android:key="deviceSettings"
+        android:title="Device settings"/>
+
+    <Preference
         android:key="changelog"
         android:title="View changelog"
         android:summary="Current version: 1.0" />

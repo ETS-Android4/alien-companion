@@ -112,6 +112,19 @@ public class ConvertUtils {
         return string;
     }
 
+    public static String getTimeIntervalString(int minutes) {
+        if(minutes == -1) {
+            return "Never";
+        }
+        else if(minutes == 60) {
+            return "Every hour";
+        }
+        else if(minutes > 60) {
+            return "Every " + minutes/60 + " hours";
+        }
+        return "Every " + minutes + " minutes";
+    }
+
     public static CharSequence noTrailingwhiteLines(CharSequence text) {
         //fromHtmlCount++;
         //Log.d("geotest", "fromhtml() executed " + fromHtmlCount + " times");

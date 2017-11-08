@@ -47,6 +47,7 @@
         <changelogtext>Added email link handling support</changelogtext>
         <!-- other changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> FILTERS FEATURE HERE]]></changelogtext>
+        <changelogtext>Added 'Device settings' option under 'Other'</changelogtext>
         <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>

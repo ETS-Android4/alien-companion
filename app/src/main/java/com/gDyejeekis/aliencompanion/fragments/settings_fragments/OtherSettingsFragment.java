@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
@@ -14,6 +15,7 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialog
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -28,12 +30,12 @@ public class OtherSettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.other_preferences);
 
         Preference messageCheckInterval = findPreference("messageCheckInterval");
-        messageCheckInterval.setSummary(getTimeIntervalString(MyApplication.messageCheckInterval));
+        messageCheckInterval.setSummary(ConvertUtils.getTimeIntervalString(MyApplication.messageCheckInterval));
         messageCheckInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object o) {
                 MyApplication.messageCheckInterval = Integer.valueOf((String) o);
-                preference.setSummary(getTimeIntervalString(MyApplication.messageCheckInterval));
+                preference.setSummary(ConvertUtils.getTimeIntervalString(MyApplication.messageCheckInterval));
                 MyApplication.scheduleMessageCheckService(getActivity());
                 return true;
             }
@@ -63,7 +65,19 @@ public class OtherSettingsFragment extends PreferenceFragment {
                         ToastUtils.showToast(getActivity(), "Cache cleared");
                     }
                 }.execute();
-                return false;
+                return true;
+            }
+        });
+
+        Preference deviceSettings = findPreference("deviceSettings");
+        deviceSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getActivity().getPackageName()));
+                myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
+                myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivityForResult(myAppSettings, 46414);
+                return true;
             }
         });
 
@@ -72,7 +86,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 GeneralUtils.showChangeLog(getActivity());
-                return false;
+                return true;
             }
         });
 
@@ -85,7 +99,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Alien Companion app feedback");
                 //emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
                 getActivity().startActivity(emailIntent);
-                return false;
+                return true;
             }
         });
 
@@ -100,7 +114,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
                         return false;
                     }
                     else {
-                        MyApplication.preferExternalStorage = moveToExternal;
+                        MyApplication.preferExternalStorage = false;
                         return true;
                     }
                 }
@@ -120,7 +134,7 @@ public class OtherSettingsFragment extends PreferenceFragment {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getActivity(), PendingUserActionsActivity.class);
                 getActivity().startActivity(intent);
-                return false;
+                return true;
             }
         });
 
@@ -133,19 +147,6 @@ public class OtherSettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
-    }
-
-    private String getTimeIntervalString(int minutes) {
-        if(minutes == -1) {
-            return "Never";
-        }
-        else if(minutes == 60) {
-            return "Every hour";
-        }
-        else if(minutes > 60) {
-            return "Every " + minutes/60 + " hours";
-        }
-        return "Every " + minutes + " minutes";
     }
 
 }
