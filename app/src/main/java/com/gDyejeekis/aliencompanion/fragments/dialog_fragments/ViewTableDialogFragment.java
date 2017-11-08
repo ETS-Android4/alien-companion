@@ -3,32 +3,41 @@ package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Created by George on 5/28/2017.
  */
 
 public class ViewTableDialogFragment extends ScalableDialogFragment {
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_table, container, false);
         WebView webView = (WebView) view.findViewById(R.id.webView_table);
+        webView.setWebViewClient(new MyWebviewClient());
         webView.getSettings().setJavaScriptEnabled(false);
 
         String tableHtml = getArguments().getString("tableHtml");
         tableHtml = tableHtml.replace("£", "&pound;").replace("€", "&euro;");
         tableHtml = styleTableHtml(tableHtml);
+        //Log.d("geotest", tableHtml);
         webView.loadData(tableHtml, "text/html", "UTF-8");
 
         getDialog().setCanceledOnTouchOutside(true);
@@ -67,5 +76,15 @@ public class ViewTableDialogFragment extends ScalableDialogFragment {
         int width = Math.round(getResources().getDisplayMetrics().widthPixels * 0.99f);
         Window window = getDialog().getWindow();
         window.setLayout(width, LinearLayout.LayoutParams.WRAP_CONTENT);
+    }
+
+    private class MyWebviewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            LinkHandler linkHandler = new LinkHandler(getActivity(), url);
+            linkHandler.setBrowserActive(false);
+            linkHandler.handleIt();
+            return true;
+        }
     }
 }
