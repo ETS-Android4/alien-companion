@@ -137,7 +137,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             profileResource = R.drawable.ic_account_circle_white_48dp;
             messagesResource = R.drawable.ic_mail_white_48dp;
             userResource = R.drawable.ic_person_white_48dp;
-            //subredditResource = ;
+            subredditResource = R.drawable.ic_r_white;
             settingsResource = R.drawable.ic_settings_white_48dp;
             expandMoreResource = R.drawable.ic_expand_more_white_48dp;
             expandLessResource = R.drawable.ic_expand_less_white_48dp;
@@ -145,7 +145,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             profileResource = R.drawable.ic_account_circle_black_48dp;
             messagesResource = R.drawable.ic_email_black_48dp;
             userResource = R.drawable.ic_person_black_48dp;
-            //subredditResource = ;
+            subredditResource = R.drawable.ic_r_black;
             settingsResource = R.drawable.ic_settings_black_48dp;
             expandMoreResource = R.drawable.ic_expand_more_black_48dp;
             expandLessResource = R.drawable.ic_expand_less_black_48dp;
@@ -153,15 +153,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (MyApplication.currentBaseTheme) {
             case MyApplication.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
-                subredditResource = R.mipmap.ic_subreddit_light_grey_48dp;
                 break;
             case MyApplication.LIGHT_THEME:
                 defaultIconOpacity = 0.54f;
-                subredditResource = R.mipmap.ic_subreddit_grey_48dp;
                 break;
             default:
                 defaultIconOpacity = 1f;
-                subredditResource = R.mipmap.ic_subreddit_white_48dp;
                 break;
         }
     }
@@ -642,7 +639,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                         break;
                     case subreddit:
                         menuRowViewHolder.image.setImageResource(subredditResource);
-                        //menuRowViewHolder.image.setAlpha(defaultIconOpacity);
+                        menuRowViewHolder.image.setAlpha(defaultIconOpacity);
                         break;
                     case settings:
                         menuRowViewHolder.image.setImageResource(settingsResource);
