@@ -61,6 +61,10 @@ public class ApiEndpointUtils {
     public static final String SUBMISSION_MARK_AS_NSFW = REDDIT_BASE_API_ENDPOINT + "/marknsfw";
     
     public static final String SUBMISSION_UNMARK_AS_NSFW = REDDIT_BASE_API_ENDPOINT + "/unmarknsfw";
+
+    public static final String SUBMISSION_MARK_AS_SPOILER = REDDIT_BASE_API_ENDPOINT + "/spoiler";
+
+    public static final String SUBMISSION_UNMARK_AS_SPOILER = REDDIT_BASE_API_ENDPOINT + "/unspoiler";
     
     public static final String VOTE = REDDIT_BASE_API_ENDPOINT + "/vote";
 

@@ -126,6 +126,17 @@ public class BrowserFragment extends Fragment {
             this.url = ((BrowserActivity) activity).url;
             this.domain = ((BrowserActivity) activity).domain;
         }
+        else {
+            this.url = activity.getIntent().getStringExtra("url");
+            this.domain = activity.getIntent().getStringExtra("domain");
+            if(this.domain == null || this.domain.trim().isEmpty()) {
+                try {
+                    this.domain = LinkUtils.getDomainName(url);
+                } catch (Exception e) {
+                    this.domain = "";
+                }
+            }
+        }
     }
 
     @Override

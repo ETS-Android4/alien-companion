@@ -98,7 +98,7 @@ public class RedditOAuth {
     public static final String SCOPE_WIKI_READ = "wikiread";
 
     public static final String SCOPES = SCOPE_ID + "," + SCOPE_MY_SUBREDDITS + "," + SCOPE_EDIT + "," + SCOPE_FLAIR  + "," + SCOPE_HISTORY + "," + SCOPE_PRIVATE_MESSAGES + "," +
-            SCOPE_READ + "," + SCOPE_REPORT + "," + SCOPE_SAVE + "," + SCOPE_SUBMIT + "," + SCOPE_SUBSCRIBE + "," + SCOPE_VOTE;
+            SCOPE_READ + "," + SCOPE_REPORT + "," + SCOPE_SAVE + "," + SCOPE_SUBMIT + "," + SCOPE_SUBSCRIBE + "," + SCOPE_VOTE + "," + SCOPE_MOD_POSTS;
 
     // Field name in responses
     public static final String ACCESS_TOKEN_NAME = "access_token";

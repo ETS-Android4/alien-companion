@@ -239,6 +239,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                 case unmarkNSFW:
                     markActions.unmarkNSFW(itemName);
                     break;
+                case markSpoiler:
+                    markActions.markSpoiler(itemName);
+                    break;
+                case unmarkSpoiler:
+                    markActions.unmarkSpoiler(itemName);
+                    break;
                 case submitLink:
                     captcha_iden = "";
                     captcha_sol = "";

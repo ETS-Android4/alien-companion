@@ -96,7 +96,7 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
                     break;
                 case R.id.radioButton_other:
                     reason = otherField.getText().toString();
-                    if(reason.length()==0) {
+                    if(reason.trim().length()==0) {
                         reason = null;
                         otherField.setText("");
                         otherField.setHint("enter a reason");
@@ -105,6 +105,7 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
                     break;
             }
             if(reason!=null) {
+                dismiss();
                 //ToastUtils.showToast(getActivity(), reason);
                 if(GeneralUtils.isNetworkAvailable(getActivity())) {
                     LoadUserActionTask task = new LoadUserActionTask(getActivity(), postId, UserActionType.report, reason);
@@ -116,8 +117,12 @@ public class ReportDialogFragment extends ScalableDialogFragment implements View
                     task.execute();
                 }
             }
-            else if(selected!=R.id.radioButton_other) ToastUtils.showToast(getActivity(), "Please select a reason");
+            else if(selected!=R.id.radioButton_other) {
+                ToastUtils.showToast(getActivity(), "Please select a reason");
+            }
         }
-        else dismiss();
+        else {
+            dismiss();
+        }
     }
 }

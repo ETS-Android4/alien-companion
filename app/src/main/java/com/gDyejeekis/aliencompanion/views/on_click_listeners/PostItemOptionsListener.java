@@ -400,7 +400,17 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         task.execute();
                         return true;
                     case R.id.action_mark_spoiler:
-                        // TODO: 4/7/2017
+                        if(post.isSpoiler()) {
+                            post.setSpoiler(false);
+                            actionType = UserActionType.unmarkSpoiler;
+                        }
+                        else {
+                            post.setSpoiler(true);
+                            actionType = UserActionType.markSpoiler;
+                        }
+                        currentAdapter.notifyDataSetChanged();
+                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                        task.execute();
                         return true;
                     case R.id.action_edit:
                         intent = new Intent(context, SubmitActivity.class);
