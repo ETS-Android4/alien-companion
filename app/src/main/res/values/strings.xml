@@ -224,5 +224,6 @@
     <string name="gallery">Gallery</string>
     <string name="about">About</string>
     <string name="got_it">Got it</string>
+    <string name="locked_post">Locked post</string>
 
 </resources>

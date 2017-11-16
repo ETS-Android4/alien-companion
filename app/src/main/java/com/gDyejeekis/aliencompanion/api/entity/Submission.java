@@ -88,6 +88,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	private Boolean spoiler;
     private Boolean hidden;
     private Boolean clicked;
+	private Boolean locked;
 
 	private String linkedCommentId;
 	private Integer parentsShown = -1;
@@ -151,7 +152,15 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 		this.redditVideo = redditVideo;
 	}
 
-    /**
+	public Boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
+	/**
 	 * @return the approvedBy
 	 */
 	public String getApprovedBy() {
@@ -290,6 +299,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setSpoiler(safeJsonToBoolean(obj.get("spoiler")));
 			setHidden(safeJsonToBoolean(obj.get("hidden")));
 			setClicked(safeJsonToBoolean(obj.get("clicked")));
+			setLocked(safeJsonToBoolean(obj.get("locked")));
 			setLikes(safeJsonToString(obj.get("likes")));
 
 			title = StringEscapeUtils.unescapeHtml4(title);

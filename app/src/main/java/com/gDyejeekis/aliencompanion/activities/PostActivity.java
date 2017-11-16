@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -69,11 +70,18 @@ public class PostActivity extends SwipeBackActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        int menuResource;
-        if(MyApplication.offlineModeEnabled) menuResource = R.menu.menu_post_offline;
-        else menuResource = R.menu.menu_post;
-        getMenuInflater().inflate(menuResource, menu);
+        getMenuInflater().inflate(R.menu.menu_post, menu);
+        if(MyApplication.offlineModeEnabled) {
+            MenuItem sortAction = menu.findItem(R.id.action_sort_comments);
+            sortAction.setVisible(false);
+        }
+        Submission post = (Submission) getIntent().getSerializableExtra("post");
+        if(post!=null && post.isLocked()) {
+            MenuItem lockedAction = menu.findItem(R.id.action_post_locked);
+            lockedAction.setVisible(true);
+            MenuItem replyAction = menu.findItem(R.id.action_reply);
+            replyAction.setVisible(false);
+        }
         return true;
     }
 
@@ -83,6 +91,9 @@ public class PostActivity extends SwipeBackActivity {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.action_post_locked:
+                ToastUtils.showSnackbarOverToast(this, "This post is locked. You won't be able to comment.");
                 return true;
             default:
                 return false;

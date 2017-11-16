@@ -18,8 +18,10 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
+import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ReportDialogFragment;
@@ -149,14 +151,25 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_reply:
-                if(MyApplication.currentUser!=null) {
-                    Intent intent = new Intent(context, SubmitActivity.class);
-                    intent.putExtra("submitType", SubmitType.comment);
-                    intent.putExtra("originalComment", comment);
-                    context.startActivity(intent);
+                boolean postIsLocked = false;
+                if(context instanceof PostActivity) {
+                    Submission post = (Submission) ((PostActivity) context).getIntent().getSerializableExtra("post");
+                    if(post!=null) {
+                        postIsLocked = post.isLocked();
+                    }
+                }
+                if(postIsLocked) {
+                    ToastUtils.showSnackbarOverToast(context, "This post is locked. You won't be able to comment.");
                 }
                 else {
-                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to reply");
+                    if (MyApplication.currentUser != null) {
+                        Intent intent = new Intent(context, SubmitActivity.class);
+                        intent.putExtra("submitType", SubmitType.comment);
+                        intent.putExtra("originalComment", comment);
+                        context.startActivity(intent);
+                    } else {
+                        ToastUtils.showSnackbarOverToast(context, "Must be logged in to reply");
+                    }
                 }
                 break;
             case R.id.btn_view_user:

@@ -51,6 +51,7 @@
         <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>
+        <changelogtext>Added indicator for locked posts</changelogtext>
         <changelogtext>Added the ability to mark/unmark posts as spoiler</changelogtext>
         <changelogtext>Fixed error when marking/unmarking posts as NSFW</changelogtext>
         <changelogtext>Fixed error when reporting posts</changelogtext>
