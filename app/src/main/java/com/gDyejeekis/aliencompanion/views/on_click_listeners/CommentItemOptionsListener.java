@@ -46,17 +46,9 @@ import com.gDyejeekis.aliencompanion.enums.UserActionType;
  */
 public class CommentItemOptionsListener implements View.OnClickListener {
 
-    //private Activity activity;
     private Context context;
     private Comment comment;
     private RecyclerView.Adapter recyclerAdapter;
-    private BaseAdapter adapter;
-
-    public CommentItemOptionsListener(Context context, Comment comment, BaseAdapter adapter) {
-        this.context = context;
-        this.comment = comment;
-        this.adapter = adapter;
-    }
 
     public CommentItemOptionsListener(Context context, Comment comment, RecyclerView.Adapter adapter) {
         this.context = context;
@@ -85,8 +77,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.upvote;
                     }
 
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                    else recyclerAdapter.notifyDataSetChanged();
+                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
 
@@ -125,8 +116,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         actionType = UserActionType.downvote;
                     }
 
-                    if (adapter != null) adapter.notifyDataSetChanged();
-                    else recyclerAdapter.notifyDataSetChanged();
+                    recyclerAdapter.notifyDataSetChanged();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
 
@@ -177,6 +167,12 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 intent.putExtra("username", comment.getAuthor());
                 context.startActivity(intent);
                 break;
+            case R.id.btn_save:
+                saveComment();
+                break;
+            case R.id.btn_share:
+                shareComment();
+                break;
             case R.id.btn_more:
                 showMoreOptionsPopup(v);
                 break;
@@ -188,6 +184,11 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         popupMenu.inflate(R.menu.menu_comment_more_options);
 
         Menu menu = popupMenu.getMenu();
+        // check the context and tweak accordingly
+        if(context instanceof UserActivity) {
+            menu.removeItem(R.id.action_save);
+            menu.removeItem(R.id.action_share);
+        }
         // check if comment belongs to current user
         if(MyApplication.currentUser!=null && comment.getAuthor().equals(MyApplication.currentUser.getUsername())) {
             menu.removeItem(R.id.action_report);
@@ -243,13 +244,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_share:
-                        commentLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
-                                + "?comment=" + comment.getIdentifier();
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, commentLink);
-                        sendIntent.setType("text/plain");
-                        context.startActivity(Intent.createChooser(sendIntent, "Share comment url via.."));
+                        shareComment();
                         return true;
                     case R.id.action_open_browser:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
@@ -257,36 +252,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         context.startActivity(intent);
                         return true;
                     case R.id.action_save:
-                        if(MyApplication.currentUser!=null) {
-                            UserActionType actionType;
-                            if(comment.isSaved()) {
-                                comment.setSaved(false);
-                                actionType = UserActionType.unsave;
-                            }
-                            else {
-                                comment.setSaved(true);
-                                actionType = UserActionType.save;
-                            }
-                            if(GeneralUtils.isNetworkAvailable(context)) {
-                                LoadUserActionTask task = new LoadUserActionTask(context, comment, actionType);
-                                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            }
-                            else {
-                                OfflineUserAction action;
-                                String accountname = MyApplication.currentAccount.getUsername();
-                                if(actionType == UserActionType.save) {
-                                    action = new SaveAction(accountname, comment.getFullName(), comment.getBody());
-                                }
-                                else {
-                                    action = new UnsaveAction(accountname, comment.getFullName(), comment.getBody());
-                                }
-                                SaveOfflineActionTask task1 = new SaveOfflineActionTask(context, action);
-                                task1.execute();
-                            }
-                        }
-                        else {
-                            ToastUtils.showSnackbarOverToast(context, "Must be logged in to save");
-                        }
+                        saveComment();
                         return true;
                     case R.id.action_report:
                         if(MyApplication.currentUser!=null) {
@@ -306,5 +272,51 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             }
         });
         popupMenu.show();
+    }
+
+    private void saveComment() {
+        if(MyApplication.currentUser!=null) {
+            UserActionType actionType;
+            if(comment.isSaved()) {
+                comment.setSaved(false);
+                actionType = UserActionType.unsave;
+            }
+            else {
+                comment.setSaved(true);
+                actionType = UserActionType.save;
+            }
+
+            recyclerAdapter.notifyDataSetChanged();
+
+            if(GeneralUtils.isNetworkAvailable(context)) {
+                LoadUserActionTask task = new LoadUserActionTask(context, comment, actionType);
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+            else {
+                OfflineUserAction action;
+                String accountname = MyApplication.currentAccount.getUsername();
+                if(actionType == UserActionType.save) {
+                    action = new SaveAction(accountname, comment.getFullName(), comment.getBody());
+                }
+                else {
+                    action = new UnsaveAction(accountname, comment.getFullName(), comment.getBody());
+                }
+                SaveOfflineActionTask task1 = new SaveOfflineActionTask(context, action);
+                task1.execute();
+            }
+        }
+        else {
+            ToastUtils.showSnackbarOverToast(context, "Must be logged in to save");
+        }
+    }
+
+    private void shareComment() {
+        String commentLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
+                + "?comment=" + comment.getIdentifier();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, commentLink);
+        sendIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(sendIntent, "Share comment url via.."));
     }
 }

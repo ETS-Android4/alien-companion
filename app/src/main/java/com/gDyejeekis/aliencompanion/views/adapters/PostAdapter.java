@@ -177,6 +177,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.downvote.setOnClickListener(listener);
                     cvh.reply.setOnClickListener(listener);
                     cvh.viewUser.setOnClickListener(listener);
+                    cvh.save.setOnClickListener(listener);
+                    cvh.share.setOnClickListener(listener);
                     cvh.more.setOnClickListener(listener);
                 } else {
                     //cvh.setPaddingLeft(leftPadding);
@@ -300,10 +302,20 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
                         cvh.downvote.setAlpha(cvh.defaultIconOpacity);
                     }
+                    // check saved state
+                    if(comment.isSaved()) {
+                        cvh.save.setImageResource(R.drawable.ic_star_border_yellow_500_48dp);
+                        cvh.save.setAlpha(1f);
+                    }
+                    else {
+                        cvh.save.setImageResource(R.drawable.ic_star_border_white_48dp);
+                        cvh.save.setAlpha(cvh.defaultIconOpacity);
+                    }
                 }
                 // logged out
                 else {
                     cvh.reply.setAlpha(cvh.defaultIconOpacityDisabled);
+                    cvh.save.setAlpha(cvh.defaultIconOpacityDisabled);
                     cvh.score.setTextColor(MyApplication.textSecondaryColor);
                     cvh.upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
                     cvh.upvote.setAlpha(cvh.defaultIconOpacityDisabled);
@@ -722,6 +734,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public ImageView downvote;
         public ImageView reply;
         public ImageView viewUser;
+        public ImageView save;
+        public ImageView share;
         public ImageView more;
 
         public float defaultIconOpacity, defaultIconOpacityDisabled;
@@ -745,6 +759,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             downvote = (ImageView) itemView.findViewById(R.id.btn_downvote);
             reply = (ImageView) itemView.findViewById(R.id.btn_reply);
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+            save = (ImageView) itemView.findViewById(R.id.btn_save);
+            share = (ImageView) itemView.findViewById(R.id.btn_share);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
             rootLayout = (LinearLayout) itemView.findViewById(R.id.rootLayout);
             layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
@@ -753,7 +769,11 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
 
             viewUser.setAlpha(defaultIconOpacity);
+            share.setAlpha(defaultIconOpacity);
             more.setAlpha(defaultIconOpacity);
+
+            save.setVisibility(View.GONE);
+            share.setVisibility(View.GONE);
         }
 
         public void setColorBandColor(int indentation) {

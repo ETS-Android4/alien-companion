@@ -415,12 +415,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private void setItemSaved(boolean saved) {
         if(submission!=null) {
             submission.setSaved(saved);
-            notifyDataSetChanged(getListFragmentAdapter());
-            notifyDataSetChanged(getPostFragmentAdapter());
         }
         else if(comment!=null) {
             comment.setSaved(saved);
         }
+        notifyDataSetChanged(getListFragmentAdapter());
+        notifyDataSetChanged(getPostFragmentAdapter());
     }
 
     public RecyclerView.Adapter getListFragmentAdapter() {

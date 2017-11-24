@@ -423,6 +423,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public ImageView downvote;
         public ImageView reply;
         public ImageView viewUser;
+        public ImageView save;
+        public ImageView share;
         public ImageView more;
 
         private float defaultIconOpacity, defaultIconOpacityDisabled;
@@ -442,10 +444,16 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             downvote = (ImageView) itemView.findViewById(R.id.btn_downvote);
             reply = (ImageView) itemView.findViewById(R.id.btn_reply);
             viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
+            save = (ImageView) itemView.findViewById(R.id.btn_save);
+            share = (ImageView) itemView.findViewById(R.id.btn_share);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
 
             viewUser.setAlpha(defaultIconOpacity);
+            share.setAlpha(defaultIconOpacity);
             more.setAlpha(defaultIconOpacity);
+
+            reply.setVisibility(View.GONE);
+            viewUser.setVisibility(View.GONE);
         }
 
         public void bindModel(Context context, Comment comment, MyClickableSpan plainTextClickable) {
@@ -497,10 +505,20 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                     upvote.setAlpha(defaultIconOpacity);
                     downvote.setAlpha(defaultIconOpacity);
                 }
+                // check saved state
+                if(comment.isSaved()) {
+                    save.setImageResource(R.drawable.ic_star_border_yellow_500_48dp);
+                    save.setAlpha(1f);
+                }
+                else {
+                    save.setImageResource(R.drawable.ic_star_border_white_48dp);
+                    save.setAlpha(defaultIconOpacity);
+                }
             }
             // logged out
             else {
                 reply.setAlpha(defaultIconOpacityDisabled);
+                save.setAlpha(defaultIconOpacityDisabled);
                 commentScore.setTextColor(MyApplication.textSecondaryColor);
                 upvote.setImageResource(R.drawable.ic_arrow_upward_white_48dp);
                 downvote.setImageResource(R.drawable.ic_arrow_downward_white_48dp);
@@ -516,6 +534,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             downvote.setOnClickListener(listener);
             reply.setOnClickListener(listener);
             viewUser.setOnClickListener(listener);
+            save.setOnClickListener(listener);
+            share.setOnClickListener(listener);
             more.setOnClickListener(listener);
         }
 
