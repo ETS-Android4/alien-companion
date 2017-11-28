@@ -18,10 +18,13 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
+import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.SaveOfflineActionTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ReportDialogFragment;
@@ -78,6 +81,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     }
 
                     recyclerAdapter.notifyDataSetChanged();
+                    notifySecondPaneChanges();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
 
@@ -117,6 +121,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     }
 
                     recyclerAdapter.notifyDataSetChanged();
+                    notifySecondPaneChanges();
 
                     if(GeneralUtils.isNetworkAvailable(context)) {
 
@@ -184,8 +189,8 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         popupMenu.inflate(R.menu.menu_comment_more_options);
 
         Menu menu = popupMenu.getMenu();
-        // check the context and tweak accordingly
-        if(context instanceof UserActivity) {
+        // check the context/adapter and tweak accordingly
+        if(context instanceof UserActivity && recyclerAdapter instanceof RedditItemListAdapter) {
             menu.removeItem(R.id.action_save);
             menu.removeItem(R.id.action_share);
         }
@@ -287,6 +292,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             }
 
             recyclerAdapter.notifyDataSetChanged();
+            notifySecondPaneChanges();
 
             if(GeneralUtils.isNetworkAvailable(context)) {
                 LoadUserActionTask task = new LoadUserActionTask(context, comment, actionType);
@@ -319,4 +325,69 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         sendIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(sendIntent, "Share comment url via.."));
     }
+
+    private void notifySecondPaneChanges() {
+        RecyclerView.Adapter secondPaneAdapter = getSecondPaneAdapter();
+        if (secondPaneAdapter != null) {
+            try {
+                int index = -1;
+                Comment comment = null;
+                if (secondPaneAdapter instanceof PostAdapter) {
+                    index = ((PostAdapter) secondPaneAdapter).indexOf(this.comment);
+                    comment = (Comment) ((PostAdapter) secondPaneAdapter).getItemAt(index);
+                } else if (secondPaneAdapter instanceof RedditItemListAdapter) {
+                    index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(this.comment);
+                    comment = (Comment) ((RedditItemListAdapter) secondPaneAdapter).getItemAt(index);
+                }
+
+                comment.setLikes(this.comment.getLikes());
+                comment.setSaved(this.comment.isSaved());
+                secondPaneAdapter.notifyItemChanged(index);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private RecyclerView.Adapter getSecondPaneAdapter() {
+        RecyclerView.Adapter adapter = null;
+        if(recyclerAdapter instanceof PostAdapter) {
+            adapter = getListFragmentAdapter();
+        }
+        else if(recyclerAdapter instanceof RedditItemListAdapter)  {
+            adapter = getPostFragmentAdapter();
+        }
+        return adapter;
+    }
+
+    public RecyclerView.Adapter getListFragmentAdapter() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getListFragment().adapter;
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getListFragment().adapter;
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getListFragment().adapter;
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    public RecyclerView.Adapter getPostFragmentAdapter() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getPostFragment().postAdapter;
+            } else if (context instanceof PostActivity) {
+                return ((PostActivity) context).getPostFragment().postAdapter;
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
 }

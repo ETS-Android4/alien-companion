@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.asynctask.LoadMoreCommentsTask;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
@@ -675,6 +676,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         getData().add(post);
         addAll(comments);
         notifyDataSetChanged();
+    }
+
+    public int indexOf(RedditItem item) {
+        return getData().indexOf(item);
     }
 
     @Override
