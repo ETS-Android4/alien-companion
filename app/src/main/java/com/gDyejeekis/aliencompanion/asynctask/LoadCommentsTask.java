@@ -44,6 +44,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     private HttpClient httpClient = new PoliteRedditHttpClient();
     private boolean initialLoad;
     private String offlineSubtitle;
+    private int linkedCommentIndex = -1;
 
     public LoadCommentsTask(Context context, PostFragment fragment, boolean initialLoad) {
         this.context = context;
@@ -112,6 +113,17 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 comments = cmnts.ofSubmission(fragment.post, fragment.post.getLinkedCommentId(), fragment.post.getParentsShown(), depth,
                         MyApplication.initialCommentCount, fragment.tempSort);
             }
+
+            if(this.fragment.post.getLinkedCommentId()!=null) {
+                int i = 0;
+                for(Comment comment : comments) {
+                    i++;
+                    if(this.fragment.post.getLinkedCommentId().equals(comment.getIdentifier())) {
+                        linkedCommentIndex = i;
+                        break;
+                    }
+                }
+            }
             Comments.indentCommentTree(comments);
 
             return comments;
@@ -160,7 +172,12 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             else {
                 this.fragment.setActionBarTitle();
                 this.fragment.postAdapter.commentsRefreshed(this.fragment.post, comments);
-                if(!initialLoad) {
+                if(initialLoad) {
+                    if(linkedCommentIndex != -1) {
+                        this.fragment.mLayoutManager.scrollToPosition(linkedCommentIndex);
+                    }
+                }
+                else {
                     this.fragment.mLayoutManager.scrollToPosition(0);
                     this.fragment.setCommentSort(this.fragment.tempSort);
                     this.fragment.setActionBarSubtitle();
