@@ -540,7 +540,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void updateSwipeRefreshColor() {
-        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorPrimary);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
     }
 
     public void updateSwipeRefreshOffset() {
