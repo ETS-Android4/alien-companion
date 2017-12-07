@@ -3,9 +3,12 @@ package com.gDyejeekis.aliencompanion.activities;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
+import com.gDyejeekis.aliencompanion.api.entity.Comment;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.fragments.ComposeMessageFragment;
 import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitCommentFragment;
 import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitImageFragment;
@@ -81,7 +84,7 @@ public class SubmitActivity extends ToolbarActivity implements DialogInterface.O
         boolean showDialog = false;
         if(fragment instanceof SubmitCommentFragment) {
             if(getIntent().getBooleanExtra("edit", false)) {
-                message = "Cancel edit?";
+                message = "Discard changes?";
             }
             else {
                 message = "Discard comment?";
@@ -112,6 +115,17 @@ public class SubmitActivity extends ToolbarActivity implements DialogInterface.O
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         super.onBackPressed();
+    }
+
+    public void sendBroadcast(Comment submittedComment) {
+        if (fragment instanceof SubmitCommentFragment) {
+            boolean edit = getIntent().getBooleanExtra("edit", false);
+            String action = edit ? CommentSubmittedReceiver.COMMENT_EDIT : CommentSubmittedReceiver.COMMENT_SUBMISSION;
+            Intent broadcastIntent = new Intent(action);
+            broadcastIntent.putExtra("comment", submittedComment);
+            broadcastIntent.putExtra("position", getIntent().getIntExtra("position", -1));
+            sendBroadcast(broadcastIntent);
+        }
     }
 
 }

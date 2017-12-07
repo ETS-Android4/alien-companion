@@ -132,6 +132,15 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void add(int position, ExpIndData item) {
+        if (item != null) {
+            mData.add(position, item);
+            if (mNotifyOnChange) {
+                notifyItemInserted(position);
+            }
+        }
+    }
+
     public void addAll(int position, Collection<? extends ExpIndData> data) {
         if (data != null && data.size() > 0) {
             mData.addAll(position, data);

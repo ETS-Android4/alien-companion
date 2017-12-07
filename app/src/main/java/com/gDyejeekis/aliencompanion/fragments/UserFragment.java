@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserContentTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddToSyncedDialogFragment;
@@ -36,6 +39,7 @@ public class UserFragment extends RedditContentFragment {
     public UserOverviewSort userOverviewSort;
     public UserSubmissionsCategory userContent, tempCategory;
     public LoadUserContentTask task;
+    private BroadcastReceiver commentEditReceiver;
 
     public static UserFragment newInstance(RedditItemListAdapter adapter, String username, UserOverviewSort sort, UserSubmissionsCategory category, boolean hasMore) {
         UserFragment newInstance = new UserFragment();
@@ -98,6 +102,24 @@ public class UserFragment extends RedditContentFragment {
             userOverviewSort = UserOverviewSort.NEW;
         }
         setActionBarSubtitle();
+        registerReceivers();
+    }
+
+    @Override
+    public void onDetach() {
+        unregisterReceivers();
+        super.onDetach();
+    }
+
+    private void registerReceivers() {
+        commentEditReceiver = new CommentSubmittedReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CommentSubmittedReceiver.COMMENT_EDIT);
+        activity.registerReceiver(commentEditReceiver, filter);
+    }
+
+    private void unregisterReceivers() {
+        activity.unregisterReceiver(commentEditReceiver);
     }
 
     @Override

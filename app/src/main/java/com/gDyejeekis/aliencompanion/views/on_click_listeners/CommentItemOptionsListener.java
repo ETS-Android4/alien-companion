@@ -161,6 +161,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         Intent intent = new Intent(context, SubmitActivity.class);
                         intent.putExtra("submitType", SubmitType.comment);
                         intent.putExtra("originalComment", comment);
+                        intent.putExtra("position", getCommentPosition(true));
                         context.startActivity(intent);
                     } else {
                         ToastUtils.showSnackbarOverToast(context, "Must be logged in to reply");
@@ -230,6 +231,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         Intent intent = new Intent(context, SubmitActivity.class);
                         intent.putExtra("submitType", SubmitType.comment);
                         intent.putExtra("originalComment", comment);
+                        intent.putExtra("position", getCommentPosition(false));
                         intent.putExtra("edit", true);
                         context.startActivity(intent);
                         return true;
@@ -388,6 +390,27 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             }
         } catch (Exception e) {}
         return null;
+    }
+
+    private int getCommentPosition(boolean newComment) {
+        // TODO: 3/23/2017 add abstraction
+        int position = -1;
+        try {
+            if (context instanceof MainActivity) {
+                position = ((MainActivity) context).getPostFragment().postAdapter.indexOf(comment);
+            } else if (context instanceof SubredditActivity) {
+                position = ((SubredditActivity) context).getPostFragment().postAdapter.indexOf(comment);
+            } else if (context instanceof UserActivity) {
+                position = ((UserActivity) context).getListFragment().adapter.indexOf(comment);
+            } else if (context instanceof PostActivity) {
+                position = ((PostActivity) context).getPostFragment().postAdapter.indexOf(comment);
+            }
+
+            if (newComment) position++;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return position;
     }
 
 }

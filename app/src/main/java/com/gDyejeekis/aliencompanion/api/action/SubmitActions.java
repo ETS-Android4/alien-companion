@@ -5,6 +5,8 @@ import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.ActorDriven;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.models.SubmitActionResponse;
+import com.gDyejeekis.aliencompanion.utils.JsonUtils;
 
 import org.json.simple.JSONObject;
 
@@ -73,8 +75,29 @@ public class SubmitActions implements ActorDriven {
      * @param fullname Full name of the submission or comment
      * @param text The text to comment (can include markdown)
      */
-    public boolean comment(String fullname, String text) throws ActionFailedException {
+    //public boolean comment(String fullname, String text) throws ActionFailedException {
+//
+    //    RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text).build();
+    //    JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
+    //            body,
+    //            ApiEndpointUtils.COMMENT,
+    //            user.getCookie()
+    //    ).getResponseObject();
+//
+    //    if (object.toJSONString().contains(".error.USER_REQUIRED")) {
+    //        System.err.println("User submission failed: please login first.");
+    //        return false;
+    //    }
+    //    else if(object.toJSONString().contains(".error.RATELIMIT.field-ratelimit")){
+    //        System.err.println("User submission failed: You need to wait before posting again");
+    //        return false;
+    //    } else {
+    //        return true;
+    //    }
+//
+    //}
 
+    public SubmitActionResponse comment(String fullname, String text) throws  ActionFailedException {
         RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text).build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 body,
@@ -82,17 +105,7 @@ public class SubmitActions implements ActorDriven {
                 user.getCookie()
         ).getResponseObject();
 
-        if (object.toJSONString().contains(".error.USER_REQUIRED")) {
-            System.err.println("User submission failed: please login first.");
-            return false;
-        }
-        else if(object.toJSONString().contains(".error.RATELIMIT.field-ratelimit")){
-            System.err.println("User submission failed: You need to wait before posting again");
-            return false;
-        } else {
-            return true;
-        }
-
+        return new SubmitActionResponse(object);
     }
 
     /**
@@ -242,8 +255,37 @@ public class SubmitActions implements ActorDriven {
      * @return Whether the edit succeeded
      * @throws ActionFailedException If the action failed
      */
-    public boolean editUserText(String fullname, String text) throws ActionFailedException {
+    //public boolean editUserText(String fullname, String text) throws ActionFailedException {
+//
+    //    RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text)/*.add("uh", user.getModhash())*/.build();
+    //    JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
+    //            body,
+    //            ApiEndpointUtils.EDITUSERTEXT,
+    //            user.getCookie()
+    //    ).getResponseObject();
+//
+    //    String responseAsString = object.toJSONString();
+//
+    //    if (responseAsString.contains(".error.USER_REQUIRED")) {
+    //        System.err.println("User is required for this action.");
+    //        return false;
+    //    } else if (responseAsString.contains(".error.NOT_AUTHOR")) {
+    //        System.err.println("User is not the author of this thing.");
+    //        return false;
+    //    } else if (responseAsString.contains(".error.TOO_LONG")) {
+    //        System.err.println("The text is too long.");
+    //        return false;
+    //    } else if (responseAsString.contains(".error.NO_TEXT")) {
+    //        System.err.println("Missing text.");
+    //        return false;
+//
+    //    } else {
+    //        return true;
+    //    }
+//
+    //}
 
+    public SubmitActionResponse editUserText(String fullname, String text) throws ActionFailedException {
         RequestBody body = new FormBody.Builder().add("thing_id", fullname).add("text", text)/*.add("uh", user.getModhash())*/.build();
         JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
                 body,
@@ -251,25 +293,7 @@ public class SubmitActions implements ActorDriven {
                 user.getCookie()
         ).getResponseObject();
 
-        String responseAsString = object.toJSONString();
-
-        if (responseAsString.contains(".error.USER_REQUIRED")) {
-            System.err.println("User is required for this action.");
-            return false;
-        } else if (responseAsString.contains(".error.NOT_AUTHOR")) {
-            System.err.println("User is not the author of this thing.");
-            return false;
-        } else if (responseAsString.contains(".error.TOO_LONG")) {
-            System.err.println("The text is too long.");
-            return false;
-        } else if (responseAsString.contains(".error.NO_TEXT")) {
-            System.err.println("Missing text.");
-            return false;
-
-        } else {
-            return true;
-        }
-
+        return new SubmitActionResponse(object);
     }
 
     public boolean compose(String recipient, String subject, String message, String iden, String captcha) throws ActionFailedException {

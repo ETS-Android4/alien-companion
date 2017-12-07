@@ -121,6 +121,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         if(!MyApplication.offlineModeEnabled) redditItems.add(showMoreButton);
     }
 
+    public void updateItem(int position, RedditItem item) {
+        selectedPosition = -1;
+        redditItems.set(position, item);
+        notifyItemChanged(position);
+    }
+
     public void add(RedditItem item) {
         selectedPosition = -1;
         int position;

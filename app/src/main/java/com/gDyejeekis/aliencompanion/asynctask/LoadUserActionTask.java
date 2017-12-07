@@ -9,12 +9,14 @@ import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
+import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
+import com.gDyejeekis.aliencompanion.models.SubmitActionResponse;
 import com.gDyejeekis.aliencompanion.models.offline_actions.CommentAction;
 import com.gDyejeekis.aliencompanion.models.offline_actions.DownvoteAction;
 import com.gDyejeekis.aliencompanion.models.offline_actions.HideAction;
@@ -48,6 +50,8 @@ import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
  */
 public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
 
+    public static final String DEFAULT_ACTION_FAILED_MESSAGE = "Error completing user action";
+
     private Context context;
     private HttpClient httpClient = new PoliteRedditHttpClient();
     private UserActionType userActionType;
@@ -64,6 +68,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
     private String recipient, subject, message;
     private SubredditSidebarDialogFragment dialogSidebar;
     private OfflineUserAction offlineUserAction;
+    private SubmitActionResponse submitActionResponse;
 
     public void setNotifyOnPostExecute(boolean flag) {
         notifyOnPostExecute = flag;
@@ -228,7 +233,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     markActions.report(itemName, text);
                     break;
                 case edit:
-                    submitActions.editUserText(itemName, text);
+                    submitActionResponse = submitActions.editUserText(itemName, text);
                     break;
                 case delete:
                     submitActions.delete(itemName);
@@ -256,7 +261,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                     submitActions.submitSelfPost(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitComment:
-                    submitActions.comment(itemName, text);
+                    submitActionResponse = submitActions.comment(itemName, text);
                     break;
                 case changePassword:
                     //profileActions.changePassword(currentPass, newPass);
@@ -295,7 +300,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             }
 
             if(context instanceof Activity) {
-                ToastUtils.showSnackbar(((Activity) context).getCurrentFocus(), "Error completing user action");
+                ToastUtils.showSnackbar(((Activity) context).getCurrentFocus(), DEFAULT_ACTION_FAILED_MESSAGE);
             }
         }
         else {
@@ -309,9 +314,25 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         ((Activity) context).finish();
                         ToastUtils.showToast(context, "Submission successful");
                         break;
+                    case edit:
                     case submitComment:
-                        ((Activity) context).finish();
-                        ToastUtils.showToast(context, "Reply sent");
+                        String message;
+                        if (submitActionResponse != null) {
+                            if (submitActionResponse.isSuccess()) {
+                                message = (userActionType == UserActionType.edit) ? "Edit successful" : "Reply sent";
+                                if (context instanceof SubmitActivity) {
+                                    if (submitActionResponse.getRedditItem() instanceof Comment)
+                                        ((SubmitActivity) context).sendBroadcast((Comment) submitActionResponse.getRedditItem());
+                                    ((SubmitActivity) context).finish();
+                                }
+                            }
+                            else {
+                                message = submitActionResponse.getFailReason();
+                            }
+                        } else {
+                            message = DEFAULT_ACTION_FAILED_MESSAGE;
+                        }
+                        ToastUtils.showToast(context, message);
                         break;
                     case save:
                         View.OnClickListener listener = new View.OnClickListener() {
@@ -351,10 +372,6 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         break;
                     case delete:
                         ToastUtils.showSnackbarOverToast(context, "Deleted");
-                        break;
-                    case edit:
-                        ((Activity) context).finish();
-                        ToastUtils.showToast(context, "Edit successful");
                         break;
                     case changePassword:
                         ToastUtils.showToast(context, "Password change successful");

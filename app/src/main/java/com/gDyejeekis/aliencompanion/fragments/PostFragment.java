@@ -2,7 +2,9 @@ package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -31,6 +33,7 @@ import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
@@ -70,6 +73,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
     public Snackbar currentSnackbar;
+    private BroadcastReceiver commentSubmittedReceiver;
 
     private static boolean fabOptionsVisible;
     private MoveUpwardRelativeLayout layoutFabRoot;
@@ -253,23 +257,37 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        this.activity = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        activity = null;
-    }
-
-    @Override
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
         setActionBarSubtitle();
+        registerReceivers();
         //updateActionBar = false;
+    }
+
+    //@Override
+    //public void onDestroyView() {
+    //    super.onDestroyView();
+    //    activity = null;
+    //}
+
+    @Override
+    public void onDetach() {
+        unregisterReceivers();
+        activity = null;
+        super.onDetach();
+    }
+
+    private void registerReceivers() {
+        commentSubmittedReceiver = new CommentSubmittedReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CommentSubmittedReceiver.COMMENT_SUBMISSION);
+        filter.addAction(CommentSubmittedReceiver.COMMENT_EDIT);
+        activity.registerReceiver(commentSubmittedReceiver, filter);
+    }
+
+    private void unregisterReceivers() {
+        activity.unregisterReceiver(commentSubmittedReceiver);
     }
 
     @Override
@@ -293,6 +311,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Intent intent = new Intent(activity, SubmitActivity.class);
         intent.putExtra("submitType", SubmitType.comment);
         intent.putExtra("postName", post.getFullName());
+        intent.putExtra("position", 1);
         startActivity(intent);
     }
 
