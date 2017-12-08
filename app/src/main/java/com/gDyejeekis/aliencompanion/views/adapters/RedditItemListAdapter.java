@@ -480,8 +480,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             }
 
-            commentScore.setText(Long.toString(comment.getScore()));
-            commentAge.setText(comment.agePrepared);
+            String scoreText = comment.isScoreHidden() ? "[score hidden]" : Long.toString(comment.getScore());
+            commentScore.setText(scoreText);
+            String ageString = " · " + comment.agePrepared;
+            if (!comment.isScoreHidden()) ageString = " pts" + ageString;
+            if (comment.getEdited()) ageString += "*";
+            commentAge.setText(ageString);
 
             layoutComment.setOnClickListener(new CommentLinkListener(context, comment));
 

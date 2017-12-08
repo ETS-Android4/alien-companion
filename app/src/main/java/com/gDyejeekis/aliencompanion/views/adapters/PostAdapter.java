@@ -223,8 +223,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 });
 
                 // bind comment data
-                cvh.score.setText(Long.toString(comment.getScore()));
-                String ageString = " pts · " + comment.agePrepared;
+                String scoreText = comment.isScoreHidden() ? "[score hidden]" : Long.toString(comment.getScore());
+                cvh.score.setText(scoreText);
+                String ageString = " · " + comment.agePrepared;
+                if (!comment.isScoreHidden()) ageString = " pts" + ageString;
                 if (comment.getEdited()) ageString += "*";
                 cvh.age.setText(ageString);
 

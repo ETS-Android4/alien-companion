@@ -61,14 +61,14 @@
                     android:textColor="?attr/themeTextSecondaryColor"
                     android:fontFamily="?attr/defaultFontFamily" />
 
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" pts · "
                     android:id="@+id/textView11"
                     android:textSize="?attr/font_small"
                     android:textColor="?attr/themeTextSecondaryColor"
-                    android:fontFamily="?attr/defaultFontFamily" />
+                    android:fontFamily="?attr/defaultFontFamily" />-->
 
                 <TextView
                     android:layout_width="wrap_content"
