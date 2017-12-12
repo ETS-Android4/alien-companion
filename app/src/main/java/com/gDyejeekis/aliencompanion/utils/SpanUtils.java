@@ -8,7 +8,9 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -126,28 +128,27 @@ public class SpanUtils {
         return strBuilder;
     }
 
-    // TODO: 5/28/2017 needs to be reworked to accomodate clickable table spans
+    // TODO: 12/12/2017 this is completely fucked but hopefully it works, re-write at some point
     public static SpannableStringBuilder modifyURLSpan(final Context context, CharSequence sequence,
                                                        final MyClickableSpan plainTextClickable) {
         SpannableStringBuilder strBuilder = new SpannableStringBuilder(sequence);
 
-        // Get an array of URLSpan from SpannableStringBuilder object
-        URLSpan[] urlSpans = strBuilder.getSpans(0, strBuilder.length(), URLSpan.class);
-
-        if(urlSpans.length==0) {
+        // Get an array of ClickableSpan from SpannableStringBuilder object
+        ClickableSpan[] clickableSpans = strBuilder.getSpans(0, strBuilder.length(), ClickableSpan.class);
+        if(clickableSpans.length==0) {
             strBuilder.setSpan(plainTextClickable, 0, strBuilder.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             return strBuilder;
         }
 
         int plainTextSpanStart = 0;
-
-        // Add onClick listener for each of URLSpan object
-        for (final URLSpan span : urlSpans) {
+        for (final ClickableSpan span : clickableSpans) {
             final int start = strBuilder.getSpanStart(span);
-            final int end = strBuilder.getSpanEnd(span);
-            // The original URLSpan needs to be removed to block the behavior of browser opening
-            strBuilder.removeSpan(span);
+            int end = strBuilder.getSpanEnd(span);
 
+            if (span instanceof MyClickableTableSpan) end += 1; // TODO: 12/12/2017 look into why this is needed
+
+            // set plain text clickable spans
+            // TODO: 12/12/2017 not sure why i couldn't just set plainTextClickable directly instead of creating a new span instance
             try {
                 strBuilder.setSpan(new MyClickableSpan() {
                     @Override
@@ -163,6 +164,7 @@ public class SpanUtils {
                     @Override
                     public void updateDrawState(TextPaint ds) {
                         plainTextClickable.updateDrawState(ds);
+                        //ds.bgColor = Color.YELLOW;
                     }
                 }, plainTextSpanStart, start, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             } catch (Exception e) {
@@ -171,9 +173,11 @@ public class SpanUtils {
             plainTextSpanStart = end;
 
             MyClickableSpan myClickableSpan;
-
-            if(span.getURL()!=null) {
-                if (span.getURL().substring(0, 2).equals("/s") || span.getURL().equals("#s")) {
+            if(span instanceof URLSpan && ((URLSpan) span).getURL()!=null) {
+                // The original URLSpan needs to be removed to block the behavior of browser opening
+                strBuilder.removeSpan(span);
+                final String url = ((URLSpan) span).getURL();
+                if (url.substring(0, 2).equals("/s") || url.equals("#s")) {
                     myClickableSpan = new MyClickableSpan() {
 
                         boolean spoilerHidden = true;
@@ -204,7 +208,7 @@ public class SpanUtils {
                         }
                     };
                 }
-                else if(span.getURL().equals("#st")) {
+                else if(url.equals("#st")) {
                     myClickableSpan = new MyClickableSpan() {
                         @Override
                         public boolean onLongClick(View widget) {
@@ -231,7 +235,7 @@ public class SpanUtils {
                     myClickableSpan = new MyClickableSpan() {
                         @Override
                         public void onClick(View widget) {
-                            LinkHandler linkHandler = new LinkHandler(context, span.getURL());
+                            LinkHandler linkHandler = new LinkHandler(context, url);
                             linkHandler.handleIt();
                         }
 
@@ -240,7 +244,7 @@ public class SpanUtils {
                             //Log.d("geotest", "start: " + start + " end: " + end);
                             try { //illegalstateexception is thrown if the parent activity is destroyed before the dialog can be shown
                                 Bundle args = new Bundle();
-                                args.putString("url", span.getURL());
+                                args.putString("url", url);
                                 UrlOptionsDialogFragment dialogFragment = new UrlOptionsDialogFragment();
                                 dialogFragment.setArguments(args);
                                 dialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
@@ -259,6 +263,28 @@ public class SpanUtils {
                         }
                     };
                 }
+                strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+            else if (span instanceof MyClickableTableSpan) { // TODO: 12/12/2017 shouldn't even have to add this (since table spans are never removed from strBuilder)
+                final MyClickableTableSpan tableSpan = (MyClickableTableSpan) span;
+                myClickableSpan = new MyClickableSpan() {
+                    @Override
+                    public boolean onLongClick(View widget) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onClick(View widget) {
+                        tableSpan.onClick(widget);
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(MyApplication.linkColor);
+                        //ds.bgColor = Color.BLUE;
+                    }
+                };
                 strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
         }

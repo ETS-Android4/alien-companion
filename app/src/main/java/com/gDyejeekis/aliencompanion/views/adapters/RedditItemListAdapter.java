@@ -473,9 +473,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 //parse html body using fromHTML
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null,
                         new HtmlTagHandler(commentBody.getPaint())));
-                // TODO: 5/28/2017 re-enable this later
-                //strBuilder = SpanUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
-                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder);
+                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
                 commentBody.setText(strBuilder);
                 commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             }

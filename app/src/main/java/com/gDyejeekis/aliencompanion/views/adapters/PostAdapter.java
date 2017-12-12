@@ -17,6 +17,7 @@ import com.gDyejeekis.aliencompanion.asynctask.LoadMoreCommentsTask;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
+import com.gDyejeekis.aliencompanion.utils.MyClickableSpan;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
@@ -249,29 +250,27 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                             Html.fromHtml(comment.getBodyHTML(), null, new HtmlTagHandler(cvh.commentTextView.getPaint())));
 
-                    // TODO: 5/28/2017 re-enable this later
-                    //MyClickableSpan clickableSpan = new MyClickableSpan() {
-                    //    @Override
-                    //    public boolean onLongClick(View widget) {
-                    //        return false;
-                    //    }
-//
-                    //    @Override
-                    //    public void onClick(View widget) {
-                    //        int previousSelected = selectedPosition;
-                    //        int pos = cvh.getAdapterPosition();
-                    //        selectedPosition = (selectedPosition == pos) ? -1 : pos;
-                    //        notifyItemChanged(previousSelected);
-                    //        notifyItemChanged(selectedPosition);
-                    //    }
-//
-                    //    @Override
-                    //    public void updateDrawState(TextPaint ds) {
-                    //        //ds.bgColor = Color.GREEN; //enable for debugging plain text clickable spans
-                    //    }
-                    //};
-                    //strBuilder = SpanUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
-                    strBuilder = SpanUtils.modifyURLSpan(activity, strBuilder);
+                    MyClickableSpan clickableSpan = new MyClickableSpan() {
+                        @Override
+                        public boolean onLongClick(View widget) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onClick(View widget) {
+                            int previousSelected = selectedPosition;
+                            int pos = cvh.getAdapterPosition();
+                            selectedPosition = (selectedPosition == pos) ? -1 : pos;
+                            notifyItemChanged(previousSelected);
+                            notifyItemChanged(selectedPosition);
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            //ds.bgColor = Color.GREEN; //enable for debugging plain text clickable spans
+                        }
+                    };
+                    strBuilder = SpanUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
                     // check for highlight text
                     if(comment.getHighlightText()!=null) {
                         strBuilder = SpanUtils.highlightText(strBuilder, comment.getHighlightText(), comment.highlightMatchCase());
