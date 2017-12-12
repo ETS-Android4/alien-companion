@@ -37,10 +37,12 @@ public class HtmlTagHandler implements Html.TagHandler {
     public HtmlTagHandler(TextPaint textPaint) {
         mTextPaint = textPaint;
         setClickableTableSpan(new MyClickableTableSpan());
-        DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
-        drawTableLinkSpan.setTextColor(MyApplication.linkColor);
-        drawTableLinkSpan.setTableLinkText("[View table]");
-        setDrawTableLinkSpan(drawTableLinkSpan);
+
+        // this causes issues with SpanUtils methods and table spans
+        //DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
+        //drawTableLinkSpan.setTextColor(MyApplication.linkColor);
+        //drawTableLinkSpan.setTableLinkText("[View table]");
+        //setDrawTableLinkSpan(drawTableLinkSpan);
     }
 
     /**
@@ -171,7 +173,8 @@ public class HtmlTagHandler implements Html.TagHandler {
                     tableHtmlBuilder = new StringBuilder();
                     // We need some text for the table to be replaced by the span because
                     // the other tags will remove their text when their text is extracted
-                    output.append("table placeholder");
+                    //output.append("table placeholder");
+                    output.append("[View table]");
                 }
 
                 tableTagLevel++;
