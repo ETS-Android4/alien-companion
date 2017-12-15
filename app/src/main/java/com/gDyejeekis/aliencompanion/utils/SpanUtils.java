@@ -262,14 +262,14 @@ public class SpanUtils {
                         public void updateDrawState(TextPaint ds) {
                             super.updateDrawState(ds);
                             ds.setColor(MyApplication.linkColor);
-                            ds.setUnderlineText(false);
+                            //ds.setUnderlineText(false);
                             //ds.bgColor = Color.RED; //enable for debugging clickable link spans
                         }
                     };
                 }
                 strBuilder.setSpan(myClickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
-            else if (span instanceof MyClickableTableSpan) { // TODO: 12/12/2017 shouldn't even have to add this (since table spans are never removed from strBuilder)
+            else if (span instanceof MyClickableTableSpan) {
                 final MyClickableTableSpan tableSpan = (MyClickableTableSpan) span;
                 myClickableSpan = new MyClickableSpan() {
                     @Override
