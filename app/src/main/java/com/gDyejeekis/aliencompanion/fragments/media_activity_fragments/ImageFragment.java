@@ -1,8 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments.media_activity_fragments;
 
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,10 +19,6 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-
-import magick.ColorspaceType;
-import magick.ImageInfo;
-import magick.MagickImage;
 
 /**
  * Created by sound on 3/8/2016.
@@ -46,6 +40,8 @@ public class ImageFragment extends Fragment {
     private Button buttonRetry;
 
     private MediaLoadTask loadTask;
+
+    public static final boolean ATTEMPT_CONVERSION_TO_RGB = false;
 
     private boolean convertedToRgb;
 
@@ -120,19 +116,27 @@ public class ImageFragment extends Fragment {
             @Override
             public void onImageLoadError(Exception e) {
                 Log.d(TAG, "onImageLoadError()");
-                if(convertedToRgb) {
-                    imageLoadError();
-                    ToastUtils.showToast(activity, "Error decoding image");
-                }
-                else {
-                    ToastUtils.showToast(activity, "Converting image to RGB..");
-                    convertAndShowImg();
+                if (ATTEMPT_CONVERSION_TO_RGB) {
+                    if (convertedToRgb) {
+                        imageLoadError();
+                        ToastUtils.showToast(activity, "Error decoding image");
+                    } else {
+                        ToastUtils.showToast(activity, "Converting image to RGB..");
+                        //convertAndShowImg();
+                    }
+                } else {
+                    ToastUtils.showToast(activity, "Error loading image");
                 }
             }
 
             @Override
             public void onTileLoadError(Exception e) {
                 Log.d(TAG, "onTileLoadError()");
+            }
+
+            @Override
+            public void onPreviewReleased() {
+                Log.d(TAG, "onPreviewReleased()");
             }
         });
 
@@ -159,44 +163,44 @@ public class ImageFragment extends Fragment {
         }
     }
 
-    private void convertAndShowImg() {
-        convertedToRgb = true;
-
-        final String cachedPath;
-        if(url.startsWith("file:")) {
-            cachedPath = url.replace("file:", "");
-        }
-        else {
-            cachedPath = GeneralUtils.checkCacheForMedia(activity.getCacheDir(), url);
-        }
-
-        new AsyncTask<Void, Void, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                try {
-                    ImageInfo imageInfo = new ImageInfo(cachedPath);
-                    MagickImage magickImage = new MagickImage(imageInfo);
-                    boolean success = magickImage.transformRgbImage(ColorspaceType.RGBColorspace);
-                    if(success) {
-                        magickImage.writeImage(imageInfo);
-                    }
-                    return success;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return false;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-                imageView.setImage(ImageSource.uri(cachedPath));
-                if(!success) {
-                    ToastUtils.showToast(activity, "Error converting image");
-                }
-            }
-        }.execute();
-    }
+    //private void convertAndShowImg() {
+    //    convertedToRgb = true;
+//
+    //    final String cachedPath;
+    //    if(url.startsWith("file:")) {
+    //        cachedPath = url.replace("file:", "");
+    //    }
+    //    else {
+    //        cachedPath = GeneralUtils.checkCacheForMedia(activity.getCacheDir(), url);
+    //    }
+//
+    //    new AsyncTask<Void, Void, Boolean>() {
+//
+    //        @Override
+    //        protected Boolean doInBackground(Void... params) {
+    //            try {
+    //                ImageInfo imageInfo = new ImageInfo(cachedPath);
+    //                MagickImage magickImage = new MagickImage(imageInfo);
+    //                boolean success = magickImage.transformRgbImage(ColorspaceType.RGBColorspace);
+    //                if(success) {
+    //                    magickImage.writeImage(imageInfo);
+    //                }
+    //                return success;
+    //            } catch (Exception e) {
+    //                e.printStackTrace();
+    //            }
+    //            return false;
+    //        }
+//
+    //        @Override
+    //        protected void onPostExecute(Boolean success) {
+    //            imageView.setImage(ImageSource.uri(cachedPath));
+    //            if(!success) {
+    //                ToastUtils.showToast(activity, "Error converting image");
+    //            }
+    //        }
+    //    }.execute();
+    //}
 
     // call at the start of every image load
     private void imageLoading() {
