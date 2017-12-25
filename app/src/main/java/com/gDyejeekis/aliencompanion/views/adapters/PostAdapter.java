@@ -1,6 +1,10 @@
 package com.gDyejeekis.aliencompanion.views.adapters;
 
 import android.graphics.Color;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -158,6 +162,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     if (hiddenComments + 1 == 1)
                         cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
                     else {
+                        cvh.hiddenCommentsCountTextView.setBackground(cvh.hiddenCommentsBackground);
+                        cvh.hiddenCommentsCountTextView.setPadding(6,6,6,6);
                         cvh.hiddenCommentsCountTextView.setVisibility(View.VISIBLE);
                         cvh.hiddenCommentsCountTextView.setText("+" + Integer.toString(hiddenComments));
                     }
@@ -743,6 +749,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public ImageView save;
         public ImageView share;
         public ImageView more;
+        public GradientDrawable hiddenCommentsBackground;
 
         public float defaultIconOpacity, defaultIconOpacityDisabled;
 
@@ -771,6 +778,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             rootLayout = (LinearLayout) itemView.findViewById(R.id.rootLayout);
             layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
             moreLayout = (FlowLayout) itemView.findViewById(R.id.moreLayout);
+
+            hiddenCommentsBackground = (GradientDrawable) ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_corner_orange);
+            hiddenCommentsBackground.setColor(MyApplication.colorSecondary);
 
             commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
 
