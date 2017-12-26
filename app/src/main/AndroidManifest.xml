@@ -65,106 +65,89 @@
             android:theme="@style/MainActivityTheme">
         </activity>
 
-        <activity
-            android:name=".activities.PostActivity"
+        <activity android:name=".activities.PostActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_post"/>
 
-        <activity
-            android:name=".activities.BrowserActivity"
+        <activity android:name=".activities.BrowserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_browser"/>
 
-        <activity
-            android:name=".activities.UserActivity"
+        <activity android:name=".activities.UserActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_user"/>
 
-        <activity
-            android:name=".activities.SearchActivity"
+        <activity android:name=".activities.SearchActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_search"/>
 
-        <activity
-            android:name=".activities.SettingsActivity"
+        <activity android:name=".activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_edit_prefs"
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        <activity
-            android:name=".activities.SubredditActivity"
+        <activity android:name=".activities.SubredditActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_subreddit"/>
 
-        <activity
-            android:name=".activities.SubmitActivity"
+        <activity android:name=".activities.SubmitActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_submit_post"/>
 
-        <service
-            android:name=".services.DownloaderService"
+        <service android:name=".services.DownloaderService"
             android:enabled="true"/>
 
-        <service
-            android:name=".services.MessageCheckService"
+        <service android:name=".services.MessageCheckService"
             android:enabled="true" />
 
-        <service
-            android:name=".services.PendingActionsService"
+        <service android:name=".services.PendingActionsService"
             android:enabled="true" />
 
-        <activity
-            android:name=".activities.MessageActivity"
+        <activity android:name=".activities.MessageActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_message"/>
 
-        <activity
-            android:name=".activities.OAuthActivity"
+        <activity android:name=".activities.OAuthActivity"
             android:configChanges="orientation|screenSize"
             android:label="OAuthActivity"/>
 
-        <activity
-            android:name=".activities.EditSubredditsActivity"
+        <activity android:name=".activities.EditSubredditsActivity"
             android:configChanges="orientation|screenSize"
             android:label="My subreddits"/>
 
-        <activity
-            android:name=".activities.EditMultisActivity"
+        <activity android:name=".activities.EditMultisActivity"
             android:configChanges="orientation|screenSize"
             android:label="My multireddits"/>
 
-        <activity
-            android:name=".activities.ProfilesActivity"
+        <activity android:name=".activities.ProfilesActivity"
             android:configChanges="orientation|screenSize"
             android:label="Profiles"/>
 
-        <activity
-            android:name=".activities.EditSyncProfileActivity"
+        <activity android:name=".activities.EditSyncProfileActivity"
             android:configChanges="orientation|screenSize"
             android:label="Edit sync profile"/>
 
-        <activity
-            android:name=".activities.EditFilterProfileActivity"
+        <activity android:name=".activities.EditFilterProfileActivity"
             android:configChanges="orientation|screenSize"
             android:label="Edit filter profile"/>
 
-        <activity
-            android:name=".activities.PendingUserActionsActivity"
+        <activity android:name=".activities.PendingUserActionsActivity"
             android:configChanges="orientation|screenSize"
             android:label="Pending actions"/>
 
-        <activity
-            android:name=".activities.MediaActivity"
+        <activity android:name=".activities.MediaActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Transparent"/>
 
-        <activity
-            android:name=".activities.SyncQueueActivity"
+        <activity android:name=".activities.SyncQueueActivity"
             android:configChanges="orientation|screenSize"
             android:label="Sync queue"/>
 
-        <activity
-            android:name=".activities.DebugActivity"
+        <activity android:name=".activities.ChangelogActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Changelog"/>
+
+        <activity android:name=".activities.DebugActivity"
             android:configChanges="orientation|screenSize"
             android:label="Debug"/>
 

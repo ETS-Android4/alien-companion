@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.gDyejeekis.aliencompanion.activities.ChangelogActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -59,8 +60,12 @@ public class GeneralUtils {
     public static final String TAG = "GeneralUtils";
 
     public static void showChangeLog(Activity activity) {
-        ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
-        dialog.show(activity.getFragmentManager(), "dialog");
+        // dialog changelog
+        //ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
+        //dialog.show(activity.getFragmentManager(), "dialog");
+        // activity changelog
+        Intent intent = new Intent(activity, ChangelogActivity.class);
+        activity.startActivity(intent);
     }
 
     public static boolean isNetworkAvailable(Context context) {
