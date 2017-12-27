@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 import me.imid.swipebacklayout.lib.ViewDragHelper;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by sound on 11/23/2015.
@@ -194,6 +195,8 @@ public class MyApplication extends Application {
 
     public static int currentBaseTheme;
 
+    public static OkHttpClient okHttpClient;
+
     public static boolean newMessages;
     //public static boolean messageServiceActive;
     public static int messageCheckInterval;
@@ -239,6 +242,7 @@ public class MyApplication extends Application {
         currentFontFamily = fontFamily;
 
         //savedAccounts = readAccounts();
+        okHttpClient = new OkHttpClient();
     }
 
     public static int[] getPrimaryColors(Context context) {

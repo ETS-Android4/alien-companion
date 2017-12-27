@@ -9,14 +9,13 @@ import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 
-import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -28,13 +27,15 @@ import okhttp3.RequestBody;
 /**
  * Created by George on 5/27/2015.
  */
-public class RedditHttpClient implements HttpClient, Serializable {
-
-    private static final long serialVersionUID = 1234531L;
+public class RedditHttpClient implements HttpClient {
 
     public static final String TAG = "RedditHttpClient";
 
+    public static final boolean DEBUG_REQUESTS = false;
+
     private String userAgent = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/ubercharge_ready)";
+
+    private OkHttpClient okHttpClient;
 
     private String accessToken;
 
@@ -43,12 +44,14 @@ public class RedditHttpClient implements HttpClient, Serializable {
     private boolean renewTokenInstance;
 
     public RedditHttpClient() {
+        okHttpClient = MyApplication.okHttpClient;
         accessToken = MyApplication.currentAccessToken;
         this.user = null;
         renewTokenInstance = false;
     }
 
     public RedditHttpClient(User user) {
+        okHttpClient = MyApplication.okHttpClient;
         accessToken = user.getTokenObject().accessToken;
         this.user = user;
         renewTokenInstance = false;
@@ -58,182 +61,194 @@ public class RedditHttpClient implements HttpClient, Serializable {
         renewTokenInstance = flag;
     }
 
-    public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException { //TODO: re-write with okhttp
+    //public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException {
+    //    tokenCheck();
+//
+    //    HttpURLConnection connection = null;
+    //    final String url = baseUrl + urlPath;
+    //    Log.d(TAG, "GET request to  " + url);
+    //    try {
+    //        connection = (HttpURLConnection) new URL(url).openConnection();
+    //        connection.setUseCaches(false);
+    //        connection.setRequestMethod("GET");
+    //        connection.setRequestProperty("User-Agent", userAgent);
+    //        if(RedditOAuth.useOAuth2) connection.setRequestProperty("Authorization", "bearer " + accessToken);
+    //        else connection.setRequestProperty("Cookie", "reddit_session=" + cookie);
+    //        connection.setDoInput(true);
+    //        //connection.setDoOutput(true);
+    //        connection.setConnectTimeout(5000);
+    //        connection.setReadTimeout(5000);
+//
+//
+    //        InputStream inputStream = connection.getInputStream();
+//
+    //        String content = IOUtils.toString(inputStream, "UTF-8");
+    //        IOUtils.closeQuietly(inputStream);
+//
+    //        if (DEBUG_REQUESTS) {
+    //            GeneralUtils.printHttpRequestProperties(connection);
+    //            GeneralUtils.printHttpRequestHeaders(connection);
+    //            Log.d(TAG, "response code: " + connection.getResponseCode());
+    //            GeneralUtils.printHttpResponseBody(content);
+    //        }
+    //
+    //        Object responseObject = new JSONParser().parse(content);
+    //        Response result = new HttpResponse(content, responseObject, connection);
+//
+    //        if (result.getResponseObject() == null) {
+    //            throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + url);
+    //        } else {
+    //            return result;
+    //        }
+    //    } catch (IOException e) {
+    //        throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + url);
+    //    } catch (org.json.simple.parser.ParseException e) {
+    //        e.printStackTrace();
+    //    } finally {
+    //        //if(inputStream != null) {
+    //        //    IOUtils.closeQuietly(inputStream);
+    //        //}
+    //        if(connection != null) {
+    //            connection.disconnect();
+    //        }
+    //    }
+//
+    //    return null;
+    //}
+
+    public Response get(String baseUrl, String urlPath, String cookie) throws RetrievalFailedException {
         tokenCheck();
-
-        HttpURLConnection connection = null;
+        final String url = baseUrl + urlPath;
+        Log.d(TAG, "GET request to  " + url);
         try {
-            URL url = new URL(baseUrl + urlPath);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setUseCaches(false);
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent", userAgent);
-            if(RedditOAuth.useOAuth2) connection.setRequestProperty("Authorization", "bearer " + accessToken);
-            else connection.setRequestProperty("Cookie", "reddit_session=" + cookie);
-            connection.setDoInput(true);
-            //connection.setDoOutput(true);
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
-
-            Log.d(TAG, "GET request to  " + baseUrl + urlPath);
-            printRequestProperties(connection);
-
-            InputStream inputStream = connection.getInputStream();
-            //Log.d(TAG, "response code: " + connection.getResponseCode());
-
-            String content = IOUtils.toString(inputStream, "UTF-8");
-            IOUtils.closeQuietly(inputStream);
-
-            printResponseString(content);
-            Object responseObject = new JSONParser().parse(content);
-            Response result = new HttpResponse(content, responseObject, connection);
-
-            printHeaderFields(connection);
-
-            if (result.getResponseObject() == null) {
-                throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + baseUrl + urlPath);
-            } else {
-                return result;
-            }
-        } catch (IOException e) {
-            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
-        } catch (org.json.simple.parser.ParseException e) {
-            e.printStackTrace();
-        } finally {
-            //if(inputStream != null) {
-            //    IOUtils.closeQuietly(inputStream);
-            //}
-            if(connection != null) {
-                connection.disconnect();
-            }
-        }
-
-        return null;
-    }
-
-    public Response post(String baseUrl, RequestBody body, String urlPath, String cookie) {
-        tokenCheck();
-        Log.d(TAG, "POST request to " + baseUrl + urlPath);
-        try {
-            OkHttpClient client = new OkHttpClient();
-            Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).post(body);
-            if (RedditOAuth.useOAuth2 && cookie == null) {
-                String authHeader;
-                if (accessToken != null) {
-                    authHeader = "bearer " + accessToken;
-                } else {
-                    authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
-                }
-                builder.addHeader("Authorization", authHeader);
-            } else {
-                builder.addHeader("Cookie", "reddit_session=" + cookie);
-            }
+            Request.Builder builder = new Request.Builder().url(url);
             builder.addHeader("User-Agent", userAgent);
+            addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
-            okhttp3.Response response = client.newCall(request).execute();
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
             String content = response.body().string();
-            Log.d(TAG, "request body: " + request.body());
-            Log.d(TAG, "request headers: " + request.headers());
-            Log.d(TAG, "response code: " + response.code());
-            Log.d(TAG, "response headers: " + response.headers());
-            printResponseString(content);
+            if (DEBUG_REQUESTS) {
+                Log.d(TAG, "request body: " + request.body());
+                Log.d(TAG, "request headers: " + request.headers());
+                Log.d(TAG, "response code: " + response.code());
+                Log.d(TAG, "response headers: " + response.headers());
+                GeneralUtils.printHttpResponseBody(content);
+            }
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
 
             if (result.getResponseObject() == null) {
-                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
+                throw new RetrievalFailedException("The given URI path does not exist on Reddit: " + url);
             } else {
                 return result;
             }
         } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
+            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + url);
+        } catch (org.json.simple.parser.ParseException e) {
+            throw new RetrievalFailedException("Failed to parse response from GET request to URI path: " + url);
+        }
+    }
+
+    public Response post(String baseUrl, RequestBody body, String urlPath, String cookie) {
+        tokenCheck();
+        final String url = baseUrl + urlPath;
+        Log.d(TAG, "POST request to " + url);
+        try {
+            Request.Builder builder = new Request.Builder().url(url).post(body);
+            builder.addHeader("User-Agent", userAgent);
+            addAuthorizatonHeaders(builder, cookie);
+            Request request = builder.build();
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
+            String content = response.body().string();
+            if (DEBUG_REQUESTS) {
+                Log.d(TAG, "request body: " + request.body());
+                Log.d(TAG, "request headers: " + request.headers());
+                Log.d(TAG, "response code: " + response.code());
+                Log.d(TAG, "response headers: " + response.headers());
+                GeneralUtils.printHttpResponseBody(content);
+            }
+
+            Object parsedObject = new JSONParser().parse(content);
+            Response result = new HttpResponse(content, parsedObject, null);
+
+            if (result.getResponseObject() == null) {
+                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + url);
+            } else {
+                return result;
+            }
+        } catch (IOException e) {
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
-            throw new ActionFailedException("Failed to parse the response from POST request to URI path: " + baseUrl + urlPath);
+            throw new ActionFailedException("Failed to parse response from POST request to URI path: " + url);
         }
     }
 
     public Response put(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
-        Log.d(TAG, "PUT request to " + baseUrl + urlPath);
+        final String url = baseUrl + urlPath;
+        Log.d(TAG, "PUT request to " + url);
         try {
-            OkHttpClient client = new OkHttpClient();
-            Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).put(body);
-            if (RedditOAuth.useOAuth2 && cookie == null) {
-                String authHeader;
-                if (accessToken != null) {
-                    authHeader = "bearer " + accessToken;
-                } else {
-                    authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
-                }
-                builder.addHeader("Authorization", authHeader);
-            } else {
-                builder.addHeader("Cookie", "reddit_session=" + cookie);
-            }
+            Request.Builder builder = new Request.Builder().url(url).put(body);
             builder.addHeader("User-Agent", userAgent);
+            addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
-            okhttp3.Response response = client.newCall(request).execute();
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
             String content = response.body().string();
-            Log.d(TAG, "request body: " + request.body());
-            Log.d(TAG, "request headers: " + request.headers());
-            Log.d(TAG, "response code: " + response.code());
-            Log.d(TAG, "response headers: " + response.headers());
-            printResponseString(content);
+            if (DEBUG_REQUESTS) {
+                Log.d(TAG, "request body: " + request.body());
+                Log.d(TAG, "request headers: " + request.headers());
+                Log.d(TAG, "response code: " + response.code());
+                Log.d(TAG, "response headers: " + response.headers());
+                GeneralUtils.printHttpResponseBody(content);
+            }
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
 
             if (result.getResponseObject() == null) {
-                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
+                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + url);
             } else {
                 return result;
             }
         } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
-            throw new ActionFailedException("Failed to parse the response from PUT request to URI path: " + baseUrl + urlPath);
+            throw new ActionFailedException("Failed to parse response from PUT request to URI path: " + url);
         }
     }
 
     public Response delete(String baseUrl, RequestBody body, String urlPath, String cookie) {
         tokenCheck();
-        Log.d(TAG, "DELETE request to " + baseUrl + urlPath);
+        final String url = baseUrl + urlPath;
+        Log.d(TAG, "DELETE request to " + url);
         try {
-            OkHttpClient client = new OkHttpClient();
-            Request.Builder builder = new Request.Builder().url(baseUrl + urlPath).delete(body);
-            if (RedditOAuth.useOAuth2 && cookie == null) {
-                String authHeader;
-                if (accessToken != null) {
-                    authHeader = "bearer " + accessToken;
-                } else {
-                    authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
-                }
-                builder.addHeader("Authorization", authHeader);
-            } else {
-                builder.addHeader("Cookie", "reddit_session=" + cookie);
-            }
+            Request.Builder builder = new Request.Builder().url(url).delete(body);
             builder.addHeader("User-Agent", userAgent);
+            addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
-            okhttp3.Response response = client.newCall(request).execute();
+            okhttp3.Response response = okHttpClient.newCall(request).execute();
             String content = response.body().string();
-            Log.d(TAG, "request body: " + request.body());
-            Log.d(TAG, "request headers: " + request.headers());
-            Log.d(TAG, "response code: " + response.code());
-            Log.d(TAG, "response headers: " + response.headers());
-            printResponseString(content);
+            if (DEBUG_REQUESTS) {
+                Log.d(TAG, "request body: " + request.body());
+                Log.d(TAG, "request headers: " + request.headers());
+                Log.d(TAG, "response code: " + response.code());
+                Log.d(TAG, "response headers: " + response.headers());
+                GeneralUtils.printHttpResponseBody(content);
+            }
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
 
             if (result.getResponseObject() == null) {
-                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + baseUrl + urlPath);
+                throw new ActionFailedException("Due to unknown reasons, the response was undefined for URI path: " + url);
             } else {
                 return result;
             }
         } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + baseUrl + urlPath);
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
-            throw new ActionFailedException("Failed to parse the response from DELETE request to URI path: " + baseUrl + urlPath);
+            throw new ActionFailedException("Failed to parse response from DELETE request to URI path: " + url);
         }
     }
 
@@ -282,35 +297,18 @@ public class RedditHttpClient implements HttpClient, Serializable {
         }
     }
 
-    private void printResponseString(String responseString) {
-        int maxLogSize = 800;
-        for(int i = 0; i <= responseString.length() / maxLogSize; i++) {
-            int start = i * maxLogSize;
-            int end = (i+1) * maxLogSize;
-            end = end > responseString.length() ? responseString.length() : end;
-            Log.v(TAG, "response: " + responseString.substring(start, end));
+    private void addAuthorizatonHeaders(Request.Builder builder, String cookie) {
+        if (RedditOAuth.useOAuth2) {
+            String authHeader;
+            if (accessToken != null) {
+                authHeader = "bearer " + accessToken;
+            } else {
+                authHeader = Credentials.basic(RedditOAuth.MY_APP_ID, RedditOAuth.MY_APP_SECRET);
+            }
+            builder.addHeader("Authorization", authHeader);
+        } else {
+            builder.addHeader("Cookie", "reddit_session=" + cookie);
         }
     }
 
-    private void printRequestProperties(HttpURLConnection connection) {
-        Log.d(TAG, "Request Properties: Request method: " + connection.getRequestMethod());
-        for (String header : connection.getRequestProperties().keySet()) {
-            if (header != null) {
-                for (String value : connection.getRequestProperties().get(header)) {
-                    Log.d(TAG, "Request properties: " + header + ":" + value);
-                }
-            }
-        }
-    }
-
-    private void printHeaderFields(HttpURLConnection connection) {
-        for (String header : connection.getHeaderFields().keySet()) {
-            if (header != null) {
-                for (String value : connection.getHeaderFields().get(header)) {
-                    Log.d(TAG, "Header fields: " + header + ":" + value);
-                }
-            }
-        }
-        Log.d(TAG, "--------------------------------------------------------------------------------------------");
-    }
 }

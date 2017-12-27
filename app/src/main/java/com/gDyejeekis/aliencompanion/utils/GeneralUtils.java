@@ -518,4 +518,37 @@ public class GeneralUtils {
         field.setHintTextColor(color);
     }
 
+    public static void printHttpRequestProperties(HttpURLConnection connection) {
+        Log.d(TAG, "REQUEST PROPERTIES");
+        Log.d(TAG, "Request method: " + connection.getRequestMethod());
+        for (String header : connection.getRequestProperties().keySet()) {
+            if (header != null) {
+                for (String value : connection.getRequestProperties().get(header)) {
+                    Log.d("Request properties", header + ":" + value);
+                }
+            }
+        }
+    }
+
+    public static void printHttpRequestHeaders(HttpURLConnection connection) {
+        Log.d(TAG, "HEADER FIELDS");
+        for (String header : connection.getHeaderFields().keySet()) {
+            if (header != null) {
+                for (String value : connection.getHeaderFields().get(header)) {
+                    Log.d(TAG, header + ":" + value);
+                }
+            }
+        }
+    }
+
+    public static void printHttpResponseBody(String responseString) {
+        int maxLogSize = 800;
+        for(int i = 0; i <= responseString.length() / maxLogSize; i++) {
+            int start = i * maxLogSize;
+            int end = (i+1) * maxLogSize;
+            end = end > responseString.length() ? responseString.length() : end;
+            Log.v(TAG, "response: " + responseString.substring(start, end));
+        }
+    }
+
 }
