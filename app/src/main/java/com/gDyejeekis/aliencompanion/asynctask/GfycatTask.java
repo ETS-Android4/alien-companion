@@ -79,6 +79,7 @@ public class GfycatTask extends AsyncTask<String, Void, String> {
         Request request = new Request.Builder().url(url).build();
         Response response = MyApplication.okHttpClient.newCall(request).execute();
         String content = response.body().string();
+        response.close();
 
         Object responseObject = new JSONParser().parse(content);
         JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");

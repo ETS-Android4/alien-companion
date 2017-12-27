@@ -134,6 +134,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "response headers: " + response.headers());
                 GeneralUtils.printHttpResponseBody(content);
             }
+            response.close();
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -168,6 +169,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "response headers: " + response.headers());
                 GeneralUtils.printHttpResponseBody(content);
             }
+            response.close();
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -202,6 +204,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "response headers: " + response.headers());
                 GeneralUtils.printHttpResponseBody(content);
             }
+            response.close();
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);
@@ -236,6 +239,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "response headers: " + response.headers());
                 GeneralUtils.printHttpResponseBody(content);
             }
+            response.close();
 
             Object parsedObject = new JSONParser().parse(content);
             Response result = new HttpResponse(content, parsedObject, null);

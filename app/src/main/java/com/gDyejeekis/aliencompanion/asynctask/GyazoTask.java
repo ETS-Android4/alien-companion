@@ -74,6 +74,7 @@ public class GyazoTask extends AsyncTask<String, Void, String> {
         Request request = new Request.Builder().url(url).build();
         Response response = MyApplication.okHttpClient.newCall(request).execute();
         String content = response.body().string();
+        response.close();
 
         JSONObject gyazoJson = (JSONObject) new JSONParser().parse(content);
         return safeJsonToString(gyazoJson.get("url"));
