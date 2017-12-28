@@ -8,6 +8,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,6 +16,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,6 +158,11 @@ public class ConvertUtils {
     public static int convertSpToPixels(float sp, Context context) {
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
         return px;
+    }
+
+    public static String convertStreamToString(InputStream is, String charset) {
+        Scanner s = new Scanner(is, charset).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
 }
