@@ -45,6 +45,9 @@
         <changelogtext>Added streamable.com link handling support</changelogtext>
         <changelogtext>Added *.mp4 link handling support</changelogtext>
         <changelogtext>Added email link handling support</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext>Fixed higher quality gfycat thumbnails not displaying</changelogtext>
+        <changelogtext>Fixed various link handling issues</changelogtext>
         <!-- other changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> FILTERS FEATURE HERE]]></changelogtext>
         <changelogtext>Added 'Device settings' option under 'Other'</changelogtext>
@@ -60,8 +63,7 @@
         <changelogtext>Fixed error when reporting posts</changelogtext>
         <changelogtext>Fixed inconsistent behavior when browsing /r/random</changelogtext>
         <changelogtext>Fixed swipe to refresh gesture when the post view isn't completely visible</changelogtext>
-        <changelogtext>Fixed various link handling issues</changelogtext>
-        <changelogtext>Fixed 'Open in app' links not opening from the in-app browser</changelogtext>
+        <changelogtext>Fixed 'Open in app' links not opening the appropriate app from the in-app browser</changelogtext>
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
 

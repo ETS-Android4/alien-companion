@@ -29,6 +29,6 @@ public class ThumbnailUtils {
     }
 
     public static String getGfycatThumbnail(String url) {
-        return BASE_GFYCAT_THUMB_URL + LinkUtils.getGfycatId(url) + "-thumb360.jpg";
+        return BASE_GFYCAT_THUMB_URL + LinkUtils.getGfycatId(url) + "-mini.jpg";
     }
 }
