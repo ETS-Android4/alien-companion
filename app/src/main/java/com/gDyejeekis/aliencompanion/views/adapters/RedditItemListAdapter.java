@@ -232,26 +232,21 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         return viewHolder;
     }
 
+    private void toggleMenuBar(int position) {
+        int previousSelected = selectedPosition;
+        selectedPosition = (selectedPosition == position) ? -1 : position;
+        notifyItemChanged(previousSelected);
+        notifyItemChanged(selectedPosition);
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
-        View.OnLongClickListener longListener = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int previousPosition = selectedPosition;
-                if (position == selectedPosition) selectedPosition = -1;
-                else selectedPosition = position;
-                notifyItemChanged(previousPosition);
-                notifyItemChanged(position);
-                //notifyDataSetChanged();
-                return true;
-            }
-        };
-
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POST:
                 PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
                 final Submission post = (Submission) getItemAt(position);
 
+                View.OnLongClickListener longListener;
                 if(viewTypeValue == PostViewType.gallery.value()) {
                     longListener = new View.OnLongClickListener() {
                         @Override
@@ -261,6 +256,14 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                                 notifyItemChanged(position);
                             }
                             PostItemListener.openComments(context, post);
+                            return true;
+                        }
+                    };
+                } else {
+                    longListener = new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            toggleMenuBar(position);
                             return true;
                         }
                     };
@@ -276,34 +279,29 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_USER_COMMENT:
                 Comment comment = (Comment) getItemAt(position);
                 UserCommentViewHolder userCommentViewHolder = (UserCommentViewHolder) viewHolder;
-                MyClickableSpan clickableSpan = new MyClickableSpan() {
+                userCommentViewHolder.bindModel(context, comment);
+
+                userCommentViewHolder.layoutComment.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
-                    public boolean onLongClick(View widget) {
-                        return false;
+                    public boolean onLongClick(View view) {
+                        toggleMenuBar(position);
+                        return true;
                     }
-
+                });
+                userCommentViewHolder.layoutMenuBarToggle.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View widget) {
-                        int previousSelected = selectedPosition;
-                        selectedPosition = (selectedPosition == position) ? -1 : position;
-                        notifyItemChanged(previousSelected);
-                        notifyItemChanged(selectedPosition);
-                        //notifyDataSetChanged();
+                    public void onClick(View view) {
+                        toggleMenuBar(position);
                     }
+                });
 
-                    @Override
-                    public void updateDrawState(TextPaint ds) {
-                        //ds.bgColor = Color.GREEN;
-                    }
-                };
-                userCommentViewHolder.bindModel(context, comment, clickableSpan);
-
-                userCommentViewHolder.layoutComment.setOnLongClickListener(longListener);
-
-                //comment item selected
                 CommentItemOptionsListener commentListener = new CommentItemOptionsListener(context, comment, this);
-                if(selectedPosition == position) userCommentViewHolder.showCommentOptions(commentListener);
-                else userCommentViewHolder.hideCommentOptions();
+                if(selectedPosition == position) {
+                    userCommentViewHolder.showCommentOptions(commentListener);
+                }
+                else {
+                    userCommentViewHolder.hideCommentOptions();
+                }
                 break;
             case VIEW_TYPE_USER_INFO:
                 UserInfo userInfo = (UserInfo) getItemAt(position);
@@ -419,6 +417,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     public static class UserCommentViewHolder extends RecyclerView.ViewHolder {
 
         public LinearLayout layoutComment;
+        public LinearLayout layoutMenuBarToggle;
         public LinearLayout layoutCommentOptions;
         public TextView postTitle;
         public TextView commentSubreddit;
@@ -432,6 +431,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public ImageView save;
         public ImageView share;
         public ImageView more;
+        public ImageView menuBarToggle;
 
         private float defaultIconOpacity, defaultIconOpacityDisabled;
 
@@ -440,6 +440,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             defaultIconOpacity = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
             defaultIconOpacityDisabled = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
             layoutComment = (LinearLayout) itemView.findViewById(R.id.layout_comment);
+            layoutMenuBarToggle = itemView.findViewById(R.id.layout_toggle_menu_bar);
             layoutCommentOptions = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);
             postTitle = (TextView) itemView.findViewById(R.id.txtView_postTitle);
             commentBody = (TextView) itemView.findViewById(R.id.txtView_commentBody);
@@ -453,6 +454,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             save = (ImageView) itemView.findViewById(R.id.btn_save);
             share = (ImageView) itemView.findViewById(R.id.btn_share);
             more = (ImageView) itemView.findViewById(R.id.btn_more);
+            menuBarToggle = itemView.findViewById(R.id.imageView_toggle_menu_bar);
+
+            if (MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
+            else if (MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);
+            else menuBarToggle.setAlpha(1f);
 
             viewUser.setAlpha(defaultIconOpacity);
             share.setAlpha(defaultIconOpacity);
@@ -462,7 +468,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             viewUser.setVisibility(View.GONE);
         }
 
-        public void bindModel(Context context, Comment comment, MyClickableSpan plainTextClickable) {
+        public void bindModel(Context context, Comment comment) {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
 
@@ -473,7 +479,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 //parse html body using fromHTML
                 SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(Html.fromHtml(comment.getBodyHTML(), null,
                         new HtmlTagHandler(commentBody.getPaint())));
-                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder, plainTextClickable);
+                strBuilder = SpanUtils.modifyURLSpan(context, strBuilder);
                 commentBody.setText(strBuilder);
                 commentBody.setMovementMethod(MyLinkMovementMethod.getInstance());
             }
@@ -537,6 +543,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public void showCommentOptions(View.OnClickListener listener) {
             layoutComment.setBackgroundColor(MyApplication.colorPrimaryLight);
+            menuBarToggle.setImageResource(MyApplication.nightThemeEnabled ? R.drawable.ic_expand_less_white_48dp : R.drawable.ic_expand_less_black_48dp);
             layoutCommentOptions.setVisibility(View.VISIBLE);
             upvote.setOnClickListener(listener);
             downvote.setOnClickListener(listener);
@@ -549,6 +556,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public void hideCommentOptions() {
             layoutComment.setBackground(null);
+            menuBarToggle.setImageResource(MyApplication.nightThemeEnabled ? R.drawable.ic_expand_more_white_48dp : R.drawable.ic_expand_more_black_48dp);
             layoutCommentOptions.setVisibility(View.GONE);
         }
     }

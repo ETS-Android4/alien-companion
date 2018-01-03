@@ -122,6 +122,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         return viewHolder;
     }
 
+    private void toggleMenuBar(int pos) {
+        int previousSelected = selectedPosition;
+        selectedPosition = (selectedPosition == pos) ? -1 : pos;
+        notifyItemChanged(previousSelected);
+        notifyItemChanged(selectedPosition);
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
@@ -179,6 +186,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 if (selectedPosition == position) {
                     //cvh.setPaddingLeft(0);
                     cvh.commentLayout.setBackgroundColor(MyApplication.colorPrimaryLight);
+                    cvh.menuBarToggle.setImageResource(MyApplication.nightThemeEnabled ? R.drawable.ic_expand_less_white_48dp : R.drawable.ic_expand_less_black_48dp);
                     cvh.commentOptionsLayout.setVisibility(View.VISIBLE);
                     CommentItemOptionsListener listener = new CommentItemOptionsListener(activity, comment, this);
                     cvh.upvote.setOnClickListener(listener);
@@ -198,6 +206,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.commentLayout.setBackground(null);
                     }
 
+                    cvh.menuBarToggle.setImageResource(MyApplication.nightThemeEnabled ? R.drawable.ic_expand_more_white_48dp : R.drawable.ic_expand_more_black_48dp);
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
                 //cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
@@ -217,15 +226,16 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     @Override
                     public boolean onLongClick(View v) {
                         if(!comment.isGroup()) {
-                            int pos = cvh.getAdapterPosition();
-                            int previousPosition = selectedPosition;
-                            if (pos == selectedPosition) selectedPosition = -1;
-                            else selectedPosition = pos;
-                            notifyItemChanged(previousPosition);
-                            notifyItemChanged(selectedPosition);
+                            toggleMenuBar(cvh.getAdapterPosition());
                             return true;
                         }
                         return false;
+                    }
+                });
+                cvh.menuBarToggleLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        toggleMenuBar(cvh.getAdapterPosition());
                     }
                 });
 
@@ -256,27 +266,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     SpannableStringBuilder strBuilder = (SpannableStringBuilder) ConvertUtils.noTrailingwhiteLines(
                             Html.fromHtml(comment.getBodyHTML(), null, new HtmlTagHandler(cvh.commentTextView.getPaint())));
 
-                    MyClickableSpan clickableSpan = new MyClickableSpan() {
-                        @Override
-                        public boolean onLongClick(View widget) {
-                            return false;
-                        }
-
-                        @Override
-                        public void onClick(View widget) {
-                            int previousSelected = selectedPosition;
-                            int pos = cvh.getAdapterPosition();
-                            selectedPosition = (selectedPosition == pos) ? -1 : pos;
-                            notifyItemChanged(previousSelected);
-                            notifyItemChanged(selectedPosition);
-                        }
-
-                        @Override
-                        public void updateDrawState(TextPaint ds) {
-                            //ds.bgColor = Color.GREEN; //enable for debugging plain text clickable spans
-                        }
-                    };
-                    strBuilder = SpanUtils.modifyURLSpan(activity, strBuilder, clickableSpan);
+                    strBuilder = SpanUtils.modifyURLSpan(activity, strBuilder);
                     // check for highlight text
                     if(comment.getHighlightText()!=null) {
                         strBuilder = SpanUtils.highlightText(strBuilder, comment.getHighlightText(), comment.highlightMatchCase());
@@ -728,6 +718,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
+        private View view;
         private View colorBand;
         public TextView authorTextView;
         public TextView commentTextView;
@@ -736,10 +727,10 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public TextView score;
         public TextView age;
         public TextView goldCount;
-        private View view;
         public LinearLayout layoutGilded;
         public LinearLayout rootLayout;
         public LinearLayout commentLayout;
+        public LinearLayout menuBarToggleLayout;
         public LinearLayout commentOptionsLayout;
         public FlowLayout moreLayout;
         public ImageView upvote;
@@ -749,14 +740,17 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public ImageView save;
         public ImageView share;
         public ImageView more;
+        public ImageView menuBarToggle;
         public GradientDrawable hiddenCommentsBackground;
 
         public float defaultIconOpacity, defaultIconOpacityDisabled;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+
             defaultIconOpacity = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
             defaultIconOpacityDisabled = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
+
             view = itemView;
             authorTextView = (TextView) itemView.findViewById(R.id.author_textview);
             commentTextView = (TextView) itemView.findViewById(R.id.comment_textview);
@@ -778,11 +772,17 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             rootLayout = (LinearLayout) itemView.findViewById(R.id.rootLayout);
             layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
             moreLayout = (FlowLayout) itemView.findViewById(R.id.moreLayout);
+            menuBarToggle = itemView.findViewById(R.id.imageView_toggle_menu_bar);
+            menuBarToggleLayout = itemView.findViewById(R.id.layout_toggle_menu_bar);
 
             hiddenCommentsBackground = (GradientDrawable) ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_corner_orange);
             hiddenCommentsBackground.setColor(MyApplication.colorSecondary);
 
             commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
+
+            if (MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
+            else if (MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);
+            else menuBarToggle.setAlpha(1f);
 
             viewUser.setAlpha(defaultIconOpacity);
             share.setAlpha(defaultIconOpacity);

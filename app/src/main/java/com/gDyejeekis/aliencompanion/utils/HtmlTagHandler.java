@@ -37,12 +37,11 @@ public class HtmlTagHandler implements Html.TagHandler {
     public HtmlTagHandler(TextPaint textPaint) {
         mTextPaint = textPaint;
         setClickableTableSpan(new MyClickableTableSpan());
-
-        // this causes issues with SpanUtils methods and table spans
-        //DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
-        //drawTableLinkSpan.setTextColor(MyApplication.linkColor);
-        //drawTableLinkSpan.setTableLinkText("[View table]");
-        //setDrawTableLinkSpan(drawTableLinkSpan);
+        // customize clickable table span
+        DrawTableLinkSpan drawTableLinkSpan = new DrawTableLinkSpan();
+        drawTableLinkSpan.setTextColor(MyApplication.linkColor);
+        drawTableLinkSpan.setTableLinkText("[View table]");
+        setDrawTableLinkSpan(drawTableLinkSpan);
     }
 
     /**
