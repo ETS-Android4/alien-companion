@@ -175,11 +175,13 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                         cvh.hiddenCommentsCountTextView.setText("+" + Integer.toString(hiddenComments));
                     }
                     cvh.commentTextView.setVisibility(View.GONE);
+                    cvh.menuBarToggleLayout.setVisibility(View.GONE);
                 }
                 else {
                     cvh.commentHidden.setVisibility(View.GONE);
                     cvh.hiddenCommentsCountTextView.setVisibility(View.GONE);
                     cvh.commentTextView.setVisibility(View.VISIBLE);
+                    cvh.menuBarToggleLayout.setVisibility(View.VISIBLE);
                 }
 
                 // check if current selected position
