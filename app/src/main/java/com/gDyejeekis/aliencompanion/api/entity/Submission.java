@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import com.gDyejeekis.aliencompanion.models.RedditVideo;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -220,29 +219,31 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     }
 
 	private void handleThumbnail() {
-		if(!(nsfw && !MyApplication.showNSFWpreview)) {
-			if(domain.contains("youtube.com") || domain.equals("youtu.be") /*(domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com"))*/) {
+		if (!(nsfw && !MyApplication.showNSFWpreview)) {
+			if (domain.contains("youtube.com") || domain.equals("youtu.be")) {
 
-				if(!(url.contains("playlist") || url.contains("user") || url.contains("channel"))) {
+				if (!(url.contains("playlist") || url.contains("user") || url.contains("channel"))) {
 					hasImageButton = true;
 					thumbnail = ThumbnailUtils.getYoutubeThumbnail(url, YoutubeThumbnailSize.MEDIUM_QUALITY);;
 				}
 			}
-			else if(domain.contains("imgur.com")) {
-				if(url.contains("/a/") || url.contains("/gallery/")) hasImageButton = false;
+			else if (domain.contains("imgur.com")) {
+				if (url.contains("/a/") || url.contains("/gallery/")) hasImageButton = false;
 				else {
 					hasImageButton = true;
 					thumbnail = ThumbnailUtils.getImgurThumbnail(url, ImgurThumbnailSize.MEDIUM_THUMBNAIL);
 				}
 			}
-			else if(domain.contains("gfycat.com")) {
+			else if (domain.contains("gfycat.com")) {
 				hasImageButton = true;
 				thumbnail = ThumbnailUtils.getGfycatThumbnail(url);
 			}
+			else if (domain.contains("streamable.com")) {
+				hasImageButton = true;
+				thumbnail = ThumbnailUtils.getStreamableThumbnail(url);
+			}
 		}
 		else hasImageButton = false;
-
-		//Log.d("SubmissionDebug", thumbnail);
 	}
 
 	public void updateSubmission(JSONObject obj) {

@@ -44,9 +44,7 @@
         <changelogtext>Added giphy.com link handling support</changelogtext>
         <changelogtext>Added streamable.com link handling support</changelogtext>
         <changelogtext>Added *.mp4 link handling support</changelogtext>
-        <changelogtext>Added email link handling support</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext>Fixed higher quality gfycat thumbnails not displaying</changelogtext>
+        <changelogtext>Email links will now open with the appropriate email app</changelogtext>
         <changelogtext>Fixed various link handling issues</changelogtext>
         <!-- other changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> FILTERS FEATURE HERE]]></changelogtext>
@@ -57,6 +55,8 @@
         <changelogtext>Comments with hidden score now have the '[score hidden]' indicator</changelogtext>
         <changelogtext>User actions(such as upvoting, saving, hiding posts, etc) performed in dual pane mode are now reflected in both panes</changelogtext>
         <changelogtext>Submitting/editing comments is now reflected in the corresponding thread after successful submission/edit (online mode only)</changelogtext>
+        <changelogtext>Added higher quality thumbnail support for streamable posts</changelogtext>
+        <changelogtext>Fixed higher quality gfycat thumbnails not displaying</changelogtext>
         <changelogtext>Added indicator for locked posts</changelogtext>
         <changelogtext>Added the ability to mark/unmark posts as spoiler</changelogtext>
         <changelogtext>Fixed error when marking/unmarking posts as NSFW</changelogtext>

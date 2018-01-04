@@ -16,6 +16,8 @@ public class ThumbnailUtils {
 
     public static final String BASE_GFYCAT_THUMB_URL = "http://thumbs.gfycat.com/";
 
+    public static final String BASE_STREAMABLE_THUMB_URL = "http://images.streamable.com/east/image/";
+
     public static String getYoutubeThumbnail(String url, YoutubeThumbnailSize size) {
         String id = LinkUtils.getYoutubeVideoId(url);
 
@@ -29,6 +31,10 @@ public class ThumbnailUtils {
     }
 
     public static String getGfycatThumbnail(String url) {
-        return BASE_GFYCAT_THUMB_URL + LinkUtils.getGfycatId(url) + "-mini.jpg";
+        return BASE_GFYCAT_THUMB_URL + LinkUtils.getGfycatId(url) + "-mobile.jpg";
+    }
+
+    public static String getStreamableThumbnail(String url) {
+        return BASE_STREAMABLE_THUMB_URL + LinkUtils.getStreamableId(url) + ".jpg?height=350";
     }
 }

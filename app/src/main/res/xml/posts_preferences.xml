@@ -33,7 +33,7 @@
     <CheckBoxPreference
         android:key="hqThumb"
         android:title="Higher quality thumbnails"
-        android:summary="Only applies to imgur, gfycat and youtube posts - mainly used in Cards layout"
+        android:summary="Currently supports imgur, gfycat, streamable and youtube posts"
         android:defaultValue="true"/>
 
     <CheckBoxPreference
