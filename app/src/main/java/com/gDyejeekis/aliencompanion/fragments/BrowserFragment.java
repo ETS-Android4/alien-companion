@@ -4,6 +4,7 @@ package com.gDyejeekis.aliencompanion.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -161,6 +162,7 @@ public class BrowserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_browser, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar4);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         webView = (WebView) view.findViewById(R.id.webView);
 
         webView.setWebViewClient(new MyWebViewClient());

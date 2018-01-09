@@ -304,6 +304,7 @@ public class MainActivity extends ToolbarActivity {
             listFragment.redrawList();
         }
 
+        // TODO: 1/9/2018 this check also needs to take into account if 'use primary color in dark modes' is enabled
         if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < MyApplication.DARK_THEME)) {
             MyApplication.colorPrimaryChanged = false;
             MyApplication.currentColor = MyApplication.colorPrimary;
@@ -316,12 +317,13 @@ public class MainActivity extends ToolbarActivity {
             MyApplication.colorPrimaryLight = primaryLightColors[index];
             updateToolbarColors();
             drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
-            listFragment.colorSchemeChanged();
+            listFragment.colorPrimaryChanged();
             navDrawerAdapter.notifyDataSetChanged();
         }
 
         if(MyApplication.colorSecondaryChanged) {
             MyApplication.colorSecondaryChanged = false;
+            listFragment.colorSecondaryChanged();
             if(MyApplication.postFabNavigation) {
                 getListFragment().updateFabNavColors();
             }

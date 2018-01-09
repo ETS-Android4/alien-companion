@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchRedditDialogFragment;
 import com.gDyejeekis.aliencompanion.asynctask.LoadSearchTask;
@@ -90,9 +92,9 @@ public class SearchFragment extends RedditContentFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
+        initMainProgressBar(view);
         initSwipeRefreshLayout(view);
 
         updateContentViewProperties();

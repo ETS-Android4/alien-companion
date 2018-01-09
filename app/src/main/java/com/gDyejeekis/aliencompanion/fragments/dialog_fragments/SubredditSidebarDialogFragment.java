@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 import android.app.DialogFragment;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -78,6 +79,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         textViewPublicDescription = (TextView) view.findViewById(R.id.textView_public_descr);
         textViewDescription = (TextView) view.findViewById(R.id.textView_description);
 
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         progressBar.setVisibility(View.VISIBLE);
         layoutContent.setVisibility(View.GONE);
 

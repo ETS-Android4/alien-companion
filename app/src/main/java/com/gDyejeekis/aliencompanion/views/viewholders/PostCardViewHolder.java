@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -73,6 +74,7 @@ public class PostCardViewHolder extends PostViewHolder  {
         if(showDetails) {
             fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
             commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
+            commentsProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         }
 
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);

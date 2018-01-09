@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -53,9 +54,9 @@ public class MessageFragment extends RedditContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
 
+        initMainProgressBar(view);
         initSwipeRefreshLayout(view);
 
         updateContentViewProperties();

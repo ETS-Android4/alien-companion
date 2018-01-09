@@ -1,6 +1,7 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -48,6 +49,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
         syncedList = (ListView) view.findViewById(R.id.listView_synced_list);
         pBar = (ProgressBar) view.findViewById(R.id.progressBar_synced_list);
+        pBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         message = (TextView) view.findViewById(R.id.textView_synced_list);
         syncedList.setOnItemClickListener(this);
         syncedList.setOnItemLongClickListener(this);

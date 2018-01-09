@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.views.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -644,6 +645,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             super(itemView);
             showMoreButton = (Button) itemView.findViewById(R.id.showMore);
             showMoreProgress = (ProgressBar) itemView.findViewById(R.id.progressBar);
+            showMoreProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         }
     }
 

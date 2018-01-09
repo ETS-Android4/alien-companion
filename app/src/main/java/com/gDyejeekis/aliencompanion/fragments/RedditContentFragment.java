@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -532,6 +533,15 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
+    public void initMainProgressBar(View view) {
+        mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
+        updateMainProgressColor();
+    }
+
+    public void updateMainProgressColor() {
+        mainProgressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+    }
+
     public void initSwipeRefreshLayout(View view) {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -540,7 +550,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void updateSwipeRefreshColor() {
-        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorSecondary);
     }
 
     public void updateSwipeRefreshOffset() {
@@ -553,11 +563,15 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         updateSwipeRefreshOffset();
     }
 
-    public void colorSchemeChanged() {
-        updateSwipeRefreshColor();
+    public void colorPrimaryChanged() {
         if(adapter!=null) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public void colorSecondaryChanged() {
+        updateMainProgressColor();
+        updateSwipeRefreshColor();
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -208,6 +209,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         progressBar.setVisibility(View.GONE);
 
         initRecyclerView(view);
@@ -375,7 +377,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void initSwipeRefreshLayout(View view) {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MyApplication.currentColor);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorSecondary);
         updateSwipeRefreshOffset();
     }
 

@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -65,6 +67,7 @@ public class ArticleFragment extends Fragment {
         body = (TextView) view.findViewById(R.id.textView_article_body);
 
         articleLayout.setVisibility(View.GONE);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
         progressBar.setVisibility(View.VISIBLE);
         new LoadSyncedArticleTask(this).execute();
 
