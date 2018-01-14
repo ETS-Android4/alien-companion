@@ -333,8 +333,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             @Override
                             protected void onPostExecute(Boolean success) {
                                 String message = (success) ? "Post deleted" : "Failed to delete post";
-                                View.OnClickListener listener = null; // TODO: 3/23/2017
-                                ToastUtils.showSnackbarOverToast(context, message, "Undo", listener);
+                                ToastUtils.showSnackbarOverToast(context, message);
                             }
                         }.execute(post.getIdentifier());
                         return true;
