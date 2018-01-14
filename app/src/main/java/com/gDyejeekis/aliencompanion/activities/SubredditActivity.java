@@ -129,7 +129,7 @@ public class SubredditActivity extends SwipeBackActivity {
                         showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
                     } catch (Exception e) {
                         showPostsOrCommentsPopup(findViewById(R.id.action_sort));
-                    } //TODO: find a more suitable anchor
+                    }
                     return true;
             }
         }
