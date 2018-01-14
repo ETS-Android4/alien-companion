@@ -190,7 +190,7 @@ public class LinkHandler {
                         }
                     }
                     // case user/subreddit link
-                    else if(urlLC.matches("^(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/(\\w+)")) {
+                    else if(urlLC.matches("^(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/(\\w+)\\/?")) {
                         intent = getUserSubredditIntent(activity, urlLC);
                     }
                     // case other reddit link not handled by the app natively
