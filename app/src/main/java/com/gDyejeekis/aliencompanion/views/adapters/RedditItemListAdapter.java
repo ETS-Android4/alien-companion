@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
@@ -33,7 +31,6 @@ import com.gDyejeekis.aliencompanion.views.on_click_listeners.ShowMoreListener;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.ShowMore;
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.utils.MyClickableSpan;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
@@ -494,7 +491,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
             layoutComment.setOnClickListener(new CommentLinkListener(context, comment));
 
-            layoutCommentOptions.setBackgroundColor(MyApplication.currentColor);
+            layoutCommentOptions.setBackgroundColor(MyApplication.currentPrimaryColor);
             // user logged in
             if(MyApplication.currentUser != null) {
                 reply.setAlpha(defaultIconOpacity);

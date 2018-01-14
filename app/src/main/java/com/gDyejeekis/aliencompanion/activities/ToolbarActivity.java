@@ -34,7 +34,7 @@ public abstract class ToolbarActivity extends BackNavActivity {
     }
 
     protected void updateToolbarColors() {
-        toolbar.setBackgroundColor(MyApplication.currentColor);
+        toolbar.setBackgroundColor(MyApplication.currentPrimaryColor);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(MyApplication.colorPrimaryDark);
         }

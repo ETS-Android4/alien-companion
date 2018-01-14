@@ -1,15 +1,12 @@
 package com.gDyejeekis.aliencompanion.views.adapters;
 
 import android.graphics.Color;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +18,6 @@ import com.gDyejeekis.aliencompanion.asynctask.LoadMoreCommentsTask;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
-import com.gDyejeekis.aliencompanion.utils.MyClickableSpan;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
@@ -211,7 +207,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                     cvh.menuBarToggle.setImageResource(MyApplication.nightThemeEnabled ? R.drawable.ic_expand_more_white_48dp : R.drawable.ic_expand_more_black_48dp);
                     cvh.commentOptionsLayout.setVisibility(View.GONE);
                 }
-                //cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
+                //cvh.commentOptionsLayout.setBackgroundColor(MyApplication.currentPrimaryColor);
 
                 // set listeners
                 cvh.rootLayout.setOnClickListener(new View.OnClickListener() {
@@ -780,7 +776,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             hiddenCommentsBackground = (GradientDrawable) ContextCompat.getDrawable(itemView.getContext(), R.drawable.rounded_corner_orange);
             hiddenCommentsBackground.setColor(MyApplication.colorSecondary);
 
-            commentOptionsLayout.setBackgroundColor(MyApplication.currentColor);
+            commentOptionsLayout.setBackgroundColor(MyApplication.currentPrimaryColor);
 
             if (MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
             else if (MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);

@@ -572,7 +572,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_HEADER:
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
-                headerViewHolder.headerLayout.setBackgroundColor(MyApplication.currentColor);
+                headerViewHolder.headerLayout.setBackgroundColor(MyApplication.currentPrimaryColor);
                 headerViewHolder.currentAccount.setText(currentAccountName);
 
                 //String themeButtonText = (MyApplication.nightThemeEnabled) ? "Light theme" : "Dark theme";
@@ -771,11 +771,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.materialGreyDrawerItemSelected));
                 break;
             case MyApplication.DARK_THEME:
-                vHolder.name.setTextColor(MyApplication.colorInDarkThemes ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
+                vHolder.name.setTextColor(MyApplication.primaryColorInDarkTheme ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
                 break;
             case MyApplication.DARK_THEME_LOW_CONTRAST:
-                vHolder.name.setTextColor(MyApplication.colorInDarkThemes ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
+                vHolder.name.setTextColor(MyApplication.primaryColorInDarkTheme ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
                 break;
         }

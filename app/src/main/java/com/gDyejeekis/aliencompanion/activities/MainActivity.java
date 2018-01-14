@@ -3,7 +3,6 @@ package com.gDyejeekis.aliencompanion.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +25,6 @@ import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.VerifyAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
-import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerEmptySpace;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerMultis;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerOther;
@@ -284,7 +282,7 @@ public class MainActivity extends ToolbarActivity {
 
         if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < MyApplication.DARK_THEME)) {
             MyApplication.colorPrimaryChanged = false;
-            MyApplication.currentColor = MyApplication.colorPrimary;
+            MyApplication.currentPrimaryColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
             int[] primaryColors = MyApplication.getPrimaryColors(this);
             int[] primaryDarkColors = MyApplication.getPrimaryDarkColors(this);

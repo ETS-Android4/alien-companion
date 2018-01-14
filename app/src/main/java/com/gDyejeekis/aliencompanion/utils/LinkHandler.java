@@ -20,9 +20,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -276,7 +274,7 @@ public class LinkHandler {
 
     public static void startChromeCustomTabs(Activity activity, Submission post, String url, String domain) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(MyApplication.currentColor);
+        builder.setToolbarColor(MyApplication.currentPrimaryColor);
         if(MyApplication.disableAnimations) {
             builder.setStartAnimations(activity, -1, -1);
             builder.setExitAnimations(activity, -1, -1);

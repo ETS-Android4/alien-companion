@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
@@ -233,7 +232,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         postDets2.setText(detsTwoSpannable);
 
         // set post menu bar backgound color
-        layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
+        layoutPostOptions.setBackgroundColor(MyApplication.currentPrimaryColor);
 
         //change menu bar item visibility depending on available space
         boolean islandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;

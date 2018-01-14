@@ -2,7 +2,6 @@ package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -12,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -224,7 +221,7 @@ public class PostListViewHolder extends PostViewHolder {
         commentsText.setText(post.getCommentCount().toString());
 
         // set post menu bar backgound color
-        layoutPostOptions.setBackgroundColor(MyApplication.currentColor);
+        layoutPostOptions.setBackgroundColor(MyApplication.currentPrimaryColor);
 
         //change menu bar item visibility depending on available space
         boolean islandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
