@@ -131,7 +131,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         initIcons();
     }
 
-    // TODO: 5/8/2017 replace subreddit icon
     private void initIcons() {
         if(MyApplication.nightThemeEnabled) {
             profileResource = R.drawable.ic_account_circle_white_48dp;
