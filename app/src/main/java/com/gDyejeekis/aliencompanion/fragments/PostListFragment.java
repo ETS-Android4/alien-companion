@@ -197,7 +197,7 @@ public class PostListFragment extends RedditContentFragment {
                     showViewsPopup(activity.findViewById(R.id.action_sort));
                 } catch (Exception e) {
                     showViewsPopup(activity.findViewById(R.id.action_refresh));
-                } //TODO: find a more suitable anchor
+                }
                 return true;
             case R.id.action_view_sidebar:
                 if(subreddit == null || subreddit.equalsIgnoreCase("all") || subreddit.equalsIgnoreCase("popular")) {
@@ -269,7 +269,7 @@ public class PostListFragment extends RedditContentFragment {
                     showSubmitPopup(activity.findViewById(R.id.action_sort));
                 } catch (Exception e) {
                     showSubmitPopup(activity.findViewById(R.id.action_refresh));
-                } //TODO: find a more suitable anchor
+                }
                 return true;
         }
 
@@ -323,7 +323,7 @@ public class PostListFragment extends RedditContentFragment {
                     case R.id.action_submit_text:
                         startSubmitActivity(SubmitType.self);
                         return true;
-                    //case R.id.action_submit_image: //TODO: implement direct image posting
+                    //case R.id.action_submit_image:
                     //    return true;
                     default:
                         return false;
