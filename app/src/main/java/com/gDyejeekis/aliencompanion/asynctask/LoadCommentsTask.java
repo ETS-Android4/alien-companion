@@ -13,12 +13,10 @@ import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
+import com.gDyejeekis.aliencompanion.utils.ThumbnailLoader;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.gDyejeekis.aliencompanion.api.exception.RedditError;
-import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.Comments;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
@@ -151,7 +149,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 this.fragment.setActionBarSubtitle(offlineSubtitle);
             }
             if (!MyApplication.noThumbnails && this.fragment.post.getThumbnailObject() == null) {
-                ImageLoader.preloadThumbnail(this.fragment.post, context);
+                ThumbnailLoader.preloadThumbnail(this.fragment.post, context);
             } //TODO: monitor this for any exceptions
 
             if (exception != null) {

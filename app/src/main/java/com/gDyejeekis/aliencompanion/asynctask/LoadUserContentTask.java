@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.asynctask;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +16,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.utils.ImageLoader;
+import com.gDyejeekis.aliencompanion.utils.ThumbnailLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.entity.Thing;
@@ -90,7 +89,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         if(this.userCategory == UserSubmissionsCategory.OVERVIEW) adapter.add(userInfo);
                         adapter.addAll(userContent);
                     }
-                    //ImageLoader.preloadUserImages(userContent, activity);
+                    //ThumbnailLoader.preloadUserImages(userContent, activity);
                     break;
                 case COMMENTS:
                     Comments comments = new Comments(httpClient, MyApplication.currentUser);
@@ -117,7 +116,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         adapter = new RedditItemListAdapter(activity);
                         adapter.addAll(userContent);
                     }
-                    //ImageLoader.preloadUserImages(userContent, activity);
+                    //ThumbnailLoader.preloadUserImages(userContent, activity);
                     break;
             }
             //ConvertUtils.preparePostsText(activity, userContent);
@@ -171,7 +170,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             else {
                 if(things.size()>0) {
                     //load trophy images here
-                    if(!MyApplication.noThumbnails) ImageLoader.preloadUserImages(things, activity);
+                    if(!MyApplication.noThumbnails) ThumbnailLoader.preloadUserImages(things, activity);
                     uf.adapter = adapter;
                 }
                 else {

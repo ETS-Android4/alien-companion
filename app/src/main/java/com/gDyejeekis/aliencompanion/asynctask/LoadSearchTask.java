@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.asynctask;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -8,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.utils.FilterUtils;
+import com.gDyejeekis.aliencompanion.utils.ThumbnailLoader;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -19,7 +19,6 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
-import com.gDyejeekis.aliencompanion.utils.ImageLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
@@ -128,7 +127,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                 }
             } else {
                 if(submissions.size()>0) {
-                    if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context);
+                    if(!MyApplication.noThumbnails) ThumbnailLoader.preloadThumbnails(submissions, context);
                 }
                 sf.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
                 switch (loadType) {

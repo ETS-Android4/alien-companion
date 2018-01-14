@@ -20,7 +20,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
-import com.gDyejeekis.aliencompanion.utils.ImageLoader;
+import com.gDyejeekis.aliencompanion.utils.ThumbnailLoader;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
@@ -28,9 +28,6 @@ import com.gDyejeekis.aliencompanion.api.retrieval.Submissions;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.List;
 
 /**
@@ -209,7 +206,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
             } else {
                 if(submissions.size()>0) {
-                    if(!MyApplication.noThumbnails) ImageLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
+                    if(!MyApplication.noThumbnails) ThumbnailLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
                 }
                 this.fragment.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
 

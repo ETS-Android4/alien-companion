@@ -14,9 +14,7 @@ import java.util.List;
 /**
  * Created by George on 6/19/2015.
  */
-public class ImageLoader {
-
-    //TODO: Load and Cache Images with Universal Image Loader instead of Picasso
+public class ThumbnailLoader {
 
     public static void preloadUserImages(List<RedditItem> posts, Context context) {
         //if (BuildConfig.DEBUG) {
