@@ -125,7 +125,7 @@ public class BrowserActivity extends SwipeBackActivity {
                 finish();
                 return true;
             case R.id.action_comments:
-                MainActivity.dualPaneActive = false; //set to false to open comments in a new activity
+                MyApplication.dualPaneActive = false; //set to false to open comments in a new activity
                 Intent intent = new Intent(this, PostActivity.class);
                 intent.putExtra("post", post);
                 startActivity(intent);

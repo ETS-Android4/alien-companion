@@ -66,9 +66,6 @@ public class MainActivity extends ToolbarActivity {
     //private Toolbar toolbar;
     private RelativeLayout container;
 
-    // TODO: 3/27/2017 move this field to application class
-    public static boolean dualPaneActive;
-
     public static boolean setupAccount = false;
     public static boolean notifyDrawerChanged = false;
     public static boolean notifySwitchedMode = false;
@@ -102,13 +99,13 @@ public class MainActivity extends ToolbarActivity {
 
         int resource;
         if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            dualPaneActive = true;
+            MyApplication.dualPaneActive = true;
             View.inflate(this, R.layout.activity_main_dual_panel, container);
             resource = R.id.listFragmentHolder;
         }
         else {
             View.inflate(this, R.layout.activity_main, container);
-            dualPaneActive = false;
+            MyApplication.dualPaneActive = false;
             resource = R.id.fragmentHolder;
         }
         setupMainFragment(resource);
@@ -261,26 +258,7 @@ public class MainActivity extends ToolbarActivity {
         if(EditSubredditsActivity.changesMade) {
             EditSubredditsActivity.changesMade = false;
             getNavDrawerAdapter().updateSubredditItems(MyApplication.currentAccount.getSubreddits());
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() { //TODO: use generalutils method (saveAccountChanges)
-                    List<SavedAccount> accounts = new ArrayList<SavedAccount>();
-                    boolean check = true;
-                    //if(currentAccount != null) {
-                        for (NavDrawerAccount accountItem : navDrawerAdapter.accountItems) {
-                            if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT || accountItem.getAccountType() == NavDrawerAccount.TYPE_LOGGED_OUT) {
-                                SavedAccount accountToSave;
-                                if (check && accountItem.getName().equals(MyApplication.currentAccount.getUsername())) {
-                                    check = false;
-                                    accountToSave = MyApplication.currentAccount;
-                                } else accountToSave = accountItem.savedAccount;
-                                accounts.add(accountToSave);
-                            }
-                        }
-                        getNavDrawerAdapter().saveAccounts(accounts);
-                    //}
-                }
-            });
+            GeneralUtils.saveAccountChanges(this);
         }
 
         if(EditMultisActivity.changesMade) {
@@ -304,7 +282,6 @@ public class MainActivity extends ToolbarActivity {
             listFragment.redrawList();
         }
 
-        // TODO: 1/9/2018 this check also needs to take into account if 'use primary color in dark modes' is enabled
         if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < MyApplication.DARK_THEME)) {
             MyApplication.colorPrimaryChanged = false;
             MyApplication.currentColor = MyApplication.colorPrimary;
@@ -373,7 +350,7 @@ public class MainActivity extends ToolbarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(dualPaneActive && getPostFragment()!=null) {
+        if(MyApplication.dualPaneActive && getPostFragment()!=null) {
             switch (item.getItemId()) {
                 case R.id.action_sort:
                     MyApplication.actionSort = true;
@@ -385,7 +362,7 @@ public class MainActivity extends ToolbarActivity {
                         showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
                     } catch (Exception e) {
                         showPostsOrCommentsPopup(findViewById(R.id.action_sort));
-                    } //TODO: find a more suitable anchor
+                    }
                     return true;
             }
         }
@@ -441,7 +418,7 @@ public class MainActivity extends ToolbarActivity {
             listFragment = recreateListFragment(listFragment);
             int resource;
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                dualPaneActive = true;
+                MyApplication.dualPaneActive = true;
                 View.inflate(this, R.layout.activity_main_dual_panel, container);
                 resource = R.id.listFragmentHolder;
 
@@ -452,7 +429,7 @@ public class MainActivity extends ToolbarActivity {
                     fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commitAllowingStateLoss();
                 }
             } else {
-                dualPaneActive = false;
+                MyApplication.dualPaneActive = false;
                 View.inflate(this, R.layout.activity_main, container);
                 resource = R.id.fragmentHolder;
             }
@@ -467,7 +444,7 @@ public class MainActivity extends ToolbarActivity {
             listFragment = recreateListFragment(listFragment);
             int resource;
             if(MyApplication.dualPane) {
-                dualPaneActive = true;
+                MyApplication.dualPaneActive = true;
                 View.inflate(this, R.layout.activity_main_dual_panel, container);
                 resource = R.id.listFragmentHolder;
 
@@ -479,7 +456,7 @@ public class MainActivity extends ToolbarActivity {
                 }
             }
             else {
-                dualPaneActive = false;
+                MyApplication.dualPaneActive = false;
                 View.inflate(this, R.layout.activity_main, container);
                 resource = R.id.fragmentHolder;
             }

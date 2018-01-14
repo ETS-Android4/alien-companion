@@ -58,12 +58,12 @@ public class SubredditActivity extends SwipeBackActivity {
 
         int resource;
         if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            MainActivity.dualPaneActive = true;
+            MyApplication.dualPaneActive = true;
             View.inflate(this, R.layout.activity_main_dual_panel, container);
             resource = R.id.listFragmentHolder;
         }
         else {
-            MainActivity.dualPaneActive = false;
+            MyApplication.dualPaneActive = false;
             View.inflate(this, R.layout.activity_main, container);
             resource = R.id.fragmentHolder;
         }
@@ -117,7 +117,7 @@ public class SubredditActivity extends SwipeBackActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(MainActivity.dualPaneActive && getPostFragment()!= null) {
+        if(MyApplication.dualPaneActive && getPostFragment()!= null) {
             switch (item.getItemId()) {
                 case R.id.action_sort:
                     MyApplication.actionSort = true;
@@ -181,7 +181,7 @@ public class SubredditActivity extends SwipeBackActivity {
             listFragment = recreateListFragment(listFragment);
             int resource;
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                MainActivity.dualPaneActive = true;
+                MyApplication.dualPaneActive = true;
                 View.inflate(this, R.layout.activity_main_dual_panel, container);
                 resource = R.id.listFragmentHolder;
 
@@ -192,7 +192,7 @@ public class SubredditActivity extends SwipeBackActivity {
                     fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commitAllowingStateLoss();
                 }
             } else {
-                MainActivity.dualPaneActive = false;
+                MyApplication.dualPaneActive = false;
                 View.inflate(this, R.layout.activity_main, container);
                 resource = R.id.fragmentHolder;
             }

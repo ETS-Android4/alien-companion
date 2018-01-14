@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
@@ -29,7 +30,7 @@ public class CommentLinkListener implements View.OnClickListener {
     public void onClick(View v) {
         String url = "https://wwww.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3) + "/title/" + comment.getIdentifier()
                 + "/?context=" + DEFAULT_COMMENT_PARENTS_SHOWN;
-        if(MainActivity.dualPaneActive) {
+        if(MyApplication.dualPaneActive) {
             PostFragment fragment = PostFragment.newInstance(url);
             ((UserActivity) context).setupPostFragment(fragment);
         }

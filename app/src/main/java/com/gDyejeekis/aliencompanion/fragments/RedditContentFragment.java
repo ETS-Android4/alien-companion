@@ -439,7 +439,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void updateFabLayoutGravity() {
         CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-        if(currentViewTypeValue == PostViewType.listReversed.value() || MainActivity.dualPaneActive) {
+        if(currentViewTypeValue == PostViewType.listReversed.value() || MyApplication.dualPaneActive) {
             params.gravity = Gravity.BOTTOM | Gravity.START;
         }
         else {

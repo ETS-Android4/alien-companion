@@ -238,9 +238,9 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         //change menu bar item visibility depending on available space
         boolean islandscape = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if((MyApplication.isLargeScreen || islandscape)) {
-            shareIconVisible = MyApplication.isLargeScreen || !MainActivity.dualPaneActive;
+            shareIconVisible = MyApplication.isLargeScreen || !MyApplication.dualPaneActive;
             if(MyApplication.isVeryLargeScreen || (MyApplication.isLargeScreen && islandscape)) {
-                openBrowserIconVisible = MyApplication.isVeryLargeScreen || !MainActivity.dualPaneActive;
+                openBrowserIconVisible = MyApplication.isVeryLargeScreen || !MyApplication.dualPaneActive;
             }
             else {
                 openBrowserIconVisible = false;

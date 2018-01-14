@@ -158,9 +158,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             initFabAnimations();
         }
 
-        if(!MainActivity.dualPaneActive) {
+        if(!MyApplication.dualPaneActive) {
             if(MyApplication.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                MainActivity.dualPaneActive = true;
+                MyApplication.dualPaneActive = true;
             }
         }
 
@@ -582,7 +582,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void setActionBarTitle() {
-        if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
+        if(!MyApplication.dualPaneActive/* || updateActionBar*/) {
             String title;
             if (post!=null && post.getSubreddit() != null) {
                 title = post.getSubreddit().toLowerCase();
@@ -594,7 +594,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void setActionBarSubtitle() {
-        if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
+        if(!MyApplication.dualPaneActive/* || updateActionBar*/) {
             String subtitle;
             if (MyApplication.offlineModeEnabled) {
                 subtitle = "loading";
@@ -611,7 +611,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void setActionBarSubtitle(String subtitle) {
-        if(!MainActivity.dualPaneActive/* || updateActionBar*/) {
+        if(!MyApplication.dualPaneActive/* || updateActionBar*/) {
             activity.getSupportActionBar().setSubtitle(subtitle);
         }
     }

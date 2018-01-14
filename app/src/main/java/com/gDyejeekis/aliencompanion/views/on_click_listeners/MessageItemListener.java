@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.MessageActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
@@ -39,7 +40,7 @@ public class MessageItemListener implements View.OnClickListener, View.OnLongCli
     @Override
     public void onClick(View v) {
         if(message.wasComment) {
-            if(MainActivity.dualPaneActive) {
+            if(MyApplication.dualPaneActive) {
                 PostFragment fragment = PostFragment.newInstance(message.context);
                 ((MessageActivity) context).setupPostFragment(fragment);
             }

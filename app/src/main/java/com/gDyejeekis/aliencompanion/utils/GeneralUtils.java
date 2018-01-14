@@ -433,9 +433,8 @@ public class GeneralUtils {
             @Override
             public void run() {
                 try {
-                    List<SavedAccount> oldAccounts = readAccounts(context);
                     List<SavedAccount> updatedAccounts = new ArrayList<>();
-                    for (SavedAccount account : oldAccounts) {
+                    for (SavedAccount account : readAccounts(context)) {
                         if (MyApplication.currentAccount.getUsername().equals(account.getUsername())) {
                             updatedAccounts.add(MyApplication.currentAccount);
                         } else updatedAccounts.add(account);

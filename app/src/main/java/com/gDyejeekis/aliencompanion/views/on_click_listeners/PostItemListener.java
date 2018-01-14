@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SearchActivity;
@@ -57,7 +58,7 @@ public class PostItemListener implements View.OnClickListener {
     }
 
     public static void openComments(Context context, Submission post) {
-        if(MainActivity.dualPaneActive) {
+        if(MyApplication.dualPaneActive) {
             PostFragment fragment = PostFragment.newInstance(post);
             addPostFragment(context, fragment);
         }

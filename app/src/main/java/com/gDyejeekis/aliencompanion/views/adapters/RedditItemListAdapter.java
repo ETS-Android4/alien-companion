@@ -184,7 +184,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case VIEW_TYPE_POST:
                 int resource = PostViewType.getLayoutResource(viewTypeValue);
-                if(MainActivity.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
+                if(MyApplication.dualPaneActive && resource == R.layout.post_list_item) resource = R.layout.post_list_item_reversed;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
                 switch (resource) {
@@ -595,7 +595,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             //int height=dm.heightPixels;
             int dens=dm.densityDpi;
             double wi=(double)width/(double)dens;
-            if(MainActivity.dualPaneActive) wi /= 2;
+            if(MyApplication.dualPaneActive) wi /= 2;
             //double hi=(double)height/(double)dens;
             //double x = Math.pow(wi,2);
             //double y = Math.pow(hi,2);
