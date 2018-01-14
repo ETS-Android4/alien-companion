@@ -35,7 +35,7 @@ public class SearchActivity extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subreddit);
+        setContentView(R.layout.activity_toolbar);
         container = (RelativeLayout) findViewById(R.id.container);
         initToolbar();
 
