@@ -86,7 +86,7 @@ public class MessageItemListener implements View.OnClickListener, View.OnLongCli
                         return true;
                     case R.id.action_copy_text:
                         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Message body", message.body); //TODO: escape markdown/HTML foramtting (maybe)
+                        ClipData clip = ClipData.newPlainText("Message body", message.body);
                         clipboard.setPrimaryClip(clip);
                         return true;
                     case R.id.action_block_user:
