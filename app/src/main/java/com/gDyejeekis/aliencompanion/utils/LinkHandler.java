@@ -265,10 +265,6 @@ public class LinkHandler {
         return false;
     }
 
-    private void openImprovedArticle() {
-        // TODO: 5/29/2017
-    }
-
     public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {
         if(MyApplication.useCCT) {
            startChromeCustomTabs(activity, post, url, domain);
