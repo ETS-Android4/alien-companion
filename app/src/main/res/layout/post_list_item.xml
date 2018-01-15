@@ -6,98 +6,101 @@
     android:id="@+id/layout_root">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:divider="?attr/themeDivider">
+        android:divider="?attr/themeDivider"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/layout_postLinkButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="8"
+            android:background="?attr/themeSelector"
             android:clickable="false"
             android:focusable="false"
-            android:id="@+id/layout_postLinkButton"
-            android:paddingTop="5dp"
+            android:orientation="horizontal"
             android:paddingBottom="5dp"
-            android:background="?attr/themeSelector">
+            android:paddingTop="5dp">
 
             <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/imgView_postImage"
-                android:src="@mipmap/ic_launcher"
-                android:layout_weight="1" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:paddingTop="5dp"
+                android:paddingLeft="6dp"
+                android:scaleType="fitStart"
+                android:src="@mipmap/ic_launcher" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:layout_marginLeft="10dp"
-                android:paddingRight="5dp">
+                android:layout_weight="7"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingRight="6dp">
 
                 <TextView
+                    android:id="@+id/txtView_postTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="?attr/defaultFontFamily"
                     android:text="(Post Title Here)"
-                    android:id="@+id/txtView_postTitle"
-                    android:textStyle="bold"
-                    android:textSize="?attr/font_medium"
                     android:textColor="?attr/themeTextPrimaryColor"
-                    android:fontFamily="?attr/defaultFontFamily" />
+                    android:textSize="?attr/font_medium"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(score) · (age) · (author)"
                     android:id="@+id/textView_dets1"
-                    android:textSize="?attr/font_small"
-                    android:textColor="?attr/themeTextSecondaryColor"
-                    android:fontFamily="?attr/defaultFontFamily" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(subreddit) · (domain) · NSFW"
-                    android:id="@+id/textView_dets2"
-                    android:textSize="?attr/font_small"
+                    android:fontFamily="?attr/defaultFontFamily"
+                    android:text="(score) · (age) · (author)"
                     android:textColor="?attr/themeTextSecondaryColor"
-                    android:fontFamily="?attr/defaultFontFamily" />
+                    android:textSize="?attr/font_small" />
+
+                <TextView
+                    android:id="@+id/textView_dets2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/defaultFontFamily"
+                    android:text="(subreddit) · (domain) · NSFW"
+                    android:textColor="?attr/themeTextSecondaryColor"
+                    android:textSize="?attr/font_small" />
 
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/layout_postCommentsButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:clickable="false"
-            android:id="@+id/layout_postCommentsButton"
             android:background="?attr/themeCommentsButtonBackground"
-            android:focusable="false">
+            android:clickable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/textView_comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="#####"
-                android:id="@+id/textView_comments"
-                android:textStyle="bold"
+                android:fontFamily="?attr/defaultFontFamily"
                 android:gravity="center"
-                android:textSize="?attr/font_small"
+                android:text="#####"
                 android:textColor="?attr/themeTextPrimaryColor"
-                android:fontFamily="?attr/defaultFontFamily" />
+                android:textSize="?attr/font_small"
+                android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/imgView_commentsIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:id="@+id/imgView_commentsIcon"
-                android:src="@drawable/ic_comment_black_48dp"
-                android:alpha="0.5"/>
+                android:alpha="0.5"
+                android:src="@drawable/ic_comment_black_48dp" />
         </LinearLayout>
     </LinearLayout>
 
