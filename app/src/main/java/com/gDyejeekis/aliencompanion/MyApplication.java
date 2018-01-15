@@ -516,8 +516,8 @@ public class MyApplication extends Application {
                 break;
         }
         primaryColorInDarkTheme = prefs.getBoolean("colorDarkTheme", false);
-        colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#00BCD4"));
-        colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#FF5252"));
+        colorPrimary = prefs.getInt("colorPrimary", Color.parseColor("#2196F3"));
+        colorSecondary = prefs.getInt("colorSecondary", Color.parseColor("#D32F2F"));
         swipeRefresh = prefs.getBoolean("swipeRefresh", true);
         postFabNavigation = prefs.getBoolean("postNav", true);
         commentFabNavigation = prefs.getBoolean("commentNav", true);
