@@ -45,6 +45,7 @@ public class PostListViewHolder extends PostViewHolder {
     public ImageView commentsIcon;
     public LinearLayout linkButton;
     public LinearLayout layoutPostOptions;
+    public LinearLayout layoutThumbnail;
     public LinearLayout commentsButton;
 
     private float defaultIconOpacity, defaultIconOpacityDisabled, commentIconOpacity, commentIconOpacityClicked;
@@ -58,6 +59,7 @@ public class PostListViewHolder extends PostViewHolder {
         linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
         upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
         layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
+        layoutThumbnail = itemView.findViewById(R.id.layout_thumbnail);
         downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
         save =  (ImageView) itemView.findViewById(R.id.btn_save);
         hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
@@ -128,17 +130,17 @@ public class PostListViewHolder extends PostViewHolder {
         if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
             if (post.isNSFW() && !MyApplication.showNSFWpreview) {
                 //postImage.setImageResource(R.drawable.nsfw2);
-                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
             }
             else {
-                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2f));
+                layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2f));
                 try {
                     Picasso.with(context).load(thumbnailObject.getUrl()).placeholder(R.drawable.noimage).into(postImage);
                 } catch (IllegalArgumentException e) {e.printStackTrace();}
             }
         }
         else {
-            postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+            layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
         }
         // set first row of post details
         SpannableString detsOneSpannable;

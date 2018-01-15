@@ -58,7 +58,7 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_weight="7"
                 android:paddingLeft="8dp"
                 android:paddingRight="6dp">
 
@@ -92,16 +92,26 @@
 
             </LinearLayout>
 
-            <ImageView
+            <LinearLayout
+                android:id="@+id/layout_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/imgView_postImage"
-                android:src="@mipmap/ic_launcher"
                 android:layout_weight="2"
-                android:paddingTop="5dp"
+                android:orientation="horizontal"
                 android:paddingBottom="5dp"
                 android:paddingRight="6dp"
-                android:scaleType="fitStart"/>
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/imgView_postImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitStart"
+                    android:src="@mipmap/ic_launcher" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
