@@ -14,7 +14,7 @@
         <changelogtext>Added 'Disable screen transitions' option under 'Appearance' (disables animations for opening and dismissing activities)</changelogtext>
         <changelogtext>Various small visual tweaks</changelogtext>
         <!-- navigation changes -->
-        <changelogtext>Changed post menu bar to show options depending on available space</changelogtext>
+        <changelogtext>Tweaked post menu bar to show options depending on screen width</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Hide read' option in the toolbar's overflow menu (available when browsing posts and search results)]]></changelogtext>
         <changelogtext>Added 'Hide toolbar on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Navigate comments with volume buttons' option under 'Navigation' (disabled by default)]]></changelogtext>
@@ -28,14 +28,14 @@
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Subreddit specific views' option under 'Posts' (disabled by default)]]></changelogtext>
         <changelogtext>Stickied posts now have different title colors</changelogtext>
         <changelogtext>Added support for tables</changelogtext>
-        <changelogtext>Added support for inline code text [NOT OPTIMALLY FORMATTED]</changelogtext>
+        <changelogtext>Added support for inline code text</changelogtext>
         <changelogtext>Added spoiler tag support for posts. Posts marked as spoiler won't show their thumbnail or self-text preview in 'Cards' view</changelogtext>
         <!-- sync changes changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync post videos' option under 'Sync options' (currently supports streamable and *.mp4 links)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync links in self-text' and 'Sync links in comments' options under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Sync new posts only' option under 'Sync options' (disabled by default)]]></changelogtext>
         <changelogtext>Updated synced article view to use the selected theme background and font size</changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> SYNC PROFILE UI CHANGES HERE]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Revamped user interface for creating/editing sync profiles]]></changelogtext>
         <changelogtext>It is now possible for a sync profile to have multiple schedules</changelogtext>
         <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
         <!-- link handling changes -->
@@ -47,7 +47,7 @@
         <changelogtext>Email links will now open with the appropriate email app</changelogtext>
         <changelogtext>Fixed various link handling issues</changelogtext>
         <!-- other changes -->
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> FILTERS FEATURE HERE]]></changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added filters in the form of filter profiles]]></changelogtext>
         <changelogtext>Added 'Device settings' option under 'Other'</changelogtext>
         <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>
