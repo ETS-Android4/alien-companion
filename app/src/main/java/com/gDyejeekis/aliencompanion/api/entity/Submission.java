@@ -308,7 +308,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			if(!MyApplication.useMarkdownParsing) {
 				selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
 				selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);
-				selftextHTML = selftextHTML.replace("\n", "<br />");
+				selftextHTML = HtmlFormatUtils.modifyInlineCodeHtml(selftextHTML);
 			}
 
 			updateAgePrepared();

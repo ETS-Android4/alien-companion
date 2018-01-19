@@ -1,13 +1,6 @@
 package com.gDyejeekis.aliencompanion.utils;
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +45,19 @@ public class HtmlFormatUtils {
             //e.printStackTrace();
         }
         return html;
+    }
+
+    public static String modifyInlineCodeHtml(String html) {
+        int start = html.indexOf("<code>");
+        return (start == -1) ? html : modifyInlineCodeHtml(html, start);
+    }
+
+    private static String modifyInlineCodeHtml(String html, int start) {
+        int end = html.indexOf("</code>", start);
+        html = html.substring(0, start) + html.substring(start, end).replace("\n", "<br />") + html.substring(end);
+
+        int newStart = html.indexOf("<code>", end);
+        return (newStart == -1) ? html : modifyInlineCodeHtml(html, newStart);
     }
 
 }
