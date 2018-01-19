@@ -121,6 +121,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             if(!MyApplication.useMarkdownParsing) {
                 bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
                 bodyHTML = HtmlFormatUtils.modifySpoilerHtml(bodyHTML);
+                bodyHTML = bodyHTML.replace("\n", "<br />");
             }
 
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
