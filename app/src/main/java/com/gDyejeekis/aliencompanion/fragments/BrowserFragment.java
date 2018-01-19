@@ -162,7 +162,7 @@ public class BrowserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_browser, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar4);
-        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         webView = (WebView) view.findViewById(R.id.webView);
 
         webView.setWebViewClient(new MyWebViewClient());

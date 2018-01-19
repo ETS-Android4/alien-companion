@@ -642,7 +642,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             super(itemView);
             showMoreButton = (Button) itemView.findViewById(R.id.showMore);
             showMoreProgress = (ProgressBar) itemView.findViewById(R.id.progressBar);
-            showMoreProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+            showMoreProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         }
     }
 

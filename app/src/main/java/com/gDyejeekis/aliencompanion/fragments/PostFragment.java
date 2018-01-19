@@ -209,7 +209,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
-        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(View.GONE);
 
         initRecyclerView(view);

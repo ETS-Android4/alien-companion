@@ -67,7 +67,7 @@ public class ArticleFragment extends Fragment {
         body = (TextView) view.findViewById(R.id.textView_article_body);
 
         articleLayout.setVisibility(View.GONE);
-        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(View.VISIBLE);
         new LoadSyncedArticleTask(this).execute();
 

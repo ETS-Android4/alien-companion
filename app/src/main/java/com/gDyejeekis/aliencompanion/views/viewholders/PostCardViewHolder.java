@@ -74,7 +74,7 @@ public class PostCardViewHolder extends PostViewHolder  {
         if(showDetails) {
             fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
             commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
-            commentsProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+            commentsProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         }
 
         title = (TextView) itemView.findViewById(R.id.txtView_postTitle);

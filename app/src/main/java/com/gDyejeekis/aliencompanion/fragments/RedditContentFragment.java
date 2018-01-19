@@ -539,7 +539,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void updateMainProgressColor() {
-        mainProgressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+        mainProgressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
     }
 
     public void initSwipeRefreshLayout(View view) {

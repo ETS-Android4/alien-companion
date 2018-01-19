@@ -79,7 +79,7 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
         textViewPublicDescription = (TextView) view.findViewById(R.id.textView_public_descr);
         textViewDescription = (TextView) view.findViewById(R.id.textView_description);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.MULTIPLY);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(View.VISIBLE);
         layoutContent.setVisibility(View.GONE);
 
