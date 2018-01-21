@@ -37,15 +37,15 @@ public class SubredditSidebarDialogFragment extends DialogFragment implements Vi
 
     public static final int UNSUB_COLOR = Color.parseColor("#ff4d4d");
 
-    public static final int SUB_COLOR = Color.parseColor("#66ff66");
+    public static final int SUB_COLOR = Color.parseColor("#54d354");
 
     public static final String UNSUB_TEXT = "UNSUBSCRIBE";
 
     public static final String SUB_TEXT = "SUBSCRIBE";
 
-    public static final String UNSUBBING_TEXT = "UNSUBSCRIBING..";
+    public static final String UNSUBBING_TEXT = "UNSUBSCRIBE..";
 
-    public static final String SUBBING_TEXT = "SUBSCRIBING..";
+    public static final String SUBBING_TEXT = "SUBSCRIBE..";
 
     private ScrollView layoutContent;
     private ProgressBar progressBar;
