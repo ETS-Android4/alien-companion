@@ -33,6 +33,8 @@ public class ViewTableDialogFragment extends ScalableDialogFragment {
         WebView webView = (WebView) view.findViewById(R.id.webView_table);
         webView.setWebViewClient(new MyWebviewClient());
         webView.getSettings().setJavaScriptEnabled(false);
+        //webView.getSettings().setBuiltInZoomControls(true);
+        //webView.getSettings().setDisplayZoomControls(false);
 
         String tableHtml = getArguments().getString("tableHtml");
         tableHtml = tableHtml.replace("£", "&pound;").replace("€", "&euro;");
@@ -51,10 +53,12 @@ public class ViewTableDialogFragment extends ScalableDialogFragment {
         String borderColor = ConvertUtils.intColorToHex(MyApplication.textSecondaryColor);
         String backgroundColor = MyApplication.nightThemeEnabled ? "#404040" : "#ffffff";
         return "<html><head>"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1\">"
                 + "<style type=\"text/css\">"
                 + "body {color: " + textColor + "; background-color: " + backgroundColor + ";}"
                 + "table {border-collapse: collapse; font-size: " + textSize + ";}"
                 + "th, td {border: 1px solid" + borderColor + "; padding: 4px;}"
+                + "html {-webkit-text-size-adjust: none;}"
                 + "</style></head>"
                 + "<body>"
                 + tableHtml
