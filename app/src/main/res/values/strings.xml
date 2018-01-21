@@ -11,13 +11,20 @@
         About sync profiles
     </string>
     <string name="about_sync_profiles">
-        (Sync profiles explanation here)
+        Sync profiles are lists of subreddits/multireddits that you can sync easily with a click of a button or even schedule to sync automatically within a specified sync window.
+        In order for a sync profile to sync automatically, it has to be ACTIVE and have at least one schedule assigned to it. Make sure that you have a working network connection
+        during the scheduled sync windows.\n\n
+            Scheduled sync profiles will sync their subreddits/multireddits at a time picked by the OS inside the specified sync window. This happens for two reasons:\n
+            1. Android likes to group scheduled tasks and execute them together to avoid waking the CPU multiple times in order to save battery life.\n
+            2. It wouldn\'t be very polite to reddit\'s severs if a lot of people decided to set their profiles to sync at precisely 7AM CST, for example.
     </string>
     <string name="about_filter_profiles_title">
         About filter profiles
     </string>
     <string name="about_filter_profiles">
-        (Filter profiles explanation here)
+        You can create filter profiles to filter out posts and subreddits by adding your desired filters to a profile. Filter profiles must be ACTIVE for their filters to work and
+        they also apply to search results and synced content. Filters will apply to all subreddits/multireddits (including frontpage, popular and all) unless you add subreddit/multireddit
+        restrictions. For NSFW filtering, use the corresponding option under 'Post' settings.
     </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
@@ -225,5 +232,14 @@
     <string name="about">About</string>
     <string name="got_it">Got it</string>
     <string name="locked_post">Locked post</string>
+    <string name="sync_window">Sync window</string>
+    <string name="days">Days</string>
+    <string name="monday_short">Mon</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="thursday_short">Thu</string>
+    <string name="friday_short">Fri</string>
+    <string name="saturday_short">Sat</string>
+    <string name="sunday_short">Sun</string>
 
 </resources>
