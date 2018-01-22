@@ -48,8 +48,13 @@ public class HtmlFormatUtils {
     }
 
     public static String modifyInlineCodeHtml(String html) {
-        int start = html.indexOf("<code>");
-        return (start == -1) ? html : modifyInlineCodeHtml(html, start);
+        try {
+            int start = html.indexOf("<code>");
+            return (start == -1) ? html : modifyInlineCodeHtml(html, start);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return html;
     }
 
     private static String modifyInlineCodeHtml(String html, int start) {

@@ -92,48 +92,42 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
 
     public Comment(JSONObject obj) {
     	super(safeJsonToString(obj.get("name")));
-    	
         try {
-        	
-            this.setAuthor(safeJsonToString(obj.get("author")));
-            this.setParentId(safeJsonToString(obj.get("parent_id")));
-            this.setBody(safeJsonToString(obj.get("body")));
-            this.setEdited(safeJsonToBoolean(obj.get("edited")));
-            this.setCreated(safeJsonToDouble(obj.get("created")));
-            this.setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
-            hasReplies = (obj.get("replies") != null) ? !safeJsonToString(obj.get("replies")).isEmpty() : false;
-            //this.replies = new LinkedList<Comment>();
-            this.setGilded(safeJsonToInteger(obj.get("gilded")));
-            this.setScore(safeJsonToInteger(obj.get("score")));
-            this.setUpvotes(safeJsonToInteger(obj.get("ups")));
-            this.setDownvotes(safeJsonToInteger(obj.get("downs")));
-            this.setSubreddit(safeJsonToString(obj.get("subreddit")));
-            this.setSubredditId(safeJsonToString(obj.get("subreddit_id")));
-            this.setLinkId(safeJsonToString(obj.get("link_id")));
-            this.setBodyHTML(safeJsonToString(obj.get("body_html")));
-            this.setScoreHidden(safeJsonToBoolean(obj.get("score_hidden")));
-            this.setSaved(safeJsonToBoolean(obj.get("saved")));
-
-            this.setLinkTitle(safeJsonToString(obj.get("link_title")));
+            setAuthor(safeJsonToString(obj.get("author")));
+            setParentId(safeJsonToString(obj.get("parent_id")));
+            setBody(safeJsonToString(obj.get("body")));
+            setEdited(safeJsonToBoolean(obj.get("edited")));
+            setCreated(safeJsonToDouble(obj.get("created")));
+            setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
+            setGilded(safeJsonToInteger(obj.get("gilded")));
+            setScore(safeJsonToInteger(obj.get("score")));
+            setUpvotes(safeJsonToInteger(obj.get("ups")));
+            setDownvotes(safeJsonToInteger(obj.get("downs")));
+            setSubreddit(safeJsonToString(obj.get("subreddit")));
+            setSubredditId(safeJsonToString(obj.get("subreddit_id")));
+            setLinkId(safeJsonToString(obj.get("link_id")));
+            setBodyHTML(safeJsonToString(obj.get("body_html")));
+            setScoreHidden(safeJsonToBoolean(obj.get("score_hidden")));
+            setSaved(safeJsonToBoolean(obj.get("saved")));
+            setLinkTitle(safeJsonToString(obj.get("link_title")));
             setLikes(safeJsonToString(obj.get("likes")));
+            setIndentation(0);
+            hasReplies = (obj.get("replies") != null) && !safeJsonToString(obj.get("replies")).isEmpty();
+            mChildren = new LinkedList<>();
+            agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
             linkTitle = StringEscapeUtils.unescapeHtml4(linkTitle);
-            if(!MyApplication.useMarkdownParsing) {
+            if(MyApplication.useMarkdownParsing) {}
+            else {
                 bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
                 bodyHTML = HtmlFormatUtils.modifySpoilerHtml(bodyHTML);
                 bodyHTML = HtmlFormatUtils.modifyInlineCodeHtml(bodyHTML);
             }
 
-            agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
-
-            setIndentation(0);
-            mChildren = new LinkedList<>();
-            
         } catch (Exception e) {
         	e.printStackTrace();
         	throw new IllegalArgumentException("JSON Object could not be parsed into a Comment. Provide a JSON Object with a valid structure.");
         }
-
     }
 
     public Comment(Message message) {

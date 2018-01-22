@@ -248,7 +248,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 
 	public void updateSubmission(JSONObject obj) {
 		try {
-
+			setDomain(safeJsonToString(obj.get("domain")));
 			setURL(safeJsonToString(obj.get("url")));
 			setPermalink(safeJsonToString(obj.get("permalink")));
 			setAuthor(safeJsonToString(obj.get("author")));
@@ -257,40 +257,18 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setSubreddit(safeJsonToString(obj.get("subreddit")));
 			setSubredditId(safeJsonToString(obj.get("subreddit_id")));
 			setThumbnail(safeJsonToString(obj.get("thumbnail")));
-
 			setSelftext(safeJsonToString(obj.get("selftext")));
 			setSelftextHTML(safeJsonToString(obj.get("selftext_html")));
-
-			setDomain(safeJsonToString(obj.get("domain")));
-			if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-				setURL(url.replace("&amp;", "&"));
-			}
-			else if(domain.equals("v.redd.it")) {
-				try {
-					JSONObject media = ((JSONObject) obj.get("media"));
-					JSONObject video = ((JSONObject) media.get("reddit_video"));
-					RedditVideo redditVideo = new RedditVideo(video);
-					//setURL(redditVideo.getFallbackUrl());
-					setRedditVideo(redditVideo);
-				} catch (Exception e) {
-					e.printStackTrace();
-					Log.e("Api error", "Error retrieving reddit video metadata from json response");
-				}
-			}
-
 			setBannedBy(safeJsonToString(obj.get("banned_by")));
 			setApprovedBy(safeJsonToString(obj.get("approved_by")));
-
 			setGilded(safeJsonToLong(obj.get("gilded")));
 			setCommentCount(safeJsonToLong(obj.get("num_comments")));
 			setReportCount(safeJsonToLong(obj.get("num_reports")));
 			setScore(safeJsonToLong(obj.get("score")));
 			setUpVotes(safeJsonToLong(obj.get("ups")));
 			setDownVotes(safeJsonToLong(obj.get("downs")));
-
 			setCreated(safeJsonToDouble(obj.get("created")));
 			setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
-
 			//setVisited(safeJsonToBoolean(obj.get("visited")));
 			setSelf(safeJsonToBoolean(obj.get("is_self")));
 			setSaved(safeJsonToBoolean(obj.get("saved")));
@@ -303,15 +281,33 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setLocked(safeJsonToBoolean(obj.get("locked")));
 			setLikes(safeJsonToString(obj.get("likes")));
 
-			title = StringEscapeUtils.unescapeHtml4(title);
-			linkFlairText = StringEscapeUtils.unescapeHtml4(linkFlairText);
-			if(!MyApplication.useMarkdownParsing) {
-				selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
-				selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);
-				selftextHTML = HtmlFormatUtils.modifyInlineCodeHtml(selftextHTML);
+			if (domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
+				setURL(url.replace("&amp;", "&"));
+			} else if (domain.equals("v.redd.it")) {
+				try {
+					JSONObject media = ((JSONObject) obj.get("media"));
+					JSONObject video = ((JSONObject) media.get("reddit_video"));
+					RedditVideo redditVideo = new RedditVideo(video);
+					//setURL(redditVideo.getFallbackUrl());
+					setRedditVideo(redditVideo);
+				} catch (Exception e) {
+					e.printStackTrace();
+					Log.e("Api error", "Error retrieving reddit video metadata from json response");
+				}
 			}
 
 			updateAgePrepared();
+
+			title = StringEscapeUtils.unescapeHtml4(title);
+			linkFlairText = StringEscapeUtils.unescapeHtml4(linkFlairText);
+			if (isSelf()) {
+				if (MyApplication.useMarkdownParsing) {}
+				else {
+					selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
+					selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);
+					selftextHTML = HtmlFormatUtils.modifyInlineCodeHtml(selftextHTML);
+				}
+			}
 
 		} catch (Exception e) {
 			Log.e("Api error", "Error creating/updating submission from JSON object");
