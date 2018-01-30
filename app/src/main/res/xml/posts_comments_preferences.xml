@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Posts">
+
+        <CheckBoxPreference
+            android:key="showNSFWthumb"
+            android:title="Show NSFW thumbnails"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="hideNSFW"
+            android:title="Hide NSFW posts"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="endlessPosts"
+            android:title="Endless posts"
+            android:summary="Load more posts automatically when scrolling"
+            android:defaultValue="true"/>
+
+        <ListPreference
+            android:key="defaultView"
+            android:title="Default view"
+            android:entries="@array/viewType"
+            android:entryValues="@array/viewTypeValues"
+            android:defaultValue="0"/>
+
+        <CheckBoxPreference
+            android:key="rememberView"
+            android:title="Subreddit specific views"
+            android:summary="Remember the last used view option for each subreddit/multireddit"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="hqThumb"
+            android:title="Higher quality thumbnails"
+            android:summary="Currently supports imgur, gfycat, streamable and youtube posts"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="noThumb"
+            android:title="Never load thumbnails"
+            android:summary="Enable this to save data if you're on a limited data plan"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Comments">
+
+        <ListPreference
+            android:key="initialCommentCount"
+            android:title="Initial comment count"
+            android:summary="Choose the number of comments that load initially"
+            android:entries="@array/commentCount"
+            android:entryValues="@array/commentCount"
+            android:defaultValue="100"/>
+
+        <ListPreference
+            android:key="initialCommentDepth"
+            android:title="Initial comment depth"
+            android:summary="Choose the maximum comment depth of any given thread"
+            android:entries="@array/commentDepth"
+            android:entryValues="@array/commentDepth"
+            android:defaultValue="5"/>
+
+        <ListPreference
+            android:key="defaultCommentSort"
+            android:title="Default comment sort"
+            android:entries="@array/commentSortEntries"
+            android:entryValues="@array/commentSortValues"
+            android:defaultValue="1"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -11,6 +11,7 @@ import com.gDyejeekis.aliencompanion.fragments.settings_fragments.HeadersSetting
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.LinkHandlingSettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.NavigationSettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.OtherSettingsFragment;
+import com.gDyejeekis.aliencompanion.fragments.settings_fragments.PostsCommentsSettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.PostsSettingsFragment;
 import com.gDyejeekis.aliencompanion.fragments.settings_fragments.SyncSettingsFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -73,6 +74,9 @@ public class SettingsActivity extends ToolbarActivity {
             case comments:
                 fragment = new CommentsSettingsFragment();
                 break;
+            case postsAndComments:
+                fragment = new PostsCommentsSettingsFragment();
+                break;
             case sync:
                 fragment = new SyncSettingsFragment();
                 break;
@@ -123,10 +127,11 @@ public class SettingsActivity extends ToolbarActivity {
         }
     }
 
-    public void setupOptionsFragment(PreferenceFragment fragment, SettingsMenuType type) {
-        if(type != SettingsMenuType.headers) {
-            getSupportActionBar().setTitle(type.value());
-            getFragmentManager().beginTransaction().replace(R.id.options_holder, fragment, "optionsFragment").commitAllowingStateLoss();
+    public void setupOptionsFragment(SettingsMenuType menuType) {
+        if(menuType != SettingsMenuType.headers) {
+            getSupportActionBar().setTitle(menuType.value());
+            getFragmentManager().beginTransaction().replace(R.id.options_holder, SettingsMenuType.getSettingsFragment(menuType), "optionsFragment")
+                    .commitAllowingStateLoss();
             findViewById(R.id.options_holder).setVisibility(View.VISIBLE);
         }
     }

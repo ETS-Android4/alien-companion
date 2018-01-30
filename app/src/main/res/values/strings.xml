@@ -34,7 +34,7 @@
     <string name="about_filter_profiles">
         You can create filter profiles to filter out posts and subreddits by adding your desired filters to a profile. Filter profiles must be ACTIVE for their filters to work and
         they also apply to search results and synced content. Filters will apply to all subreddits/multireddits (including frontpage, popular and all) unless you add subreddit/multireddit
-        restrictions. For NSFW filtering, use the corresponding option under \'Post\' settings.
+        restrictions. For NSFW filtering, use the corresponding option under \'Posts and comments\' settings.
     </string>
     <string name="about_donations_title">
         About donations

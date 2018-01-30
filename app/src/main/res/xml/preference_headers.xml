@@ -12,14 +12,18 @@
         android:key="navigation"
         android:title="Navigation"
         android:summary="Change how you navigate the app"/>
-    <Preference
+    <!--<Preference
         android:key="posts"
         android:title="Posts"
         android:summary="Post specific options"/>
     <Preference
         android:key="comments"
         android:title="Comments"
-        android:summary="Comment specific options"/>
+        android:summary="Comment specific options"/>-->
+    <Preference
+        android:key="postsAndComments"
+        android:title="Posts and comments"
+        android:summary="Change how reddit content is received and displayed"/>
     <Preference
         android:key="sync"
         android:title="Sync options"
