@@ -66,6 +66,7 @@
         <changelogtext>Fixed 'Open in app' links not opening the appropriate app from the in-app browser</changelogtext>
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
+        <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added a 'Donate' option under settings]]></changelogtext>
 
         <changelogtext></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>

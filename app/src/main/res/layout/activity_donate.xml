@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/my_toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/layout_donation_form"
+        android:padding="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/editText_donate_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themeTextPrimaryColor"
+            android:textColorHint="?attr/themeTextHintColor"
+            android:textSize="18sp"
+            android:maxLength="25"
+            android:hint="@string/name_optional_hint" />
+
+        <EditText
+            android:id="@+id/editText_donate_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themeTextPrimaryColor"
+            android:textColorHint="?attr/themeTextHintColor"
+            android:textSize="18sp"
+            android:maxLength="255"
+            android:hint="@string/message_optional_hint"
+            android:layout_marginTop="12dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/layout_donation_amount"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="18sp"
+                android:text="@string/donation_description" />
+
+            <TextView
+                android:id="@+id/textView_donate_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/imageView_donate_decrease_amount"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="8dp"/>
+
+            <ImageView
+                android:id="@+id/imageView_donate_increase_amount"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_add_circle_outline_black_24dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="16dp" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkBox_donate_public"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themeTextPrimaryColor"
+            android:textSize="18sp"
+            android:text="@string/make_donation_public"
+            android:checked="true"
+            android:layout_marginTop="12dp"/>
+
+        <Button
+            android:id="@+id/button_donate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/donate"
+            android:layout_marginTop="12dp"
+            style="@style/RaisedButtonStyle"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:id="@+id/layout_past_donations"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/themeTextSecondaryColor"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:text="@string/past_donations_title"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView_donations"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -147,6 +147,10 @@
             android:configChanges="orientation|screenSize"
             android:label="Changelog"/>
 
+        <activity android:name=".activities.DonateActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Donate"/>
+
         <activity android:name=".activities.DebugActivity"
             android:configChanges="orientation|screenSize"
             android:label="Debug"/>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.gDyejeekis.aliencompanion.activities.DonateActivity;
 import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.SettingsActivity;
 import com.gDyejeekis.aliencompanion.R;
@@ -20,6 +21,14 @@ public class HeadersSettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preference_headers);
 
         final SettingsActivity activity = (SettingsActivity) getActivity();
+
+        findPreference("donate").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                getActivity().startActivity(new Intent(getActivity(), DonateActivity.class));
+                return true;
+            }
+        });
 
         findPreference("appearance").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

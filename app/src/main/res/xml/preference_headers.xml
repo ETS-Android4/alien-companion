@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
+        android:key="donate"
+        android:title="Donate"
+        android:summary="All contributions are greatly appreciated"/>
+    <Preference
         android:key="appearance"
         android:title="Appearance"
-        android:summary="Change how the app looks" />
+        android:summary="Change how the app looks"/>
     <Preference
         android:key="navigation"
         android:title="Navigation"

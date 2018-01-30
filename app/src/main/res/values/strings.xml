@@ -15,7 +15,7 @@
             •   Improved sync functionality, allowing you to sync videos from the streamable.com domain and to sync links in self-text and comments. There\'s also a new
         interface for creating/editing sync profiles, with the added ability to set multiple schedules on the same sync profile.\n
             •   Numerous visual tweaks and additional customization options.\n\n
-            As always, the full list of changes is available in the settings. [thoughts on app monetization][closing thoughts and thanks]
+            As always, the full list of changes is available in the settings. [thoughts on app monetization][closing thoughts and thanks][notify users about user data being cleared]
     </string>
     <string name="about_sync_profiles_title">
         About sync profiles
@@ -35,6 +35,12 @@
         You can create filter profiles to filter out posts and subreddits by adding your desired filters to a profile. Filter profiles must be ACTIVE for their filters to work and
         they also apply to search results and synced content. Filters will apply to all subreddits/multireddits (including frontpage, popular and all) unless you add subreddit/multireddit
         restrictions. For NSFW filtering, use the corresponding option under \'Post\' settings.
+    </string>
+    <string name="about_donations_title">
+        About donations
+    </string>
+    <string name="about_donations">
+        (about donations)
     </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
@@ -251,5 +257,11 @@
     <string name="friday_short">Fri</string>
     <string name="saturday_short">Sat</string>
     <string name="sunday_short">Sun</string>
+    <string name="name_optional_hint">name (optional)</string>
+    <string name="message_optional_hint">message (optional)</string>
+    <string name="donation_description">Donation amount: $</string>
+    <string name="make_donation_public">Show my donation to others</string>
+    <string name="donate">Donate</string>
+    <string name="past_donations_title">Past contributions..</string>
 
 </resources>
