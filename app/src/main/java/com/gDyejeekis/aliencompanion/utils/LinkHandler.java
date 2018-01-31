@@ -88,13 +88,11 @@ public class LinkHandler {
     public boolean handleIt() {
         boolean setImplicitViewIntent = false;
         try {
-            Intent intent = null;
-            Activity activity = (Activity) context;
-
             Log.d(TAG, "FULL URL: " + url);
             Log.d(TAG, "DOMAIN: " + domain);
+            Intent intent = null;
             if (domain == null) {
-                intent = getNoDomainIntent(activity, url);
+                intent = getNoDomainIntent(url);
             }
             else {
                 String domainLC = domain.toLowerCase();
@@ -109,7 +107,7 @@ public class LinkHandler {
                             }
                             else {
                                 Log.d(TAG, "YouTube playlist ID: " + playlistId);
-                                intent = YouTubeStandalonePlayer.createPlaylistIntent(activity, YOUTUBE_API_KEY, playlistId, 0, 0, true, true);
+                                intent = YouTubeStandalonePlayer.createPlaylistIntent((Activity) context, YOUTUBE_API_KEY, playlistId, 0, 0, true, true);
                             }
 
                         }
@@ -122,7 +120,7 @@ public class LinkHandler {
                             else {
                                 Log.d(TAG, "YouTube video ID: " + videoId);
                                 int time = LinkUtils.getYoutubeVideoTime(url);
-                                intent = YouTubeStandalonePlayer.createVideoIntent(activity, YOUTUBE_API_KEY, videoId, time, true, true);
+                                intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, YOUTUBE_API_KEY, videoId, time, true, true);
                             }
                         }
                     }
@@ -131,7 +129,7 @@ public class LinkHandler {
                 else if(domainLC.contains("imgur.com")) {
                     if(MyApplication.handleImgur) {
                         //startInAppBrowser(activity, post, url, domain);
-                        intent = getMediaActivityIntent(activity, url, domain);
+                        intent = getMediaActivityIntent();
                     }
                     else setImplicitViewIntent = true;
                 }
@@ -157,60 +155,60 @@ public class LinkHandler {
                 }
                 else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
                         || domainLC.contains("gyazo.com")) {
-                    intent = getMediaActivityIntent(activity, url, domain);
+                    intent = getMediaActivityIntent();
                 }
                 else if(domainLC.contains("gfycat.com") || domainLC.contains("giphy.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
-                    intent = getMediaActivityIntent(activity, url, domain);
+                    intent = getMediaActivityIntent();
                 }
                 else if(domainLC.contains("streamable.com") || urlLC.endsWith(".mp4")) {
-                    intent = getMediaActivityIntent(activity, url, domain);
+                    intent = getMediaActivityIntent();
                 }
                 else if(domainLC.equals("twitter.com")) {
                     if(MyApplication.handleTwitter) {
-                        return startInAppBrowser(activity, post, url, domain);
+                        return startInAppBrowser();
                     }
                     else setImplicitViewIntent = true;
                 }
                 else if (domainLC.matches("^(\\w+\\.)?reddit\\.com") || domainLC.equals("redd.it")) {
                     // case post link
                     if(LinkUtils.isRedditPostUrl(urlLC)) {
-                        intent = new Intent(activity, PostActivity.class);
+                        intent = new Intent(context, PostActivity.class);
                         intent.putExtra("url", url);
                     }
                     // case (subreddit).reddit.com link
                     else if(domainLC.matches("^(?!\\bwww\\b|\\bnp\\b|\\bm\\b)(\\w+)\\.reddit\\.com")) {
                         Matcher matcher = Pattern.compile("^(?!\\bwww\\b|\\bnp\\b|\\bm\\b)(\\w+)\\.reddit\\.com").matcher(domainLC);
                         if(matcher.find()) {
-                            intent = new Intent(activity, SubredditActivity.class);
+                            intent = new Intent(context, SubredditActivity.class);
                             intent.putExtra("subreddit", matcher.group(1));
                         }
                     }
                     // case user/subreddit link
                     else if(urlLC.matches("^(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/(\\w+)\\/?")) {
-                        intent = getUserSubredditIntent(activity, urlLC);
+                        intent = getUserSubredditIntent(urlLC);
                     }
                     // case other reddit link not handled by the app natively
                     else if(urlLC.contains("/wiki/") || urlLC.contains("/about/") || urlLC.contains("/live/")) {
                         if (MyApplication.handleOtherLinks) {
-                            return startInAppBrowser(activity, post, url, domain);
+                            return startInAppBrowser();
                         }
                         else setImplicitViewIntent = true;
                     }
                 }
                 // if in offline mode start browser activity to look for synced artocle
                 else if(MyApplication.offlineModeEnabled && LinkUtils.isArticleLink(urlLC, domainLC)) { // TODO: 7/30/2017 maybe check if synced article exists here instead of checking the link
-                    return startBrowserActivity(activity, post, url, domain);
+                    return startBrowserActivity();
                 }
                 else if(LinkUtils.isIntentLink(url)) {
                     return handleAppLink();
                 }
                 else if(LinkUtils.isEmailAddress(url)) {
                     intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
-                    activity.startActivity(intent);
+                    context.startActivity(intent);
                     return true;
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
-                    return startInAppBrowser(activity, post, url, domain);
+                    return startInAppBrowser();
                 }
                 else {
                     setImplicitViewIntent = true;
@@ -221,7 +219,7 @@ public class LinkHandler {
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             }
             if(intent!=null) {
-                activity.startActivity(intent);
+                context.startActivity(intent);
                 return true;
             }
 
@@ -257,75 +255,72 @@ public class LinkHandler {
         return false;
     }
 
-    private boolean startInAppBrowser(Activity activity, Submission post, String url, String domain) {
-        return (MyApplication.useCCT) ? startChromeCustomTabs(activity, post, url, domain) : startInAppBrowser(activity, post, url, domain);
+    private boolean startInAppBrowser() {
+        return (MyApplication.useCCT) ? startChromeCustomTabs() : startBrowserActivity();
     }
 
-    public static boolean startChromeCustomTabs(Activity activity, Submission post, String url, String domain) {
+    private boolean startChromeCustomTabs() {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(MyApplication.currentPrimaryColor);
         if(MyApplication.disableAnimations) {
-            builder.setStartAnimations(activity, -1, -1);
-            builder.setExitAnimations(activity, -1, -1);
+            builder.setStartAnimations(context, -1, -1);
+            builder.setExitAnimations(context, -1, -1);
         }
         else {
-            builder.setStartAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
-            builder.setExitAnimations(activity, R.anim.slide_in_left, R.anim.slide_out_right);
+            builder.setStartAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
+            builder.setExitAnimations(context, R.anim.slide_in_left, R.anim.slide_out_right);
         }
 
         CustomTabsIntent customTabsIntent = builder.build();
 
-        customTabsIntent.launchUrl(activity, Uri.parse(url));
+        customTabsIntent.launchUrl(context, Uri.parse(url));
         return true;
     }
 
-    private boolean startBrowserActivity(Activity activity, Submission post, String url, String domain) {
+    private boolean startBrowserActivity() {
         if (browserActive) return false;
         browserActive = true;
-        Intent intent = new Intent(activity, BrowserActivity.class);
+        Intent intent = new Intent(context, BrowserActivity.class);
         if (post != null) {
             intent.putExtra("post", post);
         } else {
             intent.putExtra("url", url);
             intent.putExtra("domain", domain);
         }
-        activity.startActivity(intent);
+        context.startActivity(intent);
         return true;
     }
 
-    private Intent getMediaActivityIntent(Activity activity, String url, String domain) {
-        Intent intent = new Intent(activity, MediaActivity.class);
+    private Intent getMediaActivityIntent() {
+        Intent intent = new Intent(context, MediaActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("domain", domain);
-
         return intent;
     }
 
-    private Intent getUserSubredditIntent(Activity activity, String url) {
+    private Intent getUserSubredditIntent(String url) {
         Intent intent = null;
-
         final String pattern = "^(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/(\\w+)";
 
         Matcher matcher = Pattern.compile(pattern).matcher(url);
         if(matcher.find()) {
             if(matcher.group(1).equals("r")) {
-                intent = new Intent(activity, SubredditActivity.class);
+                intent = new Intent(context, SubredditActivity.class);
                 intent.putExtra("subreddit", matcher.group(2));
             }
             else {
-                intent = new Intent(activity, UserActivity.class);
+                intent = new Intent(context, UserActivity.class);
                 intent.putExtra("username", matcher.group(2));
             }
         }
-
         return intent;
     }
 
     // Get an intent for links like '/r/movies' or '/u/someuser' or /r/games/about/sidebar
-    private Intent getNoDomainIntent(Activity activity, String url) {
+    private Intent getNoDomainIntent(String url) {
         Intent intent = null;
-
         final String pattern = "/(\\w)/(\\w+)/?(.*)";
+
         Pattern compiledPattern = Pattern.compile(pattern);
         Matcher matcher = compiledPattern.matcher(url);
         if(matcher.find()) {
@@ -336,25 +331,24 @@ public class LinkHandler {
                 this.url = "http://reddit.com" + url;
                 this.domain = "reddit.com";
                 if(MyApplication.handleOtherLinks) {
-                    startInAppBrowser(activity, post, this.url, domain);
+                    startInAppBrowser();
                 }
                 else {
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.url));
                 }
             }
             else if(type.equalsIgnoreCase("r")) {
-                intent = new Intent(activity, SubredditActivity.class);
+                intent = new Intent(context, SubredditActivity.class);
                 intent.putExtra("subreddit", name.toLowerCase());
             }
             else if(type.equalsIgnoreCase("u") || type.equalsIgnoreCase("user")) {
-                intent = new Intent(activity, UserActivity.class);
+                intent = new Intent(context, UserActivity.class);
                 intent.putExtra("username", name.toLowerCase());
             }
         }
         else {
-            ToastUtils.showToast(activity, "Url not supported");
+            ToastUtils.showToast(context, "Url not supported");
         }
-
         return intent;
     }
 
