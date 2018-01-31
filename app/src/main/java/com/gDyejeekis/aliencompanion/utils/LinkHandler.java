@@ -84,7 +84,7 @@ public class LinkHandler {
         }
     }
 
-    // returns false if the url is to be handled by the webview, true for custom handling
+    // return false if the url is to be handled by the open webview, true for any other custom handling
     public boolean handleIt() {
         boolean setImplicitViewIntent = false;
         try {
@@ -167,9 +167,7 @@ public class LinkHandler {
                 }
                 else if(domainLC.equals("twitter.com")) {
                     if(MyApplication.handleTwitter) {
-                        if(!browserActive) {
-                            startInAppBrowser(activity, post, url, domain);
-                        }
+                        return startInAppBrowser(activity, post, url, domain);
                     }
                     else setImplicitViewIntent = true;
                 }
@@ -194,16 +192,14 @@ public class LinkHandler {
                     // case other reddit link not handled by the app natively
                     else if(urlLC.contains("/wiki/") || urlLC.contains("/about/") || urlLC.contains("/live/")) {
                         if (MyApplication.handleOtherLinks) {
-                            if(!browserActive) {
-                                startInAppBrowser(activity, post, url, domain);
-                            }
+                            return startInAppBrowser(activity, post, url, domain);
                         }
                         else setImplicitViewIntent = true;
                     }
                 }
                 // if in offline mode start browser activity to look for synced artocle
                 else if(MyApplication.offlineModeEnabled && LinkUtils.isArticleLink(urlLC, domainLC)) { // TODO: 7/30/2017 maybe check if synced article exists here instead of checking the link
-                    startBrowserActivity(activity, post, url, domain);
+                    return startBrowserActivity(activity, post, url, domain);
                 }
                 else if(LinkUtils.isIntentLink(url)) {
                     return handleAppLink();
@@ -214,9 +210,7 @@ public class LinkHandler {
                     return true;
                 }
                 else if (MyApplication.handleOtherLinks && !domainLC.equals("play.google.com") && !urlLC.endsWith(".pdf")) {
-                    if(!browserActive) {
-                        startInAppBrowser(activity, post, url, domain);
-                    }
+                    return startInAppBrowser(activity, post, url, domain);
                 }
                 else {
                     setImplicitViewIntent = true;
@@ -263,16 +257,11 @@ public class LinkHandler {
         return false;
     }
 
-    public static void startInAppBrowser(Activity activity, Submission post, String url, String domain) {
-        if(MyApplication.useCCT) {
-           startChromeCustomTabs(activity, post, url, domain);
-        }
-        else {
-            startBrowserActivity(activity, post, url, domain);
-        }
+    private boolean startInAppBrowser(Activity activity, Submission post, String url, String domain) {
+        return (MyApplication.useCCT) ? startChromeCustomTabs(activity, post, url, domain) : startInAppBrowser(activity, post, url, domain);
     }
 
-    public static void startChromeCustomTabs(Activity activity, Submission post, String url, String domain) {
+    public static boolean startChromeCustomTabs(Activity activity, Submission post, String url, String domain) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(MyApplication.currentPrimaryColor);
         if(MyApplication.disableAnimations) {
@@ -287,18 +276,21 @@ public class LinkHandler {
         CustomTabsIntent customTabsIntent = builder.build();
 
         customTabsIntent.launchUrl(activity, Uri.parse(url));
+        return true;
     }
 
-    public static void startBrowserActivity(Activity activity, Submission post, String url, String domain) {
+    private boolean startBrowserActivity(Activity activity, Submission post, String url, String domain) {
+        if (browserActive) return false;
+        browserActive = true;
         Intent intent = new Intent(activity, BrowserActivity.class);
         if (post != null) {
             intent.putExtra("post", post);
-        }
-        else {
+        } else {
             intent.putExtra("url", url);
             intent.putExtra("domain", domain);
         }
         activity.startActivity(intent);
+        return true;
     }
 
     private Intent getMediaActivityIntent(Activity activity, String url, String domain) {
