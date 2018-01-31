@@ -23,7 +23,8 @@ public class MyClickableTableSpan extends ClickableTableSpan {
         Bundle args = new Bundle();
         args.putString("tableHtml", getTableHtml());
         dialogFragment.setArguments(args);
-        FragmentManager fm = ((AppCompatActivity) widget.getContext()).getSupportFragmentManager();
+        AppCompatActivity compatActivity = (AppCompatActivity) GeneralUtils.scanForActivity(widget.getContext());
+        FragmentManager fm = compatActivity.getSupportFragmentManager();
         dialogFragment.show(fm, "dialog");
     }
 }
