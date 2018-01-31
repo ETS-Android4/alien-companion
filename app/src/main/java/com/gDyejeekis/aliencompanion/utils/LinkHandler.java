@@ -328,6 +328,7 @@ public class LinkHandler {
             String name = matcher.group(2);
             String more = matcher.group(3);
             if(more.length()>0) {
+                url = url.replace("http://", "");
                 this.url = "http://reddit.com" + url;
                 this.domain = "reddit.com";
                 if(MyApplication.handleOtherLinks) {
