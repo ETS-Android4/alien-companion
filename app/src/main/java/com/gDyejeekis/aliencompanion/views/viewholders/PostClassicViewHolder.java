@@ -44,6 +44,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
     public ImageView commentsIcon;
     //public LinearLayout linkButton;
     public LinearLayout layoutPostInfo;
+    public LinearLayout layoutThumbnail;
     public LinearLayout layoutPostOptions;
     public LinearLayout commentsButton;
 
@@ -73,6 +74,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         downvote.setVisibility(View.GONE);
 
         layoutPostInfo = (LinearLayout) itemView.findViewById(R.id.layout_postInfo);
+        layoutThumbnail = itemView.findViewById(R.id.layout_thumbnail);
         postDets1 = (TextView) itemView.findViewById(R.id.small_card_details_1);
         postDets2 = (TextView) itemView.findViewById(R.id.small_card_details_2);
         commentsIcon = (ImageView) itemView.findViewById(R.id.imageView_comments_icon);
@@ -123,17 +125,17 @@ public class PostClassicViewHolder extends PostViewHolder  {
         }
         // set post thumbnail
         if(post.isSelf()) {
-            postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+            layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
             layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
         }
         else {
             Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
             if (post.isNSFW() && !MyApplication.showNSFWpreview) {
-                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
             else if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
-                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 3f));
+                layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 3f));
                 layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 12f));
                 //postImage.setBackground(null);
                 try {
@@ -143,7 +145,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
                 }
             }
             else {
-                postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
+                layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }
         }
