@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +17,7 @@ import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.services.MessageCheckService;
 import com.gDyejeekis.aliencompanion.services.PendingActionsService;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
@@ -41,13 +43,14 @@ public class MyApplication extends Application {
 
     public static final String currentVersion = "1.0";
 
-    public static final int currentVersionCode = 100;
+    public static final int currentVersionCode = 1000;
 
-    public static final int showWelcomeMsgVersionCode = 30;
+    public static final int showWelcomeMsgVersionCode = 1000;
 
-    public static final int clearAppDataVersionCode = 20;
+    public static final int clearAppDataVersionCode = 1000;
 
-    public static final String[] defaultSubredditStrings = {"All", "pics", "videos", "gaming", "technology", "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
+    public static final String[] defaultSubredditStrings = {"All", "popular", "pics", "videos", "gaming", "technology",
+            "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
@@ -411,49 +414,33 @@ public class MyApplication extends Application {
     }
 
     private void checkAppVersion() {
+        final Context appContext = getApplicationContext();
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
-        if(lastKnownVersionCode!=currentVersionCode) {
+        if (lastKnownVersionCode!=currentVersionCode) {
             SharedPreferences.Editor editor = prefs.edit();
-            if(lastKnownVersionCode < clearAppDataVersionCode) {
-                editor.clear();
-                clearApplicationData();
-                editor.putBoolean("dualPane", GeneralUtils.isLargeScreen(getApplicationContext()));
+            if (lastKnownVersionCode < clearAppDataVersionCode) {
+                if (lastKnownVersionCode != 0) {
+                    editor.clear();
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            CleaningUtils.clearApplicationData(appContext);
+                            // version code 1000 was the version that stopped using the public pics dir for synced images
+                            if (lastKnownVersionCode < 1000) CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);
+                        }
+                    });
+                }
+                boolean isLargeScreen = GeneralUtils.isLargeScreen(appContext);
+                editor.putBoolean("dualPane", isLargeScreen);
+                editor.putBoolean("autoHideToolbar", !isLargeScreen);
             }
-            if(lastKnownVersionCode < showWelcomeMsgVersionCode) {
+            if (lastKnownVersionCode < showWelcomeMsgVersionCode) {
                 editor.putBoolean("welcomeMsg", false);
             }
             editor.putInt("versionCode", currentVersionCode);
-            editor.commit();
+            editor.apply();
             lastKnownVersionCode = currentVersionCode;
         }
-    }
-
-    private void clearApplicationData() {
-        File cache = getCacheDir();
-        File appDir = new File(cache.getParent());
-        if (appDir.exists()) {
-            String[] children = appDir.list();
-            for (String s : children) {
-                if (!s.equals("lib")) {
-                    deleteDir(new File(appDir, s));
-                    Log.d(TAG, "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
-                }
-            }
-        }
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-
-        return dir.delete();
     }
 
     public static void getCurrentSettings() {

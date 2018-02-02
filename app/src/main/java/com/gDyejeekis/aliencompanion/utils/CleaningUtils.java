@@ -3,6 +3,8 @@ package com.gDyejeekis.aliencompanion.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -271,4 +273,67 @@ public class CleaningUtils {
             Log.d(TAG, "Deleted " + file.getAbsolutePath());
         }
     }
+
+    public static void clearApplicationData(Context context) {
+        clearInternalStorageData(context);
+        clearExternalStorageData(context);
+    }
+
+    public static void clearInternalStorageData(Context context) {
+        File cache = context.getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                    Log.d(TAG, "**************** File " + appDir.getAbsolutePath() + "/" + s + " DELETED *******************");
+                }
+            }
+        }
+    }
+
+    public static void clearExternalStorageData(Context context) {
+        try {
+            File externalDirs[] = ContextCompat.getExternalFilesDirs(context, null);
+            for (File dir : externalDirs) {
+                if (dir.exists()) {
+                    deleteDir(dir);
+                    Log.d(TAG, "**************** File " + dir.getAbsolutePath() + " DELETED *******************");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // this should only be used when updating from a version prior to 1000, clears all images/gifs from the public pictures directory
+    public static void clearPublicPicsDirSyncedMedia(Context context) {
+        try {
+            File publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File[] files = publicDir.listFiles();
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDir(file);
+                    Log.d(TAG, "**************** File " + file.getAbsolutePath() + " DELETED *******************");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+
 }
