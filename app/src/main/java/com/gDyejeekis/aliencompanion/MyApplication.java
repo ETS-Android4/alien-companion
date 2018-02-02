@@ -68,6 +68,8 @@ public class MyApplication extends Application {
 
     public static final String OFFLINE_USER_ACTIONS_FILENAME = "OfflineActions";
 
+    public static final String SAVED_PICTURES_PUBLIC_DIR_NAME = "AlienCompanion";
+
     public static final String SYNCED_MEDIA_DIR_NAME = "Media";
 
     public static final String SYNCED_ARTICLES_DIR_NAME = "Articles";

@@ -310,7 +310,7 @@ public class CleaningUtils {
     // this should only be used when updating from a version prior to 1000, clears all images/gifs from the public pictures directory
     public static void clearPublicPicsDirSyncedMedia(Context context) {
         try {
-            File publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File publicDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), MyApplication.SAVED_PICTURES_PUBLIC_DIR_NAME);
             File[] files = publicDir.listFiles();
             for (File file : files) {
                 if (file.isDirectory()) {

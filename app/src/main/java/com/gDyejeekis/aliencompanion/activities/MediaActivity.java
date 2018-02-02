@@ -709,7 +709,7 @@ public class MediaActivity extends BackNavActivity {
     private File getSaveDestination() {
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
-        File appFolder = new File(dir + "/AlienCompanion");
+        File appFolder = new File(dir + "/" + MyApplication.SAVED_PICTURES_PUBLIC_DIR_NAME);
 
         if(!appFolder.exists()) {
             appFolder.mkdir();
