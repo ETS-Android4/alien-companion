@@ -138,7 +138,7 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         saveButton.setOnClickListener(this);
 
         int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, dropdownResource, RedditConstants.popularSubreddits);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
         subredditField.setAdapter(adapter);
         subRestrField.setAdapter(adapter);
     }

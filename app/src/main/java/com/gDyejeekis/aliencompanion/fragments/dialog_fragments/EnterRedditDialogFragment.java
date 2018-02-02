@@ -1,7 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -43,7 +42,7 @@ public class EnterRedditDialogFragment extends ScalableDialogFragment implements
         View view = inflater.inflate(R.layout.fragment_enter_reddit, container, false);
 
         int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.popularSubreddits);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
 
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);

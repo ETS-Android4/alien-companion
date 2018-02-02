@@ -38,7 +38,7 @@ public class AddMultiredditDialogFragment extends ScalableDialogFragment impleme
         createMultiButton = (Button) view.findViewById(R.id.button_createMulti);
 
         int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.popularSubreddits);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
         subredditField.setAdapter(adapter);
         subredditField.requestFocus();
 
