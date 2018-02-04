@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.models;
 
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+
 import java.util.UUID;
 
 /**
@@ -27,7 +29,8 @@ public class Donation {
         this.name = (name==null || name.trim().isEmpty()) ? "Anonymous" : name;
         this.message = (message==null || message.trim().isEmpty()) ? null : message;
         this.amount = amount;
-        this.isPublic = isPublic;
+        boolean profanity = GeneralUtils.containsProfanity(name) || GeneralUtils.containsProfanity(message);
+        this.isPublic = isPublic && !profanity;
     }
 
     public int getDonationId() {

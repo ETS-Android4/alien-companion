@@ -28,6 +28,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.gDyejeekis.aliencompanion.activities.ChangelogActivity;
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -563,4 +564,11 @@ public class GeneralUtils {
         return null;
     }
 
+    public static boolean containsProfanity(String input) {
+        input = input.toLowerCase();
+        for (String word : RedditConstants.PROFANE_WORDS) {
+            if (input.contains(word)) return true;
+        }
+        return false;
+    }
 }
