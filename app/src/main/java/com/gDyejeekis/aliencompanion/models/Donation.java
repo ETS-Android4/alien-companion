@@ -19,6 +19,7 @@ public class Donation {
     public static final String THANK_YOU_MESSAGE = "Donation received! Thanks for your support :)";
 
     private final int donationId;
+    private long createdAt;
     private String name;
     private String message;
     private float amount;
@@ -26,6 +27,7 @@ public class Donation {
 
     public Donation(String name, String message, float amount, boolean isPublic) {
         this.donationId = UUID.randomUUID().hashCode();
+        this.createdAt = System.currentTimeMillis();
         this.name = (name==null || name.trim().isEmpty()) ? "Anonymous" : name;
         this.message = (message==null || message.trim().isEmpty()) ? null : message;
         this.amount = amount;
@@ -55,5 +57,9 @@ public class Donation {
 
     public boolean isPublic() {
         return isPublic;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
     }
 }

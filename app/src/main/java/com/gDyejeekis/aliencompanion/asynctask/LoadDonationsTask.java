@@ -11,6 +11,8 @@ import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.DonationListAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -33,6 +35,7 @@ public class LoadDonationsTask extends AsyncTask<Void, Void, List<Donation>> {
         List<Donation> donations;
         //donations = retrievePastDonations();
         donations = generateSampleDonations();
+        sortDonationsByLatest(donations);
         return donations;
     }
 
@@ -44,12 +47,27 @@ public class LoadDonationsTask extends AsyncTask<Void, Void, List<Donation>> {
 
     private List<Donation> generateSampleDonations() {
         List<Donation> donations = new ArrayList<>();
+        donations.add(new Donation(null, null, 0.99f, true));
+        donations.add(new Donation(null, null, 0.99f, true));
+        donations.add(new Donation(null, null, 0.99f, true));
+        donations.add(new Donation(null, null, 0.99f, true));
         donations.add(new Donation(null, null, 4.99f, true));
         donations.add(new Donation(null, null, 2.99f, true));
         donations.add(new Donation(null, "Cool beans", 7.99f, true));
-        donations.add(new Donation("sample donator", "sample donation", 1.99f, true));
+        donations.add(new Donation("test donator", "test donation", 1.99f, true));
         donations.add(new Donation("joe", null, 2.99f, true));
         return donations;
+    }
+
+    private void sortDonationsByLatest(List<Donation> donations) {
+        Collections.sort(donations, new Comparator<Donation>() {
+            @Override
+            public int compare(Donation d1, Donation d2) {
+                if (d1.getCreatedAt() == d2.getCreatedAt())
+                    return 0;
+                return d1.getCreatedAt() > d2.getCreatedAt() ? -1 : 1;
+            }
+        });
     }
 
     @Override
@@ -59,7 +77,7 @@ public class LoadDonationsTask extends AsyncTask<Void, Void, List<Donation>> {
         } else {
             layout.setVisibility(View.VISIBLE);
             listView.setAdapter(new DonationListAdapter(context, donations));
-            GeneralUtils.setListViewHeightBasedOnChildren(listView);
+            //GeneralUtils.setListViewHeightBasedOnChildren(listView);
         }
     }
 }
