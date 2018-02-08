@@ -259,7 +259,7 @@
     <string name="name_optional_hint">name (optional)</string>
     <string name="message_optional_hint">message (optional)</string>
     <string name="donation_description">Donation amount: $</string>
-    <string name="make_donation_public">Show my donation to others</string>
+    <string name="make_donation_public">Show my donation here</string>
     <string name="donate">Donate</string>
     <string name="past_donations_title">Past contributions..</string>
     <string name="subreddit">subreddit</string>
