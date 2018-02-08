@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.activities;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Menu;
@@ -20,10 +18,6 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.asynctask.LoadDonationsTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.models.Donation;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.views.adapters.DonationListAdapter;
-
-import java.util.List;
 
 /**
  * Created by George on 1/22/2018.
@@ -38,6 +32,8 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     private LinearLayout layoutPastDonations;
     private ListView donationsListView;
     private int amountIndex;
+    private ImageView decrAmountBtn;
+    private ImageView incrAmountBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,31 +66,36 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         layoutPastDonations = findViewById(R.id.layout_past_donations);
         donationsListView = findViewById(R.id.listView_donations);
 
-        ImageView decreaseAmount = findViewById(R.id.imageView_donate_decrease_amount);
-        ImageView increaseAmount = findViewById(R.id.imageView_donate_increase_amount);
+        decrAmountBtn = findViewById(R.id.imageView_donate_decrease_amount);
+        incrAmountBtn = findViewById(R.id.imageView_donate_increase_amount);
+        decrAmountBtn.setOnClickListener(this);
+        incrAmountBtn.setOnClickListener(this);
         Button donateButton = findViewById(R.id.button_donate);
-        styleModifyAmountButton(decreaseAmount, false);
-        styleModifyAmountButton(increaseAmount, true);
-        decreaseAmount.setOnClickListener(this);
-        increaseAmount.setOnClickListener(this);
         donateButton.setOnClickListener(this);
     }
 
-    private void styleModifyAmountButton(ImageView imageView, boolean increase) {
+    private void updateModifyAmountButtons() {
+        styleModifyAmountButton(decrAmountBtn);
+        styleModifyAmountButton(incrAmountBtn);
+    }
+
+    private void styleModifyAmountButton(ImageView imageView) {
+        boolean increase = imageView.getId()==R.id.imageView_donate_increase_amount;
+        boolean enabled = increase ? amountIndex < Donation.DONATION_AMOUNTS.length-1 : amountIndex > 0;
         int drawable;
         float alpha;
         switch (MyApplication.currentBaseTheme) {
             case MyApplication.LIGHT_THEME:
                 drawable = increase ? R.drawable.ic_add_circle_outline_black_24dp : R.drawable.ic_remove_circle_outline_black_24dp;
-                alpha = 0.54f;
+                alpha = enabled ? 0.54f : 0.27f;
                 break;
             case MyApplication.DARK_THEME_LOW_CONTRAST:
                 drawable = increase ? R.drawable.ic_add_circle_outline_white_24dp : R.drawable.ic_remove_circle_outline_white_24dp;
-                alpha = 0.6f;
+                alpha = enabled ? 0.6f : 0.3f;
                 break;
             default:
                 drawable = increase ? R.drawable.ic_add_circle_outline_white_24dp : R.drawable.ic_remove_circle_outline_white_24dp;
-                alpha = 1f;
+                alpha = enabled ? 1f : 0.5f;
                 break;
         }
         imageView.setImageResource(drawable);
@@ -107,6 +108,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         messageField.setText("");
         amountText.setText(String.valueOf(Donation.DONATION_AMOUNTS[amountIndex]));
         makePublic.setChecked(true);
+        updateModifyAmountButtons();
     }
 
     private void makeDonation(Donation donation) {
@@ -122,9 +124,11 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.imageView_donate_decrease_amount:
                 decreaseAmount();
+                updateModifyAmountButtons();
                 break;
             case R.id.imageView_donate_increase_amount:
                 increaseAmount();
+                updateModifyAmountButtons();
                 break;
             case R.id.button_donate:
                 Donation donation = new Donation(nameField.getText().toString(), messageField.getText().toString(),
