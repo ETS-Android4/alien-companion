@@ -88,7 +88,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         switch (MyApplication.currentBaseTheme) {
             case MyApplication.LIGHT_THEME:
                 defaultIconOpacity = 0.54f;
-                defaultIconOpacityDisabled = 0.38f;
+                defaultIconOpacityDisabled = 0.27f;
                 break;
             case MyApplication.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
