@@ -565,9 +565,11 @@ public class GeneralUtils {
     }
 
     public static boolean containsProfanity(String input) {
-        input = input.toLowerCase();
-        for (String word : RedditConstants.PROFANE_WORDS) {
-            if (input.contains(word)) return true;
+        if (input != null) {
+            input = input.toLowerCase();
+            for (String word : RedditConstants.PROFANE_WORDS) {
+                if (input.contains(word)) return true;
+            }
         }
         return false;
     }
