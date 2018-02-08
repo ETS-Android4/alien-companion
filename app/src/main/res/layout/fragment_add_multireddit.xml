@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create multireddit"
+        android:text="@string/create_multireddit"
         android:id="@+id/textView_createMulti"
         android:textSize="20sp"
         android:layout_marginTop="6dp"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
-        android:hint="add subreddit"
+        android:hint="@string/subreddit"
         android:layout_margin="6dp"
         android:singleLine="true"
         android:imeOptions="actionDone"
@@ -52,14 +52,14 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CANCEL"
+                android:text="@string/cancel"
                 android:id="@+id/button_cancel"
                 style="@style/FlatButtonStyle" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ADD"
+                android:text="@string/add"
                 android:id="@+id/button_addSubreddit"
                 style="@style/FlatButtonStyle" />
 

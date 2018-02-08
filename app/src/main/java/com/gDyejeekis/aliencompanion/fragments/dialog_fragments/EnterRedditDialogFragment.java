@@ -12,8 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -21,38 +20,45 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
+import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView;
+import com.gDyejeekis.aliencompanion.views.adapters.SubredditAutoCompleteAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class EnterRedditDialogFragment extends ScalableDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private AutoCompleteTextView subredditField;
-    private CheckBox newWindowCheckbox;
+    private DelayAutoCompleteTextView subredditField;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enter_reddit, container, false);
 
-        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
-
         Button cancelButton = (Button) view.findViewById(R.id.button_cancel);
         Button viewButton = (Button) view.findViewById(R.id.button_view);
 
-        newWindowCheckbox = (CheckBox) view.findViewById(R.id.checkBox_new_window);
+        CheckBox newWindowCheckbox = (CheckBox) view.findViewById(R.id.checkBox_new_window);
         newWindowCheckbox.setChecked(MyApplication.prefs.getBoolean("newSubredditWindow", false));
         newWindowCheckbox.setOnCheckedChangeListener(this);
 
-        subredditField = (AutoCompleteTextView) view.findViewById(R.id.editText_subreddit);
-        subredditField.setAdapter(adapter);
+        subredditField = view.findViewById(R.id.editText_subreddit);
+        subredditField.setAdapter(new SubredditAutoCompleteAdapter(getContext()));
+        subredditField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Subreddit subreddit = (Subreddit) adapterView.getItemAtPosition(i);
+                String name = subreddit.getDisplayName();
+                subredditField.setText(name);
+                subredditField.setSelection(name.length());
+            }
+        });
         subredditField.requestFocus();
 
         cancelButton.setOnClickListener(this);

@@ -6,22 +6,21 @@
     android:background="?attr/themeDialogBackgroundColor">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Add subreddit(s)"
+        android:text="@string/add_subreddits"
         android:textColor="?attr/themeTextPrimaryColor"
         android:textSize="20sp"
         android:textStyle="bold"/>
 
-    <AutoCompleteTextView
+    <com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
-        android:hint="subreddit"
+        android:hint="@string/subreddit"
         android:layout_margin="6dp"
         android:singleLine="true"
         android:imeOptions="actionNext"
@@ -32,7 +31,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Subscribe"
+        android:text="@string/subscribe"
         android:id="@+id/checkBox_subscribe"
         android:checked="false"
         android:layout_marginLeft="6dp"
@@ -43,7 +42,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:gravity="right"
+        android:gravity="end"
         android:padding="8dp">
 
         <Button
@@ -51,12 +50,12 @@
             style="@style/FlatButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DONE" />
+            android:text="@string/done" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ADD"
+            android:text="@string/add"
             android:id="@+id/button_view"
             style="@style/FlatButtonStyle" />
     </LinearLayout>

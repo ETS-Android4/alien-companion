@@ -53,6 +53,7 @@
         <attr name="themeRaisedButtonBackground" format="reference"/>
         <attr name="themeFlatButtonBackground" format="reference"/>
         <attr name="themeCommentsButtonBackground" format="reference"/>
+        <attr name="themeDropdownBackground" format="reference"/>
         <!--<attr name="themeCardBorderColor" format="color" />-->
     </declare-styleable>
 

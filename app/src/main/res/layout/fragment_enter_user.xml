@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View user"
+        android:text="@string/view_user"
         android:id="@+id/textView"
         android:textSize="20sp"
         android:layout_marginTop="6dp"
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
-        android:hint="user"
+        android:hint="@string/user"
         android:layout_margin="6dp"
         android:singleLine="true"
         android:imeOptions="actionGo"
@@ -32,20 +32,20 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:gravity="right"
+        android:gravity="end"
         android:padding="8dp">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CANCEL"
+            android:text="@string/cancel"
             android:id="@+id/button_cancel"
             style="@style/FlatButtonStyle" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VIEW"
+            android:text="@string/view"
             android:id="@+id/button_view"
             style="@style/FlatButtonStyle" />
     </LinearLayout>

@@ -6,14 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
+import com.gDyejeekis.aliencompanion.views.adapters.SubredditAutoCompleteAdapter;
 
 /**
  * Created by sound on 1/29/2016.
@@ -37,12 +38,19 @@ public class AddMultiredditDialogFragment extends ScalableDialogFragment impleme
         addSubredditButton = (Button) view.findViewById(R.id.button_addSubreddit);
         createMultiButton = (Button) view.findViewById(R.id.button_createMulti);
 
-        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
-        subredditField.setAdapter(adapter);
+        subredditField.setAdapter(new SubredditAutoCompleteAdapter(getContext()));
+        subredditField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Subreddit subreddit = (Subreddit) adapterView.getItemAtPosition(i);
+                String name = subreddit.getDisplayName();
+                subredditField.setText(name);
+                subredditField.setSelection(name.length());
+            }
+        });
         subredditField.requestFocus();
 
-        subredditsListAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        subredditsListAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);
         subredditsList.setAdapter(subredditsListAdapter);
 
         cancelButton.setOnClickListener(this);

@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
+import android.util.Log;
+
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
@@ -18,6 +20,8 @@ import org.json.simple.JSONObject;
  * @author Simon Kassing
  */
 public class Subreddit extends Thing {
+
+    public static final String TAG = "Subreddit";
 	
     // The subreddit's display name
     private String displayName;
@@ -104,27 +108,24 @@ public class Subreddit extends Thing {
      *
      * @param obj The JSONObject to load Submission data from
      */
-    public Subreddit(JSONObject obj) {
-    	super(safeJsonToString(obj.get("name")));
-    	
+    public Subreddit(JSONObject obj, boolean autocomplete) {
+    	super(safeJsonToString(obj.get(autocomplete ? "id" : "name")));
         try {
-        	
-            setDisplayName(safeJsonToString(obj.get("display_name")));
-            setTitle(safeJsonToString(obj.get("title")));
-            setURL(safeJsonToString(obj.get("url")));
-            setCreated(safeJsonToDouble(obj.get("created")));
-            setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
-            setNSFW(safeJsonToBoolean(obj.get("over_18")));
-            setSubscribers(safeJsonToLong(obj.get("subscribers")));
-            setDescription(safeJsonToString(obj.get("description")));
-            setSubredditType(safeJsonToString(obj.get("subreddit_type")));
-            
-            
+            setDisplayName(safeJsonToString(obj.get(autocomplete ? "name" : "display_name")));
+            setSubscribers(safeJsonToLong(obj.get(autocomplete ? "numSubscribers" : "subscribers")));
+            if (!autocomplete) {
+                setTitle(safeJsonToString(obj.get("title")));
+                setURL(safeJsonToString(obj.get("url")));
+                setCreated(safeJsonToDouble(obj.get("created")));
+                setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
+                setNSFW(safeJsonToBoolean(obj.get("over_18")));
+                setDescription(safeJsonToString(obj.get("description")));
+                setSubredditType(safeJsonToString(obj.get("subreddit_type")));
+            }
         } catch (Exception e) {
-        	e.printStackTrace();
-            System.err.println("Error creating Subreddit");
+            Log.e(TAG, "Error creating subreddit");
+            e.printStackTrace();
         }
-        
     }
 
     public static Subreddit getSubreddit(HttpClient httpClient, String subreddit) {
@@ -137,7 +138,7 @@ public class Subreddit extends Thing {
         if(response instanceof JSONObject) {
             JSONObject object = (JSONObject) response;
             JSONObject data = (JSONObject) object.get("data");
-            Subreddit sr = new Subreddit(data);
+            Subreddit sr = new Subreddit(data, false);
             return sr;
         }
         return null;

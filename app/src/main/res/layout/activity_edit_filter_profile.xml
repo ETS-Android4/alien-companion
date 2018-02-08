@@ -19,8 +19,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Profile name"
+                android:text="@string/profile_name"
                 android:textColor="?attr/themeTextSecondaryColor"
                 android:layout_marginTop="16dp"
                 android:textStyle="italic"
@@ -30,9 +29,8 @@
                 android:id="@+id/editText_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:ems="10"
-                android:hint="name"
+                android:hint="@string/name"
                 android:inputType="text"
                 android:maxLines="1"
                 android:imeOptions="actionNext"
@@ -43,7 +41,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Domain filters"
+                android:text="@string/domain_filters"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -56,8 +54,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -67,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="domain"
+                    android:hint="@string/domain"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -86,7 +83,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Title filters"
+                android:text="@string/title_filters"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -99,8 +96,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -110,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="title keyword / phrase"
+                    android:hint="@string/title_filter_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -129,7 +125,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Flair filters"
+                android:text="@string/flair_filters"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -142,8 +138,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -153,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="flair"
+                    android:hint="@string/flair"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -172,7 +167,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Self-text filters"
+                android:text="@string/self_text_filters"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -185,8 +180,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -196,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="self-text keyword / phrase"
+                    android:hint="@string/self_text_filter_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -215,7 +209,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Subreddit filters"
+                android:text="@string/subreddit_filters"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -228,19 +222,18 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <AutoCompleteTextView
+                <com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView
                     android:id="@+id/editText_subreddit_filter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:completionThreshold="1"
                     android:ems="10"
-                    android:hint="subreddit"
+                    android:hint="@string/subreddit"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -259,7 +252,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="User filters"
+                android:text="@string/user_filters"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -272,8 +265,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -283,7 +275,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="user"
+                    android:hint="@string/user"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -302,7 +294,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Restrict profile to subreddits"
+                android:text="@string/restrict_profile_to_subreddits"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -315,19 +307,18 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <AutoCompleteTextView
+                <com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView
                     android:id="@+id/editText_subreddit_restrction"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:completionThreshold="1"
                     android:ems="10"
-                    android:hint="subreddit restriction"
+                    android:hint="@string/subreddit_restriction"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -346,7 +337,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Restrict profile to multireddits"
+                android:text="@string/restrict_profile_to_multireddits"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -359,8 +350,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -370,7 +360,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="multireddit restriction"
+                    android:hint="@string/multireddit_restriction"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -390,8 +380,7 @@
                 android:id="@+id/button_save_changes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save"
+                android:text="@string/save"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 style="@style/RaisedButtonStyle"/>

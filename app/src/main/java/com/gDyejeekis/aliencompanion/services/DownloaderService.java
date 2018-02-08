@@ -455,7 +455,7 @@ public class DownloaderService extends IntentService {
             if(!submission.isSelf()) {
                 syncUrl(submission.getURL(), submission.getDomain(), filename, syncOptions);
             }
-            else if(syncOptions.getSyncSelfTextLinkCount() > 0) {
+            else if(syncOptions.getSyncSelfTextLinkCount() > 0 && submission.getSelftextHTML() != null) {
                 syncSelfTextLinks(submission, filename, syncOptions);
             }
 
@@ -681,11 +681,15 @@ public class DownloaderService extends IntentService {
         return(b.build());
     }
 
+    // sometimes setContentText() throws nullpointerexception after calling a static method in SyncStateReceiver
+    // TODO: 2/6/2018 probably check if paused/cancelled before increasing progress (done), also look into making builder a class static field
     private void increaseProgress(NotificationCompat.Builder b, String displayName) {
         progress++;
         Log.d(TAG, progress + "/" + MAX_PROGRESS + " done");
-        b.setContentText("Syncing " + displayName + "...").setSmallIcon(android.R.drawable.stat_sys_download).setProgress(MAX_PROGRESS, progress, false);
-        notificationManager.notify(FOREGROUND_ID, b.build());
+        if (!manuallyPaused && !manuallyCancelled) {
+            b.setContentText("Syncing " + displayName + "...").setSmallIcon(android.R.drawable.stat_sys_download).setProgress(MAX_PROGRESS, progress, false);
+            notificationManager.notify(FOREGROUND_ID, b.build());
+        }
     }
 
     private void showFailedNotification(String reason) {

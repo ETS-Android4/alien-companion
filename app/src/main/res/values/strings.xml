@@ -174,7 +174,6 @@
     <string name="gridview">Gridview</string>
     <string name="high_quality">High quality</string>
     <string name="clear_synced">Clear synced</string>
-    <string name="subreddits">Subreddits</string>
     <string name="schedule">Schedule</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
@@ -263,5 +262,34 @@
     <string name="make_donation_public">Show my donation to others</string>
     <string name="donate">Donate</string>
     <string name="past_donations_title">Past contributions..</string>
+    <string name="subreddit">subreddit</string>
+    <string name="view_subreddit">View subreddit</string>
+    <string name="view_in_new_activity">View in a new window</string>
+    <string name="view">View</string>
+    <string name="view_user">View user</string>
+    <string name="user">user</string>
+    <string name="subreddit_restriction">subreddit restriction</string>
+    <string name="user_filters">User filters</string>
+    <string name="restrict_profile_to_subreddits">Restrict profile to subreddits</string>
+    <string name="restrict_profile_to_multireddits">Restrict profile to multireddits</string>
+    <string name="multireddit_restriction">multireddit restriction</string>
+    <string name="profile_name">Profile name</string>
+    <string name="name">name</string>
+    <string name="domain_filters">Domain filters</string>
+    <string name="domain">domain</string>
+    <string name="title_filters">Title filters</string>
+    <string name="title_filter_hint">title keyword / phrase</string>
+    <string name="flair_filters">Flair filters</string>
+    <string name="flair">flair</string>
+    <string name="self_text_filters">Self-text filters</string>
+    <string name="self_text_filter_hint">self-text keyword / phrase</string>
+    <string name="subreddit_filters">Subreddit filters</string>
+    <string name="subreddits">Subreddits</string>
+    <string name="multireddits">Multireddits</string>
+    <string name="multireddit">multireddit</string>
+    <string name="create_multireddit">Create multireddit</string>
+    <string name="add_subreddits">Add subreddit(s)</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="done">Done</string>
 
 </resources>

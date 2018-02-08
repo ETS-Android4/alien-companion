@@ -7,8 +7,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.models.filters.DomainFilter;
 import com.gDyejeekis.aliencompanion.models.filters.Filter;
 import com.gDyejeekis.aliencompanion.models.filters.FilterProfile;
@@ -28,7 +27,9 @@ import com.gDyejeekis.aliencompanion.models.filters.TitleFilter;
 import com.gDyejeekis.aliencompanion.models.filters.UserFilter;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView;
 import com.gDyejeekis.aliencompanion.views.adapters.RemovableItemListAdapter;
+import com.gDyejeekis.aliencompanion.views.adapters.SubredditAutoCompleteAdapter;
 
 import java.util.List;
 
@@ -45,9 +46,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     private EditText titleField;
     private EditText flairField;
     private EditText selfTextField;
-    private AutoCompleteTextView subredditField;
+    private DelayAutoCompleteTextView subredditField;
     private EditText userField;
-    private AutoCompleteTextView subRestrField;
+    private DelayAutoCompleteTextView subRestrField;
     private EditText multiRestrField;
     private ListView domains;
     private ListView titles;
@@ -87,9 +88,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         titleField = (EditText) findViewById(R.id.editText_title_filter);
         flairField = (EditText) findViewById(R.id.editText_flair_filter);
         selfTextField = (EditText) findViewById(R.id.editText_self_text_filter);
-        subredditField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit_filter);
+        subredditField = findViewById(R.id.editText_subreddit_filter);
         userField = (EditText) findViewById(R.id.editText_user_filter);
-        subRestrField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit_restrction);
+        subRestrField = findViewById(R.id.editText_subreddit_restrction);
         multiRestrField = (EditText) findViewById(R.id.editText_multireddit_restrction);
         domains = (ListView) findViewById(R.id.listView_domain_filters);
         titles = (ListView) findViewById(R.id.listView_title_filters);
@@ -137,10 +138,27 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         addMultiRestr.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
-        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
-        subredditField.setAdapter(adapter);
-        subRestrField.setAdapter(adapter);
+        SubredditAutoCompleteAdapter autocompleteAdapter = new SubredditAutoCompleteAdapter(this);
+        subredditField.setAdapter(autocompleteAdapter);
+        subredditField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Subreddit subreddit = (Subreddit) adapterView.getItemAtPosition(i);
+                String name = subreddit.getDisplayName();
+                subredditField.setText(name);
+                subredditField.setSelection(name.length());
+            }
+        });
+        subRestrField.setAdapter(autocompleteAdapter);
+        subRestrField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Subreddit subreddit = (Subreddit) adapterView.getItemAtPosition(i);
+                String name = subreddit.getDisplayName();
+                subRestrField.setText(name);
+                subRestrField.setSelection(name.length());
+            }
+        });
     }
 
     private void styleAddImageView(ImageView imageView) {

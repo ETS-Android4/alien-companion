@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View subreddit"
+        android:text="@string/view_subreddit"
         android:id="@+id/textView"
         android:textSize="20sp"
         android:layout_marginTop="6dp"
@@ -17,11 +17,11 @@
         android:textStyle="bold"
         android:textColor="?attr/themeTextPrimaryColor" />
 
-    <AutoCompleteTextView
+    <com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_subreddit"
-        android:hint="subreddit"
+        android:hint="@string/subreddit"
         android:singleLine="true"
         android:imeOptions="actionGo"
         android:completionThreshold="1"
@@ -32,7 +32,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View in a new window"
+        android:text="@string/view_in_new_activity"
         android:id="@+id/checkBox_new_window"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
@@ -43,20 +43,20 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:gravity="right"
+        android:gravity="end"
         android:padding="8dp">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CANCEL"
+            android:text="@string/cancel"
             android:id="@+id/button_cancel"
             style="@style/FlatButtonStyle" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VIEW"
+            android:text="@string/view"
             android:id="@+id/button_view"
             style="@style/FlatButtonStyle" />
     </LinearLayout>

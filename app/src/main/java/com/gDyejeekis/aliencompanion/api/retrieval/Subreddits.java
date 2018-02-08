@@ -5,6 +5,7 @@ import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class Subreddits implements ActorDriven {
 
                         // Create and add subreddit
                         data = ((JSONObject) data.get("data"));
-                        subreddits.add(new Subreddit(data));
+                        subreddits.add(new Subreddit(data, false));
                     }
 				}
 			}
@@ -224,5 +225,22 @@ public class Subreddits implements ActorDriven {
         			(before != null) ? before.getFullName() : ""
         	);
     }
+
+    public List<Subreddit> autocomplete(boolean includeOver18, boolean includeProfiles, String query) throws RetrievalFailedException, RedditError {
+    	String params = "";
+    	params = ParamFormatter.addParameter(params, "include_over_18", String.valueOf(includeOver18));
+    	params = ParamFormatter.addParameter(params, "include_profiles", String.valueOf(includeProfiles));
+    	params = ParamFormatter.addParameter(params, "query", query);
+		String endpoint = String.format(ApiEndpointUtils.SUBREDDIT_AUTOCOMPLETE, params);
+		Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, endpoint, null).getResponseObject();
+		JSONArray jsonArray = (JSONArray) ((JSONObject) response).get("subreddits");
+		List<Subreddit> subreddits = new ArrayList<>();
+		JSONObject data;
+		for (Object obj : jsonArray) {
+			data = (JSONObject) obj;
+			subreddits.add(new Subreddit(data, true));
+		}
+		return subreddits;
+	}
 
 }

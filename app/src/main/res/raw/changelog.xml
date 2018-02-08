@@ -48,7 +48,9 @@
         <changelogtext>Fixed various link handling issues</changelogtext>
         <!-- other changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added filters in the form of filter profiles]]></changelogtext>
+        <changelogtext>Subreddit suggestions are now retrieved from the reddit API instead of a static list</changelogtext>
         <changelogtext>Combined 'Posts' and 'Comments' settings under one preference screen</changelogtext>
+        <changelogtext>Added 'Show NSFW subreddit suggestions' option under 'Posts and comments'</changelogtext>
         <changelogtext>Added 'Device settings' option under 'Other'</changelogtext>
         <changelogtext>Pressing the system's back button while using the in-app browser will now load the previous page (if there is one)</changelogtext>
         <changelogtext>Links to PDF files now open in the default browser/PDF viewer</changelogtext>

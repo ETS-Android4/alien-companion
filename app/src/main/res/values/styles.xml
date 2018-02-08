@@ -209,6 +209,7 @@
         <item name="themeRaisedButtonBackground">@drawable/light_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_light</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_light</item>
+        <item name="themeDropdownBackground">@drawable/touch_selector_dropdown_light</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
     </style>
 
@@ -227,6 +228,7 @@
         <item name="themeRaisedButtonBackground">@drawable/material_blue_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_blue</item>
+        <item name="themeDropdownBackground">@drawable/touch_selector_dropdown_dark</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
     </style>
 
@@ -245,6 +247,7 @@
         <item name="themeRaisedButtonBackground">@drawable/material_grey_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_material_grey</item>
+        <item name="themeDropdownBackground">@drawable/touch_selector_dropdown_dark</item>
         <!--<item name="themeCardBorderColor">@color/chglib_material_background_default_divider_color</item>-->
     </style>
 
@@ -263,6 +266,7 @@
         <item name="themeRaisedButtonBackground">@drawable/dark_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
+        <item name="themeDropdownBackground">@drawable/touch_selector_dropdown_dark</item>
         <!--<item name="themeCardBorderColor">@color/darker_gray</item>-->
     </style>
 
@@ -281,6 +285,7 @@
         <item name="themeRaisedButtonBackground">@drawable/dark_raised_button_background</item>
         <item name="themeFlatButtonBackground">@drawable/touch_selector_button_dark</item>
         <item name="themeCommentsButtonBackground">@drawable/list_comments_button_background_dark</item>
+        <item name="themeDropdownBackground">@drawable/touch_selector_dropdown_dark</item>
         <!--<item name="themeCardBorderColor">@color/darker_gray</item>-->
     </style>
 

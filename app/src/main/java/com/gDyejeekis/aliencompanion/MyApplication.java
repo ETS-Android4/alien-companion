@@ -152,6 +152,7 @@ public class MyApplication extends Application {
     public static int drawerGravity;
     public static boolean endlessPosts;
     public static boolean showNSFWpreview;
+    public static boolean showNSFWsuggestions;
     public static boolean hideNSFW;
     public static int initialCommentCount;
     public static int initialCommentDepth;
@@ -518,6 +519,7 @@ public class MyApplication extends Application {
         hqThumbnails = prefs.getBoolean("hqThumb", true);
         noThumbnails = prefs.getBoolean("noThumb", false);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
+        showNSFWsuggestions = prefs.getBoolean("showNSFWsuggestions", false);
         hideNSFW = prefs.getBoolean("hideNSFW", true);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
         switch (swipeSetting) {

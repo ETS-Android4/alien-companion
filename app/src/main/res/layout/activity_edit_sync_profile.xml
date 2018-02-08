@@ -20,11 +20,9 @@
             android:paddingRight="8dp">
 
             <TextView
-                android:id="@+id/textView29"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Profile name"
+                android:text="@string/profile_name"
                 android:textColor="?attr/themeTextSecondaryColor"
                 android:layout_marginTop="16dp"
                 android:textStyle="italic"
@@ -36,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="name"
+                android:hint="@string/name"
                 android:inputType="text"
                 android:maxLines="1"
                 android:imeOptions="actionNext"
@@ -49,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Subreddits"
+                android:text="@string/subreddits"
                 android:layout_marginTop="16dp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"
@@ -66,24 +64,22 @@
             <ListView
                 android:id="@+id/listView_subreddits"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <AutoCompleteTextView
+                <com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView
                     android:id="@+id/editText_subreddit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:completionThreshold="1"
                     android:ems="10"
-                    android:hint="subreddit"
+                    android:hint="@string/subreddit"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"
@@ -104,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Multireddits"
+                android:text="@string/multireddits"
                 android:layout_marginTop="16dp"
                 android:textStyle="italic"
                 android:textColor="?attr/themeTextSecondaryColor"
@@ -126,8 +122,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -137,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="multireddit"
+                    android:hint="@string/multireddit"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLines="1"

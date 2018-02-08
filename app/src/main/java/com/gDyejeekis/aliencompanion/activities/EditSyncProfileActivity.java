@@ -7,8 +7,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,14 +16,16 @@ import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileScheduleDialogFragment;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncSchedule;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView;
 import com.gDyejeekis.aliencompanion.views.adapters.RemovableItemListAdapter;
+import com.gDyejeekis.aliencompanion.views.adapters.SubredditAutoCompleteAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     private boolean isNewProfile;
     private EditText nameField;
     private EditText multiredditField;
-    private AutoCompleteTextView subredditField;
+    private DelayAutoCompleteTextView subredditField;
     //private TextView subredditsTextView;
     //private TextView multiredditsTextView;
     //private TextView schedulesTextView;
@@ -74,7 +75,7 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     private void initFields() {
         nameField = (EditText) findViewById(R.id.editText_profile_name);
         multiredditField = (EditText) findViewById(R.id.editText_multireddit);
-        subredditField = (AutoCompleteTextView) findViewById(R.id.editText_subreddit);
+        subredditField = findViewById(R.id.editText_subreddit);
         subredditsListView = (ListView) findViewById(R.id.listView_subreddits);
         multiredditsListView = (ListView) findViewById(R.id.listView_multireddits);
         schedulesListView = (ListView) findViewById(R.id.listView_schedules);
@@ -99,9 +100,16 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
         syncOptionsButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
-        int dropdownResource = (MyApplication.nightThemeEnabled) ? R.layout.simple_dropdown_item_1line_dark : android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, dropdownResource, RedditConstants.TOP_SUBREDDIT_SUGGESTIONS);
-        subredditField.setAdapter(adapter);
+        subredditField.setAdapter(new SubredditAutoCompleteAdapter(this));
+        subredditField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Subreddit subreddit = (Subreddit) adapterView.getItemAtPosition(i);
+                String name = subreddit.getDisplayName();
+                subredditField.setText(name);
+                subredditField.setSelection(name.length());
+            }
+        });
     }
 
     private void styleAddImageView(ImageView imageView) {
