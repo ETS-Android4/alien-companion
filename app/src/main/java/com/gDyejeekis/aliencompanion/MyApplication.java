@@ -429,7 +429,8 @@ public class MyApplication extends Application {
                         public void run() {
                             CleaningUtils.clearApplicationData(appContext);
                             // version code 1000 was the version that stopped using the public pics dir for synced images
-                            if (lastKnownVersionCode < 1000) CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);
+                            // (DISABLED FOR NOW)
+                            //if (lastKnownVersionCode < 1000) CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);
                         }
                     });
                 }
