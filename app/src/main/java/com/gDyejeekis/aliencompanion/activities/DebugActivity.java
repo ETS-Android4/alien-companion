@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,8 @@ import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
+
+import java.io.File;
 
 /**
  * Created by George on 12/4/2016.
@@ -38,6 +41,7 @@ public class DebugActivity extends ToolbarActivity {
         initToolbar();
         setupLinkHandlerTest();
         setupUrlTests();
+        setupStorageDebug();
     }
 
     @Override
@@ -71,5 +75,20 @@ public class DebugActivity extends ToolbarActivity {
         stringBuilder = SpanUtils.modifyURLSpan(this, stringBuilder);
         urlTests.setText(stringBuilder);
         urlTests.setMovementMethod(MyLinkMovementMethod.getInstance());
+    }
+
+    private void setupStorageDebug() {
+        final Button logInternalBtn = findViewById(R.id.button_log_internal_storage);
+        logInternalBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File dir = getCacheDir().getParentFile();
+                Log.d(TAG, "------------------ Files in " + dir.getAbsolutePath() + " --------------------");
+                File[] files = dir.listFiles();
+                for (File file : files) {
+                    Log.d(TAG, file.getName());
+                }
+            }
+        });
     }
 }

@@ -16,7 +16,6 @@
             android:text="Link handler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView25"
             android:textSize="18sp"
             android:focusable="true"
             android:focusableInTouchMode="true"/>
@@ -47,7 +46,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/layout_url_tests"
         android:padding="8dp">
 
@@ -55,7 +54,6 @@
             android:text="URL tests"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView26"
             android:textSize="18sp" />
 
         <TextView
@@ -64,6 +62,29 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView_url_tests"
             android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:id="@+id/layout_storage_debug">
+
+        <TextView
+            android:text="Storage debug"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
+
+        <Button
+            android:text="Log internal storage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_log_internal_storage"
+            android:textSize="14sp"
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 
