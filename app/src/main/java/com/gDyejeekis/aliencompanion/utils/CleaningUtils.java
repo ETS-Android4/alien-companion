@@ -30,6 +30,7 @@ public class CleaningUtils {
             File dir = context.getCacheDir();
             StorageUtils.deleteDir(dir);
         } catch (Exception e) {
+            Log.e(TAG, "Error deleting cache directory");
             e.printStackTrace();
         }
     }
@@ -60,12 +61,26 @@ public class CleaningUtils {
         }
     }
 
-    public static void clearAccountData(Context context) {
-        context.deleteFile(MyApplication.SAVED_ACCOUNTS_FILENAME);
-        SharedPreferences.Editor editor = MyApplication.prefs.edit();
-        editor.putString("currentAccountName", "Logged out");
-        editor.apply();
-        NavDrawerAdapter.currentAccountName = "Logged out";
+    public static boolean clearAccountData(Context context) {
+        return deletePrivateFile(context, MyApplication.SAVED_ACCOUNTS_FILENAME);
+    }
+
+    public static boolean clearSyncProfiles(Context context) {
+        return deletePrivateFile(context, MyApplication.SYNC_PROFILES_FILENAME);
+    }
+
+    public static boolean clearFilterProfiles(Context context) {
+        return deletePrivateFile(context, MyApplication.FILTER_PROFILES_FILENAME);
+    }
+
+    public static boolean clearOfflineActions(Context context) {
+        return deletePrivateFile(context, MyApplication.OFFLINE_USER_ACTIONS_FILENAME);
+    }
+
+    public static boolean deletePrivateFile(Context context, String name) {
+        boolean success = context.deleteFile(name);
+        Log.d(TAG, (success ? "Successfully deleted " : "Failed to delete ") + name);
+        return success;
     }
 
     public static void clearAllSyncedData(Context context, final String name) {
@@ -272,11 +287,6 @@ public class CleaningUtils {
         if(file!=null && file.delete()) {
             Log.d(TAG, "Deleted " + file.getAbsolutePath());
         }
-    }
-
-    public static void clearApplicationData(Context context) {
-        clearInternalStorageData(context);
-        clearExternalStorageData(context);
     }
 
     public static void clearInternalStorageData(Context context) {

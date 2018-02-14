@@ -424,10 +424,17 @@ public class MyApplication extends Application {
             if (lastKnownVersionCode < clearAppDataVersionCode) {
                 if (lastKnownVersionCode != 0) {
                     editor.clear();
+                    CleaningUtils.clearAccountData(appContext);
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            CleaningUtils.clearApplicationData(appContext);
+                            CleaningUtils.clearSyncProfiles(appContext);
+                            CleaningUtils.clearFilterProfiles(appContext);
+                            CleaningUtils.clearOfflineActions(appContext);
+                            CleaningUtils.clearCache(appContext);
+                            CleaningUtils.clearAllSyncedData(appContext); // this will clear the synced data in the internal storage since 'preferExternalStorage' is always false here
+                            CleaningUtils.clearExternalStorageData(appContext);
+
                             // version code 1000 was the version that stopped using the public pics dir for synced images
                             // (DISABLED FOR NOW)
                             //if (lastKnownVersionCode < 1000) CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);

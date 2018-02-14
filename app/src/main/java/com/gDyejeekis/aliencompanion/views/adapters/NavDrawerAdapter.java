@@ -63,6 +63,8 @@ import java.util.List;
  */
 public class NavDrawerAdapter extends RecyclerView.Adapter {
 
+    public static final String TAG = "NavDrawerAdapter";
+
     public static final int VIEW_TYPE_HEADER = 0;
 
     public static final int VIEW_TYPE_MENU_ITEM = 1;
@@ -287,8 +289,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             return savedAccounts;
         } catch (IOException | ClassNotFoundException e) {
             if(e instanceof ClassNotFoundException) {
-                Log.d("geotest", "account data deprecated or corrupt, clearing account data...");
+                Log.d(TAG, "Account data deprecated or corrupt, clearing account data...");
                 CleaningUtils.clearAccountData(activity);
+                currentAccountName = "Logged out";
+                SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                editor.putString("currentAccountName", currentAccountName);
+                editor.apply();
             }
             e.printStackTrace();
         }
