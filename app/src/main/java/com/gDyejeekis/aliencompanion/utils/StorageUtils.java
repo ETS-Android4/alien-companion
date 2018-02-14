@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -145,15 +144,16 @@ public class StorageUtils {
         return null;
     }//met
 
-    public static void deleteRecursive(File file) {
-        if(file.isDirectory()) {
-            File[] files = file.listFiles();
-            for(File file1 : files) {
-                deleteRecursive(file1);
+    public static void deleteFileRecursive(File file) {
+        if (file != null) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                for (File aFile : files) {
+                    deleteFileRecursive(aFile);
+                }
+            } else {
+                file.delete();
             }
-        }
-        else {
-            file.delete();
         }
     }
 
@@ -209,8 +209,8 @@ public class StorageUtils {
     public static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
                 if (!success) {
                     return false;
                 }

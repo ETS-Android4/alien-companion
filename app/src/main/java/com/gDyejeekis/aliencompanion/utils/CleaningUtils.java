@@ -1,7 +1,6 @@
 package com.gDyejeekis.aliencompanion.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
@@ -13,7 +12,6 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
-import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 
 import java.io.File;
 import java.util.List;
@@ -100,7 +98,7 @@ public class CleaningUtils {
     public static void clearSyncedArticles(Context context, final String name) {
         File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedArticlesDir(context), name);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             dir.delete();
         }
     }
@@ -108,7 +106,7 @@ public class CleaningUtils {
     public static void clearSyncedArticles(Context context) {
         File dir = GeneralUtils.getSyncedArticlesDir(context);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             File[] dirs = dir.listFiles();
             for(File file : dirs) {
                 file.delete();
@@ -119,7 +117,7 @@ public class CleaningUtils {
     public static void clearSyncedThumbnails(Context context, final String name) {
         File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedThumbnailsDir(context), name);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             dir.delete();
         }
     }
@@ -127,7 +125,7 @@ public class CleaningUtils {
     public static void clearSyncedThumbnails(Context context) {
         File dir = GeneralUtils.getSyncedThumbnailsDir(context);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             File[] dirs = dir.listFiles();
             for(File file : dirs) {
                 file.delete();
@@ -138,7 +136,7 @@ public class CleaningUtils {
     public static void clearSyncedRedditData(Context context, final String name) {
         File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(context), name);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             dir.delete();
         }
     }
@@ -146,7 +144,7 @@ public class CleaningUtils {
     public static void clearSyncedRedditData(Context context) {
         File dir = GeneralUtils.getSyncedRedditDataDir(context);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             File[] dirs = dir.listFiles();
             for(File file : dirs) {
                 file.delete();
@@ -157,7 +155,7 @@ public class CleaningUtils {
     public static void clearSyncedMedia(Context context) {
         File dir = GeneralUtils.getSyncedMediaDir(context);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             File[] dirs = dir.listFiles();
             for(File file : dirs) {
                 file.delete();
@@ -168,7 +166,7 @@ public class CleaningUtils {
     public static void clearSyncedMedia(Context context, final String name) {
         File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedMediaDir(context), name);
         if(dir.exists()) {
-            StorageUtils.deleteRecursive(dir);
+            StorageUtils.deleteFileRecursive(dir);
             dir.delete();
         }
     }
@@ -296,7 +294,7 @@ public class CleaningUtils {
             String[] children = appDir.list();
             for (String s : children) {
                 if (!s.equals("lib")) {
-                    deleteDir(new File(appDir, s));
+                    StorageUtils.deleteDir(new File(appDir, s));
                     Log.d(TAG, "**************** File " + appDir.getAbsolutePath() + "/" + s + " DELETED *******************");
                 }
             }
@@ -308,7 +306,7 @@ public class CleaningUtils {
             File externalDirs[] = ContextCompat.getExternalFilesDirs(context, null);
             for (File dir : externalDirs) {
                 if (dir.exists()) {
-                    deleteDir(dir);
+                    StorageUtils.deleteDir(dir);
                     Log.d(TAG, "**************** File " + dir.getAbsolutePath() + " DELETED *******************");
                 }
             }
@@ -317,33 +315,26 @@ public class CleaningUtils {
         }
     }
 
-    // this should only be used when updating from a version prior to 1000, clears all images/gifs from the public pictures directory
+    // only use when updating from a version code lower than 1000 (not 0), clears all synced data in the internal storage files directory
+    public static void clearInternalStorageSyncedData(Context context) {
+        File filesDir = context.getFilesDir();
+        StorageUtils.deleteFileRecursive(filesDir);
+    }
+
+    // only use when updating from a version code lower than 1000 (not 0), clears all images/gifs from the public pictures directory
     public static void clearPublicPicsDirSyncedMedia(Context context) {
         try {
             File publicDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), MyApplication.SAVED_PICTURES_PUBLIC_DIR_NAME);
             File[] files = publicDir.listFiles();
             for (File file : files) {
                 if (file.isDirectory()) {
-                    deleteDir(file);
+                    StorageUtils.deleteDir(file);
                     Log.d(TAG, "**************** File " + file.getAbsolutePath() + " DELETED *******************");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String child : children) {
-                boolean success = deleteDir(new File(dir, child));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
     }
 
 }

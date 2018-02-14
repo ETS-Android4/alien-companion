@@ -421,7 +421,7 @@ public class MyApplication extends Application {
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
         if (lastKnownVersionCode!=currentVersionCode) {
             SharedPreferences.Editor editor = prefs.edit();
-            if (lastKnownVersionCode < clearAppDataVersionCode) {
+            if (lastKnownVersionCode < clearAppDataVersionCode || lastKnownVersionCode == 0) {
                 if (lastKnownVersionCode != 0) {
                     editor.clear();
                     CleaningUtils.clearAccountData(appContext);
@@ -435,9 +435,10 @@ public class MyApplication extends Application {
                             CleaningUtils.clearAllSyncedData(appContext); // this will clear the synced data in the internal storage since 'preferExternalStorage' is always false here
                             CleaningUtils.clearExternalStorageData(appContext);
 
-                            // version code 1000 was the version that stopped using the public pics dir for synced images
-                            // (DISABLED FOR NOW)
-                            //if (lastKnownVersionCode < 1000) CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);
+                            if (lastKnownVersionCode < 1000) {
+                                CleaningUtils.clearInternalStorageSyncedData(appContext);
+                                //CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);
+                            }
                         }
                     });
                 }
