@@ -59,6 +59,12 @@ public class CleaningUtils {
         }
     }
 
+    public static void clearAppWebviewData(Context context) {
+        File rootDir = context.getCacheDir().getParentFile();
+        File webviewDir = new File(rootDir, "app_webview");
+        StorageUtils.deleteDir(webviewDir);
+    }
+
     public static boolean clearAccountData(Context context) {
         return deletePrivateFile(context, MyApplication.SAVED_ACCOUNTS_FILENAME);
     }

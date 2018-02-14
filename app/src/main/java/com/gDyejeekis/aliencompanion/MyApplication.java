@@ -432,6 +432,7 @@ public class MyApplication extends Application {
                             CleaningUtils.clearFilterProfiles(appContext);
                             CleaningUtils.clearOfflineActions(appContext);
                             CleaningUtils.clearCache(appContext);
+                            CleaningUtils.clearAppWebviewData(appContext);
                             CleaningUtils.clearAllSyncedData(appContext); // this will clear the synced data in the internal storage since 'preferExternalStorage' is always false here
                             CleaningUtils.clearExternalStorageData(appContext);
 
