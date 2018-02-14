@@ -174,7 +174,7 @@ public class SyncProfile extends Profile implements Serializable {
 
     // this should be unique for every single time window of schedule
     private int getPendingIntentRequestCode(SyncSchedule schedule, int timeWindow) {
-        return profileId + schedule.getScheduleId() + timeWindow;
+        return profileId.hashCode() + schedule.getScheduleId().hashCode() + timeWindow;
     }
 
     private Intent getSyncIntent(Context context) {
@@ -285,10 +285,6 @@ public class SyncProfile extends Profile implements Serializable {
     public boolean isActive() {
         //if(!hasTime) return false;
         return isActive;
-    }
-
-    public int getProfileId() {
-        return profileId;
     }
 
     public List<SyncSchedule> getSchedules() {

@@ -24,24 +24,24 @@ public abstract class Profile implements Serializable {
 
     public static final String TAG = "Profile";
 
-    protected final int profileId;
+    protected final String profileId;
     protected String name;
 
     public Profile(String name) {
-        profileId = UUID.randomUUID().hashCode();
+        profileId = UUID.randomUUID().toString();
         this.name = name;
     }
 
     @Override
     public boolean equals(Object o) {
-        return this.getClass().isInstance(o) && ((Profile) o).getProfileId() == this.profileId;
+        return this.getClass().isInstance(o) && ((Profile) o).getProfileId().equals(this.profileId);
     }
 
-    public static Profile getProfileById(int id, File file) {
+    public static Profile getProfileById(String id, File file) {
         try {
             List<Profile> profiles = (List<Profile>) GeneralUtils.readObjectFromFile(file);
             for(Profile profile : profiles) {
-                if(profile.getProfileId() == id) {
+                if(profile.getProfileId().equals(id)) {
                     return profile;
                 }
             }
@@ -51,7 +51,7 @@ public abstract class Profile implements Serializable {
         return null;
     }
 
-    public int getProfileId() {
+    public String getProfileId() {
         return profileId;
     }
 
@@ -93,7 +93,7 @@ public abstract class Profile implements Serializable {
             else {
                 int index = -1;
                 for (Profile profile : profiles) {
-                    if (profile.getProfileId() == this.getProfileId()) {
+                    if (profile.getProfileId().equals(this.profileId)) {
                         index = profiles.indexOf(profile);
                         break;
                     }

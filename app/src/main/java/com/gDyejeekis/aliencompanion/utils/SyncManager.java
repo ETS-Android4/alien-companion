@@ -59,15 +59,15 @@ public class SyncManager {
             intent.putExtra("profile", syncProfile);
             intent.putExtra("reschedule", reschedule);
             toastMessage = syncProfile.getName() + " added to sync queue";
-            name = String.valueOf(syncProfile.getProfileId());
+            name = syncProfile.getProfileId();
         }
 
-        public SyncQueueItem(Context context, String syncProfileName, int syncProfileId, boolean reschedule) {
+        public SyncQueueItem(Context context, String syncProfileName, String syncProfileId, boolean reschedule) {
             intent = new Intent(context, DownloaderService.class);
             intent.putExtra("profileId", syncProfileId);
             intent.putExtra("reschedule", reschedule);
             toastMessage = syncProfileName + " added to sync queue";
-            name = String.valueOf(syncProfileId);
+            name = syncProfileId;
         }
 
         String getName() {

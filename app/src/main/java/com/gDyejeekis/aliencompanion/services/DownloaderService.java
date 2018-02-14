@@ -113,8 +113,8 @@ public class DownloaderService extends IntentService {
         MyApplication.checkAccountInit(this, httpClient);
 
         SyncProfile profile = null;
-        int profileId = i.getIntExtra("profileId", -1);
-        if(profileId!=-1) {
+        final String profileId = i.getStringExtra("profileId");
+        if(profileId!=null) {
             profile = (SyncProfile) Profile.getProfileById(profileId, new File(getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
         }
         //else {

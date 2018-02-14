@@ -33,20 +33,20 @@ public class SyncSchedule implements Serializable {
         }
     }
 
-    private final int scheduleId;
+    private final String scheduleId;
     private int startTime;
     private int endTime;
     private String days;
 
     public SyncSchedule() {
-        scheduleId = UUID.randomUUID().hashCode();
+        scheduleId = UUID.randomUUID().toString();
         startTime = -1;
         endTime = -1;
         days = "";
     }
 
     public SyncSchedule(int startTime, int endTime, String days) {
-        this.scheduleId = UUID.randomUUID().hashCode();
+        this.scheduleId = UUID.randomUUID().toString();
         this.startTime = startTime;
         this.endTime = endTime;
         this.days = days;
@@ -158,7 +158,7 @@ public class SyncSchedule implements Serializable {
         return days;
     }
 
-    public int getScheduleId() {
+    public String getScheduleId() {
         return scheduleId;
     }
 
@@ -208,7 +208,7 @@ public class SyncSchedule implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof SyncSchedule && ((SyncSchedule) o).getScheduleId() == this.scheduleId;
+        return o instanceof SyncSchedule && ((SyncSchedule) o).getScheduleId().equals(this.scheduleId);
     }
 
 }
