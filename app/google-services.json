@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1005618592826",
+    "firebase_url": "https://alien-companion.firebaseio.com",
+    "project_id": "alien-companion",
+    "storage_bucket": "alien-companion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005618592826:android:adcd98279523c861",
+        "android_client_info": {
+          "package_name": "com.gDyejeekis.aliencompanion.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1005618592826-k4tckkad0ffik6q7vuga7glm1u3eg40q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiufttldx1gyoDQrOVEik9r6TjGApGiB4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
