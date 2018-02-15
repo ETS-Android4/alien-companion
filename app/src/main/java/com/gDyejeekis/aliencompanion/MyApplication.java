@@ -26,6 +26,7 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
@@ -428,18 +429,14 @@ public class MyApplication extends Application {
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
-                            CleaningUtils.clearSyncProfiles(appContext);
-                            CleaningUtils.clearFilterProfiles(appContext);
-                            CleaningUtils.clearOfflineActions(appContext);
-                            CleaningUtils.clearCache(appContext);
-                            CleaningUtils.clearAppWebviewData(appContext);
-                            CleaningUtils.clearAllSyncedData(appContext); // this will clear the synced data in the internal storage since 'preferExternalStorage' is always false here
+                            FilenameFilter filter = new FilenameFilter() {
+                                @Override
+                                public boolean accept(File file, String s) {
+                                    return !s.equals("shared_prefs") && !s.equals(SAVED_ACCOUNTS_FILENAME);
+                                }
+                            };
+                            CleaningUtils.clearInternalStorageData(appContext, filter);
                             CleaningUtils.clearExternalStorageData(appContext);
-
-                            if (lastKnownVersionCode < 1000) {
-                                CleaningUtils.clearInternalStorageSyncedData(appContext);
-                                //CleaningUtils.clearPublicPicsDirSyncedMedia(appContext);
-                            }
                         }
                     });
                 }

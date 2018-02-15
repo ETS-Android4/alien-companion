@@ -14,6 +14,7 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.List;
 
 /**
@@ -293,20 +294,20 @@ public class CleaningUtils {
         }
     }
 
-    public static void clearInternalStorageData(Context context) {
+    // clears all data in the app's internal storage root directory except for the files excluded by the filter
+    public static void clearInternalStorageData(Context context, FilenameFilter filenameFilter) {
         File cache = context.getCacheDir();
         File appDir = new File(cache.getParent());
         if (appDir.exists()) {
-            String[] children = appDir.list();
+            String[] children = appDir.list(filenameFilter);
             for (String s : children) {
-                if (!s.equals("lib")) {
-                    StorageUtils.deleteDir(new File(appDir, s));
-                    Log.d(TAG, "**************** File " + appDir.getAbsolutePath() + "/" + s + " DELETED *******************");
-                }
+                StorageUtils.deleteDir(new File(appDir, s), filenameFilter);
+                Log.d(TAG, "**************** File " + appDir.getAbsolutePath() + "/" + s + " CLEARED *******************");
             }
         }
     }
 
+    // clears all data in all external storage directories
     public static void clearExternalStorageData(Context context) {
         try {
             File externalDirs[] = ContextCompat.getExternalFilesDirs(context, null);
@@ -321,13 +322,7 @@ public class CleaningUtils {
         }
     }
 
-    // only use when updating from a version code lower than 1000 (not 0), clears all synced data in the internal storage files directory
-    public static void clearInternalStorageSyncedData(Context context) {
-        File filesDir = context.getFilesDir();
-        StorageUtils.deleteFileRecursive(filesDir);
-    }
-
-    // only use when updating from a version code lower than 1000 (not 0), clears all images/gifs from the public pictures directory
+    // only use when updating from a version code lower than 1000 (not 0), clears all images/gifs from the public pictures directory (probably best to not use at all)
     public static void clearPublicPicsDirSyncedMedia(Context context) {
         try {
             File publicDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), MyApplication.SAVED_PICTURES_PUBLIC_DIR_NAME);

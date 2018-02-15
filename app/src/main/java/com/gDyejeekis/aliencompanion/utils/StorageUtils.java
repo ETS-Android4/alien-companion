@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -204,13 +205,14 @@ public class StorageUtils {
     /**
      * Recursively deletes a directory and all its files
      * @param dir
+     * @param filter
      * @return
      */
-    public static boolean deleteDir(File dir) {
+    public static boolean deleteDir(File dir, FilenameFilter filter) {
         if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
+            String[] children = dir.list(filter);
             for (String child : children) {
-                boolean success = deleteDir(new File(dir, child));
+                boolean success = deleteDir(new File(dir, child), filter);
                 if (!success) {
                     return false;
                 }
@@ -222,6 +224,10 @@ public class StorageUtils {
         else {
             return false;
         }
+    }
+
+    public static boolean deleteDir(File dir) {
+        return deleteDir(dir, null);
     }
 
     public static boolean isExternalStorageAvailable(Context context) {
