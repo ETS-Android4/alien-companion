@@ -299,10 +299,10 @@ public class CleaningUtils {
         File cache = context.getCacheDir();
         File appDir = new File(cache.getParent());
         if (appDir.exists()) {
-            String[] children = appDir.list(filenameFilter);
-            for (String s : children) {
-                StorageUtils.deleteDir(new File(appDir, s), filenameFilter);
-                Log.d(TAG, "**************** File " + appDir.getAbsolutePath() + "/" + s + " CLEARED *******************");
+            File[] children = appDir.listFiles(filenameFilter);
+            for (File child : children) {
+                boolean deleted = StorageUtils.deleteDir(child, filenameFilter);
+                Log.d(TAG, "**************** File " + child.getAbsolutePath() + (deleted ? " DELETED" : " CLEARED") + " *******************");
             }
         }
     }

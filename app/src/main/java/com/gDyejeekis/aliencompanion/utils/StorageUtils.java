@@ -210,9 +210,9 @@ public class StorageUtils {
      */
     public static boolean deleteDir(File dir, FilenameFilter filter) {
         if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list(filter);
-            for (String child : children) {
-                boolean success = deleteDir(new File(dir, child), filter);
+            File[] children = dir.listFiles(filter);
+            for (File child : children) {
+                boolean success = deleteDir(child, filter);
                 if (!success) {
                     return false;
                 }
