@@ -45,10 +45,9 @@ public class MessageCheckService extends IntentService {
     public void onHandleIntent(Intent i) {
         if(!MessageActivity.isActive) {
             Log.d(TAG, "Checking for new messages..");
-            HttpClient httpClient = new PoliteRedditHttpClient();
-            MyApplication.checkAccountInit(this, httpClient);
-
             try {
+                HttpClient httpClient = new PoliteRedditHttpClient();
+                MyApplication.checkAccountInit(this, httpClient);
                 if (MyApplication.currentAccount.loggedIn) {
                     Messages msgRetrieval = new Messages(httpClient, MyApplication.currentUser);
                     List<RedditItem> messages = msgRetrieval.ofUser(MessageCategory.INBOX, MessageCategorySort.UNREAD, -1, 1000, null, null, true);
