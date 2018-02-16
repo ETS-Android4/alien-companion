@@ -172,9 +172,9 @@ public class SyncProfile extends Profile implements Serializable {
         }
     }
 
-    // this should be unique for every single time window of schedule
+    // this should be unique for every single time window of a sync schedule
     private int getPendingIntentRequestCode(SyncSchedule schedule, int timeWindow) {
-        return profileId.hashCode() + schedule.getScheduleId().hashCode() + timeWindow;
+        return schedule.getScheduleId().hashCode() + timeWindow;
     }
 
     private Intent getSyncIntent(Context context) {
