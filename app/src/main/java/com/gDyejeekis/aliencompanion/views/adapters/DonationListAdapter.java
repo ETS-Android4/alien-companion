@@ -38,15 +38,17 @@ public class DonationListAdapter extends ArrayAdapter {
         TextView amount = view.findViewById(R.id.textView_donation_amount);
         TextView message = view.findViewById(R.id.textView_donation_message);
         final Donation donation = (Donation) getItem(position);
-        name.setText(donation.getName());
-        amount.setText("$" + String.valueOf(donation.getAmount()));
-        if (donation.hasMessage()) {
-            message.setVisibility(View.VISIBLE);
-            message.setText(donation.getMessage());
-        } else {
-            message.setVisibility(View.GONE);
+        if (donation != null) {
+            String donator = donation.name==null ? "Anonymous" : donation.name;
+            name.setText(donator);
+            amount.setText("$" + String.valueOf(donation.amount));
+            if (donation.hasMessage()) {
+                message.setVisibility(View.VISIBLE);
+                message.setText(donation.message);
+            } else {
+                message.setVisibility(View.GONE);
+            }
         }
-
         return view;
     }
 }
