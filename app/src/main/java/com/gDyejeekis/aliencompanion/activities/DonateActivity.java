@@ -42,8 +42,9 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
 
     public static final float[] DONATION_AMOUNTS = {0.99f, 1.99f, 2.99f, 3.99f, 4.99f, 5.99f, 6.99f, 7.99f, 8.99f, 9.99f};
 
-    public static final String PROD_DONATIONS_DB_NODE = "donations";
-    public static final String TEST_DONATIONS_DB_NODE = "donations-test";
+    public static final String DONATIONS_DB_NODE = "donations";
+    public static final String PROD_DONATIONS_DB_NODE = DONATIONS_DB_NODE + "/donations-prod";
+    public static final String TEST_DONATIONS_DB_NODE = DONATIONS_DB_NODE + "/donations-test";
 
     public static final String DONATION_FAILED_MESSAGE = "There was an error processing your donation (you have not been charged)";
     public static final String THANK_YOU_MESSAGE = "Donation received! Thanks for your support :)";
