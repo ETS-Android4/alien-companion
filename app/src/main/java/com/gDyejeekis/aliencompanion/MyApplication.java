@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Gravity;
 
@@ -23,6 +24,10 @@ import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -248,8 +253,8 @@ public class MyApplication extends Application {
         currentFontStyle = fontStyle;
         currentFontFamily = fontFamily;
 
-        //savedAccounts = readAccounts();
         okHttpClient = new OkHttpClient();
+        authenticateWithFirebase();
     }
 
     public static int[] getPrimaryColors(Context context) {
@@ -451,6 +456,21 @@ public class MyApplication extends Application {
             editor.apply();
             lastKnownVersionCode = currentVersionCode;
         }
+    }
+
+    private void authenticateWithFirebase() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                String msg = "Firebase authentication signInAnonymously:";
+                if (task.isSuccessful()) {
+                    Log.d(TAG, msg + "success");
+                } else {
+                    Log.e(TAG, msg + "failure", task.getException());
+                }
+            }
+        });
     }
 
     public static void getCurrentSettings() {
