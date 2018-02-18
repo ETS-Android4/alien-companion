@@ -163,7 +163,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="##### score"
+                    android:text="##### points"
                     android:id="@+id/textView_score"
                     android:textSize="?attr/font_small"
                     android:textColor="?attr/themeTextSecondaryColor"

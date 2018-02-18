@@ -174,7 +174,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
             appendSpoilerLabel(postDets1);
         }
         // set second row of post details
-        SpannableString detsTwoSpannable = new SpannableString(post.getScore() + " score · " + post.getCommentCount() + " comments");
+        SpannableString detsTwoSpannable = new SpannableString(post.getScore() + " points · " + post.getCommentCount() + " comments");
         // set icon colors and score color depending on user
         if(MyApplication.currentUser != null) {
             // check user vote

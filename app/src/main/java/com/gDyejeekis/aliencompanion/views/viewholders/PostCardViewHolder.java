@@ -251,7 +251,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             appendSpoilerLabel(postDets1);
         }
         // set post score and icon colors depending on user
-        SpannableString scoreSpannable = new SpannableString(post.getScore() + " score");
+        SpannableString scoreSpannable = new SpannableString(post.getScore() + " points");
         if(MyApplication.currentUser != null) {
             // check user vote
             int scoreEnd = post.getScore().toString().length();
