@@ -5,19 +5,25 @@
         Alien Companion v1.0
     </string>
     <string name="welcome_message">
-        Hi everyone!\n\n It\'s been a while since my last update but I wanted to make this one a bit special. This update marks the release of version 1.0 of Alien Companion, about 2 years
+        Hi everyone!
+        \n\n
+          It\'s been a while since my last update but I wanted to make this one a bit special. This update marks the release of version 1.0 of Alien Companion, about 2 years
         after the original 0.1 alpha release. This update introduces many major new features, which I plan on improving and refining with future updates, as well as a lot of smaller improvements
-        and bug fixes. Here are the highlights of this update:\n\n
+        and bug fixes. Here are the highlights of this update:
+        \n\n
             •   Two new post views. \'Classic\' view designed for easier voting on posts and \'Gallery\' view for image heavy subreddits, such as /r/gaming.\n
             •   A brand new FAB menu for easy access to frequently used actions, as well as a revamped comment navigation FAB menu with expanded functionality (including an AMA mode and the
         ability to search text).\n
             •   Filter profiles which allow you to filter out content by adding the appropriate filters.\n
             •   Improved sync functionality, allowing you to sync videos from the streamable.com domain and to sync links in self-text and comments. There\'s also a new
         interface for creating/editing sync profiles, with the added ability to set multiple schedules on the same sync profile.\n
-            •   Numerous visual tweaks and additional customization options.\n\n
-            As always, the full list of changes is available in the settings.\n
+            •   Numerous visual tweaks and additional customization options.
+        \n\n
+            As always, the full list of changes is available in the settings.
+        \n\n
           Alien Companion has always been a free app with no ads or paid features and I\'ve decided that it will remain that way, but I\'ve also added the ability to donate through Google Play
-        for anyone who wishes to contribute or show their appreciation.\n
+        for anyone who wishes to contribute or show their appreciation.
+        \n\n
           I would like thank everyone who sent me their feedback and bug reports. Developing this app has been a huge learning experience for me and it will continue to be as the app evolves
         and improves.
         \n\n
@@ -29,15 +35,17 @@
     </string>
     <string name="about_sync_profiles">
         Sync profiles are lists of subreddits/multireddits that you can sync easily by selecting \'Sync now\' on the profile or even schedule to sync automatically within a specified
-        sync window. Scheduled syncs will occur exactly once inside each scheduled sync window. For example:\n
+        sync window. Scheduled syncs will occur exactly once inside each scheduled sync window. For example:
+        \n\n
           If you have a sync profile with a schedule that reads \'5:00-7:00 Mon, Wed, Fri\', the app will sync that profile exactly 3 times inside that 5am-7am sync window every Monday,
         Wednesday and Friday.
-        \n
+        \n\n
           You can have multiple active schedules in a sync profile (for syncing multiple times a day), but it is recommended to only add the schedules you need to avoid unnecessary load
         on reddit\'s servers.
-        \n
-          In order for a sync profile to sync automatically, it has to be ACTIVE and have at least one schedule assigned to it. Make sure that you have a working network connection
-        during the scheduled sync windows.\n\n
+        \n\n
+          In order for a sync profile to sync automatically, it has to be ACTIVE and have at least one schedule assigned to it. Scheduled syncs happen regardless of the last mode (online
+        or offline) you used. Make sure that you have a working network connection during the scheduled sync windows.
+        \n\n
             Scheduled sync profiles will sync their subreddits/multireddits at a time picked by the OS inside the specified sync window. This happens for two reasons:\n
             1. Android likes to group scheduled tasks and execute them together to avoid waking the CPU multiple times in order to save battery life.\n
             2. It wouldn\'t be very polite to reddit\'s severs if a lot of people decided to set their profiles to sync at precisely 7AM CST, for example.
