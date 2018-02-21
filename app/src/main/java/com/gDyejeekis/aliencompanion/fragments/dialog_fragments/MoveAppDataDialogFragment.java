@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 
 import java.io.File;
@@ -48,8 +49,10 @@ public class MoveAppDataDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_move_app_data, container, false);
+        View view = inflater.inflate(R.layout.fragment_please_wait, container, false);
 
+        ProgressBar progressBar = view.findViewById(R.id.progressBar_operation);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         TextView textView = (TextView) view.findViewById(R.id.textView_operation);
         String string = (moveToExternal) ? "external" : "internal";
         string = "Moving data to " + string + " memory";

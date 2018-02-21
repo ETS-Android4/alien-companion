@@ -26,8 +26,8 @@ public class Donation {
     public Donation() {
     }
 
-    public Donation(String name, String message, float amount, boolean isPublic) {
-        this.createdAt = System.currentTimeMillis();
+    public Donation(long createdAt, String name, String message, float amount, boolean isPublic) {
+        this.createdAt = createdAt;
         this.name = (name==null || name.trim().isEmpty()) ? null : name;
         this.message = (message==null || message.trim().isEmpty()) ? null : message;
         this.amount = amount;

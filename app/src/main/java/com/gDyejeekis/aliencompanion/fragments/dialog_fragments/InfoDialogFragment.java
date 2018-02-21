@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,14 @@ import com.gDyejeekis.aliencompanion.R;
 
 public class InfoDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
 
+    public static void showDialog(FragmentManager fm, String title, String info) {
+        InfoDialogFragment dialogFragment = new InfoDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("info", info);
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "dialog");
+    }
 
     @Nullable
     @Override

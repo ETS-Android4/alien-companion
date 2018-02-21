@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,13 +14,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.vending.billing.util.IabHelper;
+import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Purchase;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.models.Donation;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.DonationListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,8 +52,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     public static final String PROD_DONATIONS_DB_NODE = DONATIONS_DB_NODE + "/donations-prod";
     public static final String TEST_DONATIONS_DB_NODE = DONATIONS_DB_NODE + "/donations-test";
 
-    public static final String DONATION_FAILED_MESSAGE = "There was an error processing your donation (you have not been charged)";
-    public static final String THANK_YOU_MESSAGE = "Donation received! Thanks for your support :)";
+    public static final int BILLING_REQUEST_CODE = 103241;
 
     private EditText nameField;
     private EditText messageField;
@@ -58,8 +63,11 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     private int amountIndex;
     private ImageView decrAmountBtn;
     private ImageView incrAmountBtn;
+    private Button donateButton;
 
     private DatabaseReference database;
+
+    private IabHelper iabHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +78,23 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         initFields();
         initDonationForm();
         refreshDonationsList();
+        bindBillingService();
+    }
+
+    private void bindBillingService() {
+        iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.e(TAG, "Error setting up In-app Billing: " + result);
+                    setDonationFormEnabled(false);
+                    ToastUtils.showSnackbar(DonateActivity.this.getCurrentFocus(),
+                            "There was an error connecting to Google Play services. You won't be able to donate at this time.",
+                            Snackbar.LENGTH_LONG);
+                }
+                // Hooray, IAB is fully set up!
+            }
+        });
     }
 
     @Override
@@ -84,6 +109,15 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         MyApplication.setPendingTransitions(this);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (iabHelper != null) {
+            iabHelper.disposeWhenFinished();
+            iabHelper = null;
+        }
+    }
+
     private void initFields() {
         nameField = findViewById(R.id.editText_donate_name);
         messageField = findViewById(R.id.editText_donate_message);
@@ -95,10 +129,15 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         incrAmountBtn = findViewById(R.id.imageView_donate_increase_amount);
         decrAmountBtn.setOnClickListener(this);
         incrAmountBtn.setOnClickListener(this);
-        Button donateButton = findViewById(R.id.button_donate);
+        donateButton = findViewById(R.id.button_donate);
         donateButton.setOnClickListener(this);
+
         String currentNode = BuildConfig.DEBUG ? TEST_DONATIONS_DB_NODE : PROD_DONATIONS_DB_NODE;
         database = FirebaseDatabase.getInstance().getReference(currentNode);
+
+        String base64EncodedPublicKey = "";
+        // TODO compute your public key and store it in base64EncodedPublicKey
+        iabHelper = new IabHelper(this, base64EncodedPublicKey);
     }
 
     private void updateModifyAmountButtons() {
@@ -138,24 +177,100 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         updateModifyAmountButtons();
     }
 
-    private void makeDonation(Donation donation) {
-        // TODO: 1/25/2018 google play transaction
-        GeneralUtils.hideSoftKeyboard(this);
-        initDonationForm();
-        writeDonationToDatabase(donation);
-        refreshDonationsList();
+    private void setDonationFormEnabled(boolean flag) {
+        nameField.setEnabled(flag);
+        messageField.setEnabled(flag);
+        makePublic.setEnabled(flag);
+        decrAmountBtn.setEnabled(flag);
+        incrAmountBtn.setEnabled(flag);
+        donateButton.setEnabled(flag);
     }
 
-    private void writeDonationToDatabase(Donation donation) {
-        String donationId = database.push().getKey(); // TODO: 2/15/2018 look into getting a different key for id, maybe from google play transaction
-        database.child(donationId).setValue(donation);
+    private void startGooglePlayPurchase() {
+        setDonationFormEnabled(false);
+        //ToastUtils.showToast(this, "Just a moment..");
+        final IabHelper.OnIabPurchaseFinishedListener listener = new IabHelper.OnIabPurchaseFinishedListener() {
+            @Override
+            public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+                if (result.isSuccess()) {
+                    Log.d(TAG, "Iab purchase finished successfully");
+                    consumePurchase(purchase);
+                    onSuccessfulPurchase(purchase);
+                } else {
+                    Log.e(TAG, "Error completing Iab purchase: " + result);
+                    onFailedPurchase();
+                }
+                setDonationFormEnabled(true);
+            }
+        };
+        try {
+            iabHelper.launchPurchaseFlow(this, getItemSKU(), BILLING_REQUEST_CODE, listener, null);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception thrown during launchPurchaseFlow()");
+            e.printStackTrace();
+            onFailedPurchase();
+            setDonationFormEnabled(true);
+        }
+    }
+
+    private String getItemSKU() {
+        return "donation_" + String.valueOf(DONATION_AMOUNTS[amountIndex]);
+    }
+
+    private void consumePurchase(Purchase purchase) {
+        Log.d(TAG, "Consuming purchase..");
+        final IabHelper.OnConsumeFinishedListener listener = new IabHelper.OnConsumeFinishedListener() {
+            @Override
+            public void onConsumeFinished(Purchase purchase, IabResult result) {
+                if (result.isSuccess()) {
+                    Log.d(TAG, "Purchase consumed successfully");
+                    // provision the in-app purchase to the user
+                    // (for example, credit 50 gold coins to player's character)
+                }
+                else {
+                    // handle error
+                    Log.e(TAG, "Error consuming purchase: " + result);
+                }
+            }
+        };
+        try {
+            iabHelper.consumeAsync(purchase, listener);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception thrown during consumeAsync()");
+            e.printStackTrace();
+        }
+    }
+
+    /* TODO
+       Security Recommendation: When you receive the purchase response from Google Play,
+       ensure that you check the returned data signature and the orderId. Verify that the
+       orderId exists and is a unique value that you have not previously processed. For
+       added security, you should perform purchase validation on your own secure server.
+    */
+
+    private void onSuccessfulPurchase(Purchase purchase) {
+        //String donationId = database.push().getKey(); // generate firebase key as donationId
+        Donation donation = new Donation(purchase.getPurchaseTime(), nameField.getText().toString(),
+                messageField.getText().toString(), DONATION_AMOUNTS[amountIndex], makePublic.isChecked());
+        database.child(purchase.getOrderId()).setValue(donation);
+        initDonationForm();
+        refreshDonationsList();
+        final String message =
+                "Donation received! Thanks for your support :)";
+        ToastUtils.showToast(this, message, Toast.LENGTH_LONG);
+    }
+
+    private void onFailedPurchase() {
+        final String message =
+                "There was an error processing your donation (you have not been charged)";
+        ToastUtils.showToast(this, message, Toast.LENGTH_LONG);
     }
 
     private void refreshDonationsList() {
         database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Donation> donations = parseDonationData(dataSnapshot);
+                List<Donation> donations = parseFirebaseDonationData(dataSnapshot);
                 setPastDonations(donations);
             }
 
@@ -167,7 +282,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         });
     }
 
-    private List<Donation> parseDonationData(DataSnapshot dataSnapshot) {
+    private List<Donation> parseFirebaseDonationData(DataSnapshot dataSnapshot) {
         List<Donation> donations = new ArrayList<>();
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             Donation donation = ds.getValue(Donation.class);
@@ -207,9 +322,8 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
                 updateModifyAmountButtons();
                 break;
             case R.id.button_donate:
-                Donation donation = new Donation(nameField.getText().toString(), messageField.getText().toString(),
-                        DONATION_AMOUNTS[amountIndex], makePublic.isChecked());
-                makeDonation(donation);
+                GeneralUtils.hideSoftKeyboard(this);
+                startGooglePlayPurchase();
                 break;
         }
     }
@@ -231,12 +345,9 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_donate_info) {
-            InfoDialogFragment dialogFragment = new InfoDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("title", getResources().getString(R.string.about_donations_title));
-            bundle.putString("info", getResources().getString(R.string.about_donations));
-            dialogFragment.setArguments(bundle);
-            dialogFragment.show(getSupportFragmentManager(), "dialog");
+            InfoDialogFragment.showDialog(getSupportFragmentManager(),
+                    getResources().getString(R.string.about_donations_title),
+                    getResources().getString(R.string.about_donations));
             return true;
         }
         return super.onOptionsItemSelected(item);
