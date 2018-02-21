@@ -15,14 +15,28 @@
             •   Improved sync functionality, allowing you to sync videos from the streamable.com domain and to sync links in self-text and comments. There\'s also a new
         interface for creating/editing sync profiles, with the added ability to set multiple schedules on the same sync profile.\n
             •   Numerous visual tweaks and additional customization options.\n\n
-            As always, the full list of changes is available in the settings. [thoughts on app monetization][closing thoughts and thanks][notify users about user data being cleared]
+            As always, the full list of changes is available in the settings.\n
+          Alien Companion has always been a free app with no ads or paid features and I\'ve decided that it will remain that way, but I've also added the ability to donate through Google Play
+        for anyone who wishes to contribute or show their appreciation.\n
+          I would like thank everyone who sent me their feedback and bug reports. Developing this app has been a huge learning experience for me and it will continue to be as the app evolves
+        and improves.
+        \n\n
+        IMPORTANT: If you\'re updating from a previous version, all user data and most synced data has been cleared. I also recommend checking the \'AlienCompanion\' folder inside your
+        public pictures directory and deleting any leftover synced media that you deem unnecessary.
     </string>
     <string name="about_sync_profiles_title">
         About sync profiles
     </string>
     <string name="about_sync_profiles">
-        Sync profiles are lists of subreddits/multireddits that you can sync easily with a click of a button or even schedule to sync automatically within a specified sync window.
-        In order for a sync profile to sync automatically, it has to be ACTIVE and have at least one schedule assigned to it. Make sure that you have a working network connection
+        Sync profiles are lists of subreddits/multireddits that you can sync easily by selecting \'Sync now\' on the profile or even schedule to sync automatically within a specified
+        sync window. Scheduled syncs will occur exactly once inside each scheduled sync window. For example:\n
+          If you have a sync profile with a schedule that reads \'5:00-7:00 Mon, Wed, Fri\', the app will sync that profile exactly 3 times inside that 5am-7am sync window every Monday,
+        Wednesday and Friday.
+        \n
+          You can have multiple active schedules in a sync profile (for syncing multiple times a day), but it is recommended to only add the schedules you need to avoid unnecessary load
+        on reddit\'s servers.
+        \n
+          In order for a sync profile to sync automatically, it has to be ACTIVE and have at least one schedule assigned to it. Make sure that you have a working network connection
         during the scheduled sync windows.\n\n
             Scheduled sync profiles will sync their subreddits/multireddits at a time picked by the OS inside the specified sync window. This happens for two reasons:\n
             1. Android likes to group scheduled tasks and execute them together to avoid waking the CPU multiple times in order to save battery life.\n
@@ -40,7 +54,8 @@
         About donations
     </string>
     <string name="about_donations">
-        (about donations)
+        Alien Companion and all its features are 100% free and the app displays no ads of any kind. Donations are completely optional and have been added as a means for users to show
+        their appreciation and encourage future development.
     </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
