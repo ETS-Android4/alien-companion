@@ -52,7 +52,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     public static final String PROD_DONATIONS_DB_NODE = DONATIONS_DB_NODE + "/donations-prod";
     public static final String TEST_DONATIONS_DB_NODE = DONATIONS_DB_NODE + "/donations-test";
 
-    public static final int BILLING_REQUEST_CODE = 103241;
+    public static final int BILLING_REQUEST_CODE = 15273;
 
     private EditText nameField;
     private EditText messageField;
@@ -204,7 +204,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
             }
         };
         try {
-            iabHelper.launchPurchaseFlow(this, getItemSKU(), BILLING_REQUEST_CODE, listener, null);
+            iabHelper.launchPurchaseFlow(this, getItemSKU(), BILLING_REQUEST_CODE, listener);
         } catch (Exception e) {
             Log.e(TAG, "Exception thrown during launchPurchaseFlow()");
             e.printStackTrace();
