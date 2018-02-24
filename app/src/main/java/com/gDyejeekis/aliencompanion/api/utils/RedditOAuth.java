@@ -33,15 +33,14 @@ public class RedditOAuth {
     public static final String OAUTH_AUTH_URL = "https://www.reddit.com/api/v1/authorize.compact?";
 
     // Step 2. Reddit sends user to REDIRECT_URI
-    private static final String REDIRECT_URI = production ? "redditoauthtest://response" //"my app domain here" + "/auth" //TODO: look into app domain for redirect uri
-            : "redditoauthtest://response";
+    private static final String REDIRECT_URI = "redditoauthtest://response";
 
     // Step 3. Get token
     public static final String OAUTH_TOKEN_URL = "/api/v1/access_token";
 
     // I think it is easier to create 2 reddit apps (one with 127.0.0.1 redirect URI)
-    public static final String MY_APP_ID = production ? "u4geEADEYRqWUw" : "u4geEADEYRqWUw";
-    public static final String MY_APP_SECRET = production ? "" : ""; //installed apps can't keep a secret
+    public static final String MY_APP_ID = "u4geEADEYRqWUw";
+    public static final String MY_APP_SECRET = ""; //installed apps can't keep a secret
 
     public static final boolean USE_IMPLICIT_GRANT_FLOW = false;
 
@@ -105,7 +104,7 @@ public class RedditOAuth {
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
 
     public static String getOauthAuthUrl() {
-        String randomString = new RandomString(10).nextString(); //TODO: make random string unique
+        String randomString = new RandomString(10).nextString(); //TODO: make random string unique (and make sure it matches with return string?)
         return OAUTH_AUTH_URL + "client_id=" + MY_APP_ID + "&response_type=" + RESPONSE_TYPE_STRING + "&state=" + randomString
                 + "&redirect_uri=" + REDIRECT_URI + "&duration=" + OAUTH_TOKEN_DURATION_STRING + "&scope=" + SCOPES;
     }
