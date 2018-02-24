@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.models.offline_actions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -58,7 +59,7 @@ public class PendingActionsService extends IntentService {
                 isRunning = true;
                 Log.d(TAG, "Executing remaining offline actions..");
                 try {
-                    File file = new File(getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME);
+                    File file = new File(getFilesDir(), AppConstants.OFFLINE_USER_ACTIONS_FILENAME);
                     List<OfflineUserAction> pendingActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(file);
                     List<OfflineUserAction> remainingActions = new ArrayList<>(pendingActions);
 

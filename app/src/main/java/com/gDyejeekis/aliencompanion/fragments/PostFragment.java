@@ -31,6 +31,7 @@ import android.widget.ProgressBar;
 
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
@@ -110,10 +111,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
-            if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
+            if(dy > AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
                 activity.hideToolbar();
             }
-            else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
+            else if(dy < -AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
                     || isScrolledTop()) {
                 activity.showToolbar();
             }
@@ -533,11 +534,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void updateFabNavOnScroll(int dy) {
         if(MyApplication.commentFabNavigation) {
             if(postAdapter.getItemCount() == 1 || lastItemCompletelyVisible()
-                    || (MyApplication.autoHideCommentFab && dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
+                    || (MyApplication.autoHideCommentFab && dy > AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
                 hideAllFabOnScroll();
             }
             else if(isScrolledTop()
-                    || (MyApplication.autoHideCommentFab && dy < -MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD)
+                    || (MyApplication.autoHideCommentFab && dy < -AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD)
                     || (!MyApplication.autoHideCommentFab && !lastItemCompletelyVisible())) {
                 showAllFabOnScroll();
             }

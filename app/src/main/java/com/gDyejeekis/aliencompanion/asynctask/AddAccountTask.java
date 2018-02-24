@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
@@ -69,7 +70,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private List<SavedAccount> readFromFile() {
         try {
-            FileInputStream fis = context.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+            FileInputStream fis = context.openFileInput(AppConstants.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
             is.close();
@@ -83,7 +84,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private void writeToFile(List<SavedAccount> updatedAccounts) {
         try {
-            FileOutputStream fos = context.openFileOutput(MyApplication.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(AppConstants.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(updatedAccounts);
             os.close();

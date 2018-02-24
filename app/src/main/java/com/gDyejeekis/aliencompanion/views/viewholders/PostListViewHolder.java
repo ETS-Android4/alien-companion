@@ -6,12 +6,12 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
@@ -79,13 +79,13 @@ public class PostListViewHolder extends PostViewHolder {
         initIconResources(PostViewType.list);
 
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
                 defaultIconOpacityDisabled = 0.3f;
                 commentIconOpacity = 0.4f;
                 commentIconOpacityClicked = 0.2f;
                 break;
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 defaultIconOpacity = 1f;
                 defaultIconOpacityDisabled = 0.5f;
                 commentIconOpacity = 0.44f;

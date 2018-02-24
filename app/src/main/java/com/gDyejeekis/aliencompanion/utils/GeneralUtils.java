@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -28,9 +26,8 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.ChangelogActivity;
-import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ChangeLogDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurAlbum;
@@ -42,7 +39,6 @@ import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
 
 import org.json.simple.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -52,10 +48,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Created by sound on 10/5/2015.
@@ -171,7 +165,7 @@ public class GeneralUtils {
     }
 
     public static File getSyncedMediaDir(Context context) {
-        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_MEDIA_DIR_NAME);
+        return new File(getPreferredSyncDir(context), AppConstants.SYNCED_MEDIA_DIR_NAME);
     }
 
     public static File checkSyncedMediaDir(Context context) {
@@ -180,7 +174,7 @@ public class GeneralUtils {
     }
 
     public static File getSyncedArticlesDir(Context context) {
-        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_ARTICLES_DIR_NAME);
+        return new File(getPreferredSyncDir(context), AppConstants.SYNCED_ARTICLES_DIR_NAME);
     }
 
     public static File checkSyncedArticlesDir(Context context) {
@@ -189,7 +183,7 @@ public class GeneralUtils {
     }
 
     public static File getSyncedRedditDataDir(Context context) {
-        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
+        return new File(getPreferredSyncDir(context), AppConstants.SYNCED_REDDIT_DATA_DIR_NAME);
     }
 
     public static File checkSyncedRedditDataDir(Context context) {
@@ -198,7 +192,7 @@ public class GeneralUtils {
     }
 
     public static File getSyncedThumbnailsDir(Context context) {
-        return new File(getPreferredSyncDir(context), MyApplication.SYNCED_THUMBNAILS_DIR_NAME);
+        return new File(getPreferredSyncDir(context), AppConstants.SYNCED_THUMBNAILS_DIR_NAME);
     }
 
     public static File checkSyncedThumbnailsDir(Context context) {
@@ -396,7 +390,7 @@ public class GeneralUtils {
     }
 
     public static void checkCacheSize(File cacheDir) {
-        if(StorageUtils.dirSize(cacheDir, false) >= MyApplication.IMAGES_CACHE_LIMIT) {
+        if(StorageUtils.dirSize(cacheDir, false) >= AppConstants.IMAGES_CACHE_LIMIT) {
             File toDelete = StorageUtils.oldestFileInDir(cacheDir);
             long length = toDelete.length();
             if(toDelete.delete()) {
@@ -464,7 +458,7 @@ public class GeneralUtils {
 
     public static List<SavedAccount> readAccounts(Context context) {
         try {
-            FileInputStream fis = context.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+            FileInputStream fis = context.openFileInput(AppConstants.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
             is.close();
@@ -478,7 +472,7 @@ public class GeneralUtils {
 
     public static void saveAccounts(Context context, List<SavedAccount> updatedAccounts) {
         try {
-            FileOutputStream fos = context.openFileOutput(MyApplication.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(AppConstants.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(updatedAccounts);
             os.close();
@@ -577,7 +571,7 @@ public class GeneralUtils {
     public static boolean containsProfanity(String input) {
         if (input != null) {
             input = input.toLowerCase();
-            for (String word : RedditConstants.PROFANE_WORDS) {
+            for (String word : AppConstants.PROFANE_WORDS) {
                 if (input.contains(word)) return true;
             }
         }

@@ -47,78 +47,11 @@ public class MyApplication extends Application {
 
     public static final String TAG = "MyApplication";
 
-    public static final String currentVersion = "1.0";
-
-    public static final int currentVersionCode = 1000;
-
-    public static final int showWelcomeMsgVersionCode = 1000;
-
-    public static final int clearAppDataVersionCode = 1000;
-
-    public static final String[] defaultSubredditStrings = {"All", "popular", "pics", "videos", "gaming", "technology",
-            "movies", "iama", "askreddit", "aww", "worldnews", "books", "music"};
-
-    public static final int NAV_DRAWER_CLOSE_TIME = 200;
-
-    public static final int FAB_HIDE_ON_SCROLL_THRESHOLD = 10;
-
-    public static final int TOOLBAR_HIDE_ON_SCROLL_THRESHOLD = 10;
-
-    public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
-
-    public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
-
-    public static final String SYNC_PROFILES_FILENAME = "SyncProfiles";
-
-    public static final String FILTER_PROFILES_FILENAME = "FilterProfiles";
-
-    public static final String OFFLINE_USER_ACTIONS_FILENAME = "OfflineActions";
-
-    public static final String SAVED_PICTURES_PUBLIC_DIR_NAME = "AlienCompanion";
-
-    public static final String SYNCED_MEDIA_DIR_NAME = "Media";
-
-    public static final String SYNCED_ARTICLES_DIR_NAME = "Articles";
-
-    public static final String SYNCED_REDDIT_DATA_DIR_NAME = "RedditData";
-
-    public static final String SYNCED_THUMBNAILS_DIR_NAME = "Thumbs";
-
-    public static final String INDIVIDUALLY_SYNCED_DIR_NAME = "synced";
-
-    public static final String SYNCED_ARTICLE_DATA_SUFFIX = "-article";
-
-    public static final String SYNCED_ARTICLE_IMAGE_SUFFIX = "-image.jpg";
-
-    public static final String SYNCED_POST_LIST_SUFFIX = "-posts";
-
-    public static final String SYNCED_THUMBNAIL_SUFFIX = "-thumb";
-
-    public static final String MULTIREDDIT_FILE_PREFIX = "multi=";
-
-    public static final String IMGUR_INFO_FILE_NAME = "-imgurInfo";
-
-    public static final String REMEMBER_VIEW_SUFFIX = "-view";
-
-    public static final int homeAsUpIndicator = R.drawable.ic_arrow_back_white_24dp;
-
-    public static final int LIGHT_THEME = 0;
-
-    public static final int MATERIAL_BLUE_THEME = 1;
-
-    public static final int MATERIAL_GREY_THEME = 2;
-
-    public static final int DARK_THEME = 3;
-
-    public static final int DARK_THEME_LOW_CONTRAST = 4;
-
     public static int smallCardLinkBackground;
 
     public static boolean actionSort = false;
 
     public static boolean showHiddenPosts = false;
-
-    public static final boolean useMarkdownParsing = false; //only enable this if/when markdown parsing is ready
 
     public static SharedPreferences prefs;
     public static int lastKnownVersionCode;
@@ -210,19 +143,13 @@ public class MyApplication extends Application {
     public static OkHttpClient okHttpClient;
 
     public static boolean newMessages;
-    //public static boolean messageServiceActive;
     public static int messageCheckInterval;
 
     public static boolean pendingOfflineActions;
-    //public static boolean offlineActionsServiceActive;
-    public static final int offlineActionsInterval = 5; //how often (minutes) the app should attempt to execute any failed offline actions
     public static boolean autoExecuteOfflineActions;
 
     //not used
     public static boolean syncGif = false;
-    public static int syncImagesInCommentsCount = 0;
-
-    //public static List<SavedAccount> savedAccounts;
 
     //this is horrible
     public static SavedAccount currentAccount;
@@ -273,7 +200,7 @@ public class MyApplication extends Application {
         themeFieldsInitialized = true;
         isLargeScreen = GeneralUtils.isLargeScreen(context);
         isVeryLargeScreen = GeneralUtils.isVeryLargeScreen(context);
-        currentBaseTheme = prefs.getInt("baseTheme", LIGHT_THEME);
+        currentBaseTheme = prefs.getInt("baseTheme", AppConstants.LIGHT_THEME);
         int[] primaryColors = getPrimaryColors(context);
         int[] primaryDarkColors = getPrimaryDarkColors(context);
         int[] primaryLightColors = getPrimarLightColors(context);
@@ -281,7 +208,7 @@ public class MyApplication extends Application {
         upvoteColor = context.getResources().getColor(R.color.upvoteColor);
         downvoteColor = context.getResources().getColor(R.color.downvoteColor);
         switch(currentBaseTheme) {
-            case LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 nightThemeEnabled = false;
                 currentPrimaryColor = colorPrimary;
                 colorPrimaryDark = primaryDarkColors[colorIndex];
@@ -295,7 +222,7 @@ public class MyApplication extends Application {
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.lightCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.lightSmallCardLinkBackground);
                 break;
-            case MATERIAL_BLUE_THEME:
+            case AppConstants.MATERIAL_BLUE_THEME:
                 nightThemeEnabled = true;
                 currentPrimaryColor = colorPrimary;
                 colorPrimaryDark = primaryDarkColors[colorIndex];
@@ -309,7 +236,7 @@ public class MyApplication extends Application {
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialBlueCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialBlueSmallCardLinkBackground);
                 break;
-            case MATERIAL_GREY_THEME:
+            case AppConstants.MATERIAL_GREY_THEME:
                 nightThemeEnabled = true;
                 currentPrimaryColor = colorPrimary;
                 colorPrimaryDark = primaryDarkColors[colorIndex];
@@ -323,7 +250,7 @@ public class MyApplication extends Application {
                 commentPermaLinkBackgroundColor = context.getResources().getColor(R.color.materialGreyCommentHighlight);
                 smallCardLinkBackground = context.getResources().getColor(R.color.materialGreySmallCardLinkBackground);
                 break;
-            case DARK_THEME:
+            case AppConstants.DARK_THEME:
                 nightThemeEnabled = true;
                 currentPrimaryColor = primaryColorInDarkTheme ? colorPrimary : context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = primaryColorInDarkTheme ? primaryDarkColors[colorIndex] : Color.BLACK;
@@ -338,7 +265,7 @@ public class MyApplication extends Application {
                 smallCardLinkBackground = 0;
                 //smallCardLinkBackground = context.getResources().getColor(R.color.darkSmallCardLinkBackground);
                 break;
-            case DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 nightThemeEnabled = true;
                 currentPrimaryColor = primaryColorInDarkTheme ? colorPrimary : context.getResources().getColor(R.color.darkPrimary);
                 colorPrimaryDark = primaryColorInDarkTheme ? primaryDarkColors[colorIndex] : Color.BLACK;
@@ -368,19 +295,19 @@ public class MyApplication extends Application {
             activity.getTheme().applyStyle(R.style.PopupDarkTheme, true);
         }
         switch(currentBaseTheme) {
-            case LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 activity.getTheme().applyStyle(R.style.selectedTheme_day, true);
                 break;
-            case MATERIAL_BLUE_THEME:
+            case AppConstants.MATERIAL_BLUE_THEME:
                 activity.getTheme().applyStyle(R.style.selectedTheme_material_blue, true);
                 break;
-            case MATERIAL_GREY_THEME:
+            case AppConstants.MATERIAL_GREY_THEME:
                 activity.getTheme().applyStyle(R.style.selectedTheme_material_grey, true);
                 break;
-            case DARK_THEME:
+            case AppConstants.DARK_THEME:
                 activity.getTheme().applyStyle(R.style.selectedTheme_night, true);
                 break;
-            case DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 activity.getTheme().applyStyle(R.style.selectedTheme_night_low_contrast, true);
                 break;
         }
@@ -408,8 +335,8 @@ public class MyApplication extends Application {
     }
 
     public static String getSubredditSpecificViewKey(String reddit, boolean isMulti) {
-        String key = isMulti ? MULTIREDDIT_FILE_PREFIX + reddit : reddit;
-        return key + MyApplication.REMEMBER_VIEW_SUFFIX;
+        String key = isMulti ? AppConstants.MULTIREDDIT_FILE_PREFIX + reddit : reddit;
+        return key + AppConstants.REMEMBER_VIEW_SUFFIX;
     }
 
     private void getDeviceId() {
@@ -425,9 +352,9 @@ public class MyApplication extends Application {
     private void checkAppVersion() {
         final Context appContext = getApplicationContext();
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
-        if (lastKnownVersionCode!=currentVersionCode) {
+        if (lastKnownVersionCode != AppConstants.currentVersionCode) {
             SharedPreferences.Editor editor = prefs.edit();
-            if (lastKnownVersionCode < clearAppDataVersionCode || lastKnownVersionCode == 0) {
+            if (lastKnownVersionCode < AppConstants.clearAppDataVersionCode || lastKnownVersionCode == 0) {
                 if (lastKnownVersionCode != 0) {
                     editor.clear();
                     CleaningUtils.clearAccountData(appContext);
@@ -437,7 +364,7 @@ public class MyApplication extends Application {
                             FilenameFilter filter = new FilenameFilter() {
                                 @Override
                                 public boolean accept(File file, String s) {
-                                    return !s.equals("shared_prefs") && !s.equals(SAVED_ACCOUNTS_FILENAME);
+                                    return !s.equals("shared_prefs") && !s.equals(AppConstants.SAVED_ACCOUNTS_FILENAME);
                                 }
                             };
                             CleaningUtils.clearInternalStorageData(appContext, filter);
@@ -449,12 +376,12 @@ public class MyApplication extends Application {
                 editor.putBoolean("dualPane", isLargeScreen);
                 editor.putBoolean("autoHideToolbar", !isLargeScreen);
             }
-            if (lastKnownVersionCode < showWelcomeMsgVersionCode) {
+            if (lastKnownVersionCode < AppConstants.showWelcomeMsgVersionCode) {
                 editor.putBoolean("welcomeMsg", false);
             }
-            editor.putInt("versionCode", currentVersionCode);
+            editor.putInt("versionCode", AppConstants.currentVersionCode);
             editor.apply();
-            lastKnownVersionCode = currentVersionCode;
+            lastKnownVersionCode = AppConstants.currentVersionCode;
         }
     }
 
@@ -645,8 +572,8 @@ public class MyApplication extends Application {
         Intent intent = new Intent(context, PendingActionsService.class);
         PendingIntent pIntent = PendingIntent.getService(context, PendingActionsService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if(autoExecuteOfflineActions && pendingOfflineActions) {
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000 * offlineActionsInterval, 60 * 1000 * offlineActionsInterval, pIntent);
-            Log.d(TAG, "OfflineActionsService scheduled to run every " + offlineActionsInterval + " minutes");
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000 * AppConstants.offlineActionsInterval, 60 * 1000 * AppConstants.offlineActionsInterval, pIntent);
+            Log.d(TAG, "OfflineActionsService scheduled to run every " + AppConstants.offlineActionsInterval + " minutes");
             Log.d(TAG, "..until all pending offline actions are successfully executed");
         }
         else {
@@ -676,7 +603,7 @@ public class MyApplication extends Application {
 
     public static SavedAccount getSavedAccountByName(Context context, String accountName) {
         try {
-            List<SavedAccount> savedAccounts = (List<SavedAccount>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.SAVED_ACCOUNTS_FILENAME));
+            List<SavedAccount> savedAccounts = (List<SavedAccount>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), AppConstants.SAVED_ACCOUNTS_FILENAME));
             for(SavedAccount account : savedAccounts) {
                 if(account.getUsername().equals(accountName)) {
                     return account;
@@ -698,7 +625,7 @@ public class MyApplication extends Application {
 
     public static List<SavedAccount> readAccounts(Context context) {
         try {
-            FileInputStream fis = context.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+            FileInputStream fis = context.openFileInput(AppConstants.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
             is.close();

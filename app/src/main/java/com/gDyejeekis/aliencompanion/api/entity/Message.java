@@ -2,10 +2,10 @@ package com.gDyejeekis.aliencompanion.api.entity;
 
 import android.text.SpannableStringBuilder;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
-import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -89,7 +89,7 @@ public class Message extends Thing implements RedditItem {
                 destination = "[deleted]";
             }
 
-            if(!MyApplication.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
+            if(!AppConstants.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
 
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
         } catch (Exception e) {

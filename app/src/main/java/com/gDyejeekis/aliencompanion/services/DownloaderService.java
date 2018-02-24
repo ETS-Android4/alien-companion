@@ -12,6 +12,7 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
 import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
 import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
@@ -115,7 +116,7 @@ public class DownloaderService extends IntentService {
         SyncProfile profile = null;
         final String profileId = i.getStringExtra("profileId");
         if(profileId!=null) {
-            profile = (SyncProfile) Profile.getProfileById(profileId, new File(getFilesDir(), MyApplication.SYNC_PROFILES_FILENAME));
+            profile = (SyncProfile) Profile.getProfileById(profileId, new File(getFilesDir(), AppConstants.SYNC_PROFILES_FILENAME));
         }
         //else {
         //    profile = (SyncProfile) i.getSerializableExtra("profile");
@@ -149,7 +150,7 @@ public class DownloaderService extends IntentService {
                 // sync multireddits
                 for(String multireddit : profile.getMultireddits()) {
                     progress = 0;
-                    filename = MyApplication.MULTIREDDIT_FILE_PREFIX + multireddit.toLowerCase();
+                    filename = AppConstants.MULTIREDDIT_FILE_PREFIX + multireddit.toLowerCase();
                     notifBuilder = new NotificationCompat.Builder(this);
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
                     acquireWakelock();
@@ -170,7 +171,7 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, title, true));
             acquireWakelock();
 
-            syncPost(notifBuilder, submission, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
+            syncPost(notifBuilder, submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
             addToIndividuallySyncedPosts(submission);
         }
         else if(savedCount != 0) {
@@ -182,7 +183,7 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, "saved", false));
             acquireWakelock();
 
-            syncSaved(MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, notifBuilder, savedCount, syncOptions);
+            syncSaved(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, notifBuilder, savedCount, syncOptions);
         }
         else {
             MAX_PROGRESS = MyApplication.syncPostCount + 1;
@@ -190,7 +191,7 @@ public class DownloaderService extends IntentService {
             String subreddit = i.getStringExtra("subreddit");
             boolean isMulti = i.getBooleanExtra("isMulti", false);
             String filename = "";
-            if (isMulti) filename = MyApplication.MULTIREDDIT_FILE_PREFIX;
+            if (isMulti) filename = AppConstants.MULTIREDDIT_FILE_PREFIX;
             filename = filename + ((subreddit != null) ? subreddit.toLowerCase() : "frontpage");
 
             notifBuilder = new NotificationCompat.Builder(this);
@@ -255,13 +256,13 @@ public class DownloaderService extends IntentService {
         submission.setSyncedComments(null);
         try {
             List<Submission> submissions;
-            File syncedDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME);
+            File syncedDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME);
             if(syncedDir == null) {
                 throw new RuntimeException();
             }
 
-            File syncedListFile = new File(syncedDir, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME +
-                    MyApplication.SYNCED_POST_LIST_SUFFIX);
+            File syncedListFile = new File(syncedDir, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME +
+                    AppConstants.SYNCED_POST_LIST_SUFFIX);
             try {
                 submissions = (List<Submission>) GeneralUtils.readObjectFromFile(syncedListFile);
             } catch (Exception e) {
@@ -594,7 +595,7 @@ public class DownloaderService extends IntentService {
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return !name.endsWith(MyApplication.SYNCED_POST_LIST_SUFFIX);
+                return !name.endsWith(AppConstants.SYNCED_POST_LIST_SUFFIX);
             }
         };
         File[] files = dir.listFiles(filter);
@@ -724,7 +725,7 @@ public class DownloaderService extends IntentService {
     private void writePostListToFile(List<RedditItem> posts, String filename) {
         try {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(this), filename);
-            File file = new File(dir, filename + MyApplication.SYNCED_POST_LIST_SUFFIX);
+            File file = new File(dir, filename + AppConstants.SYNCED_POST_LIST_SUFFIX);
             Log.d(TAG, "Writing post list to " + file.getAbsolutePath());
             GeneralUtils.writeObjectToFile(posts, file);
         } catch (Exception e) {
@@ -763,13 +764,13 @@ public class DownloaderService extends IntentService {
                 Log.d(TAG, "Syncing article from src: " + url);
                 final String articleId = String.valueOf(url.hashCode());
                 Article article = new Article(title, text, imageUrl);
-                GeneralUtils.writeObjectToFile(article, new File(subredditDir, articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX));
+                GeneralUtils.writeObjectToFile(article, new File(subredditDir, articleId + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX));
                 // catch all exceptions related to article image download, not as important
                 try {
                     String imageSource = article.getImageSource();
                     //Log.d(TAG, "article image source: " + imageSource);
                     GeneralUtils.downloadToFileSync(imageSource, new File(subredditDir, articleId +
-                    MyApplication.SYNCED_ARTICLE_IMAGE_SUFFIX));
+                    AppConstants.SYNCED_ARTICLE_IMAGE_SUFFIX));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -921,7 +922,7 @@ public class DownloaderService extends IntentService {
     private void saveAlbumInfoToFile(ImgurItem item, final String filename) {
         try {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
-            File file = new File(dir, filename + "-" + item.getId() + MyApplication.IMGUR_INFO_FILE_NAME);
+            File file = new File(dir, filename + "-" + item.getId() + AppConstants.IMGUR_INFO_FILE_NAME);
             GeneralUtils.writeObjectToFile(item, file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -946,7 +947,7 @@ public class DownloaderService extends IntentService {
         if(!post.isSelf()) {
             File dir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedThumbnailsDir(this), filename);
             if(dir!=null) {
-                downloadMediaToPath(post.getThumbnail(), dir.getAbsolutePath(), post.getIdentifier() + MyApplication.SYNCED_THUMBNAIL_SUFFIX);
+                downloadMediaToPath(post.getThumbnail(), dir.getAbsolutePath(), post.getIdentifier() + AppConstants.SYNCED_THUMBNAIL_SUFFIX);
             }
         }
     }

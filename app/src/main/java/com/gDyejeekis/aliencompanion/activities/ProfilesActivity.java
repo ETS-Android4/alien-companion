@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -83,10 +84,10 @@ public class ProfilesActivity extends ToolbarActivity {
         try {
             String filename = "";
             if(profilesType == ProfilesActivity.SYNC_PROFILES) {
-                filename = MyApplication.SYNC_PROFILES_FILENAME;
+                filename = AppConstants.SYNC_PROFILES_FILENAME;
             }
             else if(profilesType == ProfilesActivity.FILTER_PROFILES) {
-                filename = MyApplication.FILTER_PROFILES_FILENAME;
+                filename = AppConstants.FILTER_PROFILES_FILENAME;
             }
             return (List<Profile>) GeneralUtils.readObjectFromFile(new File(getFilesDir(), filename));
         } catch (Exception e) {

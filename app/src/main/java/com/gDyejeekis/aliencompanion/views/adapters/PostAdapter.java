@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.asynctask.LoadMoreCommentsTask;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
@@ -255,7 +256,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 }
                 cvh.authorTextView.setText(comment.getAuthor());
 
-                if (MyApplication.useMarkdownParsing) {
+                if (AppConstants.useMarkdownParsing) {
 
                 }
                 else {
@@ -746,8 +747,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         public CommentViewHolder(View itemView) {
             super(itemView);
 
-            defaultIconOpacity = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
-            defaultIconOpacityDisabled = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
+            defaultIconOpacity = MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
+            defaultIconOpacityDisabled = MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
 
             view = itemView;
             authorTextView = (TextView) itemView.findViewById(R.id.author_textview);
@@ -778,8 +779,8 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
 
             commentOptionsLayout.setBackgroundColor(MyApplication.currentPrimaryColor);
 
-            if (MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
-            else if (MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);
+            if (MyApplication.currentBaseTheme == AppConstants.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
+            else if (MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);
             else menuBarToggle.setAlpha(1f);
 
             viewUser.setAlpha(defaultIconOpacity);

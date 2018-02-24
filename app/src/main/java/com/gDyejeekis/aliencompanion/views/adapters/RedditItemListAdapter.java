@@ -19,6 +19,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
@@ -371,7 +372,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
 
-            if(MyApplication.useMarkdownParsing) {
+            if(AppConstants.useMarkdownParsing) {
 
             }
             else {
@@ -435,8 +436,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public UserCommentViewHolder(View itemView) {
             super(itemView);
-            defaultIconOpacity = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
-            defaultIconOpacityDisabled = MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
+            defaultIconOpacity = MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
+            defaultIconOpacityDisabled = MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
             layoutComment = (LinearLayout) itemView.findViewById(R.id.layout_comment);
             layoutMenuBarToggle = itemView.findViewById(R.id.layout_toggle_menu_bar);
             layoutCommentOptions = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);
@@ -454,8 +455,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             more = (ImageView) itemView.findViewById(R.id.btn_more);
             menuBarToggle = itemView.findViewById(R.id.imageView_toggle_menu_bar);
 
-            if (MyApplication.currentBaseTheme == MyApplication.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
-            else if (MyApplication.currentBaseTheme == MyApplication.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);
+            if (MyApplication.currentBaseTheme == AppConstants.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
+            else if (MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST) menuBarToggle.setAlpha(0.6f);
             else menuBarToggle.setAlpha(1f);
 
             viewUser.setAlpha(defaultIconOpacity);
@@ -470,7 +471,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
 
-            if(MyApplication.useMarkdownParsing) {
+            if(AppConstants.useMarkdownParsing) {
 
             }
             else {

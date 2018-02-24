@@ -3,7 +3,7 @@ package com.gDyejeekis.aliencompanion.models;
 import android.content.Context;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.models.filters.FilterProfile;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -69,10 +69,10 @@ public abstract class Profile implements Serializable {
 
     public String getFilename() {
         if(this instanceof SyncProfile) {
-            return MyApplication.SYNC_PROFILES_FILENAME;
+            return AppConstants.SYNC_PROFILES_FILENAME;
         }
         if(this instanceof FilterProfile) {
-            return MyApplication.FILTER_PROFILES_FILENAME;
+            return AppConstants.FILTER_PROFILES_FILENAME;
         }
         return "";
     }

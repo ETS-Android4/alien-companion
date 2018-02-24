@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
@@ -77,7 +78,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         String filename = adapter.getItem(i).toString();
         String subreddit = (filename.equals("frontpage")) ? null : filename;
         boolean isMulti = filename.startsWith("multi=");
-        boolean isOther = filename.equals(MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME);
+        boolean isOther = filename.equals(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME);
         if(getActivity() instanceof MainActivity) {
             ((MainActivity) getActivity()).getListFragment().changeSubreddit(subreddit, isMulti, isOther);
             ((MainActivity) getActivity()).getNavDrawerAdapter().notifyDataSetChanged();
@@ -141,7 +142,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
             FileFilter fileFilter = new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return pathname.isDirectory() || pathname.getName().endsWith(MyApplication.SYNCED_POST_LIST_SUFFIX);
+                    return pathname.isDirectory() || pathname.getName().endsWith(AppConstants.SYNCED_POST_LIST_SUFFIX);
                 }
             };
 

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
@@ -73,7 +74,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
     private void initIcons() {
         initIconResources(PostViewType.smallCards);
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
                 defaultIconOpacityDisabled = 0.3f;
                 break;

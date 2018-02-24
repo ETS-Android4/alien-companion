@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.models.offline_actions.CommentAction;
@@ -47,7 +48,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
     public PendingActionsAdapter(PendingUserActionsActivity activity) {
         this.activity = activity;
         try {
-            pendingActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(new File(activity.getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME));
+            pendingActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(new File(activity.getFilesDir(), AppConstants.OFFLINE_USER_ACTIONS_FILENAME));
         } catch (Exception e) {
             pendingActions = new ArrayList<>();
         }
@@ -165,7 +166,7 @@ public class PendingActionsAdapter extends RecyclerView.Adapter {
 
     public void saveChanges() {
         try {
-            GeneralUtils.writeObjectToFile(pendingActions, new File(activity.getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME));
+            GeneralUtils.writeObjectToFile(pendingActions, new File(activity.getFilesDir(), AppConstants.OFFLINE_USER_ACTIONS_FILENAME));
         } catch (Exception e) {
             e.printStackTrace();
         }

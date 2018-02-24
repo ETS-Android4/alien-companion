@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.MyApplication;
 
@@ -42,7 +43,7 @@ public class OnBootReceiver extends BroadcastReceiver {
 
     private void scheduleSyncProfiles(Context context) {
         try {
-            FileInputStream fis = context.openFileInput(MyApplication.SYNC_PROFILES_FILENAME);
+            FileInputStream fis = context.openFileInput(AppConstants.SYNC_PROFILES_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SyncProfile> syncProfiles = (List<SyncProfile>) is.readObject();
             is.close();

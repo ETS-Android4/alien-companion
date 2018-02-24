@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
@@ -86,11 +87,11 @@ public class PostClassicViewHolder extends PostViewHolder  {
     private void initIcons() {
         initIconResources(PostViewType.classic);
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 defaultIconOpacity = 0.54f;
                 defaultIconOpacityDisabled = 0.27f;
                 break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
                 defaultIconOpacityDisabled = 0.3f;
                 break;

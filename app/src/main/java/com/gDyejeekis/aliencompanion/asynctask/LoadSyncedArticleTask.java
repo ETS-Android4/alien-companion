@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.view.View;
 
-import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.fragments.ArticleFragment;
 import com.gDyejeekis.aliencompanion.models.Article;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -34,10 +34,10 @@ public class LoadSyncedArticleTask extends AsyncTask<Void, Void, Void> {
         try {
             File parentDir = GeneralUtils.getSyncedArticlesDir(fragment.getActivity());
             final String articleId = String.valueOf(fragment.url.hashCode());
-            File articleFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
+            File articleFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), articleId + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX);
             article = (Article) GeneralUtils.readObjectFromFile(articleFile);
             try {
-                File imageFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), articleId + MyApplication.SYNCED_ARTICLE_IMAGE_SUFFIX);
+                File imageFile = StorageUtils.findFile(parentDir, parentDir.getAbsolutePath(), articleId + AppConstants.SYNCED_ARTICLE_IMAGE_SUFFIX);
                 bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
             } catch (Exception e) {
                 //e.printStackTrace();

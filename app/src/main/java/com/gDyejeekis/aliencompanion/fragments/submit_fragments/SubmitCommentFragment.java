@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserActionTask;
 import com.gDyejeekis.aliencompanion.asynctask.SaveOfflineActionTask;
@@ -87,7 +88,7 @@ public class SubmitCommentFragment extends Fragment {
             }
         }
         else {
-            if(MyApplication.useMarkdownParsing) {
+            if(AppConstants.useMarkdownParsing) {
 
             }
             else {

@@ -10,6 +10,7 @@ import static com.gDyejeekis.aliencompanion.utils.JsonUtils.safeJsonToString;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.models.RedditVideo;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -301,7 +302,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			title = StringEscapeUtils.unescapeHtml4(title);
 			linkFlairText = StringEscapeUtils.unescapeHtml4(linkFlairText);
 			if (isSelf()) {
-				if (MyApplication.useMarkdownParsing) {}
+				if (AppConstants.useMarkdownParsing) {}
 				else {
 					selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
 					selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);

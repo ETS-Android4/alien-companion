@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
@@ -30,9 +31,9 @@ public class MoveAppDataDialogFragment extends DialogFragment {
     private static final FilenameFilter filter = new FilenameFilter() {
         @Override
         public boolean accept(File dir, String filename) {
-            if(filename.equals(MyApplication.SAVED_ACCOUNTS_FILENAME)
-                    || filename.equals(MyApplication.SYNC_PROFILES_FILENAME)
-                    || filename.equals(MyApplication.OFFLINE_USER_ACTIONS_FILENAME)
+            if(filename.equals(AppConstants.SAVED_ACCOUNTS_FILENAME)
+                    || filename.equals(AppConstants.SYNC_PROFILES_FILENAME)
+                    || filename.equals(AppConstants.OFFLINE_USER_ACTIONS_FILENAME)
                     || filename.equals("Pictures")) {
                 return false;
             }
@@ -81,10 +82,10 @@ public class MoveAppDataDialogFragment extends DialogFragment {
                     srcDir = externalDir;
                     targetPath = internalDir.getAbsolutePath();
                 }
-                redditDataDir = new File(srcDir, MyApplication.SYNCED_REDDIT_DATA_DIR_NAME);
-                mediaDir = new File(srcDir, MyApplication.SYNCED_MEDIA_DIR_NAME);
-                articlesDir = new File(srcDir, MyApplication.SYNCED_ARTICLES_DIR_NAME);
-                thumbsDir = new File(srcDir, MyApplication.SYNCED_THUMBNAILS_DIR_NAME);
+                redditDataDir = new File(srcDir, AppConstants.SYNCED_REDDIT_DATA_DIR_NAME);
+                mediaDir = new File(srcDir, AppConstants.SYNCED_MEDIA_DIR_NAME);
+                articlesDir = new File(srcDir, AppConstants.SYNCED_ARTICLES_DIR_NAME);
+                thumbsDir = new File(srcDir, AppConstants.SYNCED_THUMBNAILS_DIR_NAME);
 
                 if(redditDataDir.exists()) {
                     StorageUtils.moveFileBetweenDisksRecursive(redditDataDir, targetPath);

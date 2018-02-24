@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
@@ -145,10 +146,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     private void updateToolbarOnScroll(int dy) {
         if(MyApplication.autoHideToolbar) {
-            if(dy > MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
+            if(dy > AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
                 activity.hideToolbar();
             }
-            else if(dy < -MyApplication.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
+            else if(dy < -AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
                     || findFirstCompletelyVisiblePostPosition() == 0) {
                 activity.showToolbar();
             }
@@ -158,10 +159,10 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     private void updateFabOnScroll(int dy) {
         if(MyApplication.postFabNavigation && hasFabNavigation()) {
             if (MyApplication.autoHidePostFab) {
-                if (dy > MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD) {
+                if (dy > AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD) {
                     hideAllFabOptions();
                     fabMain.hide();
-                } else if (dy < -MyApplication.FAB_HIDE_ON_SCROLL_THRESHOLD
+                } else if (dy < -AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD
                         || findFirstCompletelyVisiblePostPosition() == 0) {
                     fabMain.show();
                 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
@@ -35,7 +36,7 @@ public class OtherItemListener extends NavDrawerListener {
                     intent.putExtra("category", UserSubmissionsCategory.SAVED);
                     getActivity().startActivity(intent);
                 }
-            }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+            }, AppConstants.NAV_DRAWER_CLOSE_TIME);
         }
         else if(otherItem.getName().equals("Synced")) {
             if(MyApplication.offlineModeEnabled) {
@@ -64,7 +65,7 @@ public class OtherItemListener extends NavDrawerListener {
                         public void run() {
                             getAdapter().switchMode("synced", false, true, null, null);
                         }
-                    }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+                    }, AppConstants.NAV_DRAWER_CLOSE_TIME);
                 }
                 return true;
             }

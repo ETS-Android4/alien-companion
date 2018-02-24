@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.enums;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
@@ -29,9 +30,9 @@ public enum CommentNavSetting {
 
     public static float getIconOpacity() {
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 return 0.6f;
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 return 0.54f;
             default:
                 return 1f;

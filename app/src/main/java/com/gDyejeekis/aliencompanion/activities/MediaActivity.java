@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
 import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
 import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
@@ -39,9 +40,7 @@ import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.models.RedditVideo;
 import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -399,7 +398,7 @@ public class MediaActivity extends BackNavActivity {
     private ImgurItem findImgurItemFromFile(String id) {
         File dir = GeneralUtils.checkSyncedMediaDir(this);
         if(dir!=null) {
-            File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), id + MyApplication.IMGUR_INFO_FILE_NAME);
+            File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), id + AppConstants.IMGUR_INFO_FILE_NAME);
             try {
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -709,7 +708,7 @@ public class MediaActivity extends BackNavActivity {
     private File getSaveDestination() {
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
-        File appFolder = new File(dir + "/" + MyApplication.SAVED_PICTURES_PUBLIC_DIR_NAME);
+        File appFolder = new File(dir + "/" + AppConstants.SAVED_PICTURES_PUBLIC_DIR_NAME);
 
         if(!appFolder.exists()) {
             appFolder.mkdir();

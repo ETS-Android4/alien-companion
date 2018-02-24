@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.FilterUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -68,7 +69,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
         List<RedditItem> posts = null;
         try {
             File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(context), name);
-            File file = new File(dir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
+            File file = new File(dir, name + AppConstants.SYNCED_POST_LIST_SUFFIX);
             posts = (List<RedditItem>) GeneralUtils.readObjectFromFile(file);
             if(posts == null || posts.isEmpty()) {
                 throw new RuntimeException("Nonexistant/empty post list");
@@ -90,14 +91,14 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
             List<RedditItem> submissions;
             if(MyApplication.offlineModeEnabled) {
                 // wait until nav drawer is closed to start
-                SystemClock.sleep(MyApplication.NAV_DRAWER_CLOSE_TIME - 50);
+                SystemClock.sleep(AppConstants.NAV_DRAWER_CLOSE_TIME - 50);
 
                 String name = "";
                 if(fragment.subreddit == null)
                     name = "frontpage";
                 else {
                     if(fragment.isMulti)
-                        name = MyApplication.MULTIREDDIT_FILE_PREFIX;
+                        name = AppConstants.MULTIREDDIT_FILE_PREFIX;
                     name = name + fragment.subreddit.toLowerCase();
                 }
                 submissions = readPostListFromFile(name);

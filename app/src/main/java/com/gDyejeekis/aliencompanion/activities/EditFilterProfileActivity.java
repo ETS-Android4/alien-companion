@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
@@ -165,11 +166,11 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         int drawable;
         float alpha;
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 drawable = R.drawable.ic_add_circle_outline_black_24dp;
                 alpha = 0.54f;
                 break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 drawable = R.drawable.ic_add_circle_outline_white_24dp;
                 alpha = 0.6f;
                 break;

@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
@@ -106,11 +106,11 @@ public class PostCardViewHolder extends PostViewHolder  {
     private void initIcons() {
         initIconResources(showDetails ? PostViewType.cardDetails : PostViewType.cards);
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 defaultIconOpacity = 0.54f;
                 defaultIconOpacityDisabled = 0.27f;
                 break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
                 defaultIconOpacityDisabled = 0.3f;
                 break;
@@ -145,7 +145,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             linkButton.setVisibility(View.GONE);
             imageButton.setVisibility(View.GONE);
 
-            if(MyApplication.useMarkdownParsing) {
+            if(AppConstants.useMarkdownParsing) {
                 // TODO: 1/23/2017
             }
             // parse html string using fromHtml()

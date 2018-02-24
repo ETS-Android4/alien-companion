@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
@@ -47,7 +48,7 @@ public abstract class ToolbarActivity extends BackNavActivity {
             toolbar.setPopupTheme(R.style.OverflowStyleDark);
         }
         updateToolbarColors();
-        toolbar.setNavigationIcon(MyApplication.homeAsUpIndicator);
+        toolbar.setNavigationIcon(AppConstants.homeAsUpIndicator);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

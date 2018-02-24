@@ -8,7 +8,7 @@ import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
-import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurImage;
 import com.gDyejeekis.aliencompanion.api.imgur.ImgurItem;
@@ -67,19 +67,19 @@ public class CleaningUtils {
     }
 
     public static boolean clearAccountData(Context context) {
-        return deletePrivateFile(context, MyApplication.SAVED_ACCOUNTS_FILENAME);
+        return deletePrivateFile(context, AppConstants.SAVED_ACCOUNTS_FILENAME);
     }
 
     public static boolean clearSyncProfiles(Context context) {
-        return deletePrivateFile(context, MyApplication.SYNC_PROFILES_FILENAME);
+        return deletePrivateFile(context, AppConstants.SYNC_PROFILES_FILENAME);
     }
 
     public static boolean clearFilterProfiles(Context context) {
-        return deletePrivateFile(context, MyApplication.FILTER_PROFILES_FILENAME);
+        return deletePrivateFile(context, AppConstants.FILTER_PROFILES_FILENAME);
     }
 
     public static boolean clearOfflineActions(Context context) {
-        return deletePrivateFile(context, MyApplication.OFFLINE_USER_ACTIONS_FILENAME);
+        return deletePrivateFile(context, AppConstants.OFFLINE_USER_ACTIONS_FILENAME);
     }
 
     public static boolean deletePrivateFile(Context context, String name) {
@@ -197,7 +197,7 @@ public class CleaningUtils {
 
     public static boolean clearSyncedPostFromCategory(Context context, final String name, final String id) {
         File redditDataDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedRedditDataDir(context), name);
-        File postListFile = new File(redditDataDir, name + MyApplication.SYNCED_POST_LIST_SUFFIX);
+        File postListFile = new File(redditDataDir, name + AppConstants.SYNCED_POST_LIST_SUFFIX);
         String postLink = null;
         try {
             // modify post list file
@@ -219,18 +219,18 @@ public class CleaningUtils {
 
             // delete synced thumbnail
             File thumbDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedThumbnailsDir(context), name);
-            File thumbFile = new File(thumbDir, id + MyApplication.SYNCED_THUMBNAIL_SUFFIX);
+            File thumbFile = new File(thumbDir, id + AppConstants.SYNCED_THUMBNAIL_SUFFIX);
             if (thumbFile.delete()) {
                 Log.d(TAG, "Deleted " + thumbFile.getAbsolutePath());
             }
 
             // delete synced article
             File articleDir = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedArticlesDir(context), name);
-            File articleFile = new File(articleDir, id + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
+            File articleFile = new File(articleDir, id + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX);
             if (articleFile.delete()) {
                 Log.d(TAG, "Deleted " + articleFile.getAbsolutePath());
             }
-            File articleImageFile = new File(articleDir, id + MyApplication.SYNCED_ARTICLE_IMAGE_SUFFIX);
+            File articleImageFile = new File(articleDir, id + AppConstants.SYNCED_ARTICLE_IMAGE_SUFFIX);
             if (articleImageFile.delete()) {
                 Log.d(TAG, "Deleted " + articleImageFile.getAbsolutePath());
             }
@@ -246,7 +246,7 @@ public class CleaningUtils {
                         if(postLink.contains("imgur.com")) {
                             if(postLink.contains("/a/") || postLink.contains("/gallery/")) {
                                 File infoFile = StorageUtils.findFile(namedMediaDir, namedMediaDir.getAbsolutePath(),
-                                        LinkUtils.getImgurImgId(postLink) + MyApplication.IMGUR_INFO_FILE_NAME);
+                                        LinkUtils.getImgurImgId(postLink) + AppConstants.IMGUR_INFO_FILE_NAME);
                                 if(infoFile != null && infoFile.isFile()) {
                                     ImgurItem albumInfo = (ImgurItem) GeneralUtils.readObjectFromFile(infoFile);
                                     for(ImgurImage img : albumInfo.getImages()) {
@@ -325,7 +325,7 @@ public class CleaningUtils {
     // only use when updating from a version code lower than 1000 (not 0), clears all images/gifs from the public pictures directory (probably best to not use at all)
     public static void clearPublicPicsDirSyncedMedia(Context context) {
         try {
-            File publicDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), MyApplication.SAVED_PICTURES_PUBLIC_DIR_NAME);
+            File publicDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), AppConstants.SAVED_PICTURES_PUBLIC_DIR_NAME);
             File[] files = publicDir.listFiles();
             for (File file : files) {
                 if (file.isDirectory()) {

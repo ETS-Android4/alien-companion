@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.VerifyAccountDialogFragment;
@@ -280,7 +282,7 @@ public class MainActivity extends ToolbarActivity {
             listFragment.redrawList();
         }
 
-        if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < MyApplication.DARK_THEME)) {
+        if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < AppConstants.DARK_THEME)) {
             MyApplication.colorPrimaryChanged = false;
             MyApplication.currentPrimaryColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
@@ -540,7 +542,7 @@ public class MainActivity extends ToolbarActivity {
     private List<NavDrawerItem> getDefaultSubredditItems() {
         List<NavDrawerItem> subredditItems = new ArrayList<>();
         subredditItems.add(new NavDrawerSubredditItem());
-        for (String subreddit : MyApplication.defaultSubredditStrings) {
+        for (String subreddit : RedditConstants.defaultSubredditStrings) {
             subredditItems.add(new NavDrawerSubredditItem(subreddit));
         }
 

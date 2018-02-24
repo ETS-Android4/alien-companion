@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
@@ -26,17 +27,17 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     public DividerItemDecoration(Context context, int orientation) {
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 mDivider = ContextCompat.getDrawable(context, R.drawable.divider_light_theme);
                 break;
-            case MyApplication.MATERIAL_BLUE_THEME:
+            case AppConstants.MATERIAL_BLUE_THEME:
                 mDivider = ContextCompat.getDrawable(context, R.drawable.divider_material_blue);
                 break;
-            case MyApplication.MATERIAL_GREY_THEME:
+            case AppConstants.MATERIAL_GREY_THEME:
                 mDivider = ContextCompat.getDrawable(context, R.drawable.divider_material_grey);
                 break;
-            case MyApplication.DARK_THEME:
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 mDivider = ContextCompat.getDrawable(context, R.drawable.divider_dark_theme);
                 break;
         }

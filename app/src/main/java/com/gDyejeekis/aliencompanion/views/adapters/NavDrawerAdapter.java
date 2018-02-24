@@ -18,7 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners.AccountListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners.HeaderListener;
@@ -152,10 +154,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             expandLessResource = R.drawable.ic_expand_less_black_48dp;
         }
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 defaultIconOpacity = 0.6f;
                 break;
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 defaultIconOpacity = 0.54f;
                 break;
             default:
@@ -258,7 +260,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
         else {
             List<String> subreddits = new ArrayList<>();
-            Collections.addAll(subreddits, MyApplication.defaultSubredditStrings);
+            Collections.addAll(subreddits, RedditConstants.defaultSubredditStrings);
             SavedAccount loggedOut = new SavedAccount(subreddits);
             accountItems.add(new NavDrawerAccount(loggedOut, true));
             currentAccount = loggedOut;
@@ -281,7 +283,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public List<SavedAccount> readAccounts() {
         try {
-            FileInputStream fis = activity.openFileInput(MyApplication.SAVED_ACCOUNTS_FILENAME);
+            FileInputStream fis = activity.openFileInput(AppConstants.SAVED_ACCOUNTS_FILENAME);
             ObjectInputStream is = new ObjectInputStream(fis);
             List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
             is.close();
@@ -303,7 +305,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public void saveAccounts(List<SavedAccount> updatedAccounts) {
         try {
-            FileOutputStream fos = activity.openFileOutput(MyApplication.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
+            FileOutputStream fos = activity.openFileOutput(AppConstants.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(updatedAccounts);
             os.close();
@@ -743,19 +745,19 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private void setBackgroundSelector(SubredditRowViewHolder vHolder) {
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector));
                 break;
-            case MyApplication.MATERIAL_BLUE_THEME:
+            case AppConstants.MATERIAL_BLUE_THEME:
                 vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_material_blue));
                 break;
-            case MyApplication.MATERIAL_GREY_THEME:
+            case AppConstants.MATERIAL_GREY_THEME:
                 vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_material_grey));
                 break;
-            case MyApplication.DARK_THEME:
+            case AppConstants.DARK_THEME:
                 vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
                 break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 vHolder.layout.setBackground(activity.getResources().getDrawable(R.drawable.touch_selector_drawer_dark_theme));
                 break;
         }
@@ -763,23 +765,23 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     private void highlightSelectedItem(SubredditRowViewHolder vHolder) {
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 vHolder.name.setTextColor(MyApplication.colorPrimary);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.lightDrawerItemSelected));
                 break;
-            case MyApplication.MATERIAL_BLUE_THEME:
+            case AppConstants.MATERIAL_BLUE_THEME:
                 vHolder.name.setTextColor(MyApplication.colorPrimary);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.materialBlueDrawerItemSelected));
                 break;
-            case MyApplication.MATERIAL_GREY_THEME:
+            case AppConstants.MATERIAL_GREY_THEME:
                 vHolder.name.setTextColor(MyApplication.colorPrimary);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.materialGreyDrawerItemSelected));
                 break;
-            case MyApplication.DARK_THEME:
+            case AppConstants.DARK_THEME:
                 vHolder.name.setTextColor(MyApplication.primaryColorInDarkTheme ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
                 break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 vHolder.name.setTextColor(MyApplication.primaryColorInDarkTheme ? MyApplication.colorPrimary : MyApplication.textPrimaryColor);
                 vHolder.layout.setBackgroundColor(activity.getResources().getColor(R.color.darkDrawerItemSelected));
                 break;
@@ -848,7 +850,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             public void run() {
                 switchMode();
             }
-        }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+        }, AppConstants.NAV_DRAWER_CLOSE_TIME);
     }
 
     public void switchModeGracefully(final String reddit, final boolean isMulti) {
@@ -859,7 +861,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             public void run() {
                 switchMode(reddit, isMulti, false, SubmissionSort.HOT, null);
             }
-        }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+        }, AppConstants.NAV_DRAWER_CLOSE_TIME);
     }
 
     public void showOfflineSwitchDialog(final String subreddit, final boolean isMulti, final boolean isOther, final SubmissionSort sort, final TimeSpan timeSpan) {

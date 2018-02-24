@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
 import com.android.vending.billing.util.Purchase;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -151,11 +152,11 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         int drawable;
         float alpha;
         switch (MyApplication.currentBaseTheme) {
-            case MyApplication.LIGHT_THEME:
+            case AppConstants.LIGHT_THEME:
                 drawable = increase ? R.drawable.ic_add_circle_outline_black_24dp : R.drawable.ic_remove_circle_outline_black_24dp;
                 alpha = enabled ? 0.54f : 0.27f;
                 break;
-            case MyApplication.DARK_THEME_LOW_CONTRAST:
+            case AppConstants.DARK_THEME_LOW_CONTRAST:
                 drawable = increase ? R.drawable.ic_add_circle_outline_white_24dp : R.drawable.ic_remove_circle_outline_white_24dp;
                 alpha = enabled ? 0.6f : 0.3f;
                 break;

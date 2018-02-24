@@ -2,7 +2,7 @@ package com.gDyejeekis.aliencompanion.utils;
 
 import android.content.Context;
 
-import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.filters.DomainFilter;
@@ -85,7 +85,7 @@ public class FilterUtils {
 
     public static List<FilterProfile> getFilterProfiles(Context context) {
         try {
-            return (List<FilterProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), MyApplication.FILTER_PROFILES_FILENAME));
+            return (List<FilterProfile>) GeneralUtils.readObjectFromFile(new File(context.getFilesDir(), AppConstants.FILTER_PROFILES_FILENAME));
         } catch (Exception e) {
             e.printStackTrace();
         }

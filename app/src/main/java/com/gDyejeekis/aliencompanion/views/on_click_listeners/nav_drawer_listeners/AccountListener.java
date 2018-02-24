@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.OAuthActivity;
@@ -41,7 +42,7 @@ public class AccountListener extends NavDrawerListener {
                             getActivity().startActivity(intent);
                         }
                     }
-                }, MyApplication.NAV_DRAWER_CLOSE_TIME + 75);
+                }, AppConstants.NAV_DRAWER_CLOSE_TIME + 75);
                 break;
             case NavDrawerAccount.TYPE_LOGGED_OUT:
             case NavDrawerAccount.TYPE_ACCOUNT:
@@ -55,7 +56,7 @@ public class AccountListener extends NavDrawerListener {
                         getActivity().changeCurrentUser(accountItem.savedAccount);
                         getAdapter().setCurrentAccountName(accountItem.getName());
                     }
-                }, MyApplication.NAV_DRAWER_CLOSE_TIME);
+                }, AppConstants.NAV_DRAWER_CLOSE_TIME);
                 break;
         }
     }

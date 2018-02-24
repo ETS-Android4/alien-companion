@@ -1,10 +1,10 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
-import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
@@ -117,7 +117,7 @@ public class Comment extends Thing implements MultiLevelExpIndListAdapter.ExpInd
             agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
 
             linkTitle = StringEscapeUtils.unescapeHtml4(linkTitle);
-            if(MyApplication.useMarkdownParsing) {}
+            if(AppConstants.useMarkdownParsing) {}
             else {
                 bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
                 bodyHTML = HtmlFormatUtils.modifySpoilerHtml(bodyHTML);

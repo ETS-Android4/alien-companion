@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.models.offline_actions;
 import android.content.Context;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -116,7 +117,7 @@ public abstract class OfflineUserAction implements Serializable {
                     if (account.getUsername().equals(MyApplication.accountUsernameChanged)) {
                         account.getToken().accessToken = MyApplication.newAccountAccessToken;
                         savedAccounts.set(savedAccounts.indexOf(account), account);
-                        GeneralUtils.writeObjectToFile(savedAccounts, new File(context.getFilesDir(), MyApplication.SAVED_ACCOUNTS_FILENAME));
+                        GeneralUtils.writeObjectToFile(savedAccounts, new File(context.getFilesDir(), AppConstants.SAVED_ACCOUNTS_FILENAME));
                         break;
                     }
                 }

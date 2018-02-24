@@ -3,10 +3,10 @@ package com.gDyejeekis.aliencompanion.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.fragments.ArticleFragment;
 import com.gDyejeekis.aliencompanion.fragments.BrowserFragment;
@@ -73,7 +73,7 @@ public class BrowserActivity extends SwipeBackActivity {
     public boolean syncedArticleExists() {
         final String articleId = String.valueOf(url.hashCode());
         File dir = GeneralUtils.getSyncedArticlesDir(this);
-        File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), articleId + MyApplication.SYNCED_ARTICLE_DATA_SUFFIX);
+        File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), articleId + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX);
         return file!=null;
     }
 

@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.api.utils.httpClient;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.entity.User;
@@ -36,7 +37,7 @@ public class RedditHttpClient implements HttpClient {
 
     public static final boolean ALWAYS_USE_OKHTTP = true;
 
-    public static final String ALIEN_COMPANION_USER_AGENT = "android:com.gDyejeekis.aliencompanion:v" + MyApplication.currentVersion + " (by /u/ubercharge_ready)";
+    public static final String ALIEN_COMPANION_USER_AGENT = "android:com.gDyejeekis.aliencompanion:v" + AppConstants.currentVersion + " (by /u/ubercharge_ready)";
 
     private String userAgent = ALIEN_COMPANION_USER_AGENT;
 

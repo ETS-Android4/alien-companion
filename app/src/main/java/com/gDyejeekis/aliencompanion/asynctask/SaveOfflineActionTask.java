@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.models.offline_actions.OfflineUserAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -33,7 +34,7 @@ public class SaveOfflineActionTask extends AsyncTask<Void, Void, Boolean> {
     public Boolean doInBackground(Void... unused) {
         try {
             List<OfflineUserAction> offlineActions;
-            File file = new File(context.getFilesDir(), MyApplication.OFFLINE_USER_ACTIONS_FILENAME);
+            File file = new File(context.getFilesDir(), AppConstants.OFFLINE_USER_ACTIONS_FILENAME);
             try {
                 offlineActions = (List<OfflineUserAction>) GeneralUtils.readObjectFromFile(file);
             } catch (Exception e) {

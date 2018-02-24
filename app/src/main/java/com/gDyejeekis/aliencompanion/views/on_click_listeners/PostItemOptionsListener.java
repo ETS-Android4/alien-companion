@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
@@ -327,7 +328,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
                             @Override
                             protected Boolean doInBackground(String... params) {
-                                return CleaningUtils.clearSyncedPostFromCategory(context, MyApplication.INDIVIDUALLY_SYNCED_DIR_NAME, params[0]);
+                                return CleaningUtils.clearSyncedPostFromCategory(context, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, params[0]);
                             }
 
                             @Override
