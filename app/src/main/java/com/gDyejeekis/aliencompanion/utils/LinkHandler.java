@@ -31,15 +31,9 @@ public class LinkHandler {
 
     public static final String TAG = "LinkHandler";
 
-    private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y"; //TODO: get different api key before release
+    private static final String YOUTUBE_API_KEY = "AIzaSyDAqkwJF2o2QmGsoyj-yPP8uCqMxytm15Y";
 
-    public static final String ARTICLE_API_KEY = "2f271e88a87b7bd125f99988d5daf2f3";
-
-    public static final String GIPHY_PUBLIC_BETA_API_KEY = "dc6zaTOxFJmzC";
-
-    public static final String GIPHY_PRODUCTION_API_KEY = "";
-
-    public static final String GIPHY_API_KEY = GIPHY_PUBLIC_BETA_API_KEY;
+    public static final String GIPHY_API_KEY = "dc6zaTOxFJmzC";
 
     private Context context;
     private Submission post;
