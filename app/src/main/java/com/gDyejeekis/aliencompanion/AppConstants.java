@@ -72,6 +72,9 @@ public class AppConstants {
 
     public static final int offlineActionsInterval = 5; //how often (minutes) the app should attempt to execute any failed offline actions
 
+    public static final String BASE_64_ENCODED_PUBLIC_KEY =
+            "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiNimLYQIP/Rfr7QNxczwzhpUyqNRxLPd3P5Tucmtl/UvM5ONcUsyS7FNsTAj8toZjwtfwhdLlg5V7BGiK+JCZLlKLrifW8jTYsz65gCgDGgj7WT9xPB6sdXx/hm/WuxiVFrPJv58/mp9t4hBU09bNRJFaQ3PyjyEnM57HOvpYuoIQ23PIH0Cij4dlZ+nmW/IbZ9bohsmr5wm/0JU338WLrMlM52gdxaUw8annIgNVVuNHXZOeNj3Ms5Vb4HAfYUYJB1hGiF+5ksD7h+5pEeB7av62rYiV2iWo3jfxZ8YPVSk5HhDFbH+wHZc9HC68+g0KnJYYKSfAPNlwASEiMDfSwIDAQAB";
+
     public static final String[] PROFANE_WORDS = {
             "anal",
             "anus",

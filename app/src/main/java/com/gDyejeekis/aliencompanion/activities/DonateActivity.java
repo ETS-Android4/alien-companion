@@ -136,9 +136,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         String currentNode = BuildConfig.DEBUG ? TEST_DONATIONS_DB_NODE : PROD_DONATIONS_DB_NODE;
         database = FirebaseDatabase.getInstance().getReference(currentNode);
 
-        String base64EncodedPublicKey = "";
-        // TODO compute your public key and store it in base64EncodedPublicKey
-        iabHelper = new IabHelper(this, base64EncodedPublicKey);
+        iabHelper = new IabHelper(this, AppConstants.BASE_64_ENCODED_PUBLIC_KEY);
     }
 
     private void updateModifyAmountButtons() {
