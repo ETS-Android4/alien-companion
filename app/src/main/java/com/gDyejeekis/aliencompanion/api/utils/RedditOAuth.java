@@ -3,12 +3,12 @@ package com.gDyejeekis.aliencompanion.api.utils;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.utils.RandomString;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 
 import org.json.simple.JSONObject;
 
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,7 +33,7 @@ public class RedditOAuth {
     public static final String OAUTH_AUTH_URL = "https://www.reddit.com/api/v1/authorize.compact?";
 
     // Step 2. Reddit sends user to REDIRECT_URI
-    private static final String REDIRECT_URI = "redditoauthtest://response";
+    public static final String REDIRECT_URI = "redditoauthtest://response";
 
     // Step 3. Get token
     public static final String OAUTH_TOKEN_URL = "/api/v1/access_token";
@@ -103,22 +103,33 @@ public class RedditOAuth {
     public static final String ACCESS_TOKEN_NAME = "access_token";
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
 
+    private static String oauthState = "";
+
     public static String getOauthAuthUrl() {
-        String randomString = new RandomString(10).nextString(); //TODO: make random string unique (and make sure it matches with return string?)
-        return OAUTH_AUTH_URL + "client_id=" + MY_APP_ID + "&response_type=" + RESPONSE_TYPE_STRING + "&state=" + randomString
+        oauthState = UUID.randomUUID().toString();
+        return OAUTH_AUTH_URL + "client_id=" + MY_APP_ID + "&response_type=" + RESPONSE_TYPE_STRING + "&state=" + oauthState
                 + "&redirect_uri=" + REDIRECT_URI + "&duration=" + OAUTH_TOKEN_DURATION_STRING + "&scope=" + SCOPES;
     }
 
     public static String getAuthorizationCode(String redirectUrl) {
+        String state = null;
         String code = null;
 
-        String pattern = "redditoauthtest:\\/\\/response\\?state=.*&code=(.*)";
+        String pattern = "redditoauthtest:\\/\\/response\\?state=(.*)&code=(.*)";
         Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = compiledPattern.matcher(redirectUrl);
         if(matcher.find()) {
-            code = matcher.group(1);
+            state = matcher.group(1);
+            code = matcher.group(2);
         }
-        Log.d(TAG, "auth code: " + code);
+        Log.d(TAG, "returned oauth state: " + state);
+        Log.d(TAG, "returned oauth code: " + code);
+
+        if (!oauthState.equals(state)) {
+            Log.e(TAG, "oauth state mismatch - oauth code invalid");
+            code = null;
+        }
+        oauthState = "";
 
         return code;
     }

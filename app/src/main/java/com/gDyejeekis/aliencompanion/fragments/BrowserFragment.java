@@ -58,11 +58,12 @@ public class BrowserFragment extends Fragment {
             //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             //startActivity(intent);
             //return true;
-            if(activity instanceof OAuthActivity) {
-                if (url.substring(0, 15).equals("redditoauthtest")) {
-                    Log.d(TAG, "redirect url: " + url);
+            if (activity instanceof OAuthActivity) {
+                if (url.startsWith(RedditOAuth.REDIRECT_URI)) {
+                    Log.d(TAG, "OAuth redirect url: " + url);
                     MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
-                    if (MainActivity.oauthCode != null) MainActivity.setupAccount = true;
+                    if (MainActivity.oauthCode != null)
+                        MainActivity.setupAccount = true;
                     activity.finish();
                     return true;
                 }
