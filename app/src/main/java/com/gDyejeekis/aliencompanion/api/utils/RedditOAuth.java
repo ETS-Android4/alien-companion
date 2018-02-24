@@ -33,7 +33,7 @@ public class RedditOAuth {
     public static final String OAUTH_AUTH_URL = "https://www.reddit.com/api/v1/authorize.compact?";
 
     // Step 2. Reddit sends user to REDIRECT_URI
-    private static final String REDIRECT_URI = production ? "my app domain here" + "/auth" //TODO: look into app domain for redirect uri
+    private static final String REDIRECT_URI = production ? "redditoauthtest://response" //"my app domain here" + "/auth" //TODO: look into app domain for redirect uri
             : "redditoauthtest://response";
 
     // Step 3. Get token
