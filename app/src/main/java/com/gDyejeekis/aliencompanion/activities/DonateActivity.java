@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.vending.billing.util.IabHelper;
 import com.android.vending.billing.util.IabResult;
+import com.android.vending.billing.util.Inventory;
 import com.android.vending.billing.util.Purchase;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.BuildConfig;
@@ -71,6 +73,20 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     private IabHelper iabHelper;
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Pass on the activity result to the helper for handling
+        if (!iabHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+        else {
+            Log.d(TAG, "onActivityResult handled by IABUtil");
+        }
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
@@ -80,6 +96,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         initDonationForm();
         refreshDonationsList();
         bindBillingService();
+        checkAvailablePurchases();
     }
 
     private void bindBillingService() {
@@ -185,6 +202,28 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         donateButton.setEnabled(flag);
     }
 
+    private void checkAvailablePurchases() {
+        final IabHelper.QueryInventoryFinishedListener listener = new IabHelper.QueryInventoryFinishedListener() {
+            @Override
+            public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                if (result.isFailure()) {
+                    Log.e(TAG, "Error retrieving inventory: " + result.getMessage());
+                    return;
+                }
+                for (int i=0; i<DONATION_AMOUNTS.length; i++) {
+                    String sku = getItemSKU(i);
+                    if (inv.hasPurchase(sku))
+                        consumePurchase(inv.getPurchase(sku));
+                }
+            }
+        };
+        try {
+            iabHelper.queryInventoryAsync(false, null, null, listener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void startGooglePlayPurchase() {
         setDonationFormEnabled(false);
         //ToastUtils.showToast(this, "Just a moment..");
@@ -213,7 +252,11 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     }
 
     private String getItemSKU() {
-        return "donate_" + String.valueOf(DONATION_AMOUNTS[amountIndex]);
+        return getItemSKU(amountIndex);
+    }
+
+    private String getItemSKU(int index) {
+        return "donate_" + String.valueOf(DONATION_AMOUNTS[index]);
     }
 
     private void consumePurchase(Purchase purchase) {
