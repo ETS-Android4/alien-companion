@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="1.0" changeDate="unset">
+    <changelogversion versionName="1.0" changeDate="Feb 26, 2018">
         <!-- appearance changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added two new post views, Classic view and Gallery view (long tap for comments)]]></changelogtext>
         <changelogtext>Small tweaks to 'List' and 'List (reversed)' views</changelogtext>
@@ -11,12 +11,12 @@
         <changelogtext>Added new color picker interface for primary and secondary colors</changelogtext>
         <changelogtext>Replaced toast notifications with snackbar notifications on some instances</changelogtext>
         <changelogtext>Added two additional screen orientation settings, 'Sensor portrait' and 'Sensor landscape'</changelogtext>
-        <changelogtext>Added 'Disable screen transitions' option under 'Appearance' (disables animations for opening and dismissing activities)</changelogtext>
+        <changelogtext>Added 'Disable screen transitions' option under 'Appearance' (disables animations for opening and closing activities)</changelogtext>
         <changelogtext>Various small visual tweaks</changelogtext>
         <!-- navigation changes -->
         <changelogtext>Tweaked post menu bar to show options depending on screen width</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Hide read' option in the toolbar's overflow menu (available when browsing posts and search results)]]></changelogtext>
-        <changelogtext>Added 'Hide toolbar on scroll down' option under 'Navigation' (enabled by default)</changelogtext>
+        <changelogtext>Added 'Hide toolbar on scroll down' option under 'Navigation' (enabled by default on phone devices)</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Navigate comments with volume buttons' option under 'Navigation' (disabled by default)]]></changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added FAB (floating action button) menu when browsing posts in subreddits/multireddits and search results]]></changelogtext>
         <changelogtext>Added 'FAB post navigation' option under 'Navigation' (enabled by default)</changelogtext>
@@ -37,7 +37,7 @@
         <changelogtext>Updated synced article view to use the selected theme background and font size</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Revamped user interface for creating/editing sync profiles]]></changelogtext>
         <changelogtext>It is now possible for a sync profile to have multiple schedules</changelogtext>
-        <changelogtext>Synced images, gifs and videos are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
+        <changelogtext>Synced images/GIFs are now saved in the app's private internal storage by default instead of the public pictures directory</changelogtext>
         <!-- link handling changes -->
         <changelogtext>Added v.redd.it link handling support</changelogtext>
         <changelogtext>Added gyazo.com link handling support</changelogtext>
@@ -70,9 +70,6 @@
         <changelogtext>Small tweaks to the 'Add subreddit' dialog</changelogtext>
         <changelogtext>Various small fixes and improvements</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added a 'Donate' option under settings]]></changelogtext>
-
-        <changelogtext></changelogtext>
-        <changelogtext><![CDATA[<b><font color=red>New!</font></b> feature]]></changelogtext>
     </changelogversion>
 
     <changelogversion versionName="0.6.7" changeDate="Mar 24, 2017">
