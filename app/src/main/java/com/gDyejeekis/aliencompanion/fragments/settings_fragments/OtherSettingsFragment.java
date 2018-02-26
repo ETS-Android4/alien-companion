@@ -9,6 +9,8 @@ import android.preference.PreferenceFragment;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 
+import com.gDyejeekis.aliencompanion.activities.ChangelogActivity;
+import com.gDyejeekis.aliencompanion.activities.LicensesActivity;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.MoveAppDataDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
@@ -85,7 +87,18 @@ public class OtherSettingsFragment extends PreferenceFragment {
         viewChangeLog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                GeneralUtils.showChangeLog(getActivity());
+                Intent intent = new Intent(getActivity(), ChangelogActivity.class);
+                getActivity().startActivity(intent);
+                return true;
+            }
+        });
+
+        Preference licenses = findPreference("licenses");
+        licenses.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getActivity(), LicensesActivity.class);
+                getActivity().startActivity(intent);
                 return true;
             }
         });

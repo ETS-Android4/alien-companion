@@ -66,15 +66,6 @@ public class GeneralUtils {
         }
     }
 
-    public static void showChangeLog(Activity activity) {
-        // dialog changelog
-        //ChangeLogDialogFragment dialog = new ChangeLogDialogFragment();
-        //dialog.show(activity.getFragmentManager(), "dialog");
-        // activity changelog
-        Intent intent = new Intent(activity, ChangelogActivity.class);
-        activity.startActivity(intent);
-    }
-
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

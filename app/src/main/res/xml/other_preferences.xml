@@ -38,6 +38,11 @@
         android:summary="Current version: 1.0" />
 
     <Preference
+        android:key="licenses"
+        android:title="Open-source licenses"
+        android:summary="License details for open source software"/>
+
+    <Preference
         android:key="feedback"
         android:title="Send feedback"/>
 

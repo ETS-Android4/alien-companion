@@ -148,6 +148,10 @@
             android:configChanges="orientation|screenSize"
             android:label="Changelog"/>
 
+        <activity android:name=".activities.LicensesActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="Licenses"/>
+
         <activity android:name=".activities.DonateActivity"
             android:configChanges="orientation|screenSize"
             android:label="Donate"/>
