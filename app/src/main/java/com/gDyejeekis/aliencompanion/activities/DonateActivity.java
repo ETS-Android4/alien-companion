@@ -99,6 +99,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     }
 
     private void setupIabHelper() {
+        Log.d(TAG, "Setting up Iab helper..");
         iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if (result.isSuccess()) {
