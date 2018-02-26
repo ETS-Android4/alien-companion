@@ -59,6 +59,12 @@ public class PendingUserActionsActivity extends ToolbarActivity {
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        MyApplication.setPendingTransitions(this);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(this).registerReceiver((receiver),
