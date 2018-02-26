@@ -94,23 +94,25 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         initToolbar();
         initFields();
         initDonationForm();
+        setupIabHelper();
         refreshDonationsList();
-        bindBillingService();
-        checkAvailablePurchases();
     }
 
-    private void bindBillingService() {
+    private void setupIabHelper() {
         iabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
-                if (!result.isSuccess()) {
+                if (result.isSuccess()) {
+                    // Hooray, IAB is fully set up!
+                    Log.d(TAG, "Iab helper setup successful");
+                    checkAvailablePurchases();
+                } else {
                     // Oh no, there was a problem.
-                    Log.e(TAG, "Error setting up In-app Billing: " + result);
+                    Log.e(TAG, "Error setting up Iab helper: " + result);
                     setDonationFormEnabled(false);
                     ToastUtils.showSnackbar(DonateActivity.this.getCurrentFocus(),
                             "There was an error connecting to Google Play services. You won't be able to donate at this time.",
                             Snackbar.LENGTH_LONG);
                 }
-                // Hooray, IAB is fully set up!
             }
         });
     }
@@ -203,6 +205,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     }
 
     private void checkAvailablePurchases() {
+        Log.d(TAG, "Checking available purchases..");
         final IabHelper.QueryInventoryFinishedListener listener = new IabHelper.QueryInventoryFinishedListener() {
             @Override
             public void onQueryInventoryFinished(IabResult result, Inventory inv) {
@@ -220,11 +223,13 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         try {
             iabHelper.queryInventoryAsync(false, null, null, listener);
         } catch (Exception e) {
+            Log.e(TAG, "Exception thrown during queryInventoryAsync()");
             e.printStackTrace();
         }
     }
 
     private void startGooglePlayPurchase() {
+        Log.d(TAG, "Launching purchase flow..");
         setDonationFormEnabled(false);
         //ToastUtils.showToast(this, "Just a moment..");
         final IabHelper.OnIabPurchaseFinishedListener listener = new IabHelper.OnIabPurchaseFinishedListener() {
@@ -291,10 +296,10 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     */
 
     private void onSuccessfulPurchase(Purchase purchase) {
-        //String donationId = database.push().getKey(); // generate firebase key as donationId
-        Donation donation = new Donation(purchase.getPurchaseTime(), nameField.getText().toString(),
+        String donationId = database.push().getKey(); // generate firebase key as donationId
+        Donation donation = new Donation(purchase.getPurchaseTime(), purchase.getOrderId(), nameField.getText().toString(),
                 messageField.getText().toString(), DONATION_AMOUNTS[amountIndex], makePublic.isChecked());
-        database.child(purchase.getOrderId()).setValue(donation);
+        database.child(donationId).setValue(donation);
         initDonationForm();
         refreshDonationsList();
         final String message =

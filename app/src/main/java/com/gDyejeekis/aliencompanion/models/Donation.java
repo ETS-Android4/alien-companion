@@ -18,6 +18,7 @@ public class Donation {
     public long createdAt;
     public String name;
     public String message;
+    public String orderId;
     public float amount;
     public boolean isPublic;
     public boolean isInappropriate;
@@ -26,8 +27,9 @@ public class Donation {
     public Donation() {
     }
 
-    public Donation(long createdAt, String name, String message, float amount, boolean isPublic) {
+    public Donation(long createdAt, String orderId, String name, String message, float amount, boolean isPublic) {
         this.createdAt = createdAt;
+        this.orderId = orderId;
         this.name = (name==null || name.trim().isEmpty()) ? null : name;
         this.message = (message==null || message.trim().isEmpty()) ? null : message;
         this.amount = amount;
