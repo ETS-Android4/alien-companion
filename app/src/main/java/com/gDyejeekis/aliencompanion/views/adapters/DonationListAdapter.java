@@ -41,7 +41,7 @@ public class DonationListAdapter extends ArrayAdapter {
         if (donation != null) {
             String donator = donation.name==null ? "Anonymous" : donation.name;
             name.setText(donator);
-            amount.setText("$" + String.valueOf(donation.amount));
+            amount.setText("€" + String.valueOf(donation.amount));
             if (donation.hasMessage()) {
                 message.setVisibility(View.VISIBLE);
                 message.setText(donation.message);

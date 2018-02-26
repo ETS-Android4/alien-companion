@@ -213,7 +213,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     }
 
     private String getItemSKU() {
-        return "donation_" + String.valueOf(DONATION_AMOUNTS[amountIndex]);
+        return "donate_" + String.valueOf(DONATION_AMOUNTS[amountIndex]);
     }
 
     private void consumePurchase(Purchase purchase) {

@@ -281,7 +281,7 @@
     <string name="sunday_short">Sun</string>
     <string name="name_optional_hint">name (optional)</string>
     <string name="message_optional_hint">message (optional)</string>
-    <string name="donation_description">Donation amount: $</string>
+    <string name="donation_description">Donation amount: €</string>
     <string name="make_donation_public">Show my donation in the donations list</string>
     <string name="donate">Donate</string>
     <string name="past_donations_title">Past contributions..</string>
