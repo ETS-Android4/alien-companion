@@ -84,7 +84,7 @@
     <CheckBoxPreference
         android:key="syncNewOnly"
         android:title="Sync new posts only"
-        android:summary="When enabled only new posts will be synced to significantly reduce sync times and save data"
+        android:summary="Enable to only sync posts that haven't been synced"
         android:defaultValue="false"/>
 
     <CheckBoxPreference
