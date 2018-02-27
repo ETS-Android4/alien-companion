@@ -5,7 +5,7 @@
         <changelogtext>Fixed synced subreddits dialog background color</changelogtext>
         <changelogtext>Fixed 'Submit reply' activity being accessible when logged out</changelogtext>
         <changelogtext>Pending offline action execution is now more reliable</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Added placeholder image for large image previews in card view</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>

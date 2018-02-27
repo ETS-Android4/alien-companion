@@ -193,7 +193,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             linkButton.setVisibility(View.GONE);
             imageButton.setVisibility(View.VISIBLE);
             try {
-                Picasso.with(context).load(thumbnailObject.getUrl())/*.centerCrop().resize(1000, 300)*/.into(imageButton);
+                Picasso.with(context).load(thumbnailObject.getUrl()).placeholder(R.drawable.noimage)/*.centerCrop().resize(1000, 300)*/.into(imageButton);
             } catch (IllegalArgumentException e) {e.printStackTrace();}
         }
         else {
