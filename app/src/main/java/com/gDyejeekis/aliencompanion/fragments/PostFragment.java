@@ -42,6 +42,7 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialog
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardRelativeLayout;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -311,11 +312,15 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void submitComment() {
-        Intent intent = new Intent(activity, SubmitActivity.class);
-        intent.putExtra("submitType", SubmitType.comment);
-        intent.putExtra("postName", post.getFullName());
-        intent.putExtra("position", 1);
-        startActivity(intent);
+        if (MyApplication.currentUser == null) {
+            ToastUtils.showSnackbarOverToast(activity, "Must be logged in to comment");
+        } else {
+            Intent intent = new Intent(activity, SubmitActivity.class);
+            intent.putExtra("submitType", SubmitType.comment);
+            intent.putExtra("postName", post.getFullName());
+            intent.putExtra("position", 1);
+            startActivity(intent);
+        }
     }
 
     public void showSortPopup(View v) {
