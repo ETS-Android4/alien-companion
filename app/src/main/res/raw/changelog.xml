@@ -4,7 +4,7 @@
     <changelogversion versionName="1.0.1" changeDate="">
         <changelogtext>Fixed synced subreddits dialog background color</changelogtext>
         <changelogtext>Fixed 'Submit reply' activity being accessible when logged out</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Pending offline action execution is now more reliable</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

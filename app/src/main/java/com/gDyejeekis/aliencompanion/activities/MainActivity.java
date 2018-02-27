@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.VerifyAccountDialogFragment;
@@ -67,6 +68,7 @@ public class MainActivity extends ToolbarActivity {
     private RelativeLayout container;
 
     public static boolean setupAccount = false;
+    public static boolean checkPendingActions = false;
     public static boolean notifyDrawerChanged = false;
     public static boolean notifySwitchedMode = false;
     public static String oauthCode;
@@ -253,6 +255,12 @@ public class MainActivity extends ToolbarActivity {
             dialog.show(getFragmentManager(), "dialog");
 
             oauthCode = null;
+        }
+
+        if (checkPendingActions) {
+            checkPendingActions = false;
+            Intent intent = new Intent(this, PendingActionsService.class);
+            startService(intent);
         }
 
         if(EditSubredditsActivity.changesMade) {

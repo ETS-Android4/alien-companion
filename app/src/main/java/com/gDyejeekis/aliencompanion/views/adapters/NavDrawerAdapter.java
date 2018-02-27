@@ -835,6 +835,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void switchMode(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
+        // check for pending actions after switching to online mode
+        if (MyApplication.offlineModeEnabled)
+            MainActivity.checkPendingActions = true;
         MyApplication.offlineModeEnabled = !MyApplication.offlineModeEnabled;
         SharedPreferences.Editor editor = MyApplication.prefs.edit();
         editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
