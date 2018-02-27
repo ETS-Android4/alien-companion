@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="1.0.1" changeDate="">
+        <changelogtext>Fixed synced subreddits dialog background color</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="1.0" changeDate="Feb 26, 2018">
         <!-- appearance changes -->
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added two new post views, Classic view and Gallery view (long tap for comments)]]></changelogtext>

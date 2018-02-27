@@ -314,5 +314,6 @@
     <string name="add_subreddits">Add subreddit(s)</string>
     <string name="subscribe">Subscribe</string>
     <string name="done">Done</string>
+    <string name="no_synced_subreddits_found">No synced subreddits/multireddits found</string>
 
 </resources>
