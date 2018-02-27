@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="1.0.1" changeDate="">
+    <changelogversion versionName="1.0.1" changeDate="Feb 27, 2018">
         <changelogtext>Fixed synced subreddits dialog background color</changelogtext>
         <changelogtext>Fixed 'Submit reply' activity being accessible when logged out</changelogtext>
         <changelogtext>Pending offline action execution is now more reliable</changelogtext>
         <changelogtext>Added placeholder image for large image previews in card view</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0" changeDate="Feb 26, 2018">
