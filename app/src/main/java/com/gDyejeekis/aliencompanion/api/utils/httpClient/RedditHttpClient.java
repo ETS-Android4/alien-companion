@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.NoSuchElementException;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -112,9 +113,6 @@ public class RedditHttpClient implements HttpClient {
         } catch (org.json.simple.parser.ParseException e) {
             throw new RetrievalFailedException("Failed to parse response from GET request to URI path: " + url);
         } finally {
-            //if(inputStream != null) {
-            //    IOUtils.closeQuietly(inputStream);
-            //}
             if(connection != null) {
                 connection.disconnect();
             }
@@ -149,10 +147,11 @@ public class RedditHttpClient implements HttpClient {
             } else {
                 return result;
             }
-        } catch (IOException e) {
-            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (org.json.simple.parser.ParseException e) {
             throw new RetrievalFailedException("Failed to parse response from GET request to URI path: " + url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + url);
         }
     }
 
@@ -184,10 +183,11 @@ public class RedditHttpClient implements HttpClient {
             } else {
                 return result;
             }
-        } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
             throw new ActionFailedException("Failed to parse response from POST request to URI path: " + url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         }
     }
 
@@ -219,10 +219,11 @@ public class RedditHttpClient implements HttpClient {
             } else {
                 return result;
             }
-        } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
             throw new ActionFailedException("Failed to parse response from PUT request to URI path: " + url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         }
     }
 
@@ -254,10 +255,11 @@ public class RedditHttpClient implements HttpClient {
             } else {
                 return result;
             }
-        } catch (IOException e) {
-            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
             throw new ActionFailedException("Failed to parse response from DELETE request to URI path: " + url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ActionFailedException("Input/output failed when retrieving from URI path: " + url);
         }
     }
 

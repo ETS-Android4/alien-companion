@@ -96,10 +96,11 @@ public class ImgurHttpClient {
             } else {
                 return result;
             }
-        } catch (IOException e) {
-            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + url);
         } catch (ParseException e) {
             throw new RetrievalFailedException("Failed to parse response from GET request to URI path: " + url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RetrievalFailedException("Input/output failed when retrieving from URI path: " + url);
         }
     }
 
