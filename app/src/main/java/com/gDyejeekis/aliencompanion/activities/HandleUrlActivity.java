@@ -20,14 +20,15 @@ public class HandleUrlActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         String url;
-        if(getIntent().getAction().equals(Intent.ACTION_VIEW)) {
-            url = getIntent().getDataString();
+        Intent intent = getIntent();
+        if (intent.getAction()!=null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+            url = intent.getDataString();
         }
         else {
-            url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            url = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
 
-        if(url!=null) {
+        if (url!=null && !url.isEmpty()) {
             MyApplication.checkAccountInit(this, new PoliteRedditHttpClient());
             if(MyApplication.offlineModeEnabled) {
                 notifySwitchedMode = true;

@@ -644,14 +644,29 @@ public class MyApplication extends Application {
         return null;
     }
 
-    public static void checkAccountInit(Context context, HttpClient httpClient) {
-        if (MyApplication.currentAccount == null) {
-            MyApplication.currentAccount = MyApplication.getCurrentAccount(context);
-            MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
-            if(MyApplication.currentAccount.loggedIn) {
-                MyApplication.currentUser = new User(httpClient, MyApplication.currentAccount.getUsername(), MyApplication.currentAccount.getToken());
+    // return true for successful init, false for unsuccessful
+    public static boolean checkAccountInit(Context context, HttpClient httpClient) {
+        final int maxInitDuration = 750; // max duration of current account read attempts in milliseconds
+        final long startTime = System.currentTimeMillis();
+        try {
+            while (currentAccount == null) {
+                if ((System.currentTimeMillis()-startTime) > maxInitDuration) {
+                    Log.e(TAG, "Account init timed out");
+                    return false;
+                }
+                currentAccount = MyApplication.getCurrentAccount(context);
             }
+
+            currentAccessToken = currentAccount.getToken().accessToken;
+            if (currentAccount.loggedIn) {
+                currentUser = new User(httpClient, currentAccount.getUsername(), currentAccount.getToken());
+            }
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Exception thrown during account init");
+            e.printStackTrace();
         }
+        return false;
     }
 
 }
