@@ -386,18 +386,25 @@ public class MyApplication extends Application {
     }
 
     private void authenticateWithFirebase() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                String msg = "Firebase authentication signInAnonymously:";
-                if (task.isSuccessful()) {
-                    Log.d(TAG, msg + "success");
-                } else {
-                    Log.e(TAG, msg + "failure", task.getException());
+        final String msg = "Firebase authentication signInAnonymously:";
+        try {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, msg + "success");
+                    } else {
+                        Log.e(TAG, msg + "failure");
+                        if (task.getException()!=null)
+                            task.getException().printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            Log.e(TAG, msg + "failure");
+            e.printStackTrace();
+        }
     }
 
     public static void getCurrentSettings() {

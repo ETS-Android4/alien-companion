@@ -3,7 +3,7 @@
 
     <changelogversion versionName="1.0.2" changeDate="">
         <changelogtext>Fixed occasional crash when making API calls to reddit</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed occasional crash when trying to authenticate with Firebase on app launch</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>
