@@ -148,6 +148,8 @@ public class MyApplication extends Application {
     public static boolean pendingOfflineActions;
     public static boolean autoExecuteOfflineActions;
 
+    public static boolean firebaseAuthenticated;
+
     //not used
     public static boolean syncGif = false;
 
@@ -385,24 +387,31 @@ public class MyApplication extends Application {
         }
     }
 
-    private void authenticateWithFirebase() {
+    public static void authenticateWithFirebase() {
         final String msg = "Firebase authentication signInAnonymously:";
+        final OnCompleteListener<AuthResult> listener = new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                firebaseAuthenticated = task.isSuccessful();
+                if (task.isSuccessful()) {
+                    Log.d(TAG, msg + "success");
+                } else {
+                    Log.e(TAG, msg + "failure");
+                    if (task.getException()!=null)
+                        task.getException().printStackTrace();
+                }
+            }
+        };
+        authenticateWithFirebase(listener);
+    }
+
+    public static void authenticateWithFirebase(OnCompleteListener<AuthResult> listener) {
+        Log.d(TAG, "Initiating Firebase authentication signInAnonymously..");
         try {
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, msg + "success");
-                    } else {
-                        Log.e(TAG, msg + "failure");
-                        if (task.getException()!=null)
-                            task.getException().printStackTrace();
-                    }
-                }
-            });
+            auth.signInAnonymously().addOnCompleteListener(listener);
         } catch (Exception e) {
-            Log.e(TAG, msg + "failure");
+            firebaseAuthenticated = false;
             e.printStackTrace();
         }
     }
