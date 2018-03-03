@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +9,12 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.MessageActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ReportDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
-import com.gDyejeekis.aliencompanion.utils.LinkHandler;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
@@ -85,9 +82,7 @@ public class MessageItemListener implements View.OnClickListener, View.OnLongCli
                         }
                         return true;
                     case R.id.action_copy_text:
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Message body", message.body);
-                        clipboard.setPrimaryClip(clip);
+                        GeneralUtils.copyTextToClipboard(context, "Message body", message.body);
                         return true;
                     case R.id.action_block_user:
                         //TODO: implement this

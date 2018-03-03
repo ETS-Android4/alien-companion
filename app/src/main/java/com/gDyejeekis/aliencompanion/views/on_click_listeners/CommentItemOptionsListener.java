@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
@@ -238,17 +235,13 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     case R.id.action_copy_link:
                         String commentLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
                                 + "?comment=" + comment.getIdentifier();
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Comment permalink", commentLink);
-                        clipboard.setPrimaryClip(clip);
+                        GeneralUtils.copyTextToClipboard(context, "Comment permalink", commentLink);
                         return true;
                     case R.id.action_select_text:
                         // TODO: 4/9/2017
                         return true;
                     case R.id.action_copy_text:
-                        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        clip = ClipData.newPlainText("Comment body", comment.getBody());
-                        clipboard.setPrimaryClip(clip);
+                        GeneralUtils.copyTextToClipboard(context, "Comment body", comment.getBody());
                         return true;
                     case R.id.action_share:
                         shareComment();

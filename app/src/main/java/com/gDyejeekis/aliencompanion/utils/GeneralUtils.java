@@ -2,6 +2,8 @@ package com.gDyejeekis.aliencompanion.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -399,6 +401,15 @@ public class GeneralUtils {
         }
         Log.d(TAG, "Didn't find media from " + url + " in cache");
         return null;
+    }
+
+    public static void copyTextToClipboard(Context context, String label, String toCopy) {
+        ClipboardManager clipboardManager =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboardManager!=null) {
+            ClipData clipData = ClipData.newPlainText(label, toCopy);
+            clipboardManager.setPrimaryClip(clipData);
+        }
     }
 
     public static void shareUrl(Context context, String label, String url) {

@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -344,9 +342,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     case R.id.action_copy_to_clipboard:
                         if(post.isSelf()) {
                             String postLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
-                            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("Post permalink", postLink);
-                            clipboard.setPrimaryClip(clip);
+                            GeneralUtils.copyTextToClipboard(context, "Post permalink", postLink);
                         }
                         else {
                             TwoOptionDialogFragment choiceDialog = TwoOptionDialogFragment.newInstance("POST LINK", "COMMENTS URL",
@@ -362,9 +358,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                                                 stringToCopy = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
                                                 label = "Comments url";
                                             }
-                                            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                                            ClipData clip = ClipData.newPlainText(label, stringToCopy);
-                                            clipboard.setPrimaryClip(clip);
+                                            GeneralUtils.copyTextToClipboard(context, label, stringToCopy);
                                         }
                                     });
                             choiceDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
