@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,8 +14,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
-
-import java.net.URISyntaxException;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
  * Created by George on 8/16/2015.
@@ -26,12 +26,13 @@ public class UrlOptionsDialogFragment extends ScalableDialogFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-
-        url = getArguments().getString("url");
         try {
-            if (LinkUtils.getDomainName(url) == null)
-                url = ApiEndpointUtils.REDDIT_BASE_URL + url;
-        } catch (URISyntaxException e) {}
+            url = getArguments().getString("url");
+            if (LinkUtils.isNoDomainRedditUrl(url))
+                url = ApiEndpointUtils.REDDIT_BASE_URL + url.toLowerCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -48,8 +49,15 @@ public class UrlOptionsDialogFragment extends ScalableDialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                getActivity().startActivity(intent);
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    getContext().startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    ToastUtils.showToast(getContext(), "No activity found to handle Intent");
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

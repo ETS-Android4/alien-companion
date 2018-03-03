@@ -210,6 +210,10 @@ public class LinkUtils {
         return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches("(https?:\\/\\/)?redd\\.it\\/\\w+.*");
     }
 
+    public static boolean isNoDomainRedditUrl(String url) {
+        return url.matches("(?i)\\/(r|u|user)\\/.*");
+    }
+
     public static Submission getRedditPostFromUrl(String url) {
         Submission post = null;
         url = url.toLowerCase();
