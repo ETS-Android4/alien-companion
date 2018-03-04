@@ -493,7 +493,7 @@ public class GeneralUtils {
 
     public static boolean isValidSubreddit(String s) {
         final String pattern = "^[a-zA-Z0-9\\_]*$";
-        return s.matches(pattern);
+        return s.equalsIgnoreCase("reddit.com") || s.matches(pattern);
     }
 
     public static boolean isValidUsername(String s) {
