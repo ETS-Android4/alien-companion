@@ -382,6 +382,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public void initFabNavOptions() {
         FrameLayout fabContainer = activity.findViewById(R.id.container_fab);
         if (MyApplication.postFabNavigation && hasFabNavigation()) {
+            fabContainer.setVisibility(View.VISIBLE);
             View.inflate(activity, R.layout.fab_post_nav, fabContainer);
             layoutFabNav = activity.findViewById(R.id.layout_fab_nav);
             layoutFabNav.setVisibility(View.VISIBLE);
@@ -424,6 +425,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             setFabIndividualVisibility(false);
         } else {
             fabContainer.removeAllViews();
+            fabContainer.setVisibility(View.GONE);
         }
     }
 

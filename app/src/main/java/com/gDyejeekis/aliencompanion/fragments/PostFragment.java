@@ -376,6 +376,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void initFabNavOptions() {
         FrameLayout fabContainer = activity.findViewById(R.id.container_fab);
         if (MyApplication.commentFabNavigation) {
+            fabContainer.setVisibility(View.VISIBLE);
             View.inflate(activity, R.layout.fab_comment_nav, fabContainer);
             layoutFabRoot = activity.findViewById(R.id.layout_comment_nav_root);
             layoutFabRoot.setVisibility(View.VISIBLE);
@@ -406,6 +407,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             setCommentNavSetting(CommentNavSetting.threads);
         } else {
             fabContainer.removeAllViews();
+            fabContainer.setVisibility(View.GONE);
         }
     }
 

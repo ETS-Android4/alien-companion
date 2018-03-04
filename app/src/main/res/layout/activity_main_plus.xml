@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/activity_reddit_content"/>
+    <include layout="@layout/activity_toolbar_scrollable"/>
 
     <android.support.design.widget.NavigationView
         xmlns:app="http://schemas.android.com/apk/res-auto"
