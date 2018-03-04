@@ -20,9 +20,9 @@
         android:id="@+id/container_main"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/container_fab"
         android:visibility="gone"/>
 

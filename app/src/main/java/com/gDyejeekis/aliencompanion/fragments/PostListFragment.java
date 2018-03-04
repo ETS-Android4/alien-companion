@@ -193,7 +193,7 @@ public class PostListFragment extends RedditContentFragment {
             case R.id.action_view_sidebar:
                 if(subreddit == null || subreddit.equalsIgnoreCase("all") || subreddit.equalsIgnoreCase("popular")) {
                     String string = (subreddit==null) ? "the front page" : "/r/" + subreddit;
-                    ToastUtils.showSnackbarOverToast(activity, "No sidebar for " + string);
+                    setSnackbar(ToastUtils.showSnackbar(getSnackbarParentView(), "No sidebar for " + string));
                 }
                 else {
                     SubredditSidebarDialogFragment dialog = new SubredditSidebarDialogFragment();
@@ -265,7 +265,7 @@ public class PostListFragment extends RedditContentFragment {
 
     public void submitPost(boolean fabClicked) {
         if (MyApplication.currentUser == null) {
-            ToastUtils.showSnackbarOverToast(activity, "Must be logged in to submit a post");
+            setSnackbar(ToastUtils.showSnackbar(getSnackbarParentView(), "Must be logged in to submit a post"));
         } else {
             if (fabClicked) {
                 setFabSubmitOptionsVisible(true);

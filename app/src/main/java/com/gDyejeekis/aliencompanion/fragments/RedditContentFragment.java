@@ -18,13 +18,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -32,7 +30,6 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.PendingUserActionsActivity;
 import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
@@ -92,7 +89,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     private DividerItemDecoration dividerDecoration;
 
     public View getSnackbarParentView() {
-        return layoutFabNav;
+        return fabContainer;
     }
 
     @Override
@@ -236,7 +233,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                     }
                     editor.apply();
                     updateCurrentViewType();
-                    updateFabLayoutGravity();
+                    updateFabContainerGravity();
                     if(currentLoadType==null) {
                         redrawList();
                     }
@@ -326,7 +323,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    private MoveUpwardLinearLayout layoutFabNav;
+    private MoveUpwardLinearLayout fabContainer;
+    private LinearLayout layoutFabRoot;
     private LinearLayout layoutFabNavOptions;
     private boolean fabOptionsVisible;
     private boolean fabSubmitOptionsVisible;
@@ -381,13 +379,13 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void initFabNavOptions() {
-        FrameLayout fabContainer = activity.findViewById(R.id.container_fab);
+        fabContainer = activity.findViewById(R.id.container_fab);
         if (MyApplication.postFabNavigation && hasFabNavigation()) {
             fabContainer.setVisibility(View.VISIBLE);
             View.inflate(activity, R.layout.fab_post_nav, fabContainer);
-            layoutFabNav = activity.findViewById(R.id.layout_fab_nav);
-            layoutFabNav.setVisibility(View.VISIBLE);
-            updateFabLayoutGravity();
+            layoutFabRoot = activity.findViewById(R.id.layout_fab_nav);
+            layoutFabRoot.setVisibility(View.VISIBLE);
+            updateFabContainerGravity();
             layoutFabNavOptions = activity.findViewById(R.id.layout_fab_nav_options);
             layoutFabNavOptions.setVisibility(View.GONE);
 
@@ -430,16 +428,14 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
-    public void updateFabLayoutGravity() {
-        if (layoutFabNav != null) {
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            if (currentViewTypeValue == PostViewType.listReversed.value() || MyApplication.dualPaneActive) {
-                params.gravity = Gravity.BOTTOM | Gravity.START;
-            } else {
-                params.gravity = Gravity.BOTTOM | Gravity.END;
-            }
-            layoutFabNav.setLayoutParams(params);
+    private void updateFabContainerGravity() {
+        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+        if (currentViewTypeValue == PostViewType.listReversed.value() || MyApplication.dualPaneActive) {
+            params.gravity = Gravity.BOTTOM | Gravity.START;
+        } else {
+            params.gravity = Gravity.BOTTOM | Gravity.END;
         }
+        fabContainer.setLayoutParams(params);
     }
 
     public void updateFabNavColors() {

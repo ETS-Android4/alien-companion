@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_fab_nav"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:gravity="bottom|end"
     android:orientation="vertical"
     android:clickable="true">
 
@@ -90,4 +88,4 @@
         android:src="@drawable/ic_add_white_48dp"
         app:fabSize="normal" />
 
-</com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout>
+</LinearLayout>

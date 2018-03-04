@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
@@ -41,6 +42,7 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDial
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
+import com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardRelativeLayout;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
@@ -79,7 +81,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private BroadcastReceiver commentSubmittedReceiver;
 
     private static boolean fabOptionsVisible;
-    private MoveUpwardRelativeLayout layoutFabRoot;
+    private MoveUpwardLinearLayout fabContainer;
+    //private RelativeLayout layoutFabRoot;
     private LinearLayout layoutFabNav;
     private LinearLayout layoutFabOptions;
     private FloatingActionButton fabMain;
@@ -106,7 +109,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     };
 
     public View getSnackbarParentView() {
-        return layoutFabRoot;
+        return fabContainer;
     }
 
     public static PostFragment newInstance(Submission post) {
@@ -374,12 +377,12 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void initFabNavOptions() {
-        FrameLayout fabContainer = activity.findViewById(R.id.container_fab);
+        fabContainer = activity.findViewById(R.id.container_fab);
         if (MyApplication.commentFabNavigation) {
             fabContainer.setVisibility(View.VISIBLE);
             View.inflate(activity, R.layout.fab_comment_nav, fabContainer);
-            layoutFabRoot = activity.findViewById(R.id.layout_comment_nav_root);
-            layoutFabRoot.setVisibility(View.VISIBLE);
+            //layoutFabRoot = activity.findViewById(R.id.layout_comment_nav_root);
+            //layoutFabRoot.setVisibility(View.VISIBLE);
             layoutFabNav = activity.findViewById(R.id.layout_comment_nav);
             layoutFabOptions = activity.findViewById(R.id.layout_comment_fab_options);
             fabMain = activity.findViewById(R.id.fab_nav);
