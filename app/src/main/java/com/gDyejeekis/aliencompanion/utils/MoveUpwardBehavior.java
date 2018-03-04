@@ -18,7 +18,8 @@ public class MoveUpwardBehavior extends CoordinatorLayout.Behavior<View> {
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
-        initialPositionY = parent.getY();
+        //initialPositionY = parent.getY();
+        initialPositionY = 0; // this should be always 0 to work properly (for some reason it isn't 0 in MainActivity)
         float translationY = Math.min(0, dependency.getTranslationY() - dependency.getHeight());
         child.setTranslationY(translationY);
         return true;

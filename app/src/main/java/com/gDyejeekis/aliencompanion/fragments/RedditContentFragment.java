@@ -324,7 +324,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     private MoveUpwardLinearLayout fabContainer;
-    private LinearLayout layoutFabRoot;
+    //private LinearLayout layoutFabRoot;
     private LinearLayout layoutFabNavOptions;
     private boolean fabOptionsVisible;
     private boolean fabSubmitOptionsVisible;
@@ -383,8 +383,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         if (MyApplication.postFabNavigation && hasFabNavigation()) {
             fabContainer.setVisibility(View.VISIBLE);
             View.inflate(activity, R.layout.fab_post_nav, fabContainer);
-            layoutFabRoot = activity.findViewById(R.id.layout_fab_nav);
-            layoutFabRoot.setVisibility(View.VISIBLE);
+            //layoutFabRoot = activity.findViewById(R.id.layout_fab_nav);
+            //layoutFabRoot.setVisibility(View.VISIBLE);
             updateFabContainerGravity();
             layoutFabNavOptions = activity.findViewById(R.id.layout_fab_nav_options);
             layoutFabNavOptions.setVisibility(View.GONE);
@@ -429,13 +429,12 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     private void updateFabContainerGravity() {
-        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabContainer.getLayoutParams();
         if (currentViewTypeValue == PostViewType.listReversed.value() || MyApplication.dualPaneActive) {
             params.gravity = Gravity.BOTTOM | Gravity.START;
         } else {
             params.gravity = Gravity.BOTTOM | Gravity.END;
         }
-        fabContainer.setLayoutParams(params);
     }
 
     public void updateFabNavColors() {
