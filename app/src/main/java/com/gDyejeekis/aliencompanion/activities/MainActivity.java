@@ -302,9 +302,6 @@ public class MainActivity extends ToolbarActivity {
         if(MyApplication.colorSecondaryChanged) {
             MyApplication.colorSecondaryChanged = false;
             listFragment.colorSecondaryChanged();
-            if(MyApplication.postFabNavigation) {
-                getListFragment().updateFabNavColors();
-            }
         }
 
         if(MyApplication.drawerGravity != drawerParams.gravity) {

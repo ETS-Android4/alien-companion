@@ -556,6 +556,8 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     public void colorSecondaryChanged() {
         updateMainProgressColor();
         updateSwipeRefreshColor();
+        if(MyApplication.postFabNavigation)
+            updateFabNavColors();
     }
 
     @Override

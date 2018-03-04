@@ -310,6 +310,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_SHOW_MORE:
                 FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
                 AppCompatActivity activity = (AppCompatActivity) context;
+                footerViewHolder.showMoreProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
                 footerViewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(activity.getSupportFragmentManager().findFragmentByTag("listFragment")));
                 if(loadingMoreItems) {
                     footerViewHolder.showMoreProgress.setVisibility(View.VISIBLE);
@@ -359,14 +360,14 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public MessageViewHolder(View itemView) {
             super(itemView);
-            layoutMessage = (LinearLayout) itemView.findViewById(R.id.layout_message);
-            //layoutMessageOptions = (LinearLayout) itemView.findViewById(R.id.layout_messageOptions);
-            subject = (TextView) itemView.findViewById(R.id.txtView_msgSubject);
-            newMsg = (TextView) itemView.findViewById(R.id.textView_new_message);
-            body = (TextView) itemView.findViewById(R.id.txtView_messageBody);
-            age = (TextView) itemView.findViewById(R.id.txtView_messageAge);
-            author = (TextView) itemView.findViewById(R.id.textView_messageAuthor);
-            dest = (TextView) itemView.findViewById(R.id.textView_dest);
+            layoutMessage = itemView.findViewById(R.id.layout_message);
+            //layoutMessageOptions = itemView.findViewById(R.id.layout_messageOptions);
+            subject = itemView.findViewById(R.id.txtView_msgSubject);
+            newMsg = itemView.findViewById(R.id.textView_new_message);
+            body = itemView.findViewById(R.id.txtView_messageBody);
+            age = itemView.findViewById(R.id.txtView_messageAge);
+            author = itemView.findViewById(R.id.textView_messageAuthor);
+            dest = itemView.findViewById(R.id.textView_dest);
         }
 
         public void bindModel(Context context, Message message) {
@@ -438,21 +439,21 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             super(itemView);
             defaultIconOpacity = MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST ? 0.6f : 1f;
             defaultIconOpacityDisabled = MyApplication.currentBaseTheme == AppConstants.DARK_THEME_LOW_CONTRAST ? 0.3f : 0.5f;
-            layoutComment = (LinearLayout) itemView.findViewById(R.id.layout_comment);
+            layoutComment = itemView.findViewById(R.id.layout_comment);
             layoutMenuBarToggle = itemView.findViewById(R.id.layout_toggle_menu_bar);
-            layoutCommentOptions = (LinearLayout) itemView.findViewById(R.id.layout_commentOptions);
-            postTitle = (TextView) itemView.findViewById(R.id.txtView_postTitle);
-            commentBody = (TextView) itemView.findViewById(R.id.txtView_commentBody);
-            commentScore = (TextView) itemView.findViewById(R.id.txtView_commentScore);
-            commentSubreddit = (TextView) itemView.findViewById(R.id.txtView_commentSubreddit);
-            commentAge = (TextView) itemView.findViewById(R.id.txtView_commentAge);
-            upvote = (ImageView) itemView.findViewById(R.id.btn_upvote);
-            downvote = (ImageView) itemView.findViewById(R.id.btn_downvote);
-            reply = (ImageView) itemView.findViewById(R.id.btn_reply);
-            viewUser = (ImageView) itemView.findViewById(R.id.btn_view_user);
-            save = (ImageView) itemView.findViewById(R.id.btn_save);
-            share = (ImageView) itemView.findViewById(R.id.btn_share);
-            more = (ImageView) itemView.findViewById(R.id.btn_more);
+            layoutCommentOptions = itemView.findViewById(R.id.layout_commentOptions);
+            postTitle = itemView.findViewById(R.id.txtView_postTitle);
+            commentBody = itemView.findViewById(R.id.txtView_commentBody);
+            commentScore = itemView.findViewById(R.id.txtView_commentScore);
+            commentSubreddit = itemView.findViewById(R.id.txtView_commentSubreddit);
+            commentAge = itemView.findViewById(R.id.txtView_commentAge);
+            upvote = itemView.findViewById(R.id.btn_upvote);
+            downvote = itemView.findViewById(R.id.btn_downvote);
+            reply = itemView.findViewById(R.id.btn_reply);
+            viewUser = itemView.findViewById(R.id.btn_view_user);
+            save = itemView.findViewById(R.id.btn_save);
+            share = itemView.findViewById(R.id.btn_share);
+            more = itemView.findViewById(R.id.btn_more);
             menuBarToggle = itemView.findViewById(R.id.imageView_toggle_menu_bar);
 
             if (MyApplication.currentBaseTheme == AppConstants.LIGHT_THEME) menuBarToggle.setAlpha(0.54f);
@@ -571,10 +572,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public UserInfoViewHolder(View itemView) {
             super(itemView);
             //trophiesAdded = false;
-            layoutKarma = (LinearLayout) itemView.findViewById(R.id.layout_karma);
-            layoutTrophies = (TableLayout) itemView.findViewById(R.id.layout_trophies);
-            linkKarma = (TextView) itemView.findViewById(R.id.txtView_linkKarma);
-            commentKarma = (TextView) itemView.findViewById(R.id.txtView_commentKarma);
+            layoutKarma = itemView.findViewById(R.id.layout_karma);
+            layoutTrophies = itemView.findViewById(R.id.layout_trophies);
+            linkKarma = itemView.findViewById(R.id.txtView_linkKarma);
+            commentKarma = itemView.findViewById(R.id.txtView_commentKarma);
         }
 
         public void bindModel(Context context, UserInfo userInfo) {
@@ -641,9 +642,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
         public FooterViewHolder(View itemView) {
             super(itemView);
-            showMoreButton = (Button) itemView.findViewById(R.id.showMore);
-            showMoreProgress = (ProgressBar) itemView.findViewById(R.id.progressBar);
-            showMoreProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
+            showMoreButton = itemView.findViewById(R.id.showMore);
+            showMoreProgress = itemView.findViewById(R.id.progressBar);
         }
     }
 
