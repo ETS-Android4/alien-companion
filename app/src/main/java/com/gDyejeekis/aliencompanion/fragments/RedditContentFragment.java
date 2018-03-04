@@ -258,6 +258,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
                 }
             }
             updateContentView(new RedditItemListAdapter(activity, currentViewTypeValue, notClicked));
+            activity.expandToolbar();
         } catch (Exception e) {
             e.printStackTrace();
         }
