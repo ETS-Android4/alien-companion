@@ -18,11 +18,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -82,7 +84,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             updateSwipeRefreshState();
-            updateToolbarOnScroll(dy);
             updateFabOnScroll(dy);
             updateLoadMoreOnScroll(recyclerView);
         }
@@ -110,7 +111,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         initFabAnimations();
 
         loadMore = MyApplication.endlessPosts;
-        //hasMore = true;
     }
 
     @Override
@@ -141,18 +141,6 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         if(currentSnackbar!=null) {
             currentSnackbar.dismiss();
             currentSnackbar = null;
-        }
-    }
-
-    private void updateToolbarOnScroll(int dy) {
-        if(MyApplication.autoHideToolbar) {
-            if(dy > AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
-                activity.hideToolbar();
-            }
-            else if(dy < -AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
-                    || findFirstCompletelyVisiblePostPosition() == 0) {
-                activity.showToolbar();
-            }
         }
     }
 
@@ -391,23 +379,25 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         });
     }
 
-    public void initFabNavOptions(View view) {
-        layoutFabNav = (MoveUpwardLinearLayout) view.findViewById(R.id.layout_fab_nav);
-        if(MyApplication.postFabNavigation && hasFabNavigation()) {
+    public void initFabNavOptions() {
+        FrameLayout fabContainer = activity.findViewById(R.id.container_fab);
+        if (MyApplication.postFabNavigation && hasFabNavigation()) {
+            View.inflate(activity, R.layout.fab_post_nav, fabContainer);
+            layoutFabNav = activity.findViewById(R.id.layout_fab_nav);
             layoutFabNav.setVisibility(View.VISIBLE);
             updateFabLayoutGravity();
-            layoutFabNavOptions = (LinearLayout) view.findViewById(R.id.layout_fab_nav_options);
+            layoutFabNavOptions = activity.findViewById(R.id.layout_fab_nav_options);
             layoutFabNavOptions.setVisibility(View.GONE);
 
-            fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
-            fabRefresh = (FloatingActionButton) view.findViewById(R.id.fab_refresh);
-            fabViewSynced = (FloatingActionButton) view.findViewById(R.id.fab_view_synced);
-            fabSubmit = (FloatingActionButton) view.findViewById(R.id.fab_submit);
-            fabSync = (FloatingActionButton) view.findViewById(R.id.fab_sync);
-            fabHideRead = (FloatingActionButton) view.findViewById(R.id.fab_hide_read);
-            fabSearch = (FloatingActionButton) view.findViewById(R.id.fab_search);
-            fabSubmitLink = (FloatingActionButton) view.findViewById(R.id.fab_submit_link);
-            fabSubmitText = (FloatingActionButton) view.findViewById(R.id.fab_submit_text);
+            fabMain = activity.findViewById(R.id.fab_nav);
+            fabRefresh = activity.findViewById(R.id.fab_refresh);
+            fabViewSynced = activity.findViewById(R.id.fab_view_synced);
+            fabSubmit = activity.findViewById(R.id.fab_submit);
+            fabSync = activity.findViewById(R.id.fab_sync);
+            fabHideRead = activity.findViewById(R.id.fab_hide_read);
+            fabSearch = activity.findViewById(R.id.fab_search);
+            fabSubmitLink = activity.findViewById(R.id.fab_submit_link);
+            fabSubmitText = activity.findViewById(R.id.fab_submit_text);
             PostFabNavListener listener = new PostFabNavListener(this);
             fabMain.setOnClickListener(listener);
             fabRefresh.setOnClickListener(listener);
@@ -432,21 +422,21 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
             fabMain.show();
             setFabIndividualVisibility(false);
-        }
-        else {
-            layoutFabNav.setVisibility(View.GONE);
+        } else {
+            fabContainer.removeAllViews();
         }
     }
 
     public void updateFabLayoutGravity() {
-        CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(CoordinatorLayout.LayoutParams.WRAP_CONTENT, CoordinatorLayout.LayoutParams.WRAP_CONTENT);
-        if(currentViewTypeValue == PostViewType.listReversed.value() || MyApplication.dualPaneActive) {
-            params.gravity = Gravity.BOTTOM | Gravity.START;
+        if (layoutFabNav != null) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            if (currentViewTypeValue == PostViewType.listReversed.value() || MyApplication.dualPaneActive) {
+                params.gravity = Gravity.BOTTOM | Gravity.START;
+            } else {
+                params.gravity = Gravity.BOTTOM | Gravity.END;
+            }
+            layoutFabNav.setLayoutParams(params);
         }
-        else {
-            params.gravity = Gravity.BOTTOM | Gravity.END;
-        }
-        layoutFabNav.setLayoutParams(params);
     }
 
     public void updateFabNavColors() {
@@ -535,7 +525,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void initMainProgressBar(View view) {
-        mainProgressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
+        mainProgressBar = view.findViewById(R.id.progressBar2);
         updateMainProgressColor();
     }
 
@@ -544,24 +534,17 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void initSwipeRefreshLayout(View view) {
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
         updateSwipeRefreshColor();
-        updateSwipeRefreshOffset();
     }
 
     public void updateSwipeRefreshColor() {
         swipeRefreshLayout.setColorSchemeColors(MyApplication.colorSecondary);
     }
 
-    public void updateSwipeRefreshOffset() {
-        int end = activity.toolbarVisible ? activity.toolbar.getHeight() : 0;
-        swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
-    }
-
     private void updateSwipeRefreshState() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && findFirstCompletelyVisiblePostPosition() == 0);
-        updateSwipeRefreshOffset();
     }
 
     public void colorPrimaryChanged() {

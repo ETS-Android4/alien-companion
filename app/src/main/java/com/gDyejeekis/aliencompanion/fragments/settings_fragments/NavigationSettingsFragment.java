@@ -6,6 +6,7 @@ import android.preference.PreferenceFragment;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 
 /**
  * Created by George on 9/10/2016.
@@ -16,10 +17,12 @@ public class NavigationSettingsFragment extends PreferenceFragment implements Pr
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.navigation_preferences);
 
+        Preference autoHideToolbar = findPreference("autoHideToolbar");
         Preference fabPostNav = findPreference("postNav");
         Preference autoHidePostFab = findPreference("autoHidePostNav");
         Preference fabCommentNav = findPreference("commentNav");
         Preference autoHideCommentNav = findPreference("autoHideCommentNav");
+        autoHideToolbar.setOnPreferenceChangeListener(this);
         fabPostNav.setOnPreferenceChangeListener(this);
         autoHidePostFab.setOnPreferenceChangeListener(this);
         fabCommentNav.setOnPreferenceChangeListener(this);
@@ -35,6 +38,10 @@ public class NavigationSettingsFragment extends PreferenceFragment implements Pr
         }
         else if(key.equals("commentNav") || key.equals("autoHideCommentNav")) {
             MyApplication.fabCommentNavChanged = true;
+            return true;
+        }
+        else if (key.equals("autoHideToolbar")) {
+            MainActivity.notifyToolbarAutohideChanged = true;
             return true;
         }
         return false;

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
@@ -176,6 +177,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                     }
                 }
                 else {
+                    ((ToolbarActivity) context).expandToolbar();
                     this.fragment.mLayoutManager.scrollToPosition(0);
                     this.fragment.setCommentSort(this.fragment.tempSort);
                     this.fragment.setActionBarSubtitle();

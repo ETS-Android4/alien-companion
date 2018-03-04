@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/drawer_layout"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/container">
-
-        <include layout="@layout/my_toolbar" />
-
-        <!--<include layout="@layout/activity_main" />-->
-
-    </RelativeLayout>
+    <include layout="@layout/activity_reddit_content"/>
 
     <android.support.design.widget.NavigationView
         xmlns:app="http://schemas.android.com/apk/res-auto"

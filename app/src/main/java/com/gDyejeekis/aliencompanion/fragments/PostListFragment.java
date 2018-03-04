@@ -4,19 +4,16 @@ package com.gDyejeekis.aliencompanion.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
@@ -27,7 +24,6 @@ import com.gDyejeekis.aliencompanion.asynctask.LoadPostListTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
@@ -35,8 +31,6 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
-
-import java.io.File;
 
 
 /**
@@ -122,17 +116,14 @@ public class PostListFragment extends RedditContentFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-        View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
-
+        View view = inflater.inflate(R.layout.fragment_reddit_content, container, false);
+        contentView = view.findViewById(R.id.recyclerView_postList);
+        contentView.addOnScrollListener(onScrollListener);
+        updateContentViewProperties();
+        updateCurrentViewType();
         initMainProgressBar(view);
         initSwipeRefreshLayout(view);
-
-        updateCurrentViewType();
-        updateContentViewProperties();
-        initFabNavOptions(view);
-
-        contentView.addOnScrollListener(onScrollListener);
+        initFabNavOptions();
 
         if(currentLoadType == null) {
             //Log.d("geo test", "currentLoadType is null");
@@ -467,7 +458,7 @@ public class PostListFragment extends RedditContentFragment {
         task = new LoadPostListTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         hideAllFabOptions();
-        activity.showToolbar();
+        activity.expandToolbar();
     }
 
     public void setSubreddit(String subreddit) {

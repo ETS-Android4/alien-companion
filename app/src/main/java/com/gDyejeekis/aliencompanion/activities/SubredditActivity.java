@@ -8,8 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
@@ -26,7 +26,7 @@ public class SubredditActivity extends SwipeBackActivity {
     private PostListFragment listFragment;
     private PostFragment postFragment;
     private FragmentManager fm;
-    private RelativeLayout container;
+    private FrameLayout container;
     //private boolean dualPaneActive;
 
     public PostListFragment getListFragment() {
@@ -47,9 +47,9 @@ public class SubredditActivity extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toolbar);
+        setContentView(R.layout.activity_reddit_content);
         initToolbar();
-        container = (RelativeLayout) findViewById(R.id.container);
+        container = (FrameLayout) findViewById(R.id.container_main);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
@@ -59,12 +59,12 @@ public class SubredditActivity extends SwipeBackActivity {
         int resource;
         if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             MyApplication.dualPaneActive = true;
-            View.inflate(this, R.layout.activity_main_dual_panel, container);
+            View.inflate(this, R.layout.activity_dual_pane, container);
             resource = R.id.listFragmentHolder;
         }
         else {
             MyApplication.dualPaneActive = false;
-            View.inflate(this, R.layout.activity_main, container);
+            View.inflate(this, R.layout.activity_single_pane, container);
             resource = R.id.fragmentHolder;
         }
 
@@ -176,13 +176,13 @@ public class SubredditActivity extends SwipeBackActivity {
         super.onConfigurationChanged(newConfig);
 
         if(MyApplication.dualPane) {
-            container.removeViewAt(1);
+            container.removeAllViews();
             fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
             listFragment = recreateListFragment(listFragment);
             int resource;
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 MyApplication.dualPaneActive = true;
-                View.inflate(this, R.layout.activity_main_dual_panel, container);
+                View.inflate(this, R.layout.activity_dual_pane, container);
                 resource = R.id.listFragmentHolder;
 
                 PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
@@ -193,7 +193,7 @@ public class SubredditActivity extends SwipeBackActivity {
                 }
             } else {
                 MyApplication.dualPaneActive = false;
-                View.inflate(this, R.layout.activity_main, container);
+                View.inflate(this, R.layout.activity_single_pane, container);
                 resource = R.id.fragmentHolder;
             }
             fm.beginTransaction().add(resource, listFragment, "listFragment").commitAllowingStateLoss();

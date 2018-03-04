@@ -17,8 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
@@ -64,20 +64,18 @@ public class MainActivity extends ToolbarActivity {
     private NavDrawerAdapter navDrawerAdapter;
     private DrawerLayout.LayoutParams drawerParams;
     private NavigationView scrimInsetsFrameLayout;
-    //private Toolbar toolbar;
-    private RelativeLayout container;
+    private FrameLayout container;
 
     public static boolean setupAccount = false;
     public static boolean checkPendingActions = false;
     public static boolean notifyDrawerChanged = false;
+    public static boolean notifyToolbarAutohideChanged = false;
     public static boolean notifySwitchedMode = false;
     public static String oauthCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         setOrientation();
-        //MyApplication.setThemeRelatedFields(this);
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         //if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
@@ -90,10 +88,7 @@ public class MainActivity extends ToolbarActivity {
         setContentView(R.layout.activity_main_plus);
         initToolbar();
 
-        container = (RelativeLayout) findViewById(R.id.container);
-        //if(MyApplication.nightThemeEnabled) {
-        //    getTheme().applyStyle(R.style.Theme_AppCompat_Dialog, true);
-        //}
+        container = findViewById(R.id.container_main);
 
         fm = getSupportFragmentManager();
 
@@ -102,12 +97,12 @@ public class MainActivity extends ToolbarActivity {
         int resource;
         if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             MyApplication.dualPaneActive = true;
-            View.inflate(this, R.layout.activity_main_dual_panel, container);
+            View.inflate(this, R.layout.activity_dual_pane, container);
             resource = R.id.listFragmentHolder;
         }
         else {
-            View.inflate(this, R.layout.activity_main, container);
             MyApplication.dualPaneActive = false;
+            View.inflate(this, R.layout.activity_single_pane, container);
             resource = R.id.fragmentHolder;
         }
         setupMainFragment(resource);
@@ -225,23 +220,21 @@ public class MainActivity extends ToolbarActivity {
             getNavDrawerAdapter().notifyDataSetChanged();
         }
 
-        if(!toolbarVisible && !MyApplication.autoHideToolbar) {
-            showToolbar();
-            getListFragment().updateSwipeRefreshOffset();
-            if(getPostFragment()!=null) {
-                getPostFragment().updateSwipeRefreshOffset();
-            }
+        if(notifyToolbarAutohideChanged) {
+            notifyToolbarAutohideChanged = false;
+            updateToolbarAutoHide();
+            if (!toolbarVisible) expandToolbar();
         }
 
         if(MyApplication.fabPostNavChanged) {
             MyApplication.fabPostNavChanged = false;
-            getListFragment().initFabNavOptions(findViewById(android.R.id.content));
+            getListFragment().initFabNavOptions();
         }
 
         if(MyApplication.fabCommentNavChanged) {
             MyApplication.fabCommentNavChanged = false;
             if(getPostFragment()!=null) {
-                getPostFragment().initFabNavOptions(findViewById(R.id.postFragmentHolder));
+                getPostFragment().initFabNavOptions();
             }
         }
 
@@ -421,13 +414,13 @@ public class MainActivity extends ToolbarActivity {
         drawerToggle.onConfigurationChanged(newConfig);
 
         if(MyApplication.dualPane) {
-            container.removeViewAt(1);
+            container.removeAllViews();
             fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
             listFragment = recreateListFragment(listFragment);
             int resource;
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 MyApplication.dualPaneActive = true;
-                View.inflate(this, R.layout.activity_main_dual_panel, container);
+                View.inflate(this, R.layout.activity_dual_pane, container);
                 resource = R.id.listFragmentHolder;
 
                 PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
@@ -438,7 +431,7 @@ public class MainActivity extends ToolbarActivity {
                 }
             } else {
                 MyApplication.dualPaneActive = false;
-                View.inflate(this, R.layout.activity_main, container);
+                View.inflate(this, R.layout.activity_single_pane, container);
                 resource = R.id.fragmentHolder;
             }
             fm.beginTransaction().add(resource, listFragment, "listFragment").commitAllowingStateLoss();
@@ -447,13 +440,13 @@ public class MainActivity extends ToolbarActivity {
 
     private void toggleDualPane() {
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            container.removeViewAt(1);
+            container.removeAllViews();
             fm.beginTransaction().remove(listFragment).commitAllowingStateLoss();
             listFragment = recreateListFragment(listFragment);
             int resource;
             if(MyApplication.dualPane) {
                 MyApplication.dualPaneActive = true;
-                View.inflate(this, R.layout.activity_main_dual_panel, container);
+                View.inflate(this, R.layout.activity_dual_pane, container);
                 resource = R.id.listFragmentHolder;
 
                 PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
@@ -465,7 +458,7 @@ public class MainActivity extends ToolbarActivity {
             }
             else {
                 MyApplication.dualPaneActive = false;
-                View.inflate(this, R.layout.activity_main, container);
+                View.inflate(this, R.layout.activity_single_pane, container);
                 resource = R.id.fragmentHolder;
             }
             fm.beginTransaction().add(resource, listFragment, "listFragment").commitAllowingStateLoss();
@@ -473,9 +466,8 @@ public class MainActivity extends ToolbarActivity {
     }
 
     private void initNavDrawer() {
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        scrimInsetsFrameLayout = (NavigationView) findViewById(R.id.scrimInsetsFrameLayout);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        scrimInsetsFrameLayout = findViewById(R.id.scrimInsetsFrameLayout);
         drawerLayout.setStatusBarBackgroundColor(MyApplication.colorPrimaryDark);
 
         drawerParams = new DrawerLayout.LayoutParams(calculateDrawerWidth(), ViewGroup.LayoutParams.MATCH_PARENT);

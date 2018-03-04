@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -32,7 +33,6 @@ import android.widget.ProgressBar;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.gDyejeekis.aliencompanion.AppConstants;
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
@@ -100,7 +100,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            updateToolbarOnScroll(dy);
             updateSwipeRefreshState();
             updateFabNavOnScroll(dy);
         }
@@ -109,20 +108,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View getSnackbarParentView() {
         return layoutFabRoot;
     }
-
-    private void updateToolbarOnScroll(int dy) {
-        if(MyApplication.autoHideToolbar) {
-            if(dy > AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD) {
-                activity.hideToolbar();
-            }
-            else if(dy < -AppConstants.TOOLBAR_HIDE_ON_SCROLL_THRESHOLD
-                    || isScrolledTop()) {
-                activity.showToolbar();
-            }
-        }
-    }
-
-    //public static boolean currentlyLoading = false;
 
     public static PostFragment newInstance(Submission post) {
         PostFragment postFragment = new PostFragment();
@@ -208,15 +193,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post, container, false);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar2);
-        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
-        progressBar.setVisibility(View.GONE);
-
+        View view = inflater.inflate(R.layout.fragment_reddit_content, container, false);
         initRecyclerView(view);
+        initMainProgressBar(view);
         initSwipeRefreshLayout(view);
-        initFabNavOptions(view);
+        initFabNavOptions();
 
         if (postAdapter == null) {
             //currentlyLoading = true;
@@ -363,7 +344,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initRecyclerView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
+        mRecyclerView = view.findViewById(R.id.recyclerView_postList);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         mLayoutManager = new LinearLayoutManager(activity);
@@ -380,24 +361,31 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
-    private void initSwipeRefreshLayout(View view) {
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorSecondary);
-        updateSwipeRefreshOffset();
+    private void initMainProgressBar(View view) {
+        progressBar = view.findViewById(R.id.progressBar2);
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
+        progressBar.setVisibility(View.GONE);
     }
 
-    public void initFabNavOptions(View view) {
-        layoutFabRoot = (MoveUpwardRelativeLayout) view.findViewById(R.id.layout_comment_nav_root);
-        if(MyApplication.commentFabNavigation) {
+    private void initSwipeRefreshLayout(View view) {
+        swipeRefreshLayout = view.findViewById(R.id.swipe_container);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(MyApplication.colorSecondary);
+    }
+
+    public void initFabNavOptions() {
+        FrameLayout fabContainer = activity.findViewById(R.id.container_fab);
+        if (MyApplication.commentFabNavigation) {
+            View.inflate(activity, R.layout.fab_comment_nav, fabContainer);
+            layoutFabRoot = activity.findViewById(R.id.layout_comment_nav_root);
             layoutFabRoot.setVisibility(View.VISIBLE);
-            layoutFabNav = (LinearLayout) view.findViewById(R.id.layout_comment_nav);
-            layoutFabOptions = (LinearLayout) view.findViewById(R.id.layout_comment_fab_options);
-            fabMain = (FloatingActionButton) view.findViewById(R.id.fab_nav);
-            fabNavSetting = (FloatingActionButton) view.findViewById(R.id.fab_comment_nav_setting);
-            fabReply = (FloatingActionButton) view.findViewById(R.id.fab_reply);
-            fabNext = (FloatingActionButton) view.findViewById(R.id.fab_down);
-            fabPrevious = (FloatingActionButton) view.findViewById(R.id.fab_up);
+            layoutFabNav = activity.findViewById(R.id.layout_comment_nav);
+            layoutFabOptions = activity.findViewById(R.id.layout_comment_fab_options);
+            fabMain = activity.findViewById(R.id.fab_nav);
+            fabNavSetting = activity.findViewById(R.id.fab_comment_nav_setting);
+            fabReply = activity.findViewById(R.id.fab_reply);
+            fabNext = activity.findViewById(R.id.fab_down);
+            fabPrevious = activity.findViewById(R.id.fab_up);
             fabMain.setOnClickListener(commentNavListener);
             fabNavSetting.setOnClickListener(commentNavListener);
             fabNavSetting.setOnLongClickListener(commentNavListener);
@@ -416,9 +404,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             layoutFabOptions.setVisibility(fabVisibility);
             layoutFabNav.setVisibility(fabVisibility);
             setCommentNavSetting(CommentNavSetting.threads);
-        }
-        else {
-            layoutFabRoot.setVisibility(View.GONE);
+        } else {
+            fabContainer.removeAllViews();
         }
     }
 
@@ -498,7 +485,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void updateSwipeRefreshState() {
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && isScrolledTop());
-        updateSwipeRefreshOffset();
     }
 
     private boolean isScrolledTop() {
@@ -512,11 +498,6 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             e.printStackTrace();
         }
         return false;
-    }
-
-    public void updateSwipeRefreshOffset() {
-        int end = activity.toolbarVisible ? activity.toolbar.getHeight() : 0;
-        swipeRefreshLayout.setProgressViewOffset(false, 0, end + 32);
     }
 
 

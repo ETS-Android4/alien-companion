@@ -4,19 +4,14 @@ package com.gDyejeekis.aliencompanion.fragments;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
@@ -126,17 +121,14 @@ public class UserFragment extends RedditContentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        contentView = (RecyclerView) view.findViewById(R.id.recyclerView_postList);
-
+        View view = inflater.inflate(R.layout.fragment_reddit_content, container, false);
+        contentView = view.findViewById(R.id.recyclerView_postList);
+        contentView.addOnScrollListener(onScrollListener);
+        updateContentViewProperties();
+        updateCurrentViewType();
         initMainProgressBar(view);
         initSwipeRefreshLayout(view);
-
-        updateCurrentViewType();
-        updateContentViewProperties();
-        initFabNavOptions(view);
-
-        contentView.addOnScrollListener(onScrollListener);
+        initFabNavOptions();
 
         if(currentLoadType == null) {
             if (adapter == null) {

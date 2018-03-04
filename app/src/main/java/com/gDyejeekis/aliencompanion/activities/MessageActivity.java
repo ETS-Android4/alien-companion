@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.fragments.MessageFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
@@ -24,7 +24,7 @@ public class MessageActivity extends SwipeBackActivity {
 
     private MessageFragment messageFragment;
     private FragmentManager fm;
-    private RelativeLayout container;
+    private FrameLayout container;
 
     @Override
     public void finish() {
@@ -37,10 +37,9 @@ public class MessageActivity extends SwipeBackActivity {
         isActive = true;
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_toolbar);
+        setContentView(R.layout.activity_reddit_content);
         initToolbar();
-
-        container = (RelativeLayout) findViewById(R.id.container);
+        container = (FrameLayout) findViewById(R.id.container_main);
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
         swipeBackLayout.setEdgeTrackingEnabled(MyApplication.swipeSetting);
@@ -50,12 +49,12 @@ public class MessageActivity extends SwipeBackActivity {
         int resource;
         if(MyApplication.dualPane && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             MyApplication.dualPaneActive = true;
-            View.inflate(this, R.layout.activity_main_dual_panel, container);
+            View.inflate(this, R.layout.activity_dual_pane, container);
             resource = R.id.listFragmentHolder;
         }
         else {
             MyApplication.dualPaneActive = false;
-            View.inflate(this, R.layout.activity_main, container);
+            View.inflate(this, R.layout.activity_single_pane, container);
             resource = R.id.fragmentHolder;
         }
 
@@ -136,13 +135,13 @@ public class MessageActivity extends SwipeBackActivity {
         super.onConfigurationChanged(newConfig);
 
         if(MyApplication.dualPane) {
-            container.removeViewAt(1);
+            container.removeAllViews();
             fm.beginTransaction().remove(messageFragment).commitAllowingStateLoss();
             messageFragment = recreateMessageFragment(messageFragment);
             int resource;
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 MyApplication.dualPaneActive = true;
-                View.inflate(this, R.layout.activity_main_dual_panel, container);
+                View.inflate(this, R.layout.activity_dual_pane, container);
                 resource = R.id.listFragmentHolder;
 
                 PostFragment postFragment = (PostFragment) fm.findFragmentByTag("postFragment");
@@ -153,7 +152,7 @@ public class MessageActivity extends SwipeBackActivity {
                 }
             } else {
                 MyApplication.dualPaneActive = false;
-                View.inflate(this, R.layout.activity_main, container);
+                View.inflate(this, R.layout.activity_single_pane, container);
                 resource = R.id.fragmentHolder;
             }
             fm.beginTransaction().add(resource, messageFragment, "listFragment").commitAllowingStateLoss();
