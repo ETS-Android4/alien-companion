@@ -1,7 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gDyejeekis.aliencompanion.fragments.BrowserFragment"
     android:orientation="vertical">
 
     <ProgressBar
@@ -9,11 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:progressDrawable="@drawable/browser_progress"
-        android:id="@+id/progressBar4" />
+        android:id="@+id/progressBar4"/>
 
-    <WebView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/webView" />
+        android:layout_height="match_parent">
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/webView"/>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

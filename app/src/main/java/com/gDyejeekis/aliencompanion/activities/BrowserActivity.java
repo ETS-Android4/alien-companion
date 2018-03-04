@@ -33,7 +33,7 @@ public class BrowserActivity extends SwipeBackActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.layout_fragment_holder);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container_main);
         if(fragment instanceof BrowserFragment && ((BrowserFragment) fragment).webView.canGoBack()) {
             ((BrowserFragment) fragment).goBack();
         }
@@ -46,7 +46,7 @@ public class BrowserActivity extends SwipeBackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browser);
+        setContentView(R.layout.activity_reddit_content);
         initToolbar();
 
         SwipeBackLayout swipeBackLayout = (SwipeBackLayout) findViewById(R.id.swipe);
@@ -67,7 +67,7 @@ public class BrowserActivity extends SwipeBackActivity {
     private void setupMainFragment() {
         loadSyncedArticle = (MyApplication.offlineModeEnabled && syncedArticleExists());
         Fragment fragment = (loadSyncedArticle) ? new ArticleFragment() : new BrowserFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.layout_fragment_holder, fragment).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().add(R.id.container_main, fragment).commitAllowingStateLoss();
     }
 
     public boolean syncedArticleExists() {
@@ -81,14 +81,14 @@ public class BrowserActivity extends SwipeBackActivity {
         loadFromCache = false;
         loadSyncedArticle = true;
         invalidateOptionsMenu();
-        getSupportFragmentManager().beginTransaction().replace(R.id.layout_fragment_holder, new ArticleFragment()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new ArticleFragment()).commitAllowingStateLoss();
     }
 
     public void loadOriginalPage() {
         loadFromCache = false;
         loadSyncedArticle = false;
         invalidateOptionsMenu();
-        getSupportFragmentManager().beginTransaction().replace(R.id.layout_fragment_holder, new BrowserFragment()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, new BrowserFragment()).commitAllowingStateLoss();
     }
 
     @Override

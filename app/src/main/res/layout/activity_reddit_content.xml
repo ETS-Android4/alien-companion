@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:background="@color/primary_dark"
             android:theme="@style/ToolbarTheme"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            app:layout_scrollFlags="scroll|enterAlways"/> <!-- todo: try include layout here -->
 
     </android.support.design.widget.AppBarLayout>
 
@@ -29,6 +29,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container_fab"/>
+        android:id="@+id/container_fab"/> <!-- todo: set visibility to gone by default and only show when needed -->
+
+    <!-- todo: rename -->
 
 </android.support.design.widget.CoordinatorLayout>
