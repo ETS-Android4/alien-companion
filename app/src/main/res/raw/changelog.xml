@@ -10,6 +10,10 @@
         <changelogtext>Fixed occasional crash when opening links from other apps with Alien Companion</changelogtext>
         <changelogtext>Fixed rare crash when clicking the 'Open with..' option on the url long tap menu</changelogtext>
         <changelogtext>'Dual pane in landscape' option temporarily disabled</changelogtext>
+        <changelogtext>Fixed 'Submit post' activity being accessible when logged out</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.1" changeDate="Feb 27, 2018">

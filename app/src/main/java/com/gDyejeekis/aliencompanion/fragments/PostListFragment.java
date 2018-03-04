@@ -256,15 +256,27 @@ public class PostListFragment extends RedditContentFragment {
                 addToSyncQueue();
                 return true;
             case R.id.action_submit_post:
+                submitPost(false);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void submitPost(boolean fabClicked) {
+        if (MyApplication.currentUser == null) {
+            ToastUtils.showSnackbarOverToast(activity, "Must be logged in to submit a post");
+        } else {
+            if (fabClicked) {
+                setFabSubmitOptionsVisible(true);
+            } else {
                 try {
                     showSubmitPopup(activity.findViewById(R.id.action_sort));
                 } catch (Exception e) {
                     showSubmitPopup(activity.findViewById(R.id.action_refresh));
                 }
-                return true;
+            }
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void showSearchDialog() {

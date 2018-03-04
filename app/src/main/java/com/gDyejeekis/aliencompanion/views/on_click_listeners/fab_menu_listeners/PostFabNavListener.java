@@ -32,7 +32,7 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
                 fragment.refreshList();
                 break;
             case R.id.fab_submit:
-                fragment.setFabSubmitOptionsVisible(true);
+                ((PostListFragment)fragment).submitPost(true);
                 break;
             case R.id.fab_sync:
                 // TODO: 2/24/2017 add abstraction
