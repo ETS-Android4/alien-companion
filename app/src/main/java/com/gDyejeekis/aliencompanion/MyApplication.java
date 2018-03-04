@@ -432,7 +432,7 @@ public class MyApplication extends Application {
         currentPostListView = Integer.parseInt(prefs.getString("defaultView", String.valueOf(PostViewType.list.value())));
         rememberPostListView = prefs.getBoolean("rememberView", false);
         askedRememberPostView = prefs.getBoolean("askedRememberView", false);
-        dualPane = prefs.getBoolean("dualPane", false);
+        dualPane = false; //prefs.getBoolean("dualPane", false); // todo: re-enable once it's properly implemented (activity abstraction and fab menus)
         screenOrientation = Integer.parseInt(prefs.getString("screenOrientation", "4"));
         disableAnimations = prefs.getBoolean("noAnimation", false);
         offlineModeEnabled = prefs.getBoolean("offlineMode", false);

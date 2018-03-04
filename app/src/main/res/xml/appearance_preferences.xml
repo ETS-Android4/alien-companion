@@ -44,9 +44,10 @@
         android:defaultValue="false"/>
 
     <CheckBoxPreference
+        android:enabled="false"
         android:key="dualPane"
         android:title="Dual pane in landscape"
-        android:summary="Tablet recommended"
+        android:summary="Tablet recommended (temporarily disabled)"
         android:defaultValue="false"/>
 
 </PreferenceScreen>

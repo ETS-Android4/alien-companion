@@ -8,7 +8,7 @@
         <changelogtext>Fixed occasional crash when trying to authenticate with Firebase on app launch</changelogtext>
         <changelogtext>Fixed occasional crash when opening links from other apps with Alien Companion</changelogtext>
         <changelogtext>Fixed rare crash when clicking the 'Open with..' option on the url long tap menu</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>'Dual pane in landscape' option temporarily disabled</changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>
 
