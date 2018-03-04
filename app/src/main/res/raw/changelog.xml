@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="1.0.2" changeDate="">
+    <changelogversion versionName="1.0.2" changeDate="Mar 4, 2018">
         <changelogtext>Fixed a bug causing the toolbar to be inaccessible on Android 4.4 (kitkat) or lower</changelogtext>
         <changelogtext>Tweaked 'hide toolbar on scroll down' behavior</changelogtext>
         <changelogtext>Added 'hide toolbar on scroll down' behavior to the in-app browser</changelogtext>
@@ -10,7 +10,6 @@
         <changelogtext>Fixed occasional crash when opening links from other apps with Alien Companion</changelogtext>
         <changelogtext>Fixed rare crash when clicking the 'Open with..' option on the url long tap menu</changelogtext>
         <changelogtext>'Dual pane in landscape' option temporarily disabled</changelogtext>
-        <changelogtext></changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.1" changeDate="Feb 27, 2018">
