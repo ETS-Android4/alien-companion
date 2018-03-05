@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
-
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -23,9 +21,8 @@ import android.widget.ProgressBar;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
-import com.gDyejeekis.aliencompanion.activities.OAuthActivity;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -45,6 +42,7 @@ public class BrowserFragment extends Fragment {
     private Submission post;
     private String url;
     private String domain;
+    private boolean addRedditAccount;
     private Bundle webViewBundle;
 
     private class MyWebViewClient extends WebViewClient {
@@ -58,7 +56,7 @@ public class BrowserFragment extends Fragment {
             //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             //startActivity(intent);
             //return true;
-            if (activity instanceof OAuthActivity) {
+            if (addRedditAccount) {
                 if (url.startsWith(RedditOAuth.REDIRECT_URI)) {
                     Log.d(TAG, "OAuth redirect url: " + url);
                     MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
@@ -81,9 +79,11 @@ public class BrowserFragment extends Fragment {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             try {
-                if(!(activity instanceof OAuthActivity)) {
+                if (!addRedditAccount) {
                     setActionbarTitle(LinkUtils.getDomainName(url));
                     updateMenuItems();
+                } else {
+                    setActionbarTitle("Add account");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -95,7 +95,7 @@ public class BrowserFragment extends Fragment {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             try {
-                if(activity instanceof BrowserActivity) {
+                if (!addRedditAccount) {
                     updateMenuItems();
                 }
             } catch (Exception e) {
@@ -123,14 +123,15 @@ public class BrowserFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
         this.activity = (AppCompatActivity) getActivity();
-        if(activity instanceof BrowserActivity) {
+        if (activity instanceof BrowserActivity) {
             this.post = ((BrowserActivity) activity).post;
             this.url = ((BrowserActivity) activity).url;
             this.domain = ((BrowserActivity) activity).domain;
-        }
-        else {
+            this.addRedditAccount = ((BrowserActivity) activity).addRedditAccount;
+        } else {
             this.url = activity.getIntent().getStringExtra("url");
             this.domain = activity.getIntent().getStringExtra("domain");
+            this.addRedditAccount = activity.getIntent().getBooleanExtra("addRedditAccount", false);
             if(this.domain == null || this.domain.trim().isEmpty()) {
                 try {
                     this.domain = LinkUtils.getDomainName(url);
@@ -139,6 +140,8 @@ public class BrowserFragment extends Fragment {
                 }
             }
         }
+        if (addRedditAccount)
+            CleaningUtils.clearCookies(activity);
     }
 
     @Override
@@ -168,7 +171,7 @@ public class BrowserFragment extends Fragment {
 
         webView.setWebViewClient(new MyWebViewClient());
         WebSettings settings = webView.getSettings();
-        //if(activity instanceof OAuthActivity) settings.setAppCacheEnabled(false);
+        //if(addRedditAccount) settings.setAppCacheEnabled(false);
         //else settings.setAppCacheEnabled(true);
         //settings.setAppCacheMaxSize(20 * 1024 * 1024);
         //settings.setAppCachePath(activity.getCacheDir().getAbsolutePath());

@@ -30,6 +30,7 @@ public class BrowserActivity extends SwipeBackActivity {
     public boolean loadFromCache;
     public boolean loadSyncedArticle;
     public boolean canGoBack, canGoForward;
+    public boolean addRedditAccount;
 
     @Override
     public void onBackPressed() {
@@ -59,6 +60,7 @@ public class BrowserActivity extends SwipeBackActivity {
         } else {
             url = getIntent().getStringExtra("url");
             domain = getIntent().getStringExtra("domain");
+            addRedditAccount = getIntent().getBooleanExtra("addRedditAccount", false);
         }
 
         setupMainFragment();
@@ -94,6 +96,9 @@ public class BrowserActivity extends SwipeBackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        if (addRedditAccount)
+            return super.onCreateOptionsMenu(menu);
+
         getMenuInflater().inflate(R.menu.menu_browser, menu);
         if(loadSyncedArticle || loadFromCache) {
             menu.findItem(R.id.action_load_cache).setTitle("Load live version");

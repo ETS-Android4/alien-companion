@@ -10,8 +10,8 @@ import android.view.View;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
-import com.gDyejeekis.aliencompanion.activities.OAuthActivity;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
@@ -37,8 +37,9 @@ public class AccountListener extends NavDrawerListener {
                     public void run() {
                         if(RedditOAuth.useOAuth2) {
                             String url = RedditOAuth.getOauthAuthUrl();
-                            Intent intent = new Intent(getActivity(), OAuthActivity.class);
+                            Intent intent = new Intent(getActivity(), BrowserActivity.class);
                             intent.putExtra("url", url);
+                            intent.putExtra("addRedditAccount", true);
                             getActivity().startActivity(intent);
                         }
                     }
