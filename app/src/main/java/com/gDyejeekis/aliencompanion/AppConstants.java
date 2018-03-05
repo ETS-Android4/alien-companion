@@ -6,9 +6,9 @@ package com.gDyejeekis.aliencompanion;
 
 public class AppConstants {
 
-    public static final String currentVersion = "1.0.2";
+    public static final String currentVersion = "1.0.3";
 
-    public static final int currentVersionCode = 1002;
+    public static final int currentVersionCode = 1003;
 
     public static final int showWelcomeMsgVersionCode = 1000;
 
