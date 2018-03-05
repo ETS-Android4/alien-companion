@@ -3,7 +3,7 @@
 
     <changelogversion versionName="1.0.3" changeDate="">
         <changelogtext>Added 'hide toolbar on scroll down' behavior to offline articles</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed some rendering issues in the in-app browser</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

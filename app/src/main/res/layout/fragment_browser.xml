@@ -11,15 +11,9 @@
         android:progressDrawable="@drawable/browser_progress"
         android:id="@+id/progressBar4"/>
 
-    <android.support.v4.widget.NestedScrollView
+    <com.gDyejeekis.aliencompanion.utils.NestedScrollWebView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <WebView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/webView"/>
-
-    </android.support.v4.widget.NestedScrollView>
+        android:layout_height="match_parent"
+        android:id="@+id/webView"/>
 
 </LinearLayout>
