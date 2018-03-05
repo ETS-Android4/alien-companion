@@ -1,10 +1,14 @@
 package com.gDyejeekis.aliencompanion.api.utils;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
+import com.gDyejeekis.aliencompanion.asynctask.AddAccountTask;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 
 import org.json.simple.JSONObject;
 
@@ -104,6 +108,7 @@ public class RedditOAuth {
     public static final String REFRESH_TOKEN_NAME = "refresh_token";
 
     private static String oauthState = "";
+    private static String oauthCode;
 
     public static String getOauthAuthUrl() {
         oauthState = UUID.randomUUID().toString();
@@ -111,7 +116,8 @@ public class RedditOAuth {
                 + "&redirect_uri=" + REDIRECT_URI + "&duration=" + OAUTH_TOKEN_DURATION_STRING + "&scope=" + SCOPES;
     }
 
-    public static String getAuthorizationCode(String redirectUrl) {
+    // return true if oauth code is found
+    public static boolean parseRedirectUrl(String redirectUrl) {
         String state = null;
         String code = null;
 
@@ -130,8 +136,18 @@ public class RedditOAuth {
             code = null;
         }
         oauthState = "";
+        oauthCode = code;
+        return oauthCode != null && !oauthCode.isEmpty();
+    }
 
-        return code;
+    public static void setupAccount(AppCompatActivity activity) {
+        PleaseWaitDialogFragment dialog = new PleaseWaitDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", "Setting up account");
+        dialog.setArguments(bundle);
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
+        new AddAccountTask(activity, dialog, oauthCode).execute();
+        oauthCode = null;
     }
 
     public static OAuthToken getOAuthToken(HttpClient httpClient, String oauthCode) {

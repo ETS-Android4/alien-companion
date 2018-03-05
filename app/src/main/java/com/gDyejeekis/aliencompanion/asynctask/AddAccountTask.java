@@ -1,16 +1,16 @@
 package com.gDyejeekis.aliencompanion.asynctask;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerAccount;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.MyApplication;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.action.ProfileActions;
 import com.gDyejeekis.aliencompanion.api.entity.Multireddit;
@@ -18,7 +18,6 @@ import com.gDyejeekis.aliencompanion.api.entity.OAuthToken;
 import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.entity.UserInfo;
-import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.exception.RedditError;
 import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
@@ -26,13 +25,6 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.RedditHttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 
-import org.json.simple.parser.ParseException;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +32,8 @@ import java.util.List;
  * Created by George on 8/18/2015.
  */
 public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
+
+    public static final String TAG = "AddAccountTask";
 
     private DialogFragment dialogFragment;
     private Context context;
@@ -51,47 +45,19 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     private String currentAccountName;
 
-    private static final String DEBUG_USER = "user account info";
-
-    public AddAccountTask(DialogFragment dialogFragment, String username, String password) {
+    public AddAccountTask(Context context, DialogFragment dialogFragment, String username, String password) {
         this.dialogFragment = dialogFragment;
-        context = dialogFragment.getActivity();
+        this.context = context;
         //httpClient = new PoliteRedditHttpClient();
         this.username =  username;
         this.password = password;
     }
 
-    public AddAccountTask(DialogFragment dialogFragment, String oauthCode) {
+    public AddAccountTask(Context context, DialogFragment dialogFragment, String oauthCode) {
         this.dialogFragment = dialogFragment;
-        context = dialogFragment.getActivity();
+        this.context = context;
         //httpClient = new PoliteRedditHttpClient();
         this.oauthCode = oauthCode;
-    }
-
-    private List<SavedAccount> readFromFile() {
-        try {
-            FileInputStream fis = context.openFileInput(AppConstants.SAVED_ACCOUNTS_FILENAME);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            List<SavedAccount> savedAccounts = (List<SavedAccount>) is.readObject();
-            is.close();
-            fis.close();
-            return savedAccounts;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void writeToFile(List<SavedAccount> updatedAccounts) {
-        try {
-            FileOutputStream fos = context.openFileOutput(AppConstants.SAVED_ACCOUNTS_FILENAME, Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(updatedAccounts);
-            os.close();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private List<String> getUserSubreddits(User user) { //only run on backround thread
@@ -154,20 +120,18 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
                 newAccount = new SavedAccount(username, user.getModhash(), user.getCookie(), getUserSubreddits(user));
             }
-            List<SavedAccount> accounts = readFromFile();
+            List<SavedAccount> accounts = GeneralUtils.readAccounts(context);
             assert accounts != null;
             accounts.add(newAccount);
-            writeToFile(accounts);
+            GeneralUtils.saveAccounts(context, accounts);
 
             currentAccountName = newAccount.getUsername();
             SharedPreferences.Editor editor = MyApplication.prefs.edit();
             editor.putString("currentAccountName", currentAccountName);
             editor.apply();
 
-            //MyApplication.savedAccounts = accounts;
-
             return newAccount;
-        } catch (RetrievalFailedException | ActionFailedException | IOException | ParseException | NullPointerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             exception = e;
         }
@@ -185,7 +149,6 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             } catch (NullPointerException e) {}
         }
         else {
-            //ToastUtils.showToast(context, "Logged in as " + username);
             MainActivity mainActivity = (MainActivity) context;
             mainActivity.getNavDrawerAdapter().accountAdded(new NavDrawerAccount(account), currentAccountName);
             mainActivity.changeCurrentUser(account);

@@ -20,14 +20,15 @@ import android.widget.ProgressBar;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.activities.BrowserActivity;
-import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,14 +60,13 @@ public class BrowserFragment extends Fragment {
             if (addRedditAccount) {
                 if (url.startsWith(RedditOAuth.REDIRECT_URI)) {
                     Log.d(TAG, "OAuth redirect url: " + url);
-                    MainActivity.oauthCode = RedditOAuth.getAuthorizationCode(url);
-                    if (MainActivity.oauthCode != null)
-                        MainActivity.setupAccount = true;
+                    boolean success = RedditOAuth.parseRedirectUrl(url);
+                    if (success) MainActivity.setupAccount = true;
+                    else ToastUtils.showToast(activity, "Failed to retrieve authorization code");
                     activity.finish();
                     return true;
                 }
-            }
-            else {
+            } else {
                 LinkHandler linkHandler = new LinkHandler(activity, url);
                 linkHandler.setBrowserActive(true);
                 Log.d(TAG, "URL: " + url + "\ndomain: " + linkHandler.getDomain());

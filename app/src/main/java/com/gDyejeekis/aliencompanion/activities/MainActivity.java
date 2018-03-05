@@ -22,10 +22,12 @@ import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+import com.gDyejeekis.aliencompanion.asynctask.AddAccountTask;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.VerifyAccountDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.models.nav_drawer.NavDrawerEmptySpace;
@@ -71,7 +73,7 @@ public class MainActivity extends ToolbarActivity {
     public static boolean notifyDrawerChanged = false;
     public static boolean notifyToolbarAutohideChanged = false;
     public static boolean notifySwitchedMode = false;
-    public static String oauthCode;
+    //public static String oauthCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,14 +242,9 @@ public class MainActivity extends ToolbarActivity {
 
         if(setupAccount) {
             setupAccount = false;
-
-            VerifyAccountDialogFragment dialog = new VerifyAccountDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("code", oauthCode);
-            dialog.setArguments(bundle);
-            dialog.show(getFragmentManager(), "dialog");
-
-            oauthCode = null;
+            if (RedditOAuth.useOAuth2) {
+                RedditOAuth.setupAccount(this);
+            }
         }
 
         if (checkPendingActions) {
