@@ -3,7 +3,7 @@
 
     <changelogversion versionName="" changeDate="">
         <changelogtext>Fixed permalinks from comment replies not loading in the messages screen</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Reduced scroll threshold for hiding FAB menus</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>

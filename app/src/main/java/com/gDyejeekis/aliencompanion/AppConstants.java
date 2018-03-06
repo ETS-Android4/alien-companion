@@ -16,9 +16,7 @@ public class AppConstants {
 
     public static final int NAV_DRAWER_CLOSE_TIME = 200;
 
-    public static final int FAB_HIDE_ON_SCROLL_THRESHOLD = 10;
-
-    public static final int TOOLBAR_HIDE_ON_SCROLL_THRESHOLD = 10;
+    public static final int FAB_HIDE_ON_SCROLL_THRESHOLD = 1;
 
     public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
 
