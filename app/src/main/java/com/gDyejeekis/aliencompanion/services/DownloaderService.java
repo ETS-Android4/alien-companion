@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
 import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
 import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
@@ -573,8 +574,9 @@ public class DownloaderService extends IntentService {
 
             linkedPost = LinkUtils.getRedditPostFromUrl(url);
             if (linkedPost != null) {
+                CommentSort commentSort = linkedPost.getPreferredSort()==null ? syncOptions.getSyncCommentSort() : linkedPost.getPreferredSort();
                 List<Comment> comments = cmntsRetrieval.ofSubmission(linkedPost, linkedPost.getLinkedCommentId(), linkedPost.getParentsShown(), syncOptions.getSyncCommentDepth(),
-                        syncOptions.getSyncCommentCount(), syncOptions.getSyncCommentSort());
+                        syncOptions.getSyncCommentCount(), commentSort);
                 linkedPost.setSyncedComments(comments);
                 // TODO: 7/30/2017 thumbnails don't seem to sync or load properly here
                 //if (syncOptions.isSyncThumbs()) {

@@ -21,7 +21,25 @@ public class ParamFormatter {
     	} else {
     		return params;
     	}
-    	
     }
+
+	/**
+	 * Get the value of a parameter from a parameters string
+	 *
+	 * @param params parameters string
+	 * @param name parameter name
+	 * @return parameter value, null if parameter isn't found
+	 */
+	public static String getParameterValue(String params, String name) {
+		assert params != null;
+
+		int nameStart = params.indexOf(name);
+		if (nameStart==-1)
+			return null;
+		String substring = params.substring(nameStart + name.length() + 1);
+		int valueEnd = substring.indexOf('&');
+		if (valueEnd==-1) valueEnd = substring.length();
+		return substring.substring(0, valueEnd);
+	}
     
 }

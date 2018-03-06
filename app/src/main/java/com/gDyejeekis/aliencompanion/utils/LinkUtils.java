@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.utils;
 
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
+import com.gDyejeekis.aliencompanion.api.utils.ParamFormatter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -66,15 +68,6 @@ public class LinkUtils {
             e.printStackTrace();
         }
         return url;
-    }
-
-    public static String getShortRedditId(String url) {
-        final String pattern = "redd\\.it/(\\w+)";
-        Matcher matcher = Pattern.compile(pattern).matcher(url);
-        if(matcher.find()) {
-            return matcher.group(1);
-        }
-        return "";
     }
 
     public static String getGfycatId(String url) {
@@ -206,8 +199,11 @@ public class LinkUtils {
         return url.toLowerCase().startsWith("intent://");
     }
 
+    public static final String REGEX_REDDIT_POST_URL = "(?i).*reddit\\.com\\/r\\/([\\w\\.]{3,20})\\/(?:comments\\/)?([\\w]{5,8})\\/?(?:\\w+\\/?)?([\\w]{6,9})?\\/?(?:\\?([\\w=&]+))?";
+    public static final String REGEX_REDDIT_POST_URL_SHORT = "(?i)(?:https?:\\/\\/)?redd\\.it\\/([\\w]{5,8})\\/?";
+
     public static boolean isRedditPostUrl(String url) {
-        return url.matches(".*reddit\\.com\\/r\\/\\w+\\/comments\\/\\w+.*") || url.matches("(https?:\\/\\/)?redd\\.it\\/\\w+.*");
+        return url.matches(REGEX_REDDIT_POST_URL) || url.matches(REGEX_REDDIT_POST_URL_SHORT);
     }
 
     public static boolean isNoDomainRedditUrl(String url) {
@@ -217,30 +213,39 @@ public class LinkUtils {
     public static Submission getRedditPostFromUrl(String url) {
         Submission post = null;
         url = url.toLowerCase();
-        if(url.contains("v.redd.it")) {
-
-        }
-        else if(url.contains("redd.it")) {
-            String id = LinkUtils.getShortRedditId(url);
-            if(!id.isEmpty()) {
+        if (url.contains("v.redd.it")) {
+            // TODO: 3/5/2018 check if you can get post from v.redd.it link
+        } else if (url.contains("redd.it")) {
+            Matcher matcher = Pattern.compile(REGEX_REDDIT_POST_URL_SHORT).matcher(url);
+            if(matcher.find()) {
+                String id = matcher.group(1);
                 post = new Submission(id);
             }
-        }
-        else {
-            final String pattern = "/r/(.*)/(?:comments|duplicates)/(\\w+)/?(?:\\w+)?/?(\\w+)?(?:.*context=(\\d+))?";
-            Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = compiledPattern.matcher(url);
+        } else {
+            Matcher matcher = Pattern.compile(REGEX_REDDIT_POST_URL).matcher(url);
             if(matcher.find()) {
                 String subreddit = matcher.group(1);
                 String postId = matcher.group(2);
-                String linkedCommentId = matcher.group(3);
-                String context = matcher.group(4);
-                int parentsShown = context!=null ? Integer.valueOf(context) : -1;
+                String commentId = matcher.group(3);
+                String params = matcher.group(4);
 
                 post = new Submission(postId);
                 post.setSubreddit(subreddit);
-                post.setLinkedCommentId(linkedCommentId);
-                post.setParentsShown(parentsShown);
+                post.setLinkedCommentId(commentId);
+                if (params!=null) {
+                    String contextValue = ParamFormatter.getParameterValue(params, "context");
+                    if (contextValue!=null) {
+                        try {
+                            int parentsShown = Integer.valueOf(contextValue);
+                            post.setParentsShown(parentsShown);
+                        } catch (Exception e) {}
+                    }
+                    String sortValue = ParamFormatter.getParameterValue(params, "sort");
+                    if (sortValue!=null) {
+                        CommentSort sort = CommentSort.getCommentSort(sortValue);
+                        post.setPreferredSort(sort);
+                    }
+                }
             }
         }
         return post;

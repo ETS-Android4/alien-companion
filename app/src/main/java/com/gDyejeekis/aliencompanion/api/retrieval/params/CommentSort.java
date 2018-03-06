@@ -18,6 +18,29 @@ public enum CommentSort {
     CONFIDENCE("confidence"),
     QA("qa");
 
+    public static CommentSort getCommentSort(String value) {
+        switch (value) {
+            case "new":
+                return NEW;
+            case "best":
+                return BEST;
+            case "top":
+                return TOP;
+            case "controversial":
+                return CONTROVERSIAL;
+            case "old":
+                return OLD;
+            case "random":
+                return RANDOM;
+            case "confidence":
+                return CONFIDENCE;
+            case "qa":
+                return QA;
+            default:
+                return null;
+        }
+    }
+
     private final String value;
 
     CommentSort(String value) {

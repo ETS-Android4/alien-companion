@@ -25,17 +25,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDialogFragment;
@@ -43,7 +42,6 @@ import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialog
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SearchTextDialogFragment;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout;
-import com.gDyejeekis.aliencompanion.utils.MoveUpwardRelativeLayout;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadCommentsTask;
@@ -60,8 +58,6 @@ import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners
  */
 public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     //private static final String GROUPS_KEY = "groups_key";
-
-    public static final CommentSort DEFAULT_COMMENT_SORT = CommentSort.TOP;
 
     public PostAdapter postAdapter;
     public RecyclerView mRecyclerView;
@@ -114,17 +110,20 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public static PostFragment newInstance(Submission post) {
         PostFragment postFragment = new PostFragment();
-        postFragment.post = post;
         postFragment.loadFromUrl = false;
+        postFragment.post = post;
+        postFragment.commentSort = post.getPreferredSort();
 
         return postFragment;
     }
 
     public static PostFragment newInstance(PostAdapter postAdapter) {
         PostFragment newInstance = new PostFragment();
-        newInstance.postAdapter = postAdapter;
-        newInstance.post = (Submission) postAdapter.getItemAt(0);
         newInstance.commentsLoaded = true;
+        newInstance.postAdapter = postAdapter;
+        Submission post = (Submission) postAdapter.getItemAt(0);
+        newInstance.post = post;
+        newInstance.commentSort = post.getPreferredSort();
 
         return newInstance;
     }
@@ -132,7 +131,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public static PostFragment newInstance(String url) {
         PostFragment postFragment = new PostFragment();
         postFragment.loadFromUrl = true;
-        postFragment.post = LinkUtils.getRedditPostFromUrl(url);
+        Submission post = LinkUtils.getRedditPostFromUrl(url);
+        postFragment.post = post;
+        postFragment.commentSort = post.getPreferredSort();
 
         return postFragment;
     }
@@ -144,11 +145,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setHasOptionsMenu(true);
 
         commentNavListener = new CommentFabNavListener(this);
-        if(MyApplication.commentFabNavigation) {
+        if (MyApplication.commentFabNavigation) {
             initFabAnimations();
         }
 
-        if(!MyApplication.dualPaneActive) {
+        if (!MyApplication.dualPaneActive) {
             if(MyApplication.dualPane && activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 MyApplication.dualPaneActive = true;
             }
@@ -158,27 +159,27 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Submission post = (Submission) activity.getIntent().getSerializableExtra("post");
         CommentSort commentSort = (CommentSort) activity.getIntent().getSerializableExtra("commentSort");
 
-        if(commentSort != null) {
-            this.commentSort = tempSort = commentSort;
-        }
-        else if(this.commentSort == null) {
-            this.commentSort = tempSort = DEFAULT_COMMENT_SORT;
-        }
-
-        if(post == null && url != null) {
+        // TODO: 3/6/2018 re-write at some point to take into account newInstance static methods
+        if (post == null && url != null) {
             loadFromUrl = true;
             this.post = LinkUtils.getRedditPostFromUrl(url);
-            if(this.post==null) {
+            if (this.post==null) {
                 if(url.contains("v.redd.it")) {
                     redditVideoUrl = url;
                 }
-            }
-            else {
+            } else {
                 showFullCommentsButton = this.post.getLinkedCommentId() != null;
+                this.commentSort = tempSort = this.post.getPreferredSort();
             }
-        }
-        else if(post != null) {
+        } else if (post != null) {
             this.post = post;
+            this.commentSort = tempSort = post.getPreferredSort();
+        }
+
+        if (commentSort != null) {
+            this.commentSort = tempSort = commentSort;
+        } else if (this.commentSort == null) {
+            this.commentSort = tempSort = RedditConstants.DEFAULT_COMMENT_SORT;
         }
     }
 

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.models.RedditVideo;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -24,6 +25,7 @@ import com.gDyejeekis.aliencompanion.enums.YoutubeThumbnailSize;
 import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
 import java.util.List;
 
 
@@ -110,6 +112,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     //private String distinguished;
 	private String highlightText;
 	private boolean matchCase;
+	private CommentSort preferredSort;
 
 	public void setSyncedComments(List<Comment> comments) {
 		syncedComments = comments;
@@ -118,6 +121,14 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	public List<Comment> getSyncedComments() {
 		if(syncedComments!=null) return syncedComments;
 		return null;
+	}
+
+	public CommentSort getPreferredSort() {
+		return preferredSort;
+	}
+
+	public void setPreferredSort(CommentSort preferredSort) {
+		this.preferredSort = preferredSort;
 	}
 
 	//public List<Image> getImgurUrls() {
@@ -282,31 +293,32 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setLocked(safeJsonToBoolean(obj.get("locked")));
 			setLikes(safeJsonToString(obj.get("likes")));
 
-			if (domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-				setURL(url.replace("&amp;", "&"));
-			} else if (domain.equals("v.redd.it")) {
-				try {
-					JSONObject media = ((JSONObject) obj.get("media"));
-					JSONObject video = ((JSONObject) media.get("reddit_video"));
-					RedditVideo redditVideo = new RedditVideo(video);
-					//setURL(redditVideo.getFallbackUrl());
-					setRedditVideo(redditVideo);
-				} catch (Exception e) {
-					e.printStackTrace();
-					Log.e("Api error", "Error retrieving reddit video metadata from json response");
-				}
-			}
-
 			updateAgePrepared();
 
 			title = StringEscapeUtils.unescapeHtml4(title);
 			linkFlairText = StringEscapeUtils.unescapeHtml4(linkFlairText);
 			if (isSelf()) {
-				if (AppConstants.useMarkdownParsing) {}
-				else {
+				if (AppConstants.useMarkdownParsing) {
+
+				} else {
 					selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);
 					selftextHTML = HtmlFormatUtils.modifySpoilerHtml(selftextHTML);
 					selftextHTML = HtmlFormatUtils.modifyInlineCodeHtml(selftextHTML);
+				}
+			} else {
+				if (domain.equals("v.redd.it")) {
+					try {
+						JSONObject media = ((JSONObject) obj.get("media"));
+						JSONObject video = ((JSONObject) media.get("reddit_video"));
+						RedditVideo redditVideo = new RedditVideo(video);
+						//setURL(redditVideo.getFallbackUrl());
+						setRedditVideo(redditVideo);
+					} catch (Exception e) {
+						e.printStackTrace();
+						Log.e("Api error", "Error retrieving reddit video metadata from json response");
+					}
+				} else {
+					setURL(url.replace("&amp;", "&")); // TODO: 3/6/2018 might need to do this for all URLs
 				}
 			}
 

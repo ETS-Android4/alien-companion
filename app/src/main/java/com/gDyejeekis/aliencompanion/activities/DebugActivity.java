@@ -28,10 +28,18 @@ public class DebugActivity extends ToolbarActivity {
 
     public static final String TAG = "DebugActivity";
 
-    public static final String[] URL_TESTS_HARDCODED = {"https://i.reddituploads.com/5934d0a2442b41618d9db9c27425e285?fit=max&h=1536&w=1536&s=427c55349d61cc17aed8f1d30a81160a",
-            "https://i.reddituploads.com/6f8e5f3f3d74460bae59047ecbf19559?fit=max&h=1536&w=1536&s=067b6ffbeac9bb3d3449bf0418bce96f",
-            "https://i.reddituploads.com/8b91fc23ba1f41898c13bc3112c2d08a?fit=max&h=1536&w=1536&s=0c9dcd22bbe24037a72c83a5e876d66e",
-            "https://i.reddituploads.com/5966b24e42d04943b51f13c1229026d6?fit=max&h=1536&w=1536&s=7f617e10a8cb7ca2ffc26fa02a6133c1"};
+    public static final String[] URL_TESTS_HARDCODED = {
+            "https://www.reddit.com/r/buildapcforme/",
+            "https://www.reddit.com/r/buildapcforme",
+            "https://www.reddit.com/r/KeepOurNetFree/80mkp0/",
+            "https://www.reddit.com/r/KeepOurNetFree/80mkp0",
+            "https://www.reddit.com/r/Art/comments/346tdo/10_years_of_progress_learning_to_draw_album_on/",
+            "https://www.REDDIT.com/r/funny/COMMENTS/6geuo5/thats_my_chair/",
+            "https://www.reddit.com/r/worldnews/comments/826074/young_people_without_family_wealth_are_right_to/dv870al/?sort=controversial&context=2",
+            "https://www.reddit.com/r/AnimalsBeingJerks/comments/6g1g78/muffin_trying_to_keep_blueberry_out/",
+            "http://gfycat.com/bothcircularcornsnake",
+            "http://www.gfycat.com/nippykindlangur",
+            "http://www.gfycat.com/brutalsavagerekt"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
