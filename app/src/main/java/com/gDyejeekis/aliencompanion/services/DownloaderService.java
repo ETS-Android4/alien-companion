@@ -814,7 +814,7 @@ public class DownloaderService extends IntentService {
         // GFYCAT
         if (url.contains("gfycat.com")) {
             try {
-                url = GfycatTask.getGfycatDirectUrlSimple(url);
+                url = GfycatTask.getGfycatDirectUrl(url);
                 downloadMediaToPath(url, path);
             } catch (Exception e) {
                 e.printStackTrace();

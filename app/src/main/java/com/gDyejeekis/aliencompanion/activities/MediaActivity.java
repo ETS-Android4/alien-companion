@@ -252,7 +252,17 @@ public class MediaActivity extends BackNavActivity {
             Log.d(TAG, "No locally saved image found, loading from network..");
             // GFYCAT
             if (domain.contains("gfycat.com")) {
-                addGifFragment(GfycatTask.getGfycatDirectUrlSimple(url));
+                //addGifFragment(GfycatTask.getGfycatDirectUrlSimple(url));
+                new GfycatTask(this) {
+                    @Override
+                    protected void onPostExecute(String rawUrl) {
+                        if (rawUrl==null) {
+                            ToastUtils.showToast(getContext(), "Error retrieving gfycat info");
+                        } else {
+                            addGifFragment(rawUrl);
+                        }
+                    }
+                }.execute(url);
             }
             // GYAZO
             else if(domain.contains("gyazo.com") && !LinkUtils.isRawGyazoUrl(url)) {
