@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="" changeDate="">
+        <changelogtext>Fixed permalinks from comment replies not loading in the messages screen</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="1.0.3" changeDate="Mar 6, 2018">
         <changelogtext>Added 'hide toolbar on scroll down' behavior to offline articles</changelogtext>
         <changelogtext>Fixed some rendering issues in the in-app browser</changelogtext>

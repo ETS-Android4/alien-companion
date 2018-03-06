@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.api.entity;
 import android.text.SpannableStringBuilder;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
+import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -42,16 +43,6 @@ public class Message extends Thing implements RedditItem {
         return bodyHTML;
     }
 
-    public void storePreparedText(SpannableStringBuilder stringBuilder) {
-        bodyPrepared = stringBuilder;
-    }
-
-    public SpannableStringBuilder getPreparedText() {
-        return bodyPrepared;
-    }
-
-    //private User user;
-
     public String subject;
     public String body;
     public String bodyHTML;
@@ -63,12 +54,10 @@ public class Message extends Thing implements RedditItem {
     public double createdUTC;
     public Boolean isNew;
     public Boolean wasComment;
-    public SpannableStringBuilder bodyPrepared;
     public String agePrepared;
 
     public Message(JSONObject obj) {
         super(safeJsonToString(obj.get("name")));
-
         try {
             this.subject = safeJsonToString(obj.get("subject"));
             this.author = safeJsonToString(obj.get("author"));
@@ -82,6 +71,9 @@ public class Message extends Thing implements RedditItem {
             this.isNew = safeJsonToBoolean(obj.get("new"));
             this.wasComment = safeJsonToBoolean(obj.get("was_comment"));
 
+            context = ApiEndpointUtils.REDDIT_BASE_URL + context;
+            agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
+
             if(author==null) {
                 author = "[deleted]";
             }
@@ -89,21 +81,15 @@ public class Message extends Thing implements RedditItem {
                 destination = "[deleted]";
             }
 
-            if(!AppConstants.useMarkdownParsing) bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
+            if(AppConstants.useMarkdownParsing)  {
 
-            agePrepared = ConvertUtils.getSubmissionAge(createdUTC);
+            } else {
+                bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalArgumentException("JSON Object could not be parsed into a Comment. Provide a JSON Object with a valid structure.");
         }
     }
-
-    //public void setUser(User user) {
-    //    this.user = user;
-    //}
-    //
-    //public User getUser() {
-    //    return this.user;
-    //}
 
 }
