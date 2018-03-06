@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="1.0.3" changeDate="">
+    <changelogversion versionName="1.0.3" changeDate="Mar 6, 2018">
         <changelogtext>Added 'hide toolbar on scroll down' behavior to offline articles</changelogtext>
         <changelogtext>Fixed some rendering issues in the in-app browser</changelogtext>
         <changelogtext>Improved reddit post url handling</changelogtext>
         <changelogtext>Fixed some gfycat links not loading</changelogtext>
-        <changelogtext></changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.2" changeDate="Mar 4, 2018">
