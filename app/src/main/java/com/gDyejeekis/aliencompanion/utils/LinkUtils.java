@@ -49,6 +49,7 @@ public class LinkUtils {
         return string;
     }
 
+    // TODO: 3/7/2018 this method might be flawed, maybe revert to old method
     public static String urlToFilename(String url) {
         String filename = removeUrlParameters(url);
         filename = filename.substring(filename.lastIndexOf("/") + 1);
@@ -70,11 +71,18 @@ public class LinkUtils {
         return url;
     }
 
+    public static String getShortRedditId(String url) {
+        final String pattern = ".*redd\\.it\\/(\\w+)\\/?.*";
+        Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(url);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
     public static String getGfycatId(String url) {
         final String pattern = "gfycat\\.com\\/(?:gifs\\/detail\\/)?(\\w+)";
-        Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = compiledPattern.matcher(url);
-
+        Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(url);
         if(matcher.find()) {
             return matcher.group(1);
         }

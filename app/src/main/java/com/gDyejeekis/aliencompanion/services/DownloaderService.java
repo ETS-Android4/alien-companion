@@ -844,10 +844,11 @@ public class DownloaderService extends IntentService {
         }
         // REDDIT VIDEO
         else if(url.contains("v.redd.it")) {
-            if(!url.toLowerCase().endsWith("/DASH_2_4_M")) {
-                url += "/DASH_2_4_M";
+            final String urlSuffix = "/DASH_600_K"; // TODO: 3/7/2018 retrieve this from submission object (instead of adding a hardcoded suffix)
+            if(!url.toLowerCase().endsWith(urlSuffix)) {
+                url += urlSuffix;
             }
-            downloadMediaToPath(url, path, LinkUtils.urlToFilename(url).concat(".mp4"));
+            downloadMediaToPath(url, path, LinkUtils.urlToFilenameOld(url).concat(".mp4")); // use old method here to make sure we keep the id
         }
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {

@@ -160,7 +160,7 @@ public class MediaActivity extends BackNavActivity {
                 toFind = LinkUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
             }
             else if(domain.equals("v.redd.it")) {
-                toFind = LinkUtils.urlToFilename(url); // TODO: 10/11/2017 maybe use video id
+                toFind = LinkUtils.getShortRedditId(url);
             }
             else if(domain.contains("gyazo.com")) {
                 toFind = LinkUtils.getGyazoId(url);
@@ -224,7 +224,7 @@ public class MediaActivity extends BackNavActivity {
                 hasSound = url.endsWith(".mp4");
             }
 
-            if(toFind!=null) {
+            if(toFind!=null && !toFind.isEmpty()) {
                 File file = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), toFind);
                 if (file != null) {
                     Log.d(TAG, "Locally saved image found " + file.getAbsolutePath());
