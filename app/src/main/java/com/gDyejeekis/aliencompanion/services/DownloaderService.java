@@ -804,6 +804,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    // TODO: 3/7/2018 possible flaw here: don't change original url and then use that to extract image filename, instead always use original url to get image filename
     private void syncImage(String url, String filename, SyncProfileOptions syncOptions) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
@@ -844,11 +845,11 @@ public class DownloaderService extends IntentService {
         }
         // REDDIT VIDEO
         else if(url.contains("v.redd.it")) {
-            final String urlSuffix = "/DASH_600_K"; // TODO: 3/7/2018 retrieve this from submission object (instead of adding a hardcoded suffix)
-            if(!url.toLowerCase().endsWith(urlSuffix)) {
-                url += urlSuffix;
+            String directUrl = getRedditVideoDirectUrl(url);
+            if (directUrl!=null) {
+                String imgFilename = LinkUtils.urlToFilenameOld(url).concat(".mp4"); // use old method here to make sure we keep the id
+                downloadMediaToPath(directUrl, path, imgFilename);
             }
-            downloadMediaToPath(url, path, LinkUtils.urlToFilenameOld(url).concat(".mp4")); // use old method here to make sure we keep the id
         }
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
@@ -891,6 +892,20 @@ public class DownloaderService extends IntentService {
                 }
             }
         }
+    }
+
+    private String getRedditVideoDirectUrl(String redditVideoUrl) {
+        try {
+            String postUrl = GeneralUtils.getFinalUrlRedirect(redditVideoUrl);
+            Submission post = LinkUtils.getRedditPostFromUrl(postUrl);
+            Comments comments = new Comments(httpClient, MyApplication.currentUser);
+            comments.ofSubmission(post, null, -1, 1, 1, CommentSort.TOP);
+            return post.getRedditVideo().getScrubberMediaUrl();
+        } catch (Exception e) {
+            Log.e(TAG, "Error retrieving direct video url for: " + redditVideoUrl);
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void downloadAlbumImages(ImgurItem item, String filename, String path, SyncProfileOptions syncOptions) {
