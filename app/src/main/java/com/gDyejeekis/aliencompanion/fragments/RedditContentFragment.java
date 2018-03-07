@@ -269,6 +269,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             List<RedditItem> items = adapter.redditItems;
             items.remove(items.size() - 1); // remove show more item
             updateContentView(new RedditItemListAdapter(activity, currentViewTypeValue, items));
+            activity.expandToolbar();
         } catch (Exception e) {}
     }
 

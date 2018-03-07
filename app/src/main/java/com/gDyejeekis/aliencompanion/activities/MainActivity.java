@@ -225,7 +225,7 @@ public class MainActivity extends ToolbarActivity {
         if(notifyToolbarAutohideChanged) {
             notifyToolbarAutohideChanged = false;
             updateToolbarAutoHide();
-            if (!toolbarVisible) expandToolbar();
+            expandToolbar();
         }
 
         if(MyApplication.fabPostNavChanged) {
