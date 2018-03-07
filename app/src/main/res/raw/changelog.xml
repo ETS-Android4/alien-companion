@@ -6,7 +6,7 @@
         <changelogtext>Reduced scroll threshold for hiding FAB menus</changelogtext>
         <changelogtext>Fixed 'Default comment sort' option not being respected</changelogtext>
         <changelogtext>Fixed snackbar popups not appearing correctly in some cases</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed images/gif hosted on i.redd.it and a few other domains not loading in offline mode</changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>
 

@@ -220,7 +220,7 @@ public class MediaActivity extends BackNavActivity {
                 }
             }
             else {
-                toFind = url.replaceAll("https?://", "").replace("/", "(s)");
+                toFind = LinkUtils.urlToFilename(url);
                 hasSound = url.endsWith(".mp4");
             }
 
