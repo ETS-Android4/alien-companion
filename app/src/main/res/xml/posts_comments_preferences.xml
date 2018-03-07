@@ -75,8 +75,8 @@
             android:key="defaultCommentSort"
             android:title="Default comment sort"
             android:entries="@array/commentSortEntries"
-            android:entryValues="@array/commentSortValues"
-            android:defaultValue="1"/>
+            android:entryValues="@array/commentSortEntries"
+            android:defaultValue="Top"/>
 
     </PreferenceCategory>
 

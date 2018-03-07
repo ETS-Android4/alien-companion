@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Gravity;
 
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
 import com.gDyejeekis.aliencompanion.services.MessageCheckService;
@@ -507,49 +508,15 @@ public class MyApplication extends Application {
         }
         initialCommentCount = Integer.parseInt(prefs.getString("initialCommentCount", "100"));
         initialCommentDepth = (Integer.parseInt(prefs.getString("initialCommentDepth", "5")));
-        int index = Integer.parseInt(prefs.getString("defaultCommentSort", "1"));
-        switch (index) {
-            case 1:
-                defaultCommentSort = CommentSort.TOP;
-                break;
-            case 2:
-                defaultCommentSort = CommentSort.BEST;
-                break;
-            case 3:
-                defaultCommentSort = CommentSort.NEW;
-                break;
-            case 4:
-                defaultCommentSort = CommentSort.OLD;
-                break;
-            case 5:
-                defaultCommentSort = CommentSort.CONTROVERSIAL;
-                break;
-        }
+        defaultCommentSort = CommentSort.getCommentSort(prefs.getString("defaultCommentSort", RedditConstants.DEFAULT_COMMENT_SORT.value()));
         syncPostCount = Integer.parseInt(prefs.getString("syncPostCount", "25"));
         syncCommentCount = Integer.parseInt(prefs.getString("syncCommentCount", "100"));
         syncCommentDepth = Integer.parseInt(prefs.getString("syncCommentDepth", "5"));
+        syncCommentSort = CommentSort.getCommentSort(prefs.getString("syncCommentSort", RedditConstants.DEFAULT_COMMENT_SORT.value()));
         syncSelfTextLinkCount = Integer.parseInt(prefs.getString("syncSelfTextLinks", "0"));
         syncCommentLinkCount = Integer.parseInt(prefs.getString("syncCommentLinks", "0"));
         syncThumbnails = prefs.getBoolean("syncThumb", false);
         syncNewPostsOnly = prefs.getBoolean("syncNewOnly", false);
-        index = Integer.parseInt(prefs.getString("syncCommentSort", "1"));
-        switch (index) {
-            case 1:
-                syncCommentSort = CommentSort.TOP;
-                break;
-            case 2:
-                syncCommentSort = CommentSort.BEST;
-                break;
-            case 3:
-                syncCommentSort = CommentSort.NEW;
-                break;
-            case 4:
-                syncCommentSort = CommentSort.OLD;
-                break;
-            case 5:
-                syncCommentSort = CommentSort.CONTROVERSIAL;
-                break;
-        }
         handleYouTube = prefs.getBoolean("handleYoutube", true);
         handleImgur = prefs.getBoolean("handleImgur", true);
         handleTwitter = prefs.getBoolean("handleTwitter", true);

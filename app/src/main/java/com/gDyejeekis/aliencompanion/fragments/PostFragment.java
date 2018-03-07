@@ -169,18 +169,19 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             } else {
                 showFullCommentsButton = this.post.getLinkedCommentId() != null;
-                this.commentSort = tempSort = this.post.getPreferredSort();
+                this.commentSort = this.post.getPreferredSort();
             }
         } else if (post != null) {
             this.post = post;
-            this.commentSort = tempSort = post.getPreferredSort();
+            this.commentSort = post.getPreferredSort();
         }
 
         if (commentSort != null) {
-            this.commentSort = tempSort = commentSort;
+            this.commentSort = commentSort;
         } else if (this.commentSort == null) {
-            this.commentSort = tempSort = RedditConstants.DEFAULT_COMMENT_SORT;
+            this.commentSort = MyApplication.defaultCommentSort;
         }
+        this.tempSort = this.commentSort;
     }
 
     public void setSnackbar(Snackbar snackbar) {

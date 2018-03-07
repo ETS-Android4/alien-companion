@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.retrieval.params;
 
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
+
 /**
  * Enum to represent comment sorts on Reddit. You see these on a page that lists comments.
  *
@@ -19,6 +21,7 @@ public enum CommentSort {
     QA("qa");
 
     public static CommentSort getCommentSort(String value) {
+        value = value.toLowerCase();
         switch (value) {
             case "new":
                 return NEW;
@@ -37,7 +40,7 @@ public enum CommentSort {
             case "qa":
                 return QA;
             default:
-                return null;
+                return RedditConstants.DEFAULT_COMMENT_SORT;
         }
     }
 
