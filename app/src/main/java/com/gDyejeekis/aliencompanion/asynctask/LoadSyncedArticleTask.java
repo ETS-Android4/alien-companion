@@ -52,21 +52,19 @@ public class LoadSyncedArticleTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void unused) {
         fragment.progressBar.setVisibility(View.GONE);
-        if(exception == null) {
+        if (exception == null) {
             fragment.articleLayout.setVisibility(View.VISIBLE);
             fragment.title.setText(article.getTitle());
             fragment.body.setText(article.getBody());
-            if(bitmap == null) {
+            if (bitmap == null) {
                 fragment.image.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 fragment.image.setVisibility(View.VISIBLE);
                 fragment.image.setImageBitmap(bitmap);
             }
-        }
-        else {
+        } else {
             fragment.articleLayout.setVisibility(View.GONE);
-            ToastUtils.showSnackbarOverToast(fragment.getActivity(), "Error loading article");
+            ToastUtils.showToast(fragment.getActivity(), "Error loading article");
         }
     }
 }

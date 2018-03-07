@@ -22,6 +22,7 @@ public class SearchActivity extends SwipeBackActivity {
 
     public static boolean isForeground;
     private SearchFragment searchFragment;
+    private PostFragment postFragment;
     private FragmentManager fm;
     private FrameLayout container;
 
@@ -72,6 +73,7 @@ public class SearchActivity extends SwipeBackActivity {
     }
 
     public void setupPostFragment(PostFragment postFragment) {
+        this.postFragment = postFragment;
         fm.beginTransaction().replace(R.id.postFragmentHolder, postFragment, "postFragment").commit();
     }
 
@@ -145,6 +147,10 @@ public class SearchActivity extends SwipeBackActivity {
 
     public SearchFragment getSearchFragment() {
         return searchFragment;
+    }
+
+    public PostFragment getPostFragment() {
+        return postFragment;
     }
 
     @Override

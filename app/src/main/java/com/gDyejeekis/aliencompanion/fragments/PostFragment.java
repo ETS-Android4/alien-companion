@@ -299,7 +299,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void submitComment() {
         if (MyApplication.currentUser == null) {
-            ToastUtils.showSnackbarOverToast(activity, "Must be logged in to comment");
+            setSnackbar(ToastUtils.showSnackbar(getSnackbarParentView(),
+                    "Must be logged in to comment"));
         } else {
             Intent intent = new Intent(activity, SubmitActivity.class);
             intent.putExtra("submitType", SubmitType.comment);

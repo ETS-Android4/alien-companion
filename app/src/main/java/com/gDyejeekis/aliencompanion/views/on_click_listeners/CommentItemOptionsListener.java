@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -16,11 +17,15 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.MessageActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
+import com.gDyejeekis.aliencompanion.activities.SearchActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.SaveOfflineActionTask;
@@ -63,7 +68,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 UserActionType actionType;
                 LoadUserActionTask task;
                 SaveOfflineActionTask task1;
-                if(MyApplication.currentUser!=null) {
+                if (MyApplication.currentUser!=null) {
 
                     if (comment.getLikes().equals("true")) {
                         comment.setLikes("null");
@@ -80,30 +85,27 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     recyclerAdapter.notifyDataSetChanged();
                     notifySecondPaneChanges();
 
-                    if(GeneralUtils.isNetworkAvailable(context)) {
+                    if (GeneralUtils.isNetworkAvailable(context)) {
 
                         task = new LoadUserActionTask(context, comment.getFullName(), actionType);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
+                    } else {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
-                        if(actionType == UserActionType.novote) {
+                        if (actionType == UserActionType.novote) {
                             action = new NoVoteAction(accountName, comment.getFullName(), comment.getBody());
-                        }
-                        else {
+                        } else {
                             action = new UpvoteAction(accountName, comment.getFullName(), comment.getBody());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
                     }
-                }
-                else {
-                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
+                } else {
+                    showSnackbar("Must be logged in to vote");
                 }
                 break;
             case R.id.btn_downvote:
-                if(MyApplication.currentUser!=null) {
+                if (MyApplication.currentUser!=null) {
 
                     if (comment.getLikes().equals("false")) {
                         comment.setLikes("null");
@@ -120,40 +122,36 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                     recyclerAdapter.notifyDataSetChanged();
                     notifySecondPaneChanges();
 
-                    if(GeneralUtils.isNetworkAvailable(context)) {
+                    if (GeneralUtils.isNetworkAvailable(context)) {
 
                         task = new LoadUserActionTask(context, comment.getFullName(), actionType);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
+                    } else {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
-                        if(actionType == UserActionType.novote) {
+                        if (actionType == UserActionType.novote) {
                             action = new NoVoteAction(accountName, comment.getFullName(), comment.getBody());
-                        }
-                        else {
+                        } else {
                             action = new DownvoteAction(accountName, comment.getFullName(), comment.getBody());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
                     }
-                }
-                else {
-                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
+                } else {
+                    showSnackbar("Must be logged in to vote");
                 }
                 break;
             case R.id.btn_reply:
                 boolean postIsLocked = false;
-                if(context instanceof PostActivity) {
+                if (context instanceof PostActivity) {
                     Submission post = (Submission) ((PostActivity) context).getIntent().getSerializableExtra("post");
-                    if(post!=null) {
+                    if (post!=null) {
                         postIsLocked = post.isLocked();
                     }
                 }
-                if(postIsLocked) {
-                    ToastUtils.showSnackbarOverToast(context, "This post is locked. You won't be able to comment.");
-                }
-                else {
+                if (postIsLocked) {
+                    showSnackbar("This post is locked. You won't be able to comment.");
+                } else {
                     if (MyApplication.currentUser != null) {
                         Intent intent = new Intent(context, SubmitActivity.class);
                         intent.putExtra("submitType", SubmitType.comment);
@@ -161,7 +159,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         intent.putExtra("position", getCommentPosition(true));
                         context.startActivity(intent);
                     } else {
-                        ToastUtils.showSnackbarOverToast(context, "Must be logged in to reply");
+                        showSnackbar("Must be logged in to reply");
                     }
                 }
                 break;
@@ -255,15 +253,14 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         saveComment();
                         return true;
                     case R.id.action_report:
-                        if(MyApplication.currentUser!=null) {
+                        if (MyApplication.currentUser!=null) {
                             ReportDialogFragment dialog = new ReportDialogFragment();
                             Bundle bundle = new Bundle();
                             bundle.putString("postId", comment.getFullName());
                             dialog.setArguments(bundle);
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        }
-                        else {
-                            ToastUtils.showSnackbarOverToast(context, "Must be logged in to report");
+                        } else {
+                            showSnackbar("Must be logged in to report");
                         }
                         return true;
                     default:
@@ -275,13 +272,12 @@ public class CommentItemOptionsListener implements View.OnClickListener {
     }
 
     private void saveComment() {
-        if(MyApplication.currentUser!=null) {
+        if (MyApplication.currentUser!=null) {
             UserActionType actionType;
-            if(comment.isSaved()) {
+            if (comment.isSaved()) {
                 comment.setSaved(false);
                 actionType = UserActionType.unsave;
-            }
-            else {
+            } else {
                 comment.setSaved(true);
                 actionType = UserActionType.save;
             }
@@ -289,25 +285,22 @@ public class CommentItemOptionsListener implements View.OnClickListener {
             recyclerAdapter.notifyDataSetChanged();
             notifySecondPaneChanges();
 
-            if(GeneralUtils.isNetworkAvailable(context)) {
+            if (GeneralUtils.isNetworkAvailable(context)) {
                 LoadUserActionTask task = new LoadUserActionTask(context, comment, actionType);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
-            else {
+            } else {
                 OfflineUserAction action;
                 String accountname = MyApplication.currentAccount.getUsername();
-                if(actionType == UserActionType.save) {
+                if (actionType == UserActionType.save) {
                     action = new SaveAction(accountname, comment.getFullName(), comment.getBody());
-                }
-                else {
+                } else {
                     action = new UnsaveAction(accountname, comment.getFullName(), comment.getBody());
                 }
                 SaveOfflineActionTask task1 = new SaveOfflineActionTask(context, action);
                 task1.execute();
             }
-        }
-        else {
-            ToastUtils.showSnackbarOverToast(context, "Must be logged in to save");
+        } else {
+            showSnackbar("Must be logged in to save");
         }
     }
 
@@ -356,32 +349,16 @@ public class CommentItemOptionsListener implements View.OnClickListener {
     }
 
     public RecyclerView.Adapter getListFragmentAdapter() {
-        // TODO: 3/23/2017 add abstraction
-        try {
-            if (context instanceof MainActivity) {
-                return ((MainActivity) context).getListFragment().adapter;
-            } else if (context instanceof SubredditActivity) {
-                return ((SubredditActivity) context).getListFragment().adapter;
-            } else if (context instanceof UserActivity) {
-                return ((UserActivity) context).getListFragment().adapter;
-            }
-        } catch (Exception e) {}
+        RedditContentFragment fragment = getListFragment();
+        if (fragment!=null)
+            return fragment.adapter;
         return null;
     }
 
     public RecyclerView.Adapter getPostFragmentAdapter() {
-        // TODO: 3/23/2017 add abstraction
-        try {
-            if (context instanceof MainActivity) {
-                return ((MainActivity) context).getPostFragment().postAdapter;
-            } else if (context instanceof SubredditActivity) {
-                return ((SubredditActivity) context).getPostFragment().postAdapter;
-            } else if (context instanceof UserActivity) {
-                return ((UserActivity) context).getPostFragment().postAdapter;
-            } else if (context instanceof PostActivity) {
-                return ((PostActivity) context).getPostFragment().postAdapter;
-            }
-        } catch (Exception e) {}
+        PostFragment fragment = getPostFragment();
+        if (fragment!=null)
+            return fragment.postAdapter;
         return null;
     }
 
@@ -406,4 +383,53 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         return position;
     }
 
+    private RedditContentFragment getListFragment() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getListFragment();
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getListFragment();
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getListFragment();
+            } else if (context instanceof SearchActivity) {
+                return ((SearchActivity) context).getSearchFragment();
+            } else if (context instanceof MessageActivity) {
+                return ((MessageActivity) context).getMessageFragment();
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    private PostFragment getPostFragment() {
+        // TODO: 3/23/2017 add abstraction
+        try {
+            if (context instanceof MainActivity) {
+                return ((MainActivity) context).getPostFragment();
+            } else if (context instanceof SubredditActivity) {
+                return ((SubredditActivity) context).getPostFragment();
+            } else if (context instanceof UserActivity) {
+                return ((UserActivity) context).getPostFragment();
+            } else if (context instanceof PostActivity) {
+                return ((PostActivity) context).getPostFragment();
+            } else if (context instanceof SearchActivity) {
+                return ((SearchActivity) context).getPostFragment();
+            } else if (context instanceof MessageActivity) {
+                return ((MessageActivity) context).getPostFragment();
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    private void showSnackbar(String message) {
+        showSnackbar(message, Snackbar.LENGTH_SHORT);
+    }
+
+    private void showSnackbar(String message, int duration) {
+        if (context instanceof PostActivity) {
+            PostFragment fragment = ((PostActivity) context).getPostFragment();
+            if (fragment!=null)
+                fragment.setSnackbar(ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message, duration));
+        }
+    }
 }

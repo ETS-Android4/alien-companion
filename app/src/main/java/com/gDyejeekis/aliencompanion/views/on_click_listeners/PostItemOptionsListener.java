@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -18,12 +19,16 @@ import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.MessageActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
+import com.gDyejeekis.aliencompanion.activities.SearchActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
+import com.gDyejeekis.aliencompanion.fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
@@ -79,7 +84,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
 
     private void sharePost() {
         final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
-        if(post.isSelf()) {
+        if (post.isSelf()) {
             GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
         }
         else {
@@ -114,7 +119,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 UserActionType actionType;
                 LoadUserActionTask task;
                 SaveOfflineActionTask task1;
-                if(MyApplication.currentUser!=null) {
+                if (MyApplication.currentUser!=null) {
                     if (post.getLikes().equals("true")) {
                         post.setLikes("null");
                         post.setScore(post.getScore() - 1);
@@ -129,27 +134,26 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     currentAdapter.notifyDataSetChanged();
                     notifySecondPaneChanges();
 
-                    if(GeneralUtils.isNetworkAvailable(context)) {
+                    if( GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
+                    } else {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
-                        if(actionType == UserActionType.novote) {
+                        if (actionType == UserActionType.novote) {
                             action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
-                        }
-                        else {
+                        } else {
                             action = new UpvoteAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
                     }
+                } else {
+                    showSnackbar("Must be logged in to vote");
                 }
-                else ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_downvote: case R.id.imageView_downvote_classic:
-                if(MyApplication.currentUser!=null) {
+                if (MyApplication.currentUser!=null) {
                     if (post.getLikes().equals("false")) {
                         post.setLikes("null");
                         post.setScore(post.getScore() + 1);
@@ -164,27 +168,26 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     currentAdapter.notifyDataSetChanged();
                     notifySecondPaneChanges();
 
-                    if(GeneralUtils.isNetworkAvailable(context)) {
+                    if (GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post.getFullName(), actionType);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
+                    } else {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
-                        if(actionType == UserActionType.novote) {
+                        if (actionType == UserActionType.novote) {
                             action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
-                        }
-                        else {
+                        } else {
                             action = new DownvoteAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
                     }
+                } else {
+                    showSnackbar("Must be logged in to vote");
                 }
-                else ToastUtils.showSnackbarOverToast(context, "Must be logged in to vote");
                 break;
             case R.id.btn_save:
-                if(MyApplication.currentUser!=null) {
+                if (MyApplication.currentUser!=null) {
                     if (post.isSaved()) {
                         post.setSaved(false);
                         actionType = UserActionType.unsave;
@@ -196,29 +199,28 @@ public class PostItemOptionsListener implements View.OnClickListener {
                     currentAdapter.notifyDataSetChanged();
                     notifySecondPaneChanges();
 
-                    if(GeneralUtils.isNetworkAvailable(context)) {
+                    if (GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post, actionType);
                         task.execute();
-                    }
-                    else {
+                    } else {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
-                        if(actionType == UserActionType.save) {
+                        if (actionType == UserActionType.save) {
                             action = new SaveAction(accountName, post.getFullName(), post.getTitle());
-                        }
-                        else {
+                        } else {
                             action = new UnsaveAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
                     }
+                } else {
+                    showSnackbar("Must be logged in to save");
                 }
-                else ToastUtils.showSnackbarOverToast(context, "Must be logged in to save");
                 break;
             case R.id.btn_hide:
                 int index = -1;
                 boolean notifyOnPost = true;
-                if(MyApplication.currentUser!=null) {
+                if (MyApplication.currentUser!=null) {
                     if (post.isHidden()) {
                         post.setHidden(false);
                         actionType = UserActionType.unhide;
@@ -228,17 +230,15 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             notifyOnPost = false;
                             notifySecondPaneChanges();
                         }
-                    }
-                    else {
+                    } else {
                         post.setHidden(true);
                         actionType = UserActionType.hide;
                         // case viewing user's hidden posts
-                        if(context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
+                        if (context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
                             notifyOnPost = false;
                             currentAdapter.notifyDataSetChanged();
                             notifySecondPaneChanges();
-                        }
-                        else {
+                        } else {
                             if (!(context instanceof PostActivity) && currentAdapter instanceof RedditItemListAdapter) {
                                 index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
                                 ((RedditItemListAdapter) currentAdapter).remove(post);
@@ -256,26 +256,23 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         }
                     }
 
-                    if(GeneralUtils.isNetworkAvailable(context)) {
+                    if (GeneralUtils.isNetworkAvailable(context)) {
                         task = new LoadUserActionTask(context, post, index, actionType);
                         task.setNotifyOnPostExecute(notifyOnPost);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                    else {
+                    } else {
                         OfflineUserAction action;
                         String accountName = MyApplication.currentAccount.getUsername();
-                        if(actionType == UserActionType.hide) {
+                        if (actionType == UserActionType.hide) {
                             action = new HideAction(accountName, post.getFullName(), post.getTitle());
-                        }
-                        else {
+                        } else {
                             action = new UnhideAction(accountName, post.getFullName(), post.getTitle());
                         }
                         task1 = new SaveOfflineActionTask(context, action);
                         task1.execute();
                     }
-                }
-                else {
-                    ToastUtils.showSnackbarOverToast(context, "Must be logged in to hide");
+                } else {
+                    showSnackbar("Must be logged in to hide");
                 }
                 break;
             case R.id.btn_view_user:
@@ -332,7 +329,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             @Override
                             protected void onPostExecute(Boolean success) {
                                 String message = (success) ? "Post deleted" : "Failed to delete post";
-                                ToastUtils.showSnackbarOverToast(context, message);
+                                ToastUtils.showToast(context, message);
                             }
                         }.execute(post.getIdentifier());
                         return true;
@@ -435,9 +432,8 @@ public class PostItemOptionsListener implements View.OnClickListener {
                             bundle.putString("postId", post.getFullName());
                             dialog.setArguments(bundle);
                             dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "dialog");
-                        }
-                        else {
-                            ToastUtils.showSnackbarOverToast(context, "Must be logged in to report");
+                        } else {
+                            showSnackbar("Must be logged in to report");
                         }
                         return true;
                 }
@@ -565,34 +561,72 @@ public class PostItemOptionsListener implements View.OnClickListener {
         }
     }
 
-    public RecyclerView.Adapter getListFragmentAdapter() {
+    private RecyclerView.Adapter getListFragmentAdapter() {
+        RedditContentFragment fragment = getListFragment();
+        if (fragment!=null)
+            return fragment.adapter;
+        return null;
+    }
+
+    private RecyclerView.Adapter getPostFragmentAdapter() {
+        PostFragment fragment = getPostFragment();
+        if (fragment!=null)
+            return fragment.postAdapter;
+        return null;
+    }
+
+    private RedditContentFragment getListFragment() {
         // TODO: 3/23/2017 add abstraction
         try {
             if (context instanceof MainActivity) {
-                return ((MainActivity) context).getListFragment().adapter;
+                return ((MainActivity) context).getListFragment();
             } else if (context instanceof SubredditActivity) {
-                return ((SubredditActivity) context).getListFragment().adapter;
+                return ((SubredditActivity) context).getListFragment();
             } else if (context instanceof UserActivity) {
-                return ((UserActivity) context).getListFragment().adapter;
+                return ((UserActivity) context).getListFragment();
+            } else if (context instanceof SearchActivity) {
+                return ((SearchActivity) context).getSearchFragment();
+            } else if (context instanceof MessageActivity) {
+                return ((MessageActivity) context).getMessageFragment();
             }
         } catch (Exception e) {}
         return null;
     }
 
-    public RecyclerView.Adapter getPostFragmentAdapter() {
+    private PostFragment getPostFragment() {
         // TODO: 3/23/2017 add abstraction
         try {
             if (context instanceof MainActivity) {
-                return ((MainActivity) context).getPostFragment().postAdapter;
+                return ((MainActivity) context).getPostFragment();
             } else if (context instanceof SubredditActivity) {
-                return ((SubredditActivity) context).getPostFragment().postAdapter;
+                return ((SubredditActivity) context).getPostFragment();
             } else if (context instanceof UserActivity) {
-                return ((UserActivity) context).getPostFragment().postAdapter;
+                return ((UserActivity) context).getPostFragment();
+            } else if (context instanceof SearchActivity) {
+                return ((SearchActivity) context).getPostFragment();
+            } else if (context instanceof MessageActivity) {
+                return ((MessageActivity) context).getPostFragment();
             } else if (context instanceof PostActivity) {
-                return ((PostActivity) context).getPostFragment().postAdapter;
+                return ((PostActivity) context).getPostFragment();
             }
         } catch (Exception e) {}
         return null;
+    }
+
+    private void showSnackbar(String message) {
+        showSnackbar(message, Snackbar.LENGTH_SHORT);
+    }
+
+    private void showSnackbar(String message, int duration) {
+        if (currentAdapter instanceof RedditItemListAdapter) {
+            RedditContentFragment fragment = getListFragment();
+            if (fragment!=null)
+                fragment.setSnackbar(ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message, duration));
+        } else if (currentAdapter instanceof PostAdapter) {
+            PostFragment fragment = getPostFragment();
+            if (fragment!=null)
+                fragment.setSnackbar(ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message, duration));
+        }
     }
 
 }

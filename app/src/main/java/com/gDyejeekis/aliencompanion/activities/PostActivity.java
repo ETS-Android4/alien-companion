@@ -93,7 +93,10 @@ public class PostActivity extends SwipeBackActivity {
                 onBackPressed();
                 return true;
             case R.id.action_post_locked:
-                ToastUtils.showSnackbarOverToast(this, "This post is locked. You won't be able to comment.");
+                if (postFragment!=null) {
+                    postFragment.setSnackbar(ToastUtils.showSnackbar(postFragment.getSnackbarParentView(),
+                            "This post is locked. You won't be able to comment."));
+                }
                 return true;
             default:
                 return false;

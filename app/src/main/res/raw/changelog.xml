@@ -5,6 +5,8 @@
         <changelogtext>Fixed permalinks from comment replies not loading in the messages screen</changelogtext>
         <changelogtext>Reduced scroll threshold for hiding FAB menus</changelogtext>
         <changelogtext>Fixed 'Default comment sort' option not being respected</changelogtext>
+        <changelogtext>Fixed snackbar popups not appearing correctly in some cases</changelogtext>
+        <changelogtext></changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>
 

@@ -4,17 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.MessageActivity;
 import com.gDyejeekis.aliencompanion.activities.PostActivity;
+import com.gDyejeekis.aliencompanion.activities.SearchActivity;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
-import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
+import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
 import com.gDyejeekis.aliencompanion.models.SubmitActionResponse;
 import com.gDyejeekis.aliencompanion.models.offline_actions.CommentAction;
@@ -31,7 +34,6 @@ import com.gDyejeekis.aliencompanion.models.offline_actions.UnsaveAction;
 import com.gDyejeekis.aliencompanion.models.offline_actions.UpvoteAction;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
-import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.action.MarkActions;
 import com.gDyejeekis.aliencompanion.api.action.ProfileActions;
 import com.gDyejeekis.aliencompanion.api.action.SubmitActions;
@@ -43,6 +45,7 @@ import com.gDyejeekis.aliencompanion.api.exception.RetrievalFailedException;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 
 /**
@@ -300,7 +303,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
             }
 
             if(context instanceof Activity) {
-                ToastUtils.showSnackbar(((Activity) context).getCurrentFocus(), DEFAULT_ACTION_FAILED_MESSAGE);
+                ToastUtils.showToast(context, DEFAULT_ACTION_FAILED_MESSAGE);
             }
         }
         else {
@@ -344,7 +347,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                                 task.execute();
                             }
                         };
-                        ToastUtils.showSnackbarOverToast(context, "Saved", "Undo", listener);
+                        showSnackbar("Saved", "Undo", listener);
                         break;
                     case unsave:
                         listener = new View.OnClickListener() {
@@ -356,7 +359,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                                 task.execute();
                             }
                         };
-                        ToastUtils.showSnackbarOverToast(context, "Unsaved", "Undo", listener);
+                        showSnackbar("Unsaved", "Undo", listener);
                         break;
                     case hide:
                         listener = new View.OnClickListener() {
@@ -368,16 +371,16 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                                 task.execute();
                             }
                         };
-                        ToastUtils.showSnackbarOverToast(context, "Hidden", "Undo", listener);
+                        showSnackbar("Hidden", "Undo", listener);
                         break;
                     case delete:
-                        ToastUtils.showSnackbarOverToast(context, "Deleted");
+                        showSnackbar("Deleted");
                         break;
                     case changePassword:
                         ToastUtils.showToast(context, "Password change successful");
                         break;
                     case report:
-                        ToastUtils.showSnackbarOverToast(context, "Report sent");
+                        showSnackbar("Report sent");
                         break;
                     case subscribe:
                         if (dialogSidebar != null) {
@@ -396,6 +399,33 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         ToastUtils.showToast(context, "Message sent");
                         break;
                 }
+            }
+        }
+    }
+
+    private void showSnackbar(String message) {
+        showSnackbar(message, Snackbar.LENGTH_SHORT);
+    }
+
+    private void showSnackbar(String message, int duration) {
+        showSnackbar(message, null, null, duration);
+    }
+
+    private void showSnackbar(String message, String actionText, View.OnClickListener listener) {
+        showSnackbar(message, actionText, listener, Snackbar.LENGTH_LONG);
+    }
+
+    private void showSnackbar(String message, String actionText, View.OnClickListener listener, int duration) {
+        // TODO: 3/7/2018 this won't work while dual pane is active
+        PostFragment postFragment = getPostFragment();
+        if (postFragment!=null) {
+            postFragment.setSnackbar(ToastUtils.showSnackbar(postFragment.getSnackbarParentView(),
+                    message, actionText, listener, duration));
+        } else {
+            RedditContentFragment fragment = getListFragment();
+            if (fragment!=null) {
+                fragment.setSnackbar(ToastUtils.showSnackbar(fragment.getSnackbarParentView(),
+                        message, actionText, listener, duration));
             }
         }
     }
@@ -440,31 +470,53 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         notifyDataSetChanged(getPostFragmentAdapter());
     }
 
-    public RecyclerView.Adapter getListFragmentAdapter() {
+    private RecyclerView.Adapter getListFragmentAdapter() {
+        RedditContentFragment fragment = getListFragment();
+        if (fragment!=null)
+            return fragment.adapter;
+        return null;
+    }
+
+    private RecyclerView.Adapter getPostFragmentAdapter() {
+        PostFragment fragment = getPostFragment();
+        if (fragment!=null)
+            return fragment.postAdapter;
+        return null;
+    }
+
+    private RedditContentFragment getListFragment() {
         // TODO: 3/23/2017 add abstraction
         try {
             if (context instanceof MainActivity) {
-                return ((MainActivity) context).getListFragment().adapter;
+                return ((MainActivity) context).getListFragment();
             } else if (context instanceof SubredditActivity) {
-                return ((SubredditActivity) context).getListFragment().adapter;
+                return ((SubredditActivity) context).getListFragment();
             } else if (context instanceof UserActivity) {
-                return ((UserActivity) context).getListFragment().adapter;
+                return ((UserActivity) context).getListFragment();
+            } else if (context instanceof SearchActivity) {
+                return ((SearchActivity) context).getSearchFragment();
+            } else if (context instanceof MessageActivity) {
+                return ((MessageActivity) context).getMessageFragment();
             }
         } catch (Exception e) {}
         return null;
     }
 
-    public RecyclerView.Adapter getPostFragmentAdapter() {
+    private PostFragment getPostFragment() {
         // TODO: 3/23/2017 add abstraction
         try {
             if (context instanceof MainActivity) {
-                return ((MainActivity) context).getPostFragment().postAdapter;
+                return ((MainActivity) context).getPostFragment();
             } else if (context instanceof SubredditActivity) {
-                return ((SubredditActivity) context).getPostFragment().postAdapter;
+                return ((SubredditActivity) context).getPostFragment();
             } else if (context instanceof UserActivity) {
-                return ((UserActivity) context).getPostFragment().postAdapter;
+                return ((UserActivity) context).getPostFragment();
             } else if (context instanceof PostActivity) {
-                return ((PostActivity) context).getPostFragment().postAdapter;
+                return ((PostActivity) context).getPostFragment();
+            } else if (context instanceof SearchActivity) {
+                return ((SearchActivity) context).getPostFragment();
+            } else if (context instanceof MessageActivity) {
+                return ((MessageActivity) context).getPostFragment();
             }
         } catch (Exception e) {}
         return null;

@@ -23,6 +23,7 @@ public class MessageActivity extends SwipeBackActivity {
     public static boolean isActive = false;
 
     private MessageFragment messageFragment;
+    private PostFragment postFragment;
     private FragmentManager fm;
     private FrameLayout container;
 
@@ -70,9 +71,8 @@ public class MessageActivity extends SwipeBackActivity {
     }
 
     public void setupPostFragment(PostFragment postFragment) {
-        PostFragment oldFragment = (PostFragment) fm.findFragmentByTag("postFragment");
-        if(oldFragment!=null) fm.beginTransaction().remove(oldFragment).commit();
-        fm.beginTransaction().add(R.id.postFragmentHolder, postFragment, "postFragment").commit();
+        this.postFragment = postFragment;
+        fm.beginTransaction().replace(R.id.postFragmentHolder, postFragment, "postFragment").commit();
     }
 
     @Override
@@ -186,4 +186,11 @@ public class MessageActivity extends SwipeBackActivity {
         super.onDestroy();
     }
 
+    public MessageFragment getMessageFragment() {
+        return messageFragment;
+    }
+
+    public PostFragment getPostFragment() {
+        return postFragment;
+    }
 }
