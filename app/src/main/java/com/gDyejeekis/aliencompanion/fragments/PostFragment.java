@@ -93,12 +93,13 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentNavSetting commentNavSetting;
     public CommentFabNavListener commentNavListener;
 
-    private int topPos = -1;
+    private int currentScrollPosition;
 
     private final RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
+            currentScrollPosition += dy;
             updateSwipeRefreshState();
             updateFabNavOnScroll(dy);
         }
@@ -496,18 +497,8 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private boolean isScrolledTop() {
-        try {
-            int currentTop = mLayoutManager.getChildAt(0).getTop();
-            if(currentTop>topPos) {
-                topPos = currentTop;
-            }
-            return topPos == currentTop;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        return currentScrollPosition == 0;
     }
-
 
     private void hideAllFabOnScroll() {
         fabMain.hide();

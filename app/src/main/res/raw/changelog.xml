@@ -2,7 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="" changeDate="">
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed 'Swipe down to refresh' sometimes triggering regardless of scrolled position</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
