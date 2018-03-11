@@ -34,10 +34,7 @@ import com.gDyejeekis.aliencompanion.enums.UserActionType;
  */
 public class SubmitCommentFragment extends Fragment {
 
-    private TextView originalCommentTextView;
     private EditText replyField;
-    private LinearLayout layoutOriginalComment;
-    //private String originalComment;
     private Comment originalComment;
     private String selfText;
     private String postName;
@@ -60,38 +57,32 @@ public class SubmitCommentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_submit_comment, container, false);
         View view = inflater.inflate(R.layout.fragment_submit_comment, container, false);
-        layoutOriginalComment = (LinearLayout) view.findViewById(R.id.layout_originalComment);
-        originalCommentTextView = (TextView) view.findViewById(R.id.txtView_originalComment);
-        replyField = (EditText) view.findViewById(R.id.editText_reply);
+        LinearLayout layoutOriginalComment = view.findViewById(R.id.layout_originalComment);
+        TextView originalCommentTextView = view.findViewById(R.id.txtView_originalComment);
+        replyField = view.findViewById(R.id.editText_reply);
         replyField.requestFocus();
 
-        if(originalComment == null || edit) {
+        if (originalComment == null || edit) {
             layoutOriginalComment.setVisibility(View.GONE);
-            if(edit) {
+            if (edit) {
                 String title;
-                if(offlineAction != null) {
+                if (offlineAction != null) {
                     title = "Edit pending comment";
                     replyField.setText(offlineAction.getCommentText());
-                }
-                else if(selfText != null) {
+                } else if (selfText != null) {
                     title = "Edit self-post";
                     replyField.setText(selfText);
-                }
-                else {
+                } else {
                     title = "Edit comment";
                     replyField.setText(originalComment.getBody());
                 }
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
             }
-        }
-        else {
-            if(AppConstants.useMarkdownParsing) {
+        } else {
+            if (AppConstants.useMarkdownParsing) {
 
-            }
-            else {
+            } else {
                 originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null,
                         new HtmlTagHandler(originalCommentTextView.getPaint()))));
             }
@@ -102,11 +93,11 @@ public class SubmitCommentFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_submit) {
+        if (item.getItemId() == R.id.action_submit) {
 
             String commentText = replyField.getText().toString();
 
-            if(offlineAction != null && edit) {
+            if (offlineAction != null && edit) {
                 int index = getActivity().getIntent().getIntExtra("index", -1);
                 if(index != -1) {
                     getActivity().finish();
@@ -114,10 +105,9 @@ public class SubmitCommentFragment extends Fragment {
                     PendingUserActionsActivity.editedIndex = index;
                     PendingUserActionsActivity.newAction = offlineAction;
                 }
-            }
-            else {
+            } else {
                 String fullname = (selfText != null || !edit) ? postName : originalComment.getFullName();
-                if(fullname==null) fullname = originalComment.getFullName();
+                if (fullname==null) fullname = originalComment.getFullName();
 
                 if (GeneralUtils.isNetworkAvailable(getActivity())) {
                     UserActionType actionType = (edit) ? UserActionType.edit : UserActionType.submitComment;
@@ -131,10 +121,7 @@ public class SubmitCommentFragment extends Fragment {
                     task.execute();
                 }
             }
-
-            //getActivity().finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

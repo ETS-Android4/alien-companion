@@ -3,7 +3,7 @@
 
     <changelogversion versionName="" changeDate="">
         <changelogtext>Fixed 'Swipe down to refresh' sometimes triggering regardless of scrolled position</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed indentation of user submitted comments after successful submission</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

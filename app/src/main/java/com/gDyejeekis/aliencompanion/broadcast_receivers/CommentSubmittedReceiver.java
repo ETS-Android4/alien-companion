@@ -9,6 +9,7 @@ import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.UserFragment;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 
 /**
@@ -36,6 +37,7 @@ public class CommentSubmittedReceiver extends BroadcastReceiver {
                     fragment.postAdapter.selectedPosition = -1;
                     fragment.postAdapter.notifyDataSetChanged();
                     if (intent.getAction().equals(COMMENT_SUBMISSION)) {
+                        updateCommentIndentation(comment, fragment.postAdapter, position);
                         fragment.postAdapter.add(position, comment);
                         fragment.mLayoutManager.scrollToPosition(position);
                     } else if (intent.getAction().equals(COMMENT_EDIT)) {
@@ -43,14 +45,27 @@ public class CommentSubmittedReceiver extends BroadcastReceiver {
                     }
                 }
             }
-        }
-        else if (context instanceof UserActivity && intent.getAction().equals(COMMENT_EDIT)) {
+        } else if (context instanceof UserActivity && intent.getAction().equals(COMMENT_EDIT)) {
             UserFragment fragment = ((UserActivity) context).getListFragment();
             if (fragment != null) {
                 if (comment != null && position != -1) {
                     fragment.adapter.updateItem(position, comment);
                 }
             }
+        }
+    }
+
+    private void updateCommentIndentation(Comment comment, PostAdapter adapter, int position) {
+        try {
+            RedditItem aboveItem = (RedditItem) adapter.getItemAt(position - 1);
+            if (aboveItem instanceof Comment) {
+                Comment aboveComment = (Comment) aboveItem;
+                if (comment.getParentId().equals(aboveComment.getFullName())) {
+                    comment.setIndentation(aboveComment.getIndentation() + 1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
