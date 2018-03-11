@@ -356,15 +356,15 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mLayoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addOnScrollListener(onScrollListener);
-        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                try {
-                    getView().requestFocus();
-                } catch (Exception e) {}
-                return false;
-            }
-        });
+        //mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+        //    @Override
+        //    public boolean onTouch(View v, MotionEvent event) {
+        //        try {
+        //            getView().requestFocus();
+        //        } catch (Exception e) {}
+        //        return false;
+        //    }
+        //});
     }
 
     private void initMainProgressBar(View view) {

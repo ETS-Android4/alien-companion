@@ -277,15 +277,15 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         contentView.setHasFixedSize(true);
         setLayoutManager();
         updateListDividerVisibility();
-        contentView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                try {
-                    getView().requestFocus();
-                } catch (Exception e) {}
-                return false;
-            }
-        });
+        //contentView.setOnTouchListener(new View.OnTouchListener() {
+        //    @Override
+        //    public boolean onTouch(View v, MotionEvent event) {
+        //        try {
+        //            getView().requestFocus();
+        //        } catch (Exception e) {}
+        //        return false;
+        //    }
+        //});
     }
 
     public void updateContentViewAdapter(RedditItemListAdapter adapter) {
