@@ -4,7 +4,7 @@
     <changelogversion versionName="" changeDate="">
         <changelogtext>Fixed 'Swipe down to refresh' sometimes triggering regardless of scrolled position</changelogtext>
         <changelogtext>Fixed indentation of user submitted comments after successful submission</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed layout bug in messages screen when default post view is set to 'Gallery'</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

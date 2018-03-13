@@ -299,8 +299,9 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     private void setLayoutManager() {
-        layoutManager = currentViewTypeValue == PostViewType.gallery.value() ?
-                new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH) : new LinearLayoutManager(activity);
+        if (!(this instanceof MessageFragment) && currentViewTypeValue == PostViewType.gallery.value())
+            layoutManager = new GridAutoFitLayoutManager(activity, PostGalleryViewHolder.GALLERY_COLUMN_WIDTH);
+        else layoutManager = new LinearLayoutManager(activity);
         contentView.setLayoutManager(layoutManager);
     }
 
