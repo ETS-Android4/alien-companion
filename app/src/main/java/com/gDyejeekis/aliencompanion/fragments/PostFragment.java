@@ -82,7 +82,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private LinearLayout layoutFabNav;
     private LinearLayout layoutFabOptions;
     private FloatingActionButton fabMain;
-    private FloatingActionButton fabReply;
+    //private FloatingActionButton fabReply;
     private FloatingActionButton fabNavSetting;
     private FloatingActionButton fabNext;
     private FloatingActionButton fabPrevious;
@@ -388,20 +388,20 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             layoutFabOptions = activity.findViewById(R.id.layout_comment_fab_options);
             fabMain = activity.findViewById(R.id.fab_nav);
             fabNavSetting = activity.findViewById(R.id.fab_comment_nav_setting);
-            fabReply = activity.findViewById(R.id.fab_reply);
+            //fabReply = activity.findViewById(R.id.fab_reply);
             fabNext = activity.findViewById(R.id.fab_down);
             fabPrevious = activity.findViewById(R.id.fab_up);
             fabMain.setOnClickListener(commentNavListener);
             fabNavSetting.setOnClickListener(commentNavListener);
             fabNavSetting.setOnLongClickListener(commentNavListener);
-            fabReply.setOnClickListener(commentNavListener);
-            fabReply.setOnLongClickListener(commentNavListener);
+            //fabReply.setOnClickListener(commentNavListener);
+            //fabReply.setOnLongClickListener(commentNavListener);
             fabNext.setOnClickListener(commentNavListener);
             fabPrevious.setOnClickListener(commentNavListener);
             ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
             fabMain.setBackgroundTintList(fabColor);
             fabNavSetting.setBackgroundTintList(fabColor);
-            fabReply.setBackgroundTintList(fabColor);
+            //fabReply.setBackgroundTintList(fabColor);
             fabNext.setBackgroundTintList(fabColor);
             fabPrevious.setBackgroundTintList(fabColor);
             setFabOptionsVisible(fabOptionsVisible);
@@ -504,7 +504,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void hideAllFabOnScroll() {
         fabMain.hide();
-        fabReply.hide();
+        //fabReply.hide();
         fabNavSetting.hide();
         fabNext.hide();
         fabPrevious.hide();
@@ -512,7 +512,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void showAllFabOnScroll() {
         fabMain.show();
-        fabReply.show();
+        //fabReply.show();
         fabNavSetting.show();
         fabNext.show();
         fabPrevious.show();
