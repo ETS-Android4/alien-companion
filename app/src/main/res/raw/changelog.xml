@@ -7,7 +7,7 @@
         <changelogtext>Fixed UI update after successful post/comment deletion</changelogtext>
         <changelogtext>Fixed layout bug in messages screen when default post view is set to 'Gallery'</changelogtext>
         <changelogtext>Removed 'Reply' option from comment navigation FAB menu</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Removed 'Show NSFW subreddit suggestions' option</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Various UI optimizations and bug fixes</changelogtext>

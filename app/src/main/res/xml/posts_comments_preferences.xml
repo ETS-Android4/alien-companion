@@ -9,10 +9,10 @@
             android:title="Show NSFW thumbnails"
             android:defaultValue="false"/>
 
-        <CheckBoxPreference
+        <!--<CheckBoxPreference
             android:key="showNSFWsuggestions"
             android:title="Show NSFW subreddit suggestions"
-            android:defaultValue="false"/>
+            android:defaultValue="false"/>-->
 
         <CheckBoxPreference
             android:key="hideNSFW"

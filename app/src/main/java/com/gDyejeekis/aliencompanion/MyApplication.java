@@ -490,7 +490,7 @@ public class MyApplication extends Application {
         hqThumbnails = prefs.getBoolean("hqThumb", true);
         noThumbnails = prefs.getBoolean("noThumb", false);
         showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
-        showNSFWsuggestions = prefs.getBoolean("showNSFWsuggestions", false);
+        showNSFWsuggestions = false; //prefs.getBoolean("showNSFWsuggestions", false);
         hideNSFW = prefs.getBoolean("hideNSFW", true);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
         switch (swipeSetting) {
