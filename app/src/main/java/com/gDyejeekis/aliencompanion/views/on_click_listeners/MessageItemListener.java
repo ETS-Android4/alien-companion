@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -20,6 +21,7 @@ import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Message;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 
 /**
  * Created by sound on 10/12/2015.
@@ -27,38 +29,40 @@ import com.gDyejeekis.aliencompanion.enums.SubmitType;
 public class MessageItemListener implements View.OnClickListener, View.OnLongClickListener {
 
     private Context context;
-    private Message message;
+    private RecyclerView.ViewHolder viewHolder;
+    private RedditItemListAdapter adapter;
 
-    public MessageItemListener(Context context, Message message) {
+    public MessageItemListener(Context context, RecyclerView.ViewHolder viewHolder, RedditItemListAdapter adapter) {
         this.context = context;
-        this.message = message;
+        this.viewHolder = viewHolder;
+        this.adapter = adapter;
     }
 
     @Override
     public void onClick(View v) {
-        if(message.wasComment) {
-            if(MyApplication.dualPaneActive) {
+        Message message = (Message) adapter.getItemAt(viewHolder.getAdapterPosition());
+        if (message.wasComment) {
+            if (MyApplication.dualPaneActive) {
                 PostFragment fragment = PostFragment.newInstance(message.context);
                 ((MessageActivity) context).setupPostFragment(fragment);
-            }
-            else {
+            } else {
                 Intent intent = new Intent(context, PostActivity.class);
                 intent.putExtra("url", message.context);
                 context.startActivity(intent);
             }
-        }
-        else {
+        } else {
             //TODO: implement show message reply screen
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
-        showMessageOptionsPopup(v);
+        Message message = (Message) adapter.getItemAt(viewHolder.getAdapterPosition());
+        showMessageOptionsPopup(v, message);
         return true;
     }
 
-    private void showMessageOptionsPopup(View v) {
+    private void showMessageOptionsPopup(View v, final Message message) {
         PopupMenu popupMenu = new PopupMenu(context, v);
         final int resource = (message.wasComment) ? R.menu.menu_message_comment_options : R.menu.menu_message_options;
         popupMenu.inflate(resource);

@@ -15,6 +15,8 @@ import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.utils.LinkHandler;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
+import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 
 /**
  * Created by George on 6/20/2015.
@@ -22,30 +24,30 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 public class PostItemListener implements View.OnClickListener {
 
     private Context context;
-    private Submission post;
+    private RecyclerView.ViewHolder viewHolder;
     private RecyclerView.Adapter adapter;
-    private int position;
 
-    public PostItemListener(Context context, Submission post) {
+    public PostItemListener(Context context, RecyclerView.ViewHolder viewHolder, RecyclerView.Adapter adapter) {
         this.context = context;
-        this.post = post;
-        position = -1;
+        this.viewHolder = viewHolder;
+        this.adapter = adapter;
     }
 
-    public PostItemListener(Context context, Submission post, RecyclerView.Adapter adapter, int position) {
-        this.context = context;
-        this.post = post;
-        this.adapter = adapter;
-        this.position = position;
+    private Submission getCurrentPost() {
+        if (adapter instanceof RedditItemListAdapter)
+            return (Submission) ((RedditItemListAdapter) adapter).getItemAt(viewHolder.getAdapterPosition());
+        else if (adapter instanceof PostAdapter)
+            return (Submission) ((PostAdapter) adapter).getItemAt(0);
+        return null;
     }
 
     @Override
     public void onClick(View v) {
-
-        if(!post.isClicked() && position != -1) {
+        Submission post = getCurrentPost();
+        if(!post.isClicked()) {
             //if(adapter instanceof RedditItemListAdapter)
             post.setClicked(true);
-            adapter.notifyItemChanged(position);
+            adapter.notifyItemChanged(viewHolder.getAdapterPosition());
         }
 
         if(v.getId() == R.id.layout_postCommentsButton || post.isSelf()) {

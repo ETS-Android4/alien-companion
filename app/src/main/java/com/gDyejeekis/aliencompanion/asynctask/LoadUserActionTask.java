@@ -19,6 +19,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.SubredditSidebarDialogFragment;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.SubmitActionResponse;
 import com.gDyejeekis.aliencompanion.models.offline_actions.CommentAction;
 import com.gDyejeekis.aliencompanion.models.offline_actions.DownvoteAction;
@@ -46,7 +47,9 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.gDyejeekis.aliencompanion.enums.UserActionType;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 /**
  * Created by sound on 8/26/2015.
@@ -374,6 +377,7 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         showSnackbar("Hidden", "Undo", listener);
                         break;
                     case delete:
+                        onRedditItemDeleted();
                         showSnackbar("Deleted");
                         break;
                     case changePassword:
@@ -403,6 +407,53 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         }
     }
 
+    // TODO: 3/7/2018 re-write to work while dual pane mode is active
+    private void onRedditItemDeleted() {
+        final String id = itemName.substring(3);
+        RedditItemListAdapter listAdapter = getListFragmentAdapter();
+        if (listAdapter != null) {
+            for (RedditItem item : listAdapter.redditItems) {
+                if (item.getIdentifier().equals(id)) {
+                    listAdapter.remove(item);
+                    break;
+                }
+            }
+        } else {
+            PostAdapter postAdapter = getPostFragmentAdapter();
+            if (postAdapter != null) {
+                if (itemName.startsWith("t1_")) { // comment case
+                    for (MultiLevelExpIndListAdapter.ExpIndData item : postAdapter.getData()) {
+                        if (item instanceof Comment && ((Comment) item).getIdentifier().equals(id)) {
+                            Comment comment = (Comment) item;
+                            int commentIndex = postAdapter.indexOf(comment);
+                            Comment belowComment = null;
+                            try {
+                                belowComment = (Comment) postAdapter.getItemAt(commentIndex + 1);
+                            } catch (Exception e) {}
+                            if (belowComment!=null && belowComment.getParentId().equals(comment.getFullName())) {
+                                comment.setAuthor("[deleted]");
+                                comment.setBodyHTML("[deleted]");
+                                comment.setBody("[deleted]");
+                                postAdapter.notifyItemChanged(commentIndex);
+                            } else {
+                                postAdapter.remove(item, true);
+                            }
+                            break;
+                        }
+                    }
+                } else if (itemName.startsWith("t3_")) { // post case
+                    Submission post = (Submission) postAdapter.getItemAt(0);
+                    post.setAuthor("[deleted]");
+                    if (post.isSelf()) {
+                        post.setSelftext("[deleted]");
+                        post.setSelftextHTML("[deleted]");
+                    }
+                    postAdapter.notifyItemChanged(0);
+                }
+            }
+        }
+    }
+
     private void showSnackbar(String message) {
         showSnackbar(message, Snackbar.LENGTH_SHORT);
     }
@@ -415,8 +466,8 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         showSnackbar(message, actionText, listener, Snackbar.LENGTH_LONG);
     }
 
+    // TODO: 3/7/2018 re-write to work while dual pane mode is active
     private void showSnackbar(String message, String actionText, View.OnClickListener listener, int duration) {
-        // TODO: 3/7/2018 this won't work while dual pane is active
         PostFragment postFragment = getPostFragment();
         if (postFragment!=null) {
             postFragment.setSnackbar(ToastUtils.showSnackbar(postFragment.getSnackbarParentView(),
@@ -470,14 +521,14 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
         notifyDataSetChanged(getPostFragmentAdapter());
     }
 
-    private RecyclerView.Adapter getListFragmentAdapter() {
+    private RedditItemListAdapter getListFragmentAdapter() {
         RedditContentFragment fragment = getListFragment();
         if (fragment!=null)
             return fragment.adapter;
         return null;
     }
 
-    private RecyclerView.Adapter getPostFragmentAdapter() {
+    private PostAdapter getPostFragmentAdapter() {
         PostFragment fragment = getPostFragment();
         if (fragment!=null)
             return fragment.postAdapter;

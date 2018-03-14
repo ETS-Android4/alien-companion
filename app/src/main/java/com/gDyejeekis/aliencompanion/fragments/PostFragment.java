@@ -542,6 +542,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void loadFullComments() {
+        showFullCommentsButton = false;
         post.setLinkedCommentId(null);
         refreshPostAndComments();
     }

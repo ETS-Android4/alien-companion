@@ -65,24 +65,24 @@ import com.gDyejeekis.aliencompanion.views.viewholders.PostSmallCardViewHolder;
 public class PostItemOptionsListener implements View.OnClickListener {
 
     private Context context;
-    private Submission post;
+    private RecyclerView.ViewHolder viewHolder;
     private RecyclerView.Adapter currentAdapter;
     private PostViewType viewType;
 
-    public PostItemOptionsListener(Context context, Submission post, RecyclerView.Adapter adapter, PostViewType postViewType) {
+    public PostItemOptionsListener(Context context, RecyclerView.ViewHolder viewHolder, RecyclerView.Adapter adapter, PostViewType postViewType) {
         this.context = context;
-        this.post = post;
+        this.viewHolder = viewHolder;
         this.currentAdapter = adapter;
         this.viewType = postViewType;
     }
 
-    private void viewUser() {
+    private void viewUser(Submission post) {
         Intent intent = new Intent(context, UserActivity.class);
         intent.putExtra("username", post.getAuthor());
         context.startActivity(intent);
     }
 
-    private void sharePost() {
+    private void sharePost(final Submission post) {
         final String commentsUrl = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + post.getSubreddit() + "/comments/" + post.getIdentifier();
         if (post.isSelf()) {
             GeneralUtils.shareUrl(context, "Share self-post url to..", commentsUrl);
@@ -107,13 +107,23 @@ public class PostItemOptionsListener implements View.OnClickListener {
         }
     }
 
-    private void openInBrowser() {
+    private void openInBrowser(Submission post) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(post.getURL()));
         context.startActivity(intent);
     }
 
+    private Submission getCurrentPost() {
+        int position = viewHolder.getAdapterPosition();
+        if (currentAdapter instanceof RedditItemListAdapter)
+            return (Submission) ((RedditItemListAdapter) currentAdapter).getItemAt(position);
+        else if (currentAdapter instanceof PostAdapter)
+            return (Submission) ((PostAdapter) currentAdapter).getItemAt(position);
+        return null;
+    }
+
     @Override
     public void onClick(View v) {
+        Submission post = getCurrentPost();
         switch (v.getId()) {
             case R.id.btn_upvote:case R.id.imageView_upvote_classic:
                 UserActionType actionType;
@@ -276,21 +286,21 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_view_user:
-                viewUser();
+                viewUser(post);
                 break;
             case R.id.btn_share:
-                sharePost();
+                sharePost(post);
                 break;
             case R.id.btn_open_browser:
-                openInBrowser();
+                openInBrowser(post);
                 break;
             case R.id.btn_more:
-                showMoreOptionsPopup(v);
+                showMoreOptionsPopup(v, post);
                 break;
         }
     }
 
-    private void showMoreOptionsPopup(View v) {
+    private void showMoreOptionsPopup(View v, final Submission post) {
         final PopupMenu popupMenu = new PopupMenu(context, v);
         popupMenu.inflate(R.menu.menu_post_more_options);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -334,7 +344,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         }.execute(post.getIdentifier());
                         return true;
                     case R.id.action_open_in_browser:
-                        openInBrowser();
+                        openInBrowser(post);
                         return true;
                     case R.id.action_copy_to_clipboard:
                         if(post.isSelf()) {
@@ -365,10 +375,10 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         // TODO: 4/7/2017
                         return true;
                     case R.id.action_share:
-                        sharePost();
+                        sharePost(post);
                         return true;
                     case R.id.action_view_user:
-                        viewUser();
+                        viewUser(post);
                         return true;
                     case R.id.action_view_subreddit:
                         Intent intent = new Intent(context, SubredditActivity.class);
@@ -415,9 +425,6 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (currentAdapter instanceof RedditItemListAdapter) {
-                                    ((RedditItemListAdapter) currentAdapter).remove(post);
-                                }
                                 LoadUserActionTask task = new LoadUserActionTask(context, post.getFullName(), UserActionType.delete);
                                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
@@ -551,7 +558,7 @@ public class PostItemOptionsListener implements View.OnClickListener {
                 secondPaneAdapter.notifyItemChanged(0);
             }
             else if(secondPaneAdapter instanceof RedditItemListAdapter) {
-                int index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(post);
+                int index = viewHolder.getAdapterPosition();
                 RedditItem item = ((RedditItemListAdapter) secondPaneAdapter).getItemAt(index);
                 if(item instanceof Submission) {
                     ((Submission) item).setClicked(true);
@@ -561,14 +568,14 @@ public class PostItemOptionsListener implements View.OnClickListener {
         }
     }
 
-    private RecyclerView.Adapter getListFragmentAdapter() {
+    private RedditItemListAdapter getListFragmentAdapter() {
         RedditContentFragment fragment = getListFragment();
         if (fragment!=null)
             return fragment.adapter;
         return null;
     }
 
-    private RecyclerView.Adapter getPostFragmentAdapter() {
+    private PostAdapter getPostFragmentAdapter() {
         PostFragment fragment = getPostFragment();
         if (fragment!=null)
             return fragment.postAdapter;

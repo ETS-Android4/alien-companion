@@ -52,17 +52,27 @@ import com.gDyejeekis.aliencompanion.enums.UserActionType;
 public class CommentItemOptionsListener implements View.OnClickListener {
 
     private Context context;
-    private Comment comment;
+    private RecyclerView.ViewHolder viewHolder;
     private RecyclerView.Adapter recyclerAdapter;
 
-    public CommentItemOptionsListener(Context context, Comment comment, RecyclerView.Adapter adapter) {
+    public CommentItemOptionsListener(Context context, RecyclerView.ViewHolder viewHolder, RecyclerView.Adapter adapter) {
         this.context = context;
-        this.comment = comment;
+        this.viewHolder = viewHolder;
         this.recyclerAdapter = adapter;
+    }
+
+    private Comment getCurrentComment() {
+        int position = viewHolder.getAdapterPosition();
+        if (recyclerAdapter instanceof RedditItemListAdapter)
+            return (Comment) ((RedditItemListAdapter) recyclerAdapter).getItemAt(position);
+        else if (recyclerAdapter instanceof PostAdapter)
+            return (Comment) ((PostAdapter) recyclerAdapter).getItemAt(position);
+        return null;
     }
 
     @Override
     public void onClick(View v) {
+        Comment comment = getCurrentComment();
         switch (v.getId()) {
             case R.id.btn_upvote:
                 UserActionType actionType;
@@ -169,18 +179,18 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                 context.startActivity(intent);
                 break;
             case R.id.btn_save:
-                saveComment();
+                saveComment(comment);
                 break;
             case R.id.btn_share:
-                shareComment();
+                shareComment(comment);
                 break;
             case R.id.btn_more:
-                showMoreOptionsPopup(v);
+                showMoreOptionsPopup(v, comment);
                 break;
         }
     }
 
-    private void showMoreOptionsPopup(View v) {
+    private void showMoreOptionsPopup(View v, final Comment comment) {
         PopupMenu popupMenu = new PopupMenu(context, v);
         popupMenu.inflate(R.menu.menu_comment_more_options);
 
@@ -212,9 +222,6 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(recyclerAdapter instanceof RedditItemListAdapter) {
-                                    ((RedditItemListAdapter) recyclerAdapter).remove(comment);
-                                }
                                 LoadUserActionTask task = new LoadUserActionTask(context, comment.getFullName(), UserActionType.delete);
                                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
@@ -242,7 +249,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         GeneralUtils.copyTextToClipboard(context, "Comment body", comment.getBody());
                         return true;
                     case R.id.action_share:
-                        shareComment();
+                        shareComment(comment);
                         return true;
                     case R.id.action_open_browser:
                         intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
@@ -250,7 +257,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
                         context.startActivity(intent);
                         return true;
                     case R.id.action_save:
-                        saveComment();
+                        saveComment(comment);
                         return true;
                     case R.id.action_report:
                         if (MyApplication.currentUser!=null) {
@@ -271,7 +278,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         popupMenu.show();
     }
 
-    private void saveComment() {
+    private void saveComment(Comment comment) {
         if (MyApplication.currentUser!=null) {
             UserActionType actionType;
             if (comment.isSaved()) {
@@ -304,7 +311,7 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         }
     }
 
-    private void shareComment() {
+    private void shareComment(Comment comment) {
         String commentLink = ApiEndpointUtils.REDDIT_BASE_URL + "/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().substring(3)
                 + "?comment=" + comment.getIdentifier();
         Intent sendIntent = new Intent();
@@ -318,18 +325,19 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         RecyclerView.Adapter secondPaneAdapter = getSecondPaneAdapter();
         if (secondPaneAdapter != null) {
             try {
+                Comment comment = getCurrentComment();
                 int index = -1;
-                Comment comment = null;
+                Comment secondPaneComment = null;
                 if (secondPaneAdapter instanceof PostAdapter) {
-                    index = ((PostAdapter) secondPaneAdapter).indexOf(this.comment);
-                    comment = (Comment) ((PostAdapter) secondPaneAdapter).getItemAt(index);
+                    index = ((PostAdapter) secondPaneAdapter).indexOf(comment);
+                    secondPaneComment = (Comment) ((PostAdapter) secondPaneAdapter).getItemAt(index);
                 } else if (secondPaneAdapter instanceof RedditItemListAdapter) {
-                    index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(this.comment);
-                    comment = (Comment) ((RedditItemListAdapter) secondPaneAdapter).getItemAt(index);
+                    index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(comment);
+                    secondPaneComment = (Comment) ((RedditItemListAdapter) secondPaneAdapter).getItemAt(index);
                 }
 
-                comment.setLikes(this.comment.getLikes());
-                comment.setSaved(this.comment.isSaved());
+                secondPaneComment.setLikes(comment.getLikes());
+                secondPaneComment.setSaved(comment.isSaved());
                 secondPaneAdapter.notifyItemChanged(index);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -348,14 +356,14 @@ public class CommentItemOptionsListener implements View.OnClickListener {
         return adapter;
     }
 
-    public RecyclerView.Adapter getListFragmentAdapter() {
+    private RedditItemListAdapter getListFragmentAdapter() {
         RedditContentFragment fragment = getListFragment();
         if (fragment!=null)
             return fragment.adapter;
         return null;
     }
 
-    public RecyclerView.Adapter getPostFragmentAdapter() {
+    private PostAdapter getPostFragmentAdapter() {
         PostFragment fragment = getPostFragment();
         if (fragment!=null)
             return fragment.postAdapter;
@@ -363,23 +371,8 @@ public class CommentItemOptionsListener implements View.OnClickListener {
     }
 
     private int getCommentPosition(boolean newComment) {
-        // TODO: 3/23/2017 add abstraction
-        int position = -1;
-        try {
-            if (context instanceof MainActivity) {
-                position = ((MainActivity) context).getPostFragment().postAdapter.indexOf(comment);
-            } else if (context instanceof SubredditActivity) {
-                position = ((SubredditActivity) context).getPostFragment().postAdapter.indexOf(comment);
-            } else if (context instanceof UserActivity) {
-                position = ((UserActivity) context).getListFragment().adapter.indexOf(comment);
-            } else if (context instanceof PostActivity) {
-                position = ((PostActivity) context).getPostFragment().postAdapter.indexOf(comment);
-            }
-
-            if (newComment) position++;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        int position = viewHolder.getAdapterPosition();
+        if (newComment) position++;
         return position;
     }
 

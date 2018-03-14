@@ -3,11 +3,14 @@
 
     <changelogversion versionName="" changeDate="">
         <changelogtext>Fixed 'Swipe down to refresh' sometimes triggering regardless of scrolled position</changelogtext>
-        <changelogtext>Fixed indentation of user submitted comments after successful submission</changelogtext>
+        <changelogtext>Fixed UI update after successful comment submission</changelogtext>
+        <changelogtext>Fixed UI update after successful post/comment deletion</changelogtext>
         <changelogtext>Fixed layout bug in messages screen when default post view is set to 'Gallery'</changelogtext>
         <changelogtext>Removed 'Reply' option from comment navigation FAB menu</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext>Various UI optimizations and bug fixes</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.4" changeDate="Mar 7, 2018">

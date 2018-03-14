@@ -100,7 +100,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 index = fragment.postAdapter.nextGildedIndex(start);
                 break;
             default:
-                index = PostAdapter.POSITION_NOT_FOUND;
+                index = PostAdapter.NO_POSITION;
                 Log.e(TAG, "Invalid comment nav setting");
         }
         boolean scrolled = scrollToPosition(index);
@@ -133,7 +133,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 index = fragment.postAdapter.previousGildedIndex(start);
                 break;
             default:
-                index = PostAdapter.POSITION_NOT_FOUND;
+                index = PostAdapter.NO_POSITION;
                 Log.e(TAG, "Invalid comment nav setting");
         }
         boolean scrolled = scrollToPosition(index);
@@ -189,7 +189,7 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
     }
 
     private boolean scrollToPosition(int position) {
-        if(position != PostAdapter.POSITION_NOT_FOUND) {
+        if(position != PostAdapter.NO_POSITION) {
             fragment.mLayoutManager.scrollToPositionWithOffset(position, 0);
             return true;
         }
