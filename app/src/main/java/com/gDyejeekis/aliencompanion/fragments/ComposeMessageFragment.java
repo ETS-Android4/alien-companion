@@ -33,8 +33,8 @@ public class ComposeMessageFragment extends Fragment {
 
         replyingToUser = getActivity().getIntent().getStringExtra("recipient");
         replyingToSubject = getActivity().getIntent().getStringExtra("subject");
-        if(replyingToSubject!=null) {
-            if(!replyingToSubject.substring(0,3).equalsIgnoreCase("re:")) replyingToSubject = "re: " + replyingToSubject;
+        if (replyingToSubject!=null) {
+            if (!replyingToSubject.startsWith("re:")) replyingToSubject = "re: " + replyingToSubject;
         }
     }
 
@@ -42,11 +42,10 @@ public class ComposeMessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compose_message, container, false);
-        recipientField = (EditText) view.findViewById(R.id.editText_recipient);
-        subjectField = (EditText) view.findViewById(R.id.editText_subject);
-        messageField = (EditText) view.findViewById(R.id.editText_message);
-        if(replyingToUser !=null) {
-            assert replyingToSubject != null;
+        recipientField = view.findViewById(R.id.editText_recipient);
+        subjectField = view.findViewById(R.id.editText_subject);
+        messageField = view.findViewById(R.id.editText_message);
+        if (replyingToUser !=null) {
             recipientField.setText(replyingToUser);
             subjectField.setText(replyingToSubject);
         }
@@ -56,37 +55,33 @@ public class ComposeMessageFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_submit) {
+        if (item.getItemId() == R.id.action_submit) {
             String recipient = recipientField.getText().toString();
             recipient = recipient.replaceAll("\\s","");
             String subject = subjectField.getText().toString();
             String message = messageField.getText().toString();
 
-            if(recipient.length()==0 || subject.replaceAll("\\s","").length()==0 || message.replaceAll("\\s","").length()==0) {
-                if(recipient.length()==0) {
+            if (recipient.length()==0 || subject.replaceAll("\\s","").length()==0 || message.replaceAll("\\s","").length()==0) {
+                if (recipient.length()==0) {
                     recipientField.setText("");
                     recipientField.setHint("enter a recipient");
                     recipientField.setHintTextColor(Color.RED);
                 }
-                if(subject.replaceAll("\\s","").length()==0) {
+                if (subject.replaceAll("\\s","").length()==0) {
                     subjectField.setText("");
                     subjectField.setHint("enter a subject");
                     subjectField.setHintTextColor(Color.RED);
                 }
-                if(message.replaceAll("\\s","").length()==0) {
+                if (message.replaceAll("\\s","").length()==0) {
                     messageField.setText("");
                     messageField.setHint("enter a message");
                     messageField.setHintTextColor(Color.RED);
                 }
-            }
-            else {
+            } else {
                 //send message here
-                //ToastUtils.showToast(getActivity(), "message ready for delivery");
                 ToastUtils.showToast(getActivity(), "Sending message...");
                 LoadUserActionTask task = new LoadUserActionTask(getActivity(), recipient, subject, message);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-                //getActivity().finish();
             }
         }
 
