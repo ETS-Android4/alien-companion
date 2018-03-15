@@ -3,8 +3,8 @@
 
     <changelogversion versionName="" changeDate="">
         <changelogtext>Fixed 'Swipe down to refresh' sometimes triggering regardless of scrolled position</changelogtext>
-        <changelogtext>Fixed UI update after successful comment submission</changelogtext>
-        <changelogtext>Fixed UI update after successful post/comment deletion</changelogtext>
+        <changelogtext>Fixed indentation of new comment after a successful comment submission</changelogtext>
+        <changelogtext>Fixed UI not being properly updated after a successful post/comment deletion</changelogtext>
         <changelogtext>Fixed layout bug in messages screen when default post view is set to 'Gallery'</changelogtext>
         <changelogtext>Removed 'Reply' option from comment navigation FAB menu</changelogtext>
         <changelogtext>Removed 'Show NSFW subreddit suggestions' option</changelogtext>
