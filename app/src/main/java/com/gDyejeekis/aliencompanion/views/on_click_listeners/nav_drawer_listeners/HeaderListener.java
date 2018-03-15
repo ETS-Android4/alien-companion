@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listen
 
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 
 /**
@@ -15,11 +16,26 @@ public class HeaderListener extends NavDrawerListener {
 
     @Override
     public void onClick(View v) {
-        getAdapter().toggleAccountItems();
+        switch (v.getId()) {
+            case R.id.button_theme_switch:
+                getAdapter().showThemesDialog();
+                break;
+            case R.id.button_offline_switch:
+                getAdapter().showOfflineSwitchDialog();
+                break;
+            default:
+                getAdapter().toggleAccountItems();
+                break;
+        }
     }
 
     @Override
     public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.button_offline_switch:
+                getAdapter().switchModeGracefully();
+                return true;
+        }
         return false;
     }
 }

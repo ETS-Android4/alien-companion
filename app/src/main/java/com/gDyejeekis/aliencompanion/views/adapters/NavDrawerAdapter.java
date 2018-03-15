@@ -494,71 +494,75 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        RecyclerView.ViewHolder viewHolder = null;
+        RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
             case VIEW_TYPE_HEADER:
-                int resource = R.layout.drawer_header;
-                NavDrawerListener listener = new HeaderListener(activity);
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(resource, parent, false);
-                v.setOnClickListener(listener);
+                        .inflate(R.layout.drawer_header, parent, false);
                 viewHolder = new HeaderViewHolder(v);
+                NavDrawerListener listener = new HeaderListener(activity);
+                v.setOnClickListener(listener);
+                ((HeaderViewHolder) viewHolder).themeButton.setOnClickListener(listener);
+                ((HeaderViewHolder) viewHolder).offlineButton.setOnClickListener(listener);
+                ((HeaderViewHolder) viewHolder).offlineButton.setOnLongClickListener(listener);
                 break;
             case VIEW_TYPE_MENU_ITEM:
-                resource = R.layout.drawer_menu_row;
-                listener = new MenuItemListener(activity);
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(resource, parent, false);
-                v.setOnClickListener(listener);
+                        .inflate(R.layout.drawer_menu_row, parent, false);
                 viewHolder = new MenuRowViewHolder(v);
+                listener = new MenuItemListener(activity);
+                v.setOnClickListener(listener);
                 break;
             case VIEW_TYPE_SUBREDDITS:
-                resource = R.layout.drawer_subreddits;
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(resource, parent, false);
+                        .inflate(R.layout.drawer_subreddits, parent, false);
                 viewHolder = new SubredditsViewHolder(v);
+                listener = new SubredditsListener(activity);
+                ((SubredditsViewHolder) viewHolder).layoutToggle.setOnClickListener(listener);
+                ((SubredditsViewHolder) viewHolder).layoutEdit.setOnClickListener(listener);
                 break;
             case VIEW_TYPE_SUBREDDIT_ITEM:
-                resource = R.layout.drawer_subreddit_row;
-                listener = new SubredditItemListener(activity);
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(resource, parent, false);
+                        .inflate(R.layout.drawer_subreddit_row, parent, false);
+                viewHolder = new SubredditRowViewHolder(v);
+                listener = new SubredditItemListener(activity);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
-                viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_ACCOUNT:
-                resource = R.layout.drawer_account_row;
-                listener = new AccountListener(activity);
                 v = LayoutInflater.from(parent.getContext())
-                        .inflate(resource, parent, false);
+                        .inflate(R.layout.drawer_account_row, parent, false);
+                viewHolder = new SubredditRowViewHolder(v);
+                listener = new AccountListener(activity);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
-                viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_MULTIS:
-                resource = R.layout.drawer_multis;
-                v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.drawer_multis, parent, false);
                 viewHolder = new SubredditsViewHolder(v);
+                listener = new MultisListener(activity);
+                ((SubredditsViewHolder) viewHolder).layoutToggle.setOnClickListener(listener);
+                ((SubredditsViewHolder) viewHolder).layoutEdit.setOnClickListener(listener);
                 break;
             case VIEW_TYPE_MULTIREDDIT_ITEM:
-                resource = R.layout.drawer_subreddit_row;
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.drawer_subreddit_row, parent, false);
+                viewHolder = new SubredditRowViewHolder(v);
                 listener = new MultiredditItemListener(activity);
-                v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
-                viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_OTHER:
                 viewHolder = new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_other, parent, false));
                 break;
             case VIEW_TYPE_OTHER_ITEM:
-                resource = R.layout.drawer_subreddit_row;
+                v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.drawer_subreddit_row, parent, false);
+                viewHolder = new SubredditRowViewHolder(v);
                 listener = new OtherItemListener(activity);
-                v = LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
-                viewHolder = new SubredditRowViewHolder(v);
                 break;
             case VIEW_TYPE_EMPTY_SPACE:
                 viewHolder = new EmptySpaceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_empty_space, parent, false));
@@ -569,7 +573,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
             default:
                 throw new IllegalStateException("unknown viewType");
         }
-
         return viewHolder;
     }
 
@@ -581,44 +584,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 HeaderViewHolder headerViewHolder = (HeaderViewHolder) viewHolder;
                 headerViewHolder.headerLayout.setBackgroundColor(MyApplication.currentPrimaryColor);
                 headerViewHolder.currentAccount.setText(currentAccountName);
-
-                //String themeButtonText = (MyApplication.nightThemeEnabled) ? "Light theme" : "Dark theme";
-                //headerViewHolder.themeButton.setText(themeButtonText);
-                //headerViewHolder.themeButton.setOnClickListener(new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View view) {
-                //        showThemeSwitchDialog();
-                //    }
-                //});
-
                 headerViewHolder.themeButton.setText("Base theme");
-                headerViewHolder.themeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showThemesDialog();
-                    }
-                });
-
-                String offlineButtonText = (MyApplication.offlineModeEnabled) ? "Go online" : "Go offline";
-                headerViewHolder.offlineButton.setText(offlineButtonText);
-                headerViewHolder.offlineButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showOfflineSwitchDialog();
-                    }
-                });
-                headerViewHolder.offlineButton.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if(MyApplication.longTapSwitchMode) {
-                            switchModeGracefully();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                if(accountItemsVisible) headerViewHolder.toggle.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
+                headerViewHolder.offlineButton.setText((MyApplication.offlineModeEnabled) ? "Go online" : "Go offline");
+                if (accountItemsVisible) headerViewHolder.toggle.setImageResource(R.drawable.ic_arrow_drop_up_white_24dp);
                 else headerViewHolder.toggle.setImageResource(R.drawable.ic_arrow_drop_down_white_24dp);
                 break;
             case VIEW_TYPE_MENU_ITEM:
@@ -656,15 +624,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_SUBREDDITS:
                 SubredditsViewHolder subredditsViewHolder = (SubredditsViewHolder) viewHolder;
-                if(subredditItemsVisible) {
+                if (subredditItemsVisible) {
                     subredditsViewHolder.imgToggle.setImageResource(expandLessResource);
                 } else {
                     subredditsViewHolder.imgToggle.setImageResource(expandMoreResource);
                 }
                 subredditsViewHolder.imgToggle.setAlpha(defaultIconOpacity);
-                SubredditsListener listener = new SubredditsListener(activity);
-                subredditsViewHolder.layoutToggle.setOnClickListener(listener);
-                subredditsViewHolder.layoutEdit.setOnClickListener(listener);
                 break;
             case VIEW_TYPE_SUBREDDIT_ITEM:
                 SubredditRowViewHolder subredditRowViewHolder = (SubredditRowViewHolder) viewHolder;
@@ -678,8 +643,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 if ((subreddit.toLowerCase().equals(currentSubreddit) && !isMulti && !isOther) ||
                         (subredditItem.getName() == null && currentSubreddit == null)) {
                     highlightSelectedItem(subredditRowViewHolder);
-                }
-                else {
+                } else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textPrimaryColor);
                     setBackgroundSelector(subredditRowViewHolder);
                 }
@@ -695,14 +659,10 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 subredditsViewHolder = (SubredditsViewHolder) viewHolder;
                 if(multiredditItemsVisible) {
                     subredditsViewHolder.imgToggle.setImageResource(expandLessResource);
-                }
-                else {
+                } else {
                     subredditsViewHolder.imgToggle.setImageResource(expandMoreResource);
                 }
                 subredditsViewHolder.imgToggle.setAlpha(defaultIconOpacity);
-                MultisListener multisListener = new MultisListener(activity);
-                subredditsViewHolder.layoutToggle.setOnClickListener(multisListener);
-                subredditsViewHolder.layoutEdit.setOnClickListener(multisListener);
                 break;
             case VIEW_TYPE_MULTIREDDIT_ITEM:
                 subredditRowViewHolder = (SubredditRowViewHolder) viewHolder;
@@ -713,8 +673,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 isMulti = activity.getListFragment().isMulti;
                 if (multireddit.getName().toLowerCase().equals(currentSubreddit) && isMulti) {
                     highlightSelectedItem(subredditRowViewHolder);
-                }
-                else {
+                } else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textPrimaryColor);
                     setBackgroundSelector(subredditRowViewHolder);
                 }
@@ -728,8 +687,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 isOther = activity.getListFragment().isOther;
                 if (otherItem.getName().toLowerCase().equals(currentSubreddit) && isOther) {
                     highlightSelectedItem(subredditRowViewHolder);
-                }
-                else {
+                } else {
                     subredditRowViewHolder.name.setTextColor(MyApplication.textPrimaryColor);
                     setBackgroundSelector(subredditRowViewHolder);
                 }
@@ -811,7 +769,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
     }
 
-    private void showThemesDialog() {
+    public void showThemesDialog() {
         BaseThemesDialogFragment dialogFragment = new BaseThemesDialogFragment();
         dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
     }
@@ -896,8 +854,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
         public MenuRowViewHolder(View row) {
             super(row);
-            image = (ImageView) row.findViewById(R.id.imgView_option);
-            name = (TextView) row.findViewById(R.id.txtView_option);
+            image = row.findViewById(R.id.imgView_option);
+            name = row.findViewById(R.id.txtView_option);
         }
     }
 
@@ -907,8 +865,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
         public SubredditRowViewHolder(View row) {
             super(row);
-            name = (TextView) row.findViewById(R.id.txtView_subreddit);
-            layout = (LinearLayout) row.findViewById(R.id.subredditRowLayout);
+            name = row.findViewById(R.id.txtView_subreddit);
+            layout = row.findViewById(R.id.subredditRowLayout);
         }
     }
 
@@ -919,9 +877,9 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
         public SubredditsViewHolder(View row) {
             super(row);
-            layoutToggle = (LinearLayout) row.findViewById(R.id.layoutToggle);
-            layoutEdit = (LinearLayout) row.findViewById(R.id.layoutEdit);
-            imgToggle = (ImageView) row.findViewById(R.id.imgView_toggle);
+            layoutToggle = row.findViewById(R.id.layoutToggle);
+            layoutEdit = row.findViewById(R.id.layoutEdit);
+            imgToggle = row.findViewById(R.id.imgView_toggle);
         }
     }
 
@@ -935,12 +893,12 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
         public HeaderViewHolder(View row) {
             super(row);
-            headerLayout = (LinearLayout) row.findViewById(R.id.layout_header);
-            currentAccount = (TextView) row.findViewById(R.id.txtView_currentAccount);
-            accountLayout = (LinearLayout) row.findViewById(R.id.layout_account);
-            toggle = (ImageView) row.findViewById(R.id.imgView_toggle);
-            themeButton = (Button) row.findViewById(R.id.button_theme_switch);
-            offlineButton = (Button) row.findViewById(R.id.button_offline_switch);
+            headerLayout = row.findViewById(R.id.layout_header);
+            currentAccount = row.findViewById(R.id.txtView_currentAccount);
+            accountLayout = row.findViewById(R.id.layout_account);
+            toggle = row.findViewById(R.id.imgView_toggle);
+            themeButton = row.findViewById(R.id.button_theme_switch);
+            offlineButton = row.findViewById(R.id.button_offline_switch);
         }
     }
 
