@@ -483,8 +483,8 @@ public class MyApplication extends Application {
         postFabNavigation = prefs.getBoolean("postNav", true);
         commentFabNavigation = prefs.getBoolean("commentNav", true);
         volumeNavigation = prefs.getBoolean("volumeNav", false);
-        autoHidePostFab = prefs.getBoolean("autoHidePostNav", true);
-        autoHideCommentFab = prefs.getBoolean("autoHideCommentNav", true);
+        autoHidePostFab = prefs.getBoolean("autoHidePostNav", false);
+        autoHideCommentFab = prefs.getBoolean("autoHideCommentNav", false);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         hqThumbnails = prefs.getBoolean("hqThumb", true);

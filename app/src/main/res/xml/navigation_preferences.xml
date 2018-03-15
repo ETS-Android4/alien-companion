@@ -72,7 +72,7 @@
         <CheckBoxPreference
             android:key="autoHidePostNav"
             android:title="Hide post FAB on scroll down"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
 
         <CheckBoxPreference
             android:key="commentNav"
@@ -83,7 +83,7 @@
         <CheckBoxPreference
             android:key="autoHideCommentNav"
             android:title="Hide comment FAB on scroll down"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
