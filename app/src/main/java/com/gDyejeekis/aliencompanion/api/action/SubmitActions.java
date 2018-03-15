@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.api.action;
 
+import android.util.Log;
+
 import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.exception.ActionFailedException;
 import com.gDyejeekis.aliencompanion.api.retrieval.ActorDriven;
@@ -165,7 +167,7 @@ public class SubmitActions implements ActorDriven {
      * @param captcha_sol		Captcha solution
      * @throws ActionFailedException    	If the action failed
      */
-    public boolean submitLink(String title, String link, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
+    public SubmitActionResponse submitLink(String title, String link, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
         return submit(title, link, false, subreddit, captcha_iden, captcha_sol);
     }
 
@@ -180,7 +182,7 @@ public class SubmitActions implements ActorDriven {
      * @param captcha_sol		Captcha solution
      * @throws ActionFailedException    	If the action failed
      */
-    public boolean submitSelfPost(String title, String text, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
+    public SubmitActionResponse submitSelfPost(String title, String text, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
         return submit(title, text, true, subreddit, captcha_iden, captcha_sol);
     }
 
@@ -196,54 +198,64 @@ public class SubmitActions implements ActorDriven {
      * @return Whether the submission succeeded
      * @throws ActionFailedException    	If the action failed
      */
-    private boolean submit(String title, String linkOrText, boolean selfPost, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
+    //private boolean submit(String title, String linkOrText, boolean selfPost, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
+//
+    //    // Parameters
+    //    //String params =
+    //    //        "title=" 							+ title 							+
+    //    //                (selfPost ? "&text=" : "&url=") 	+ linkOrText 						+
+    //    //                "&sr=" 								+ subreddit 						+
+    //    //                "&kind=" 							+ (selfPost ? "self" : "link") 		+
+    //    //                "&uh=" 								+ user.getModhash() 				+
+    //    //                "&iden=" 							+ captcha_iden						+
+    //    //                "&Captcha=" 						+ captcha_sol;
+    //    RequestBody body = new FormBody.Builder().add("title", title).add((selfPost ? "text" : "url"), linkOrText).add("sr", subreddit).add("kind", (selfPost ? "self" : "link"))
+    //            /*.add("uh", user.getModhash())*/.add("iden", captcha_iden).add("Captcha", captcha_sol).build();
+//
+    //    // Make the request
+    //    JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
+//
+    //    String responseAsString = object.toJSONString();
+//
+    //    // User required
+    //    if (responseAsString.contains(".error.USER_REQUIRED")) {
+//
+    //        System.err.println("User submission failed: please login first.");
+    //        return false;
+//
+    //    } // Rate limit exceeded
+    //    else if (responseAsString.contains(".error.RATELIMIT.field-ratelimit")) {
+//
+    //        System.err.println("User submission failed: you are doing that too much.");
+    //        return false;
+//
+    //    } // Already submitted link
+    //    else if (responseAsString.contains(".error.ALREADY_SUB.field-url")) {
+//
+    //        System.err.println("User submission failed: that link has already been submitted.");
+    //        return false;
+//
+    //    } // Captcha problem
+    //    else if (responseAsString.contains(".error.BAD_CAPTCHA.field-Captcha")) {
+//
+    //        System.err.println("User submission failed: the Captcha field was incorrect.");
+    //        return false;
+//
+    //    }
+    //    else { // Success
+    //        return true;
+    //    }
+//
+    //}
 
-        // Parameters
-        //String params =
-        //        "title=" 							+ title 							+
-        //                (selfPost ? "&text=" : "&url=") 	+ linkOrText 						+
-        //                "&sr=" 								+ subreddit 						+
-        //                "&kind=" 							+ (selfPost ? "self" : "link") 		+
-        //                "&uh=" 								+ user.getModhash() 				+
-        //                "&iden=" 							+ captcha_iden						+
-        //                "&Captcha=" 						+ captcha_sol;
-        RequestBody body = new FormBody.Builder().add("title", title).add((selfPost ? "text" : "url"), linkOrText).add("sr", subreddit).add("kind", (selfPost ? "self" : "link"))
-                /*.add("uh", user.getModhash())*/.add("iden", captcha_iden).add("Captcha", captcha_sol).build();
+    private SubmitActionResponse submit(String title, String linkOrText, boolean selfPost, String subreddit, String captcha_iden, String captcha_sol) throws ActionFailedException {
+        RequestBody body = new FormBody.Builder().add("title", title).add((selfPost ? "text" : "url"), linkOrText)
+                .add("sr", subreddit).add("kind", (selfPost ? "self" : "link"))/*.add("uh", user.getModhash())*/
+                .add("iden", captcha_iden).add("Captcha", captcha_sol).build();
+        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL,
+                body,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
 
-        // Make the request
-        JSONObject object = (JSONObject) httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body,ApiEndpointUtils.USER_SUBMIT, user.getCookie()).getResponseObject();
-
-        String responseAsString = object.toJSONString();
-
-        // User required
-        if (responseAsString.contains(".error.USER_REQUIRED")) {
-
-            System.err.println("User submission failed: please login first.");
-            return false;
-
-        } // Rate limit exceeded
-        else if (responseAsString.contains(".error.RATELIMIT.field-ratelimit")) {
-
-            System.err.println("User submission failed: you are doing that too much.");
-            return false;
-
-        } // Already submitted link
-        else if (responseAsString.contains(".error.ALREADY_SUB.field-url")) {
-
-            System.err.println("User submission failed: that link has already been submitted.");
-            return false;
-
-        } // Captcha problem
-        else if (responseAsString.contains(".error.BAD_CAPTCHA.field-Captcha")) {
-
-            System.err.println("User submission failed: the Captcha field was incorrect.");
-            return false;
-
-        }
-        else { // Success
-            return true;
-        }
-
+        return new SubmitActionResponse(object);
     }
 
     /**

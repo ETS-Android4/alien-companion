@@ -519,6 +519,24 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         notifyDataSetChanged();
     }
 
+    public void addComment(int position, Comment comment) {
+        int previousSelected = selectedPosition;
+        selectedPosition = NO_POSITION;
+        notifyItemChanged(previousSelected);
+        try { // update comment indentation
+            RedditItem aboveItem = (RedditItem) getItemAt(position - 1);
+            if (aboveItem instanceof Comment) {
+                Comment aboveComment = (Comment) aboveItem;
+                if (comment.getParentId().equals(aboveComment.getFullName())) {
+                    comment.setIndentation(aboveComment.getIndentation() + 1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        add(position, comment);
+    }
+
     public int indexOf(RedditItem item) {
         return getData().indexOf(item);
     }

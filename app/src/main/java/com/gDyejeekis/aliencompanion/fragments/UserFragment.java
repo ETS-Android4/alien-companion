@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
-import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserContentTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddToSyncedDialogFragment;
@@ -108,9 +108,9 @@ public class UserFragment extends RedditContentFragment {
     }
 
     private void registerReceivers() {
-        commentEditReceiver = new CommentSubmittedReceiver();
+        commentEditReceiver = new RedditItemSubmittedReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(CommentSubmittedReceiver.COMMENT_EDIT);
+        filter.addAction(RedditItemSubmittedReceiver.COMMENT_EDIT);
         activity.registerReceiver(commentEditReceiver, filter);
     }
 

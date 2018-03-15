@@ -164,7 +164,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 	}
 
 	public Boolean isLocked() {
-		return locked;
+		return locked==null ? false : locked;
 	}
 
 	public void setLocked(Boolean locked) {
@@ -347,6 +347,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			setNSFW(updated.isNSFW());
 			setSpoiler(updated.isSpoiler());
 			setHidden(updated.isHidden());
+			setClicked(updated.isClicked());
+			setLocked(updated.isLocked());
 			setLikes(updated.getLikes());
 
 			updateAgePrepared();

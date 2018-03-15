@@ -259,12 +259,12 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                 case submitLink:
                     captcha_iden = "";
                     captcha_sol = "";
-                    submitActions.submitLink(title, linkOrText, subreddit, captcha_iden, captcha_sol);
+                    submitActionResponse = submitActions.submitLink(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitText:
                     captcha_iden = "";
                     captcha_sol = "";
-                    submitActions.submitSelfPost(title, linkOrText, subreddit, captcha_iden, captcha_sol);
+                    submitActionResponse = submitActions.submitSelfPost(title, linkOrText, subreddit, captcha_iden, captcha_sol);
                     break;
                 case submitComment:
                     submitActionResponse = submitActions.comment(itemName, text);
@@ -317,28 +317,9 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                 switch (userActionType) {
                     case submitText:
                     case submitLink:
-                        ((Activity) context).finish();
-                        ToastUtils.showToast(context, "Submission successful");
-                        break;
-                    case edit:
                     case submitComment:
-                        String message;
-                        if (submitActionResponse != null) {
-                            if (submitActionResponse.isSuccess()) {
-                                message = (userActionType == UserActionType.edit) ? "Edit successful" : "Reply sent";
-                                if (context instanceof SubmitActivity) {
-                                    if (submitActionResponse.getRedditItem() instanceof Comment)
-                                        ((SubmitActivity) context).sendBroadcast((Comment) submitActionResponse.getRedditItem());
-                                    ((SubmitActivity) context).finish();
-                                }
-                            }
-                            else {
-                                message = submitActionResponse.getFailReason();
-                            }
-                        } else {
-                            message = DEFAULT_ACTION_FAILED_MESSAGE;
-                        }
-                        ToastUtils.showToast(context, message);
+                    case edit:
+                        onRedditItemSubmitted();
                         break;
                     case save:
                         View.OnClickListener listener = new View.OnClickListener() {
@@ -404,6 +385,27 @@ public class LoadUserActionTask extends AsyncTask<Void, Void, Void> {
                         break;
                 }
             }
+        }
+    }
+
+    private void onRedditItemSubmitted() {
+        if (context instanceof SubmitActivity) {
+            SubmitActivity activity = (SubmitActivity) context;
+            String message;
+            if (submitActionResponse != null) {
+                if (submitActionResponse.isSuccess()) {
+                    RedditItem item = submitActionResponse.getRedditItem();
+                    activity.sendBroadcast(item);
+                    if (userActionType==UserActionType.edit) message = "Edit successful";
+                    else message = (item instanceof Comment) ? "Reply sent" : "Submission successful";
+                } else {
+                    message = submitActionResponse.getFailReason();
+                }
+            } else {
+                message = DEFAULT_ACTION_FAILED_MESSAGE;
+            }
+            ToastUtils.showToast(context, message);
+            activity.finish();
         }
     }
 

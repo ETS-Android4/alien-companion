@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
-import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.fragments.ComposeMessageFragment;
 import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitCommentFragment;
 import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitImageFragment;
@@ -17,6 +18,7 @@ import com.gDyejeekis.aliencompanion.fragments.submit_fragments.SubmitTextFragme
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 
 public class SubmitActivity extends ToolbarActivity implements DialogInterface.OnClickListener {
 
@@ -117,15 +119,28 @@ public class SubmitActivity extends ToolbarActivity implements DialogInterface.O
         super.onBackPressed();
     }
 
-    public void sendBroadcast(Comment submittedComment) {
-        if (fragment instanceof SubmitCommentFragment) {
-            boolean edit = getIntent().getBooleanExtra("edit", false);
-            String action = edit ? CommentSubmittedReceiver.COMMENT_EDIT : CommentSubmittedReceiver.COMMENT_SUBMISSION;
-            Intent broadcastIntent = new Intent(action);
-            broadcastIntent.putExtra("comment", submittedComment);
-            broadcastIntent.putExtra("position", getIntent().getIntExtra("position", -1));
-            sendBroadcast(broadcastIntent);
-        }
+    public void sendBroadcast(RedditItem item) {
+        if (item instanceof Submission)
+            sendBroadcast((Submission) item);
+        else if (item instanceof Comment)
+            sendBroadcast((Comment) item);
+    }
+
+    private void sendBroadcast(Comment comment) {
+        boolean edit = getIntent().getBooleanExtra("edit", false);
+        String action = edit ? RedditItemSubmittedReceiver.COMMENT_EDIT : RedditItemSubmittedReceiver.COMMENT_SUBMISSION;
+        Intent broadcastIntent = new Intent(action);
+        broadcastIntent.putExtra("comment", comment);
+        broadcastIntent.putExtra("position", getIntent().getIntExtra("position", -1));
+        sendBroadcast(broadcastIntent);
+    }
+
+    private void sendBroadcast(Submission post) {
+        boolean edit = getIntent().getBooleanExtra("edit", false);
+        String action = edit ? RedditItemSubmittedReceiver.POST_SELF_TEXT_EDIT : RedditItemSubmittedReceiver.POST_SUBMISSION;
+        Intent broadcastIntent = new Intent(action);
+        broadcastIntent.putExtra("post", post);
+        sendBroadcast(broadcastIntent);
     }
 
 }

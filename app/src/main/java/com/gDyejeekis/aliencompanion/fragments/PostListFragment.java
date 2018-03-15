@@ -1,8 +1,10 @@
 package com.gDyejeekis.aliencompanion.fragments;
 
 
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
@@ -47,6 +50,7 @@ public class PostListFragment extends RedditContentFragment {
     private SubmissionSort tempSort;
     public TimeSpan timeSpan;
     public LoadPostListTask task;
+    private BroadcastReceiver submittedReceiver;
 
     public static PostListFragment newInstance(RedditItemListAdapter adapter, String subreddit, boolean isMulti, SubmissionSort sort, TimeSpan time, LoadType currentLoadType, boolean hasMore) {
         PostListFragment listFragment = new PostListFragment();
@@ -413,8 +417,25 @@ public class PostListFragment extends RedditContentFragment {
     public void onActivityCreated(Bundle bundle) {
         super.onActivityCreated(bundle);
         setActionBarTitle();
-        if(submissionSort == null) submissionSort = SubmissionSort.HOT;
         setActionBarSubtitle();
+        registerReceivers();
+    }
+
+    @Override
+    public void onDetach() {
+        unregisterReceivers();
+        super.onDetach();
+    }
+
+    private void registerReceivers() {
+        submittedReceiver = new RedditItemSubmittedReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(RedditItemSubmittedReceiver.POST_SUBMISSION);
+        activity.registerReceiver(submittedReceiver, filter);
+    }
+
+    private void unregisterReceivers() {
+        activity.unregisterReceiver(submittedReceiver);
     }
 
     @Override
@@ -502,8 +523,9 @@ public class PostListFragment extends RedditContentFragment {
             subtitle = "loading";
         }
         else {
-            if (timeSpan == null) subtitle = submissionSort.value();
-            else subtitle = submissionSort.value() + ": " + timeSpan.value();
+            if(submissionSort == null) submissionSort = SubmissionSort.HOT;
+            subtitle = submissionSort.value();
+            if (timeSpan!=null) subtitle += timeSpan.value();
         }
         activity.getSupportActionBar().setSubtitle(subtitle);
     }

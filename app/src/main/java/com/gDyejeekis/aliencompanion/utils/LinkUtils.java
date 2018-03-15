@@ -1,5 +1,7 @@
 package com.gDyejeekis.aliencompanion.utils;
 
+import android.util.Log;
+
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.utils.ParamFormatter;
@@ -222,7 +224,7 @@ public class LinkUtils {
         Submission post = null;
         url = url.toLowerCase();
         if (url.contains("v.redd.it")) {
-            // TODO: 3/5/2018 check if you can get post from v.redd.it link
+            // can't get reddit post from v.redd.it url on main thread (need to follow redirect in background thread)
         } else if (url.contains("redd.it")) {
             Matcher matcher = Pattern.compile(REGEX_REDDIT_POST_URL_SHORT).matcher(url);
             if(matcher.find()) {

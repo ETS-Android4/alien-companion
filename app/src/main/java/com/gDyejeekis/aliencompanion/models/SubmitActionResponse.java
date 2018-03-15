@@ -1,8 +1,11 @@
 package com.gDyejeekis.aliencompanion.models;
 
+import android.util.Log;
+
 import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.utils.JsonUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -51,8 +54,13 @@ public class SubmitActionResponse {
         } else if (obj instanceof JSONArray) {
             JSONArray jsonArray = (JSONArray) obj;
             for (int i=0; i<jsonArray.size(); i++) {
-                RedditItem item = retrieveRedditItem(jsonArray.get(i));
-                if (item != null) return item;
+                Object o = jsonArray.get(i);
+                if (LinkUtils.isRedditPostUrl(o.toString())) {
+                    return LinkUtils.getRedditPostFromUrl(o.toString());
+                } else {
+                    RedditItem item = retrieveRedditItem(o);
+                    if (item != null) return item;
+                }
             }
         }
         return null;
@@ -60,19 +68,21 @@ public class SubmitActionResponse {
 
     private String retrieveFailReason(JSONObject obj) {
         String jsonString = obj.toJSONString();
-        String reason;
+        String reason = "User submission failed";
         if (jsonString.contains(".error.USER_REQUIRED")) {
-            reason = "User not logged in";
+            reason += ": user not logged in";
         } else if (jsonString.contains(".error.RATELIMIT.field-ratelimit")){
-            reason = "Api rate limit exceeded. Try again in a bit.";
+            reason += ": API rate limit exceeded. Try again in a bit.";
         } else if (jsonString.contains(".error.NOT_AUTHOR")) {
-            reason = "User is not the author of this post";
+            reason += ": user is not the author of this post";
         } else if (jsonString.contains(".error.TOO_LONG")) {
-            reason = "Submission text is too long";
+            reason += ": submission text is too long";
         } else if (jsonString.contains(".error.NO_TEXT")) {
-            reason = "Submission contains no text";
-        } else {
-            reason = "Submission failed - unknown reason";
+            reason += ": submission contains no text";
+        } else if (jsonString.contains(".error.ALREADY_SUB.field-url")) {
+            reason += ": that link has already been submitted.";
+        } else if (jsonString.contains(".error.BAD_CAPTCHA.field-Captcha")) {
+            reason += ": the Captcha field was incorrect.";
         }
         return reason;
     }

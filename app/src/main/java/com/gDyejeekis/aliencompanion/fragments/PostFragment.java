@@ -20,7 +20,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -34,8 +33,8 @@ import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
-import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
-import com.gDyejeekis.aliencompanion.broadcast_receivers.CommentSubmittedReceiver;
+import com.gDyejeekis.aliencompanion.api.entity.Comment;
+import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.enums.CommentNavSetting;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AmaUsernamesDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.CommentNavDialogFragment;
@@ -68,13 +67,13 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentSort commentSort;
     public CommentSort tempSort;
     public ProgressBar progressBar;
-    private boolean loadFromUrl = false;
+    private boolean incompletePostObject = false;
     public String redditVideoUrl;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
     public LoadCommentsTask task;
     public Snackbar currentSnackbar;
-    private BroadcastReceiver commentSubmittedReceiver;
+    private BroadcastReceiver submittedReceiver;
 
     private static boolean fabOptionsVisible;
     private MoveUpwardLinearLayout fabContainer;
@@ -108,7 +107,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public static PostFragment newInstance(Submission post) {
         PostFragment postFragment = new PostFragment();
-        postFragment.loadFromUrl = false;
+        postFragment.incompletePostObject = false;
         postFragment.post = post;
         postFragment.commentSort = post.getPreferredSort();
 
@@ -128,7 +127,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public static PostFragment newInstance(String url) {
         PostFragment postFragment = new PostFragment();
-        postFragment.loadFromUrl = true;
+        postFragment.incompletePostObject = true;
         Submission post = LinkUtils.getRedditPostFromUrl(url);
         postFragment.post = post;
         postFragment.commentSort = post.getPreferredSort();
@@ -159,7 +158,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         // TODO: 3/6/2018 re-write at some point to take into account newInstance static methods
         if (post == null && url != null) {
-            loadFromUrl = true;
+            incompletePostObject = true;
             this.post = LinkUtils.getRedditPostFromUrl(url);
             if (this.post==null) {
                 if(url.contains("v.redd.it")) {
@@ -170,6 +169,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 this.commentSort = this.post.getPreferredSort();
             }
         } else if (post != null) {
+            incompletePostObject = (post.isSelf() == null); // TODO: 3/15/2018 might need to put a better condition here
             this.post = post;
             this.commentSort = post.getPreferredSort();
         }
@@ -206,7 +206,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             //currentlyLoading = true;
             postAdapter = new PostAdapter(activity);
 
-            if(loadFromUrl || post==null) {
+            if(incompletePostObject || post==null) {
                 progressBar.setVisibility(View.VISIBLE);
             }
             else {
@@ -262,20 +262,21 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onDetach() {
         unregisterReceivers();
-        activity = null;
         super.onDetach();
+        activity = null;
     }
 
     private void registerReceivers() {
-        commentSubmittedReceiver = new CommentSubmittedReceiver();
+        submittedReceiver = new RedditItemSubmittedReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(CommentSubmittedReceiver.COMMENT_SUBMISSION);
-        filter.addAction(CommentSubmittedReceiver.COMMENT_EDIT);
-        activity.registerReceiver(commentSubmittedReceiver, filter);
+        filter.addAction(RedditItemSubmittedReceiver.POST_SELF_TEXT_EDIT);
+        filter.addAction(RedditItemSubmittedReceiver.COMMENT_SUBMISSION);
+        filter.addAction(RedditItemSubmittedReceiver.COMMENT_EDIT);
+        activity.registerReceiver(submittedReceiver, filter);
     }
 
     private void unregisterReceivers() {
-        activity.unregisterReceiver(commentSubmittedReceiver);
+        activity.unregisterReceiver(submittedReceiver);
     }
 
     @Override
@@ -305,6 +306,13 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             intent.putExtra("postName", post.getFullName());
             intent.putExtra("position", 1);
             startActivity(intent);
+        }
+    }
+
+    public void newCommentSubmitted(int position, Comment comment) {
+        if (postAdapter!=null && mLayoutManager!=null) {
+            postAdapter.addComment(position, comment);
+            mLayoutManager.scrollToPosition(position);
         }
     }
 
