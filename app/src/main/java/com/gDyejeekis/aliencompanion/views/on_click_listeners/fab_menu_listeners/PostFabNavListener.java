@@ -2,13 +2,18 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listener
 
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.SearchFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
+import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
+
+import java.io.File;
 
 /**
  * Created by George on 3/21/2017.
@@ -86,16 +91,33 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
                 break;
             case R.id.fab_sync:
                 message = "Sync posts";
+                String lastSynced = getLastSynced();
+                if (lastSynced!=null) {
+                    message += " (last synced " + lastSynced + ")";
+                }
                 break;
             case R.id.fab_view_synced:
                 message = "View synced subreddits/multireddits";
                 break;
         }
         if(message!=null) {
-            //ToastUtils.showToast(fragment.getActivity(), message);
             ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message);
             return true;
         }
         return false;
+    }
+
+    private String getLastSynced() {
+        try {
+            if (fragment instanceof PostListFragment) {
+                String name = ((PostListFragment) fragment).subreddit.toLowerCase();
+                File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(fragment.getContext()), name);
+                File file = new File(dir, name + AppConstants.SYNCED_POST_LIST_SUFFIX);
+                if (file.exists()) {
+                    return ConvertUtils.getSubmissionAge((double) file.lastModified() / 1000);
+                }
+            }
+        } catch (Exception e) {}
+        return null;
     }
 }
