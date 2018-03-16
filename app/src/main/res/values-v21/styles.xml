@@ -38,14 +38,16 @@
         <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <style name="MyCardViewStyle" parent="CardView">
-        <!--<item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:clickable">true</item>-->
+    <style name="MyCardViewStyle">
         <item name="cardUseCompatPadding">true</item>
         <item name="cardElevation">1dp</item>
         <item name="cardCornerRadius">4dp</item>
         <item name="cardBackgroundColor">@android:color/transparent</item>
     </style>
+
+    <style name="ImageButtonStyle">
+        <item name="android:paddingLeft">0.5dp</item>
+        <item name="android:paddingRight">0.5dp</item>
+    </style>
+
 </resources>

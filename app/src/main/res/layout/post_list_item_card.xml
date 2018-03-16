@@ -112,7 +112,8 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:id="@+id/imageButton" />
+            android:id="@+id/imageButton"
+            style="@style/ImageButtonStyle"/>
 
         <LinearLayout
             android:orientation="vertical"
