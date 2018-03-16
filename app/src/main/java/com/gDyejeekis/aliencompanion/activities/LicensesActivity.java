@@ -39,7 +39,6 @@ public class LicensesActivity extends ToolbarActivity {
         ArrayList<License> customLicenses = new ArrayList<>();
         customLicenses.add(new License(this, "Subsampling Scale Image View", LicenseType.APACHE_LICENSE_20, "2018", "David Morrissey"));
         customLicenses.add(new License(this, "android-gif-drawable", LicenseType.MIT_LICENSE,      "2013",      "Karol Wrótniak"));
-        customLicenses.add(new License(this, "RoundedImageView", LicenseType.APACHE_LICENSE_20,      "2017",      "Vincent Mi"));
         customLicenses.add(new License(this, "CircleView", LicenseType.APACHE_LICENSE_20,      "2014",      "Pavlos-Petros Tournaris"));
         customLicenses.add(new License(this, "ColorPicker", LicenseType.MIT_LICENSE,      "2016",      "Petrov Kristiyan"));
         customLicenses.add(new License(this, "ChangeLog Library", LicenseType.APACHE_LICENSE_20,      "2013-2015",      "Gabriele Mariotti"));

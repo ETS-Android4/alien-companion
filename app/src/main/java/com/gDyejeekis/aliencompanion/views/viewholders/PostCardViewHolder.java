@@ -27,7 +27,6 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.MyLinkMovementMethod;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
-import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -56,7 +55,7 @@ public class PostCardViewHolder extends PostViewHolder  {
     public ImageView share;
     public ImageView moreOptions;
     public ImageView postImage;
-    public RoundedImageView imageButton;
+    public ImageView imageButton;
     public LinearLayout fullComments;
     public LinearLayout linkButton;
     public LinearLayout layoutPostOptions;
@@ -72,33 +71,33 @@ public class PostCardViewHolder extends PostViewHolder  {
 
         this.showDetails = showDetails;
         if(showDetails) {
-            fullComments = (LinearLayout) itemView.findViewById(R.id.fullLoad);
-            commentsProgress = (ProgressBar) itemView.findViewById(R.id.pBar_comments);
+            fullComments = itemView.findViewById(R.id.fullLoad);
+            commentsProgress = itemView.findViewById(R.id.pBar_comments);
             commentsProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         }
 
-        title = (TextView) itemView.findViewById(R.id.txtView_postTitle);
-        goldCount = (TextView) itemView.findViewById(R.id.textView_gilded);
-        commentsText = (TextView) itemView.findViewById(R.id.textView_comments);
-        postImage = (ImageView) itemView.findViewById(R.id.imgView_postImage);
-        linkButton = (LinearLayout) itemView.findViewById(R.id.layout_postLinkButton);
-        upvote =  (ImageView) itemView.findViewById(R.id.btn_upvote);
-        layoutPostOptions = (LinearLayout) itemView.findViewById(R.id.layout_postOptions);
-        downvote =  (ImageView) itemView.findViewById(R.id.btn_downvote);
-        save =  (ImageView) itemView.findViewById(R.id.btn_save);
-        hide =  (ImageView) itemView.findViewById(R.id.btn_hide);
-        viewUser =  (ImageView) itemView.findViewById(R.id.btn_view_user);
-        share =  (ImageView) itemView.findViewById(R.id.btn_share);
-        moreOptions =  (ImageView) itemView.findViewById(R.id.btn_more);
-        postDets1 = (TextView) itemView.findViewById(R.id.textView_dets1);
-        layoutGilded = (LinearLayout) itemView.findViewById(R.id.layout_gilded);
-        commentsButton = (LinearLayout) itemView.findViewById(R.id.layout_postCommentsButton);
-        domain2 = (TextView) itemView.findViewById(R.id.txtView_postDomain_two);
-        fullUrl = (TextView) itemView.findViewById(R.id.txtView_postUrl);
-        layoutSelfText = (LinearLayout) itemView.findViewById(R.id.layout_selfTextPreview);
-        selfText = (TextView) itemView.findViewById(R.id.txtView_selfTextPreview);
-        scoreText = (TextView) itemView.findViewById(R.id.textView_score);
-        imageButton = (RoundedImageView) itemView.findViewById(R.id.imageButton);
+        title = itemView.findViewById(R.id.txtView_postTitle);
+        goldCount = itemView.findViewById(R.id.textView_gilded);
+        commentsText = itemView.findViewById(R.id.textView_comments);
+        postImage = itemView.findViewById(R.id.imgView_postImage);
+        linkButton = itemView.findViewById(R.id.layout_postLinkButton);
+        upvote = itemView.findViewById(R.id.btn_upvote);
+        layoutPostOptions = itemView.findViewById(R.id.layout_postOptions);
+        downvote = itemView.findViewById(R.id.btn_downvote);
+        save = itemView.findViewById(R.id.btn_save);
+        hide = itemView.findViewById(R.id.btn_hide);
+        viewUser = itemView.findViewById(R.id.btn_view_user);
+        share = itemView.findViewById(R.id.btn_share);
+        moreOptions = itemView.findViewById(R.id.btn_more);
+        postDets1 = itemView.findViewById(R.id.textView_dets1);
+        layoutGilded = itemView.findViewById(R.id.layout_gilded);
+        commentsButton = itemView.findViewById(R.id.layout_postCommentsButton);
+        domain2 = itemView.findViewById(R.id.txtView_postDomain_two);
+        fullUrl = itemView.findViewById(R.id.txtView_postUrl);
+        layoutSelfText = itemView.findViewById(R.id.layout_selfTextPreview);
+        selfText = itemView.findViewById(R.id.txtView_selfTextPreview);
+        scoreText = itemView.findViewById(R.id.textView_score);
+        imageButton = itemView.findViewById(R.id.imageButton);
 
         initIcons();
     }
