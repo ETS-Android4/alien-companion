@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="" changeDate="">
+    <changelogversion versionName="1.0.5" changeDate="Mar 16, 2018">
         <changelogtext>Long tapping the 'Sync posts' mini FAB now displays when the current subreddit was last synced</changelogtext>
         <changelogtext>Fixed 'Swipe down to refresh' sometimes triggering regardless of scrolled position</changelogtext>
         <changelogtext>Fixed indentation of new comment after a successful comment submission</changelogtext>
@@ -12,7 +12,6 @@
         <changelogtext>Removed 'Show NSFW subreddit suggestions' option</changelogtext>
         <changelogtext>'Hide post FAB on scroll down' and 'Hide comment FAB on scroll down' options are now disabled by default</changelogtext>
         <changelogtext>Small tweaks to 'Cards' post view</changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext>Various UI optimizations and bug fixes</changelogtext>
     </changelogversion>
 
