@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listen
 
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
@@ -17,16 +18,16 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategor
  * Created by George on 7/16/2016.
  */
 public class OtherItemListener extends NavDrawerListener {
-    public OtherItemListener(MainActivity activity) {
-        super(activity);
+    public OtherItemListener(MainActivity activity, RecyclerView.ViewHolder viewHolder) {
+        super(activity, viewHolder);
     }
 
     @Override
     public void onClick(View v) {
-        int position = getRecyclerView().getChildPosition(v);
-        NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getAdapter().getItemAt(position);
+        NavDrawerOtherItem otherItem =
+                (NavDrawerOtherItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
 
-        if(otherItem.getName().equals("Saved")) {
+        if (otherItem.getName().equals("Saved")) {
             getDrawerLayout().closeDrawers();
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -37,12 +38,10 @@ public class OtherItemListener extends NavDrawerListener {
                     getActivity().startActivity(intent);
                 }
             }, AppConstants.NAV_DRAWER_CLOSE_TIME);
-        }
-        else if(otherItem.getName().equals("Synced")) {
-            if(MyApplication.offlineModeEnabled) {
+        } else if (otherItem.getName().equals("Synced")) {
+            if (MyApplication.offlineModeEnabled) {
                 showSyncedPosts();
-            }
-            else {
+            } else {
                 getAdapter().showOfflineSwitchDialog("synced", false, true, null, null);
             }
         }
@@ -50,9 +49,9 @@ public class OtherItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        if(MyApplication.longTapSwitchMode) {
-            int position = getRecyclerView().getChildPosition(v);
-            NavDrawerOtherItem otherItem = (NavDrawerOtherItem) getAdapter().getItemAt(position);
+        if (MyApplication.longTapSwitchMode) {
+            NavDrawerOtherItem otherItem =
+                    (NavDrawerOtherItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
 
             if (otherItem.getName().equals("Synced")) {
                 if (MyApplication.offlineModeEnabled) {

@@ -16,15 +16,14 @@ import java.util.ArrayList;
 public class SubredditsListener extends NavDrawerListener {
 
     public SubredditsListener(MainActivity activity) {
-        super(activity);
+        super(activity, null);
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.layoutToggle) {
+        if (v.getId() == R.id.layoutToggle) {
             getAdapter().toggleSubredditItems();
-        }
-        else if(v.getId() == R.id.layoutEdit) {
+        } else if (v.getId() == R.id.layoutEdit) {
             Intent intent = new Intent(getActivity(), EditSubredditsActivity.class);
             ArrayList<String> subreddits = (ArrayList) MyApplication.currentAccount.getSubreddits();
 
@@ -37,4 +36,5 @@ public class SubredditsListener extends NavDrawerListener {
     public boolean onLongClick(View v) {
         return false;
     }
+
 }

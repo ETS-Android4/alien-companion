@@ -510,7 +510,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.drawer_menu_row, parent, false);
                 viewHolder = new MenuRowViewHolder(v);
-                listener = new MenuItemListener(activity);
+                listener = new MenuItemListener(activity, viewHolder);
                 v.setOnClickListener(listener);
                 break;
             case VIEW_TYPE_SUBREDDITS:
@@ -525,7 +525,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.drawer_subreddit_row, parent, false);
                 viewHolder = new SubredditRowViewHolder(v);
-                listener = new SubredditItemListener(activity);
+                listener = new SubredditItemListener(activity, viewHolder);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
                 break;
@@ -533,7 +533,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.drawer_account_row, parent, false);
                 viewHolder = new SubredditRowViewHolder(v);
-                listener = new AccountListener(activity);
+                listener = new AccountListener(activity, viewHolder);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
                 break;
@@ -549,7 +549,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.drawer_subreddit_row, parent, false);
                 viewHolder = new SubredditRowViewHolder(v);
-                listener = new MultiredditItemListener(activity);
+                listener = new MultiredditItemListener(activity, viewHolder);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
                 break;
@@ -560,7 +560,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.drawer_subreddit_row, parent, false);
                 viewHolder = new SubredditRowViewHolder(v);
-                listener = new OtherItemListener(activity);
+                listener = new OtherItemListener(activity, viewHolder);
                 v.setOnClickListener(listener);
                 v.setOnLongClickListener(listener);
                 break;

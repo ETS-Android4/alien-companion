@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
@@ -12,14 +13,14 @@ import com.gDyejeekis.aliencompanion.MyApplication;
  */
 public class SubredditItemListener extends NavDrawerListener {
 
-    public SubredditItemListener(MainActivity activity) {
-        super(activity);
+    public SubredditItemListener(MainActivity activity, RecyclerView.ViewHolder viewHolder) {
+        super(activity, viewHolder);
     }
 
     @Override
     public void onClick(View v) {
-        int position = getRecyclerView().getChildPosition(v);
-        NavDrawerSubredditItem subreddit = (NavDrawerSubredditItem) getAdapter().getItemAt(position);
+        NavDrawerSubredditItem subreddit =
+                (NavDrawerSubredditItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
         getAdapter().notifyDataSetChanged();
         getDrawerLayout().closeDrawers();
 
@@ -34,13 +35,14 @@ public class SubredditItemListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        if(MyApplication.longTapSwitchMode) {
-            int position = getRecyclerView().getChildPosition(v);
-            NavDrawerSubredditItem subreddit = (NavDrawerSubredditItem) getAdapter().getItemAt(position);
+        if (MyApplication.longTapSwitchMode) {
+            NavDrawerSubredditItem subreddit =
+                    (NavDrawerSubredditItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
             String subredditName = (subreddit.getName() != null) ? subreddit.getName().toLowerCase() : null;
             getAdapter().switchModeGracefully(subredditName, false);
             return true;
         }
         return false;
     }
+
 }

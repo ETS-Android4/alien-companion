@@ -11,7 +11,7 @@ import com.gDyejeekis.aliencompanion.activities.MainActivity;
 public class HeaderListener extends NavDrawerListener {
 
     public HeaderListener(MainActivity activity) {
-        super(activity);
+        super(activity, null);
     }
 
     @Override

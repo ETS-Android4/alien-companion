@@ -15,22 +15,15 @@ import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 public class MultisListener extends NavDrawerListener {
 
     public MultisListener(MainActivity activity) {
-        super(activity);
+        super(activity, null);
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.layoutToggle) {
+        if (v.getId() == R.id.layoutToggle) {
             getAdapter().toggleMultiredditItems();
-        }
-        else if(v.getId() == R.id.layoutEdit) {
+        } else if (v.getId() == R.id.layoutEdit) {
             refreshMultis();
-
-            //Intent intent = new Intent(getActivity(), EditMultisActivity.class);
-            //ArrayList<String> multireddits = (ArrayList) MyApplication.currentAccount.getMultireddits();
-//
-            //intent.putStringArrayListExtra("multis", multireddits);
-            //getActivity().startActivity(intent);
         }
     }
 
@@ -40,10 +33,9 @@ public class MultisListener extends NavDrawerListener {
     }
 
     private void refreshMultis() {
-        if(MyApplication.currentUser == null) {
+        if (MyApplication.currentUser == null) {
             ToastUtils.showToast(getActivity(), "Must be logged in to do that");
-        }
-        else {
+        } else {
             ToastUtils.showToast(getActivity(), "Refreshing multis...");
             RefreshUserMultisTask task = new RefreshUserMultisTask(getActivity());
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

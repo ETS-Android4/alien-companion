@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listen
 
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
@@ -20,14 +21,14 @@ import com.gDyejeekis.aliencompanion.enums.SettingsMenuType;
  */
 public class MenuItemListener extends NavDrawerListener {
 
-    public MenuItemListener(MainActivity activity) {
-        super(activity);
+    public MenuItemListener(MainActivity activity, RecyclerView.ViewHolder viewHolder) {
+        super(activity, viewHolder);
     }
 
     @Override
     public void onClick(View v) {
-        int position = getRecyclerView().getChildPosition(v);
-        NavDrawerMenuItem menuItem = (NavDrawerMenuItem) getAdapter().getItemAt(position);
+        NavDrawerMenuItem menuItem =
+                (NavDrawerMenuItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
         getDrawerLayout().closeDrawers();
         switch (menuItem.getMenuType()) {
             case profile:

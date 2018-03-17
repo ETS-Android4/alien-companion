@@ -13,30 +13,30 @@ import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 public abstract class NavDrawerListener implements View.OnClickListener, View.OnLongClickListener{
 
     private MainActivity activity;
-    private RecyclerView recyclerView;
+    private RecyclerView.ViewHolder viewHolder;
     private NavDrawerAdapter adapter;
     private DrawerLayout drawerLayout;
 
-    public NavDrawerListener(MainActivity activity) {
+    public NavDrawerListener(MainActivity activity, RecyclerView.ViewHolder viewHolder) {
         this.activity = activity;
-        recyclerView = activity.getNavDrawerView();
-        adapter = activity.getNavDrawerAdapter();
-        drawerLayout = activity.getDrawerLayout();
+        this.viewHolder = viewHolder;
+        this.adapter = activity.getNavDrawerAdapter();
+        this.drawerLayout = activity.getDrawerLayout();
     }
 
     protected MainActivity getActivity() {
         return activity;
     }
 
-    protected RecyclerView getRecyclerView() {
-        return recyclerView;
+    protected RecyclerView.ViewHolder getViewHolder() {
+        return viewHolder;
     }
 
     protected NavDrawerAdapter getAdapter() {
         return adapter;
     }
 
-    protected DrawerLayout getDrawerLayout() {
+    DrawerLayout getDrawerLayout() {
         return drawerLayout;
     }
 

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
@@ -21,14 +22,14 @@ import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
  */
 public class AccountListener extends NavDrawerListener {
 
-    public AccountListener(MainActivity activity) {
-        super(activity);
+    public AccountListener(MainActivity activity, RecyclerView.ViewHolder viewHolder) {
+        super(activity, viewHolder);
     }
 
     @Override
     public void onClick(View v) {
-        final int position = getRecyclerView().getChildPosition(v);
-        final NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
+        final NavDrawerAccount accountItem =
+                (NavDrawerAccount) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
         getDrawerLayout().closeDrawers();
         switch (accountItem.getAccountType()) {
             case NavDrawerAccount.TYPE_ADD:
@@ -51,7 +52,6 @@ public class AccountListener extends NavDrawerListener {
                     @Override
                     public void run() {
                         SharedPreferences.Editor editor = MyApplication.prefs.edit();
-                        NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
                         editor.putString("currentAccountName", accountItem.getName());
                         editor.apply();
                         getActivity().changeCurrentUser(accountItem.savedAccount);
@@ -64,19 +64,23 @@ public class AccountListener extends NavDrawerListener {
 
     @Override
     public boolean onLongClick(View v) {
-        final int position = getRecyclerView().getChildPosition(v);
-        final NavDrawerAccount accountItem = (NavDrawerAccount) getAdapter().getItemAt(position);
-        if(accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT) {
+        final NavDrawerAccount accountItem =
+                (NavDrawerAccount) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
+        if (accountItem.getAccountType() == NavDrawerAccount.TYPE_ACCOUNT) {
             DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     getActivity().getNavDrawerAdapter().deleteAccount(accountItem.getName());
                 }
             };
-            new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle)).setMessage("Remove " + accountItem.getName() + "?")
-                    .setPositiveButton("Yes", listener).setNegativeButton("No", null).show();
+            new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle))
+                    .setMessage("Remove " + accountItem.getName() + "?")
+                    .setPositiveButton("Yes", listener)
+                    .setNegativeButton("No", null)
+                    .show();
             return true;
         }
         return false;
     }
+
 }
