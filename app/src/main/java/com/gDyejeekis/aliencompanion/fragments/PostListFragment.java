@@ -525,7 +525,7 @@ public class PostListFragment extends RedditContentFragment {
         else {
             if(submissionSort == null) submissionSort = SubmissionSort.HOT;
             subtitle = submissionSort.value();
-            if (timeSpan!=null) subtitle += timeSpan.value();
+            if (timeSpan!=null) subtitle += ": " + timeSpan.value();
         }
         activity.getSupportActionBar().setSubtitle(subtitle);
     }
