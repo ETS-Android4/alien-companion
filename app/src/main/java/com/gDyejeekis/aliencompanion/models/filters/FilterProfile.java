@@ -22,15 +22,23 @@ public class FilterProfile extends Profile implements Serializable {
 
     public FilterProfile() {
         super("");
+        filters = new ArrayList<>();
+        subredditRestrictions = new ArrayList<>();
+        multiredditRestrictions = new ArrayList<>();
     }
 
     public FilterProfile(String name) {
         super(name);
+        filters = new ArrayList<>();
+        subredditRestrictions = new ArrayList<>();
+        multiredditRestrictions = new ArrayList<>();
     }
 
-    public FilterProfile(String name, List<Filter> filters) {
+    public FilterProfile(String name, List<Filter> filters, List<String> subredditRestrictions, List<String> multiredditRestrictions) {
         super(name);
         this.filters = filters;
+        this.subredditRestrictions = subredditRestrictions;
+        this.multiredditRestrictions = multiredditRestrictions;
     }
 
     public boolean isActive() {

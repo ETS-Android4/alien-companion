@@ -1,8 +1,11 @@
 package com.gDyejeekis.aliencompanion.activities;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,16 +35,20 @@ import com.gDyejeekis.aliencompanion.views.DelayAutoCompleteTextView;
 import com.gDyejeekis.aliencompanion.views.adapters.RemovableItemListAdapter;
 import com.gDyejeekis.aliencompanion.views.adapters.SubredditAutoCompleteAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by George on 6/21/2017.
  */
 
-public class EditFilterProfileActivity extends ToolbarActivity implements View.OnClickListener, TextView.OnEditorActionListener{
+public class EditFilterProfileActivity extends ToolbarActivity implements View.OnClickListener, DialogInterface.OnClickListener, TextView.OnEditorActionListener{
 
     private FilterProfile profile;
     private boolean isNewProfile;
+    private List<Filter> originalFilters;
+    private List<String> originalSubRestr;
+    private List<String> originalMultiRestr;
     private EditText nameField;
     private EditText domainField;
     private EditText titleField;
@@ -72,9 +79,8 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_filter_profile);
         initToolbar();
-
         initFields();
-        initProfile((FilterProfile) getIntent().getSerializableExtra("profile"));
+        initProfile();
     }
 
     @Override
@@ -84,32 +90,32 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     }
 
     private void initFields() {
-        nameField = (EditText) findViewById(R.id.editText_profile_name);
-        domainField = (EditText) findViewById(R.id.editText_domain_filter);
-        titleField = (EditText) findViewById(R.id.editText_title_filter);
-        flairField = (EditText) findViewById(R.id.editText_flair_filter);
-        selfTextField = (EditText) findViewById(R.id.editText_self_text_filter);
+        nameField = findViewById(R.id.editText_profile_name);
+        domainField = findViewById(R.id.editText_domain_filter);
+        titleField = findViewById(R.id.editText_title_filter);
+        flairField = findViewById(R.id.editText_flair_filter);
+        selfTextField = findViewById(R.id.editText_self_text_filter);
         subredditField = findViewById(R.id.editText_subreddit_filter);
-        userField = (EditText) findViewById(R.id.editText_user_filter);
+        userField = findViewById(R.id.editText_user_filter);
         subRestrField = findViewById(R.id.editText_subreddit_restrction);
-        multiRestrField = (EditText) findViewById(R.id.editText_multireddit_restrction);
-        domains = (ListView) findViewById(R.id.listView_domain_filters);
-        titles = (ListView) findViewById(R.id.listView_title_filters);
-        flairs = (ListView) findViewById(R.id.listView_flair_filters);
-        selfTexts = (ListView) findViewById(R.id.listView_self_text_filters);
-        subreddits = (ListView) findViewById(R.id.listView_subreddit_filters);
-        users = (ListView) findViewById(R.id.listView_user_filters);
-        subRestrctions = (ListView) findViewById(R.id.listView_subreddit_restrictions);
-        multiRestrctions = (ListView) findViewById(R.id.listView_multireddit_restrictions);
-        ImageView addDomain = (ImageView) findViewById(R.id.button_add_domain_filter);
-        ImageView addTitle = (ImageView) findViewById(R.id.button_add_title_filter);
-        ImageView addSelfText = (ImageView) findViewById(R.id.button_add_self_text_filter);
-        ImageView addFlair = (ImageView) findViewById(R.id.button_add_flair_filter);
-        ImageView addSubreddit = (ImageView) findViewById(R.id.button_add_subreddit_filter);
-        ImageView addUser = (ImageView) findViewById(R.id.button_add_user_filter);
-        ImageView addSubRestr = (ImageView) findViewById(R.id.button_add_subreddit_restrction);
-        ImageView addMultiRestr = (ImageView) findViewById(R.id.button_add_multireddit_restrction);
-        Button saveButton = (Button) findViewById(R.id.button_save_changes);
+        multiRestrField = findViewById(R.id.editText_multireddit_restrction);
+        domains = findViewById(R.id.listView_domain_filters);
+        titles = findViewById(R.id.listView_title_filters);
+        flairs = findViewById(R.id.listView_flair_filters);
+        selfTexts = findViewById(R.id.listView_self_text_filters);
+        subreddits = findViewById(R.id.listView_subreddit_filters);
+        users = findViewById(R.id.listView_user_filters);
+        subRestrctions = findViewById(R.id.listView_subreddit_restrictions);
+        multiRestrctions = findViewById(R.id.listView_multireddit_restrictions);
+        ImageView addDomain = findViewById(R.id.button_add_domain_filter);
+        ImageView addTitle = findViewById(R.id.button_add_title_filter);
+        ImageView addSelfText = findViewById(R.id.button_add_self_text_filter);
+        ImageView addFlair = findViewById(R.id.button_add_flair_filter);
+        ImageView addSubreddit = findViewById(R.id.button_add_subreddit_filter);
+        ImageView addUser = findViewById(R.id.button_add_user_filter);
+        ImageView addSubRestr = findViewById(R.id.button_add_subreddit_restrction);
+        ImageView addMultiRestr = findViewById(R.id.button_add_multireddit_restrction);
+        Button saveButton = findViewById(R.id.button_save_changes);
 
         styleAddImageView(addDomain);
         styleAddImageView(addTitle);
@@ -183,18 +189,27 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
         imageView.setAlpha(alpha);
     }
 
-    private void initProfile(FilterProfile profile) {
-        isNewProfile = (profile==null);
+    private void initProfile() {
+        FilterProfile originalProfile = (FilterProfile) getIntent().getSerializableExtra("profile");
+        isNewProfile = (originalProfile==null);
 
-        if(isNewProfile) {
+        if (isNewProfile) {
             this.profile = new FilterProfile();
             getSupportActionBar().setTitle("Create filter profile");
             nameField.requestFocus();
-        }
-        else {
-            this.profile = profile;
+        } else {
+            this.profile = originalProfile;
             getSupportActionBar().setTitle("Edit filter profile");
-            nameField.setText(profile.getName());
+            nameField.setText(originalProfile.getName());
+
+            // not ideal, check same method in EditSyncProfileActivity
+            try {
+                originalFilters = new ArrayList<>(originalProfile.getFilters());
+                originalSubRestr = new ArrayList<>(originalProfile.getSubredditRestrictions());
+                originalMultiRestr = new ArrayList<>(originalProfile.getMultiredditRestrictions());
+            } catch (Exception e) { // in case of null original profile lists
+                e.printStackTrace();
+            }
         }
         refreshFilters();
         refreshSubredditRestrctions();
@@ -211,32 +226,26 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     }
 
     private void refreshFilters(Class<? extends Filter> cls) {
-        if(cls == DomainFilter.class) {
+        if (cls == DomainFilter.class) {
             refreshDomainFilters();
-        }
-        else if(cls == TitleFilter.class) {
+        } else if (cls == TitleFilter.class) {
             refreshTitleFilters();
-        }
-        else if(cls == FlairFilter.class) {
+        } else if (cls == FlairFilter.class) {
             refreshFlairFilters();
-        }
-        else if(cls == SelfTextFilter.class) {
+        } else if (cls == SelfTextFilter.class) {
             refreshSelfTextFilters();
-        }
-        else if(cls == SubredditFilter.class) {
+        } else if (cls == SubredditFilter.class) {
             refreshSubredditFilters();
-        }
-        else if(cls == UserFilter.class) {
+        } else if (cls == UserFilter.class) {
             refreshUserFilters();
         }
     }
 
     private void refreshFilterList(Class<? extends Filter> cls, ListView listView) {
         List<String> filters = profile.getFilterStrings(cls);
-        if(filters == null || filters.isEmpty()) {
+        if (filters == null || filters.isEmpty()) {
             listView.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             listView.setVisibility(View.VISIBLE);
             listView.setAdapter(new RemovableItemListAdapter(this, filters, RemovableItemListAdapter.FILTERS));
             GeneralUtils.setListViewHeightBasedOnChildren(listView);
@@ -268,10 +277,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     }
 
     private void refreshSubredditRestrctions() {
-        if(profile.getSubredditRestrictions() == null || profile.getSubredditRestrictions().isEmpty()) {
+        if (profile.getSubredditRestrictions() == null || profile.getSubredditRestrictions().isEmpty()) {
             subRestrctions.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             subRestrctions.setVisibility(View.VISIBLE);
             subRestrctions.setAdapter(new RemovableItemListAdapter(this, profile.getSubredditRestrictions(), RemovableItemListAdapter.SUBREDDIT_RESTRICTIONS));
             GeneralUtils.setListViewHeightBasedOnChildren(subRestrctions);
@@ -279,10 +287,9 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     }
 
     private void refreshMultiredditRestrctions() {
-        if(profile.getMultiredditRestrictions() == null || profile.getMultiredditRestrictions().isEmpty()) {
+        if (profile.getMultiredditRestrictions() == null || profile.getMultiredditRestrictions().isEmpty()) {
             multiRestrctions.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             multiRestrctions.setVisibility(View.VISIBLE);
             multiRestrctions.setAdapter(new RemovableItemListAdapter(this, profile.getMultiredditRestrictions(), RemovableItemListAdapter.MULTIREDDIT_RESTRCTIONS));
             GeneralUtils.setListViewHeightBasedOnChildren(multiRestrctions);
@@ -291,28 +298,24 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
 
     private void addFilter(Class<? extends Filter> cls, EditText field, String hint, String warning) {
         String filterText = field.getText().toString();
-        if(filterText.trim().isEmpty()) {
+        if (filterText.trim().isEmpty()) {
             field.setText("");
             field.setHint(warning);
             field.setHintTextColor(Color.RED);
-        }
-        else if(profile.containsFilter(cls, filterText)) {
+        } else if (profile.containsFilter(cls, filterText)) {
             GeneralUtils.clearField(field, hint);
             ToastUtils.showSnackbarOverToast(this, "Filter already in list");
-        }
-        else {
+        } else {
             GeneralUtils.clearField(field, hint);
             Filter filter = Filter.newInstance(cls, filterText);
             boolean added = profile.addFilter(filter);
-            if(added) {
+            if (added) {
                 refreshFilters(cls);
-            }
-            else {
+            } else {
                 String message;
-                if(!filter.isValid()) {
+                if (!filter.isValid()) {
                     message = filter.getTextRequirements();
-                }
-                else {
+                } else {
                     message = "Failed to add filter";
                 }
                 ToastUtils.showSnackbarOverToast(this, message);
@@ -347,18 +350,15 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     private void addSubredditRestrction() {
         String restriction = subRestrField.getText().toString();
         restriction = restriction.replaceAll("\\s","");
-        if(restriction.isEmpty()) {
+        if (restriction.isEmpty()) {
             GeneralUtils.clearField(subRestrField, "enter subreddit", Color.RED);
-        }
-        else if(profile.containsSubredditRestriction(restriction)) {
+        } else if (profile.containsSubredditRestriction(restriction)) {
             GeneralUtils.clearField(subRestrField, "subreddit");
             ToastUtils.showSnackbarOverToast(this, "Subreddit already in list");
-        }
-        else if(!GeneralUtils.isValidSubreddit(restriction)) {
+        } else if (!GeneralUtils.isValidSubreddit(restriction)) {
             GeneralUtils.clearField(subRestrField, "subreddit");
             ToastUtils.showSnackbarOverToast(this, "Subreddit can contain only alphanumeric characters (a-z,0-9) and underscores (_)");
-        }
-        else {
+        } else {
             GeneralUtils.clearField(subRestrField, "subreddit");
             profile.addSubredditRestriction(restriction);
             refreshSubredditRestrctions();
@@ -368,18 +368,15 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
     private void addMultiredditRestrction() {
         String restriction = multiRestrField.getText().toString();
         restriction = restriction.replaceAll("\\s","");
-        if(restriction.isEmpty()) {
+        if (restriction.isEmpty()) {
             GeneralUtils.clearField(multiRestrField, "enter multireddit", Color.RED);
-        }
-        else if(profile.containsMultiredditRestrction(restriction)) {
+        } else if (profile.containsMultiredditRestrction(restriction)) {
             GeneralUtils.clearField(multiRestrField, "multireddit");
             ToastUtils.showSnackbarOverToast(this, "Multireddit already in list");
-        }
-        else if(!GeneralUtils.isValidSubreddit(restriction)) {
+        } else if (!GeneralUtils.isValidSubreddit(restriction)) {
             GeneralUtils.clearField(multiRestrField, "multireddit");
             ToastUtils.showSnackbarOverToast(this, "Multireddit can contain only alphanumeric characters (a-z,0-9) and underscores (_)");
-        }
-        else {
+        } else {
             GeneralUtils.clearField(multiRestrField, "multireddit");
             profile.addMultiredditRestriction(restriction);
             refreshMultiredditRestrctions();
@@ -477,20 +474,70 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
 
     private void saveProfile() {
         String name = nameField.getText().toString();
-        if(name.trim().isEmpty()) {
-            if(isNewProfile) {
+        if (name.trim().isEmpty()) {
+            if (isNewProfile) {
                 profile.setName(getIntent().getStringExtra("defaultName"));
             }
         } else {
             profile.setName(name);
         }
 
-        if(isNewProfile && profile.hasFilters()) {
+        if (isNewProfile && profile.hasFilters()) {
             profile.setActive(true);
         }
 
         profile.save(this, isNewProfile);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (changesMade()) {
+            showSaveChangesDialog();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean changesMade() {
+        try {
+            if (isNewProfile) {
+                if (!nameField.getText().toString().trim().isEmpty()) return true;
+                if (!profile.getFilters().isEmpty()) return true;
+                if (!profile.getSubredditRestrictions().isEmpty()) return true;
+                if (!profile.getMultiredditRestrictions().isEmpty()) return true;
+            } else {
+                if (!originalFilters.equals(profile.getFilters())) return true;
+                if (!originalSubRestr.equals(profile.getSubredditRestrictions())) return true;
+                if (!originalMultiRestr.equals(profile.getMultiredditRestrictions())) return true;
+            }
+        } catch (Exception e) { // in case of null profile lists
+            e.printStackTrace();
+            return true;
+        }
+        return false;
+    }
+
+    private void showSaveChangesDialog() {
+        String message = isNewProfile ? "Save profile?" : "Save changes?";
+        new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAlertDialogStyle))
+                .setMessage(message)
+                .setPositiveButton("Yes", this)
+                .setNegativeButton("No", this)
+                .show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+        switch (i) {
+            case DialogInterface.BUTTON_POSITIVE:
+                saveProfile();
+                super.onBackPressed();
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+                super.onBackPressed();
+                break;
+        }
     }
 
 }
