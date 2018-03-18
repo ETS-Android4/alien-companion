@@ -76,11 +76,6 @@ public class MyApplication extends Application {
     public static int currentPrimaryColor;
     public static boolean primaryColorInDarkTheme;
 
-    public static boolean colorPrimaryChanged;
-    public static boolean colorSecondaryChanged;
-    public static boolean fabPostNavChanged;
-    public static boolean fabCommentNavChanged;
-
     public static int swipeSetting;
     public static boolean swipeRefresh;
     public static boolean postFabNavigation;

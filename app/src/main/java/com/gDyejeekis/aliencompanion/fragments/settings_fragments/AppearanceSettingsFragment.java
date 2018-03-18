@@ -1,13 +1,13 @@
 package com.gDyejeekis.aliencompanion.fragments.settings_fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.activities.MainActivity;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
 
@@ -32,7 +32,7 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if(preference.getKey().equals("colorPrimary")) {
+        if (preference.getKey().equals("colorPrimary")) {
             ColorPicker colorPicker = new ColorPicker(getActivity());
             colorPicker.setColors(R.array.colorPrimaryValues);
             colorPicker.setDefaultColorButton(MyApplication.colorPrimary);
@@ -41,7 +41,7 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
 
                 @Override
                 public void onChooseColor(int position, int color) {
-                    MyApplication.colorPrimaryChanged = true;
+                    MainActivity.notifyColorPrimaryChanged = true;
                     MyApplication.colorPrimary = color;
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
                     editor.putInt("colorPrimary", color);
@@ -55,8 +55,7 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
             });
             colorPicker.show();
             return true;
-        }
-        else if(preference.getKey().equals("colorSecondary")) {
+        } else if (preference.getKey().equals("colorSecondary")) {
             ColorPicker colorPicker = new ColorPicker(getActivity());
             colorPicker.setColors(R.array.colorSecondaryValues);
             colorPicker.setDefaultColorButton(MyApplication.colorSecondary);
@@ -65,7 +64,7 @@ public class AppearanceSettingsFragment extends PreferenceFragment implements Pr
 
                 @Override
                 public void onChooseColor(int position, int color) {
-                    MyApplication.colorSecondaryChanged = true;
+                    MainActivity.notifyColorSecondaryChanged = true;
                     MyApplication.colorSecondary = color;
                     SharedPreferences.Editor editor = MyApplication.prefs.edit();
                     editor.putInt("colorSecondary", color);

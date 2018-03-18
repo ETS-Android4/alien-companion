@@ -23,8 +23,6 @@ import android.widget.PopupMenu;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
-import com.gDyejeekis.aliencompanion.asynctask.AddAccountTask;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
 import com.gDyejeekis.aliencompanion.services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
@@ -73,7 +71,10 @@ public class MainActivity extends ToolbarActivity {
     public static boolean notifyDrawerChanged = false;
     public static boolean notifyToolbarAutohideChanged = false;
     public static boolean notifySwitchedMode = false;
-    //public static String oauthCode;
+    public static boolean notifyColorPrimaryChanged = false;
+    public static boolean notifyColorSecondaryChanged = false;
+    public static boolean notifyPostFabChanged = false;
+    public static boolean notifyCommentFabChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,15 +229,15 @@ public class MainActivity extends ToolbarActivity {
             expandToolbar();
         }
 
-        if(MyApplication.fabPostNavChanged) {
-            MyApplication.fabPostNavChanged = false;
-            getListFragment().initFabNavOptions();
+        if(notifyPostFabChanged) {
+            notifyPostFabChanged = false;
+            getListFragment().onFabNavOptionsChanged();
         }
 
-        if(MyApplication.fabCommentNavChanged) {
-            MyApplication.fabCommentNavChanged = false;
+        if(notifyCommentFabChanged) {
+            notifyCommentFabChanged = false;
             if(getPostFragment()!=null) {
-                getPostFragment().initFabNavOptions();
+                getPostFragment().onFabNavOptionsChanged();
             }
         }
 
@@ -280,8 +281,8 @@ public class MainActivity extends ToolbarActivity {
             listFragment.redrawList();
         }
 
-        if(MyApplication.colorPrimaryChanged && (MyApplication.currentBaseTheme < AppConstants.DARK_THEME)) {
-            MyApplication.colorPrimaryChanged = false;
+        if(notifyColorPrimaryChanged && (MyApplication.currentBaseTheme < AppConstants.DARK_THEME)) {
+            notifyColorPrimaryChanged = false;
             MyApplication.currentPrimaryColor = MyApplication.colorPrimary;
             MyApplication.linkColor = MyApplication.colorPrimary;
             int[] primaryColors = MyApplication.getPrimaryColors(this);
@@ -296,8 +297,8 @@ public class MainActivity extends ToolbarActivity {
             navDrawerAdapter.notifyDataSetChanged();
         }
 
-        if(MyApplication.colorSecondaryChanged) {
-            MyApplication.colorSecondaryChanged = false;
+        if(notifyColorSecondaryChanged) {
+            notifyColorSecondaryChanged = false;
             listFragment.colorSecondaryChanged();
         }
 

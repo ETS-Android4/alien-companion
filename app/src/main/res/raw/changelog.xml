@@ -3,7 +3,7 @@
 
     <changelogversion versionName="" changeDate="">
         <changelogtext>Fixed occasional crash when using the navigation drawer</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed visual bug after changing 'Hide post FAB on scroll down' option</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
     </changelogversion>

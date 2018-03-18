@@ -380,6 +380,11 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         });
     }
 
+    public void onFabNavOptionsChanged() {
+        fabContainer.removeAllViews();
+        initFabNavOptions();
+    }
+
     public void initFabNavOptions() {
         fabContainer = activity.findViewById(R.id.container_fab);
         if (MyApplication.postFabNavigation && hasFabNavigation()) {

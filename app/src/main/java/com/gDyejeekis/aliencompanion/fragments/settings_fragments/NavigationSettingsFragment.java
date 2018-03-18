@@ -31,18 +31,18 @@ public class NavigationSettingsFragment extends PreferenceFragment implements Pr
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        String key =  preference.getKey();
-        if(key.equals("postNav") || key.equals("autoHidePostNav")) {
-            MyApplication.fabPostNavChanged = true;
-            return true;
-        }
-        else if(key.equals("commentNav") || key.equals("autoHideCommentNav")) {
-            MyApplication.fabCommentNavChanged = true;
-            return true;
-        }
-        else if (key.equals("autoHideToolbar")) {
-            MainActivity.notifyToolbarAutohideChanged = true;
-            return true;
+        switch (preference.getKey()) {
+            case "postNav":
+            case "autoHidePostNav":
+                MainActivity.notifyPostFabChanged = true;
+                return true;
+            case "commentNav":
+            case "autoHideCommentNav":
+                MainActivity.notifyCommentFabChanged = true;
+                return true;
+            case "autoHideToolbar":
+                MainActivity.notifyToolbarAutohideChanged = true;
+                return true;
         }
         return false;
     }
