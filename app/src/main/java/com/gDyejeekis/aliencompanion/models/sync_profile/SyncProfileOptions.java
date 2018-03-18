@@ -154,38 +154,42 @@ public class SyncProfileOptions implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        SyncProfileOptions other = (SyncProfileOptions) obj;
-        if(syncPostCount != other.getSyncPostCount()) return false;
-        if(syncCommentCount != other.getSyncCommentCount()) return false;
-        if(syncCommentDepth != other.getSyncCommentDepth()) return false;
-        if(syncCommentSort != other.getSyncCommentSort()) return false;
-        if(syncThumbs != other.isSyncThumbs()) return false;
-        if(syncImages != other.isSyncImages()) return false;
-        if(syncVideo != other.isSyncVideo()) return false;
-        if(albumSyncLimit != other.getAlbumSyncLimit()) return false;
-        if(syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
-        if(syncSelfTextLinkCount != other.getSyncSelfTextLinkCount()) return false;
-        if(syncCommentLinkCount != other.getSyncCommentLinkCount()) return false;
-        if(syncNewPostsOnly != other.isSyncNewPostsOnly()) return false;
-
-        return true;
+        if (obj!=null && obj instanceof SyncProfileOptions) {
+            SyncProfileOptions other = (SyncProfileOptions) obj;
+            if (syncPostCount != other.getSyncPostCount()) return false;
+            if (syncCommentCount != other.getSyncCommentCount()) return false;
+            if (syncCommentDepth != other.getSyncCommentDepth()) return false;
+            if (syncCommentSort != other.getSyncCommentSort()) return false;
+            if (syncThumbs != other.isSyncThumbs()) return false;
+            if (syncImages != other.isSyncImages()) return false;
+            if (syncVideo != other.isSyncVideo()) return false;
+            if (albumSyncLimit != other.getAlbumSyncLimit()) return false;
+            if (syncOverWifiOnly != other.isSyncOverWifiOnly()) return false;
+            if (syncSelfTextLinkCount != other.getSyncSelfTextLinkCount()) return false;
+            if (syncCommentLinkCount != other.getSyncCommentLinkCount()) return false;
+            if (syncNewPostsOnly != other.isSyncNewPostsOnly()) return false;
+            return true;
+        }
+        return false;
     }
 
     public SyncProfileOptions(SyncProfileOptions other) {
-        this.syncPostCount = other.getSyncPostCount();
-        this.syncCommentCount = other.getSyncCommentCount();
-        this.syncCommentDepth = other.getSyncCommentDepth();
-        this.syncCommentSort = other.getSyncCommentSort();
-        this.syncThumbs = other.isSyncThumbs();
-        this.syncImages = other.isSyncImages();
-        this.syncVideo = other.isSyncVideo();
-        this.albumSyncLimit = other.getAlbumSyncLimit();
-        this.syncOverWifiOnly = other.isSyncOverWifiOnly();
-        this.syncWebpages = other.isSyncWebpages();
-        this.syncGif = other.isSyncGif();
-        this.syncSelfTextLinkCount = other.getSyncSelfTextLinkCount();
-        this.syncCommentLinkCount = other.getSyncCommentLinkCount();
-        this.syncNewPostsOnly = other.isSyncNewPostsOnly();
+        if (other!=null) {
+            this.syncPostCount = other.getSyncPostCount();
+            this.syncCommentCount = other.getSyncCommentCount();
+            this.syncCommentDepth = other.getSyncCommentDepth();
+            this.syncCommentSort = other.getSyncCommentSort();
+            this.syncThumbs = other.isSyncThumbs();
+            this.syncImages = other.isSyncImages();
+            this.syncVideo = other.isSyncVideo();
+            this.albumSyncLimit = other.getAlbumSyncLimit();
+            this.syncOverWifiOnly = other.isSyncOverWifiOnly();
+            this.syncWebpages = other.isSyncWebpages();
+            this.syncGif = other.isSyncGif();
+            this.syncSelfTextLinkCount = other.getSyncSelfTextLinkCount();
+            this.syncCommentLinkCount = other.getSyncCommentLinkCount();
+            this.syncNewPostsOnly = other.isSyncNewPostsOnly();
+        }
     }
 
     public SyncProfileOptions() {
