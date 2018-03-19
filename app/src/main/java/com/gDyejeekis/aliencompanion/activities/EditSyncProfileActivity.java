@@ -157,7 +157,8 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
                 originalSubreddits = new ArrayList<>(originalProfile.getSubreddits());
                 originalMultis = new ArrayList<>(originalProfile.getMultireddits());
                 originalSchedules = new ArrayList<>(originalProfile.getSchedules());
-                originalSyncOptions = new SyncProfileOptions(originalProfile.getSyncOptions());
+                originalSyncOptions = originalProfile.getSyncOptions()==null
+                        ? null : new SyncProfileOptions(originalProfile.getSyncOptions());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -358,17 +359,21 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
 
     private boolean changesMade() {
         try {
+            String nameFieldString = nameField.getText().toString();
             if (isNewProfile) {
-                if (!nameField.getText().toString().trim().isEmpty()) return true;
+                if (!nameFieldString.trim().isEmpty()) return true;
                 if (!profile.getSubreddits().isEmpty()) return true;
                 if (!profile.getMultireddits().isEmpty()) return true;
                 if (!profile.getSchedules().isEmpty()) return true;
                 if (profile.getSyncOptions()!=null) return true;
             } else {
+                if (!nameFieldString.equals(profile.getName())) return true;
                 if (!originalSubreddits.equals(profile.getSubreddits())) return true;
                 if (!originalMultis.equals(profile.getMultireddits())) return true;
                 if (!originalSchedules.equals(profile.getSchedules())) return true;
-                if (!originalSyncOptions.equals(profile.getSyncOptions())) return true;
+                if (originalSyncOptions==null) {
+                    if (profile.getSyncOptions()!=null) return true;
+                } else if (!originalSyncOptions.equals(profile.getSyncOptions())) return true;
             }
         } catch (Exception e) {
             e.printStackTrace();

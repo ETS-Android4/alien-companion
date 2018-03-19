@@ -501,12 +501,14 @@ public class EditFilterProfileActivity extends ToolbarActivity implements View.O
 
     private boolean changesMade() {
         try {
+            String nameFieldString = nameField.getText().toString();
             if (isNewProfile) {
-                if (!nameField.getText().toString().trim().isEmpty()) return true;
+                if (!nameFieldString.trim().isEmpty()) return true;
                 if (!profile.getFilters().isEmpty()) return true;
                 if (!profile.getSubredditRestrictions().isEmpty()) return true;
                 if (!profile.getMultiredditRestrictions().isEmpty()) return true;
             } else {
+                if (!nameFieldString.equals(profile.getName())) return true;
                 if (!originalFilters.equals(profile.getFilters())) return true;
                 if (!originalSubRestr.equals(profile.getSubredditRestrictions())) return true;
                 if (!originalMultiRestr.equals(profile.getMultiredditRestrictions())) return true;
