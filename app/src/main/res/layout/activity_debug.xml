@@ -5,87 +5,97 @@
 
     <include layout="@layout/my_toolbar"/>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout_link_debug"
-        android:padding="8dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:text="Link handler"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:orientation="vertical"
             android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textUri"
-            android:ems="10"
-            android:id="@+id/editText_test_url"
-            android:textSize="14sp"
-            android:hint="enter url here"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:textColorHint="?attr/themeTextHintColor"
-            android:nextFocusUp="@id/editText_test_url"
-            android:nextFocusLeft="@id/editText_test_url"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_link_debug"
+                android:padding="8dp">
 
-        <Button
-            android:text="Go"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_handle_url"
-            android:textSize="14sp"
-            android:textColor="@android:color/black" />
+                <TextView
+                    android:text="Link handler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"/>
 
-    </LinearLayout>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:ems="10"
+                    android:id="@+id/editText_test_url"
+                    android:textSize="14sp"
+                    android:hint="enter url here"
+                    android:textColor="?attr/themeTextPrimaryColor"
+                    android:textColorHint="?attr/themeTextHintColor"/>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout_url_tests"
-        android:padding="8dp">
+                <Button
+                    android:text="Go"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_handle_url"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black" />
 
-        <TextView
-            android:text="URL tests"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp" />
+            </LinearLayout>
 
-        <TextView
-            android:text="(test urls here)"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView_url_tests"
-            android:layout_marginTop="12dp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_url_tests"
+                android:padding="8dp">
 
-    </LinearLayout>
+                <TextView
+                    android:text="URL tests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:id="@+id/layout_storage_debug">
+                <TextView
+                    android:text="(test urls here)"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView_url_tests"
+                    android:layout_marginTop="12dp" />
 
-        <TextView
-            android:text="Storage debug"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp" />
+            </LinearLayout>
 
-        <Button
-            android:text="Log internal storage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_log_internal_storage"
-            android:textSize="14sp"
-            android:textColor="@android:color/black" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:id="@+id/layout_storage_debug">
 
-    </LinearLayout>
+                <TextView
+                    android:text="Storage debug"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:text="Log internal storage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_log_internal_storage"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
