@@ -29,6 +29,11 @@ public class DebugActivity extends ToolbarActivity {
     public static final String TAG = "DebugActivity";
 
     public static final String[] URL_TESTS_HARDCODED = {
+            "https://www.reddit.com/r/Games/wiki/rules",
+            "/u/10-15-19-26-32-34-68",
+            "https://www.reddit.com/user/10-15-19-26-32-34-68",
+            "https://www.reddit.com/r/reddit.com/",
+            "https://www.reddit.com/r/reddit.com",
             "https://www.reddit.com/r/buildapcforme/",
             "https://www.reddit.com/r/buildapcforme",
             "https://www.reddit.com/r/KeepOurNetFree/80mkp0/",

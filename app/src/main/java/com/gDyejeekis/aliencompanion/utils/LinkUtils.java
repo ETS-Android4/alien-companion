@@ -1,7 +1,11 @@
 package com.gDyejeekis.aliencompanion.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
+import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.utils.ParamFormatter;
@@ -211,13 +215,18 @@ public class LinkUtils {
 
     public static final String REGEX_REDDIT_POST_URL = "(?i).*reddit\\.com\\/r\\/([\\w\\.]{3,20})\\/(?:comments\\/)?([\\w]{5,8})\\/?(?:\\w+\\/?)?([\\w]{6,9})?\\/?(?:\\?([\\w=&]+))?";
     public static final String REGEX_REDDIT_POST_URL_SHORT = "(?i)(?:https?:\\/\\/)?redd\\.it\\/([\\w]{5,8})\\/?";
+    public static final String REGEX_REDDIT_USER_SUBREDDIT = "(?i)(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/([\\w\\.\\-]{3,20})\\/?";
 
     public static boolean isRedditPostUrl(String url) {
         return url.matches(REGEX_REDDIT_POST_URL) || url.matches(REGEX_REDDIT_POST_URL_SHORT);
     }
 
+    public static boolean isUserSubredditUrl(String url) {
+        return url.matches(REGEX_REDDIT_USER_SUBREDDIT);
+    }
+
     public static boolean isNoDomainRedditUrl(String url) {
-        return url.matches("(?i)\\/(r|u|user)\\/.*");
+        return url.matches("(?i)^\\/(r|u|user)\\/.*");
     }
 
     public static Submission getRedditPostFromUrl(String url) {
@@ -259,6 +268,21 @@ public class LinkUtils {
             }
         }
         return post;
+    }
+
+    public static Intent getUserSubredditIntent(Context context, String url) {
+        Intent intent = null;
+        Matcher matcher = Pattern.compile(REGEX_REDDIT_USER_SUBREDDIT).matcher(url);
+        if (matcher.find()) {
+            if (matcher.group(1).equals("r")) {
+                intent = new Intent(context, SubredditActivity.class);
+                intent.putExtra("subreddit", matcher.group(2));
+            } else {
+                intent = new Intent(context, UserActivity.class);
+                intent.putExtra("username", matcher.group(2));
+            }
+        }
+        return intent;
     }
 
     public static boolean isImageLink(String url, String domain) {

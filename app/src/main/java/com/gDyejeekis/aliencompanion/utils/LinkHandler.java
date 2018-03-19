@@ -86,7 +86,7 @@ public class LinkHandler {
             Log.d(TAG, "DOMAIN: " + domain);
             Intent intent = null;
             if (domain == null) {
-                intent = getNoDomainIntent(url);
+                intent = LinkUtils.getUserSubredditIntent(context, url);
             }
             else {
                 String domainLC = domain.toLowerCase();
@@ -170,7 +170,7 @@ public class LinkHandler {
                         intent.putExtra("url", url);
                     }
                     // case (subreddit).reddit.com link
-                    else if(domainLC.matches("^(?!\\bwww\\b|\\bnp\\b|\\bm\\b)(\\w+)\\.reddit\\.com")) {
+                    else if (domainLC.matches("^(?!\\bwww\\b|\\bnp\\b|\\bm\\b)(\\w+)\\.reddit\\.com")) {
                         Matcher matcher = Pattern.compile("^(?!\\bwww\\b|\\bnp\\b|\\bm\\b)(\\w+)\\.reddit\\.com").matcher(domainLC);
                         if(matcher.find()) {
                             intent = new Intent(context, SubredditActivity.class);
@@ -178,11 +178,11 @@ public class LinkHandler {
                         }
                     }
                     // case user/subreddit link
-                    else if(urlLC.matches("^(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/(\\w+)\\/?")) {
-                        intent = getUserSubredditIntent(urlLC);
+                    else if (LinkUtils.isUserSubredditUrl(urlLC)) {
+                        intent = LinkUtils.getUserSubredditIntent(context, urlLC);
                     }
                     // case other reddit link not handled by the app natively
-                    else if(urlLC.contains("/wiki/") || urlLC.contains("/about/") || urlLC.contains("/live/")) {
+                    else {
                         if (MyApplication.handleOtherLinks) {
                             return startInAppBrowser();
                         }
@@ -289,61 +289,6 @@ public class LinkHandler {
         Intent intent = new Intent(context, MediaActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("domain", domain);
-        return intent;
-    }
-
-    private Intent getUserSubredditIntent(String url) {
-        Intent intent = null;
-        final String pattern = "^(?:https?\\:\\/\\/)?(?:www\\.)?(?:reddit\\.com)?\\/(r|u|user)\\/(\\w+)";
-
-        Matcher matcher = Pattern.compile(pattern).matcher(url);
-        if(matcher.find()) {
-            if(matcher.group(1).equals("r")) {
-                intent = new Intent(context, SubredditActivity.class);
-                intent.putExtra("subreddit", matcher.group(2));
-            }
-            else {
-                intent = new Intent(context, UserActivity.class);
-                intent.putExtra("username", matcher.group(2));
-            }
-        }
-        return intent;
-    }
-
-    // Get an intent for links like '/r/movies' or '/u/someuser' or /r/games/about/sidebar
-    private Intent getNoDomainIntent(String url) {
-        Intent intent = null;
-        final String pattern = "/(\\w)/(\\w+)/?(.*)";
-
-        Pattern compiledPattern = Pattern.compile(pattern);
-        Matcher matcher = compiledPattern.matcher(url);
-        if(matcher.find()) {
-            String type = matcher.group(1);
-            String name = matcher.group(2);
-            String more = matcher.group(3);
-            if(more.length()>0) {
-                url = url.replace("http://", "");
-                this.url = "http://reddit.com" + url;
-                this.domain = "reddit.com";
-                if(MyApplication.handleOtherLinks) {
-                    startInAppBrowser();
-                }
-                else {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.url));
-                }
-            }
-            else if(type.equalsIgnoreCase("r")) {
-                intent = new Intent(context, SubredditActivity.class);
-                intent.putExtra("subreddit", name.toLowerCase());
-            }
-            else if(type.equalsIgnoreCase("u") || type.equalsIgnoreCase("user")) {
-                intent = new Intent(context, UserActivity.class);
-                intent.putExtra("username", name.toLowerCase());
-            }
-        }
-        else {
-            ToastUtils.showToast(context, "Url not supported");
-        }
         return intent;
     }
 
