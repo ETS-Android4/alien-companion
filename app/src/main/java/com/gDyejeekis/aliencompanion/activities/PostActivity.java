@@ -75,12 +75,13 @@ public class PostActivity extends SwipeBackActivity {
             MenuItem sortAction = menu.findItem(R.id.action_sort_comments);
             sortAction.setVisible(false);
         }
-        Submission post = (Submission) getIntent().getSerializableExtra("post");
-        if(post!=null && post.isLocked()) {
+        Submission post = postFragment!=null ? postFragment.post
+                : (Submission) getIntent().getSerializableExtra("post");
+        if(post!=null) {
             MenuItem lockedAction = menu.findItem(R.id.action_post_locked);
-            lockedAction.setVisible(true);
+            lockedAction.setVisible(post.isLocked());
             MenuItem replyAction = menu.findItem(R.id.action_reply);
-            replyAction.setVisible(false);
+            replyAction.setVisible(!post.isLocked());
         }
         return true;
     }

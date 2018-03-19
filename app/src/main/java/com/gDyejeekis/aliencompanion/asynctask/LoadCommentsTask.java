@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.asynctask;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
@@ -146,7 +147,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
             this.fragment.progressBar.setVisibility(View.GONE);
             this.fragment.swipeRefreshLayout.setRefreshing(false);
             this.fragment.commentsLoaded = true;
-            if(offlineSubtitle!=null) {
+            if (offlineSubtitle!=null) {
                 this.fragment.setActionBarSubtitle(offlineSubtitle);
             }
             if (!MyApplication.noThumbnails && this.fragment.post.getThumbnailObject() == null) {
@@ -157,8 +158,7 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 this.fragment.postAdapter.notifyItemChanged(0);
                 if (exception instanceof IOException) {
                     ToastUtils.showSnackbar(this.fragment.getSnackbarParentView(), "No synced comments found");
-                }
-                else {
+                } else {
                     View.OnClickListener listener = new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -169,18 +169,18 @@ public class LoadCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
                 }
             }
             else {
+                ((Activity) context).invalidateOptionsMenu();
                 this.fragment.setActionBarTitle();
                 this.fragment.postAdapter.commentsRefreshed(this.fragment.post, comments);
-                if(initialLoad) {
-                    if(linkedCommentIndex != -1) {
+                if (initialLoad) {
+                    if (linkedCommentIndex != -1) {
                         this.fragment.mLayoutManager.scrollToPosition(linkedCommentIndex);
                     }
-                }
-                else {
+                } else {
                     ((ToolbarActivity) context).expandToolbar();
                     this.fragment.mLayoutManager.scrollToPosition(0);
                     this.fragment.setCommentSort(this.fragment.tempSort);
-                    this.fragment.setActionBarSubtitle();
+                    this.fragment.setActionBarSubtitle(offlineSubtitle);
                 }
             }
         } catch (NullPointerException e) {

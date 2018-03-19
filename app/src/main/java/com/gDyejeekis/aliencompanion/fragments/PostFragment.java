@@ -67,7 +67,7 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public CommentSort commentSort;
     public CommentSort tempSort;
     public ProgressBar progressBar;
-    private boolean incompletePostObject = false;
+    public boolean incompletePostObject = false;
     public String redditVideoUrl;
     public boolean commentsLoaded;
     public boolean showFullCommentsButton;
@@ -614,7 +614,10 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void setActionBarSubtitle(String subtitle) {
         if(!MyApplication.dualPaneActive/* || updateActionBar*/) {
-            activity.getSupportActionBar().setSubtitle(subtitle);
+            if (subtitle == null)
+                setActionBarSubtitle();
+            else
+                activity.getSupportActionBar().setSubtitle(subtitle);
         }
     }
 
