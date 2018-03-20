@@ -252,7 +252,6 @@ public class MediaActivity extends BackNavActivity {
             Log.d(TAG, "No locally saved image found, loading from network..");
             // GFYCAT
             if (domain.contains("gfycat.com")) {
-                //addGifFragment(GfycatTask.getGfycatDirectUrlSimple(url));
                 new GfycatTask(this) {
                     @Override
                     protected void onPostExecute(String rawUrl) {
@@ -303,7 +302,7 @@ public class MediaActivity extends BackNavActivity {
                 }.execute(url);
             }
             // GYAZO
-            else if(domain.contains("gyazo.com")/* && !LinkUtils.isRawGyazoUrl(url)*/) {
+            else if(domain.contains("gyazo.com")) {
                 new GyazoTask(this) {
                     @Override
                     protected void onPostExecute(String rawUrl) {
@@ -322,8 +321,7 @@ public class MediaActivity extends BackNavActivity {
                 }.execute(url);
             }
             // GIPHY
-            else if(domain.contains("giphy.com")/* && !LinkUtils.isMp4Giphy(url)*/) {
-                //addGifFragment(GiphyTask.getGiphyDirectUrlSimple(url));
+            else if(domain.contains("giphy.com")) {
                 new GiphyTask(this) {
                     @Override
                     protected void onPostExecute(String mp4Url) {

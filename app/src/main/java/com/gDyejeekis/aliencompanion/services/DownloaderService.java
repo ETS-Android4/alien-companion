@@ -851,7 +851,7 @@ public class DownloaderService extends IntentService {
             }
         }
         // GYAZO
-        else if(url.contains("gyazo.com")/* && !LinkUtils.isRawGyazoUrl(url)*/) {
+        else if(url.contains("gyazo.com")) {
             try {
                 String directUrl = GyazoTask.getGyazoDirectUrl(url);
                 String saveName = LinkUtils.getGyazoId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
@@ -861,9 +861,9 @@ public class DownloaderService extends IntentService {
             }
         }
         // GIPHY
-        else if(url.contains("giphy.com")/* && !LinkUtils.isMp4Giphy(url)*/) {
+        else if(url.contains("giphy.com")) {
             try {
-                String mp4Url = GiphyTask.getGiphyDirectUrlSimple(url);
+                String mp4Url = GiphyTask.getGiphyDirectUrl(url);
                 String saveName = LinkUtils.getGiphyId(url).concat(".mp4");
                 downloadMediaToPath(mp4Url, path, saveName);
             } catch (Exception e) {
