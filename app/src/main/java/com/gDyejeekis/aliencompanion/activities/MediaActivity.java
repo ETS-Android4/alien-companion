@@ -264,8 +264,46 @@ public class MediaActivity extends BackNavActivity {
                     }
                 }.execute(url);
             }
+            // IMGUR
+            else if (domain.contains("imgur.com")) {
+                new ImgurTask(this) {
+                    @Override
+                    protected void onPostExecute(ImgurItem item) {
+                        if (item == null) {
+                            ToastUtils.showToast(getContext(), "Error retrieving imgur info");
+                        } else {
+                            if (item instanceof ImgurImage) {
+                                ImgurImage image = (ImgurImage) item;
+                                checkImgurItemInfo(image);
+                                if (image.isAnimated()) {
+                                    addGifFragment(image.getMp4());
+                                } else {
+                                    addImageFragment(image.getLink());
+                                }
+                            } else if (item instanceof ImgurAlbum) {
+                                checkImgurAlbumSize(item);
+                                //setupAlbumView(item.getImages());
+                            } else if (item instanceof ImgurGallery) {
+                                ImgurGallery gallery = (ImgurGallery) item;
+                                if (gallery.isAlbum()) {
+                                    checkImgurAlbumSize(item);
+                                    //setupAlbumView(gallery.getImages());
+                                } else {
+                                    checkImgurItemInfo(gallery);
+                                    if(gallery.isAnimated()) {
+                                        addGifFragment(gallery.getMp4());
+                                    }
+                                    else {
+                                        addImageFragment(gallery.getLink());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }.execute(url);
+            }
             // GYAZO
-            else if(domain.contains("gyazo.com") && !LinkUtils.isRawGyazoUrl(url)) {
+            else if(domain.contains("gyazo.com")/* && !LinkUtils.isRawGyazoUrl(url)*/) {
                 new GyazoTask(this) {
                     @Override
                     protected void onPostExecute(String rawUrl) {
@@ -284,19 +322,19 @@ public class MediaActivity extends BackNavActivity {
                 }.execute(url);
             }
             // GIPHY
-            else if(domain.contains("giphy.com") && !LinkUtils.isMp4Giphy(url)) {
-                addGifFragment(GiphyTask.getGiphyDirectUrlSimple(url));
-                //new GiphyTask(this) {
-                //    @Override
-                //    protected void onPostExecute(String mp4Url) {
-                //        if(mp4Url == null) {
-                //            ToastUtils.showToast(getContext(), "Error retrieving giphy info");
-                //        }
-                //        else {
-                //            addGifFragment(mp4Url);
-                //        }
-                //    }
-                //}.execute(url);
+            else if(domain.contains("giphy.com")/* && !LinkUtils.isMp4Giphy(url)*/) {
+                //addGifFragment(GiphyTask.getGiphyDirectUrlSimple(url));
+                new GiphyTask(this) {
+                    @Override
+                    protected void onPostExecute(String mp4Url) {
+                        if(mp4Url == null) {
+                            ToastUtils.showToast(getContext(), "Error retrieving giphy info");
+                        }
+                        else {
+                            addGifFragment(mp4Url);
+                        }
+                    }
+                }.execute(url);
             }
             // STREAMABLE
             else if(domain.contains("streamable.com")) {
@@ -336,44 +374,6 @@ public class MediaActivity extends BackNavActivity {
                     //url = url.replace(".gif", ".mp4");
                 }
                 addGifFragment(url);
-            }
-            // IMGUR
-            else if (domain.contains("imgur.com")) {
-                new ImgurTask(this) {
-                    @Override
-                    protected void onPostExecute(ImgurItem item) {
-                        if (item == null) {
-                            ToastUtils.showToast(getContext(), "Error retrieving imgur info");
-                        } else {
-                            if (item instanceof ImgurImage) {
-                                ImgurImage image = (ImgurImage) item;
-                                checkImgurItemInfo(image);
-                                if (image.isAnimated()) {
-                                    addGifFragment(image.getMp4());
-                                } else {
-                                    addImageFragment(image.getLink());
-                                }
-                            } else if (item instanceof ImgurAlbum) {
-                                checkImgurAlbumSize(item);
-                                //setupAlbumView(item.getImages());
-                            } else if (item instanceof ImgurGallery) {
-                                ImgurGallery gallery = (ImgurGallery) item;
-                                if (gallery.isAlbum()) {
-                                    checkImgurAlbumSize(item);
-                                    //setupAlbumView(gallery.getImages());
-                                } else {
-                                    checkImgurItemInfo(gallery);
-                                    if(gallery.isAnimated()) {
-                                        addGifFragment(gallery.getMp4());
-                                    }
-                                    else {
-                                        addImageFragment(gallery.getLink());
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }.execute(url);
             }
             // VIDEOS
             else if(url.endsWith(".mp4")) {

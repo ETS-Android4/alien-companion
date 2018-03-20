@@ -2,14 +2,13 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="" changeDate="">
-        <changelogtext>Fixed some link handling issues for reddit URLs</changelogtext>
-        <changelogtext>Fixed occasional crash when using the navigation drawer</changelogtext>
-        <changelogtext>Fixed visual bug after changing 'Hide post FAB on scroll down' option</changelogtext>
+        <changelogtext>Fixed link handling issues for reddit, imgur and giphy URLs</changelogtext>
+        <changelogtext>Fixed visual bug after changing 'Hide post FAB on scroll down' preference</changelogtext>
         <changelogtext>Added confirmation dialogs upon exiting filter/sync profile creation/edit</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Minor crash fixes</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.5" changeDate="Mar 16, 2018">

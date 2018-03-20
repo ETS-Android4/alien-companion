@@ -55,6 +55,15 @@ public class LinkUtils {
         return string;
     }
 
+    public static String getDirectMediaUrlExtension(String directMediaUrl) {
+        final String pattern = "(?i).*(\\.(?:jpg|jpeg|png|gif|mp4))\\b";
+        Matcher matcher = Pattern.compile(pattern).matcher(directMediaUrl);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
     // TODO: 3/7/2018 this method might be flawed, maybe revert to old method
     public static String urlToFilename(String url) {
         String filename = removeUrlParameters(url);

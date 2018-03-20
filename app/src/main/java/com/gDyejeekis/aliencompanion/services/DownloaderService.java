@@ -804,7 +804,6 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    // TODO: 3/7/2018 possible flaw here: don't change original url and then use that to extract image filename, instead always use original url to get image filename
     private void syncImage(String url, String filename, SyncProfileOptions syncOptions) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
@@ -815,26 +814,58 @@ public class DownloaderService extends IntentService {
         // GFYCAT
         if (url.contains("gfycat.com")) {
             try {
-                url = GfycatTask.getGfycatDirectUrl(url); // TODO: 3/6/2018 might need to edit post url in case of gfycat id mismatch (i.e. original url id different than retrieved url)
-                downloadMediaToPath(url, path);
+                String mp4Url = GfycatTask.getGfycatDirectUrl(url);
+                String saveName = LinkUtils.getGfycatId(url).concat(".mp4");
+                downloadMediaToPath(mp4Url, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        // GYAZO
-        else if(url.contains("gyazo.com") && !LinkUtils.isRawGyazoUrl(url)) {
+        // IMGUR
+        else if (url.contains("imgur.com")) {
+            ImgurItem item = null;
             try {
-                url = GyazoTask.getGyazoDirectUrl(url);
-                downloadMediaToPath(url, path);
+                item = GeneralUtils.getImgurDataFromUrl(new ImgurHttpClient(), url);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(item instanceof ImgurImage) {
+                ImgurImage image = (ImgurImage) item;
+                String directUrl = (image.isAnimated()) ? image.getMp4() : image.getLink();
+                String saveName = LinkUtils.getImgurImgId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
+                downloadMediaToPath(directUrl, path, saveName);
+            }
+            else if(item instanceof ImgurAlbum) {
+                downloadAlbumImages(item, filename, path, syncOptions);
+            }
+            else if(item instanceof ImgurGallery) {
+                ImgurGallery gallery = (ImgurGallery) item;
+                if(gallery.isAlbum()) {
+                    downloadAlbumImages(gallery, filename, path, syncOptions);
+                }
+                else {
+                    String directUrl = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
+                    String saveName = LinkUtils.getImgurImgId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
+                    downloadMediaToPath(directUrl, path, saveName);
+                }
+            }
+        }
+        // GYAZO
+        else if(url.contains("gyazo.com")/* && !LinkUtils.isRawGyazoUrl(url)*/) {
+            try {
+                String directUrl = GyazoTask.getGyazoDirectUrl(url);
+                String saveName = LinkUtils.getGyazoId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
+                downloadMediaToPath(directUrl, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         // GIPHY
-        else if(url.contains("giphy.com") && !LinkUtils.isMp4Giphy(url)) {
+        else if(url.contains("giphy.com")/* && !LinkUtils.isMp4Giphy(url)*/) {
             try {
-                url = GiphyTask.getGiphyDirectUrlSimple(url);
-                downloadMediaToPath(url, path);
+                String mp4Url = GiphyTask.getGiphyDirectUrlSimple(url);
+                String saveName = LinkUtils.getGiphyId(url).concat(".mp4");
+                downloadMediaToPath(mp4Url, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -845,10 +876,12 @@ public class DownloaderService extends IntentService {
         }
         // REDDIT VIDEO
         else if(url.contains("v.redd.it")) {
-            String directUrl = getRedditVideoDirectUrl(url);
-            if (directUrl!=null) {
-                String imgFilename = LinkUtils.urlToFilenameOld(url).concat(".mp4"); // use old method here to make sure we keep the id
-                downloadMediaToPath(directUrl, path, imgFilename);
+            try {
+                String mp4Url = getRedditVideoDirectUrl(url);
+                String saveName = LinkUtils.urlToFilenameOld(url).concat(".mp4"); // use old method here to make sure we keep the id
+                downloadMediaToPath(mp4Url, path, saveName);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         // IMAGES
@@ -865,47 +898,15 @@ public class DownloaderService extends IntentService {
             }
             downloadMediaToPath(url, path);
         }
-        // IMGUR
-        else if (url.contains("imgur.com")) {
-            ImgurItem item = null;
-            try {
-                item = GeneralUtils.getImgurDataFromUrl(new ImgurHttpClient(), url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if(item instanceof ImgurImage) {
-                ImgurImage image = (ImgurImage) item;
-                String link = (image.isAnimated()) ? image.getMp4() : image.getLink();
-                downloadMediaToPath(link, path);
-            }
-            else if(item instanceof ImgurAlbum) {
-                downloadAlbumImages(item, filename, path, syncOptions);
-            }
-            else if(item instanceof ImgurGallery) {
-                ImgurGallery gallery = (ImgurGallery) item;
-                if(gallery.isAlbum()) {
-                    downloadAlbumImages(gallery, filename, path, syncOptions);
-                }
-                else {
-                    String link = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
-                    downloadMediaToPath(link, path);
-                }
-            }
-        }
     }
 
+    // unsafe method
     private String getRedditVideoDirectUrl(String redditVideoUrl) {
-        try {
-            String postUrl = GeneralUtils.getFinalUrlRedirect(redditVideoUrl);
-            Submission post = LinkUtils.getRedditPostFromUrl(postUrl);
-            Comments comments = new Comments(httpClient, MyApplication.currentUser);
-            comments.ofSubmission(post, null, -1, 1, 1, CommentSort.TOP);
-            return post.getRedditVideo().getScrubberMediaUrl();
-        } catch (Exception e) {
-            Log.e(TAG, "Error retrieving direct video url for: " + redditVideoUrl);
-            e.printStackTrace();
-        }
-        return null;
+        String postUrl = GeneralUtils.getFinalUrlRedirect(redditVideoUrl);
+        Submission post = LinkUtils.getRedditPostFromUrl(postUrl);
+        Comments comments = new Comments(httpClient, MyApplication.currentUser);
+        comments.ofSubmission(post, null, -1, 1, 1, CommentSort.TOP);
+        return post.getRedditVideo().getScrubberMediaUrl();
     }
 
     private void downloadAlbumImages(ImgurItem item, String filename, String path, SyncProfileOptions syncOptions) {
