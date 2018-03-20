@@ -759,13 +759,17 @@ public class DownloaderService extends IntentService {
             //    expireAfterWrite(minutes, TimeUnit.MINUTES).makeMap();
 
             JResult res = fetcher.fetchAndExtract(url, 5000, true);
-            String text = res.getText();
+            List<String> textList = res.getTextList();
+            StringBuilder text = new StringBuilder();
+            for (String item : textList) {
+                text.append(item).append("\n\n");
+            }
             String title = res.getTitle();
             String imageUrl = res.getImageUrl();
-            if(text!=null && !text.trim().isEmpty()) {
+            if(!text.toString().trim().isEmpty()) {
                 Log.d(TAG, "Syncing article from src: " + url);
                 final String articleId = String.valueOf(url.hashCode());
-                Article article = new Article(title, text, imageUrl);
+                Article article = new Article(title, text.toString(), imageUrl);
                 GeneralUtils.writeObjectToFile(article, new File(subredditDir, articleId + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX));
                 // catch all exceptions related to article image download, not as important
                 try {

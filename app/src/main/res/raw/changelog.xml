@@ -5,7 +5,7 @@
         <changelogtext>Fixed link handling issues for reddit, imgur and giphy URLs</changelogtext>
         <changelogtext>Fixed visual bug after changing 'Hide post FAB on scroll down' preference</changelogtext>
         <changelogtext>Added confirmation dialogs upon exiting filter/sync profile creation/edit</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Synced article main body paragraphs are now properly separated</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Minor crash fixes</changelogtext>
