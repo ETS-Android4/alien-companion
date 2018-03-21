@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
 import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
@@ -375,8 +376,19 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void initMainProgressBar(View view) {
         progressBar = view.findViewById(R.id.progressBar2);
-        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(View.GONE);
+        updateMainProgressBarColor();
+        updateMainProgressBarPosition();
+    }
+
+    public void updateMainProgressBarColor() {
+        progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
+    }
+
+    public void updateMainProgressBarPosition() {
+        int marginBottom = MyApplication.autoHideToolbar ? 48 : 0;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) progressBar.getLayoutParams();
+        params.setMargins(0, 0, 0, marginBottom);
     }
 
     private void initSwipeRefreshLayout(View view) {

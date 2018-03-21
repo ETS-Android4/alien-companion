@@ -227,6 +227,12 @@ public class MainActivity extends ToolbarActivity {
             notifyToolbarAutohideChanged = false;
             updateToolbarAutoHide();
             expandToolbar();
+            if (getListFragment()!=null) {
+                getListFragment().updateMainProgressBarPosition();
+            }
+            if (getPostFragment()!=null) {
+                getPostFragment().updateMainProgressBarPosition();
+            }
         }
 
         if(notifyPostFabChanged) {

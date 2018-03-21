@@ -19,13 +19,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
@@ -531,11 +531,18 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
 
     public void initMainProgressBar(View view) {
         mainProgressBar = view.findViewById(R.id.progressBar2);
-        updateMainProgressColor();
+        updateMainProgressBarColor();
+        updateMainProgressBarPosition();
     }
 
-    public void updateMainProgressColor() {
+    public void updateMainProgressBarColor() {
         mainProgressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
+    }
+
+    public void updateMainProgressBarPosition() {
+        int marginBottom = MyApplication.autoHideToolbar ? 48 : 0;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mainProgressBar.getLayoutParams();
+        params.setMargins(0, 0, 0, marginBottom);
     }
 
     public void initSwipeRefreshLayout(View view) {
@@ -559,7 +566,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     public void colorSecondaryChanged() {
-        updateMainProgressColor();
+        updateMainProgressBarColor();
         updateSwipeRefreshColor();
         if(MyApplication.postFabNavigation)
             updateFabNavColors();
