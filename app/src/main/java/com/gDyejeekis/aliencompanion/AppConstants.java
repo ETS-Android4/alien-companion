@@ -10,7 +10,9 @@ public class AppConstants {
 
     public static final int currentVersionCode = 1005;
 
-    public static final int showWelcomeMsgVersionCode = -1;
+    public static final boolean showWelcomeMsg = false;
+
+    public static final int showWelcomeMsgVersionCode = 1000;
 
     public static final int clearAppDataVersionCode = 1000;
 

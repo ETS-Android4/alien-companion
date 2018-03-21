@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 
@@ -33,17 +34,8 @@ public class SplashActivity extends AppCompatActivity {
             finish();
             return;
         }
-        if(MyApplication.showedWelcomeMessage) {
-            setContentView(R.layout.splash_screen);
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startMainActivity();
-                }
-            }, SPLASH_DISPLAY_DURATION);
-        }
-        else {
+        if (AppConstants.showWelcomeMsg && !MyApplication.showedWelcomeMessage) {
             setContentView(R.layout.splash_screen_welcome);
 
             Button button = (Button) findViewById(R.id.button_welcome_done);
@@ -57,6 +49,15 @@ public class SplashActivity extends AppCompatActivity {
                     startMainActivity();
                 }
             });
+        } else {
+            setContentView(R.layout.splash_screen);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startMainActivity();
+                }
+            }, SPLASH_DISPLAY_DURATION);
         }
     }
 
