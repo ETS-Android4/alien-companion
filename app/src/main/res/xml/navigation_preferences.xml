@@ -55,7 +55,7 @@
 
         <CheckBoxPreference
             android:key="infoTap"
-            android:title="Dismiss image info on single tap"
+            android:title="Dismiss media info on single tap"
             android:defaultValue="true"/>
 
     </PreferenceCategory>
@@ -65,24 +65,24 @@
 
         <CheckBoxPreference
             android:key="postNav"
-            android:title="FAB post navigation"
+            android:title="FAB post menu"
             android:summary="Enables use of floating action buttons when browsing posts"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
             android:key="autoHidePostNav"
-            android:title="Hide post FAB on scroll down"
+            android:title="Hide FAB post menu on scroll down"
             android:defaultValue="false"/>
 
         <CheckBoxPreference
             android:key="commentNav"
-            android:title="FAB comment navigation"
+            android:title="FAB comment menu"
             android:summary="Enables use of floating action buttons to navigate between comments"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
             android:key="autoHideCommentNav"
-            android:title="Hide comment FAB on scroll down"
+            android:title="Hide FAB comment menu on scroll down"
             android:defaultValue="false"/>
 
     </PreferenceCategory>
