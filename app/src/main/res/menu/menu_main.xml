@@ -37,7 +37,7 @@
     <item android:id="@+id/action_sync_profiles" android:title="@string/sync_profiles"
         android:orderInCategory="115" app:showAsAction="never" />
 
-    <item android:id="@+id/action_sync_posts" android:title="@string/sync_posts"
+    <item android:id="@+id/action_sync_posts" android:title="@string/sync_now"
         android:orderInCategory="120" app:showAsAction="never" />
 
     <item android:id="@+id/action_debug" android:title="Debug"

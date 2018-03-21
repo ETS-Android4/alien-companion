@@ -90,7 +90,7 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
                 message = "Hide read posts and go to top";
                 break;
             case R.id.fab_sync:
-                message = "Sync posts";
+                message = "Sync now";
                 String lastSynced = getLastSynced();
                 if (lastSynced!=null) {
                     message += " (last synced " + lastSynced + ")";
@@ -110,7 +110,8 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
     private String getLastSynced() {
         try {
             if (fragment instanceof PostListFragment) {
-                String name = ((PostListFragment) fragment).subreddit.toLowerCase();
+                String subreddit = ((PostListFragment) fragment).subreddit;
+                String name = subreddit==null ? "frontpage" : subreddit.toLowerCase();
                 File dir = GeneralUtils.getNamedDir(GeneralUtils.getSyncedRedditDataDir(fragment.getContext()), name);
                 File file = new File(dir, name + AppConstants.SYNCED_POST_LIST_SUFFIX);
                 if (file.exists()) {
@@ -120,4 +121,5 @@ public class PostFabNavListener implements View.OnClickListener, View.OnLongClic
         } catch (Exception e) {}
         return null;
     }
+
 }

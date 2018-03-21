@@ -10,6 +10,7 @@
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Snackbar action text color now matches the 'Secondary color' preference</changelogtext>
+        <changelogtext>'Sync posts' subreddit option renamed to 'Sync now'</changelogtext>
         <changelogtext>Minor updates to preference descriptions</changelogtext>
         <changelogtext>Minor crash fixes</changelogtext>
     </changelogversion>
