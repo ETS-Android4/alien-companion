@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,15 @@ public class PleaseWaitDialogFragment extends DialogFragment {
     public static final String DEFAULT_MESSAGE = "Please wait";
 
     private String message;
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            super.show(manager, tag);
+        } catch (IllegalStateException e) {
+            manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
