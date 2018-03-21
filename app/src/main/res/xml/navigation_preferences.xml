@@ -66,7 +66,7 @@
         <CheckBoxPreference
             android:key="postNav"
             android:title="FAB post menu"
-            android:summary="Enables use of floating action buttons when browsing posts"
+            android:summary="Enables use of the FAB menu in subreddits"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
@@ -77,7 +77,7 @@
         <CheckBoxPreference
             android:key="commentNav"
             android:title="FAB comment menu"
-            android:summary="Enables use of floating action buttons to navigate between comments"
+            android:summary="Enables use of the FAB menu to navigate between comments"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
