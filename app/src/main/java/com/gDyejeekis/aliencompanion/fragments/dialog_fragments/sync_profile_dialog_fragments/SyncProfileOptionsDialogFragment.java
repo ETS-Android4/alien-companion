@@ -30,7 +30,7 @@ public class SyncProfileOptionsDialogFragment extends ScalableDialogFragment imp
     private SyncProfileOptions syncOptions;
 
     // TODO: 4/23/2017 should probably asssign from resource arrays
-    private static final String[] postCountOptions = {"10", "25", "50", "75", "100"};
+    private static final String[] postCountOptions = {"10", "25", "50", "75", "100", "150", "200"};
     private static final String[] commentCountOptions = {"50", "100", "200", "400", "600"};
     private static final String[] commentDepthOptions = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     private static final String[] albumLimitOptions = {"1", "2", "5", "10", "25", "50"};

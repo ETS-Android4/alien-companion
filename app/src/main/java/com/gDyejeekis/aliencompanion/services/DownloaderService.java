@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
+import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
 import com.gDyejeekis.aliencompanion.asynctask.GiphyTask;
 import com.gDyejeekis.aliencompanion.asynctask.GyazoTask;
@@ -363,6 +364,27 @@ public class DownloaderService extends IntentService {
         return s;
     }
 
+    private static final boolean SYNC_OVER_MAX_LIMIT_LISTING = true;
+
+    // unsafe method
+    private List<RedditItem> retrievePostsToSync(String subreddit,  SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, int syncPostCount, Submission after) {
+        List<RedditItem> posts;
+        Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
+        if (subreddit == null || subreddit.equalsIgnoreCase("frontpage"))
+            posts = submissions.frontpage(submissionSort, timeSpan, -1, syncPostCount, after, null, MyApplication.showHiddenPosts);
+        else {
+            if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, syncPostCount, after, null, MyApplication.showHiddenPosts);
+            else posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, syncPostCount, after, null, MyApplication.showHiddenPosts);
+        }
+
+        if (posts!=null && !posts.isEmpty()) {
+            if (SYNC_OVER_MAX_LIMIT_LISTING && syncPostCount > RedditConstants.MAX_LIMIT_LISTING)
+                posts.addAll(retrievePostsToSync(subreddit, submissionSort, timeSpan, isMulti,
+                        syncPostCount - RedditConstants.MAX_LIMIT_LISTING, (Submission) posts.get(posts.size()-1)));
+        }
+        return posts;
+    }
+
     /*
      * syncs given subreddit/multireddit, checks for pause/cancellation, auto-pauses on error, increments progress
      */
@@ -372,17 +394,9 @@ public class DownloaderService extends IntentService {
             return;
         }
         try {
-            Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
-            List<RedditItem> posts;
+            List<RedditItem> posts = retrievePostsToSync(subreddit, submissionSort, timeSpan, isMulti, syncOptions.getSyncPostCount(), null);
 
-            if (subreddit == null || subreddit.equalsIgnoreCase("frontpage"))
-                posts = submissions.frontpage(submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
-            else {
-                if(isMulti) posts = submissions.ofMultireddit(subreddit, submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
-                else posts = submissions.ofSubreddit(subreddit, submissionSort, timeSpan, -1, syncOptions.getSyncPostCount(), null, null, MyApplication.showHiddenPosts);
-            }
-
-            if(posts!=null) {
+            if(posts!=null && !posts.isEmpty()) {
                 posts = FilterUtils.checkProfiles(this, posts, subreddit == null ? "frontpage" : subreddit, isMulti);
                 if(syncOptions.isSyncNewPostsOnly()) {
                     clearUnlistedSyncedPosts(posts, filename);
