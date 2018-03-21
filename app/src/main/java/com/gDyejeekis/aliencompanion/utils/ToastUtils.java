@@ -69,7 +69,7 @@ public class ToastUtils {
             Snackbar snackbar = Snackbar.make(view, text, duration);
             if (listener != null) {
                 snackbar.setAction(actionText, listener);
-                snackbar.setActionTextColor(MyApplication.linkColor);
+                snackbar.setActionTextColor(MyApplication.colorSecondary);
             }
             TextView txtv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
             txtv.setTextColor(Color.WHITE);
