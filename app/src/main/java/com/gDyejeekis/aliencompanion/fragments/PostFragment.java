@@ -518,6 +518,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         swipeRefreshLayout.setEnabled(MyApplication.swipeRefresh && isScrolledTop());
     }
 
+    private boolean isScrolledBottom() {
+        int lastPosition = postAdapter.getItemCount() - 1;
+        int lastVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+        int lastCompletelyVisiblePosition = mLayoutManager.findLastCompletelyVisibleItemPosition();
+        return lastCompletelyVisiblePosition == lastPosition ||
+                (lastCompletelyVisiblePosition == RecyclerView.NO_POSITION && lastVisiblePosition == lastPosition);
+    }
+
     private boolean isScrolledTop() {
         try {
             int topPos = mRecyclerView.getChildAt(0).getTop();
@@ -544,21 +552,19 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void updateFabNavOnScroll(int dy) {
-        if(MyApplication.commentFabNavigation) {
-            if(postAdapter.getItemCount() == 1 || lastItemCompletelyVisible()
-                    || (MyApplication.autoHideCommentFab && dy > AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD)) {
+        if (MyApplication.commentFabNavigation) {
+            if (postAdapter.getItemCount()==1 || isScrolledBottom()) {
                 hideAllFabOnScroll();
-            }
-            else if(isScrolledTop()
-                    || (MyApplication.autoHideCommentFab && dy < -AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD)
-                    || (!MyApplication.autoHideCommentFab && !lastItemCompletelyVisible())) {
+            } else if (MyApplication.autoHideCommentFab) {
+                if (dy > AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD) {
+                    hideAllFabOnScroll();
+                } else if (dy < -AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD || isScrolledTop()) {
+                    showAllFabOnScroll();
+                }
+            } else {
                 showAllFabOnScroll();
             }
         }
-    }
-
-    private boolean lastItemCompletelyVisible() {
-        return mLayoutManager.findLastCompletelyVisibleItemPosition() == postAdapter.getItemCount() - 1;
     }
 
     @Override public void onRefresh() {

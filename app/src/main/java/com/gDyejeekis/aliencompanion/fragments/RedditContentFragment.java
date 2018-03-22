@@ -142,15 +142,19 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     }
 
     private void updateFabOnScroll(int dy) {
-        if(MyApplication.postFabNavigation && hasFabNavigation()) {
-            if (MyApplication.autoHidePostFab) {
+        if (MyApplication.postFabNavigation && hasFabNavigation()) {
+            if (isScrolledBottom()) {
+                hideAllFabOptions();
+                fabMain.hide();
+            } else if (MyApplication.autoHidePostFab) {
                 if (dy > AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD) {
                     hideAllFabOptions();
                     fabMain.hide();
-                } else if (dy < -AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD
-                        || findFirstCompletelyVisiblePostPosition() == 0) {
+                } else if (dy < -AppConstants.FAB_HIDE_ON_SCROLL_THRESHOLD || isScrolledTop()) {
                     fabMain.show();
                 }
+            } else {
+                fabMain.show();
             }
         }
     }
@@ -171,21 +175,34 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         }
     }
 
+    private boolean isScrolledTop() {
+        return findFirstCompletelyVisiblePostPosition() == 0;
+    }
+
+    private boolean isScrolledBottom() {
+        return findLastCompletelyVisiblePostPosition() == adapter.getItemCount()-1;
+    }
+
+    private int findLastCompletelyVisiblePostPosition() {
+        if (layoutManager instanceof LinearLayoutManager)
+            return ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+        else if (layoutManager instanceof GridLayoutManager)
+            return ((GridLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+        return -1;
+    }
+
     private int findFirstCompletelyVisiblePostPosition() {
-        if(layoutManager instanceof LinearLayoutManager) {
+        if (layoutManager instanceof LinearLayoutManager)
             return ((LinearLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
-        }
-        else if(layoutManager instanceof GridLayoutManager) {
+        else if (layoutManager instanceof GridLayoutManager)
             return ((GridLayoutManager) layoutManager).findFirstCompletelyVisibleItemPosition();
-        }
         return -1;
     }
 
     private int findFirstVisiblePostPosition() {
-        if(layoutManager instanceof LinearLayoutManager) {
+        if (layoutManager instanceof LinearLayoutManager) {
             return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-        }
-        else if(layoutManager instanceof GridLayoutManager) {
+        } else if (layoutManager instanceof GridLayoutManager) {
             return ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
         }
         return -1;
