@@ -250,6 +250,12 @@ public class CommentFabNavListener implements View.OnClickListener, View.OnLongC
                 }
                 ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message, length);
                 return true;
+            case R.id.fab_up:
+                fragment.scrollToTop();
+                return true;
+            case R.id.fab_down:
+                fragment.scrollToBottom();
+                return true;
         }
         return false;
     }

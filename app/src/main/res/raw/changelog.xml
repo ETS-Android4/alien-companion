@@ -9,6 +9,8 @@
         <changelogtext>Synced article main body paragraphs are now properly separated</changelogtext>
         <changelogtext>Added confirmation dialogs upon exiting filter/sync profile creation/edit</changelogtext>
         <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext>Long tapping the up/down comment mini-FABs will now scroll to screen top/bottom respectively</changelogtext>
         <changelogtext>Fixed visual bug after changing 'Hide FAB post menu on scroll down' preference</changelogtext>
         <changelogtext>Snackbar action text color now matches the 'Secondary color' preference</changelogtext>
         <changelogtext>Minor updates to preference descriptions</changelogtext>

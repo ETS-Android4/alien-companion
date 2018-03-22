@@ -22,11 +22,17 @@ public abstract class ToolbarActivity extends BackNavActivity implements AppBarL
 
     private AppBarLayout appBarLayout;
     public Toolbar toolbar;
-    public boolean toolbarVisible;
+    public boolean toolbarVisible; // true when toolbar is completely visible
 
     public void expandToolbar() {
         if (!toolbarVisible && appBarLayout!=null)
             appBarLayout.setExpanded(true);
+    }
+
+    public void collapseToolbar() {
+        if (appBarLayout!=null) {
+            appBarLayout.setExpanded(false);
+        }
     }
 
     protected void updateToolbarColors() {

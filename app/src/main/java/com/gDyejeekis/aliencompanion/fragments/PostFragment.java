@@ -422,7 +422,9 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             //fabReply.setOnClickListener(commentNavListener);
             //fabReply.setOnLongClickListener(commentNavListener);
             fabNext.setOnClickListener(commentNavListener);
+            fabNext.setOnLongClickListener(commentNavListener);
             fabPrevious.setOnClickListener(commentNavListener);
+            fabPrevious.setOnLongClickListener(commentNavListener);
             ColorStateList fabColor = ColorStateList.valueOf(MyApplication.colorSecondary);
             fabMain.setBackgroundTintList(fabColor);
             fabNavSetting.setBackgroundTintList(fabColor);
@@ -565,6 +567,16 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 showAllFabOnScroll();
             }
         }
+    }
+
+    public void scrollToTop() {
+        activity.expandToolbar();
+        mLayoutManager.scrollToPosition(0);
+    }
+
+    public void scrollToBottom() {
+        activity.collapseToolbar();
+        mLayoutManager.scrollToPosition(postAdapter.getItemCount()-1);
     }
 
     @Override public void onRefresh() {
