@@ -135,9 +135,13 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (iabHelper != null) {
-            iabHelper.disposeWhenFinished();
-            iabHelper = null;
+        try {
+            if (iabHelper != null) {
+                iabHelper.disposeWhenFinished();
+                iabHelper = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
