@@ -8,7 +8,8 @@ import java.io.Serializable;
 /**
  * Created by sound on 3/20/2016.
  */
-public class SyncOptions implements Serializable {
+// TODO: 3/24/2018 wanted to change class name to SyncOptions but APPARENTLY doing so breaks serialization FUCK.ME.
+public class SyncProfileOptions implements Serializable {
 
     private static final long serialVersionUID = 1234543L;
 
@@ -154,8 +155,8 @@ public class SyncOptions implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj!=null && obj instanceof SyncOptions) {
-            SyncOptions other = (SyncOptions) obj;
+        if (obj!=null && obj instanceof SyncProfileOptions) {
+            SyncProfileOptions other = (SyncProfileOptions) obj;
             if (syncPostCount != other.getSyncPostCount()) return false;
             if (syncCommentCount != other.getSyncCommentCount()) return false;
             if (syncCommentDepth != other.getSyncCommentDepth()) return false;
@@ -173,7 +174,7 @@ public class SyncOptions implements Serializable {
         return false;
     }
 
-    public SyncOptions(SyncOptions other) {
+    public SyncProfileOptions(SyncProfileOptions other) {
         if (other!=null) {
             this.syncPostCount = other.getSyncPostCount();
             this.syncCommentCount = other.getSyncCommentCount();
@@ -192,7 +193,7 @@ public class SyncOptions implements Serializable {
         }
     }
 
-    public SyncOptions() {
+    public SyncProfileOptions() {
         syncPostCount = MyApplication.syncPostCount;
         syncCommentCount = MyApplication.syncCommentCount;
         syncCommentDepth = MyApplication.syncCommentDepth;

@@ -24,7 +24,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Subreddit;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncProfileScheduleDialogFragment;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
-import com.gDyejeekis.aliencompanion.models.sync_profile.SyncOptions;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncSchedule;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -46,7 +46,7 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
     private List<String> originalSubreddits;
     private List<String> originalMultis;
     private List<SyncSchedule> originalSchedules;
-    private SyncOptions originalSyncOptions;
+    private SyncProfileOptions originalSyncOptions;
     private EditText nameField;
     private EditText multiredditField;
     private DelayAutoCompleteTextView subredditField;
@@ -157,7 +157,7 @@ public class EditSyncProfileActivity extends ToolbarActivity implements View.OnC
                 originalMultis = new ArrayList<>(originalProfile.getMultireddits());
                 originalSchedules = new ArrayList<>(originalProfile.getSchedules());
                 originalSyncOptions = originalProfile.getSyncOptions()==null
-                        ? null : new SyncOptions(originalProfile.getSyncOptions());
+                        ? null : new SyncProfileOptions(originalProfile.getSyncOptions());
             } catch (Exception e) {
                 e.printStackTrace();
             }

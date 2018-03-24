@@ -43,15 +43,15 @@ public class SyncProfile extends Profile implements Serializable {
 
     private boolean useGlobalSyncOptions;
 
-    public SyncOptions getSyncOptions() {
+    public SyncProfileOptions getSyncOptions() {
         return syncOptions;
     }
 
-    public void setSyncOptions(SyncOptions syncOptions) {
+    public void setSyncOptions(SyncProfileOptions syncOptions) {
         this.syncOptions = syncOptions;
     }
 
-    private SyncOptions syncOptions;
+    private SyncProfileOptions syncOptions;
 
     public SyncProfile() {
         super("");

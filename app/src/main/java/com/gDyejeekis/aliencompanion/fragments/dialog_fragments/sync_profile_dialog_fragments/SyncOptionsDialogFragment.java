@@ -19,7 +19,7 @@ import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
-import com.gDyejeekis.aliencompanion.models.sync_profile.SyncOptions;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
@@ -31,7 +31,7 @@ import java.util.Arrays;
  */
 public class SyncOptionsDialogFragment extends ScalableDialogFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    private SyncOptions syncOptions;
+    private SyncProfileOptions syncOptions;
     private SyncProfile profile;
     private boolean customSync;
 
@@ -87,14 +87,14 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
             Button btnCancel = view.findViewById(R.id.button_cancel);
             btnSync.setOnClickListener(this);
             btnCancel.setOnClickListener(this);
-            this.syncOptions = new SyncOptions();
+            this.syncOptions = new SyncProfileOptions();
         } else if (profile!=null){
             optionsEnabled = !profile.isUseGlobalSyncOptions();
             useGlobalSwitch.setVisibility(View.VISIBLE);
             useGlobalSwitch.setChecked(!optionsEnabled);
             useGlobalSwitch.setOnCheckedChangeListener(this);
             layoutButtons.setVisibility(View.GONE);
-            this.syncOptions = (profile.getSyncOptions()==null) ? new SyncOptions() : new SyncOptions(profile.getSyncOptions());
+            this.syncOptions = (profile.getSyncOptions()==null) ? new SyncProfileOptions() : new SyncProfileOptions(profile.getSyncOptions());
         }
 
         syncPostCountSpinner = view.findViewById(R.id.spinner_syncPostCount);

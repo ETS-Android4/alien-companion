@@ -20,7 +20,7 @@ import android.widget.PopupMenu;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
-import com.gDyejeekis.aliencompanion.models.sync_profile.SyncOptions;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
@@ -310,7 +310,7 @@ public class PostListFragment extends RedditContentFragment {
         addToSyncQueue(null);
     }
 
-    public void addToSyncQueue(SyncOptions syncOptions) {
+    public void addToSyncQueue(SyncProfileOptions syncOptions) {
         hideAllFabOptions();
         String toastMessage;
         if(GeneralUtils.isNetworkAvailable(activity)) {
