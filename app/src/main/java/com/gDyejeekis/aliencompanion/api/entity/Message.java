@@ -1,7 +1,5 @@
 package com.gDyejeekis.aliencompanion.api.entity;
 
-import android.text.SpannableStringBuilder;
-
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.ApiEndpointUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -81,7 +79,7 @@ public class Message extends Thing implements RedditItem {
                 destination = "[deleted]";
             }
 
-            if(AppConstants.useMarkdownParsing)  {
+            if(AppConstants.USER_MARKDOWN_PARSER)  {
 
             } else {
                 bodyHTML = StringEscapeUtils.unescapeHtml4(bodyHTML);

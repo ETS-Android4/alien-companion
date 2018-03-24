@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
-        if (AppConstants.showWelcomeMsg && !MyApplication.showedWelcomeMessage) {
+        if (AppConstants.SHOW_UPDATE_MESSAGE && !MyApplication.showedWelcomeMessage) {
             setContentView(R.layout.splash_screen_welcome);
 
             Button button = (Button) findViewById(R.id.button_welcome_done);

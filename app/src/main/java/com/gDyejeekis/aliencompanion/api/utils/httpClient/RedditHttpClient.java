@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.NoSuchElementException;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -38,7 +37,7 @@ public class RedditHttpClient implements HttpClient {
 
     public static final boolean ALWAYS_USE_OKHTTP = true;
 
-    public static final String ALIEN_COMPANION_USER_AGENT = "android:com.gDyejeekis.aliencompanion:v" + AppConstants.currentVersion + " (by /u/ubercharge_ready)";
+    public static final String ALIEN_COMPANION_USER_AGENT = "android:com.gDyejeekis.aliencompanion:v" + AppConstants.CURRENT_VERSION_NAME + " (by /u/ubercharge_ready)";
 
     private String userAgent = ALIEN_COMPANION_USER_AGENT;
 

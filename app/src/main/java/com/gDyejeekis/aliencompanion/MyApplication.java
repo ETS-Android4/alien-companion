@@ -350,9 +350,9 @@ public class MyApplication extends Application {
     private void checkAppVersion() {
         final Context appContext = getApplicationContext();
         lastKnownVersionCode = prefs.getInt("versionCode", 0);
-        if (lastKnownVersionCode != AppConstants.currentVersionCode) {
+        if (lastKnownVersionCode != AppConstants.CURRENT_VERSION_CODE) {
             SharedPreferences.Editor editor = prefs.edit();
-            if (lastKnownVersionCode < AppConstants.clearAppDataVersionCode || lastKnownVersionCode == 0) {
+            if (lastKnownVersionCode < AppConstants.CLEAR_APP_DATA_VERSION_CODE || lastKnownVersionCode == 0) {
                 if (lastKnownVersionCode != 0) {
                     editor.clear();
                     CleaningUtils.clearAccountData(appContext);
@@ -374,12 +374,12 @@ public class MyApplication extends Application {
                 editor.putBoolean("dualPane", isLargeScreen);
                 editor.putBoolean("autoHideToolbar", !isLargeScreen);
             }
-            if (lastKnownVersionCode < AppConstants.showWelcomeMsgVersionCode) {
+            if (lastKnownVersionCode < AppConstants.UPDATE_MESSAGE_VERSION_CODE) {
                 editor.putBoolean("welcomeMsg", false);
             }
-            editor.putInt("versionCode", AppConstants.currentVersionCode);
+            editor.putInt("versionCode", AppConstants.CURRENT_VERSION_CODE);
             editor.apply();
-            lastKnownVersionCode = AppConstants.currentVersionCode;
+            lastKnownVersionCode = AppConstants.CURRENT_VERSION_CODE;
         }
     }
 
@@ -550,8 +550,9 @@ public class MyApplication extends Application {
         Intent intent = new Intent(context, PendingActionsService.class);
         PendingIntent pIntent = PendingIntent.getService(context, PendingActionsService.SERVICE_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         if(autoExecuteOfflineActions && pendingOfflineActions) {
-            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000 * AppConstants.offlineActionsInterval, 60 * 1000 * AppConstants.offlineActionsInterval, pIntent);
-            Log.d(TAG, "OfflineActionsService scheduled to run every " + AppConstants.offlineActionsInterval + " minutes");
+            int intervalMinutes = AppConstants.OFFLINE_ACTIONS_ATTEMPT_INTERVAL_MINUTES;
+            manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000 * intervalMinutes, 60 * 1000 * intervalMinutes, pIntent);
+            Log.d(TAG, "OfflineActionsService scheduled to run every " + intervalMinutes + " minutes");
             Log.d(TAG, "..until all pending offline actions are successfully executed");
         }
         else {

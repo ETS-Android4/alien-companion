@@ -80,7 +80,7 @@ public class SubmitCommentFragment extends Fragment {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
             }
         } else {
-            if (AppConstants.useMarkdownParsing) {
+            if (AppConstants.USER_MARKDOWN_PARSER) {
 
             } else {
                 originalCommentTextView.setText(ConvertUtils.noTrailingwhiteLines(Html.fromHtml(originalComment.getBodyHTML(), null,

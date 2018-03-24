@@ -20,6 +20,8 @@ public abstract class ToolbarActivity extends BackNavActivity implements AppBarL
 
     public static final String TAG = "ToolbarActivity";
 
+    public static final int NAVIGATION_ICON = R.drawable.ic_arrow_back_white_24dp;
+
     private AppBarLayout appBarLayout;
     public Toolbar toolbar;
     public boolean toolbarVisible; // true when toolbar is completely visible
@@ -71,7 +73,7 @@ public abstract class ToolbarActivity extends BackNavActivity implements AppBarL
         }
         updateToolbarAutoHide();
         updateToolbarColors();
-        toolbar.setNavigationIcon(AppConstants.homeAsUpIndicator);
+        toolbar.setNavigationIcon(NAVIGATION_ICON);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

@@ -738,7 +738,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
             }
             authorTextView.setText(comment.getAuthor());
 
-            if (AppConstants.useMarkdownParsing) {
+            if (AppConstants.USER_MARKDOWN_PARSER) {
 
             } else {
                 // Comment textview

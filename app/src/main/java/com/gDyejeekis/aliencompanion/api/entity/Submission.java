@@ -25,7 +25,6 @@ import com.gDyejeekis.aliencompanion.enums.YoutubeThumbnailSize;
 import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 import java.io.Serializable;
-import java.net.URLDecoder;
 import java.util.List;
 
 
@@ -298,7 +297,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 			title = StringEscapeUtils.unescapeHtml4(title);
 			linkFlairText = StringEscapeUtils.unescapeHtml4(linkFlairText);
 			if (isSelf()) {
-				if (AppConstants.useMarkdownParsing) {
+				if (AppConstants.USER_MARKDOWN_PARSER) {
 
 				} else {
 					selftextHTML = StringEscapeUtils.unescapeHtml4(selftextHTML);

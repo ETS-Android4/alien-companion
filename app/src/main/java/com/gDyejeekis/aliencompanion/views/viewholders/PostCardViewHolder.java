@@ -144,7 +144,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             linkButton.setVisibility(View.GONE);
             imageButton.setVisibility(View.GONE);
 
-            if(AppConstants.useMarkdownParsing) {
+            if(AppConstants.USER_MARKDOWN_PARSER) {
                 // TODO: 1/23/2017
             }
             // parse html string using fromHtml()

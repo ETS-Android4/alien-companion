@@ -384,7 +384,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         public void bindModel(Context context, Message message) {
             subject.setText(message.subject);
 
-            if (AppConstants.useMarkdownParsing) {
+            if (AppConstants.USER_MARKDOWN_PARSER) {
 
             } else {
                 //parse body with fromHtml
@@ -477,7 +477,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
             postTitle.setText(comment.getLinkTitle());
             commentSubreddit.setText(comment.getSubreddit());
 
-            if (AppConstants.useMarkdownParsing) {
+            if (AppConstants.USER_MARKDOWN_PARSER) {
 
             } else {
                 //parse html body using fromHTML
