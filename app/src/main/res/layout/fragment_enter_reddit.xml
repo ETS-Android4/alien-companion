@@ -1,7 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.gDyejeekis.aliencompanion.fragments.dialog_fragments.EnterRedditDialogFragment"
     android:orientation="vertical"
     android:background="?attr/themeDialogBackgroundColor">
 
@@ -58,6 +58,9 @@
             android:layout_height="wrap_content"
             android:text="@string/view"
             android:id="@+id/button_view"
-            style="@style/FlatButtonStyle" />
+            style="@style/FlatButtonStyle"
+            android:layout_marginLeft="8dp"/>
+
     </LinearLayout>
+
 </LinearLayout>
