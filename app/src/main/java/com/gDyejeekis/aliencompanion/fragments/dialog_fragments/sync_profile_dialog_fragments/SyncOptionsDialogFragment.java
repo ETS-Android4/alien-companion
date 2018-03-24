@@ -73,7 +73,7 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sync_profile_options, container, false);
+        View view = inflater.inflate(R.layout.fragment_sync_options, container, false);
 
         useGlobalSwitch = view.findViewById(R.id.switch_global_options);
         LinearLayout layoutButtons = view.findViewById(R.id.layout_buttons);
