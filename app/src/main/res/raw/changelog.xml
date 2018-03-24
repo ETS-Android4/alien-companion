@@ -2,6 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="" changeDate="">
+        <changelogtext>Fixed crash which prevented reddit login on some devices</changelogtext>
         <changelogtext>Fixed link handling issues for reddit, imgur and giphy URLs</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Added two more options to the 'Sync post limit' preference (150 and 200)</changelogtext>
@@ -13,6 +14,7 @@
         <changelogtext>Long tapping the up/down comment mini-FABs will now scroll to screen top/bottom respectively</changelogtext>
         <changelogtext>Fixed visual bug after changing 'Hide FAB post menu on scroll down' preference</changelogtext>
         <changelogtext>Snackbar action text color now matches the 'Secondary color' preference</changelogtext>
+        <changelogtext>Tweaked 'Add to synced' dialog for saved posts</changelogtext>
         <changelogtext>Minor updates to preference descriptions</changelogtext>
         <changelogtext>Minor crash fixes</changelogtext>
     </changelogversion>

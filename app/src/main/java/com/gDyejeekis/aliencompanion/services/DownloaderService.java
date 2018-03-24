@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
+import com.gDyejeekis.aliencompanion.api.entity.User;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.asynctask.GfycatTask;
@@ -74,6 +75,8 @@ public class DownloaderService extends IntentService {
     private static final int FOREGROUND_ID = 574974;
 
     private static final int CHANGE_STATE_REQUEST_CODE = 59392;
+
+    private static final boolean SYNC_OVER_MAX_LIMIT_LISTING = true;
 
     private int MAX_PROGRESS;
 
@@ -285,6 +288,21 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    // unsafe method
+    private List<RedditItem> retrieveSavedPostsToSync(User user, int savedCount, Submission after) {
+        UserMixed userMixed = new UserMixed(httpClient, user);
+        List<RedditItem> posts = userMixed.ofUser(user.getUsername(), UserSubmissionsCategory.SAVED, null,
+                TimeSpan.ALL, -1, savedCount, after, null, false);
+
+        if (posts!=null && !posts.isEmpty()) {
+            if (SYNC_OVER_MAX_LIMIT_LISTING && savedCount > RedditConstants.MAX_LIMIT_LISTING) {
+                posts.addAll(retrieveSavedPostsToSync(user, savedCount - RedditConstants.MAX_LIMIT_LISTING,
+                        (Submission) posts.get(posts.size()-1)));
+            }
+        }
+        return posts;
+    }
+
     /*
      * syncs user's saved list, checks for pause/cancellation, auto-pauses on error, increments progress
      */
@@ -295,8 +313,7 @@ public class DownloaderService extends IntentService {
         }
         try {
             final String displayName = "saved";
-            UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
-            List<RedditItem> savedList = userMixed.ofUser(MyApplication.currentUser.getUsername(), UserSubmissionsCategory.SAVED, null, TimeSpan.ALL, -1, savedCount, null, null, false);
+            List<RedditItem> savedList = retrieveSavedPostsToSync(MyApplication.currentUser, savedCount, null);
             Collections.reverse(savedList);
             increaseProgress(builder, displayName);
             for(RedditItem item : savedList) {
@@ -364,12 +381,10 @@ public class DownloaderService extends IntentService {
         return s;
     }
 
-    private static final boolean SYNC_OVER_MAX_LIMIT_LISTING = true;
-
     // unsafe method
     private List<RedditItem> retrievePostsToSync(String subreddit,  SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, int syncPostCount, Submission after) {
-        List<RedditItem> posts;
         Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
+        List<RedditItem> posts;
         if (subreddit == null || subreddit.equalsIgnoreCase("frontpage"))
             posts = submissions.frontpage(submissionSort, timeSpan, -1, syncPostCount, after, null, MyApplication.showHiddenPosts);
         else {

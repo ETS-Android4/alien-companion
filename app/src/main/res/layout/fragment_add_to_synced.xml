@@ -1,86 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/themeDialogBackgroundColor"
-    android:gravity="end"
-    android:padding="12dp">
+    android:background="?attr/themeDialogBackgroundColor">
 
     <TextView
-        android:text="Add posts to synced"
+        android:text="Select number of saved posts to sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="?attr/themeTextPrimaryColor" />
+        android:textColor="?attr/themeTextPrimaryColor"
+        android:paddingTop="24dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="20dp"/>
 
-    <RadioGroup
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/radioGroup_post_count">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="false">
 
-        <RadioButton
-            android:text="10"
+        <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton_sync_10"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:textSize="20sp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:buttonTint="?attr/themeTextSecondaryColor" />
+            android:id="@+id/radioGroup_post_count"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
 
-        <RadioButton
-            android:text="25"
-            android:layout_width="match_parent"
+            <RadioButton
+                android:text="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_10"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"/>
+
+            <RadioButton
+                android:text="25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_25"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="20dp"/>
+
+            <RadioButton
+                android:text="50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_50"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="20dp"/>
+
+            <RadioButton
+                android:text="75"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_75"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="20dp"/>
+
+            <RadioButton
+                android:text="100"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_100"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="20dp"/>
+
+            <RadioButton
+                android:text="150"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_150"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="20dp"/>
+
+            <RadioButton
+                android:text="200"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButton_sync_200"
+                android:textColor="?attr/themeTextPrimaryColor"
+                android:textSize="20sp"
+                android:paddingLeft="18dp"
+                android:buttonTint="?attr/themeTextSecondaryColor"
+                android:layout_marginTop="20dp"/>
+
+        </RadioGroup>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:padding="8dp">
+
+        <Button
+            android:text="@string/cancel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton_sync_25"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:textSize="20sp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:buttonTint="?attr/themeTextSecondaryColor" />
+            android:id="@+id/button_cancel"
+            style="@style/FlatButtonStyle" />
 
-        <RadioButton
-            android:text="50"
-            android:layout_width="match_parent"
+        <Button
+            android:text="@string/add_to_synced"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radioButton_sync_50"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:textSize="20sp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:buttonTint="?attr/themeTextSecondaryColor" />
+            android:id="@+id/button_add_to_synced"
+            style="@style/FlatButtonStyle"
+            android:layout_marginLeft="8dp"/>
 
-        <RadioButton
-            android:text="75"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioButton_sync_75"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:textSize="20sp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:buttonTint="?attr/themeTextSecondaryColor" />
-
-        <RadioButton
-            android:text="100"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/radioButton_sync_100"
-            android:textColor="?attr/themeTextPrimaryColor"
-            android:textSize="20sp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:buttonTint="?attr/themeTextSecondaryColor" />
-
-    </RadioGroup>
-
-    <Button
-        android:text="@string/sync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_add_to_synced"
-        style="@style/FlatButtonStyle" />
+    </LinearLayout>
 
 </LinearLayout>

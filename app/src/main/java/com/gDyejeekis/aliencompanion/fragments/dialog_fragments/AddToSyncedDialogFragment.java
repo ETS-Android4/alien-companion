@@ -29,10 +29,12 @@ public class AddToSyncedDialogFragment extends ScalableDialogFragment implements
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_to_synced, container, false);
 
-        Button addToSynced = (Button) view.findViewById(R.id.button_add_to_synced);
+        Button addToSynced = view.findViewById(R.id.button_add_to_synced);
         addToSynced.setOnClickListener(this);
+        Button cancel = view.findViewById(R.id.button_cancel);
+        cancel.setOnClickListener(this);
 
-        RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup_post_count);
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup_post_count);
         radioGroup.setOnCheckedChangeListener(this);
 
         getDialog().setCanceledOnTouchOutside(true);
@@ -42,14 +44,17 @@ public class AddToSyncedDialogFragment extends ScalableDialogFragment implements
 
     @Override
     public void onClick(View v) {
-        if(count != 0) {
+        if (v.getId()==R.id.button_add_to_synced) {
+            if (count != 0) {
+                dismiss();
+                Intent intent = new Intent(getContext(), DownloaderService.class);
+                intent.putExtra("savedCount", count);
+                getContext().startService(intent);
+            } else {
+                ToastUtils.showToast(getContext(), "Select number of posts");
+            }
+        } else {
             dismiss();
-            Intent intent = new Intent(getContext(), DownloaderService.class);
-            intent.putExtra("savedCount", count);
-            getContext().startService(intent);
-        }
-        else {
-            ToastUtils.showToast(getContext(), "Select post count");
         }
     }
 
@@ -71,6 +76,13 @@ public class AddToSyncedDialogFragment extends ScalableDialogFragment implements
             case R.id.radioButton_sync_100:
                 count = 100;
                 break;
+            case R.id.radioButton_sync_150:
+                count = 150;
+                break;
+            case R.id.radioButton_sync_200:
+                count = 200;
+                break;
         }
     }
+
 }
