@@ -19,6 +19,8 @@ import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncOptions;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.PleaseWaitDialogFragment;
@@ -256,6 +258,9 @@ public class PostListFragment extends RedditContentFragment {
             case R.id.action_sync_profiles:
                 showSyncProfiles();
                 return true;
+            case R.id.action_custom_sync:
+                showCustomSyncDialog();
+                return true;
             case R.id.action_sync_posts:
                 addToSyncQueue();
                 return true;
@@ -283,6 +288,14 @@ public class PostListFragment extends RedditContentFragment {
         }
     }
 
+    public void showCustomSyncDialog() {
+        SyncOptionsDialogFragment dialog = new SyncOptionsDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("customSync", true);
+        dialog.setArguments(bundle);
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
+    }
+
     public void showSearchDialog() {
         hideAllFabOptions();
         SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();
@@ -294,10 +307,15 @@ public class PostListFragment extends RedditContentFragment {
     }
 
     public void addToSyncQueue() {
+        addToSyncQueue(null);
+    }
+
+    public void addToSyncQueue(SyncOptions syncOptions) {
         hideAllFabOptions();
         String toastMessage;
         if(GeneralUtils.isNetworkAvailable(activity)) {
-            if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
+            boolean syncOverWifiOnly = (syncOptions==null) ? MyApplication.syncOverWifiOnly : syncOptions.isSyncOverWifiOnly();
+            if(syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
                 toastMessage = "Syncing over mobile data connection is disabled";
             }
             else {
@@ -308,6 +326,7 @@ public class PostListFragment extends RedditContentFragment {
                 intent.putExtra("time", timeSpan);
                 intent.putExtra("subreddit", subreddit);
                 intent.putExtra("isMulti", isMulti);
+                intent.putExtra("syncOptions", syncOptions);
                 activity.startService(intent);
             }
         }

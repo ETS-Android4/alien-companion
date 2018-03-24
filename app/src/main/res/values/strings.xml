@@ -315,5 +315,6 @@
     <string name="subscribe">Subscribe</string>
     <string name="done">Done</string>
     <string name="no_synced_subreddits_found">No synced subreddits/multireddits found</string>
+    <string name="custom_sync">Custom sync</string>
 
 </resources>

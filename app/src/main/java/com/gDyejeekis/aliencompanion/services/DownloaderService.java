@@ -25,7 +25,7 @@ import com.gDyejeekis.aliencompanion.models.Article;
 import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
-import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
@@ -131,12 +131,12 @@ public class DownloaderService extends IntentService {
         int savedCount = i.getIntExtra("savedCount", 0);
 
         if(profile != null) {
-            SyncProfileOptions syncOptions;
+            SyncOptions syncOptions;
             if(!profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null) {
                 syncOptions = profile.getSyncOptions();
             }
             else {
-                syncOptions = new SyncProfileOptions();
+                syncOptions = new SyncOptions();
             }
             MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
 
@@ -176,14 +176,14 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, title, true));
             acquireWakelock();
 
-            syncPost(notifBuilder, submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
+            syncPost(notifBuilder, submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncOptions());
             addToIndividuallySyncedPosts(submission);
         }
         else if(savedCount != 0) {
             MAX_PROGRESS = savedCount + 1;
             progress = 0;
 
-            SyncProfileOptions syncOptions = new SyncProfileOptions();
+            SyncOptions syncOptions = new SyncOptions();
             notifBuilder = new NotificationCompat.Builder(this);
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, "saved", false));
             acquireWakelock();
@@ -195,6 +195,8 @@ public class DownloaderService extends IntentService {
             progress = 0;
             String subreddit = i.getStringExtra("subreddit");
             boolean isMulti = i.getBooleanExtra("isMulti", false);
+            SyncOptions syncOptions = (SyncOptions) i.getSerializableExtra("syncOptions");
+            if (syncOptions==null) syncOptions = new SyncOptions();
             String filename = "";
             if (isMulti) filename = AppConstants.MULTIREDDIT_FILE_PREFIX;
             filename = filename + ((subreddit != null) ? subreddit.toLowerCase() : "frontpage");
@@ -206,7 +208,7 @@ public class DownloaderService extends IntentService {
             SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
             TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
 
-            syncSubreddit(filename, notifBuilder, subreddit, submissionSort, timeSpan, isMulti, new SyncProfileOptions());
+            syncSubreddit(filename, notifBuilder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
         }
     }
 
@@ -306,7 +308,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs user's saved list, checks for pause/cancellation, auto-pauses on error, increments progress
      */
-    private void syncSaved(String filename, NotificationCompat.Builder builder, int savedCount, SyncProfileOptions syncOptions) {
+    private void syncSaved(String filename, NotificationCompat.Builder builder, int savedCount, SyncOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return;
@@ -365,7 +367,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs and returns given saved post/comment, checks for pause/cancellation, auto-pauses on error, increments progress
      */
-    private Submission syncSavedPost(RedditItem item, String filename, NotificationCompat.Builder builder, String displayName, SyncProfileOptions syncOptions) {
+    private Submission syncSavedPost(RedditItem item, String filename, NotificationCompat.Builder builder, String displayName, SyncOptions syncOptions) {
         Submission s;
         if(item instanceof Submission) {
             s = (Submission) item;
@@ -403,7 +405,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs given subreddit/multireddit, checks for pause/cancellation, auto-pauses on error, increments progress
      */
-    private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
+    private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return;
@@ -467,7 +469,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs given submission, checks for pause/cancellation, auto-pauses on error, increments progress
      */
-    private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncProfileOptions syncOptions) {
+    private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return;
@@ -505,7 +507,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs urls from the (synced) self-text of the given self-post, checks for pause/cancellation
      */
-    private void syncSelfTextLinks(Submission post, String filename, SyncProfileOptions syncOptions) {
+    private void syncSelfTextLinks(Submission post, String filename, SyncOptions syncOptions) {
         final int syncLimit = syncOptions.getSyncSelfTextLinkCount();
         int syncCount = 0;
         Document doc = Jsoup.parse(post.getSelftextHTML());
@@ -529,7 +531,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs urls from the (synced) comments of the given post, checks for pause/cancellation
      */
-    private void syncCommentLinks(Submission post, String filename, SyncProfileOptions syncOptions) {
+    private void syncCommentLinks(Submission post, String filename, SyncOptions syncOptions) {
         final int syncLimit = syncOptions.getSyncCommentLinkCount();
         int syncCount = 0;
         for(Comment comment : post.getSyncedComments()) {
@@ -541,7 +543,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs comment links and links in replies recursively, returns current sync count, checks for pause/cancellation
      */
-    private int syncCommentLinksRecursive(Comment comment, int syncCount, final int syncLimit, String filename, SyncProfileOptions syncOptions) {
+    private int syncCommentLinksRecursive(Comment comment, int syncCount, final int syncLimit, String filename, SyncOptions syncOptions) {
         if(syncCount < syncLimit) {
             Document doc = Jsoup.parse(comment.getBodyHTML());
             Elements links = doc.select("a[href]");
@@ -571,7 +573,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs the given url depending on sync options used, checks for pause/cancellation
      */
-    private void syncUrl(String url, String domain, String filename, SyncProfileOptions syncOptions) {
+    private void syncUrl(String url, String domain, String filename, SyncOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return;
@@ -591,7 +593,7 @@ public class DownloaderService extends IntentService {
     /*
      * syncs and returns given reddit post url as a linked post (just the comments, no links), checks for pause/cancellation, auto-pauses on error
      */
-    private Submission syncLinkedRedditPost(String url, String domain, String filename, SyncProfileOptions syncOptions) {
+    private Submission syncLinkedRedditPost(String url, String domain, String filename, SyncOptions syncOptions) {
         checkManuallyPaused();
         if(manuallyCancelled) {
             return null;
@@ -837,7 +839,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void syncImage(String url, String filename, SyncProfileOptions syncOptions) {
+    private void syncImage(String url, String filename, SyncOptions syncOptions) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
             return;
@@ -942,7 +944,7 @@ public class DownloaderService extends IntentService {
         return post.getRedditVideo().getScrubberMediaUrl();
     }
 
-    private void downloadAlbumImages(ImgurItem item, String filename, String path, SyncProfileOptions syncOptions) {
+    private void downloadAlbumImages(ImgurItem item, String filename, String path, SyncOptions syncOptions) {
         final int albumSyncLimit = syncOptions.getAlbumSyncLimit();
         int i = 0;
         for(ImgurImage img : item.getImages()) {

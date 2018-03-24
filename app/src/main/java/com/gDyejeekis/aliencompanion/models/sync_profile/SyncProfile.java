@@ -8,14 +8,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.views.adapters.ProfileListAdapter;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,15 +43,15 @@ public class SyncProfile extends Profile implements Serializable {
 
     private boolean useGlobalSyncOptions;
 
-    public SyncProfileOptions getSyncOptions() {
+    public SyncOptions getSyncOptions() {
         return syncOptions;
     }
 
-    public void setSyncOptions(SyncProfileOptions syncOptions) {
+    public void setSyncOptions(SyncOptions syncOptions) {
         this.syncOptions = syncOptions;
     }
 
-    private SyncProfileOptions syncOptions;
+    private SyncOptions syncOptions;
 
     public SyncProfile() {
         super("");
