@@ -165,12 +165,15 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             public void onClick(View view) {
                 if (MyApplication.dismissGifOnTap) {
                     activity.finish();
-                }
-                else {
-                    if (mPlayer.isPlaying()) {
-                        mPlayer.pause();
-                    } else {
-                        safeMediaPlayerStart();
+                } else {
+                    try {
+                        if (mPlayer.isPlaying()) {
+                            mPlayer.pause();
+                        } else {
+                            safeMediaPlayerStart();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
