@@ -56,7 +56,7 @@ public class MoveAppDataDialogFragment extends DialogFragment {
         progressBar.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         TextView textView = (TextView) view.findViewById(R.id.textView_operation);
         String string = (moveToExternal) ? "external" : "internal";
-        string = "Moving data to " + string + " memory";
+        string = "Moving data to " + string + " storage";
         textView.setText(string);
         new AsyncTask<Void, Void, Void>() {
 
