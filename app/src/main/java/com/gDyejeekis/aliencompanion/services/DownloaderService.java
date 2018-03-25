@@ -501,6 +501,8 @@ public class DownloaderService extends IntentService {
             //e.printStackTrace();
             pauseSync(builder);
             syncPost(builder, submission, filename, displayName, syncOptions);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 
@@ -619,6 +621,8 @@ public class DownloaderService extends IntentService {
             //e.printStackTrace();
             pauseSync(notifBuilder);
             syncLinkedRedditPost(url, domain, filename, syncOptions);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
         return linkedPost;
     }
