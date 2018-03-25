@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.views.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -15,13 +16,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
-import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.utils.HtmlTagHandler;
 import com.gDyejeekis.aliencompanion.utils.SpanUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.CommentItemOptionsListener;
@@ -182,10 +183,11 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         notifyItemChanged(selectedPosition);
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
-        RecyclerView.ViewHolder viewHolder = null;
+        RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
             case VIEW_TYPE_POST:
                 int resource = PostViewType.getLayoutResource(viewTypeValue);
@@ -225,11 +227,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 viewHolder = new UserInfoViewHolder(v);
                 break;
             case VIEW_TYPE_SHOW_MORE:
-                resource = R.layout.footer_layout;
+                resource = R.layout.show_more;
                 v = LayoutInflater.from(parent.getContext())
                         .inflate(resource, parent, false);
-                viewHolder = new FooterViewHolder(v);
-                setFooterViewHolderListeners((FooterViewHolder) viewHolder);
+                viewHolder = new ShowMoreViewHolder(v);
                 break;
             case VIEW_TYPE_MESSAGE:
                 resource = R.layout.user_message;
@@ -237,6 +238,8 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 viewHolder = new MessageViewHolder(v);
                 setMessageViewHolderListeners((MessageViewHolder) viewHolder);
                 break;
+            default:
+                throw new IllegalArgumentException("unknown view type");
         }
         return viewHolder;
     }
@@ -290,10 +293,6 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void setFooterViewHolderListeners(FooterViewHolder viewHolder) {
-        viewHolder.showMoreButton.setOnClickListener(new ShowMoreListener((AppCompatActivity) context));
-    }
-
     private void setMessageViewHolderListeners(MessageViewHolder viewHolder) {
         MessageItemListener listener = new MessageItemListener(context, viewHolder, this);
         viewHolder.layoutMessage.setOnClickListener(listener);
@@ -301,7 +300,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POST:
                 PostViewHolder postViewHolder = (PostViewHolder) viewHolder;
@@ -321,13 +320,15 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
                 userInfoViewHolder.bindModel(context, userInfo);
                 break;
             case VIEW_TYPE_SHOW_MORE:
-                FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
+                ShowMoreViewHolder moreViewHolder = (ShowMoreViewHolder) viewHolder;
                 if (loadingMoreItems) {
-                    footerViewHolder.showMoreProgress.setVisibility(View.VISIBLE);
-                    footerViewHolder.showMoreButton.setVisibility(View.GONE);
+                    moreViewHolder.showMoreLayout.setOnClickListener(null);
+                    moreViewHolder.showMoreProgress.setVisibility(View.VISIBLE);
+                    moreViewHolder.showMoreButton.setVisibility(View.GONE);
                 } else {
-                    footerViewHolder.showMoreProgress.setVisibility(View.GONE);
-                    footerViewHolder.showMoreButton.setVisibility(View.VISIBLE);
+                    moreViewHolder.showMoreLayout.setOnClickListener(new ShowMoreListener((AppCompatActivity) context));
+                    moreViewHolder.showMoreProgress.setVisibility(View.GONE);
+                    moreViewHolder.showMoreButton.setVisibility(View.VISIBLE);
                 }
                 break;
             case VIEW_TYPE_MESSAGE:
@@ -571,10 +572,10 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public static class UserInfoViewHolder extends RecyclerView.ViewHolder {
 
-        public LinearLayout layoutKarma;
-        public TableLayout layoutTrophies;
-        public TextView linkKarma;
-        public TextView commentKarma;
+        LinearLayout layoutKarma;
+        TableLayout layoutTrophies;
+        TextView linkKarma;
+        TextView commentKarma;
         //private boolean trophiesAdded;
 
         UserInfoViewHolder(View itemView) {
@@ -643,15 +644,17 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class FooterViewHolder extends RecyclerView.ViewHolder {
+    public static class ShowMoreViewHolder extends RecyclerView.ViewHolder {
 
-        public Button showMoreButton;
-        public ProgressBar showMoreProgress;
+        RelativeLayout showMoreLayout;
+        Button showMoreButton;
+        ProgressBar showMoreProgress;
 
-        FooterViewHolder(View itemView) {
+        ShowMoreViewHolder(View itemView) {
             super(itemView);
-            showMoreButton = itemView.findViewById(R.id.showMore);
-            showMoreProgress = itemView.findViewById(R.id.progressBar);
+            showMoreLayout = itemView.findViewById(R.id.layout_show_more);
+            showMoreButton = itemView.findViewById(R.id.button_show_more);
+            showMoreProgress = itemView.findViewById(R.id.progress_bar_show_more);
             showMoreProgress.getIndeterminateDrawable().setColorFilter(MyApplication.colorSecondary, PorterDuff.Mode.SRC_IN);
         }
     }
