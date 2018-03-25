@@ -148,7 +148,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
             List<File> files = new ArrayList<>();
             StorageUtils.listFilesRecursive(GeneralUtils.checkSyncedRedditDataDir(dialog.getActivity()), fileFilter, files);
-            if(files.size() > 0) {
+            if(!files.isEmpty()) {
                 Collections.sort(files, new Comparator<File>() {
                     @Override
                     public int compare(File f1, File f2) {
@@ -166,13 +166,12 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         }
 
         @Override
-        public void onPostExecute(List<String> syncedStrings) {
-            if(syncedStrings == null) {
+        public void onPostExecute(List<String> syncedNames) {
+            if (syncedNames == null || syncedNames.isEmpty())
                 dialog.noSyncedRedditsFound();
-            }
-            else {
-                dialog.updateSyncedList(syncedStrings);
-            }
+            else dialog.updateSyncedList(syncedNames);
         }
+
     }
+
 }

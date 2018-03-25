@@ -161,12 +161,16 @@ public class StorageUtils {
     }
 
     public static void listFilesRecursive(File dir, FileFilter filter, List<File> files) {
-        File[] fList = dir.listFiles(filter);
-        for (File file : fList) {
-            if (file.isFile()) {
-                files.add(file);
-            } else if (file.isDirectory()) {
-                listFilesRecursive(file, filter, files);
+        if (dir!=null) {
+            File[] fList = dir.listFiles(filter);
+            if (fList != null) {
+                for (File file : fList) {
+                    if (file.isFile()) {
+                        files.add(file);
+                    } else if (file.isDirectory()) {
+                        listFilesRecursive(file, filter, files);
+                    }
+                }
             }
         }
     }
