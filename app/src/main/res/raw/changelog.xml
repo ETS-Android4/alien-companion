@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="" changeDate="">
+    <changelogversion versionName="1.0.6" changeDate="Mar 25, 2018">
         <changelogtext>Fixed crash which prevented reddit login on some devices</changelogtext>
         <changelogtext>Fixed link handling issues for reddit, imgur and giphy URLs</changelogtext>
         <changelogtext><![CDATA[<b><font color=red>New!</font></b> Added 'Custom sync' option to the subreddit toolbar menu
@@ -10,8 +10,6 @@
         <changelogtext>'Sync posts' subreddit option renamed to 'Sync now'</changelogtext>
         <changelogtext>Synced article main body paragraphs are now properly separated</changelogtext>
         <changelogtext>Added confirmation dialogs upon exiting filter/sync profile creation/edit</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext>Long tapping the up/down comment mini-FABs will now scroll to screen top/bottom respectively</changelogtext>
         <changelogtext>Fixed visual bug after changing 'Hide FAB post menu on scroll down' preference</changelogtext>
         <changelogtext>Snackbar action text color now matches the 'Secondary color' preference</changelogtext>
