@@ -1,6 +1,8 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
@@ -10,14 +12,18 @@ import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
  */
 public class ShowMoreListener implements View.OnClickListener {
 
-    private RedditContentFragment fragment;
+    private AppCompatActivity activity;
 
-    public ShowMoreListener(Fragment fragment) {
-        this.fragment = (RedditContentFragment) fragment;
+    public ShowMoreListener(AppCompatActivity activity) {
+        this.activity = activity;
     }
 
     @Override
     public void onClick(View v) {
-        fragment.extendList();
+        RedditContentFragment fragment =
+                (RedditContentFragment) activity.getSupportFragmentManager().findFragmentByTag("listFragment");
+        if (fragment!=null)
+            fragment.extendList();
     }
+
 }

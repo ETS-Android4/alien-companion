@@ -291,9 +291,7 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
     }
 
     private void setFooterViewHolderListeners(FooterViewHolder viewHolder) {
-        RedditContentFragment fragment =
-                (RedditContentFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("listFragment");
-        viewHolder.showMoreButton.setOnClickListener(new ShowMoreListener(fragment));
+        viewHolder.showMoreButton.setOnClickListener(new ShowMoreListener((AppCompatActivity) context));
     }
 
     private void setMessageViewHolderListeners(MessageViewHolder viewHolder) {
