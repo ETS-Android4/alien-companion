@@ -33,13 +33,16 @@ public class ParamFormatter {
 	public static String getParameterValue(String params, String name) {
 		assert params != null;
 
-		int nameStart = params.indexOf(name);
-		if (nameStart==-1)
-			return null;
-		String substring = params.substring(nameStart + name.length() + 1);
-		int valueEnd = substring.indexOf('&');
-		if (valueEnd==-1) valueEnd = substring.length();
-		return substring.substring(0, valueEnd);
+		try {
+			int nameStart = params.indexOf(name);
+			if (nameStart == -1)
+				return null;
+			String substring = params.substring(nameStart + name.length() + 1);
+			int valueEnd = substring.indexOf('&');
+			if (valueEnd == -1) valueEnd = substring.length();
+			return substring.substring(0, valueEnd);
+		} catch (Exception e) {}
+		return null;
 	}
     
 }
