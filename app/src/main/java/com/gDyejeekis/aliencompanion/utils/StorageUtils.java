@@ -130,20 +130,22 @@ public class StorageUtils {
      * @return the file we were looking for. Null if no such file could be found.
      */
     public static File findFile( File aFile, String sDir, String toFind ){
-        if( aFile.isFile() &&
-                aFile.getAbsolutePath().contains( sDir ) &&
-                aFile.getName().contains( toFind ) ) {
+        if (aFile.isFile() && aFile.getAbsolutePath().contains(sDir) &&
+                aFile.getName().contains(toFind)) {
             return aFile;
-        } else if( aFile.isDirectory() ) {
-            for( File child : aFile.listFiles() ){
-                File found = findFile( child, sDir, toFind );
-                if( found != null ) {
-                    return found;
-                }//if
-            }//for
-        }//else
+        } else if (aFile.isDirectory()) {
+            File[] files = aFile.listFiles();
+            if (files!=null) {
+                for (File child : files) {
+                    File found = findFile(child, sDir, toFind);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+        }
         return null;
-    }//met
+    }
 
     public static void deleteFileRecursive(File file) {
         if (file != null) {
