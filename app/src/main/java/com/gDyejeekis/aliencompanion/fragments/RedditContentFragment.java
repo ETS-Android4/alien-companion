@@ -169,7 +169,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) { // TODO: 2/7/2017  maybe change this constant for gallery view
                 loadMore = false;
                 //Log.d("scroll listener", "load more now");
-                ShowMoreListener listener = new ShowMoreListener(activity.getSupportFragmentManager().findFragmentByTag("listFragment"));
+                ShowMoreListener listener = new ShowMoreListener(activity);
                 listener.onClick(recyclerView);
             }
         }
