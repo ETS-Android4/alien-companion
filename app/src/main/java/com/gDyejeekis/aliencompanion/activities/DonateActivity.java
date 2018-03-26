@@ -95,9 +95,9 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         initFields();
         initDonationForm();
         setupIabHelper();
+
+        MyApplication.authenticateWithFirebase();
         refreshDonationsList();
-        if (!MyApplication.firebaseAuthenticated)
-            MyApplication.authenticateWithFirebase();
     }
 
     private void setupIabHelper() {

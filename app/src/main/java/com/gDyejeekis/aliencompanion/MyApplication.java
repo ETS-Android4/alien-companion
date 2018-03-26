@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -143,8 +144,6 @@ public class MyApplication extends Application {
 
     public static boolean pendingOfflineActions;
     public static boolean autoExecuteOfflineActions;
-
-    public static boolean firebaseAuthenticated;
 
     //not used
     public static boolean syncGif = false;
@@ -384,11 +383,10 @@ public class MyApplication extends Application {
     }
 
     public static void authenticateWithFirebase() {
-        final String msg = "Firebase authentication signInAnonymously:";
+        final String msg = "Firebase authentication signInAnonymously: ";
         final OnCompleteListener<AuthResult> listener = new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                firebaseAuthenticated = task.isSuccessful();
                 if (task.isSuccessful()) {
                     Log.d(TAG, msg + "success");
                 } else {
@@ -402,12 +400,18 @@ public class MyApplication extends Application {
     }
 
     public static void authenticateWithFirebase(OnCompleteListener<AuthResult> listener) {
-        Log.d(TAG, "Initiating Firebase authentication signInAnonymously..");
         try {
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.signInAnonymously().addOnCompleteListener(listener);
+            FirebaseUser user = auth.getCurrentUser();
+            if (user == null) {
+                Log.d(TAG, "User not signed in with Firebase");
+                Log.d(TAG, "Initiating Firebase authentication..");
+                auth.signInAnonymously().addOnCompleteListener(listener);
+            } else {
+                Log.d(TAG, "User signed in with Firebase");
+                Log.d(TAG, "User ID: " + user.getUid());
+            }
         } catch (Exception e) {
-            firebaseAuthenticated = false;
             e.printStackTrace();
         }
     }

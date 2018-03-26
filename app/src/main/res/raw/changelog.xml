@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelgogversion versionName="" changeDate="">
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+    </changelgogversion>
+
     <changelogversion versionName="1.0.6" changeDate="Mar 25, 2018">
         <changelogtext>Fixed crash which prevented reddit login on some devices</changelogtext>
         <changelogtext>Fixed link handling issues for reddit, imgur and giphy URLs</changelogtext>
