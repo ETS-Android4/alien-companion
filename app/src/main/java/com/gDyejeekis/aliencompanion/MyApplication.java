@@ -87,9 +87,10 @@ public class MyApplication extends Application {
     public static boolean autoHideToolbar;
     public static int drawerGravity;
     public static boolean endlessPosts;
-    public static boolean showNSFWpreview;
-    public static boolean showNSFWsuggestions;
-    public static boolean hideNSFW;
+    public static boolean userOver18;
+    public static boolean showNsfwPosts;
+    public static boolean showNsfwPreviews;
+    public static boolean showNsfwSuggestions;
     public static int initialCommentCount;
     public static int initialCommentDepth;
     public static int textPrimaryColor;
@@ -488,9 +489,10 @@ public class MyApplication extends Application {
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         hqThumbnails = prefs.getBoolean("hqThumb", true);
         noThumbnails = prefs.getBoolean("noThumb", false);
-        showNSFWpreview = prefs.getBoolean("showNSFWthumb", false);
-        showNSFWsuggestions = false; //prefs.getBoolean("showNSFWsuggestions", false);
-        hideNSFW = prefs.getBoolean("hideNSFW", true);
+        userOver18 = prefs.getBoolean("userOver18", false);
+        showNsfwPosts = prefs.getBoolean("showNsfwPosts", false);
+        showNsfwPreviews = prefs.getBoolean("showNsfwPreviews", false);
+        showNsfwSuggestions = false; //prefs.getBoolean("showNsfwSuggestions", false);
         swipeSetting = Integer.parseInt(prefs.getString("swipeBack", "0"));
         switch (swipeSetting) {
             case 0:

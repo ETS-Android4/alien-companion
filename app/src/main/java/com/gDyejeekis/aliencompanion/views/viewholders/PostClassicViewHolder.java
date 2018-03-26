@@ -131,7 +131,7 @@ public class PostClassicViewHolder extends PostViewHolder  {
         }
         else {
             Thumbnail thumbnailObject = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
-            if (post.isNSFW() && !MyApplication.showNSFWpreview) {
+            if (post.isNSFW() && !MyApplication.showNsfwPreviews) {
                 layoutThumbnail.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 layoutPostInfo.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 15f));
             }

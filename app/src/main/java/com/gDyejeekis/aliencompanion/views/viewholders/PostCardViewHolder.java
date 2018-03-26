@@ -203,7 +203,7 @@ public class PostCardViewHolder extends PostViewHolder  {
             domain2.setTextColor(MyApplication.linkColor);
             fullUrl.setText(post.getURL());
             if(thumbnailObject.hasThumbnail() && !post.isSpoiler()) {
-                if(post.isNSFW() && !MyApplication.showNSFWpreview) {
+                if(post.isNSFW() && !MyApplication.showNsfwPreviews) {
                     postImage.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0f));
                 }
                 else {

@@ -129,17 +129,11 @@ public class Submissions implements ActorDriven {
                         data = ((JSONObject) data.get("data"));
                         submission = new Submission(data);
 						submission.showAsStickied = showStickied;
-						if(!submission.isNSFW()) {
+						if(!submission.isNSFW() || MyApplication.showNsfwPosts) {
 							submission.setUser(user);
 							submissions.add(submission);
 						}
-						else {
-							if(!MyApplication.hideNSFW) {
-								submission.setUser(user);
-								submissions.add(submission);
-							}
-							else postsSkipped ++;
-						}
+						else postsSkipped++;
                     }
 				}
 			}

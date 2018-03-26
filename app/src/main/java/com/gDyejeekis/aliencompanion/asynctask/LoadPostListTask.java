@@ -255,7 +255,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
     private void showNoPostsSnackbar() {
         String message = "No posts found";
-        if (MyApplication.hideNSFW && !MyApplication.offlineModeEnabled) {
+        if (!MyApplication.showNsfwPosts && !MyApplication.offlineModeEnabled) {
             message = message.concat(" (NSFW filter is enabled)");
         }
         fragment.setSnackbar(ToastUtils.showSnackbar(fragment.getSnackbarParentView(), message));

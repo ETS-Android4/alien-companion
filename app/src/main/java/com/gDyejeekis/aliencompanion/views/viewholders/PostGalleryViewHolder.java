@@ -6,14 +6,11 @@ import android.text.Spanned;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
-import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemListener;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.PostItemOptionsListener;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
@@ -66,7 +63,7 @@ public class PostGalleryViewHolder extends PostViewHolder {
     public void bindModel(Context context, Submission post) {
         Thumbnail thumbnailObject = post.getThumbnailObject() == null ? new Thumbnail() : post.getThumbnailObject();
         // nsfw post (nsfw thumbnails disabled)
-        if(post.isNSFW() && !MyApplication.showNSFWpreview) {
+        if(post.isNSFW() && !MyApplication.showNsfwPreviews) {
             postImage.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
             String text = "NSFW";

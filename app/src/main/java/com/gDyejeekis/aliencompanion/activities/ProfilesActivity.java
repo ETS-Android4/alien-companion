@@ -168,7 +168,7 @@ public class ProfilesActivity extends ToolbarActivity {
                 info = getResources().getString(R.string.about_filter_profiles);
                 break;
         }
-        InfoDialogFragment.showDialog(getSupportFragmentManager(), title, info);
+        InfoDialogFragment.showDialog(getSupportFragmentManager(), title, info, null,true);
     }
 
 }

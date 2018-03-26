@@ -401,7 +401,8 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         if (item.getItemId() == R.id.action_donate_info) {
             InfoDialogFragment.showDialog(getSupportFragmentManager(),
                     getResources().getString(R.string.about_donations_title),
-                    getResources().getString(R.string.about_donations));
+                    getResources().getString(R.string.about_donations),
+                    null, true);
             return true;
         }
         return super.onOptionsItemSelected(item);

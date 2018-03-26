@@ -5,19 +5,19 @@
         android:title="Posts">
 
         <CheckBoxPreference
-            android:key="showNSFWthumb"
-            android:title="Show NSFW thumbnails"
+            android:key="showNsfwPosts"
+            android:title="Show NSFW posts"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="showNsfwPreviews"
+            android:title="Show NSFW previews"
             android:defaultValue="false"/>
 
         <!--<CheckBoxPreference
-            android:key="showNSFWsuggestions"
+            android:key="showNsfwSuggestions"
             android:title="Show NSFW subreddit suggestions"
             android:defaultValue="false"/>-->
-
-        <CheckBoxPreference
-            android:key="hideNSFW"
-            android:title="Hide NSFW posts"
-            android:defaultValue="true"/>
 
         <CheckBoxPreference
             android:key="endlessPosts"

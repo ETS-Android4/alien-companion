@@ -92,9 +92,9 @@ public class SubredditAutoCompleteAdapter extends BaseAdapter implements Filtera
     }
 
     private List<Subreddit> getResultList(String query) {
-        List<Subreddit> subreddits = subredditRetrieval.autocomplete(MyApplication.showNSFWsuggestions, false, query);
+        List<Subreddit> subreddits = subredditRetrieval.autocomplete(MyApplication.showNsfwSuggestions, false, query);
         // remove any leftover nsfw subreddits if nsfw suggestions are disabled
-        if (!MyApplication.showNSFWsuggestions) {
+        if (!MyApplication.showNsfwSuggestions) {
             for (Subreddit subreddit : subreddits) {
                 if (subreddit.getDisplayName().toLowerCase().contains("nsfw"))
                     subreddits.remove(subreddit);

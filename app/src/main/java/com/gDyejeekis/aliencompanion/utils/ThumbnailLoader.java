@@ -72,7 +72,7 @@ public class ThumbnailLoader {
         if(post.isSelf()) {
             return new Thumbnail("self");
         }
-        else if(post.isNSFW() && !MyApplication.showNSFWpreview) {
+        else if(post.isNSFW() && !MyApplication.showNsfwPreviews) {
             return new Thumbnail("nsfw");
         }
         else {

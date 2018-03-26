@@ -230,7 +230,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
     }
 
 	private void handleThumbnail() {
-		if (!(nsfw && !MyApplication.showNSFWpreview)) {
+		if (!(nsfw && !MyApplication.showNsfwPreviews)) {
 			if (domain.contains("youtube.com") || domain.equals("youtu.be")) {
 
 				if (!(url.contains("playlist") || url.contains("user") || url.contains("channel"))) {

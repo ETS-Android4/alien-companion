@@ -65,6 +65,15 @@
         Alien Companion and all its features are 100% free and the app displays no ads of any kind. Donations are completely optional and have been added as a means for users to show
         their appreciation and encourage future development.
     </string>
+    <string name="user_over_18_title">
+        NSFW (Not Safe For Work) content
+    </string>
+    <string name="user_over_18_info_text">
+        Enabling this setting may cause the app to display offensive or inappropriate material which should only be viewed by people over the age of 18.
+    </string>
+    <string name="user_over_18_button_text">
+        I am over 18
+    </string>
     <!-- Activity Title -->
     <string name="title_activity_post">PostActivity</string>
     <string name="title_activity_options">SettingsActivity</string>

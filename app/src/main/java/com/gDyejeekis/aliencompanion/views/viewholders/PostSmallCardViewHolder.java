@@ -111,7 +111,7 @@ public class PostSmallCardViewHolder extends PostViewHolder  {
         }
         else {
             Thumbnail postThumbnail = post.getThumbnailObject()==null ? new Thumbnail() : post.getThumbnailObject();
-            if (post.isNSFW() && !MyApplication.showNSFWpreview) {
+            if (post.isNSFW() && !MyApplication.showNsfwPreviews) {
                 linkButton.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
                 linkButton.setPadding(10, 10, 0, 10);
                 linkButton.setBackground(null);
