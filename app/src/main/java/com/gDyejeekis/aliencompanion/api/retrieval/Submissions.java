@@ -375,9 +375,12 @@ public class Submissions implements ActorDriven {
     		throw new IllegalArgumentException("The query must be defined.");
     	}
     	
-    	if (limit < -1 || limit > RedditConstants.MAX_LIMIT_LISTING) {
-    		throw new IllegalArgumentException("The limit needs to be between 0 and 100 (or -1 for default).");
-    	}
+    	//if (limit < -1 || limit > RedditConstants.MAX_LIMIT_LISTING) {
+    	//	throw new IllegalArgumentException("The limit needs to be between 0 and 100 (or -1 for default).");
+    	//}
+		if (limit > RedditConstants.MAX_LIMIT_LISTING) {
+			limit = RedditConstants.MAX_LIMIT_LISTING;
+		}
     	
     	return search(
 				subreddit,
@@ -449,9 +452,12 @@ public class Submissions implements ActorDriven {
     		throw new IllegalArgumentException("The category must be defined.");
     	}
     	
-    	if (limit < -1 || limit > RedditConstants.MAX_LIMIT_LISTING) {
-    		throw new IllegalArgumentException("The limit needs to be between 0 and 100 (or -1 for default).");
-    	}
+    	//if (limit < -1 || limit > RedditConstants.MAX_LIMIT_LISTING) {
+    	//	throw new IllegalArgumentException("The limit needs to be between 0 and 100 (or -1 for default).");
+    	//}
+		if (limit > RedditConstants.MAX_LIMIT_LISTING) {
+			limit = RedditConstants.MAX_LIMIT_LISTING;
+		}
     	
     	return ofUser(
     			username,

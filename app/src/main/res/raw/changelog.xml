@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelgogversion versionName="" changeDate="">
+    <changelogversion versionName="" changeDate="">
         <changelogtext>Added age confirmation dialog for enabling NSFW content</changelogtext>
+        <changelogtext>Fixed crash when trying to sync more than 100 saved posts</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
-    </changelgogversion>
+    </changelogversion>
 
     <changelogversion versionName="1.0.6" changeDate="Mar 25, 2018">
         <changelogtext>Fixed crash which prevented reddit login on some devices</changelogtext>
