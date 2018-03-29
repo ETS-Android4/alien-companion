@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.OverEighteenDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.OverEighteenDialogFragment;
 
 /**
  * Created by George on 1/30/2018.

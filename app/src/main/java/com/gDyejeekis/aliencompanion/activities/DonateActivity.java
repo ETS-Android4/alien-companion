@@ -25,7 +25,7 @@ import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.models.Donation;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
@@ -401,8 +401,7 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         if (item.getItemId() == R.id.action_donate_info) {
             InfoDialogFragment.showDialog(getSupportFragmentManager(),
                     getResources().getString(R.string.about_donations_title),
-                    getResources().getString(R.string.about_donations),
-                    null, true);
+                    getResources().getString(R.string.about_donations));
             return true;
         }
         return super.onOptionsItemSelected(item);

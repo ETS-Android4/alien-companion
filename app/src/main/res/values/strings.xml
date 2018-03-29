@@ -30,6 +30,17 @@
         IMPORTANT: If you\'re updating from a previous version, all user data and most synced data has been cleared. I also recommend checking the \'AlienCompanion\' folder inside your
         public pictures directory and deleting any leftover synced media that you deem unnecessary.
     </string>
+    <string name="about_offline_mode_title">
+        Offline mode and syncing
+    </string>
+    <string name="about_offline_mode">
+        This subreddit/multireddit is currently syncing in the background. You can view any subreddits/multireddits/posts you\'ve synced, without a network connection, in offline
+        mode. Use the \'Go offline/online\' option, located at the very top of the hamburger menu, to switch between modes. Alternatively, you can long tap the same option or a
+        subreddit/multireddit to quickly switch between modes without a dialog prompt.
+        \n\n
+        You can also sync individual posts by using the \'Add to synced\' option from a post\'s menu. Those posts will be available in the \'Synced\' section of the
+        app, located at the very bottom of the hamburger menu.
+    </string>
     <string name="about_sync_profiles_title">
         About sync profiles
     </string>
@@ -64,6 +75,15 @@
     <string name="about_donations">
         Alien Companion and all its features are 100% free and the app displays no ads of any kind. Donations are completely optional and have been added as a means for users to show
         their appreciation and encourage future development.
+    </string>
+    <string name="crash_collection_title">
+
+    </string>
+    <string name="crash_collection_disclaimer">
+
+    </string>
+    <string name="crash_collection_confirmation">
+
     </string>
     <string name="user_over_18_title">
         NSFW (Not Safe For Work) content

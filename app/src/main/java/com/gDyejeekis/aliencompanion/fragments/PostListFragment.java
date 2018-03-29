@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
@@ -313,12 +314,11 @@ public class PostListFragment extends RedditContentFragment {
     public void addToSyncQueue(SyncProfileOptions syncOptions) {
         hideAllFabOptions();
         String toastMessage;
-        if(GeneralUtils.isNetworkAvailable(activity)) {
+        if (GeneralUtils.isNetworkAvailable(activity)) {
             boolean syncOverWifiOnly = (syncOptions==null) ? MyApplication.syncOverWifiOnly : syncOptions.isSyncOverWifiOnly();
-            if(syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
+            if (syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
                 toastMessage = "Syncing over mobile data connection is disabled";
-            }
-            else {
+            } else {
                 String filename = (subreddit == null) ? "frontpage" : subreddit;
                 toastMessage = filename + " added to sync queue";
                 Intent intent = new Intent(activity, DownloaderService.class);
@@ -328,12 +328,25 @@ public class PostListFragment extends RedditContentFragment {
                 intent.putExtra("isMulti", isMulti);
                 intent.putExtra("syncOptions", syncOptions);
                 activity.startService(intent);
+                checkOfflineModeExplanation();
             }
-        }
-        else {
+        } else {
             toastMessage = "Network connection unavailable";
         }
         ToastUtils.showToast(activity, toastMessage);
+    }
+
+    private void checkOfflineModeExplanation() {
+        if (!MyApplication.showedOfflineModeInfo) {
+            MyApplication.showedOfflineModeInfo = true;
+            SharedPreferences.Editor editor = MyApplication.prefs.edit();
+            editor.putBoolean("offlineInfo", MyApplication.showedOfflineModeInfo);
+            editor.apply();
+
+            InfoDialogFragment.showDialog(activity.getSupportFragmentManager(),
+                    activity.getResources().getString(R.string.about_offline_mode_title),
+                    activity.getResources().getString(R.string.about_offline_mode));
+        }
     }
 
     private void showSubmitPopup(View v) {

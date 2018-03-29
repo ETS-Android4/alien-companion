@@ -23,6 +23,7 @@ import android.widget.PopupMenu;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.CrashCollectionDialogFragment;
 import com.gDyejeekis.aliencompanion.services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
 import com.gDyejeekis.aliencompanion.BuildConfig;
@@ -109,6 +110,20 @@ public class MainActivity extends ToolbarActivity {
             resource = R.id.fragmentHolder;
         }
         setupMainFragment(resource);
+
+        checkNewVersionNotice();
+        //checkCrashCollection();
+    }
+
+    private void checkNewVersionNotice() {
+        // TODO: 3/28/2018
+    }
+
+    // TODO: 3/29/2018 fill in correspoinding strings before using this
+    private void checkCrashCollection() {
+        if (!MyApplication.agreedCrashCollection) {
+            CrashCollectionDialogFragment.showDialog(this);
+        }
     }
 
     private void setOrientation() {

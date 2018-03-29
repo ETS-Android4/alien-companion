@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.InfoDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.InfoDialogFragment;
 import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.ProfileListAdapter;
@@ -168,7 +168,7 @@ public class ProfilesActivity extends ToolbarActivity {
                 info = getResources().getString(R.string.about_filter_profiles);
                 break;
         }
-        InfoDialogFragment.showDialog(getSupportFragmentManager(), title, info, null,true);
+        InfoDialogFragment.showDialog(getSupportFragmentManager(), title, info);
     }
 
 }

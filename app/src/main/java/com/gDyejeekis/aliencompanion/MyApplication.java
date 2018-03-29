@@ -59,6 +59,8 @@ public class MyApplication extends Application {
     public static int lastKnownVersionCode;
     public static String deviceID;
     public static boolean showedWelcomeMessage;
+    public static boolean showedOfflineModeInfo;
+    public static boolean agreedCrashCollection;
     public static boolean nightThemeEnabled;
     public static boolean offlineModeEnabled;
     public static boolean dualPane;
@@ -419,6 +421,8 @@ public class MyApplication extends Application {
 
     public static void getCurrentSettings() {
         showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);
+        showedOfflineModeInfo = prefs.getBoolean("offlineInfo", false);
+        agreedCrashCollection = prefs.getBoolean("crashCollection", false);
         syncImages = prefs.getBoolean("syncImg", false);
         syncVideo = prefs.getBoolean("syncVideo", false);
         syncWebpages = prefs.getBoolean("syncWeb", false);

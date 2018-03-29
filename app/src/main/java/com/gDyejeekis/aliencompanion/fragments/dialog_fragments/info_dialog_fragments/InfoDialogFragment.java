@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
+package com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.gDyejeekis.aliencompanion.R;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
 
 /**
  * Created by George on 5/1/2017.
@@ -19,15 +20,33 @@ import com.gDyejeekis.aliencompanion.R;
 
 public class InfoDialogFragment extends ScalableDialogFragment implements View.OnClickListener {
 
+    public static final String TITLE_KEY = "title";
+    public static final String INFO_TEXT_KEY = "infoText";
+    public static final String BUTTON_TEXT_KEY = "buttonText";
+    public static final String IS_CANCELABLE_KEY = "cancelable";
+
+    public static void showDialog(FragmentManager fm, String title, String info) {
+        showDialog(fm, title, info, null, true);
+    }
+
     public static void showDialog(FragmentManager fm, String title, String info, String buttonText, boolean cancelable) {
         InfoDialogFragment dialogFragment = new InfoDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("title", title);
-        bundle.putString("info", info);
-        bundle.putString("buttonText", buttonText);
-        bundle.putBoolean("cancelable", cancelable);
+        bundle.putString(TITLE_KEY, title);
+        bundle.putString(INFO_TEXT_KEY, info);
+        bundle.putString(BUTTON_TEXT_KEY, buttonText);
+        bundle.putBoolean(IS_CANCELABLE_KEY, cancelable);
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fm, "dialog");
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            super.show(manager, tag);
+        } catch (IllegalStateException e) {
+            manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
+        }
     }
 
     @Nullable
@@ -43,10 +62,10 @@ public class InfoDialogFragment extends ScalableDialogFragment implements View.O
         String buttonText = null;
         boolean cancelable = true;
         if (getArguments()!=null) {
-            titleText = getArguments().getString("title");
-            infoText = getArguments().getString("info");
-            buttonText = getArguments().getString("buttonText");
-            cancelable = getArguments().getBoolean("cancelable", true);
+            titleText = getArguments().getString(TITLE_KEY);
+            infoText = getArguments().getString(INFO_TEXT_KEY);
+            buttonText = getArguments().getString(BUTTON_TEXT_KEY);
+            cancelable = getArguments().getBoolean(IS_CANCELABLE_KEY, true);
         }
 
         if (titleText!=null && !titleText.trim().isEmpty()) {

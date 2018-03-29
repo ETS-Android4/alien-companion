@@ -1,4 +1,4 @@
-package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
+package com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,9 +17,9 @@ public class OverEighteenDialogFragment extends InfoDialogFragment implements Vi
     public static void showDialog(AppCompatActivity activity) {
         OverEighteenDialogFragment dialog = new OverEighteenDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("title", activity.getResources().getString(R.string.user_over_18_title));
-        bundle.putString("info", activity.getResources().getString(R.string.user_over_18_info_text));
-        bundle.putString("buttonText", activity.getResources().getString(R.string.user_over_18_button_text));
+        bundle.putString(TITLE_KEY, activity.getResources().getString(R.string.user_over_18_title));
+        bundle.putString(INFO_TEXT_KEY, activity.getResources().getString(R.string.user_over_18_info_text));
+        bundle.putString(BUTTON_TEXT_KEY, activity.getResources().getString(R.string.user_over_18_button_text));
         dialog.setArguments(bundle);
         dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
