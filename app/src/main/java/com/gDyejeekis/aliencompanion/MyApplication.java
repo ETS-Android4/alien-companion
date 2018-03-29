@@ -59,6 +59,7 @@ public class MyApplication extends Application {
     public static int lastKnownVersionCode;
     public static String deviceID;
     public static boolean showedWelcomeMessage;
+    public static boolean showedUpdateSnackbar;
     public static boolean showedOfflineModeInfo;
     public static boolean agreedCrashCollection;
     public static boolean nightThemeEnabled;
@@ -379,6 +380,7 @@ public class MyApplication extends Application {
             if (lastKnownVersionCode < AppConstants.UPDATE_MESSAGE_VERSION_CODE) {
                 editor.putBoolean("welcomeMsg", false);
             }
+            editor.putBoolean("updateSnackbar", false);
             editor.putInt("versionCode", AppConstants.CURRENT_VERSION_CODE);
             editor.apply();
             lastKnownVersionCode = AppConstants.CURRENT_VERSION_CODE;
@@ -421,6 +423,7 @@ public class MyApplication extends Application {
 
     public static void getCurrentSettings() {
         showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);
+        showedUpdateSnackbar = prefs.getBoolean("updateSnackbar", false);
         showedOfflineModeInfo = prefs.getBoolean("offlineInfo", false);
         agreedCrashCollection = prefs.getBoolean("crashCollection", false);
         syncImages = prefs.getBoolean("syncImg", false);

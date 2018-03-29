@@ -4,7 +4,7 @@
     <changelogversion versionName="" changeDate="">
         <changelogtext>Users must now confirm their age via dialog popup before enabling NSFW content</changelogtext>
         <changelogtext>Added one time tutorial dialog popup explaining offline mode and syncing</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Added snackbar notification for new version updates</changelogtext>
         <changelogtext>Fixed crash when trying to sync more than 100 saved posts</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>

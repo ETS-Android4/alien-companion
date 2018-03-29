@@ -1,9 +1,12 @@
 package com.gDyejeekis.aliencompanion.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +26,7 @@ import android.widget.PopupMenu;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
+import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.CrashCollectionDialogFragment;
 import com.gDyejeekis.aliencompanion.services.PendingActionsService;
 import com.gDyejeekis.aliencompanion.views.adapters.NavDrawerAdapter;
@@ -112,15 +116,36 @@ public class MainActivity extends ToolbarActivity {
         setupMainFragment(resource);
 
         checkNewVersionNotice();
-        //checkCrashCollection();
+        //checkCrashCollectionAgreement();
     }
 
     private void checkNewVersionNotice() {
-        // TODO: 3/28/2018
+        if (!MyApplication.showedUpdateSnackbar && getListFragment()!=null) {
+            final int waitTimeMilis = 2000;
+            final View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, ChangelogActivity.class);
+                    MainActivity.this.startActivity(intent);
+                }
+            };
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MyApplication.showedUpdateSnackbar = true;
+                    SharedPreferences.Editor editor = MyApplication.prefs.edit();
+                    editor.putBoolean("updateSnackbar", MyApplication.showedUpdateSnackbar);
+                    editor.apply();
+
+                    getListFragment().setSnackbar(ToastUtils.showSnackbar(getListFragment().getSnackbarParentView(),
+                            "What's new in v" + AppConstants.CURRENT_VERSION_NAME, "View", listener, Snackbar.LENGTH_INDEFINITE));
+                }
+            }, waitTimeMilis);
+        }
     }
 
     // TODO: 3/29/2018 fill in correspoinding strings before using this
-    private void checkCrashCollection() {
+    private void checkCrashCollectionAgreement() {
         if (!MyApplication.agreedCrashCollection) {
             CrashCollectionDialogFragment.showDialog(this);
         }
