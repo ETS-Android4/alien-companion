@@ -229,7 +229,8 @@ public class BrowserFragment extends Fragment {
                 goForward();
                 return true;
             case R.id.action_open_browser:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl())));
+                Uri uri = webView.getUrl()!=null ? Uri.parse(webView.getUrl()) : Uri.parse(url);
+                startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 return true;
             case R.id.action_refresh:
                 webView.reload();
