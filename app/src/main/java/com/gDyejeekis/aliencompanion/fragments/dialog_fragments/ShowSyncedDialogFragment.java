@@ -62,8 +62,8 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         }
 
         String getSubtitleText() {
-            //return syncedCount + " posts synced " + syncedAge;
-            return "synced " + syncedAge;
+            String string = name.equals(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME) ? "updated " : "synced ";
+            return string + syncedAge;
         }
     }
 
