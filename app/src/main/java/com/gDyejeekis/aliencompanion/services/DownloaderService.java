@@ -688,24 +688,31 @@ public class DownloaderService extends IntentService {
         SystemClock.sleep(waitTime);
     }
 
-    public static void manualSyncPause(Context context, NotificationManager notifManager) {
+    public static void manualSyncPause(Context context) {
         manuallyPaused = true;
         notifBuilder.setContentText("Pausing..");
         notifBuilder.mActions.set(0, createResumeAction(context));
-        notifManager.notify(FOREGROUND_ID, notifBuilder.build());
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(FOREGROUND_ID, notifBuilder.build());
     }
 
-    public static void manualSyncResume(Context context, NotificationManager notifManager) {
+    public static void manualSyncResume(Context context) {
         manuallyPaused = false;
         notifBuilder.setContentText("Resuming..");
         notifBuilder.mActions.set(0, createPauseAction(context));
-        notifManager.notify(FOREGROUND_ID, notifBuilder.build());
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(FOREGROUND_ID, notifBuilder.build());
     }
 
-    public static void manualSyncCancel(NotificationManager notifManager) {
+    public static void manualSyncCancel(Context context) {
         manuallyCancelled = true;
-        notifBuilder.setContentText("Stopping sync..");
-        notifManager.notify(FOREGROUND_ID, notifBuilder.build());
+        try {
+            notifBuilder.setContentText("Stopping sync..");
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(FOREGROUND_ID, notifBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Notification buildForegroundNotification(NotificationCompat.Builder b, String displayName, boolean indeterminateProgress) {
@@ -732,8 +739,8 @@ public class DownloaderService extends IntentService {
 
     private void showFailedNotification(String reason) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setContentTitle("Sync failed")
-                .setContentText(reason)
+        builder.setContentTitle("Alien Companion")
+                .setContentText("Sync failed: " + reason)
                 .setSmallIcon(android.R.drawable.stat_notify_error);
         notificationManager.notify(FOREGROUND_ID, builder.build());
     }

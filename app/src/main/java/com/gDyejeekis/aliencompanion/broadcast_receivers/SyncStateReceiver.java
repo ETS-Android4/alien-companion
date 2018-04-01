@@ -23,20 +23,22 @@ public class SyncStateReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if(intent.getAction().equals(SYNC_CANCEL)) {
-            Log.d(TAG, "Cancelling sync..");
-            DownloaderService.manualSyncCancel(manager);
-        }
-        else if(intent.getAction().equals(SYNC_PAUSE)) {
-            Log.d(TAG, "Pausing sync..");
-            DownloaderService.manualSyncPause(context, manager);
-        }
-        else if(intent.getAction().equals(SYNC_RESUME)) {
-            Log.d(TAG, "Resuming sync..");
-            DownloaderService.manualSyncResume(context, manager);
+        if (intent.getAction()!=null) {
+            switch (intent.getAction()) {
+                case SYNC_CANCEL:
+                    Log.d(TAG, "Cancelling sync..");
+                    DownloaderService.manualSyncCancel(context);
+                    break;
+                case SYNC_PAUSE:
+                    Log.d(TAG, "Pausing sync..");
+                    DownloaderService.manualSyncPause(context);
+                    break;
+                case SYNC_RESUME:
+                    Log.d(TAG, "Resuming sync..");
+                    DownloaderService.manualSyncResume(context);
+                    break;
+            }
         }
     }
+
 }
