@@ -156,7 +156,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
 
     static class SyncedGroupsAdapter extends ArrayAdapter<SyncedGroup> {
 
-        public SyncedGroupsAdapter(@NonNull Context context, @NonNull List<SyncedGroup> objects) {
+        SyncedGroupsAdapter(@NonNull Context context, @NonNull List<SyncedGroup> objects) {
             super(context, R.layout.simple_list_item_2line, objects);
         }
 
