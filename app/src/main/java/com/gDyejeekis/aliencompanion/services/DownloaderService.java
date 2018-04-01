@@ -726,8 +726,6 @@ public class DownloaderService extends IntentService {
         return(b.build());
     }
 
-    // sometimes setContentText() throws nullpointerexception after calling a static method in SyncStateReceiver
-    // TODO: 2/6/2018 probably check if paused/cancelled before increasing progress (done), also look into making builder a class static field
     private void increaseProgress(NotificationCompat.Builder b, String displayName) {
         progress++;
         Log.d(TAG, progress + "/" + MAX_PROGRESS + " done");
