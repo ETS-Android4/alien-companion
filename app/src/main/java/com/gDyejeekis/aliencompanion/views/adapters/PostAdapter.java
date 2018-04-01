@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.views.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -93,8 +94,9 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         selectedPosition = NO_POSITION;
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
