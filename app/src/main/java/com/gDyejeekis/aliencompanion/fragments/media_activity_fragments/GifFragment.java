@@ -209,7 +209,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             mPlayer.prepareAsync();
             mPlayer.setOnPreparedListener(this);
             mPlayer.setOnErrorListener(this);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             buttonRetry.setVisibility(View.VISIBLE);
             videoView.setVisibility(View.GONE);
