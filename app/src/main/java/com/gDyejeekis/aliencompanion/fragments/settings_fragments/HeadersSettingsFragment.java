@@ -28,7 +28,7 @@ public class HeadersSettingsFragment extends PreferenceFragment implements Prefe
 
         activity = (SettingsActivity) getActivity();
 
-        findPreference("donate").setOnPreferenceClickListener(this);
+        //findPreference("donate").setOnPreferenceClickListener(this);
         findPreference("appearance").setOnPreferenceClickListener(this);
         findPreference("navigation").setOnPreferenceClickListener(this);
         //findPreference("posts").setOnPreferenceClickListener(this);
