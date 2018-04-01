@@ -6,7 +6,7 @@
         <changelogtext>Added one time tutorial dialog popup explaining offline mode and syncing</changelogtext>
         <changelogtext>Added snackbar notification for new version updates</changelogtext>
         <changelogtext>Fixed crash when trying to sync more than 100 saved posts</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>'View synced' dialog now shows synced subreddit/multireddit age</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Various crash fixes and stability improvements</changelogtext>

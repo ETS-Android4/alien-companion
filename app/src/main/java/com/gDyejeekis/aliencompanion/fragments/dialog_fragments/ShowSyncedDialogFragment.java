@@ -67,7 +67,6 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         }
     }
 
-    private List<SyncedGroup> syncedGroups;
     private ListView syncedListView;
     private ArrayAdapter adapter;
     private ProgressBar progressBar;
@@ -96,8 +95,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
         progressBar.setVisibility(View.GONE);
         notSyncedTextView.setVisibility(View.GONE);
         syncedListView.setVisibility(View.VISIBLE);
-        this.syncedGroups = syncedGroups;
-        adapter = new SyncedGroupsAdapter(getActivity(), this.syncedGroups);
+        adapter = new SyncedGroupsAdapter(getActivity(), syncedGroups);
         syncedListView.setAdapter(adapter);
     }
 
@@ -141,8 +139,7 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
                     @Override
                     protected void onPostExecute(Void aVoid) {
                         dialogFragment.dismiss();
-                        syncedGroups.remove(group);
-                        adapter.notifyDataSetChanged();
+                        adapter.remove(group);
                         ToastUtils.showToast(getActivity(), "Synced data for '" + group.getTitleText() + "' cleared");
                     }
                 }.execute();
