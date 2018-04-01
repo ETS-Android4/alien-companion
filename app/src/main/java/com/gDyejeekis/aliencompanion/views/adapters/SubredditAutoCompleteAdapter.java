@@ -55,7 +55,7 @@ public class SubredditAutoCompleteAdapter extends BaseAdapter implements Filtera
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.simple_dropdown_item_2line, parent, false);
+            convertView = inflater.inflate(R.layout.simple_list_item_2line, parent, false);
         }
         Subreddit subreddit = getItem(position);
         ((TextView) convertView.findViewById(R.id.text1)).setText(subreddit.getDisplayName());
