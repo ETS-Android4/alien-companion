@@ -105,7 +105,7 @@ public class MoveAppDataDialogFragment extends DialogFragment {
 
             @Override
             protected void onPostExecute(Void aVoid) {
-                dismiss();
+                dismissAllowingStateLoss();
             }
         }.execute();
 
