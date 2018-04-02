@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -166,10 +167,19 @@ public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
+        setupStrictMode();
         super.onCreate();
         initStaticFields();
 
         scheduleOfflineActionsService(getApplicationContext());
+    }
+
+    private void setupStrictMode() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.ThreadPolicy.Builder b = new StrictMode.ThreadPolicy.Builder();
+            b.detectAll().penaltyLog();//.penaltyDeath();
+            StrictMode.setThreadPolicy(b.build());
+        }
     }
 
     private void initStaticFields() {
