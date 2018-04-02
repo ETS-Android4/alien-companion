@@ -316,6 +316,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 						e.printStackTrace();
 						Log.e("Api error", "Error retrieving reddit video metadata from json response");
 					}
+				} else if (safeJsonToString(obj.get("crosspost_parent")) != null) {
+					setDomain("reddit.com");
 				} else {
 					setURL(url.replace("&amp;", "&")); // TODO: 3/6/2018 might need to do this for all URLs
 				}

@@ -8,7 +8,7 @@
         <changelogtext>Fixed crash when trying to sync more than 100 saved posts</changelogtext>
         <changelogtext>'View synced' dialog now shows synced subreddit/multireddit age</changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed handling of crossposted self-posts</changelogtext>
         <changelogtext>Various crash fixes and stability improvements</changelogtext>
     </changelogversion>
 
