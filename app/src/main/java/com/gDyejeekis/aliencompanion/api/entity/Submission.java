@@ -14,6 +14,7 @@ import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.models.RedditVideo;
 import com.gDyejeekis.aliencompanion.utils.HtmlFormatUtils;
+import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.models.Thumbnail;
@@ -317,7 +318,9 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 						Log.e("Api error", "Error retrieving reddit video metadata from json response");
 					}
 				} else if (safeJsonToString(obj.get("crosspost_parent")) != null) {
-					setDomain("reddit.com");
+					try {
+						setDomain(LinkUtils.getDomainName(url));
+					} catch (Exception e) {}
 				} else {
 					setURL(url.replace("&amp;", "&")); // TODO: 3/6/2018 might need to do this for all URLs
 				}
