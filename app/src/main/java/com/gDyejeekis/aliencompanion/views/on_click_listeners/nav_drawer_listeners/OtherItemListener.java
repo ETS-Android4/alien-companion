@@ -62,6 +62,7 @@ public class OtherItemListener extends NavDrawerListener {
             if (otherItem.getName().equals("Synced")) {
                 if (MyApplication.offlineModeEnabled) changeToSynced();
                 else getAdapter().switchModeGracefully("synced", false, true);
+                return true;
             }
         }
         return false;
