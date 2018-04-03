@@ -746,11 +746,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void showThemesDialog() {
-        BaseThemesDialogFragment dialogFragment = new BaseThemesDialogFragment();
-        dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
-    }
-
     private void switchMode() {
         PostListFragment f = activity.getListFragment();
         switchMode(f.subreddit, f.isMulti, f.isOther, f.submissionSort, f.timeSpan);
