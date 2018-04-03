@@ -286,7 +286,7 @@ public class DownloaderService extends IntentService {
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "Error updating individually synced posts list");
-            showFailedNotification("Error updating synced posts list");
+            showFailedNotification();
         }
     }
 
@@ -735,10 +735,10 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private void showFailedNotification(String reason) {
+    private void showFailedNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle("Alien Companion")
-                .setContentText("Sync failed: " + reason)
+                .setContentText("Sync failed")
                 .setSmallIcon(android.R.drawable.stat_notify_error);
         notificationManager.notify(FOREGROUND_ID, builder.build());
     }
