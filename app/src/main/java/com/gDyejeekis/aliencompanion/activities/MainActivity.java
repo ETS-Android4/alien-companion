@@ -24,6 +24,8 @@ import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.AppConstants;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
+import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.api.utils.RedditOAuth;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
@@ -623,6 +625,28 @@ public class MainActivity extends ToolbarActivity {
             //MyApplication.currentUser = null; //user connects every time main activity is started - RE-ENABLE THIS IF NEEDED
             super.onBackPressed();
         }
+    }
+
+    public void restartApp() {
+        restartApp(listFragment.subreddit, listFragment.isMulti, listFragment.isOther, listFragment.submissionSort, listFragment.timeSpan);
+    }
+
+    public void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
+        //Intent i = activity.getBaseContext().getPackageManager()
+        //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
+        //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(!MyApplication.offlineModeEnabled && isOther && subreddit!=null && subreddit.equals("synced")) {
+            subreddit = null;
+            isOther = false;
+        }
+        Intent i = getIntent();
+        i.putExtra("subreddit", subreddit);
+        i.putExtra("isMulti", isMulti);
+        i.putExtra("isOther", isOther);
+        i.putExtra("sort", sort);
+        i.putExtra("time", timeSpan);
+        finish();
+        startActivity(i);
     }
 
     private PostListFragment recreateListFragment(PostListFragment f) {

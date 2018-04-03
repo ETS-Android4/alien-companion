@@ -746,50 +746,37 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
-        //Intent i = activity.getBaseContext().getPackageManager()
-        //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
-        //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if(!MyApplication.offlineModeEnabled && isOther && subreddit!=null && subreddit.equals("synced")) {
-            subreddit = null;
-            isOther = false;
-        }
-        Intent i = activity.getIntent();
-        i.putExtra("subreddit", subreddit);
-        i.putExtra("isMulti", isMulti);
-        i.putExtra("isOther", isOther);
-        i.putExtra("sort", sort);
-        i.putExtra("time", timeSpan);
-        activity.finish();
-        activity.startActivity(i);
-    }
-
-    public void restartApp() {
-        PostListFragment fragment = activity.getListFragment();
-        restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
-    }
+    //public void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
+    //    //Intent i = activity.getBaseContext().getPackageManager()
+    //    //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
+    //    //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    //    if(!MyApplication.offlineModeEnabled && isOther && subreddit!=null && subreddit.equals("synced")) {
+    //        subreddit = null;
+    //        isOther = false;
+    //    }
+    //    Intent i = activity.getIntent();
+    //    i.putExtra("subreddit", subreddit);
+    //    i.putExtra("isMulti", isMulti);
+    //    i.putExtra("isOther", isOther);
+    //    i.putExtra("sort", sort);
+    //    i.putExtra("time", timeSpan);
+    //    activity.finish();
+    //    activity.startActivity(i);
+    //}
+//
+    //public void restartApp() {
+    //    PostListFragment fragment = activity.getListFragment();
+    //    restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
+    //}
 
     public void showThemesDialog() {
         BaseThemesDialogFragment dialogFragment = new BaseThemesDialogFragment();
         dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
     }
 
-    public void showOfflineSwitchDialog() {
-        String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
-        //text += " (App will restart)";
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switchMode();
-            }
-        };
-        new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage(text).setPositiveButton("Yes", listener)
-                .setNegativeButton("No", null).show();
-    }
-
     private void switchMode() {
-        PostListFragment fragment = activity.getListFragment();
-        switchMode(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
+        PostListFragment f = activity.getListFragment();
+        switchMode(f.subreddit, f.isMulti, f.isOther, f.submissionSort, f.timeSpan);
     }
 
     public void switchMode(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
@@ -800,7 +787,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         SharedPreferences.Editor editor = MyApplication.prefs.edit();
         editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
         editor.apply();
-        restartApp(subreddit, isMulti, isOther, sort, timeSpan);
+        activity.restartApp(subreddit, isMulti, isOther, sort, timeSpan);
     }
 
     public void switchModeGracefully() {
@@ -823,6 +810,11 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 switchMode(reddit, isMulti, false, SubmissionSort.HOT, null);
             }
         }, AppConstants.NAV_DRAWER_CLOSE_TIME);
+    }
+
+    public void showOfflineSwitchDialog() {
+        PostListFragment f = activity.getListFragment();
+        showOfflineSwitchDialog(f.subreddit, f.isMulti, f.isOther, f.submissionSort, f.timeSpan);
     }
 
     public void showOfflineSwitchDialog(final String subreddit, final boolean isMulti, final boolean isOther, final SubmissionSort sort, final TimeSpan timeSpan) {

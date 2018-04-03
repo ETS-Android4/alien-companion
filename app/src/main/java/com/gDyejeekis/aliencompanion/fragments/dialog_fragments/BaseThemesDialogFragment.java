@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.fragments.dialog_fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,29 +27,27 @@ public class BaseThemesDialogFragment extends ScalableDialogFragment implements 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_base_themes, container, false);
-
-
         switch (MyApplication.currentBaseTheme) {
             case AppConstants.LIGHT_THEME:
-                RadioButton light = (RadioButton) view.findViewById(R.id.radioButtonLight);
+                RadioButton light = view.findViewById(R.id.radioButtonLight);
                 light.setChecked(true);
                 break;
             case AppConstants.MATERIAL_BLUE_THEME:
-                RadioButton materialBlue = (RadioButton) view.findViewById(R.id.radioButtonMaterialBlue);
+                RadioButton materialBlue = view.findViewById(R.id.radioButtonMaterialBlue);
                 materialBlue.setChecked(true);
                 break;
             case AppConstants.MATERIAL_GREY_THEME:
-                RadioButton materialGrey = (RadioButton) view.findViewById(R.id.radioButtonMaterialGrey);
+                RadioButton materialGrey = view.findViewById(R.id.radioButtonMaterialGrey);
                 materialGrey.setChecked(true);
                 break;
             case AppConstants.DARK_THEME:
-                RadioButton dark = (RadioButton) view.findViewById(R.id.radioButtonDark);
+                RadioButton dark = view.findViewById(R.id.radioButtonDark);
                 dark.setChecked(true);
                 break;
             case AppConstants.DARK_THEME_LOW_CONTRAST:
-                RadioButton darkLowContrast = (RadioButton) view.findViewById(R.id.radioButtonDarkLowContrast);
+                RadioButton darkLowContrast = view.findViewById(R.id.radioButtonDarkLowContrast);
                 darkLowContrast.setChecked(true);
                 break;
         }
@@ -90,17 +89,16 @@ public class BaseThemesDialogFragment extends ScalableDialogFragment implements 
                 night = true;
                 break;
         }
-        if(theme != MyApplication.currentBaseTheme) {
+        if (theme != MyApplication.currentBaseTheme) {
             MyApplication.themeFieldsInitialized = false;
             SharedPreferences.Editor editor = MyApplication.prefs.edit();
             editor.putInt("baseTheme", theme);
             editor.putBoolean("nightTheme", night);
             editor.apply();
-            MainActivity activity = (MainActivity) getActivity();
-            activity.getNavDrawerAdapter().restartApp();
-        }
-        else {
+            ((MainActivity) getActivity()).restartApp();
+        } else {
             dismiss();
         }
     }
+
 }
