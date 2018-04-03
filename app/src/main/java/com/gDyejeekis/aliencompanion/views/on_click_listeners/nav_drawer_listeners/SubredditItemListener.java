@@ -39,7 +39,7 @@ public class SubredditItemListener extends NavDrawerListener {
             NavDrawerSubredditItem subreddit =
                     (NavDrawerSubredditItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
             String subredditName = (subreddit.getName() != null) ? subreddit.getName().toLowerCase() : null;
-            getAdapter().switchModeGracefully(subredditName, false);
+            getAdapter().switchModeGracefully(subredditName, false, false);
             return true;
         }
         return false;

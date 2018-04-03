@@ -36,7 +36,7 @@ public class MultiredditItemListener extends NavDrawerListener {
         if (MyApplication.longTapSwitchMode) {
             NavDrawerMutliredditItem multireddit =
                     (NavDrawerMutliredditItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
-            getAdapter().switchModeGracefully(multireddit.getName().toLowerCase(), true);
+            getAdapter().switchModeGracefully(multireddit.getName().toLowerCase(), true, false);
             return true;
         }
         return false;

@@ -1,5 +1,6 @@
 package com.gDyejeekis.aliencompanion.views.on_click_listeners.nav_drawer_listeners;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -26,39 +27,50 @@ public class OtherItemListener extends NavDrawerListener {
     public void onClick(View v) {
         NavDrawerOtherItem otherItem =
                 (NavDrawerOtherItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
-
-        if (otherItem.getName().equals("Saved")) {
-            getDrawerLayout().closeDrawers();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
+        final String name = otherItem.getName();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (name.equals("Saved")) {
+                    getDrawerLayout().closeDrawers();
                     Intent intent = new Intent(getActivity(), UserActivity.class);
                     intent.putExtra("username", MyApplication.currentAccount.getUsername());
                     intent.putExtra("category", UserSubmissionsCategory.SAVED);
                     getActivity().startActivity(intent);
+                } else if (name.equals("Synced")) {
+                    if (MyApplication.offlineModeEnabled) {
+                        changeToSynced();
+                    } else {
+                        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                getAdapter().switchModeGracefully("synced", false, true);
+                            }
+                        };
+                        getAdapter().showOfflineSwitchDialog(listener);
+                    }
                 }
-            }, AppConstants.NAV_DRAWER_CLOSE_TIME);
-        } else if (otherItem.getName().equals("Synced")) {
-            //if (MyApplication.offlineModeEnabled) {
-            //    showSyncedPosts();
-            //} else {
-            //    getAdapter().showOfflineSwitchDialog("synced", false, true, null, null);
-            //}
-            // TODO: 4/3/2018
-        }
+            }
+        }, AppConstants.NAV_DRAWER_CLOSE_TIME);
     }
 
     @Override
     public boolean onLongClick(View v) {
+        if (MyApplication.longTapSwitchMode) {
+            NavDrawerOtherItem otherItem =
+                    (NavDrawerOtherItem) getAdapter().getItemAt(getViewHolder().getAdapterPosition());
+            if (otherItem.getName().equals("Synced")) {
+                if (MyApplication.offlineModeEnabled) changeToSynced();
+                else getAdapter().switchModeGracefully("synced", false, true);
+            }
+        }
         return false;
     }
 
-    private void showSyncedPosts() {
-        getAdapter().notifyDataSetChanged();
+    private void changeToSynced() {
         getDrawerLayout().closeDrawers();
-        PostListFragment listFragment = getActivity().getListFragment();
-        listFragment.isMulti = false;
-        listFragment.isOther = true;
-        listFragment.changeSubreddit("synced");
+        getAdapter().notifyDataSetChanged();
+        getActivity().getListFragment().changeSubreddit("synced", false, true);
     }
+
 }

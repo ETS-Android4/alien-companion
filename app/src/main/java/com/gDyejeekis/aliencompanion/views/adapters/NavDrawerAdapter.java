@@ -562,7 +562,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 viewHolder = new SubredditRowViewHolder(v);
                 listener = new OtherItemListener(activity, viewHolder);
                 v.setOnClickListener(listener);
-                //v.setOnLongClickListener(listener);
+                v.setOnLongClickListener(listener);
                 break;
             case VIEW_TYPE_EMPTY_SPACE:
                 viewHolder = new EmptySpaceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_empty_space, parent, false));
@@ -746,7 +746,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void switchMode(String reddit, boolean isMulti) {
+    private void switchMode(String reddit, boolean isMulti, boolean isOther) {
         // check for pending actions after switching to online mode
         if (MyApplication.offlineModeEnabled)
             MainActivity.checkPendingActions = true;
@@ -755,34 +755,43 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         editor.putBoolean("offlineMode", MyApplication.offlineModeEnabled);
         editor.apply();
         notifyDataSetChanged();
-        activity.onSwitchMode(reddit, isMulti);
+        activity.onSwitchMode(reddit, isMulti, isOther);
     }
 
     public void switchModeGracefully() {
         PostListFragment f = activity.getListFragment();
-        switchModeGracefully(f.subreddit, f.isMulti);
+        if (MyApplication.offlineModeEnabled && f.isOther) { // case switching from offline mode 'synced' to online mode
+            switchModeGracefully(null, false, false);
+        } else {
+            switchModeGracefully(f.subreddit, f.isMulti, f.isOther);
+        }
     }
 
-    public void switchModeGracefully(final String reddit, final boolean isMulti) {
+    public void switchModeGracefully(final String reddit, final boolean isMulti, final boolean isOther) {
         activity.getDrawerLayout().closeDrawers();
         ToastUtils.showToast(activity, "Switched to " + ((MyApplication.offlineModeEnabled) ? "online" : "offline") + " mode");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                switchMode(reddit, isMulti);
+                switchMode(reddit, isMulti, isOther);
             }
         }, AppConstants.NAV_DRAWER_CLOSE_TIME);
     }
 
     public void showOfflineSwitchDialog() {
+        showOfflineSwitchDialog(null);
+    }
+
+    public void showOfflineSwitchDialog(DialogInterface.OnClickListener listener) {
         String text = (MyApplication.offlineModeEnabled) ? "Switch to online mode?" : "Switch to offline mode?";
-        //text += " (App will restart)";
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switchModeGracefully();
-            }
-        };
+        if (listener == null) {
+            listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switchModeGracefully();
+                }
+            };
+        }
         new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.MyAlertDialogStyle)).setMessage(text).setPositiveButton("Yes", listener)
                 .setNegativeButton("No", null).show();
     }

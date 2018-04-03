@@ -627,9 +627,9 @@ public class MainActivity extends ToolbarActivity {
         }
     }
 
-    public void onSwitchMode(String reddit, boolean isMulti) {
+    public void onSwitchMode(String reddit, boolean isMulti, boolean isOther) {
         invalidateOptionsMenu();
-        listFragment.changeSubreddit(reddit, isMulti, false);
+        listFragment.changeSubreddit(reddit, isMulti, isOther);
     }
 
     public void restartApp() {
