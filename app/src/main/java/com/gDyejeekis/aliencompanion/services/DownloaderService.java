@@ -150,7 +150,7 @@ public class DownloaderService extends IntentService {
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
                     acquireWakelock();
 
-                    syncSubreddit(filename, notifBuilder, subreddit, SubmissionSort.HOT, null, false, syncOptions);
+                    syncSubredditControlled(filename, notifBuilder, subreddit, SubmissionSort.HOT, null, false, syncOptions);
                 }
                 // sync multireddits
                 for(String multireddit : profile.getMultireddits()) {
@@ -160,7 +160,7 @@ public class DownloaderService extends IntentService {
                     startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, filename, false));
                     acquireWakelock();
 
-                    syncSubreddit(filename, notifBuilder, multireddit, SubmissionSort.HOT, null, true, syncOptions);
+                    syncSubredditControlled(filename, notifBuilder, multireddit, SubmissionSort.HOT, null, true, syncOptions);
                 }
             }
 
@@ -176,7 +176,7 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, title, true));
             acquireWakelock();
 
-            syncPost(notifBuilder, submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
+            syncPostControlled(notifBuilder, submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
             addToIndividuallySyncedPosts(submission);
         }
         else if(savedCount != 0) {
@@ -188,7 +188,7 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildForegroundNotification(notifBuilder, "saved", false));
             acquireWakelock();
 
-            syncSaved(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, notifBuilder, savedCount, syncOptions);
+            syncSavedControlled(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, notifBuilder, savedCount, syncOptions);
         }
         else {
             MAX_PROGRESS = MyApplication.syncPostCount + 1;
@@ -208,7 +208,7 @@ public class DownloaderService extends IntentService {
             SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
             TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
 
-            syncSubreddit(filename, notifBuilder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
+            syncSubredditControlled(filename, notifBuilder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
         }
     }
 
@@ -305,14 +305,19 @@ public class DownloaderService extends IntentService {
         return posts;
     }
 
-    /*
-     * syncs user's saved list, checks for pause/cancellation, auto-pauses on error, increments progress
-     */
-    private void syncSaved(String filename, NotificationCompat.Builder builder, int savedCount, SyncProfileOptions syncOptions) {
-        checkManuallyPaused();
-        if(manuallyCancelled) {
-            return;
-        }
+    private void syncSavedControlled(String filename, NotificationCompat.Builder builder, int savedCount, SyncProfileOptions syncOptions) {
+        boolean success;
+        do {
+            checkManuallyPaused();
+            if (manuallyCancelled) {
+                return;
+            }
+            success = syncSaved(filename, builder, savedCount, syncOptions);
+            if (!success) pauseSync(builder);
+        } while (!success);
+    }
+
+    private boolean syncSaved(String filename, NotificationCompat.Builder builder, int savedCount, SyncProfileOptions syncOptions) {
         try {
             final String displayName = "saved";
             List<RedditItem> savedList = retrieveSavedPostsToSync(MyApplication.currentUser, savedCount, null);
@@ -357,11 +362,11 @@ public class DownloaderService extends IntentService {
                     Log.e(TAG, "Failed to sync saved post");
                 }
             }
+            return true;
         } catch (RetrievalFailedException | RedditError e) {
-            //e.printStackTrace();
-            pauseSync(builder);
-            syncSaved(filename, builder, savedCount, syncOptions);
+            e.printStackTrace();
         }
+        return false;
     }
 
     /*
@@ -371,13 +376,13 @@ public class DownloaderService extends IntentService {
         Submission s;
         if(item instanceof Submission) {
             s = (Submission) item;
-            syncPost(builder, s, filename, displayName, syncOptions);
+            syncPostControlled(builder, s, filename, displayName, syncOptions);
         }
         // comment case
         else {
             Comment comment = (Comment) item;
             String url = "https://www.reddit.com/r/" + comment.getSubreddit() + "/comments/" + comment.getLinkId().split("_")[1] + "/title_text/" + comment.getIdentifier(); //+ "?context=" + syncOptions.getSyncCommentCount();
-            s = syncLinkedRedditPost(url, "reddit.com", filename, syncOptions);
+            s = syncLinkedRedditPostControlled(url, "reddit.com", filename, syncOptions);
             increaseProgress(builder, displayName);
         }
         return s;
@@ -402,14 +407,21 @@ public class DownloaderService extends IntentService {
         return posts;
     }
 
-    /*
-     * syncs given subreddit/multireddit, checks for pause/cancellation, auto-pauses on error, increments progress
-     */
-    private void syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort, TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
-        checkManuallyPaused();
-        if(manuallyCancelled) {
-            return;
-        }
+    private void syncSubredditControlled(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort,
+                                         TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
+        boolean success;
+        do {
+            checkManuallyPaused();
+            if (manuallyCancelled) {
+                return;
+            }
+            success = syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
+            if (!success) pauseSync(builder);
+        } while (!success);
+    }
+
+    private boolean syncSubreddit(String filename, NotificationCompat.Builder builder, String subreddit, SubmissionSort submissionSort,
+                               TimeSpan timeSpan, boolean isMulti, SyncProfileOptions syncOptions) {
         try {
             List<RedditItem> posts = retrievePostsToSync(subreddit, submissionSort, timeSpan, isMulti, syncOptions.getSyncPostCount(), null);
 
@@ -430,7 +442,7 @@ public class DownloaderService extends IntentService {
                         updateSyncedPostDetails(post, filename, builder, filename);
                     }
                     else {
-                        syncPost(builder, post, filename, filename, syncOptions);
+                        syncPostControlled(builder, post, filename, filename, syncOptions);
                     }
                     // set comments to null before we update the post list file
                     post.setSyncedComments(null);
@@ -438,12 +450,11 @@ public class DownloaderService extends IntentService {
                     writePostListToFile(posts, filename);
                 }
             }
-
+            return true;
         } catch (RetrievalFailedException | RedditError e) {
-            //e.printStackTrace();
-            pauseSync(builder);
-            syncSubreddit(filename, builder, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
+            e.printStackTrace();
         }
+        return false;
     }
 
     /*
@@ -451,7 +462,7 @@ public class DownloaderService extends IntentService {
      */
     private void updateSyncedPostDetails(Submission updated, String filename, NotificationCompat.Builder builder, String displayName) {
         checkManuallyPaused();
-        if(manuallyCancelled) {
+        if (manuallyCancelled) {
             return;
         }
         try {
@@ -466,15 +477,19 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    /*
-     * syncs given submission, checks for pause/cancellation, auto-pauses on error, increments progress
-     */
-    private void syncPost(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncProfileOptions syncOptions) {
-        checkManuallyPaused();
-        if(manuallyCancelled) {
-            return;
-        }
+    private void syncPostControlled(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncProfileOptions syncOptions) {
+        boolean success;
+        do {
+            checkManuallyPaused();
+            if (manuallyCancelled) {
+                return;
+            }
+            success = syncPost(builder, submission, filename, displayName, syncOptions);
+            if (!success) pauseSync(builder);
+        } while (!success);
+    }
 
+    private boolean syncPost(NotificationCompat.Builder builder, Submission submission, String filename, String displayName, SyncProfileOptions syncOptions) {
         try {
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             cmntsRetrieval.setSyncRetrieval(true);
@@ -497,13 +512,14 @@ public class DownloaderService extends IntentService {
             }
 
             increaseProgress(builder, displayName);
+            return true;
         } catch (RetrievalFailedException | RedditError e) {
-            //e.printStackTrace();
-            pauseSync(builder);
-            syncPost(builder, submission, filename, displayName, syncOptions);
-        } catch (IllegalArgumentException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e) { // illegal argument exception means incorrect json response format, no point in retrying
+            e.printStackTrace();
+            return true;
         }
+        return false;
     }
 
     /*
@@ -582,7 +598,7 @@ public class DownloaderService extends IntentService {
         }
 
         if (LinkUtils.isRedditPostUrl(url)) {
-            syncLinkedRedditPost(url, domain, filename, syncOptions);
+            syncLinkedRedditPostControlled(url, domain, filename, syncOptions);
         } else if (syncOptions.isSyncImages() && LinkUtils.isImageLink(url, domain)) {
             syncImage(url, filename, syncOptions);
         } else if (syncOptions.isSyncVideo() && LinkUtils.isVideoLink(url, domain)) {
@@ -592,16 +608,22 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    /*
-     * syncs and returns given reddit post url as a linked post (just the comments, no links), checks for pause/cancellation, auto-pauses on error
-     */
+    private Submission syncLinkedRedditPostControlled(String url, String domain, String filename, SyncProfileOptions syncOptions) {
+        Submission post;
+        do {
+            checkManuallyPaused();
+            if (manuallyCancelled) {
+                return null;
+            }
+            post = syncLinkedRedditPost(url, domain, filename, syncOptions);
+            if (post == null) pauseSync(notifBuilder);
+        } while (post == null);
+        return post;
+    }
+
     private Submission syncLinkedRedditPost(String url, String domain, String filename, SyncProfileOptions syncOptions) {
-        checkManuallyPaused();
-        if(manuallyCancelled) {
-            return null;
-        }
-        Submission linkedPost = null;
         try {
+            Submission linkedPost;
             Comments cmntsRetrieval = new Comments(httpClient, MyApplication.currentUser);
             cmntsRetrieval.setSyncRetrieval(true);
 
@@ -617,14 +639,14 @@ public class DownloaderService extends IntentService {
                 //}
                 writePostToFile(linkedPost, filename);
             }
+            return linkedPost;
         } catch (RetrievalFailedException | RedditError e) {
-            //e.printStackTrace();
-            pauseSync(notifBuilder);
-            syncLinkedRedditPost(url, domain, filename, syncOptions);
-        } catch (IllegalArgumentException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e) { // incorrect json response, don't retry
+            e.printStackTrace();
+            return new Submission("t3_null");
         }
-        return linkedPost;
+        return null;
     }
 
     private void clearUnlistedSyncedPosts(List<RedditItem> posts, String filename) {
