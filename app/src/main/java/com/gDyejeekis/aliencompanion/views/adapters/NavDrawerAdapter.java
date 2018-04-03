@@ -848,34 +848,34 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         return getItemAt(position).getType();
     }
 
-    public static class MenuRowViewHolder extends RecyclerView.ViewHolder {
-        public ImageView image;
-        public TextView name;
+    static class MenuRowViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView name;
 
-        public MenuRowViewHolder(View row) {
+        MenuRowViewHolder(View row) {
             super(row);
             image = row.findViewById(R.id.imgView_option);
             name = row.findViewById(R.id.txtView_option);
         }
     }
 
-    public static class SubredditRowViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public LinearLayout layout;
+    static class SubredditRowViewHolder extends RecyclerView.ViewHolder {
+        TextView name;
+        LinearLayout layout;
 
-        public SubredditRowViewHolder(View row) {
+        SubredditRowViewHolder(View row) {
             super(row);
             name = row.findViewById(R.id.txtView_subreddit);
             layout = row.findViewById(R.id.subredditRowLayout);
         }
     }
 
-    public static class SubredditsViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout layoutToggle;
-        public LinearLayout layoutEdit;
-        public ImageView imgToggle;
+    static class SubredditsViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout layoutToggle;
+        LinearLayout layoutEdit;
+        ImageView imgToggle;
 
-        public SubredditsViewHolder(View row) {
+        SubredditsViewHolder(View row) {
             super(row);
             layoutToggle = row.findViewById(R.id.layoutToggle);
             layoutEdit = row.findViewById(R.id.layoutEdit);
@@ -883,15 +883,15 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout headerLayout;
-        public TextView currentAccount;
-        public LinearLayout accountLayout;
-        public ImageView toggle;
-        public Button themeButton;
-        public Button offlineButton;
+    static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout headerLayout;
+        TextView currentAccount;
+        LinearLayout accountLayout;
+        ImageView toggle;
+        Button themeButton;
+        Button offlineButton;
 
-        public HeaderViewHolder(View row) {
+        HeaderViewHolder(View row) {
             super(row);
             headerLayout = row.findViewById(R.id.layout_header);
             currentAccount = row.findViewById(R.id.txtView_currentAccount);
@@ -902,21 +902,22 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public static class OtherViewHolder extends RecyclerView.ViewHolder {
-        public OtherViewHolder(View view) {
+    static class OtherViewHolder extends RecyclerView.ViewHolder {
+        OtherViewHolder(View view) {
             super(view);
         }
     }
 
-    public static class EmptySpaceViewHolder extends RecyclerView.ViewHolder {
-        public EmptySpaceViewHolder(View convertView) {
+    static class EmptySpaceViewHolder extends RecyclerView.ViewHolder {
+        EmptySpaceViewHolder(View convertView) {
             super(convertView);
         }
     }
 
-    public static class SeparatorViewHolder extends RecyclerView.ViewHolder {
-        public SeparatorViewHolder(View convertView) {
+    static class SeparatorViewHolder extends RecyclerView.ViewHolder {
+        SeparatorViewHolder(View convertView) {
             super(convertView);
         }
     }
+
 }
