@@ -140,7 +140,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
 
     @Override
     protected void onPostExecute(SavedAccount account) {
-        dialogFragment.dismiss();
+        dialogFragment.dismissAllowingStateLoss();
         MyApplication.renewingToken = false;
         if(exception != null || account == null) {
             ToastUtils.showToast(context, "Failed to verify account");
