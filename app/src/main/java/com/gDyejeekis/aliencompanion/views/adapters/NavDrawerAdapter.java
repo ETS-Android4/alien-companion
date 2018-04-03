@@ -746,29 +746,6 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    //public void restartApp(String subreddit, boolean isMulti, boolean isOther, SubmissionSort sort, TimeSpan timeSpan) {
-    //    //Intent i = activity.getBaseContext().getPackageManager()
-    //    //        .getLaunchIntentForPackage(activity.getBaseContext().getPackageName());
-    //    //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    //    if(!MyApplication.offlineModeEnabled && isOther && subreddit!=null && subreddit.equals("synced")) {
-    //        subreddit = null;
-    //        isOther = false;
-    //    }
-    //    Intent i = activity.getIntent();
-    //    i.putExtra("subreddit", subreddit);
-    //    i.putExtra("isMulti", isMulti);
-    //    i.putExtra("isOther", isOther);
-    //    i.putExtra("sort", sort);
-    //    i.putExtra("time", timeSpan);
-    //    activity.finish();
-    //    activity.startActivity(i);
-    //}
-//
-    //public void restartApp() {
-    //    PostListFragment fragment = activity.getListFragment();
-    //    restartApp(fragment.subreddit, fragment.isMulti, fragment.isOther, fragment.submissionSort, fragment.timeSpan);
-    //}
-
     public void showThemesDialog() {
         BaseThemesDialogFragment dialogFragment = new BaseThemesDialogFragment();
         dialogFragment.show(activity.getSupportFragmentManager(), "dialog");
