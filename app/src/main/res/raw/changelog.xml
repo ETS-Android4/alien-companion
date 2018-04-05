@@ -6,7 +6,7 @@
         <changelogtext>Added one time tutorial dialog popup explaining offline mode and syncing</changelogtext>
         <changelogtext>Added snackbar notification for new version updates</changelogtext>
         <changelogtext>Fixed crash when trying to sync more than 100 saved posts</changelogtext>
-        <changelogtext>'View synced' dialog now shows synced subreddit/multireddit age</changelogtext>
+        <changelogtext>'View synced' dialog now shows each subreddit's last synced time</changelogtext>
         <changelogtext>Switching between online and offline mode will no longer cause the app to restart</changelogtext>
         <changelogtext>Fixed handling of crossposted reddit posts</changelogtext>
         <changelogtext>Various crash fixes and stability improvements</changelogtext>
