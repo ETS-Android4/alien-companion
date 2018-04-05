@@ -212,7 +212,11 @@ public class CommentItemOptionsListener implements View.OnClickListener {
 
         // check if comment is saved
         if(comment.isSaved()) {
-            menu.findItem(R.id.action_save).setTitle("Unsave");
+            try {
+                menu.findItem(R.id.action_save).setTitle("Unsave");
+            } catch (Exception e) { // sometimes throws NPE for some reason
+                e.printStackTrace();
+            }
         }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
