@@ -6,9 +6,9 @@ package com.gDyejeekis.aliencompanion;
 
 public class AppConstants {
 
-    public static final String CURRENT_VERSION_NAME = "1.0.6";
+    public static final String CURRENT_VERSION_NAME = "1.0.7";
 
-    public static final int CURRENT_VERSION_CODE = 1006;
+    public static final int CURRENT_VERSION_CODE = 1007;
 
     public static final boolean SHOW_UPDATE_MESSAGE = false;
 

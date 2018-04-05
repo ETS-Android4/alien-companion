@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="" changeDate="">
+    <changelogversion versionName="1.0.7" changeDate="Apr 5, 2018">
         <changelogtext>Users must now confirm their age via dialog popup before enabling NSFW content</changelogtext>
         <changelogtext>Added one time tutorial dialog popup explaining offline mode and syncing</changelogtext>
         <changelogtext>Added snackbar notification for new version updates</changelogtext>
         <changelogtext>Fixed crash when trying to sync more than 100 saved posts</changelogtext>
         <changelogtext>'View synced' dialog now shows synced subreddit/multireddit age</changelogtext>
         <changelogtext>Switching between online and offline mode will no longer cause the app to restart</changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext>Fixed handling of crossposted reddit posts</changelogtext>
-        <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext>Various crash fixes and stability improvements</changelogtext>
     </changelogversion>
 
