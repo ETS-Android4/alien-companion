@@ -163,7 +163,9 @@ public class ApiEndpointUtils {
     public static final String SUBREDDIT_ABOUT = "/r/%s/about.json";
 
     public static final String SUBREDDIT_AUTOCOMPLETE = REDDIT_BASE_API_ENDPOINT + "/subreddit_autocomplete.json?%s";
-    
+
+    public static final String SUBREDDIT_AUTOCOMPLETE_V2 = REDDIT_BASE_API_ENDPOINT + "/subreddit_autocomplete_v2.json?%s";
+
     /* Live Thread specific constants */
     
     public static final String LIVE_THREAD_CREATE = REDDIT_BASE_API_ENDPOINT + "/live/create";
