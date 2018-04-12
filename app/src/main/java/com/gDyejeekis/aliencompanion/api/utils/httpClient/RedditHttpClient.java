@@ -95,7 +95,7 @@ public class RedditHttpClient implements HttpClient {
                 GeneralUtils.printHttpRequestProperties(connection);
                 GeneralUtils.printHttpRequestHeaders(connection);
                 Log.d(TAG, "response code: " + connection.getResponseCode());
-                GeneralUtils.printHttpResponseBody(content);
+                GeneralUtils.printHttpResponseBody(TAG, content);
             }
             inputStream.close();
 
@@ -134,7 +134,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "request headers: " + request.headers());
                 Log.d(TAG, "response code: " + response.code());
                 Log.d(TAG, "response headers: " + response.headers());
-                GeneralUtils.printHttpResponseBody(content);
+                GeneralUtils.printHttpResponseBody(TAG, content);
             }
             response.close();
 
@@ -170,7 +170,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "request headers: " + request.headers());
                 Log.d(TAG, "response code: " + response.code());
                 Log.d(TAG, "response headers: " + response.headers());
-                GeneralUtils.printHttpResponseBody(content);
+                GeneralUtils.printHttpResponseBody(TAG, content);
             }
             response.close();
 
@@ -206,7 +206,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "request headers: " + request.headers());
                 Log.d(TAG, "response code: " + response.code());
                 Log.d(TAG, "response headers: " + response.headers());
-                GeneralUtils.printHttpResponseBody(content);
+                GeneralUtils.printHttpResponseBody(TAG, content);
             }
             response.close();
 
@@ -242,7 +242,7 @@ public class RedditHttpClient implements HttpClient {
                 Log.d(TAG, "request headers: " + request.headers());
                 Log.d(TAG, "response code: " + response.code());
                 Log.d(TAG, "response headers: " + response.headers());
-                GeneralUtils.printHttpResponseBody(content);
+                GeneralUtils.printHttpResponseBody(TAG, content);
             }
             response.close();
 

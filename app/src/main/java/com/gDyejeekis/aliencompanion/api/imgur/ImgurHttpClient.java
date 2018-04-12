@@ -84,7 +84,7 @@ public class ImgurHttpClient {
                 Log.d(TAG, "request headers: " + request.headers());
                 Log.d(TAG, "response code: " + response.code());
                 Log.d(TAG, "response headers: " + response.headers());
-                GeneralUtils.printHttpResponseBody(content);
+                GeneralUtils.printHttpResponseBody(TAG, content);
             }
             response.close();
 
