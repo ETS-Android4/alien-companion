@@ -554,11 +554,12 @@ public class GeneralUtils {
 
     public static void printHttpResponseBody(String responseString) {
         int maxLogSize = 800;
+        Log.v(TAG, "Response body:");
         for(int i = 0; i <= responseString.length() / maxLogSize; i++) {
             int start = i * maxLogSize;
             int end = (i+1) * maxLogSize;
             end = end > responseString.length() ? responseString.length() : end;
-            Log.v(TAG, "response: " + responseString.substring(start, end));
+            Log.v(TAG, responseString.substring(start, end));
         }
     }
 
