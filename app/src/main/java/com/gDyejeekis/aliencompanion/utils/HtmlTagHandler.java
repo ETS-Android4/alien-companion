@@ -324,7 +324,11 @@ public class HtmlTagHandler implements Html.TagHandler {
                 thisLen++;
             }
             for (Object replace : replaces) {
-                output.setSpan(replace, where, thisLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                try {
+                    output.setSpan(replace, where, thisLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (DEBUG) {

@@ -5,7 +5,7 @@
         <changelogtext>Improved subreddit autocompletion</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Minor crash fixes</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.7" changeDate="Apr 5, 2018">
