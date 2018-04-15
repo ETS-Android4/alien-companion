@@ -163,8 +163,13 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
         notifyItemRemoved(index);
     }
 
-    public RedditItem getLastItem() { //TODO: check out of bounds index exception, probably related to load task
-        return redditItems.get(redditItems.size()-2);
+    public RedditItem getLastItem() {
+        try {
+            return redditItems.get(redditItems.size() - 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setLoadingMoreItems(boolean flag) {

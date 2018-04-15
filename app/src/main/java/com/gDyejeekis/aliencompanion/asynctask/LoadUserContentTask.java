@@ -75,8 +75,8 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case OVERVIEW: case GILDED: case SAVED:
                     UserMixed userMixed = new UserMixed(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
-                        RedditItem lastItem = uf.adapter.getLastItem();
-                        userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, (Thing) lastItem, null, false);
+                        userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1,
+                                RedditConstants.DEFAULT_LIMIT, (Thing) uf.adapter.getLastItem(), null, false);
                         adapter = uf.adapter;
                     }
                     else {
@@ -84,7 +84,8 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                         UserInfo userInfo = userDetails.ofUser(uf.username);
                         userInfo.retrieveTrophyInfo(httpClient); //retrieves trophy info
 
-                        userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
+                        userContent = userMixed.ofUser(uf.username, this.userCategory, this.userSort, TimeSpan.ALL, -1,
+                                RedditConstants.DEFAULT_LIMIT, null, null, false);
                         adapter = new RedditItemListAdapter(activity);
                         if(this.userCategory == UserSubmissionsCategory.OVERVIEW) adapter.add(userInfo);
                         adapter.addAll(userContent);
@@ -94,12 +95,13 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case COMMENTS:
                     Comments comments = new Comments(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
-                        Comment lastComment = (Comment) uf.adapter.getLastItem();
-                        userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, lastComment, null, true);
+                        userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1,
+                                RedditConstants.DEFAULT_LIMIT, (Comment) uf.adapter.getLastItem(), null, true);
                         adapter = uf.adapter;
                     }
                     else {
-                        userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1, RedditConstants.DEFAULT_LIMIT, null, null, true);
+                        userContent = comments.ofUser(uf.username, this.userSort, TimeSpan.ALL, -1,
+                                RedditConstants.DEFAULT_LIMIT, null, null, true);
                         adapter = new RedditItemListAdapter(activity);
                         adapter.addAll(userContent);
                     }
@@ -107,12 +109,13 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
                 case SUBMITTED: case LIKED: case DISLIKED: case HIDDEN:
                     Submissions submissions = new Submissions(httpClient, MyApplication.currentUser);
                     if(mLoadType == LoadType.extend) {
-                        Submission lastPost = (Submission) uf.adapter.getLastItem();
-                        userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, lastPost, null, false);
+                        userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1,
+                                RedditConstants.DEFAULT_LIMIT, (Submission) uf.adapter.getLastItem(), null, false);
                         adapter = uf.adapter;
                     }
                     else {
-                        userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1, RedditConstants.DEFAULT_LIMIT, null, null, false);
+                        userContent = submissions.ofUser(uf.username, this.userCategory, this.userSort, -1,
+                                RedditConstants.DEFAULT_LIMIT, null, null, false);
                         adapter = new RedditItemListAdapter(activity);
                         adapter.addAll(userContent);
                     }
