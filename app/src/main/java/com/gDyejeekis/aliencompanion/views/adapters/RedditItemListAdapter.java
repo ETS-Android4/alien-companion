@@ -169,7 +169,12 @@ public class RedditItemListAdapter extends RecyclerView.Adapter {
 
     public void setLoadingMoreItems(boolean flag) {
         loadingMoreItems = flag;
-        notifyItemChanged(redditItems.size() - 1);
+        try {
+            notifyItemChanged(redditItems.size() - 1);
+        } catch (IllegalStateException e) {
+            // cannot call this method while RecyclerView is computing a layout or scrolling
+            e.printStackTrace();
+        }
     }
 
     private void toggleMenuBar(int newSelected) {
