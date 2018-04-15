@@ -14,6 +14,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.MyApplication;
 
 import org.xml.sax.XMLReader;
@@ -326,8 +327,9 @@ public class HtmlTagHandler implements Html.TagHandler {
             for (Object replace : replaces) {
                 try {
                     output.setSpan(replace, where, thisLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                } catch (IndexOutOfBoundsException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    Crashlytics.logException(e); // TODO: 4/15/2018 remove at some point
                 }
             }
 
