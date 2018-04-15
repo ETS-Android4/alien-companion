@@ -312,6 +312,7 @@ public class DownloaderService extends IntentService {
             final String displayName = "saved";
             List<RedditItem> savedList = retrieveSavedPostsToSync(MyApplication.currentUser, savedCount, null);
             Collections.reverse(savedList);
+            MAX_PROGRESS = savedList.size() + 1;
             increaseProgress(displayName);
             for(RedditItem item : savedList) {
                 Submission s = null;
