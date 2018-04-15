@@ -243,8 +243,9 @@ public class LinkHandler {
                 }
                 return true;
             }
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            ToastUtils.showToast(context, "Unknown uri intent scheme");
         }
         return false;
     }
