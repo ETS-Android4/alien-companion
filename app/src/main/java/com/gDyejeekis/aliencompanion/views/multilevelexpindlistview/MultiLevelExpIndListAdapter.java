@@ -292,10 +292,14 @@ public abstract class MultiLevelExpIndListAdapter extends RecyclerView.Adapter {
      * @param position The position (range [0,n-1]) of the element that has to be collapsed/expanded
      */
     public void toggleGroup(int position) {
-        if (getItemAt(position).isGroup()){
-            expandGroup(position);
-        } else {
-            collapseGroup(position);
+        try {
+            if (getItemAt(position).isGroup()) {
+                expandGroup(position);
+            } else {
+                collapseGroup(position);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
