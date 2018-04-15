@@ -217,34 +217,37 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     }
 
     private void handleAspectRatio() {
-        int surfaceView_Width = gifParent.getWidth();
-        int surfaceView_Height = gifParent.getHeight();
+        try {
+            int surfaceView_Width = gifParent.getWidth();
+            int surfaceView_Height = gifParent.getHeight();
 
-        float video_Width = mPlayer.getVideoWidth();
-        float video_Height = mPlayer.getVideoHeight();
+            float video_Width = mPlayer.getVideoWidth();
+            float video_Height = mPlayer.getVideoHeight();
 
-        float ratio_width = surfaceView_Width/video_Width;
-        float ratio_height = surfaceView_Height/video_Height;
-        float aspectratio = video_Width/video_Height;
+            float ratio_width = surfaceView_Width / video_Width;
+            float ratio_height = surfaceView_Height / video_Height;
+            float aspectratio = video_Width / video_Height;
 
-        ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams = videoView.getLayoutParams();
 
-        if (ratio_width > ratio_height){
-            layoutParams.width = (int) (surfaceView_Height * aspectratio);
-            layoutParams.height = surfaceView_Height;
+            if (ratio_width > ratio_height) {
+                layoutParams.width = (int) (surfaceView_Height * aspectratio);
+                layoutParams.height = surfaceView_Height;
+            } else {
+                layoutParams.width = surfaceView_Width;
+                layoutParams.height = (int) (surfaceView_Width / aspectratio);
+            }
+
+            videoView.setLayoutParams(layoutParams);
+
+            //Log.d(TAG, "-----------------------------------------------");
+            //Log.d(TAG, "SurfaceView width: " + surfaceView_Width);
+            //Log.d(TAG, "SurfaceView height: " + surfaceView_Height);
+            //Log.d(TAG, "MediaPlayer width: " + video_Width);
+            //Log.d(TAG, "MediaPlayer height: " + video_Height);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else {
-            layoutParams.width = surfaceView_Width;
-            layoutParams.height = (int) (surfaceView_Width / aspectratio);
-        }
-
-        videoView.setLayoutParams(layoutParams);
-
-        //Log.d(TAG, "-----------------------------------------------");
-        //Log.d(TAG, "SurfaceView width: " + surfaceView_Width);
-        //Log.d(TAG, "SurfaceView height: " + surfaceView_Height);
-        //Log.d(TAG, "MediaPlayer width: " + video_Width);
-        //Log.d(TAG, "MediaPlayer height: " + video_Height);
     }
 
     @Override
