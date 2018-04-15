@@ -48,7 +48,7 @@ public class LoadSubredditSidebarTask extends AsyncTask<Void, Void, SubredditInf
     @Override
     protected void onPostExecute(SubredditInfo subredditInfo) {
         if(exception != null) {
-            dialog.dismiss();
+            dialog.dismissAllowingStateLoss();
             ToastUtils.showToast(dialog.getActivity(), "Error retrieving subreddit sidebar");
         }
         else {
