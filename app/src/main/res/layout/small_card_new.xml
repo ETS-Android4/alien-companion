@@ -24,12 +24,13 @@
                 android:id="@+id/layout_postLinkButton"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingRight="0dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/imgView_postImage"
                     android:src="@mipmap/ic_launcher" />
@@ -41,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:id="@+id/layout_postCommentsButton"
-                android:paddingLeft="10dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="6dp"
                 android:paddingRight="6dp"
                 android:paddingBottom="6dp">
