@@ -113,190 +113,198 @@ public class PostItemOptionsListener implements View.OnClickListener {
     }
 
     private Submission getCurrentPost() {
-        int position = viewHolder.getAdapterPosition();
-        if (currentAdapter instanceof RedditItemListAdapter)
-            return (Submission) ((RedditItemListAdapter) currentAdapter).getItemAt(position);
-        else if (currentAdapter instanceof PostAdapter)
-            return (Submission) ((PostAdapter) currentAdapter).getItemAt(position);
+        try {
+            int position = viewHolder.getAdapterPosition();
+            if (currentAdapter instanceof RedditItemListAdapter)
+                return (Submission) ((RedditItemListAdapter) currentAdapter).getItemAt(position);
+            else if (currentAdapter instanceof PostAdapter)
+                return (Submission) ((PostAdapter) currentAdapter).getItemAt(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public void onClick(View v) {
         Submission post = getCurrentPost();
-        switch (v.getId()) {
-            case R.id.btn_upvote:case R.id.imageView_upvote_classic:
-                UserActionType actionType;
-                LoadUserActionTask task;
-                SaveOfflineActionTask task1;
-                if (MyApplication.currentUser!=null) {
-                    if (post.getLikes().equals("true")) {
-                        post.setLikes("null");
-                        post.setScore(post.getScore() - 1);
-                        actionType = UserActionType.novote;
-                    } else {
-                        if (post.getLikes().equals("false")) post.setScore(post.getScore() + 2);
-                        else post.setScore(post.getScore() + 1);
-                        post.setLikes("true");
-                        actionType = UserActionType.upvote;
-                    }
-
-                    currentAdapter.notifyDataSetChanged();
-                    notifySecondPaneChanges();
-
-                    if( GeneralUtils.isNetworkAvailable(context)) {
-                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    } else {
-                        OfflineUserAction action;
-                        String accountName = MyApplication.currentAccount.getUsername();
-                        if (actionType == UserActionType.novote) {
-                            action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
+        if (post != null) {
+            switch (v.getId()) {
+                case R.id.btn_upvote:
+                case R.id.imageView_upvote_classic:
+                    UserActionType actionType;
+                    LoadUserActionTask task;
+                    SaveOfflineActionTask task1;
+                    if (MyApplication.currentUser != null) {
+                        if (post.getLikes().equals("true")) {
+                            post.setLikes("null");
+                            post.setScore(post.getScore() - 1);
+                            actionType = UserActionType.novote;
                         } else {
-                            action = new UpvoteAction(accountName, post.getFullName(), post.getTitle());
+                            if (post.getLikes().equals("false")) post.setScore(post.getScore() + 2);
+                            else post.setScore(post.getScore() + 1);
+                            post.setLikes("true");
+                            actionType = UserActionType.upvote;
                         }
-                        task1 = new SaveOfflineActionTask(context, action);
-                        task1.execute();
-                    }
-                } else {
-                    showSnackbar("Must be logged in to vote");
-                }
-                break;
-            case R.id.btn_downvote: case R.id.imageView_downvote_classic:
-                if (MyApplication.currentUser!=null) {
-                    if (post.getLikes().equals("false")) {
-                        post.setLikes("null");
-                        post.setScore(post.getScore() + 1);
-                        actionType = UserActionType.novote;
-                    } else {
-                        if (post.getLikes().equals("true")) post.setScore(post.getScore() - 2);
-                        else post.setScore(post.getScore() - 1);
-                        post.setLikes("false");
-                        actionType = UserActionType.downvote;
-                    }
 
-                    currentAdapter.notifyDataSetChanged();
-                    notifySecondPaneChanges();
-
-                    if (GeneralUtils.isNetworkAvailable(context)) {
-                        task = new LoadUserActionTask(context, post.getFullName(), actionType);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    } else {
-                        OfflineUserAction action;
-                        String accountName = MyApplication.currentAccount.getUsername();
-                        if (actionType == UserActionType.novote) {
-                            action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
-                        } else {
-                            action = new DownvoteAction(accountName, post.getFullName(), post.getTitle());
-                        }
-                        task1 = new SaveOfflineActionTask(context, action);
-                        task1.execute();
-                    }
-                } else {
-                    showSnackbar("Must be logged in to vote");
-                }
-                break;
-            case R.id.btn_save:
-                if (MyApplication.currentUser!=null) {
-                    if (post.isSaved()) {
-                        post.setSaved(false);
-                        actionType = UserActionType.unsave;
-                    } else {
-                        post.setSaved(true);
-                        actionType = UserActionType.save;
-                    }
-
-                    currentAdapter.notifyDataSetChanged();
-                    notifySecondPaneChanges();
-
-                    if (GeneralUtils.isNetworkAvailable(context)) {
-                        task = new LoadUserActionTask(context, post, actionType);
-                        task.execute();
-                    } else {
-                        OfflineUserAction action;
-                        String accountName = MyApplication.currentAccount.getUsername();
-                        if (actionType == UserActionType.save) {
-                            action = new SaveAction(accountName, post.getFullName(), post.getTitle());
-                        } else {
-                            action = new UnsaveAction(accountName, post.getFullName(), post.getTitle());
-                        }
-                        task1 = new SaveOfflineActionTask(context, action);
-                        task1.execute();
-                    }
-                } else {
-                    showSnackbar("Must be logged in to save");
-                }
-                break;
-            case R.id.btn_hide:
-                int index = -1;
-                boolean notifyOnPost = true;
-                if (MyApplication.currentUser!=null) {
-                    if (post.isHidden()) {
-                        post.setHidden(false);
-                        actionType = UserActionType.unhide;
                         currentAdapter.notifyDataSetChanged();
-                        // case viewing user's hidden posts
-                        if(context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
-                            notifyOnPost = false;
-                            notifySecondPaneChanges();
+                        notifySecondPaneChanges();
+
+                        if (GeneralUtils.isNetworkAvailable(context)) {
+                            task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        } else {
+                            OfflineUserAction action;
+                            String accountName = MyApplication.currentAccount.getUsername();
+                            if (actionType == UserActionType.novote) {
+                                action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
+                            } else {
+                                action = new UpvoteAction(accountName, post.getFullName(), post.getTitle());
+                            }
+                            task1 = new SaveOfflineActionTask(context, action);
+                            task1.execute();
                         }
                     } else {
-                        post.setHidden(true);
-                        actionType = UserActionType.hide;
-                        // case viewing user's hidden posts
-                        if (context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
-                            notifyOnPost = false;
-                            currentAdapter.notifyDataSetChanged();
-                            notifySecondPaneChanges();
+                        showSnackbar("Must be logged in to vote");
+                    }
+                    break;
+                case R.id.btn_downvote:
+                case R.id.imageView_downvote_classic:
+                    if (MyApplication.currentUser != null) {
+                        if (post.getLikes().equals("false")) {
+                            post.setLikes("null");
+                            post.setScore(post.getScore() + 1);
+                            actionType = UserActionType.novote;
                         } else {
-                            if (!(context instanceof PostActivity) && currentAdapter instanceof RedditItemListAdapter) {
-                                index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
-                                ((RedditItemListAdapter) currentAdapter).remove(post);
-                                notifyDataSetChangedDelayed();
+                            if (post.getLikes().equals("true")) post.setScore(post.getScore() - 2);
+                            else post.setScore(post.getScore() - 1);
+                            post.setLikes("false");
+                            actionType = UserActionType.downvote;
+                        }
+
+                        currentAdapter.notifyDataSetChanged();
+                        notifySecondPaneChanges();
+
+                        if (GeneralUtils.isNetworkAvailable(context)) {
+                            task = new LoadUserActionTask(context, post.getFullName(), actionType);
+                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        } else {
+                            OfflineUserAction action;
+                            String accountName = MyApplication.currentAccount.getUsername();
+                            if (actionType == UserActionType.novote) {
+                                action = new NoVoteAction(accountName, post.getFullName(), post.getTitle());
+                            } else {
+                                action = new DownvoteAction(accountName, post.getFullName(), post.getTitle());
+                            }
+                            task1 = new SaveOfflineActionTask(context, action);
+                            task1.execute();
+                        }
+                    } else {
+                        showSnackbar("Must be logged in to vote");
+                    }
+                    break;
+                case R.id.btn_save:
+                    if (MyApplication.currentUser != null) {
+                        if (post.isSaved()) {
+                            post.setSaved(false);
+                            actionType = UserActionType.unsave;
+                        } else {
+                            post.setSaved(true);
+                            actionType = UserActionType.save;
+                        }
+
+                        currentAdapter.notifyDataSetChanged();
+                        notifySecondPaneChanges();
+
+                        if (GeneralUtils.isNetworkAvailable(context)) {
+                            task = new LoadUserActionTask(context, post, actionType);
+                            task.execute();
+                        } else {
+                            OfflineUserAction action;
+                            String accountName = MyApplication.currentAccount.getUsername();
+                            if (actionType == UserActionType.save) {
+                                action = new SaveAction(accountName, post.getFullName(), post.getTitle());
+                            } else {
+                                action = new UnsaveAction(accountName, post.getFullName(), post.getTitle());
+                            }
+                            task1 = new SaveOfflineActionTask(context, action);
+                            task1.execute();
+                        }
+                    } else {
+                        showSnackbar("Must be logged in to save");
+                    }
+                    break;
+                case R.id.btn_hide:
+                    int index = -1;
+                    boolean notifyOnPost = true;
+                    if (MyApplication.currentUser != null) {
+                        if (post.isHidden()) {
+                            post.setHidden(false);
+                            actionType = UserActionType.unhide;
+                            currentAdapter.notifyDataSetChanged();
+                            // case viewing user's hidden posts
+                            if (context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
+                                notifyOnPost = false;
+                                notifySecondPaneChanges();
+                            }
+                        } else {
+                            post.setHidden(true);
+                            actionType = UserActionType.hide;
+                            // case viewing user's hidden posts
+                            if (context instanceof UserActivity && ((UserActivity) context).getListFragment().userContent == UserSubmissionsCategory.HIDDEN) {
+                                notifyOnPost = false;
+                                currentAdapter.notifyDataSetChanged();
                                 notifySecondPaneChanges();
                             } else {
-                                currentAdapter.notifyDataSetChanged();
-                                RecyclerView.Adapter secondPaneAdapter = getSecondPaneAdapter();
-                                if (secondPaneAdapter != null && secondPaneAdapter instanceof RedditItemListAdapter) {
-                                    index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(post);
-                                    ((RedditItemListAdapter) secondPaneAdapter).remove(post);
-                                    notifyDataSetChangedDelayed(secondPaneAdapter);
+                                if (!(context instanceof PostActivity) && currentAdapter instanceof RedditItemListAdapter) {
+                                    index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
+                                    ((RedditItemListAdapter) currentAdapter).remove(post);
+                                    notifyDataSetChangedDelayed();
+                                    notifySecondPaneChanges();
+                                } else {
+                                    currentAdapter.notifyDataSetChanged();
+                                    RecyclerView.Adapter secondPaneAdapter = getSecondPaneAdapter();
+                                    if (secondPaneAdapter != null && secondPaneAdapter instanceof RedditItemListAdapter) {
+                                        index = ((RedditItemListAdapter) secondPaneAdapter).indexOf(post);
+                                        ((RedditItemListAdapter) secondPaneAdapter).remove(post);
+                                        notifyDataSetChangedDelayed(secondPaneAdapter);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (GeneralUtils.isNetworkAvailable(context)) {
-                        task = new LoadUserActionTask(context, post, index, actionType);
-                        task.setNotifyOnPostExecute(notifyOnPost);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    } else {
-                        OfflineUserAction action;
-                        String accountName = MyApplication.currentAccount.getUsername();
-                        if (actionType == UserActionType.hide) {
-                            action = new HideAction(accountName, post.getFullName(), post.getTitle());
+                        if (GeneralUtils.isNetworkAvailable(context)) {
+                            task = new LoadUserActionTask(context, post, index, actionType);
+                            task.setNotifyOnPostExecute(notifyOnPost);
+                            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         } else {
-                            action = new UnhideAction(accountName, post.getFullName(), post.getTitle());
+                            OfflineUserAction action;
+                            String accountName = MyApplication.currentAccount.getUsername();
+                            if (actionType == UserActionType.hide) {
+                                action = new HideAction(accountName, post.getFullName(), post.getTitle());
+                            } else {
+                                action = new UnhideAction(accountName, post.getFullName(), post.getTitle());
+                            }
+                            task1 = new SaveOfflineActionTask(context, action);
+                            task1.execute();
                         }
-                        task1 = new SaveOfflineActionTask(context, action);
-                        task1.execute();
+                    } else {
+                        showSnackbar("Must be logged in to hide");
                     }
-                } else {
-                    showSnackbar("Must be logged in to hide");
-                }
-                break;
-            case R.id.btn_view_user:
-                viewUser(post);
-                break;
-            case R.id.btn_share:
-                sharePost(post);
-                break;
-            case R.id.btn_open_browser:
-                openInBrowser(post);
-                break;
-            case R.id.btn_more:
-                showMoreOptionsPopup(v, post);
-                break;
+                    break;
+                case R.id.btn_view_user:
+                    viewUser(post);
+                    break;
+                case R.id.btn_share:
+                    sharePost(post);
+                    break;
+                case R.id.btn_open_browser:
+                    openInBrowser(post);
+                    break;
+                case R.id.btn_more:
+                    showMoreOptionsPopup(v, post);
+                    break;
+            }
         }
     }
 
