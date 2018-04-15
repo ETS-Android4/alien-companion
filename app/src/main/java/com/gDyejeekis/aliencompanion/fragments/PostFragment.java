@@ -311,9 +311,11 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void newCommentSubmitted(int position, Comment comment) {
-        if (postAdapter!=null && mLayoutManager!=null) {
+        try {
             postAdapter.addComment(position, comment);
             mLayoutManager.scrollToPosition(position);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
