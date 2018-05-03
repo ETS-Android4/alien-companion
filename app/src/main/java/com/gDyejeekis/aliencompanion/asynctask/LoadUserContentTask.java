@@ -124,7 +124,7 @@ public class LoadUserContentTask extends AsyncTask<Void, Void, List<RedditItem>>
             }
             //ConvertUtils.preparePostsText(activity, userContent);
             return userContent;
-        } catch (RetrievalFailedException | RedditError | NullPointerException | ClassCastException e) {
+        } catch (Exception e) {
             mException = e;
             e.printStackTrace();
         }
