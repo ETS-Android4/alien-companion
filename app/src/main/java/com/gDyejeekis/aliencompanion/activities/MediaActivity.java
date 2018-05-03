@@ -39,7 +39,6 @@ import com.gDyejeekis.aliencompanion.fragments.media_activity_fragments.VideoFra
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.models.RedditVideo;
-import com.gDyejeekis.aliencompanion.utils.BitmapTransform;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.LinkUtils;
 import com.gDyejeekis.aliencompanion.utils.StorageUtils;
@@ -677,7 +676,8 @@ public class MediaActivity extends BackNavActivity {
         boolean isImage = false;
         if(success) {
             try {
-                resizedBitmap = new BitmapTransform(640, 480).transform(GeneralUtils.getBitmapFromPath(file.getAbsolutePath()));
+                //resizedBitmap = new BitmapTransform(640, 480).transform(GeneralUtils.getBitmapFromPath(file.getAbsolutePath()));
+                resizedBitmap = GeneralUtils.decodeSampledBitmapFromPath(file.getAbsolutePath(), 640, 480);
                 isImage = true;
             } catch (Exception e) {
                 isImage = false;
