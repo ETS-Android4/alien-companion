@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
+import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
+import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserContentTask;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddToSyncedDialogFragment;
@@ -23,6 +25,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategor
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -210,6 +213,14 @@ public class UserFragment extends RedditContentFragment {
         mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadUserContentTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void itemEdited(int position, RedditItem item) {
+        try {
+            adapter.updateItem(position, item);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setActionBarTitle() {

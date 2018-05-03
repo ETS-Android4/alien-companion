@@ -48,31 +48,23 @@ public class RedditItemSubmittedReceiver extends BroadcastReceiver {
             case POST_SELF_TEXT_EDIT:
                 if (validPostExtras() && context instanceof PostActivity) {
                     PostFragment postFragment = ((PostActivity) context).getPostFragment();
-                    if (postFragment!=null && postFragment.postAdapter!=null) {
-                        postFragment.postAdapter.updateItem(0, post);
-                    }
+                    if (postFragment!=null) postFragment.itemEdited(0, post);
                 }
                 break;
             case COMMENT_SUBMISSION:
                 if (validCommentExtras() && context instanceof PostActivity) {
                     PostFragment postFragment = ((PostActivity) context).getPostFragment();
-                    if (postFragment!=null) {
-                        postFragment.newCommentSubmitted(commentIndex, comment);
-                    }
+                    if (postFragment!=null) postFragment.newCommentSubmitted(commentIndex, comment);
                 }
                 break;
             case COMMENT_EDIT:
                 if (validCommentExtras()) {
                     if (context instanceof PostActivity) {
                         PostFragment postFragment = ((PostActivity) context).getPostFragment();
-                        if (postFragment!=null && postFragment.postAdapter!=null) {
-                            postFragment.postAdapter.updateItem(commentIndex, comment);
-                        }
+                        if (postFragment!=null) postFragment.itemEdited(commentIndex, comment);
                     } else if (context instanceof UserActivity){
                         UserFragment fragment = ((UserActivity) context).getListFragment();
-                        if (fragment!=null && fragment.adapter!=null) {
-                            fragment.adapter.updateItem(commentIndex, comment);
-                        }
+                        if (fragment!=null) fragment.itemEdited(commentIndex, comment);
                     }
                 }
                 break;

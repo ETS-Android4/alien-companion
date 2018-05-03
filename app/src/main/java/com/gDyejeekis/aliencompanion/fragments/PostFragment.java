@@ -51,6 +51,7 @@ import com.gDyejeekis.aliencompanion.views.DividerItemDecoration;
 import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
 import com.gDyejeekis.aliencompanion.enums.SubmitType;
+import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 import com.gDyejeekis.aliencompanion.views.on_click_listeners.fab_menu_listeners.CommentFabNavListener;
 
 /**
@@ -314,6 +315,14 @@ public class PostFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         try {
             postAdapter.addComment(position, comment);
             mLayoutManager.scrollToPosition(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void itemEdited(int position, MultiLevelExpIndListAdapter.ExpIndData item) {
+        try {
+            postAdapter.updateItem(position, item);
         } catch (Exception e) {
             e.printStackTrace();
         }
