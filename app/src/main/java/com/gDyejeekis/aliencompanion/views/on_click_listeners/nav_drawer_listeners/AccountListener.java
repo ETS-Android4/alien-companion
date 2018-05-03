@@ -33,6 +33,7 @@ public class AccountListener extends NavDrawerListener {
         getDrawerLayout().closeDrawers();
         switch (accountItem.getAccountType()) {
             case NavDrawerAccount.TYPE_ADD:
+                getAdapter().toggleAccountItems();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -56,6 +57,7 @@ public class AccountListener extends NavDrawerListener {
                         editor.apply();
                         getActivity().changeCurrentUser(accountItem.savedAccount);
                         getAdapter().setCurrentAccountName(accountItem.getName());
+                        getAdapter().toggleAccountItems();
                     }
                 }, AppConstants.NAV_DRAWER_CLOSE_TIME);
                 break;

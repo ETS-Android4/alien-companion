@@ -168,8 +168,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
 
     public void setCurrentAccountName(String name) {
         currentAccountName = name;
-        toggleAccountItems();
-        Log.d("current account name", "current : " + currentAccountName);
+        //Log.d("current account name", "current : " + currentAccountName);
     }
 
     public void showUserMenuItems() {
@@ -274,7 +273,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void accountAdded(NavDrawerAccount accountItem, String name) {
-        items.add(accountItems.size(), accountItem);
+        if (accountItemsVisible) items.add(accountItems.size(), accountItem);
         accountItems.add(accountItems.size()-1, accountItem);
         setCurrentAccountName(name);
         notifyDataSetChanged();
