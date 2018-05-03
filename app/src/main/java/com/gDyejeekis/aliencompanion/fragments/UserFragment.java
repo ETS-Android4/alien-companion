@@ -85,7 +85,7 @@ public class UserFragment extends RedditContentFragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(!MyApplication.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
+        if(adapter!=null && !MyApplication.dualPane && userContent == UserSubmissionsCategory.OVERVIEW)
             adapter.notifyItemChanged(0);
     }
 
