@@ -701,18 +701,26 @@ public class DownloaderService extends IntentService {
 
     public static void manualSyncPause(Context context) {
         manuallyPaused = true;
-        notifBuilder.setContentText("Pausing..");
-        notifBuilder.mActions.set(0, createResumeAction(context));
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(FOREGROUND_ID, notifBuilder.build());
+        try {
+            notifBuilder.setContentText("Pausing..");
+            notifBuilder.mActions.set(0, createResumeAction(context));
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(FOREGROUND_ID, notifBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void manualSyncResume(Context context) {
         manuallyPaused = false;
-        notifBuilder.setContentText("Resuming..");
-        notifBuilder.mActions.set(0, createPauseAction(context));
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(FOREGROUND_ID, notifBuilder.build());
+        try {
+            notifBuilder.setContentText("Resuming..");
+            notifBuilder.mActions.set(0, createPauseAction(context));
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(FOREGROUND_ID, notifBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void manualSyncCancel(Context context) {
