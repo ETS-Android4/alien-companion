@@ -229,8 +229,14 @@ public class BrowserFragment extends Fragment {
                 goForward();
                 return true;
             case R.id.action_open_browser:
-                Uri uri = webView.getUrl()!=null ? Uri.parse(webView.getUrl()) : Uri.parse(url);
-                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                try {
+                    final String currentUrl = webView.getUrl();
+                    Uri uri = currentUrl != null ? Uri.parse(currentUrl) : Uri.parse(url);
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.showToast(activity, "Failed to parse URL");
+                }
                 return true;
             case R.id.action_refresh:
                 webView.reload();
