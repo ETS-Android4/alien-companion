@@ -315,7 +315,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
     }
 
     public void deleteAccount(String accountToDelete) {
-        Log.d("current account name", "before delete : " + currentAccountName);
+        //Log.d("current account name", "before delete : " + currentAccountName);
         List<SavedAccount> accounts = readAccounts();
         for(SavedAccount account : accounts) {
             if(account.getUsername().equals(accountToDelete)) {
@@ -331,18 +331,22 @@ public class NavDrawerAdapter extends RecyclerView.Adapter {
                 accountItems.remove(account);
                 items.remove(account);
                 if(currentAccountName.equals(accountToDelete)) {
-                    currentAccountName = "Logged out";
+                    setCurrentAccountName("Logged out");
                     justRemove = false;
                 }
                 break;
             }
             i++;
         }
+
         SharedPreferences.Editor editor = MyApplication.prefs.edit();
         editor.putString("currentAccountName", currentAccountName);
         editor.apply();
-        if(justRemove) notifyItemRemoved(i+1);
+
+        if (justRemove)
+            notifyItemRemoved(i+1);
         else {
+            toggleAccountItems();
             activity.getDrawerLayout().closeDrawers();
             activity.changeCurrentUser(accountItems.get(0).savedAccount);
         }
