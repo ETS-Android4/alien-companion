@@ -73,10 +73,15 @@ public class BrowserActivity extends SwipeBackActivity {
     }
 
     public boolean syncedArticleExists() {
-        final String articleId = String.valueOf(url.hashCode());
-        File dir = GeneralUtils.getSyncedArticlesDir(this);
-        File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), articleId + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX);
-        return file!=null;
+        try {
+            final String articleId = String.valueOf(url.hashCode());
+            File dir = GeneralUtils.getSyncedArticlesDir(this);
+            File file = StorageUtils.findFile(dir, dir.getAbsolutePath(), articleId + AppConstants.SYNCED_ARTICLE_DATA_SUFFIX);
+            return file != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void loadSyncedArticle() {
