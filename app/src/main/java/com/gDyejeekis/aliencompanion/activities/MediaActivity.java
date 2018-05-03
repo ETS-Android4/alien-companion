@@ -476,10 +476,10 @@ public class MediaActivity extends BackNavActivity {
                     Fragment fragment = (Fragment) viewPager.getAdapter().instantiateItem(viewPager, viewPagerPosition);
                     if (fragment instanceof GifFragment) {
                         if (state == SCROLL_STATE_IDLE) {
-                            ((GifFragment) fragment).resumePlayback();
+                            ((GifFragment) fragment).resumePlaybackSafe();
                         }
                         else {
-                            ((GifFragment) fragment).pausePlayback();
+                            ((GifFragment) fragment).pausePlaybackSafe();
                         }
                     }
                 }

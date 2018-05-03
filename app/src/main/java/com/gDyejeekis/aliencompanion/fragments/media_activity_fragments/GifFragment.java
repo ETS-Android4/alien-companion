@@ -371,6 +371,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         }
     }
 
+    public void resumePlaybackSafe() {
+        try {
+            resumePlayback();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void pausePlayback() {
         if(isGif) {
             if(gifDrawable != null && gifDrawable.isPlaying()) {
@@ -381,6 +389,14 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             if(mPlayer !=null && mPlayer.isPlaying()) {
                 mPlayer.pause();
             }
+        }
+    }
+
+    public void pausePlaybackSafe() {
+        try {
+            pausePlayback();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
