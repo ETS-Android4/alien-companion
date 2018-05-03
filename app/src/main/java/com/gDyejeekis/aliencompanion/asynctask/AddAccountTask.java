@@ -42,6 +42,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     private String password;
     private String oauthCode;
     private Exception exception;
+    private boolean accountAlreadyExists;
 
     private String currentAccountName;
 
@@ -108,6 +109,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 HttpClient httpClient = new PoliteRedditHttpClient();
                 ProfileActions profileActions = new ProfileActions(httpClient, token.accessToken);
                 UserInfo userInfo = profileActions.getUserInformation();
+                if (checkAlreadyExists(userInfo.getName())) return null;
                 User user = new User(httpClient, userInfo.getName(), token);
                 List<String> subredditList = getUserSubreddits(user);
                 List<String> multiList = getUserMultis(user);
@@ -115,6 +117,7 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
                 newAccount = new SavedAccount(user.getUsername(), token, subredditList, multiList);
             }
             else {
+                if (checkAlreadyExists(username)) return null;
                 User user = new User(new RedditHttpClient(), username, password);
                 user.connect();
 
@@ -142,7 +145,10 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
     protected void onPostExecute(SavedAccount account) {
         dialogFragment.dismissAllowingStateLoss();
         MyApplication.renewingToken = false;
-        if(exception != null || account == null) {
+        if (accountAlreadyExists) {
+            ToastUtils.showToast(context, "An account with that username already exists");
+        }
+        else if (exception != null || account == null) {
             ToastUtils.showToast(context, "Failed to verify account");
             try {
                 MyApplication.currentAccessToken = MyApplication.currentAccount.getToken().accessToken;
@@ -154,4 +160,14 @@ public class AddAccountTask extends AsyncTask<Void, Void, SavedAccount> {
             mainActivity.changeCurrentUser(account);
         }
     }
+
+    private boolean checkAlreadyExists(String username) {
+        for (NavDrawerAccount account : ((MainActivity) context).getNavDrawerAdapter().accountItems) {
+            if (account.getName().equalsIgnoreCase(username)) {
+                accountAlreadyExists = true;
+            }
+        }
+        return accountAlreadyExists;
+    }
+
 }
