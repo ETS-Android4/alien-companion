@@ -168,6 +168,7 @@ public class SearchFragment extends RedditContentFragment {
         mainProgressBar.setVisibility(View.VISIBLE);
         task = new LoadSearchTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        activity.expandToolbar();
     }
 
     @Override

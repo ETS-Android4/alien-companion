@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.gDyejeekis.aliencompanion.activities.ToolbarActivity;
 import com.gDyejeekis.aliencompanion.utils.FilterUtils;
 import com.gDyejeekis.aliencompanion.utils.ThumbnailLoader;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
@@ -142,6 +143,7 @@ public class LoadSearchTask extends AsyncTask<Void, Void, List<RedditItem>> {
                         break;
                     case refresh:
                         if (submissions.size() != 0) {
+                            ((ToolbarActivity) context).expandToolbar();
                             if(changedSort) {
                                 sf.searchSort = sort;
                                 sf.timeSpan = time;
