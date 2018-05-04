@@ -111,15 +111,17 @@ public class LoadMoreCommentsTask extends AsyncTask<Void, Void, List<Comment>> {
     protected void onPostExecute(List<Comment> comments) {
         moreChildren.setLoadingMore(false);
         PostAdapter postAdapter = postFragment.postAdapter;
-        if(comments==null || comments.size()==0) {
+        if (comments==null || comments.size()==0) {
             ToastUtils.showSnackbar(postFragment.getSnackbarParentView(), exception!=null ? "Error loading comments" : "Replies not found");
             int index = postAdapter.getData().indexOf(moreChildren);
             postAdapter.notifyItemChanged(index);
         }
         else {
+            postAdapter.toggleMenuBar(PostAdapter.NO_POSITION);
             postAdapter.remove(moreChildren);
             postAdapter.addAll(addIndex, comments);
             postFragment.updateFabNavOnScroll(0);
         }
     }
+
 }

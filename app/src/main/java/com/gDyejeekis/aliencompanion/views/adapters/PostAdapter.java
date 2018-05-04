@@ -189,7 +189,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
         });
     }
 
-    private void toggleMenuBar(int newSelected) {
+    public void toggleMenuBar(int newSelected) {
         int previousSelected = selectedPosition;
         if (previousSelected == NO_POSITION) {
             selectedPosition = newSelected;
