@@ -326,6 +326,7 @@ public class PostListFragment extends RedditContentFragment {
                 intent.putExtra("time", timeSpan);
                 intent.putExtra("subreddit", subreddit);
                 intent.putExtra("isMulti", isMulti);
+                intent.putExtra("isOther", isOther);
                 intent.putExtra("syncOptions", syncOptions);
                 activity.startService(intent);
                 checkOfflineModeExplanation();

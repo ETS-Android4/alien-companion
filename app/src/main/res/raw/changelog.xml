@@ -2,7 +2,8 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="" changeDate="">
-        <changelogtext></changelogtext>
+        <changelogtext>Using the 'Sync now' or 'Custom sync' options when browsing individually synced posts will now
+        properly re-sync them</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Various small optimizations, bug and crash fixes</changelogtext>
     </changelogversion>

@@ -103,6 +103,7 @@ public class DownloaderService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
+        initNotificationBuilder();
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -128,11 +129,10 @@ public class DownloaderService extends IntentService {
 
         if (profile != null) {
             SyncProfileOptions syncOptions;
-            if (!profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null) {
+            if (!profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null)
                 syncOptions = profile.getSyncOptions();
-            } else {
-                syncOptions = new SyncProfileOptions();
-            }
+            else syncOptions = new SyncProfileOptions();
+
             MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
 
             if (!(syncOptions.isSyncOverWifiOnly() && !GeneralUtils.isConnectedOverWifi(this))) {
@@ -141,8 +141,7 @@ public class DownloaderService extends IntentService {
                 for (String subreddit : profile.getSubreddits()) {
                     progress = 0;
                     filename = subreddit.toLowerCase();
-                    notifBuilder = new NotificationCompat.Builder(this);
-                    startForeground(FOREGROUND_ID, buildForegroundNotification(filename, false));
+                    startForeground(FOREGROUND_ID, buildProgressNotification(filename, false));
                     acquireWakelock();
 
                     syncSubredditControlled(filename, subreddit, SubmissionSort.HOT, null, false, syncOptions);
@@ -151,8 +150,7 @@ public class DownloaderService extends IntentService {
                 for (String multireddit : profile.getMultireddits()) {
                     progress = 0;
                     filename = AppConstants.MULTIREDDIT_FILE_PREFIX + multireddit.toLowerCase();
-                    notifBuilder = new NotificationCompat.Builder(this);
-                    startForeground(FOREGROUND_ID, buildForegroundNotification(filename, false));
+                    startForeground(FOREGROUND_ID, buildProgressNotification(filename, false));
                     acquireWakelock();
 
                     syncSubredditControlled(filename, multireddit, SubmissionSort.HOT, null, true, syncOptions);
@@ -163,9 +161,8 @@ public class DownloaderService extends IntentService {
         } else if (submission != null) {
             MAX_PROGRESS = 1;
             progress = 0;
-            notifBuilder = new NotificationCompat.Builder(this);
             String title = (submission.getTitle().length() > 20) ? submission.getTitle().substring(0, 20) : submission.getTitle();
-            startForeground(FOREGROUND_ID, buildForegroundNotification(title, true));
+            startForeground(FOREGROUND_ID, buildProgressNotification(title, true));
             acquireWakelock();
 
             syncPostControlled(submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
@@ -175,30 +172,36 @@ public class DownloaderService extends IntentService {
             progress = 0;
 
             SyncProfileOptions syncOptions = new SyncProfileOptions();
-            notifBuilder = new NotificationCompat.Builder(this);
-            startForeground(FOREGROUND_ID, buildForegroundNotification("saved", false));
+            startForeground(FOREGROUND_ID, buildProgressNotification("saved", false));
             acquireWakelock();
 
             syncSavedControlled(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, savedCount, syncOptions);
         } else {
             MAX_PROGRESS = MyApplication.syncPostCount + 1;
             progress = 0;
-            String subreddit = i.getStringExtra("subreddit");
-            boolean isMulti = i.getBooleanExtra("isMulti", false);
+
             SyncProfileOptions syncOptions = (SyncProfileOptions) i.getSerializableExtra("syncOptions");
-            if (syncOptions==null) syncOptions = new SyncProfileOptions();
-            String filename = "";
-            if (isMulti) filename = AppConstants.MULTIREDDIT_FILE_PREFIX;
-            filename = filename + ((subreddit != null) ? subreddit.toLowerCase() : "frontpage");
+            if (syncOptions == null) syncOptions = new SyncProfileOptions();
 
-            notifBuilder = new NotificationCompat.Builder(this);
-            startForeground(FOREGROUND_ID, buildForegroundNotification(filename, false));
-            acquireWakelock();
+            String subreddit = i.getStringExtra("subreddit");
+            boolean isOther = i.getBooleanExtra("isOther", false);
 
-            SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
-            TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
+            if (isOther && subreddit.equalsIgnoreCase("synced")) {
+                // TODO: 5/4/2018 re-sync individually synced
+            } else {
+                SubmissionSort submissionSort = (SubmissionSort) i.getSerializableExtra("sort");
+                TimeSpan timeSpan = (TimeSpan) i.getSerializableExtra("time");
+                boolean isMulti = i.getBooleanExtra("isMulti", false);
 
-            syncSubredditControlled(filename, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
+                String filename = "";
+                if (isMulti) filename = AppConstants.MULTIREDDIT_FILE_PREFIX;
+                filename = filename + ((subreddit != null) ? subreddit.toLowerCase() : "frontpage");
+
+                startForeground(FOREGROUND_ID, buildProgressNotification(filename, false));
+                acquireWakelock();
+
+                syncSubredditControlled(filename, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
+            }
         }
     }
 
@@ -734,14 +737,19 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    private Notification buildForegroundNotification(String displayName, boolean indeterminateProgress) {
-        notifBuilder.setOngoing(true);
-        notifBuilder.setContentTitle("Alien Companion")
-                .setContentText("Syncing " + displayName +"...")
-                .setSmallIcon(android.R.drawable.stat_sys_download).setTicker("Syncing posts...")
-                .setProgress(MAX_PROGRESS, progress, indeterminateProgress)
+    private void initNotificationBuilder() {
+        notifBuilder = new NotificationCompat.Builder(this);
+        notifBuilder.setOngoing(true)
+                .setContentTitle("Alien Companion")
+                .setSmallIcon(android.R.drawable.stat_sys_download)
+                .setTicker("Syncing posts...")
                 .addAction(createPauseAction(this))
                 .addAction(createCancelAction(this));
+    }
+
+    private Notification buildProgressNotification(String displayName, boolean indeterminateProgress) {
+        notifBuilder.setContentText("Syncing " + displayName +"...")
+                .setProgress(MAX_PROGRESS, progress, indeterminateProgress);
         return(notifBuilder.build());
     }
 
@@ -749,8 +757,7 @@ public class DownloaderService extends IntentService {
         progress++;
         Log.d(TAG, progress + "/" + MAX_PROGRESS + " done");
         if (!manuallyPaused && !manuallyCancelled) {
-            notifBuilder.setContentText("Syncing " + displayName + "...").setSmallIcon(android.R.drawable.stat_sys_download).setProgress(MAX_PROGRESS, progress, false);
-            notificationManager.notify(FOREGROUND_ID, notifBuilder.build());
+            notificationManager.notify(FOREGROUND_ID, buildProgressNotification(displayName, false));
         }
     }
 
