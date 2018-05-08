@@ -103,6 +103,13 @@ public class SubredditActivity extends SwipeBackActivity {
             menu.removeItem(R.id.action_search);
             menu.removeItem(R.id.action_view_sidebar);
             menu.removeItem(R.id.action_submit_post);
+
+            boolean isOther = (listFragment!=null) ? listFragment.isOther
+                    : getIntent().getBooleanExtra("isOther", false);
+            if (isOther) {
+                menu.removeItem(R.id.action_custom_sync);
+                menu.removeItem(R.id.action_sync_posts);
+            }
         }
         else {
             menu.removeItem(R.id.action_view_synced);

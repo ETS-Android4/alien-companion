@@ -529,6 +529,7 @@ public class PostListFragment extends RedditContentFragment {
         task = new LoadPostListTask(activity, this, LoadType.init);
         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         hideAllFabOptions();
+        activity.invalidateOptionsMenu();
         activity.expandToolbar();
     }
 
