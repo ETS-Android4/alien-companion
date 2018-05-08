@@ -326,10 +326,10 @@ public class HtmlTagHandler implements Html.TagHandler {
             }
             for (Object replace : replaces) {
                 try {
+                    // this sometimes throws IndexOutOfBounds exception
                     output.setSpan(replace, where, thisLen, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Crashlytics.logException(e); // TODO: 4/15/2018 remove at some point
                 }
             }
 
