@@ -27,6 +27,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -48,6 +49,8 @@ import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.fabric.sdk.android.services.common.Crash;
 
 /**
  * Created by George on 2/9/2017.
@@ -206,6 +209,18 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             return ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
         }
         return -1;
+    }
+
+    protected void showViewsPopupSafe() {
+        try {
+            showViewsPopup(activity.findViewById(R.id.action_sort));
+        } catch (Exception e) {
+            try {
+                showViewsPopup(activity.findViewById(R.id.action_refresh));
+            } catch (Exception x) {
+                Crashlytics.log("Null anchor used for showViewsPopup()");
+            }
+        }
     }
 
     protected void showViewsPopup(View v) {

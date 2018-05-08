@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.InfoDialogFragment;
@@ -191,11 +192,7 @@ public class PostListFragment extends RedditContentFragment {
                 removeClickedPosts();
                 return true;
             case R.id.action_switch_view:
-                try {
-                    showViewsPopup(activity.findViewById(R.id.action_sort));
-                } catch (Exception e) {
-                    showViewsPopup(activity.findViewById(R.id.action_refresh));
-                }
+                showViewsPopupSafe();
                 return true;
             case R.id.action_view_sidebar:
                 if(subreddit == null || subreddit.equalsIgnoreCase("all") || subreddit.equalsIgnoreCase("popular")) {
@@ -280,11 +277,7 @@ public class PostListFragment extends RedditContentFragment {
             if (fabClicked) {
                 setFabSubmitOptionsVisible(true);
             } else {
-                try {
-                    showSubmitPopup(activity.findViewById(R.id.action_sort));
-                } catch (Exception e) {
-                    showSubmitPopup(activity.findViewById(R.id.action_refresh));
-                }
+                showSubmitPopupSafe();
             }
         }
     }
@@ -347,6 +340,18 @@ public class PostListFragment extends RedditContentFragment {
             InfoDialogFragment.showDialog(activity.getSupportFragmentManager(),
                     activity.getResources().getString(R.string.about_offline_mode_title),
                     activity.getResources().getString(R.string.about_offline_mode));
+        }
+    }
+
+    private void showSubmitPopupSafe() {
+        try {
+            showSubmitPopup(activity.findViewById(R.id.action_sort));
+        } catch (Exception e) {
+            try {
+                showSubmitPopup(activity.findViewById(R.id.action_refresh));
+            } catch (Exception x) {
+                Crashlytics.log("Null anchor used for showSubmitPopup()");
+            }
         }
     }
 

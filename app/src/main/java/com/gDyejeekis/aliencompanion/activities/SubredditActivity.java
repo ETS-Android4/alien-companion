@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
+import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
@@ -121,15 +122,11 @@ public class SubredditActivity extends SwipeBackActivity {
             switch (item.getItemId()) {
                 case R.id.action_sort:
                     MyApplication.actionSort = true;
-                    showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+                    showPostsOrCommentsPopupSafe();
                     return true;
                 case R.id.action_refresh:
                     MyApplication.actionSort = false;
-                    try {
-                        showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
-                    } catch (Exception e) {
-                        showPostsOrCommentsPopup(findViewById(R.id.action_sort));
-                    }
+                    showPostsOrCommentsPopupSafe();
                     return true;
             }
         }
@@ -142,6 +139,18 @@ public class SubredditActivity extends SwipeBackActivity {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    private void showPostsOrCommentsPopupSafe() {
+        try {
+            showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
+        } catch (Exception e) {
+            try {
+                showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+            } catch (Exception x) {
+                Crashlytics.log("Null anchor used for showPostsOrCommentsPopup()");
+            }
         }
     }
 

@@ -187,7 +187,7 @@ public class SearchFragment extends RedditContentFragment {
                 showSearchDialog();
                 return true;
             case R.id.action_switch_view:
-                showViewsPopup(activity.findViewById(R.id.action_refresh));
+                showViewsPopupSafe();
                 return true;
         }
 

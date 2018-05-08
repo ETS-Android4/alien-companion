@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
+import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
@@ -398,15 +399,11 @@ public class MainActivity extends ToolbarActivity {
             switch (item.getItemId()) {
                 case R.id.action_sort:
                     MyApplication.actionSort = true;
-                    showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+                    showPostsOrCommentsPopupSafe();
                     return true;
                 case R.id.action_refresh:
                     MyApplication.actionSort = false;
-                    try {
-                        showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
-                    } catch (Exception e) {
-                        showPostsOrCommentsPopup(findViewById(R.id.action_sort));
-                    }
+                    showPostsOrCommentsPopupSafe();
                     return true;
             }
         }
@@ -417,6 +414,18 @@ public class MainActivity extends ToolbarActivity {
         }
 
         return drawerToggle.onOptionsItemSelected(item);
+    }
+
+    private void showPostsOrCommentsPopupSafe() {
+        try {
+            showPostsOrCommentsPopup(findViewById(R.id.action_refresh));
+        } catch (Exception e) {
+            try {
+                showPostsOrCommentsPopup(findViewById(R.id.action_sort));
+            } catch (Exception x) {
+                Crashlytics.log("Null anchor used for showPostsOrCommentsPopup()");
+            }
+        }
     }
 
     private void showPostsOrCommentsPopup(final View v) {
