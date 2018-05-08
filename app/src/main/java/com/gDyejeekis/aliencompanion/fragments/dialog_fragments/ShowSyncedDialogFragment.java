@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -71,6 +72,15 @@ public class ShowSyncedDialogFragment extends ScalableDialogFragment implements 
     private ArrayAdapter adapter;
     private ProgressBar progressBar;
     private TextView notSyncedTextView;
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            super.show(manager, tag);
+        } catch (IllegalStateException e) {
+            manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
