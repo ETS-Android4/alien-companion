@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Request;
 
 /**
@@ -76,7 +78,10 @@ public class ImgurHttpClient {
         final String url = ImgurApiEndpoints.BASE_IMGUR_URL + urlPath;
         Log.d(TAG, "GET request to " + url);
         try {
-            Request request = new Request.Builder().url(url).addHeader("Authorization", "Client-ID " + CLIENT_ID).build();
+            Request request = new Request.Builder()
+                    .cacheControl(new CacheControl.Builder().maxStale(24, TimeUnit.HOURS).build())
+                    .url(url).addHeader("Authorization", "Client-ID " + CLIENT_ID)
+                    .build();
             okhttp3.Response response = MyApplication.okHttpClient.newCall(request).execute();
             String content = response.body().string();
             if (DEBUG_REQUESTS) {

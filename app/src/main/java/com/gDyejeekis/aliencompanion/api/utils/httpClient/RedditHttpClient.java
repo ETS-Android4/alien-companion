@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import okhttp3.CacheControl;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -123,8 +124,11 @@ public class RedditHttpClient implements HttpClient {
         final String url = baseUrl + urlPath;
         Log.d(TAG, "GET request to  " + url);
         try {
-            Request.Builder builder = new Request.Builder().url(url);
-            builder.addHeader("User-Agent", userAgent);
+            Request.Builder builder = new Request.Builder()
+                    .cacheControl(new CacheControl.Builder().noCache().build())
+                    .url(url)
+                    .addHeader("User-Agent", userAgent)
+                    .get();
             addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
             okhttp3.Response response = okHttpClient.newCall(request).execute();
@@ -159,8 +163,10 @@ public class RedditHttpClient implements HttpClient {
         final String url = baseUrl + urlPath;
         Log.d(TAG, "POST request to " + url);
         try {
-            Request.Builder builder = new Request.Builder().url(url).post(body);
-            builder.addHeader("User-Agent", userAgent);
+            Request.Builder builder = new Request.Builder()
+                    .url(url)
+                    .addHeader("User-Agent", userAgent)
+                    .post(body);
             addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
             okhttp3.Response response = okHttpClient.newCall(request).execute();
@@ -195,8 +201,10 @@ public class RedditHttpClient implements HttpClient {
         final String url = baseUrl + urlPath;
         Log.d(TAG, "PUT request to " + url);
         try {
-            Request.Builder builder = new Request.Builder().url(url).put(body);
-            builder.addHeader("User-Agent", userAgent);
+            Request.Builder builder = new Request.Builder()
+                    .url(url)
+                    .addHeader("User-Agent", userAgent)
+                    .put(body);
             addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
             okhttp3.Response response = okHttpClient.newCall(request).execute();
@@ -231,8 +239,10 @@ public class RedditHttpClient implements HttpClient {
         final String url = baseUrl + urlPath;
         Log.d(TAG, "DELETE request to " + url);
         try {
-            Request.Builder builder = new Request.Builder().url(url).delete(body);
-            builder.addHeader("User-Agent", userAgent);
+            Request.Builder builder = new Request.Builder()
+                    .url(url)
+                    .addHeader("User-Agent", userAgent)
+                    .delete(body);
             addAuthorizatonHeaders(builder, cookie);
             Request request = builder.build();
             okhttp3.Response response = okHttpClient.newCall(request).execute();

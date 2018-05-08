@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 import me.imid.swipebacklayout.lib.ViewDragHelper;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 /**
@@ -191,8 +192,14 @@ public class MyApplication extends Application {
         currentFontStyle = fontStyle;
         currentFontFamily = fontFamily;
 
-        okHttpClient = new OkHttpClient();
+        initOkHttpClient();
         authenticateWithFirebase();
+    }
+
+    private void initOkHttpClient() {
+        okHttpClient = new OkHttpClient.Builder()
+                .cache(new Cache(getCacheDir(), AppConstants.OKHTTP_CACHE_LIMIT))
+                .build();
     }
 
     public static int[] getPrimaryColors(Context context) {

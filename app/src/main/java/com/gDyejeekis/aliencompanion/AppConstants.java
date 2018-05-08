@@ -20,6 +20,8 @@ public class AppConstants {
 
     public static final int FAB_HIDE_ON_SCROLL_THRESHOLD = 1;
 
+    public static final long OKHTTP_CACHE_LIMIT = 5 * 1024 * 1024;
+
     public static final long IMAGES_CACHE_LIMIT = 50 * 1024 * 1024;
 
     public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
