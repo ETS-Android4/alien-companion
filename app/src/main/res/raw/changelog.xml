@@ -3,7 +3,7 @@
 
     <changelogversion versionName="" changeDate="">
         <changelogtext></changelogtext>
-        <changelogtext>Various small optimizations, bug and crash fixes</changelogtext>
+        <changelogtext>Various small improvements, optimizations, bug and crash fixes</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.0.8" changeDate="Apr 15, 2018">
