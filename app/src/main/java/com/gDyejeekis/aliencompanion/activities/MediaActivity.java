@@ -617,21 +617,22 @@ public class MediaActivity extends BackNavActivity {
         if (loadFromSynced) {
             Fragment fragment = getCurrentFragment();
             // TODO: 3/14/2017 add abstraction
-            final File file;
-            if(fragment instanceof ImageFragment) {
-                file = new File(((ImageFragment) fragment).getUrl().replace("file:", ""));
-            }
-            else if(fragment instanceof GifFragment) {
-                file = new File(((GifFragment) fragment).getUrl().replace("file:", ""));
-            }
-            else {
-                file = null;
+            File file = null;
+            try { // apparently this might throw NPE
+                if (fragment instanceof ImageFragment) {
+                    file = new File(((ImageFragment) fragment).getUrl().replace("file:", ""));
+                } else if (fragment instanceof GifFragment) {
+                    file = new File(((GifFragment) fragment).getUrl().replace("file:", ""));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             if(file != null) {
                 new AsyncTask<File, Void, Boolean>() {
                     @Override
                     protected Boolean doInBackground(File... params) {
-                        return StorageUtils.safeCopy(file, saveTarget);
+                        File targetFile = params[0];
+                        return StorageUtils.safeCopy(targetFile, saveTarget);
                     }
 
                     @Override
