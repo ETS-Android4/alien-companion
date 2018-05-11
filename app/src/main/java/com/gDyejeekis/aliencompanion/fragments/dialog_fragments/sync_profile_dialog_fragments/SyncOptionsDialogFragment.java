@@ -1,6 +1,9 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
+import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
@@ -26,6 +30,9 @@ import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.CommentSort;
+import com.gDyejeekis.aliencompanion.services.DownloaderService;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 
 import java.util.Arrays;
 
@@ -69,8 +76,7 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
         super.onCreate(bundle);
         if (getArguments()!=null) {
             customSync = getArguments().getBoolean("customSync", false);
-            if (!customSync)
-                profile = (SyncProfile) getArguments().getSerializable("profile");
+            profile = (SyncProfile) getArguments().getSerializable("profile");
         }
     }
 
@@ -80,24 +86,29 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
 
         useGlobalSwitch = view.findViewById(R.id.switch_global_options);
         LinearLayout layoutButtons = view.findViewById(R.id.layout_buttons);
-        boolean optionsEnabled = false;
+        boolean optionsEnabled;
 
         if (customSync) {
-            optionsEnabled = true;
-            useGlobalSwitch.setVisibility(View.GONE);
             layoutButtons.setVisibility(View.VISIBLE);
             Button btnSync = view.findViewById(R.id.button_sync);
             Button btnCancel = view.findViewById(R.id.button_cancel);
             btnSync.setOnClickListener(this);
             btnCancel.setOnClickListener(this);
-            this.syncOptions = new SyncProfileOptions();
-        } else if (profile!=null){
+        } else {
+            layoutButtons.setVisibility(View.GONE);
+        }
+
+        if (profile == null) {
+            optionsEnabled = true;
+            useGlobalSwitch.setVisibility(View.GONE);
+            syncOptions = new SyncProfileOptions();
+        } else {
             optionsEnabled = !profile.isUseGlobalSyncOptions();
             useGlobalSwitch.setVisibility(View.VISIBLE);
             useGlobalSwitch.setChecked(!optionsEnabled);
             useGlobalSwitch.setOnCheckedChangeListener(this);
-            layoutButtons.setVisibility(View.GONE);
-            this.syncOptions = (profile.getSyncOptions()==null) ? new SyncProfileOptions() : new SyncProfileOptions(profile.getSyncOptions());
+            syncOptions = (profile.getSyncOptions()==null) ? new SyncProfileOptions()
+                    : new SyncProfileOptions(profile.getSyncOptions());
         }
 
         syncPostCountSpinner = view.findViewById(R.id.spinner_syncPostCount);
@@ -239,11 +250,36 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
                     ((SubredditActivity) getActivity()).getListFragment().addToSyncQueue(syncOptions);
                 } else if (getActivity() instanceof UserActivity) {
                     ((UserActivity) getActivity()).getListFragment().addSavedToSyncQueue(syncOptions);
+                } else if (getActivity() instanceof ProfilesActivity) {
+                    addSyncProfileToQueue();
                 }
                 break;
             case R.id.button_cancel:
                 dismiss();
                 break;
+        }
+    }
+
+    private void addSyncProfileToQueue() {
+        Context context = getContext();
+        if (context!=null && profile!=null) {
+            String toastMessage;
+            if (GeneralUtils.isNetworkAvailable(context)) {
+                boolean syncOverWifiOnly = (profile.isUseGlobalSyncOptions()) ? MyApplication.syncOverWifiOnly
+                        : syncOptions.isSyncOverWifiOnly();
+                if (syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
+                    toastMessage = "Syncing over mobile data connection is disabled";
+                } else {
+                    toastMessage = profile.getName() + " added to sync queue";
+                    Intent intent = new Intent(context, DownloaderService.class);
+                    intent.putExtra("profileId", profile.getProfileId());
+                    intent.putExtra("syncOptions", syncOptions);
+                    context.startService(intent);
+                }
+            } else {
+                toastMessage = "Network connection unavailable";
+            }
+            ToastUtils.showToast(context, toastMessage);
         }
     }
 

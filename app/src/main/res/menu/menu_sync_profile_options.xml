@@ -3,6 +3,8 @@
 
     <item android:id="@+id/action_sync_now" android:title="@string/sync_now" android:orderInCategory="80"/>
 
+    <item android:id="@+id/action_custom_sync" android:title="@string/custom_sync" android:orderInCategory="90"/>
+
     <item android:id="@+id/action_edit_profile" android:title="@string/edit" android:orderInCategory="100"/>
 
     <item android:id="@+id/action_delete_profile" android:title="@string/delete" android:orderInCategory="120"/>

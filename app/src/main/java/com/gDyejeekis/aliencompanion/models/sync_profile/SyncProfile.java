@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.views.adapters.ProfileListAdapter;
 import com.gDyejeekis.aliencompanion.services.DownloaderService;
@@ -90,18 +91,24 @@ public class SyncProfile extends Profile implements Serializable {
         useGlobalSyncOptions = true;
     }
 
-    public void startSync(Context context) {
+    public void addToSyncQueue(Context context) {
+        String toastMessage;
         if(GeneralUtils.isNetworkAvailable(context)) {
-            Intent intent = new Intent(context, DownloaderService.class);
-            //intent.putStringArrayListExtra("subreddits", (ArrayList) subreddits);
-            intent.putExtra("profileId", this.profileId);
-            context.startService(intent);
-        }
-        else {
-            if(context instanceof Activity) {
-                ToastUtils.showToast(context, "Network connection unavailable");
+            boolean syncOverWifiOnly = (syncOptions==null || useGlobalSyncOptions) ? MyApplication.syncOverWifiOnly
+                    : syncOptions.isSyncOverWifiOnly();
+            if (syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
+                toastMessage = "Syncing over mobile data connection is disabled";
+            } else {
+                toastMessage = name + " added to sync queue";
+                Intent intent = new Intent(context, DownloaderService.class);
+                intent.putExtra("profileId", this.profileId);
+                context.startService(intent);
             }
         }
+        else {
+            toastMessage = "Network connection unavailable";
+        }
+        if (context instanceof Activity) ToastUtils.showToast(context, toastMessage);
     }
 
     public boolean addSchedule(SyncSchedule schedule) {

@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.views.viewholders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.activities.EditFilterProfileActivity;
 import com.gDyejeekis.aliencompanion.activities.EditSyncProfileActivity;
 import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.models.filters.FilterProfile;
 import com.gDyejeekis.aliencompanion.models.Profile;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
@@ -125,8 +127,15 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
                                 .setNegativeButton("No", null).show();
                         return true;
                     case R.id.action_sync_now:
-                        ToastUtils.showToast(activity, profile.getName() + " added to sync queue");
-                        profile.startSync(activity);
+                        profile.addToSyncQueue(activity);
+                        return true;
+                    case R.id.action_custom_sync:
+                        SyncOptionsDialogFragment dialog = new SyncOptionsDialogFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("customSync", true);
+                        bundle.putSerializable("profile", profile);
+                        dialog.setArguments(bundle);
+                        dialog.show(activity.getSupportFragmentManager(), "dialog");
                         return true;
                     default:
                         return false;
