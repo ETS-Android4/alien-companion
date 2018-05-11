@@ -282,14 +282,6 @@ public class PostListFragment extends RedditContentFragment {
         }
     }
 
-    public void showCustomSyncDialog() {
-        SyncOptionsDialogFragment dialog = new SyncOptionsDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("customSync", true);
-        dialog.setArguments(bundle);
-        dialog.show(activity.getSupportFragmentManager(), "dialog");
-    }
-
     public void showSearchDialog() {
         hideAllFabOptions();
         SearchRedditDialogFragment searchDialog = new SearchRedditDialogFragment();

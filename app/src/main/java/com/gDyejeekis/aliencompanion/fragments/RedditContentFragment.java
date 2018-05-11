@@ -38,6 +38,7 @@ import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ShowSyncedDialogFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.GridAutoFitLayoutManager;
 import com.gDyejeekis.aliencompanion.utils.MoveUpwardLinearLayout;
@@ -607,6 +608,14 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
     @Override
     public void onRefresh() {
         refreshList();
+    }
+
+    public void showCustomSyncDialog() {
+        SyncOptionsDialogFragment dialog = new SyncOptionsDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("customSync", true);
+        dialog.setArguments(bundle);
+        dialog.show(activity.getSupportFragmentManager(), "dialog");
     }
 
     public void showSyncedReddits() {

@@ -119,20 +119,25 @@ public class DownloaderService extends IntentService {
     public void onHandleIntent(Intent i) {
         MyApplication.checkAccountInit(this, httpClient);
 
+        // init extras
         SyncProfile profile = null;
         final String profileId = i.getStringExtra("profileId");
         if (profileId!=null) {
             profile = (SyncProfile) Profile.getProfileById(profileId, new File(getFilesDir(), AppConstants.SYNC_PROFILES_FILENAME));
         }
         Submission submission = (Submission) i.getSerializableExtra("post");
-        int savedCount = i.getIntExtra("savedCount", 0);
+        boolean syncSaved = i.getBooleanExtra("syncSaved", false);
 
-        if (profile != null) {
-            SyncProfileOptions syncOptions;
-            if (!profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null)
+        // init sync options
+        SyncProfileOptions syncOptions = (SyncProfileOptions) i.getSerializableExtra("syncOptions");
+        if (syncOptions == null) {
+            if (profile!=null && !profile.isUseGlobalSyncOptions() && profile.getSyncOptions()!=null)
                 syncOptions = profile.getSyncOptions();
             else syncOptions = new SyncProfileOptions();
+        }
 
+        // sync items
+        if (profile != null) {
             MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
 
             if (!(syncOptions.isSyncOverWifiOnly() && !GeneralUtils.isConnectedOverWifi(this))) {
@@ -165,23 +170,19 @@ public class DownloaderService extends IntentService {
             startForeground(FOREGROUND_ID, buildProgressNotification(title, true));
             acquireWakelock();
 
-            syncPostControlled(submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, new SyncProfileOptions());
+            syncPostControlled(submission, AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, title, syncOptions);
             addToIndividuallySyncedPosts(submission);
-        } else if (savedCount != 0) {
-            MAX_PROGRESS = savedCount + 1;
+        } else if (syncSaved) {
+            MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
             progress = 0;
 
-            SyncProfileOptions syncOptions = new SyncProfileOptions();
             startForeground(FOREGROUND_ID, buildProgressNotification("saved", false));
             acquireWakelock();
 
-            syncSavedControlled(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, savedCount, syncOptions);
+            syncSavedControlled(AppConstants.INDIVIDUALLY_SYNCED_DIR_NAME, syncOptions);
         } else {
-            MAX_PROGRESS = MyApplication.syncPostCount + 1;
+            MAX_PROGRESS = syncOptions.getSyncPostCount() + 1;
             progress = 0;
-
-            SyncProfileOptions syncOptions = (SyncProfileOptions) i.getSerializableExtra("syncOptions");
-            if (syncOptions == null) syncOptions = new SyncProfileOptions();
 
             String subreddit = i.getStringExtra("subreddit");
             boolean isOther = i.getBooleanExtra("isOther", false);
@@ -298,22 +299,22 @@ public class DownloaderService extends IntentService {
         return posts;
     }
 
-    private void syncSavedControlled(String filename, int savedCount, SyncProfileOptions syncOptions) {
+    private void syncSavedControlled(String filename, SyncProfileOptions syncOptions) {
         boolean success;
         do {
             checkManuallyPaused();
             if (manuallyCancelled) {
                 return;
             }
-            success = syncSaved(filename, savedCount, syncOptions);
+            success = syncSaved(filename, syncOptions);
             if (!success) pauseSync();
         } while (!success);
     }
 
-    private boolean syncSaved(String filename, int savedCount, SyncProfileOptions syncOptions) {
+    private boolean syncSaved(String filename, SyncProfileOptions syncOptions) {
         try {
             final String displayName = "saved";
-            List<RedditItem> savedList = retrieveSavedPostsToSync(MyApplication.currentUser, savedCount, null);
+            List<RedditItem> savedList = retrieveSavedPostsToSync(MyApplication.currentUser, syncOptions.getSyncPostCount(), null);
             Collections.reverse(savedList);
             MAX_PROGRESS = savedList.size() + 1;
             increaseProgress(displayName);

@@ -2,6 +2,7 @@ package com.gDyejeekis.aliencompanion.fragments;
 
 
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -14,18 +15,19 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
-import com.gDyejeekis.aliencompanion.api.entity.Comment;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
+import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
+import com.gDyejeekis.aliencompanion.services.DownloaderService;
+import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
+import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.RedditItemListAdapter;
 import com.gDyejeekis.aliencompanion.asynctask.LoadUserContentTask;
-import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.AddToSyncedDialogFragment;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategory;
 import com.gDyejeekis.aliencompanion.enums.LoadType;
 import com.gDyejeekis.aliencompanion.R;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.UserOverviewSort;
-import com.gDyejeekis.aliencompanion.views.multilevelexpindlistview.MultiLevelExpIndListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -245,12 +247,30 @@ public class UserFragment extends RedditContentFragment {
                 showContentPopup(activity.findViewById(R.id.action_sort));
                 return true;
             case R.id.action_add_to_synced:
-                AddToSyncedDialogFragment fragment = new AddToSyncedDialogFragment();
-                fragment.show(activity.getSupportFragmentManager(), AddToSyncedDialogFragment.TAG);
+                showCustomSyncDialog();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addSavedToSyncQueue(SyncProfileOptions syncOptions) {
+        String toastMessage;
+        if (GeneralUtils.isNetworkAvailable(activity)) {
+            boolean syncOverWifiOnly = (syncOptions==null) ? MyApplication.syncOverWifiOnly : syncOptions.isSyncOverWifiOnly();
+            if (syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(activity)) {
+                toastMessage = "Syncing over mobile data connection is disabled";
+            } else {
+                toastMessage = "Saved posts added to sync queue";
+                Intent intent = new Intent(activity, DownloaderService.class);
+                intent.putExtra("syncSaved", true);
+                intent.putExtra("syncOptions", syncOptions);
+                activity.startService(intent);
+            }
+        } else {
+            toastMessage = "Network connection unavailable";
+        }
+        ToastUtils.showToast(activity, toastMessage);
     }
 
     public void showContentPopup(View view) {

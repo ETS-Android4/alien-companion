@@ -16,7 +16,10 @@ import android.widget.Switch;
 
 import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
+import com.gDyejeekis.aliencompanion.activities.UserActivity;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
+import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
+import com.gDyejeekis.aliencompanion.fragments.UserFragment;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
@@ -228,16 +231,14 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
         switch (view.getId()) {
             case R.id.button_sync:
                 dismiss();
-                PostListFragment fragment = null;
+                updateSyncOptions();
                 // TODO: 3/24/2018 abstraction here
                 if (getActivity() instanceof MainActivity) {
-                    fragment = ((MainActivity) getActivity()).getListFragment();
+                    ((MainActivity) getActivity()).getListFragment().addToSyncQueue(syncOptions);
                 } else if (getActivity() instanceof SubredditActivity) {
-                    fragment = ((SubredditActivity) getActivity()).getListFragment();
-                }
-                if (fragment!=null) {
-                    updateSyncOptions();
-                    fragment.addToSyncQueue(syncOptions);
+                    ((SubredditActivity) getActivity()).getListFragment().addToSyncQueue(syncOptions);
+                } else if (getActivity() instanceof UserActivity) {
+                    ((UserActivity) getActivity()).getListFragment().addSavedToSyncQueue(syncOptions);
                 }
                 break;
             case R.id.button_cancel:
