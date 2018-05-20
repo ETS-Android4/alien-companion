@@ -44,7 +44,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
         if(cachedPath==null) {
             String cachedName = LinkUtils.getFilenameFromUrl(url).concat(LinkUtils.getDirectMediaUrlExtension(url));
             cachedPath = downloadToCache(new File(cacheDir, cachedName));
-            GeneralUtils.checkCacheSize(cacheDir);
+            CleaningUtils.checkCacheSize(cacheDir, cachedName);
         }
         return cachedPath;
     }
@@ -52,28 +52,28 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
     private String downloadToCache(File file) {
         Log.d(TAG, "Caching media from " + url);
         try {
-            //Open a connection to that URL.
+            // Open a connection to that URL.
             URLConnection ucon = new URL(url).openConnection();
 
-            //this timeout affects how long it takes for the app to realize there's a connection problem
-            ucon.setReadTimeout(5000);
+            // this timeout affects how long it takes for the app to realize there's a connection problem
+            ucon.setReadTimeout(15000);
             ucon.setConnectTimeout(5000);
 
-            //Define InputStreams to read from the URLConnection.
+            // Define InputStreams to read from the URLConnection.
             // uses 3KB download buffer
             InputStream is = ucon.getInputStream();
             inStream = new BufferedInputStream(is, 1024 * 5);
             FileOutputStream outStream = new FileOutputStream(file);
             byte[] buff = new byte[5 * 1024];
 
-            //Read bytes (and store them) until there is nothing more to read(-1)
+            // Read bytes (and store them) until there is nothing more to read(-1)
             int len;
             while ((len = inStream.read(buff)) != -1) {
                 outStream.write(buff, 0, len);
                 //Log.d(TAG, "writing buffer to file..");
             }
 
-            //clean up
+            // clean up
             outStream.flush();
             outStream.close();
             inStream.close();

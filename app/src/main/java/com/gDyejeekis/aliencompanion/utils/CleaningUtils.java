@@ -34,9 +34,24 @@ public class CleaningUtils {
         }
     }
 
+    public static void checkCacheSize(File cacheDir, final String lastCached) {
+        if(StorageUtils.dirSize(cacheDir, false) >= AppConstants.IMAGES_CACHE_LIMIT) {
+            File toDelete = StorageUtils.oldestFileInDir(cacheDir);
+            if (!toDelete.getName().equals(lastCached)) {
+                long length = toDelete.length();
+                if (toDelete.delete()) {
+                    Log.d(TAG, "Deleted " + toDelete.getName());
+                    Log.d(TAG, length + " bytes cleared from cache");
+                }
+                checkCacheSize(cacheDir, lastCached);
+            }
+        }
+    }
+
     public static void clearMediaFromCache(File cacheDir, String url) {
-        File file = new File(cacheDir, LinkUtils.getFilenameFromUrl(url));
-        if(file.delete()) {
+        //File file = new File(cacheDir, LinkUtils.getFilenameFromUrl(url));
+        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), LinkUtils.getFilenameFromUrl(url));
+        if(file!=null && file.delete()) {
             Log.d(TAG, "Deleted " + file.getAbsolutePath() + " from cache");
         }
     }

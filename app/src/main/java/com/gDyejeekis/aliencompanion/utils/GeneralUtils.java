@@ -421,17 +421,6 @@ public class GeneralUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    public static void checkCacheSize(File cacheDir) {
-        if(StorageUtils.dirSize(cacheDir, false) >= AppConstants.IMAGES_CACHE_LIMIT) {
-            File toDelete = StorageUtils.oldestFileInDir(cacheDir);
-            long length = toDelete.length();
-            if(toDelete.delete()) {
-                Log.d(TAG, length + " bytes cleared from cache");
-            }
-            checkCacheSize(cacheDir);
-        }
-    }
-
     public static String checkCacheForMedia(File cacheDir, String url) {
         File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), LinkUtils.getFilenameFromUrl(url));
         if(file!=null) {
