@@ -68,19 +68,6 @@ public class LinkUtils {
         return String.valueOf(url.hashCode());
     }
 
-    // TODO: 5/19/2018 delet
-    //public static String urlToFilename(String url) {
-    //    String filename = removeUrlParameters(url);
-    //    filename = filename.substring(filename.lastIndexOf("/") + 1);
-    //    return filename;
-    //}
-//
-    //public static String urlToFilenameOld(String url) {
-    //    String filename = removeUrlParameters(url);
-    //    filename = filename.replaceAll("https?://", "").replace("/", "(s)");
-    //    return filename;
-    //}
-
     public static String removeUrlParameters(String url) {
         try {
             url = url.substring(0, url.lastIndexOf("?"));
@@ -100,7 +87,7 @@ public class LinkUtils {
     }
 
     public static String getGfycatId(String url) {
-        final String pattern = "gfycat\\.com\\/(?:gifs\\/detail\\/)?(\\w+)";
+        final String pattern = "gfycat\\.com\\/(?:gifs\\/)?(?:detail\\/)?(\\w+)";
         Matcher matcher = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(url);
         if(matcher.find()) {
             return matcher.group(1);
