@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -53,42 +55,12 @@ public class StreamableTask extends AsyncTask<String, Void, String> {
         return context;
     }
 
-    // this method makes an API call to api.streamable.com (synchronously)
-    //public static String getStreamableDirectUrl(String originalUrl) throws IOException, ParseException {
-    //    final String url = "https://api.streamable.com/videos/" + LinkUtils.getStreamableId(originalUrl);
-    //    Log.d("Streamable", "GET request to " + url);
-    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-    //    connection.setUseCaches(true);
-    //    connection.setRequestMethod("GET");
-    //    connection.setDoInput(true);
-    //    connection.setConnectTimeout(5000);
-    //    connection.setReadTimeout(5000);
-//
-    //    InputStream inputStream = connection.getInputStream();
-    //    String content = IOUtils.toString(inputStream, "UTF-8");
-    //    IOUtils.closeQuietly(inputStream);
-//
-    //    Log.d("Streamable", content);
-    //    Object response = new JSONParser().parse(content);
-    //    JSONObject files = (JSONObject) ((JSONObject) response).get("files");
-    //    JSONObject mp4 = (JSONObject) files.get("mp4");
-//
-    //    String directUrl = safeJsonToString(mp4.get("url"));
-    //    if(!directUrl.matches("http(s)?\\:\\/\\/.*")) {
-    //        if(directUrl.startsWith("//")) {
-    //            return "https:" + directUrl;
-    //        }
-    //        else {
-    //            return "https://" + directUrl;
-    //        }
-    //    }
-    //    return directUrl;
-    //}
-
     public static String getStreamableDirectUrl(String originalUrl) throws IOException, ParseException {
         final String url = "https://api.streamable.com/videos/" + LinkUtils.getStreamableId(originalUrl);
         Log.d("Streamable", "GET request to " + url);
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder()
+                .cacheControl(new CacheControl.Builder().maxStale(24, TimeUnit.HOURS).build())
+                .url(url).build();
         Response response = MyApplication.okHttpClient.newCall(request).execute();
         String content = response.body().string();
         response.close();

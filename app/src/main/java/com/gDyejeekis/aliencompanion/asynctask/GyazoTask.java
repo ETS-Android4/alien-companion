@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -47,31 +49,12 @@ public class GyazoTask extends AsyncTask<String, Void, String> {
         return context;
     }
 
-    // this method makes an API call to api.gyazo.com (synchronously)
-    //public static String getGyazoDirectUrl(String originalUrl) throws IOException, ParseException {
-    //    final String url = "https://api.gyazo.com/api/oembed?url=" + originalUrl;
-    //    Log.d("Gyazo", "GET request to " + url);
-    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-    //    connection.setUseCaches(true);
-    //    connection.setRequestMethod("GET");
-    //    connection.setDoInput(true);
-    //    connection.setConnectTimeout(5000);
-    //    connection.setReadTimeout(5000);
-//
-    //    InputStream inputStream = connection.getInputStream();
-    //    String content = IOUtils.toString(inputStream, "UTF-8");
-    //    IOUtils.closeQuietly(inputStream);
-//
-    //    Log.d("Gyazo", content);
-    //    JSONObject gyazoJson = (JSONObject) new JSONParser().parse(content);
-//
-    //    return safeJsonToString(gyazoJson.get("url"));
-    //}
-
     public static String getGyazoDirectUrl(String originalUrl) throws IOException, ParseException {
         final String url = "https://api.gyazo.com/api/oembed?url=" + originalUrl;
         Log.d("Gyazo", "GET request to " + url);
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder()
+                .cacheControl(new CacheControl.Builder().maxStale(24, TimeUnit.HOURS).build())
+                .url(url).build();
         Response response = MyApplication.okHttpClient.newCall(request).execute();
         String content = response.body().string();
         response.close();

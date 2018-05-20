@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -49,34 +51,12 @@ public class GiphyTask extends AsyncTask<String, Void, String> {
         return context;
     }
 
-    // this method makes an API call to api.giphy.com (synchronously)
-    //public static String getGiphyDirectUrl(String originalUrl) throws IOException, ParseException {
-    //    final String url = "http://api.giphy.com/v1/gifs/" + LinkUtils.getGiphyId(originalUrl) + "?api_key=" + LinkHandler.GIPHY_API_KEY;
-    //    Log.d("Giphy", "GET request to " + url);
-    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-    //    connection.setUseCaches(true);
-    //    connection.setRequestMethod("GET");
-    //    connection.setDoInput(true);
-    //    connection.setConnectTimeout(5000);
-    //    connection.setReadTimeout(5000);
-//
-    //    InputStream inputStream = connection.getInputStream();
-    //    String content = IOUtils.toString(inputStream, "UTF-8");
-    //    IOUtils.closeQuietly(inputStream);
-//
-    //    Log.d("Giphy", content);
-    //    Object responseObject = new JSONParser().parse(content);
-    //    JSONObject giphyData = (JSONObject) ((JSONObject) responseObject).get("data");
-    //    JSONObject images = (JSONObject) giphyData.get("images");
-    //    JSONObject original = (JSONObject) images.get("original");
-//
-    //    return safeJsonToString(original.get("mp4"));
-    //}
-
     public static String getGiphyDirectUrl(String originalUrl) throws IOException, ParseException {
         final String url = "http://api.giphy.com/v1/gifs/" + LinkUtils.getGiphyId(originalUrl) + "?api_key=" + LinkHandler.GIPHY_API_KEY;
         Log.d("Giphy", "GET request to " + url);
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder()
+                .cacheControl(new CacheControl.Builder().maxStale(24, TimeUnit.HOURS).build())
+                .url(url).build();
         Response response = MyApplication.okHttpClient.newCall(request).execute();
         String content = response.body().string();
         response.close();

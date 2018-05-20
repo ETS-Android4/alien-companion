@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -48,35 +50,12 @@ public class GfycatTask extends AsyncTask<String, Void, String> {
         return context;
     }
 
-
-    // this method makes an API call to gfycat.com (synchronously)
-    //public static String getGfycatDirectUrl(String desktopUrl) throws IOException, ParseException {
-    //    final String url = "http://gfycat.com/cajax/get/" + LinkUtils.getGfycatId(desktopUrl);
-    //    Log.d("Gfycat", "GET request to " + url);
-    //    HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-    //    connection.setUseCaches(true);
-    //    connection.setRequestMethod("GET");
-    //    connection.setDoInput(true);
-    //    connection.setConnectTimeout(5000);
-    //    connection.setReadTimeout(5000);
-//
-    //    InputStream inputStream = connection.getInputStream();
-//
-    //    String content = IOUtils.toString(inputStream, "UTF-8");
-    //    IOUtils.closeQuietly(inputStream);
-//
-    //    Log.d("Gfycat", content);
-    //    Object responseObject = new JSONParser().parse(content);
-//
-    //    JSONObject gfyItem = (JSONObject) ((JSONObject) responseObject).get("gfyItem");
-//
-    //    return safeJsonToString(gfyItem.get("mobileUrl"));
-    //}
-
     public static String getGfycatDirectUrl(String originalUrl) throws IOException, ParseException {
         final String url = "http://gfycat.com/cajax/get/" + LinkUtils.getGfycatId(originalUrl);
         Log.d("Gfycat", "GET request to " + url);
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder()
+                .cacheControl(new CacheControl.Builder().maxStale(24, TimeUnit.HOURS).build())
+                .url(url).build();
         Response response = MyApplication.okHttpClient.newCall(request).execute();
         String content = response.body().string();
         response.close();

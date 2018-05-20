@@ -30,9 +30,7 @@ public class DebugActivity extends ToolbarActivity {
 
     public static final String[] URL_TESTS_HARDCODED = {
             "https://i.imgur.com/IMmmP8A.gif",
-            "https://i.stack.imgur.com/sGhaO.gif",
-            "https://i.redd.it/rkdbdl9c04tx.gif",
-            "https://gfycat.com/gifs/detail/whisperedenchantingdowitcher"
+            "https://i.stack.imgur.com/sGhaO.gif"
     };
 
     @Override
