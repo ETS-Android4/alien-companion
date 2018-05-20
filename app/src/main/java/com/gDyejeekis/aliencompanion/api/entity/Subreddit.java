@@ -108,20 +108,18 @@ public class Subreddit extends Thing {
      *
      * @param obj The JSONObject to load Submission data from
      */
-    public Subreddit(JSONObject obj, boolean autocomplete) {
-    	super(safeJsonToString(obj.get(autocomplete ? "id" : "name")));
+    public Subreddit(JSONObject obj) {
+    	super(safeJsonToString(obj.get("name")));
         try {
-            setDisplayName(safeJsonToString(obj.get(autocomplete ? "name" : "display_name")));
-            setSubscribers(safeJsonToLong(obj.get(autocomplete ? "numSubscribers" : "subscribers")));
-            if (!autocomplete) {
-                setTitle(safeJsonToString(obj.get("title")));
-                setURL(safeJsonToString(obj.get("url")));
-                setCreated(safeJsonToDouble(obj.get("created")));
-                setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
-                setNSFW(safeJsonToBoolean(obj.get("over_18")));
-                setDescription(safeJsonToString(obj.get("description")));
-                setSubredditType(safeJsonToString(obj.get("subreddit_type")));
-            }
+            setDisplayName(safeJsonToString(obj.get("display_name")));
+            setSubscribers(safeJsonToLong(obj.get("subscribers")));
+            setTitle(safeJsonToString(obj.get("title")));
+            setURL(safeJsonToString(obj.get("url")));
+            setCreated(safeJsonToDouble(obj.get("created")));
+            setCreatedUTC(safeJsonToDouble(obj.get("created_utc")));
+            setNSFW(safeJsonToBoolean(obj.get("over18")));
+            setDescription(safeJsonToString(obj.get("public_description")));
+            setSubredditType(safeJsonToString(obj.get("subreddit_type")));
         } catch (Exception e) {
             Log.e(TAG, "Error creating subreddit");
             e.printStackTrace();
@@ -138,7 +136,7 @@ public class Subreddit extends Thing {
         if(response instanceof JSONObject) {
             JSONObject object = (JSONObject) response;
             JSONObject data = (JSONObject) object.get("data");
-            Subreddit sr = new Subreddit(data, false);
+            Subreddit sr = new Subreddit(data);
             return sr;
         }
         return null;

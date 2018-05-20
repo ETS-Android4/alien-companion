@@ -104,7 +104,7 @@ public class Subreddits implements ActorDriven {
 
                         // Create and add subreddit
                         data = ((JSONObject) data.get("data"));
-                        subreddits.add(new Subreddit(data, false));
+                        subreddits.add(new Subreddit(data));
                     }
 				}
 			}
@@ -226,21 +226,6 @@ public class Subreddits implements ActorDriven {
         	);
     }
 
-    public List<Subreddit> autocomplete(boolean includeOver18, boolean includeProfiles, String query) throws RetrievalFailedException, RedditError {
-    	String params = "";
-    	params = ParamFormatter.addParameter(params, "include_over_18", String.valueOf(includeOver18));
-    	params = ParamFormatter.addParameter(params, "include_profiles", String.valueOf(includeProfiles));
-    	params = ParamFormatter.addParameter(params, "query", query);
-		String endpoint = String.format(ApiEndpointUtils.SUBREDDIT_AUTOCOMPLETE, params);
-		Object response = httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, endpoint, null).getResponseObject();
-		JSONArray jsonArray = (JSONArray) ((JSONObject) response).get("subreddits");
-		List<Subreddit> subreddits = new ArrayList<>();
-		for (Object obj : jsonArray) {
-			subreddits.add(new Subreddit((JSONObject) obj, true));
-		}
-		return subreddits;
-	}
-
 	public List<Subreddit> autocompleteV2(boolean includeOver18, boolean includeProfiles, int limit, String query) throws RetrievalFailedException, RedditError {
 		String params = "";
 		params = ParamFormatter.addParameter(params, "include_over_18", String.valueOf(includeOver18));
@@ -254,7 +239,7 @@ public class Subreddits implements ActorDriven {
 		List<Subreddit> subreddits = new ArrayList<>();
 		for (Object obj : jsonArray) {
 			JSONObject subredditData = (JSONObject) ((JSONObject)obj).get("data");
-			subreddits.add(new Subreddit(subredditData, false));
+			subreddits.add(new Subreddit(subredditData));
 		}
 		return subreddits;
 	}

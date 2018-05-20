@@ -70,19 +70,19 @@ public class SubredditAutoCompleteAdapter extends BaseAdapter implements Filtera
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null) {
-                    List<Subreddit> subreddits = getResultList(constraint.toString());
+                    List<Subreddit> results = getResultList(constraint.toString());
 
                     // Assign the data to the FilterResults
-                    filterResults.values = subreddits;
-                    filterResults.count = subreddits.size();
+                    filterResults.values = results;
+                    filterResults.count = results.size();
                 }
                 return filterResults;
             }
 
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0) {
-                    resultList = (List<Subreddit>) results.values;
+            protected void publishResults(CharSequence constraint, FilterResults filterResults) {
+                if (filterResults != null && filterResults.count > 0) {
+                    resultList = (List<Subreddit>) filterResults.values;
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();
@@ -94,15 +94,21 @@ public class SubredditAutoCompleteAdapter extends BaseAdapter implements Filtera
     private List<Subreddit> getResultList(String query) {
         List<Subreddit> subreddits = subredditRetrieval.autocompleteV2(MyApplication.showNsfwSuggestions, false, 10, query);
         // remove any leftover nsfw subreddits if nsfw suggestions are disabled
-        if (!MyApplication.showNsfwSuggestions) {
+        List<Subreddit> processedList;
+        if (MyApplication.showNsfwSuggestions) {
+            processedList = new ArrayList<>(subreddits);
+        } else {
+            processedList = new ArrayList<>();
             for (Subreddit subreddit : subreddits) {
                 String name = subreddit.getDisplayName().toLowerCase();
-                if (name.contains("nsfw") || name.contains("nsfl"))
-                    subreddits.remove(subreddit);
+                boolean isNsfw = subreddit.isNSFW()!=null && subreddit.isNSFW();
+                if (!(isNsfw || name.contains("nsfw") || name.contains("nsfl"))) {
+                    processedList.add(subreddit);
+                }
             }
         }
         // sort list by subs
-        Collections.sort(subreddits, new Comparator<Subreddit>() {
+        Collections.sort(processedList, new Comparator<Subreddit>() {
             @Override
             public int compare(Subreddit s1, Subreddit s2) {
                 if (s1.getSubscribers() == s2.getSubscribers())
@@ -110,7 +116,7 @@ public class SubredditAutoCompleteAdapter extends BaseAdapter implements Filtera
                 return s1.getSubscribers() > s2.getSubscribers() ? -1 : 1;
             }
         });
-        return subreddits;
+        return processedList;
     }
 
 }
