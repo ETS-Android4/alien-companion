@@ -137,6 +137,8 @@ public class LinkHandler {
                     else if(post.getRedditVideo()!=null) { // reddit video object found in post object so pass that as extra to media activity
                         intent = new Intent(context, MediaActivity.class);
                         intent.putExtra("redditVideo", post.getRedditVideo());
+                        intent.putExtra("url", url);
+                        intent.putExtra("domain", domainLC);
                     }
                     else { // post isn't null but redditVideo object is null, manually edit reddit video url and pass to media activity
                         intent = new Intent(context, MediaActivity.class);

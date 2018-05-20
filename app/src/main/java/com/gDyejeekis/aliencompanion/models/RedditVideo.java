@@ -72,7 +72,7 @@ public class RedditVideo implements Serializable {
         this.hlsUrl = hlsUrl;
     }
 
-    public Boolean getGif() {
+    public Boolean isGif() {
         return isGif;
     }
 

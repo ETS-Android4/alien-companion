@@ -860,15 +860,16 @@ public class DownloaderService extends IntentService {
         }
 
         final String path = file.getAbsolutePath();
+        final String saveName = LinkUtils.getFilenameFromUrl(url).concat(".mp4");
         // VIDEOS
         if(url.endsWith(".mp4")) {
-            downloadMediaToPath(url, path);
+            downloadMediaToPath(url, path, saveName);
         }
         // STREAMABLE
-        else if(url.contains("streamable.com")) {
+        else if(url.equals("streamable.com")) {
             try {
                 url = StreamableTask.getStreamableDirectUrl(url);
-                downloadMediaToPath(url, path);
+                downloadMediaToPath(url, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -882,11 +883,12 @@ public class DownloaderService extends IntentService {
         }
 
         final String path = file.getAbsolutePath();
+        String saveName = LinkUtils.getFilenameFromUrl(url);
         // GFYCAT
         if (url.contains("gfycat.com")) {
             try {
                 String mp4Url = GfycatTask.getGfycatDirectUrl(url);
-                String saveName = LinkUtils.getGfycatId(url).concat(".mp4");
+                saveName = saveName.concat(".mp4");
                 downloadMediaToPath(mp4Url, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -903,7 +905,7 @@ public class DownloaderService extends IntentService {
             if(item instanceof ImgurImage) {
                 ImgurImage image = (ImgurImage) item;
                 String directUrl = (image.isAnimated()) ? image.getMp4() : image.getLink();
-                String saveName = LinkUtils.getImgurImgId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
+                saveName = saveName.concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
                 downloadMediaToPath(directUrl, path, saveName);
             }
             else if(item instanceof ImgurAlbum) {
@@ -916,7 +918,7 @@ public class DownloaderService extends IntentService {
                 }
                 else {
                     String directUrl = (gallery.isAnimated()) ? gallery.getMp4() : gallery.getLink();
-                    String saveName = LinkUtils.getImgurImgId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
+                    saveName = saveName.concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
                     downloadMediaToPath(directUrl, path, saveName);
                 }
             }
@@ -925,7 +927,7 @@ public class DownloaderService extends IntentService {
         else if(url.contains("gyazo.com")) {
             try {
                 String directUrl = GyazoTask.getGyazoDirectUrl(url);
-                String saveName = LinkUtils.getGyazoId(url).concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
+                saveName = saveName.concat(LinkUtils.getDirectMediaUrlExtension(directUrl));
                 downloadMediaToPath(directUrl, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -935,7 +937,7 @@ public class DownloaderService extends IntentService {
         else if(url.contains("giphy.com")) {
             try {
                 String mp4Url = GiphyTask.getGiphyDirectUrl(url);
-                String saveName = LinkUtils.getGiphyId(url).concat(".mp4");
+                saveName = saveName.concat(".mp4");
                 downloadMediaToPath(mp4Url, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -943,13 +945,14 @@ public class DownloaderService extends IntentService {
         }
         // REDDIT
         else if(url.contains("i.reddituploads.com") || url.contains("i.redditmedia.com")) {
-            downloadMediaToPath(url, path, LinkUtils.urlToFilename(url).concat(".jpg"));
+            saveName = saveName.concat(".jpg");
+            downloadMediaToPath(url, path, saveName);
         }
         // REDDIT VIDEO
-        else if(url.contains("v.redd.it")) {
+        else if(url.equals("v.redd.it")) {
             try {
                 String mp4Url = getRedditVideoDirectUrl(url);
-                String saveName = LinkUtils.urlToFilenameOld(url).concat(".mp4"); // use old method here to make sure we keep the id
+                saveName = saveName.concat(".mp4");
                 downloadMediaToPath(mp4Url, path, saveName);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -958,16 +961,17 @@ public class DownloaderService extends IntentService {
         // IMAGES
         else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
             url = url.replaceAll("\\?(\\d+)?", "");
-            downloadMediaToPath(url, path);
+            saveName = saveName.concat(LinkUtils.getDirectMediaUrlExtension(url));
+            downloadMediaToPath(url, path, saveName);
         }
         // GIFs
         else if (url.matches("(?i).*\\.(gifv|gif)\\??(\\d+)?")) {
             url = url.replaceAll("\\?(\\d+)?", "");
             if (url.contains("imgur.com")) {
                 url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
-                //url = url.replace(".gif", ".mp4");
             }
-            downloadMediaToPath(url, path);
+            saveName = saveName.concat(LinkUtils.getDirectMediaUrlExtension(url));
+            downloadMediaToPath(url, path, saveName);
         }
     }
 
@@ -987,7 +991,13 @@ public class DownloaderService extends IntentService {
             if(i >= albumSyncLimit) {
                 break;
             }
-            downloadMediaToPath((img.isAnimated()) ? img.getMp4() : img.getLink(), path);
+
+            String url;
+            if (img.isAnimated()) url = img.getMp4();
+            else url = img.getLink();
+            String saveName = LinkUtils.getFilenameFromUrl(url).concat(LinkUtils.getDirectMediaUrlExtension(url));
+            downloadMediaToPath(url, path, saveName);
+
             if(albumSyncLimit > 1) {
                 // sync album thumbnails for grid view
                 try {
@@ -1030,7 +1040,7 @@ public class DownloaderService extends IntentService {
     }
 
     private void downloadMediaToPath(String url, String path) {
-        downloadMediaToPath(url, path, LinkUtils.urlToFilename(url));
+        downloadMediaToPath(url, path, LinkUtils.getFilenameFromUrl(url));
     }
 
     private void downloadPostThumbnail(Submission post, String filename) {

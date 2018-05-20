@@ -31,7 +31,7 @@ public class AlbumPagerAdapter extends FragmentStatePagerAdapter {
         for(ImgurImage image : images) {
             if(loadFromLocal) {
                 File mediaDir = GeneralUtils.getSyncedMediaDir(activity);
-                File imgFile = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), LinkUtils.getImgurImgId(image.getLink()));
+                File imgFile = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), LinkUtils.getFilenameFromUrl(image.getLink()));
                 if(imgFile!=null) {
                     image.setLink("file:" + imgFile.getAbsolutePath());
                 }

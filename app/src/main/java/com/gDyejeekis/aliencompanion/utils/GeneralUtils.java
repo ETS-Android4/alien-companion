@@ -433,7 +433,7 @@ public class GeneralUtils {
     }
 
     public static String checkCacheForMedia(File cacheDir, String url) {
-        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), LinkUtils.urlToFilename(url));
+        File file = StorageUtils.findFile(cacheDir, cacheDir.getAbsolutePath(), LinkUtils.getFilenameFromUrl(url));
         if(file!=null) {
             Log.d(TAG, "Found media in cache " + file.getAbsolutePath());
             return file.getAbsolutePath();

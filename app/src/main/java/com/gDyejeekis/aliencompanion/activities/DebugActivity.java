@@ -29,22 +29,11 @@ public class DebugActivity extends ToolbarActivity {
     public static final String TAG = "DebugActivity";
 
     public static final String[] URL_TESTS_HARDCODED = {
-            "https://www.reddit.com/r/Games/wiki/rules",
-            "/u/10-15-19-26-32-34-68",
-            "https://www.reddit.com/user/10-15-19-26-32-34-68",
-            "https://www.reddit.com/r/reddit.com/",
-            "https://www.reddit.com/r/reddit.com",
-            "https://www.reddit.com/r/buildapcforme/",
-            "https://www.reddit.com/r/buildapcforme",
-            "https://www.reddit.com/r/KeepOurNetFree/80mkp0/",
-            "https://www.reddit.com/r/KeepOurNetFree/80mkp0",
-            "https://www.reddit.com/r/Art/comments/346tdo/10_years_of_progress_learning_to_draw_album_on/",
-            "https://www.REDDIT.com/r/funny/COMMENTS/6geuo5/thats_my_chair/",
-            "https://www.reddit.com/r/worldnews/comments/826074/young_people_without_family_wealth_are_right_to/dv870al/?sort=controversial&context=2",
-            "https://www.reddit.com/r/AnimalsBeingJerks/comments/6g1g78/muffin_trying_to_keep_blueberry_out/",
-            "http://gfycat.com/bothcircularcornsnake",
-            "http://www.gfycat.com/nippykindlangur",
-            "http://www.gfycat.com/brutalsavagerekt"};
+            "https://i.imgur.com/IMmmP8A.gif",
+            "https://i.stack.imgur.com/sGhaO.gif",
+            "https://i.redd.it/rkdbdl9c04tx.gif",
+            "https://gfycat.com/gifs/detail/whisperedenchantingdowitcher"
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

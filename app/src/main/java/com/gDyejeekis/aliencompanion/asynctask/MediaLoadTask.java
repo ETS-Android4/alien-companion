@@ -42,7 +42,8 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
         url = params[0];
         String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, url);
         if(cachedPath==null) {
-            cachedPath = downloadToCache(new File(cacheDir, LinkUtils.urlToFilename(url)));
+            String cachedName = LinkUtils.getFilenameFromUrl(url).concat(LinkUtils.getDirectMediaUrlExtension(url));
+            cachedPath = downloadToCache(new File(cacheDir, cachedName));
             GeneralUtils.checkCacheSize(cacheDir);
         }
         return cachedPath;
@@ -56,7 +57,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
 
             //this timeout affects how long it takes for the app to realize there's a connection problem
             ucon.setReadTimeout(5000);
-            ucon.setConnectTimeout(10000);
+            ucon.setConnectTimeout(5000);
 
             //Define InputStreams to read from the URLConnection.
             // uses 3KB download buffer

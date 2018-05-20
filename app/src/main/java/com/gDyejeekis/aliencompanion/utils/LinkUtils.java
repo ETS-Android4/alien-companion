@@ -64,18 +64,22 @@ public class LinkUtils {
         return "";
     }
 
-    // TODO: 3/7/2018 this method might be flawed, maybe revert to old method
-    public static String urlToFilename(String url) {
-        String filename = removeUrlParameters(url);
-        filename = filename.substring(filename.lastIndexOf("/") + 1);
-        return filename;
+    public static String getFilenameFromUrl(String url) {
+        return String.valueOf(url.hashCode());
     }
 
-    public static String urlToFilenameOld(String url) {
-        String filename = removeUrlParameters(url);
-        filename = filename.replaceAll("https?://", "").replace("/", "(s)");
-        return filename;
-    }
+    // TODO: 5/19/2018 delet
+    //public static String urlToFilename(String url) {
+    //    String filename = removeUrlParameters(url);
+    //    filename = filename.substring(filename.lastIndexOf("/") + 1);
+    //    return filename;
+    //}
+//
+    //public static String urlToFilenameOld(String url) {
+    //    String filename = removeUrlParameters(url);
+    //    filename = filename.replaceAll("https?://", "").replace("/", "(s)");
+    //    return filename;
+    //}
 
     public static String removeUrlParameters(String url) {
         try {

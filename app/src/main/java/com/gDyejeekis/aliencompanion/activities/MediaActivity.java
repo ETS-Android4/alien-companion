@@ -134,94 +134,51 @@ public class MediaActivity extends BackNavActivity {
     }
 
     private void setupFragments() {
-        String domain;
-        //boolean isGif = false;
-        RedditVideo redditVideo = (RedditVideo) getIntent().getSerializableExtra("redditVideo");
-        if(redditVideo != null) {
-            domain = "v.redd.it";
-            //isGif = redditVideo.getGif();
-            url = redditVideo.getFallbackUrl(); // TODO: 10/11/2017 properly support v.redd.it videos with sound
-        }
-        else {
-            domain = getIntent().getStringExtra("domain");
-            url = getIntent().getStringExtra("url");
-        }
+        final RedditVideo redditVideo = (RedditVideo) getIntent().getSerializableExtra("redditVideo");
+        final String domain = getIntent().getStringExtra("domain");
+        url = getIntent().getStringExtra("url");
 
         if(MyApplication.offlineModeEnabled) {
             File mediaDir = GeneralUtils.checkSyncedMediaDir(this);
 
             String toFind = null;
-            boolean hasSound = false;
-            if(domain.contains("gfycat.com")) {
-                toFind = LinkUtils.getGfycatId(url);
-            }
-            else if(domain.equals("i.reddituploads.com") || domain.equals("i.redditmedia.com")) {
-                toFind = LinkUtils.urlToFilename(url); // TODO: 7/30/2017 maybe make getReddituploadsId method
-            }
-            else if(domain.equals("v.redd.it")) {
-                toFind = LinkUtils.getShortRedditId(url);
-            }
-            else if(domain.contains("gyazo.com")) {
-                toFind = LinkUtils.getGyazoId(url);
-            }
-            else if(domain.contains("giphy.com")) {
-                toFind = LinkUtils.getGiphyId(url);
-            }
-            else if(domain.contains("streamable.com")) {
-                toFind = LinkUtils.getStreamableId(url);
-                hasSound = true;
-            }
-            else if(domain.contains("imgur.com")) {
+            if(domain.equals("imgur.com")) {
                 String id = LinkUtils.getImgurImgId(url);
-                if(url.contains("/a/")) {
+                if(url.contains("/a/")) { // album link
                     ImgurAlbum album = (ImgurAlbum) findImgurItemFromFile(id);
                     if(album!=null) {
                         loadFromSynced = true;
                         if(album.getImages().size()==1) {
-                            String path = album.getImages().get(0).getLink();
-                            if(path.endsWith(".mp4") || path.endsWith(".gif")) {
-                                addGifFragment(path);
-                            }
-                            else {
-                                addImageFragment(path);
-                            }
-                        }
-                        else {
+                            String imgLink = album.getImages().get(0).getLink();
+                            toFind = LinkUtils.getFilenameFromUrl(imgLink);
+                        } else {
                             setupAlbumView(album.getImages(), album.hasInfo(), album.getTitle(), album.getDescription());
                         }
                     }
                 }
-                else if(url.contains("/gallery/")) {
+                else if(url.contains("/gallery/")) { // gallery link
                     ImgurGallery gallery = (ImgurGallery) findImgurItemFromFile(id);
                     if(gallery!=null) {
                         if(gallery.isAlbum()) {
                             loadFromSynced = true;
                             if(gallery.getImages().size()==1) {
-                                String path = gallery.getImages().get(0).getLink();
-                                if(path.endsWith(".mp4") || path.endsWith(".gif")) {
-                                    addGifFragment(path);
-                                }
-                                else {
-                                    addImageFragment(path);
-                                }
-                            }
-                            else {
+                                String imgLink = gallery.getImages().get(0).getLink();
+                                toFind = LinkUtils.getFilenameFromUrl(imgLink);
+                            } else {
                                 setupAlbumView(gallery.getImages(), false, null, null);
                             }
-                        }
-                        else {
-                            toFind = id;
+                        } else {
+                            toFind = LinkUtils.getFilenameFromUrl(url);
                         }
                     }
+                } else {
+                    toFind = LinkUtils.getFilenameFromUrl(url);
                 }
-                else {
-                    toFind = id;
-                }
+            } else {
+                toFind = LinkUtils.getFilenameFromUrl(url);
             }
-            else {
-                toFind = LinkUtils.urlToFilename(url);
-                hasSound = url.endsWith(".mp4");
-            }
+            boolean isVideo = domain.equals("streamable.com") || url.endsWith(".mp4");
+                   // || (redditVideo!=null && !redditVideo.isGif()); // TODO: 10/11/2017 properly support v.redd.it videos with sound
 
             if(toFind!=null && !toFind.isEmpty()) {
                 File file = StorageUtils.findFile(mediaDir, mediaDir.getAbsolutePath(), toFind);
@@ -233,7 +190,7 @@ public class MediaActivity extends BackNavActivity {
                         addVideoFragment(file.getAbsolutePath());
                     }
                     else if (filename.endsWith(".mp4") || filename.endsWith(".gif")) {
-                        if(hasSound) {
+                        if(isVideo) {
                             addVideoFragment(file.getAbsolutePath());
                         }
                         else {
@@ -280,12 +237,10 @@ public class MediaActivity extends BackNavActivity {
                                 }
                             } else if (item instanceof ImgurAlbum) {
                                 checkImgurAlbumSize(item);
-                                //setupAlbumView(item.getImages());
                             } else if (item instanceof ImgurGallery) {
                                 ImgurGallery gallery = (ImgurGallery) item;
                                 if (gallery.isAlbum()) {
                                     checkImgurAlbumSize(item);
-                                    //setupAlbumView(gallery.getImages());
                                 } else {
                                     checkImgurItemInfo(gallery);
                                     if(gallery.isAnimated()) {
@@ -334,7 +289,7 @@ public class MediaActivity extends BackNavActivity {
                 }.execute(url);
             }
             // STREAMABLE
-            else if(domain.contains("streamable.com")) {
+            else if(domain.equals("streamable.com")) {
                 new StreamableTask(this) {
                     @Override
                     protected void onPostExecute(String url) {
@@ -352,11 +307,11 @@ public class MediaActivity extends BackNavActivity {
                 addImageFragment(url);
             }
             // REDDIT VIDEO (>.<)
-            else if(domain.equals("v.redd.it")) {
+            else if(domain.equals("v.redd.it") && redditVideo != null) {
                 // TODO: 10/11/2017 add approriate fragment (sound or no sound)
                 //if(isGif) addGifFragment(url);
                 //else addVideoFragment(url);
-                addGifFragment(url);
+                addGifFragment(redditVideo.getScrubberMediaUrl());
             }
             // IMAGES
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {
@@ -368,7 +323,6 @@ public class MediaActivity extends BackNavActivity {
                 url = url.replaceAll("\\?(\\d+)?", "");
                 if (domain.contains("imgur.com")) {
                     url = url.replace(".gifv", ".mp4").replace(".gif", ".mp4");
-                    //url = url.replace(".gif", ".mp4");
                 }
                 addGifFragment(url);
             }
@@ -723,10 +677,7 @@ public class MediaActivity extends BackNavActivity {
             appFolder.mkdir();
         }
 
-        String filename = LinkUtils.urlToFilename(url);
-        if(!(filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png"))) {
-            filename = filename.concat(".jpg");
-        }
+        String filename = LinkUtils.getFilenameFromUrl(url).concat(LinkUtils.getDirectMediaUrlExtension(url)); // TODO: 5/19/2018 check this
         return new File(appFolder.getAbsolutePath(), filename);
     }
 
