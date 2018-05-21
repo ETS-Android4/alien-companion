@@ -323,25 +323,8 @@ public class PostItemOptionsListener implements View.OnClickListener {
                         b.putSerializable("post", post);
                         d.setArguments(b);
                         d.show(((AppCompatActivity)context).getSupportFragmentManager(), "dialog");
-                        //String toastMessage;
-                        //if(GeneralUtils.isNetworkAvailable(context)) {
-                        //    if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
-                        //        toastMessage = "Syncing over mobile data connection is disabled";
-                        //    }
-                        //    else {
-                        //        toastMessage = "Post added to sync queue";
-                        //        Intent intent = new Intent(context, DownloaderService.class);
-                        //        intent.putExtra("post", post);
-                        //        context.startService(intent);
-                        //    }
-                        //}
-                        //else {
-                        //    toastMessage = "Network connection unavailable";
-                        //}
-                        //ToastUtils.showToast(context, toastMessage);
                         return true;
                     case R.id.action_remove_from_synced:
-                        //final int index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
                         ((RedditItemListAdapter) currentAdapter).remove(post);
                         notifyDataSetChangedDelayed();
                         new AsyncTask<String, Void, Boolean>() {
