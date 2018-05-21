@@ -30,6 +30,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:id="@+id/layout_sync_post_limit"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -301,6 +302,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_sync_new_posts"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

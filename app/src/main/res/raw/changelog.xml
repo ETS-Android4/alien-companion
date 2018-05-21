@@ -2,7 +2,7 @@
 <changelog bulletedList="true">
 
     <changelogversion versionName="" changeDate="">
-        <changelogtext>Replaced dialog for syncing saved posts with the 'Custom sync' dialog</changelogtext>
+        <changelogtext>Replaced dialog for syncing saved and individual posts with the 'Custom sync' dialog</changelogtext>
         <changelogtext>Added 'Custom sync' option to the sync profile overflow menu (use this option to sync a profile with a new set of sync options
         without changing that profile's saved sync options)</changelogtext>
         <changelogtext>Fixed a few caching issues which prevented some media links from loading properly</changelogtext>

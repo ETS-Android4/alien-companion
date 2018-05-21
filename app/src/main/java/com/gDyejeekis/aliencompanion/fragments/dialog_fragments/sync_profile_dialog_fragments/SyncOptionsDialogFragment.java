@@ -1,6 +1,5 @@
 package com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,9 +20,7 @@ import com.gDyejeekis.aliencompanion.activities.MainActivity;
 import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.SubredditActivity;
 import com.gDyejeekis.aliencompanion.activities.UserActivity;
-import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
-import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
-import com.gDyejeekis.aliencompanion.fragments.UserFragment;
+import com.gDyejeekis.aliencompanion.api.entity.Submission;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.ScalableDialogFragment;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfile;
 import com.gDyejeekis.aliencompanion.models.sync_profile.SyncProfileOptions;
@@ -44,6 +41,7 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
     private SyncProfileOptions syncOptions;
     private SyncProfile profile;
     private boolean customSync;
+    private Submission post;
 
     // TODO: 4/23/2017 should probably asssign from resource arrays
     private static final String[] postCountOptions = {"10", "25", "50", "75", "100", "150", "200"};
@@ -77,6 +75,7 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
         if (getArguments()!=null) {
             customSync = getArguments().getBoolean("customSync", false);
             profile = (SyncProfile) getArguments().getSerializable("profile");
+            post = (Submission) getArguments().getSerializable("post");
         }
     }
 
@@ -109,6 +108,13 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
             useGlobalSwitch.setOnCheckedChangeListener(this);
             syncOptions = (profile.getSyncOptions()==null) ? new SyncProfileOptions()
                     : new SyncProfileOptions(profile.getSyncOptions());
+        }
+
+        if (post != null) {
+            LinearLayout layoutPostLimit = view.findViewById(R.id.layout_sync_post_limit);
+            LinearLayout layoutNewPosts = view.findViewById(R.id.layout_sync_new_posts);
+            layoutPostLimit.setVisibility(View.GONE);
+            layoutNewPosts.setVisibility(View.GONE);
         }
 
         syncPostCountSpinner = view.findViewById(R.id.spinner_syncPostCount);
@@ -244,14 +250,16 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
                 dismiss();
                 updateSyncOptions();
                 // TODO: 3/24/2018 abstraction here
-                if (getActivity() instanceof MainActivity) {
+                if (post != null) {
+                    addPostToSyncQueue();
+                } else if (getActivity() instanceof MainActivity) {
                     ((MainActivity) getActivity()).getListFragment().addToSyncQueue(syncOptions);
                 } else if (getActivity() instanceof SubredditActivity) {
                     ((SubredditActivity) getActivity()).getListFragment().addToSyncQueue(syncOptions);
                 } else if (getActivity() instanceof UserActivity) {
                     ((UserActivity) getActivity()).getListFragment().addSavedToSyncQueue(syncOptions);
                 } else if (getActivity() instanceof ProfilesActivity) {
-                    addSyncProfileToQueue();
+                    addSyncProfileToSyncQueue();
                 }
                 break;
             case R.id.button_cancel:
@@ -260,7 +268,28 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
         }
     }
 
-    private void addSyncProfileToQueue() {
+    private void addPostToSyncQueue() {
+        Context context = getContext();
+        if (context!=null) {
+            String toastMessage;
+            if (GeneralUtils.isNetworkAvailable(context)) {
+                if (syncOptions.isSyncOverWifiOnly() && !GeneralUtils.isConnectedOverWifi(context)) {
+                    toastMessage = "Syncing over mobile data connection is disabled";
+                } else {
+                    toastMessage = "Post added to sync queue";
+                    Intent intent = new Intent(context, DownloaderService.class);
+                    intent.putExtra("post", post);
+                    intent.putExtra("syncOptions", syncOptions);
+                    context.startService(intent);
+                }
+            } else {
+                toastMessage = "Network connection unavailable";
+            }
+            ToastUtils.showToast(context, toastMessage);
+        }
+    }
+
+    private void addSyncProfileToSyncQueue() {
         Context context = getContext();
         if (context!=null && profile!=null) {
             String toastMessage;

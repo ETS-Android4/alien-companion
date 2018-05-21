@@ -29,6 +29,7 @@ import com.gDyejeekis.aliencompanion.api.retrieval.params.UserSubmissionsCategor
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.RedditContentFragment;
+import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.sync_profile_dialog_fragments.SyncOptionsDialogFragment;
 import com.gDyejeekis.aliencompanion.models.RedditItem;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.PostAdapter;
@@ -316,22 +317,28 @@ public class PostItemOptionsListener implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_add_to_synced:
-                        String toastMessage;
-                        if(GeneralUtils.isNetworkAvailable(context)) {
-                            if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
-                                toastMessage = "Syncing over mobile data connection is disabled";
-                            }
-                            else {
-                                toastMessage = "Post added to sync queue";
-                                Intent intent = new Intent(context, DownloaderService.class);
-                                intent.putExtra("post", post);
-                                context.startService(intent);
-                            }
-                        }
-                        else {
-                            toastMessage = "Network connection unavailable";
-                        }
-                        ToastUtils.showToast(context, toastMessage);
+                        SyncOptionsDialogFragment d = new SyncOptionsDialogFragment();
+                        Bundle b = new Bundle();
+                        b.putBoolean("customSync", true);
+                        b.putSerializable("post", post);
+                        d.setArguments(b);
+                        d.show(((AppCompatActivity)context).getSupportFragmentManager(), "dialog");
+                        //String toastMessage;
+                        //if(GeneralUtils.isNetworkAvailable(context)) {
+                        //    if(MyApplication.syncOverWifiOnly && !GeneralUtils.isConnectedOverWifi(context)) {
+                        //        toastMessage = "Syncing over mobile data connection is disabled";
+                        //    }
+                        //    else {
+                        //        toastMessage = "Post added to sync queue";
+                        //        Intent intent = new Intent(context, DownloaderService.class);
+                        //        intent.putExtra("post", post);
+                        //        context.startService(intent);
+                        //    }
+                        //}
+                        //else {
+                        //    toastMessage = "Network connection unavailable";
+                        //}
+                        //ToastUtils.showToast(context, toastMessage);
                         return true;
                     case R.id.action_remove_from_synced:
                         //final int index = ((RedditItemListAdapter) currentAdapter).indexOf(post);
