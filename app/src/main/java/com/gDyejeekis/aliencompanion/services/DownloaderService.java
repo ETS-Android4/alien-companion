@@ -303,9 +303,9 @@ public class DownloaderService extends IntentService {
         boolean success;
         do {
             checkManuallyPaused();
-            if (manuallyCancelled) {
-                return;
-            }
+            if (manuallyCancelled) return;
+            if (syncOptions.isSyncOverWifiOnly()) checkWifiDisconnected();
+
             success = syncSaved(filename, syncOptions);
             if (!success) pauseSync();
         } while (!success);
@@ -406,9 +406,9 @@ public class DownloaderService extends IntentService {
         boolean success;
         do {
             checkManuallyPaused();
-            if (manuallyCancelled) {
-                return;
-            }
+            if (manuallyCancelled) return;
+            if (syncOptions.isSyncOverWifiOnly()) checkWifiDisconnected();
+
             success = syncSubreddit(filename, subreddit, submissionSort, timeSpan, isMulti, syncOptions);
             if (!success) pauseSync();
         } while (!success);
@@ -474,9 +474,9 @@ public class DownloaderService extends IntentService {
         boolean success;
         do {
             checkManuallyPaused();
-            if (manuallyCancelled) {
-                return;
-            }
+            if (manuallyCancelled) return;
+            if (syncOptions.isSyncOverWifiOnly()) checkWifiDisconnected();
+
             success = syncPost(submission, filename, displayName, syncOptions);
             if (!success) pauseSync();
         } while (!success);
@@ -605,9 +605,9 @@ public class DownloaderService extends IntentService {
         Submission post;
         do {
             checkManuallyPaused();
-            if (manuallyCancelled) {
-                return null;
-            }
+            if (manuallyCancelled) return null;
+            if (syncOptions.isSyncOverWifiOnly()) checkWifiDisconnected();
+
             post = syncLinkedRedditPost(url, domain, filename, syncOptions);
             if (post == null) pauseSync();
         } while (post == null);
@@ -684,15 +684,23 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    private void checkWifiDisconnected() {
+        while (GeneralUtils.isNetworkAvailable(this) && !GeneralUtils.isConnectedOverWifi(this)) {
+            notifBuilder.setContentText("WiFi disconnected. Retrying..").setSmallIcon(android.R.drawable.stat_notify_error);
+            notificationManager.notify(FOREGROUND_ID, notifBuilder.build());
+            SystemClock.sleep(1000);
+        }
+    }
+
     private void pauseSync() {
         String pauseReason;
         long waitTime;
         if(!GeneralUtils.isNetworkAvailable(this)) {
-            pauseReason = "Sync paused (network unavailable). Retrying..";
+            pauseReason = "Network unavailable. Retrying..";
             waitTime = 1000;
         }
         else {
-            pauseReason = "Sync paused (error connecting to reddit). Retrying..";
+            pauseReason = "Error connecting to reddit. Retrying..";
             waitTime = 2000;
         }
 
