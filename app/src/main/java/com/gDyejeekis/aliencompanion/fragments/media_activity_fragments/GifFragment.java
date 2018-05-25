@@ -235,7 +235,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         activity.setMainProgressBarVisible(false);
         buttonRetry.setVisibility(View.VISIBLE);
         videoView.setVisibility(View.GONE);
-        return false;
+        return true;
     }
 
     private void handleAspectRatio() {
