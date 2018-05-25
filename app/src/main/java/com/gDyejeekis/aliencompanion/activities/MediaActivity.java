@@ -67,7 +67,7 @@ public class MediaActivity extends BackNavActivity {
 
     private boolean loadFromSynced = false;
 
-    public boolean loadedFromLocal() {
+    public boolean loadedFromSynced() {
         return loadFromSynced;
     }
 

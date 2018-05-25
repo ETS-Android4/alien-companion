@@ -153,7 +153,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         sHolder = videoView.getHolder();
         sHolder.addCallback(this);
 
-        //if (!activity.loadedFromLocal() && PRE_CACHE_VIDEO_GIFS) {
+        //if (!activity.loadedFromSynced() && PRE_CACHE_VIDEO_GIFS) {
         //    loadGifTask = new MediaLoadTask(activity.getCacheDir()) {
         //        @Override
         //        protected void onPostExecute(String videoPath) {
@@ -185,7 +185,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         Log.d(TAG, "Loading video from " + url);
         try {
             mPlayer = new MediaPlayer();
-            String source = activity.loadedFromLocal() ? url :
+            String source = activity.loadedFromSynced() ? url :
                     MyApplication.proxyCacheServer.getProxyUrl(url);
             mPlayer.setDataSource(source);
             mPlayer.setDisplay(sHolder);
@@ -324,7 +324,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         buttonRetry.setVisibility(View.GONE);
         activity.setMainProgressBarVisible(true);
 
-        if(activity.loadedFromLocal()) {
+        if(activity.loadedFromSynced()) {
             activity.setMainProgressBarVisible(false);
             try {
                 gifDrawable = new GifDrawable(url);
