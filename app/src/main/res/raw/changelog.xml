@@ -8,7 +8,7 @@
         <changelogtext>Syncing will now pause automatically on WiFi disconnect if 'Sync over WiFi only' option is enabled</changelogtext>
         <changelogtext>Improved caching of video gifs from sites such as imgur and gfycat</changelogtext>
         <changelogtext>Fixed a few caching issues which prevented some media links from loading properly</changelogtext>
-        <changelogtext></changelogtext>
+        <changelogtext>Fixed a bug which prevented clicks from registering after scrolling when 'Hide toolbar on scroll down' is enabled</changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Various small improvements, optimizations, bug and crash fixes</changelogtext>
     </changelogversion>
