@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Gravity;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.gDyejeekis.aliencompanion.api.utils.RedditConstants;
 import com.gDyejeekis.aliencompanion.enums.PostViewType;
 import com.gDyejeekis.aliencompanion.models.SavedAccount;
@@ -144,6 +145,7 @@ public class MyApplication extends Application {
     public static int currentBaseTheme;
 
     public static OkHttpClient okHttpClient;
+    public static HttpProxyCacheServer proxyCacheServer;
 
     public static boolean newMessages;
     public static int messageCheckInterval;
@@ -193,6 +195,7 @@ public class MyApplication extends Application {
         currentFontFamily = fontFamily;
 
         initOkHttpClient();
+        initProxyCacheServer();
         authenticateWithFirebase();
     }
 
@@ -200,6 +203,10 @@ public class MyApplication extends Application {
         okHttpClient = new OkHttpClient.Builder()
                 .cache(new Cache(getCacheDir(), AppConstants.OKHTTP_CACHE_LIMIT))
                 .build();
+    }
+
+    private void initProxyCacheServer() {
+        proxyCacheServer = new HttpProxyCacheServer(this);
     }
 
     public static int[] getPrimaryColors(Context context) {

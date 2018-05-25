@@ -34,7 +34,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
 
     public static final String TAG = "GifFragment";
 
-    private static final boolean FULLY_CACHE_VIDEO_GIFS = true;
+    //private static final boolean PRE_CACHE_VIDEO_GIFS = false;
 
     private MediaActivity activity;
 
@@ -151,28 +151,29 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         videoView.setVisibility(View.VISIBLE);
 
         sHolder = videoView.getHolder();
+        sHolder.addCallback(this);
 
-        if (!activity.loadedFromLocal() && FULLY_CACHE_VIDEO_GIFS) {
-            loadGifTask = new MediaLoadTask(activity.getCacheDir()) {
-                @Override
-                protected void onPostExecute(String videoPath) {
-                    activity.setMainProgressBarVisible(false);
-                    if(videoPath!=null) {
-                        url = videoPath;
-                        loadVideoSource();
-                    }
-                    else {
-                        videoView.setVisibility(View.GONE);
-                        buttonRetry.setVisibility(View.VISIBLE);
-                        ToastUtils.showToast(activity, "Error loading gif");
-                        CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
-                    }
-                }
-            };
-            loadGifTask.execute(url);
-        } else {
-            sHolder.addCallback(this);
-        }
+        //if (!activity.loadedFromLocal() && PRE_CACHE_VIDEO_GIFS) {
+        //    loadGifTask = new MediaLoadTask(activity.getCacheDir()) {
+        //        @Override
+        //        protected void onPostExecute(String videoPath) {
+        //            activity.setMainProgressBarVisible(false);
+        //            if(videoPath!=null) {
+        //                url = videoPath;
+        //                loadVideoSource();
+        //            }
+        //            else {
+        //                videoView.setVisibility(View.GONE);
+        //                buttonRetry.setVisibility(View.VISIBLE);
+        //                ToastUtils.showToast(activity, "Error loading gif");
+        //                CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
+        //            }
+        //        }
+        //    };
+        //    loadGifTask.execute(url);
+        //} else {
+        //    sHolder.addCallback(this);
+        //}
     }
 
     @Override
@@ -184,7 +185,9 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         Log.d(TAG, "Loading video from " + url);
         try {
             mPlayer = new MediaPlayer();
-            mPlayer.setDataSource(url);
+            String source = activity.loadedFromLocal() ? url :
+                    MyApplication.proxyCacheServer.getProxyUrl(url);
+            mPlayer.setDataSource(source);
             mPlayer.setDisplay(sHolder);
             mPlayer.prepareAsync();
             mPlayer.setOnPreparedListener(this);

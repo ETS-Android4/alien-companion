@@ -48,6 +48,7 @@ public class LicensesActivity extends ToolbarActivity {
         customLicenses.add(new License(this, "snacktory", LicenseType.APACHE_LICENSE_20,      "n/a",      "karussell"));
         customLicenses.add(new License(this, "SwipeBackLayout", LicenseType.APACHE_LICENSE_20,      "2013",      "Isaac Wang"));
         customLicenses.add(new License(this, "DragSortListView", LicenseType.APACHE_LICENSE_20,      "2012",      "Carl Bauer"));
+        customLicenses.add(new License(this, "AndroidVideoCache", LicenseType.APACHE_LICENSE_20, "2014-2017", "Alexey Danilov"));
 
         fragment.addCustomLicense(customLicenses);
     }
