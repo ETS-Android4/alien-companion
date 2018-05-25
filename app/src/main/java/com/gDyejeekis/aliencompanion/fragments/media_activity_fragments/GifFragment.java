@@ -1,9 +1,7 @@
 package com.gDyejeekis.aliencompanion.fragments.media_activity_fragments;
 
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -35,6 +33,8 @@ import pl.droidsonroids.gif.GifImageView;
 public class GifFragment extends Fragment implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
     public static final String TAG = "GifFragment";
+
+    private static final boolean FULLY_CACHE_VIDEO_GIFS = true;
 
     private MediaActivity activity;
 
@@ -100,12 +100,12 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         View view = inflater.inflate(R.layout.fragment_gif, container, false);
 
         if(!isGif) {
-            gifParent = (RelativeLayout) view.findViewById(R.id.layout_gif_parent);
-            videoView = (SurfaceView) view.findViewById(R.id.videoView);
+            gifParent = view.findViewById(R.id.layout_gif_parent);
+            videoView = view.findViewById(R.id.videoView);
             videoView.setZOrderOnTop(true);
         }
         else {
-            gifView = (GifImageView) view.findViewById(R.id.gifView);
+            gifView = view.findViewById(R.id.gifView);
             gifView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -122,7 +122,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                 }
             });
         }
-        buttonRetry = (Button) view.findViewById(R.id.button_retry);
+        buttonRetry = view.findViewById(R.id.button_retry);
         buttonRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,11 +136,10 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
     }
 
     private void loadUrl() {
-        if(isGif) {
+        if (isGif) {
             loadGif();
-        }
-        else {
-            if(autoplay) {
+        } else {
+            if (autoplay) {
                 loadVideo();
             }
         }
@@ -152,7 +151,49 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         videoView.setVisibility(View.VISIBLE);
 
         sHolder = videoView.getHolder();
-        sHolder.addCallback(this);
+
+        if (!activity.loadedFromLocal() && FULLY_CACHE_VIDEO_GIFS) {
+            loadGifTask = new MediaLoadTask(activity.getCacheDir()) {
+                @Override
+                protected void onPostExecute(String videoPath) {
+                    activity.setMainProgressBarVisible(false);
+                    if(videoPath!=null) {
+                        url = videoPath;
+                        loadVideoSource();
+                    }
+                    else {
+                        videoView.setVisibility(View.GONE);
+                        buttonRetry.setVisibility(View.VISIBLE);
+                        ToastUtils.showToast(activity, "Error loading gif");
+                        CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
+                    }
+                }
+            };
+            loadGifTask.execute(url);
+        } else {
+            sHolder.addCallback(this);
+        }
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        loadVideoSource();
+    }
+
+    private void loadVideoSource() {
+        Log.d(TAG, "Loading video from " + url);
+        try {
+            mPlayer = new MediaPlayer();
+            mPlayer.setDataSource(url);
+            mPlayer.setDisplay(sHolder);
+            mPlayer.prepareAsync();
+            mPlayer.setOnPreparedListener(this);
+            mPlayer.setOnErrorListener(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            buttonRetry.setVisibility(View.VISIBLE);
+            videoView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -195,27 +236,6 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
         buttonRetry.setVisibility(View.VISIBLE);
         videoView.setVisibility(View.GONE);
         return false;
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        loadVideoSource();
-    }
-
-    private void loadVideoSource() {
-        Log.d(TAG, "Loading video from " + url);
-        try {
-            mPlayer = new MediaPlayer();
-            mPlayer.setDataSource(url);
-            mPlayer.setDisplay(sHolder);
-            mPlayer.prepareAsync();
-            mPlayer.setOnPreparedListener(this);
-            mPlayer.setOnErrorListener(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            buttonRetry.setVisibility(View.VISIBLE);
-            videoView.setVisibility(View.GONE);
-        }
     }
 
     private void handleAspectRatio() {
