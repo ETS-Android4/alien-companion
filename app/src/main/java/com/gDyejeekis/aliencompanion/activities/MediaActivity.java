@@ -307,11 +307,12 @@ public class MediaActivity extends BackNavActivity {
                 addImageFragment(url);
             }
             // REDDIT VIDEO (>.<)
-            else if(domain.equals("v.redd.it") && redditVideo != null) {
+            else if(domain.equals("v.redd.it")) {
                 // TODO: 10/11/2017 add approriate fragment (sound or no sound)
                 //if(isGif) addGifFragment(url);
                 //else addVideoFragment(url);
-                addGifFragment(redditVideo.getScrubberMediaUrl());
+                String videoUrl = redditVideo == null ? url.concat("/DASH_2_4_M") : redditVideo.getScrubberMediaUrl();
+                addGifFragment(videoUrl);
             }
             // IMAGES
             else if (url.matches("(?i).*\\.(png|jpg|jpeg)\\??(\\d+)?")) {

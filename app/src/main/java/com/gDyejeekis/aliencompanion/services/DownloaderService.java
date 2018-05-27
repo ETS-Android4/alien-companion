@@ -884,6 +884,7 @@ public class DownloaderService extends IntentService {
         }
     }
 
+    // TODO: 5/27/2018 maybe extract domain from url here and check that
     private void syncImage(String url, String filename, SyncProfileOptions syncOptions) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
@@ -957,7 +958,7 @@ public class DownloaderService extends IntentService {
             downloadMediaToPath(url, path, saveName);
         }
         // REDDIT VIDEO
-        else if(url.equals("v.redd.it")) {
+        else if(url.contains("v.redd.it")) {
             try {
                 String mp4Url = getRedditVideoDirectUrl(url);
                 saveName = saveName.concat(".mp4");
