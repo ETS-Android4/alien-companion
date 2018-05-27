@@ -196,7 +196,7 @@ public class MyApplication extends Application {
 
         initOkHttpClient();
         initProxyCacheServer();
-        authenticateWithFirebase();
+        //authenticateWithFirebase(); // re-enable later if needed
     }
 
     private void initOkHttpClient() {
