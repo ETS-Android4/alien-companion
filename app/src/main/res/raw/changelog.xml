@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
-    <changelogversion versionName="" changeDate="">
+    <changelogversion versionName="1.0.9" changeDate="May 29, 2018">
         <changelogtext>Replaced dialog for syncing saved and individual posts with the 'Custom sync' dialog</changelogtext>
         <changelogtext>Added 'Custom sync' option to the sync profile overflow menu (use this option to sync a profile with a new set of sync options
         without changing that profile's saved sync options)</changelogtext>
@@ -9,7 +9,6 @@
         <changelogtext>Improved caching of video gifs from sites such as imgur and gfycat</changelogtext>
         <changelogtext>Fixed a few caching issues which prevented some media links from loading properly</changelogtext>
         <changelogtext>Fixed a bug which prevented clicks from registering after scrolling when 'Hide toolbar on scroll down' is enabled</changelogtext>
-        <changelogtext></changelogtext>
         <changelogtext>Various small improvements, optimizations, bug and crash fixes</changelogtext>
     </changelogversion>
 
