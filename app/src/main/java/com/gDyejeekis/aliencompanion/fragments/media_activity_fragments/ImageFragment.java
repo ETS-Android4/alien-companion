@@ -236,7 +236,7 @@ public class ImageFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                activity.saveMedia();
+                activity.saveMedia(url);
                 return true;
             case R.id.action_share:
                 activity.shareMedia();

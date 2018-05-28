@@ -545,7 +545,7 @@ public class MediaActivity extends BackNavActivity {
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
         if(requestCode == 119871) {
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                saveMedia();
+                saveMedia(getFragmentUrl());
             }
             else {
                 ToastUtils.showToast(this, "Failed to save media (permission denied)");
@@ -553,71 +553,77 @@ public class MediaActivity extends BackNavActivity {
         }
     }
 
-    public void saveMedia() {
-        // checek for permission on android M+
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 119871);
-                return;
-            }
-        }
-        ToastUtils.showToast(this, "Saving to pictures..");
-        Log.d(TAG, "Saving " + url + " to public pictures directory");
+    // this is bad
+    private String getFragmentUrl() {
+        Fragment fragment = getCurrentFragment();
+        if (fragment instanceof ImageFragment)
+            return ((ImageFragment) fragment).getUrl();
+        else if (fragment instanceof GifFragment)
+            return ((GifFragment) fragment).getUrl();
+        else return null;
+    }
 
-        final File saveTarget = getSaveDestination();
-        final int saveId = url.hashCode();
-
-        showSavingMediaNotif(saveId);
-
-        if (loadFromSynced) {
-            Fragment fragment = getCurrentFragment();
-            // TODO: 3/14/2017 add abstraction
-            File file = null;
-            try { // apparently this might throw NPE
-                if (fragment instanceof ImageFragment) {
-                    file = new File(((ImageFragment) fragment).getUrl().replace("file:", ""));
-                } else if (fragment instanceof GifFragment) {
-                    file = new File(((GifFragment) fragment).getUrl().replace("file:", ""));
+    public void saveMedia(final String saveUri) {
+        if (saveUri != null) {
+            // checek for permission on android M+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE}, 119871);
+                    return;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            if(file != null) {
-                new AsyncTask<File, Void, Boolean>() {
-                    @Override
-                    protected Boolean doInBackground(File... params) {
-                        File targetFile = params[0];
-                        return StorageUtils.safeCopy(targetFile, saveTarget);
-                    }
+            ToastUtils.showToast(this, "Saving to pictures..");
+            Log.d(TAG, "Saving " + saveUri + " to public pictures directory");
 
+            final int saveId = saveUri.hashCode();
+
+            showSavingMediaNotif(saveUri, saveId);
+
+            // media file found in synced media dir, copy to public pics dir
+            if (loadFromSynced) {
+                File file = new File(saveUri.replace("file:", ""));
+                if (file.exists()) {
+                    final File saveTarget = getSaveDestination(file.getName());
+                    new AsyncTask<File, Void, Boolean>() {
+                        @Override
+                        protected Boolean doInBackground(File... params) {
+                            File toCopy = params[0];
+                            return StorageUtils.safeCopy(toCopy, saveTarget);
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean success) {
+                            onPostMediaSave(saveUri, saveId, success, saveTarget);
+                        }
+                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, file);
+                }
+            }
+            // media file not loaded from synced dir, either copy from cache or download file
+            else {
+                final File saveTarget = getSaveDestination(LinkUtils.getFilenameFromUrl(saveUri)
+                        .concat(LinkUtils.getDirectMediaUrlExtension(saveUri)));
+                new MediaDownloadTask(saveUri, saveTarget, getCacheDir()) {
                     @Override
                     protected void onPostExecute(Boolean success) {
-                        onPostMediaSave(saveId, success, saveTarget);
+                        onPostMediaSave(saveUri, saveId, success, saveTarget);
                     }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, file);
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
-        } else {
-            new MediaDownloadTask(url, saveTarget, getCacheDir()) {
-                @Override
-                protected void onPostExecute(Boolean success) {
-                    onPostMediaSave(saveId, success, saveTarget);
-                }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
-    private void onPostMediaSave(int saveId, boolean success, File saveTarget) {
-        Log.d(TAG, url + " save operation " + (success ? "successful" : "failed"));
+    private void onPostMediaSave(String saveUri, int saveId, boolean success, File saveTarget) {
+        Log.d(TAG, saveUri + " save operation " + (success ? "successful" : "failed"));
         if (success) {
             GeneralUtils.addFileToMediaStore(this, saveTarget);
         }
-        showSavedMediaNotif(saveId, success, saveTarget);
+        showSavedMediaNotif(saveUri, saveId, success, saveTarget);
     }
 
-    private void showSavingMediaNotif(int id) {
+    private void showSavingMediaNotif(String saveUri, int id) {
         Notification notif = new Notification.Builder(this)
                 .setContentTitle("Saving media..")
-                .setContentText(url)
+                .setContentText(saveUri)
                 .setSmallIcon(R.drawable.ic_photo_white_24dp)
                 .setProgress(1, 0, true)
                 .build();
@@ -626,11 +632,11 @@ public class MediaActivity extends BackNavActivity {
         nm.notify(id, notif);
     }
 
-    private void showSavedMediaNotif(int id, boolean success, File file) {
+    private void showSavedMediaNotif(String saveUri, int id, boolean success, File file) {
         PendingIntent pIntent = null;
         Bitmap resizedBitmap = null;
         boolean isImage = false;
-        if(success) {
+        if (success) {
             try {
                 //resizedBitmap = new BitmapTransform(640, 480).transform(GeneralUtils.getBitmapFromPath(file.getAbsolutePath()));
                 resizedBitmap = GeneralUtils.decodeSampledBitmapFromPath(file.getAbsolutePath(), 640, 480);
@@ -646,6 +652,7 @@ public class MediaActivity extends BackNavActivity {
         }
 
         String title = (success) ? "Media saved" : "Failed to save media";
+        String contentText = loadFromSynced ? url : saveUri;
         int smallIcon = (success) ? R.drawable.ic_photo_white_24dp : android.R.drawable.stat_notify_error;
         Notification.Builder notifBuilder = new Notification.Builder(this)
                 .setContentTitle(title)
@@ -653,15 +660,14 @@ public class MediaActivity extends BackNavActivity {
                 .setContentIntent(pIntent)
                 .setAutoCancel(true);
 
-        if(success) {
+        if (success) {
             if (isImage) {
-                notifBuilder.setSubText(file.getPath());
+                notifBuilder.setSubText(contentText);
                 if(resizedBitmap != null) {
                     notifBuilder.setStyle(new Notification.BigPictureStyle().bigPicture(resizedBitmap));
                 }
-            }
-            else {
-                notifBuilder.setContentText(file.getPath());
+            } else {
+                notifBuilder.setContentText(contentText);
             }
         }
 
@@ -669,7 +675,7 @@ public class MediaActivity extends BackNavActivity {
         nm.notify(id, notifBuilder.build());
     }
 
-    private File getSaveDestination() {
+    private File getSaveDestination(String filename) {
         String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
 
         File appFolder = new File(dir + "/" + AppConstants.SAVED_PICTURES_PUBLIC_DIR_NAME);
@@ -678,7 +684,6 @@ public class MediaActivity extends BackNavActivity {
             appFolder.mkdir();
         }
 
-        String filename = LinkUtils.getFilenameFromUrl(url).concat(LinkUtils.getDirectMediaUrlExtension(url)); // TODO: 5/19/2018 check this
         return new File(appFolder.getAbsolutePath(), filename);
     }
 
