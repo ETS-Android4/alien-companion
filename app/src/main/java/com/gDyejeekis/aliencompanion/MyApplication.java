@@ -195,7 +195,7 @@ public class MyApplication extends Application {
         currentFontStyle = fontStyle;
         currentFontFamily = fontFamily;
 
-        preferredCacheDir = getExternalCacheDir();
+        preferredCacheDir = getCacheDir();
         initOkHttpClient();
         initProxyCacheServer();
         //authenticateWithFirebase(); // re-enable later if needed
