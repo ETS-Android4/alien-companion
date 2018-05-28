@@ -116,10 +116,10 @@ public class MediaActivity extends BackNavActivity {
         getTheme().applyStyle(MyApplication.fontStyle, true);
         getTheme().applyStyle(MyApplication.fontFamily, true);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image);
+        setContentView(R.layout.activity_media);
         fragmentManager = getSupportFragmentManager();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar toolbar = findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(Color.parseColor("#78000000"));
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -127,7 +127,7 @@ public class MediaActivity extends BackNavActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar5);
+        progressBar = findViewById(R.id.progressBar5);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
 
         setupFragments();
