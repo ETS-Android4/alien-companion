@@ -26,8 +26,8 @@ public class CleaningUtils {
 
     public static void clearCache(Context context) {
         try {
-            File dir = context.getCacheDir();
-            StorageUtils.deleteDir(dir);
+            StorageUtils.deleteDir(context.getCacheDir());
+            StorageUtils.deleteDir(context.getExternalCacheDir());
         } catch (Exception e) {
             Log.e(TAG, "Error deleting cache directory");
             e.printStackTrace();
