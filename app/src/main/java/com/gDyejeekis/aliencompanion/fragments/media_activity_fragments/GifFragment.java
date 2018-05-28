@@ -339,7 +339,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
             }
         }
         else {
-            loadGifTask = new MediaLoadTask(activity.getCacheDir()) {
+            loadGifTask = new MediaLoadTask() {
 
                 @Override
                 protected void onPostExecute(String gifPath) {
@@ -360,7 +360,7 @@ public class GifFragment extends Fragment implements SurfaceHolder.Callback, Med
                         gifView.setVisibility(View.GONE);
                         buttonRetry.setVisibility(View.VISIBLE);
                         ToastUtils.showToast(activity, "Error loading gif");
-                        CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
+                        CleaningUtils.clearMediaFromCache(MyApplication.preferredCacheDir, url); // this shouldn't throw any exceptions
                     }
                 }
             };

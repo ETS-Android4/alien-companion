@@ -3,6 +3,7 @@ package com.gDyejeekis.aliencompanion.asynctask;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.utils.CleaningUtils;
 import com.gDyejeekis.aliencompanion.utils.ConvertUtils;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
@@ -27,19 +28,20 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
 
     public static final String TAG = "MediaLoadTask";
 
-    private File cacheDir;
+    //private File cacheDir;
 
     private String url;
 
     private BufferedInputStream inStream;
 
-    public MediaLoadTask(File cacheDir) {
-        this.cacheDir = cacheDir;
-    }
+    //public MediaLoadTask(File cacheDir) {
+    //    this.cacheDir = cacheDir;
+    //}
 
     @Override
     protected String doInBackground(String... params) {
         url = params[0];
+        final File cacheDir = MyApplication.preferredCacheDir;
         String cachedPath = GeneralUtils.checkCacheForMedia(cacheDir, url);
         if(cachedPath==null) {
             String cachedName = LinkUtils.getFilenameFromUrl(url).concat(LinkUtils.getDirectMediaUrlExtension(url));
@@ -100,7 +102,7 @@ public class MediaLoadTask extends AsyncTask<String, Void, String> {
         super.onCancelled();
 
         if(url != null) {
-            CleaningUtils.clearMediaFromCache(cacheDir, url);
+            CleaningUtils.clearMediaFromCache(MyApplication.preferredCacheDir, url);
         }
     }
 

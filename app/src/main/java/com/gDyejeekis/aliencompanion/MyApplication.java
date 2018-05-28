@@ -59,6 +59,7 @@ public class MyApplication extends Application {
     public static boolean showHiddenPosts = false;
 
     public static SharedPreferences prefs;
+    public static File preferredCacheDir;
     public static int lastKnownVersionCode;
     public static String deviceID;
     public static boolean showedWelcomeMessage;
@@ -194,6 +195,7 @@ public class MyApplication extends Application {
         currentFontStyle = fontStyle;
         currentFontFamily = fontFamily;
 
+        preferredCacheDir = getExternalCacheDir();
         initOkHttpClient();
         initProxyCacheServer();
         //authenticateWithFirebase(); // re-enable later if needed
@@ -201,14 +203,14 @@ public class MyApplication extends Application {
 
     private void initOkHttpClient() {
         okHttpClient = new OkHttpClient.Builder()
-                .cache(new Cache(getCacheDir(), AppConstants.OKHTTP_CACHE_LIMIT))
+                .cache(new Cache(preferredCacheDir, AppConstants.OKHTTP_CACHE_LIMIT))
                 .build();
     }
 
     private void initProxyCacheServer() {
         proxyCacheServer = new HttpProxyCacheServer.Builder(this)
-                .cacheDirectory(getCacheDir())
-                .maxCacheSize(AppConstants.VIDEO_CACHE_LIMIT)
+                .cacheDirectory(preferredCacheDir)
+                .maxCacheSize(AppConstants.TOTAL_CACHE_LIMIT)
                 .build();
     }
 

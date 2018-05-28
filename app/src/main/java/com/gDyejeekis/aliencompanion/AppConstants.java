@@ -22,9 +22,7 @@ public class AppConstants {
 
     public static final long OKHTTP_CACHE_LIMIT = 5 * 1024 * 1024;
 
-    public static final long VIDEO_CACHE_LIMIT = 50 * 1024 * 1024;
-
-    public static final long TOTAL_CACHE_LIMIT = 100 * 1024 * 1024;
+    public static final long TOTAL_CACHE_LIMIT = 90 * 1024 * 1024;
 
     public static final String SAVED_ACCOUNTS_FILENAME = "SavedAccounts";
 
