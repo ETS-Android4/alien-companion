@@ -145,7 +145,7 @@ public class ImageFragment extends Fragment {
             imageView.setImage(ImageSource.uri(url.replace("file:", "")));
         }
         else {
-            loadTask = new MediaLoadTask(activity.getCacheDir()) {
+            loadTask = new MediaLoadTask() {
 
                 @Override
                 protected void onPostExecute(String cachedPath) {
@@ -155,7 +155,7 @@ public class ImageFragment extends Fragment {
                     else {
                         imageLoadError();
                         ToastUtils.showToast(activity, "Error loading image");
-                        CleaningUtils.clearMediaFromCache(activity.getCacheDir(), url); // this shouldn't throw any exceptions
+                        CleaningUtils.clearMediaFromCache(MyApplication.preferredCacheDir, url); // this shouldn't throw any exceptions
                     }
                 }
             };
