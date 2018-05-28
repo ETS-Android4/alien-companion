@@ -24,6 +24,7 @@ import java.util.List;
 public class CleaningUtils {
     public static final String TAG = "CleaningUtils";
 
+    // clear all cache directories
     public static void clearCache(Context context) {
         try {
             StorageUtils.deleteDir(context.getCacheDir());
@@ -311,10 +312,9 @@ public class CleaningUtils {
 
     // clears all data in the app's internal storage root directory except for the files excluded by the filter
     public static void clearInternalStorageData(Context context, FilenameFilter filenameFilter) {
-        File cache = context.getCacheDir();
-        File appDir = new File(cache.getParent());
-        if (appDir.exists()) {
-            File[] children = appDir.listFiles(filenameFilter);
+        File internalDir = new File(context.getCacheDir().getParent());
+        if (internalDir.exists()) {
+            File[] children = internalDir.listFiles(filenameFilter);
             for (File child : children) {
                 boolean deleted = StorageUtils.deleteDir(child, filenameFilter);
                 Log.d(TAG, "**************** File " + child.getAbsolutePath() + (deleted ? " DELETED" : " CLEARED") + " *******************");
