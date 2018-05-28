@@ -206,7 +206,10 @@ public class MyApplication extends Application {
     }
 
     private void initProxyCacheServer() {
-        proxyCacheServer = new HttpProxyCacheServer(this);
+        proxyCacheServer = new HttpProxyCacheServer.Builder(this)
+                .cacheDirectory(getCacheDir())
+                .maxCacheSize(AppConstants.VIDEO_CACHE_LIMIT)
+                .build();
     }
 
     public static int[] getPrimaryColors(Context context) {

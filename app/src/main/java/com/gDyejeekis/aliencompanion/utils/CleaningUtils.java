@@ -35,7 +35,7 @@ public class CleaningUtils {
     }
 
     public static void checkCacheSize(File cacheDir, final String lastCached) {
-        if(StorageUtils.dirSize(cacheDir, false) >= AppConstants.IMAGES_CACHE_LIMIT) {
+        if(StorageUtils.dirSize(cacheDir, false) >= AppConstants.TOTAL_CACHE_LIMIT) {
             File toDelete = StorageUtils.oldestFileInDir(cacheDir);
             if (!toDelete.getName().equals(lastCached)) {
                 long length = toDelete.length();
