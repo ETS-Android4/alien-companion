@@ -33,7 +33,7 @@ public class LinkUtils {
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         } catch (NullPointerException e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 
