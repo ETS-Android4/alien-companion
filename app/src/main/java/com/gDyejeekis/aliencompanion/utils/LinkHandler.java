@@ -122,7 +122,26 @@ public class LinkHandler {
                 }
                 else if(domainLC.contains("imgur.com")) {
                     if(MyApplication.handleImgur) {
-                        //startInAppBrowser(activity, post, url, domain);
+                        intent = getMediaActivityIntent();
+                    }
+                    else setImplicitViewIntent = true;
+                }
+                else if(domainLC.contains("gyazo.com")) {
+                    if(MyApplication.handleGyazo) {
+                        intent = getMediaActivityIntent();
+                    }
+                    else setImplicitViewIntent = true;
+                }
+                else if (domainLC.contains("gfycat.com")) {
+                    if(MyApplication.handleGfycat) {
+                        // TODO: 9/8/2020 re-enable media activity for gfycat when api is properly implemented
+                        //intent = getMediaActivityIntent();
+                        return startInAppBrowser();
+                    }
+                    else setImplicitViewIntent = true;
+                }
+                else if (domainLC.contains("giphy.com")) {
+                    if(MyApplication.handleGiphy) {
                         intent = getMediaActivityIntent();
                     }
                     else setImplicitViewIntent = true;
@@ -141,16 +160,21 @@ public class LinkHandler {
                         intent.putExtra("domain", domainLC);
                     }
                 }
-                else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")
-                        || domainLC.contains("gyazo.com")) {
+                else if (domainLC.contains("streamable.com")) {
+                    if(MyApplication.handleStreamable) {
+                        intent = getMediaActivityIntent();
+                    }
+                    else setImplicitViewIntent = true;
+                }
+                else if(urlLC.endsWith(".png") || urlLC.endsWith(".jpg") || urlLC.endsWith(".jpeg") || domainLC.equals("i.reddituploads.com") || domainLC.equals("i.redditmedia.com")) {
                     intent = getMediaActivityIntent();
                 }
-                else if(domainLC.contains("gfycat.com") || domainLC.contains("giphy.com") || urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")/* || urlLC.endsWith(".webm") || urlLC.endsWith(".mp4")*/) {
+                else if(urlLC.endsWith(".gif") || urlLC.endsWith(".gifv")) {
                     intent = getMediaActivityIntent();
                 }
-                else if(domainLC.contains("streamable.com") || urlLC.endsWith(".mp4")) {
-                    intent = getMediaActivityIntent();
-                }
+                //else if(urlLC.endsWith(".mp4")) {
+                //    intent = getMediaActivityIntent();
+                //}
                 else if(domainLC.equals("twitter.com")) {
                     if(MyApplication.handleTwitter) {
                         return startInAppBrowser();

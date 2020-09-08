@@ -12,6 +12,26 @@
         android:defaultValue="true"/>
 
     <CheckBoxPreference
+        android:key="handleGyazo"
+        android:title="Gyazo"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="handleGfycat"
+        android:title="Gfycat"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="handleGiphy"
+        android:title="Giphy"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="handleStreamable"
+        android:title="Streamable"
+        android:defaultValue="true"/>
+
+    <CheckBoxPreference
         android:key="handleTwitter"
         android:title="Twitter"
         android:defaultValue="true"/>

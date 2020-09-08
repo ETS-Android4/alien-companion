@@ -121,6 +121,10 @@ public class MyApplication extends Application {
     public static boolean useCCT;
     public static boolean handleYouTube;
     public static boolean handleImgur;
+    public static boolean handleGyazo;
+    public static boolean handleGfycat;
+    public static boolean handleGiphy;
+    public static boolean handleStreamable;
     public static boolean handleTwitter;
     public static boolean handleOtherLinks;
     public static boolean hqThumbnails;
@@ -556,6 +560,10 @@ public class MyApplication extends Application {
         syncNewPostsOnly = prefs.getBoolean("syncNewOnly", false);
         handleYouTube = prefs.getBoolean("handleYoutube", true);
         handleImgur = prefs.getBoolean("handleImgur", true);
+        handleGyazo = prefs.getBoolean("handleGyazo", true);
+        handleGfycat = prefs.getBoolean("handleGfycat", true);
+        handleGiphy = prefs.getBoolean("handleGiphy", true);
+        handleStreamable = prefs.getBoolean("handleStreamable", true);
         handleTwitter = prefs.getBoolean("handleTwitter", true);
         handleOtherLinks = prefs.getBoolean("handleOther", true);
         useCCT = prefs.getBoolean("useCCT", false);
