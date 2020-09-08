@@ -306,7 +306,11 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 					selftextHTML = HtmlFormatUtils.modifyInlineCodeHtml(selftextHTML);
 				}
 			} else {
-				if (domain.equals("v.redd.it")) {
+				if (url.startsWith("/r/")) { // easier check for crosspost url
+					setDomain("reddit.com");
+					setURL("reddit.com" + url);
+				}
+				else if (domain.equals("v.redd.it")) {
 					try {
 						JSONObject media = ((JSONObject) obj.get("media"));
 						JSONObject video = ((JSONObject) media.get("reddit_video"));
@@ -317,11 +321,8 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 						e.printStackTrace();
 						Log.e("Api error", "Error retrieving reddit video metadata from json response");
 					}
-				} else if (safeJsonToString(obj.get("crosspost_parent")) != null) {
-					try {
-						setDomain(LinkUtils.getDomainName(url));
-					} catch (Exception e) {}
-				} else {
+				}
+				else {
 					setURL(url.replace("&amp;", "&")); // TODO: 3/6/2018 might need to do this for all URLs
 				}
 			}

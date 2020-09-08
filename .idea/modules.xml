@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AlienCompanion.iml" filepath="$PROJECT_DIR$/AlienCompanion.iml" />
-      <module fileurl="file://$PROJECT_DIR$/androidlibmagick/AlienCompanion-androidlibmagick.iml" filepath="$PROJECT_DIR$/androidlibmagick/AlienCompanion-androidlibmagick.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/AlienCompanion-app.iml" filepath="$PROJECT_DIR$/app/AlienCompanion-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AlienCompanion.iml" filepath="$PROJECT_DIR$/AlienCompanion.iml" group="AlienCompanion" />
+      <module fileurl="file://$PROJECT_DIR$/androidlibmagick/AlienCompanion-androidlibmagick.iml" filepath="$PROJECT_DIR$/androidlibmagick/AlienCompanion-androidlibmagick.iml" group="AlienCompanion/androidlibmagick" />
+      <module fileurl="file://$PROJECT_DIR$/app/AlienCompanion-app.iml" filepath="$PROJECT_DIR$/app/AlienCompanion-app.iml" group="AlienCompanion/app" />
       <module fileurl="file://$PROJECT_DIR$/androidlibmagick/androidlibmagick.iml" filepath="$PROJECT_DIR$/androidlibmagick/androidlibmagick.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/redditreader.iml" filepath="$PROJECT_DIR$/redditreader.iml" />

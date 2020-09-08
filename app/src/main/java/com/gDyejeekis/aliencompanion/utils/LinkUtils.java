@@ -32,10 +32,9 @@ public class LinkUtils {
             String domain = uri.getHost(); // underscore character will cause getHost() to return null
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         } catch (NullPointerException e) {
-            if (url.contains("/r/") || url.contains("/u/")) return "reddit.com";
             e.printStackTrace();
-            return "";
         }
+        return "";
     }
 
     public static String URLEncodeString(String string) {
