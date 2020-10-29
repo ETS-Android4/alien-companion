@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.SubmissionSort;
 import com.gDyejeekis.aliencompanion.api.retrieval.params.TimeSpan;
@@ -430,7 +430,9 @@ public class MainActivity extends ToolbarActivity {
             try {
                 showPostsOrCommentsPopup(findViewById(R.id.action_sort));
             } catch (Exception x) {
-                Crashlytics.log("Null anchor used for showPostsOrCommentsPopup()");
+                //Crashlytics.log("Null anchor used for showPostsOrCommentsPopup()");
+                Log.e(TAG, "Null anchor used for showPostsOrCommentsPopup()");
+                x.printStackTrace();
             }
         }
     }

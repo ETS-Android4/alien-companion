@@ -5,13 +5,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.PopupMenu;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.BuildConfig;
 import com.gDyejeekis.aliencompanion.fragments.PostFragment;
 import com.gDyejeekis.aliencompanion.fragments.PostListFragment;
@@ -156,7 +157,9 @@ public class SubredditActivity extends SwipeBackActivity {
             try {
                 showPostsOrCommentsPopup(findViewById(R.id.action_sort));
             } catch (Exception x) {
-                Crashlytics.log("Null anchor used for showPostsOrCommentsPopup()");
+                //Crashlytics.log("Null anchor used for showPostsOrCommentsPopup()");
+                Log.e(TAG, "Null anchor used for showPostsOrCommentsPopup()");
+                x.printStackTrace();
             }
         }
     }

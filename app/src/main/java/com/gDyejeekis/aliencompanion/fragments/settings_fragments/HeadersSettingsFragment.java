@@ -6,7 +6,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import com.gDyejeekis.aliencompanion.activities.DonateActivity;
+//import com.gDyejeekis.aliencompanion.activities.DonateActivity;
 import com.gDyejeekis.aliencompanion.activities.ProfilesActivity;
 import com.gDyejeekis.aliencompanion.activities.SettingsActivity;
 import com.gDyejeekis.aliencompanion.R;
@@ -45,7 +45,7 @@ public class HeadersSettingsFragment extends PreferenceFragment implements Prefe
         SettingsMenuType menuType = null;
         switch (preference.getKey()) {
             case "donate":
-                activity.startActivity(new Intent(activity, DonateActivity.class));
+                //activity.startActivity(new Intent(activity, DonateActivity.class));
                 return true;
             case "appearance":
                 menuType = SettingsMenuType.appearance;

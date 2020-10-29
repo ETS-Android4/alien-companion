@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +28,7 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.AppConstants;
 import com.gDyejeekis.aliencompanion.MyApplication;
 import com.gDyejeekis.aliencompanion.R;
@@ -51,7 +52,7 @@ import com.gDyejeekis.aliencompanion.views.viewholders.PostGalleryViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.fabric.sdk.android.services.common.Crash;
+//import io.fabric.sdk.android.services.common.Crash;
 
 /**
  * Created by George on 2/9/2017.
@@ -219,7 +220,9 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
             try {
                 showViewsPopup(activity.findViewById(R.id.action_refresh));
             } catch (Exception x) {
-                Crashlytics.log("Null anchor used for showViewsPopup()");
+                //Crashlytics.log("Null anchor used for showViewsPopup()");
+                Log.e(TAG, "Null anchor used for showViewsPopup()");
+                x.printStackTrace();
             }
         }
     }

@@ -30,11 +30,11 @@ import com.gDyejeekis.aliencompanion.models.Donation;
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.ToastUtils;
 import com.gDyejeekis.aliencompanion.views.adapters.DonationListAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+//import com.google.firebase.database.DataSnapshot;
+//import com.google.firebase.database.DatabaseError;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +45,8 @@ import java.util.List;
  * Created by George on 1/22/2018.
  */
 
-public class DonateActivity extends ToolbarActivity implements View.OnClickListener {
+public class DonateActivity extends ToolbarActivity /*implements View.OnClickListener*/ {
+    /*
 
     public static final String TAG = "DonateActivity";
 
@@ -295,12 +296,12 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         }
     }
 
-    /* TODO
-       Security Recommendation: When you receive the purchase response from Google Play,
-       ensure that you check the returned data signature and the orderId. Verify that the
-       orderId exists and is a unique value that you have not previously processed. For
-       added security, you should perform purchase validation on your own secure server.
-    */
+       //TODO
+       //Security Recommendation: When you receive the purchase response from Google Play,
+       //ensure that you check the returned data signature and the orderId. Verify that the
+       //orderId exists and is a unique value that you have not previously processed. For
+       //added security, you should perform purchase validation on your own secure server.
+
 
     private void onSuccessfulPurchase(Purchase purchase) {
         String donationId = database.push().getKey(); // generate firebase key as donationId
@@ -407,4 +408,5 @@ public class DonateActivity extends ToolbarActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    */
 }

@@ -29,9 +29,9 @@ import com.gDyejeekis.aliencompanion.api.utils.httpClient.HttpClient;
 import com.gDyejeekis.aliencompanion.api.utils.httpClient.PoliteRedditHttpClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.AuthResult;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -420,39 +420,39 @@ public class MyApplication extends Application {
         }
     }
 
-    public static void authenticateWithFirebase() {
-        final String msg = "Firebase authentication signInAnonymously: ";
-        final OnCompleteListener<AuthResult> listener = new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, msg + "success");
-                } else {
-                    Log.e(TAG, msg + "failure");
-                    if (task.getException()!=null)
-                        task.getException().printStackTrace();
-                }
-            }
-        };
-        authenticateWithFirebase(listener);
-    }
+    //public static void authenticateWithFirebase() {
+    //    final String msg = "Firebase authentication signInAnonymously: ";
+    //    final OnCompleteListener<AuthResult> listener = new OnCompleteListener<AuthResult>() {
+    //        @Override
+    //        public void onComplete(@NonNull Task<AuthResult> task) {
+    //            if (task.isSuccessful()) {
+    //                Log.d(TAG, msg + "success");
+    //            } else {
+    //                Log.e(TAG, msg + "failure");
+    //                if (task.getException()!=null)
+    //                    task.getException().printStackTrace();
+    //            }
+    //        }
+    //    };
+    //    authenticateWithFirebase(listener);
+    //}
 
-    public static void authenticateWithFirebase(OnCompleteListener<AuthResult> listener) {
-        try {
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            FirebaseUser user = auth.getCurrentUser();
-            if (user == null) {
-                Log.d(TAG, "User not signed in with Firebase");
-                Log.d(TAG, "Initiating Firebase authentication..");
-                auth.signInAnonymously().addOnCompleteListener(listener);
-            } else {
-                Log.d(TAG, "User signed in with Firebase");
-                Log.d(TAG, "User ID: " + user.getUid());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    //public static void authenticateWithFirebase(OnCompleteListener<AuthResult> listener) {
+    //    try {
+    //        FirebaseAuth auth = FirebaseAuth.getInstance();
+    //        FirebaseUser user = auth.getCurrentUser();
+    //        if (user == null) {
+    //            Log.d(TAG, "User not signed in with Firebase");
+    //            Log.d(TAG, "Initiating Firebase authentication..");
+    //            auth.signInAnonymously().addOnCompleteListener(listener);
+    //        } else {
+    //            Log.d(TAG, "User signed in with Firebase");
+    //            Log.d(TAG, "User ID: " + user.getUid());
+    //        }
+    //    } catch (Exception e) {
+    //        e.printStackTrace();
+    //    }
+    //}
 
     public static void getCurrentSettings() {
         showedWelcomeMessage = prefs.getBoolean("welcomeMsg", false);

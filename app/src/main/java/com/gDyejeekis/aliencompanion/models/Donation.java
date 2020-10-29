@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.gDyejeekis.aliencompanion.utils.GeneralUtils;
 import com.gDyejeekis.aliencompanion.utils.JsonUtils;
-import com.google.firebase.database.IgnoreExtraProperties;
+//import com.google.firebase.database.IgnoreExtraProperties;
 
 import org.json.simple.JSONObject;
 
@@ -12,7 +12,7 @@ import org.json.simple.JSONObject;
  * Created by George on 1/22/2018.
  */
 
-@IgnoreExtraProperties
+//@IgnoreExtraProperties
 public class Donation {
 
     public long createdAt;

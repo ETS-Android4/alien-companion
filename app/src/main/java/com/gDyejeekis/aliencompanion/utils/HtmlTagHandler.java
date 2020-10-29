@@ -14,7 +14,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.MyApplication;
 
 import org.xml.sax.XMLReader;

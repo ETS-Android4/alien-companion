@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.gDyejeekis.aliencompanion.activities.SubmitActivity;
 import com.gDyejeekis.aliencompanion.broadcast_receivers.RedditItemSubmittedReceiver;
 import com.gDyejeekis.aliencompanion.fragments.dialog_fragments.info_dialog_fragments.InfoDialogFragment;
@@ -342,7 +343,9 @@ public class PostListFragment extends RedditContentFragment {
             try {
                 showSubmitPopup(activity.findViewById(R.id.action_refresh));
             } catch (Exception x) {
-                Crashlytics.log("Null anchor used for showSubmitPopup()");
+                //Crashlytics.log("Null anchor used for showSubmitPopup()");
+                Log.e(TAG, "Null anchor used for showSubmitPopup()");
+                x.printStackTrace();
             }
         }
     }
