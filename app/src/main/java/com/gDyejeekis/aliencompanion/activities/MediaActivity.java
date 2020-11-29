@@ -120,10 +120,14 @@ public class MediaActivity extends BackNavActivity {
         fragmentManager = getSupportFragmentManager();
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
-        toolbar.setBackgroundColor(Color.parseColor("#78000000"));
+        int color = Color.parseColor("#78000000");
+        toolbar.setBackgroundColor(color);
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) getWindow().setStatusBarColor(Color.BLACK);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.BLACK);
+            getWindow().setNavigationBarColor(color);
+        }
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
