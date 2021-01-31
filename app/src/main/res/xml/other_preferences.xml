@@ -16,7 +16,8 @@
         android:key="autoOfflineActions"
         android:title="Execute pending actions automatically"
         android:summary="All pending offline actions execute automatically as soon as a network connection is established"
-        android:defaultValue="true"/>
+        android:defaultValue="true"
+        android:singleLineTitle="false"/>
 
     <CheckBoxPreference
         android:key="prefExternal"
