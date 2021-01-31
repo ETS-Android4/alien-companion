@@ -639,6 +639,9 @@ public class MainActivity extends ToolbarActivity {
         if (drawerLayout.isDrawerOpen(Gravity.LEFT) || drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawers();
         }
+        else if(MyApplication.openDrawerOnBack) {
+            drawerLayout.openDrawer(MyApplication.drawerGravity);
+        }
         else {
             //MyApplication.currentUser = null; //user connects every time main activity is started - RE-ENABLE THIS IF NEEDED
             super.onBackPressed();

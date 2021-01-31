@@ -32,6 +32,11 @@
         android:summary="Long tap an item on the navigation drawer (subreddits, multireddits, 'Go offline' option, etc) to quickly switch between modes"
         android:defaultValue="true"/>
 
+    <CheckBoxPreference
+        android:key="openDrawerOnBack"
+        android:title="Navigation drawer opens when pressing back"
+        android:defaultValue="false"/>
+
     <ListPreference
         android:key="navDrawerSide"
         android:title="Navigation drawer side"

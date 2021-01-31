@@ -92,6 +92,7 @@ public class MyApplication extends Application {
     public static boolean autoHidePostFab;
     public static boolean autoHideCommentFab;
     public static boolean autoHideToolbar;
+    public static boolean openDrawerOnBack;
     public static int drawerGravity;
     public static boolean endlessPosts;
     public static boolean userOver18;
@@ -525,6 +526,7 @@ public class MyApplication extends Application {
         volumeNavigation = prefs.getBoolean("volumeNav", false);
         autoHidePostFab = prefs.getBoolean("autoHidePostNav", false);
         autoHideCommentFab = prefs.getBoolean("autoHideCommentNav", false);
+        openDrawerOnBack = prefs.getBoolean("openDrawerOnBack", false);
         drawerGravity = (prefs.getString("navDrawerSide", "Left").equals("Left")) ? Gravity.LEFT : Gravity.RIGHT;
         endlessPosts = prefs.getBoolean("endlessPosts", true);
         hqThumbnails = prefs.getBoolean("hqThumb", true);
