@@ -44,7 +44,6 @@ public class AmaUsernamesDialogFragment extends ScalableDialogFragment implement
             else {
                 dismiss();
                 PostFragment fragment;
-                // TODO: 3/19/2017 maybe add abstraction
                 if (getActivity() instanceof PostActivity) {
                     fragment = ((PostActivity) getActivity()).getPostFragment();
                 } else {

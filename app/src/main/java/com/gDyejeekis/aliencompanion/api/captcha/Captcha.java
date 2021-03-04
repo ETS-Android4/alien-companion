@@ -41,7 +41,6 @@ public class Captcha {
      * @return true if CAPTCHAs are needed, false otherwise
      */
     public boolean needsCaptcha(User user) {
-        // TODO: Object comparison or responsetext comparison?
         return httpClient.get(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, ApiEndpointUtils.CAPTCHA_NEEDS, user.getCookie()).getResponseText().equals("true");
     }
 

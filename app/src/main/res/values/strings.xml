@@ -48,8 +48,8 @@
         Sync profiles are lists of subreddits/multireddits that you can sync easily by selecting \'Sync now\' on the profile or even schedule to sync automatically within a specified
         sync window. Scheduled syncs will occur exactly once inside each scheduled sync window. For example:
         \n\n
-          If you have a sync profile with a schedule that reads \'5:00-7:00 Mon, Wed, Fri\', the app will sync that profile exactly 3 times inside that 5am-7am sync window every Monday,
-        Wednesday and Friday.
+          If you have a sync profile with a schedule that reads \'5:00-7:00 Mon, Wed, Fri\', the app will sync that profile once every Monday,
+        Wednesday and Friday inside that 5am-7am sync window.
         \n\n
           You can have multiple active schedules in a sync profile (for syncing multiple times a day), but it is recommended to only add the schedules you need to avoid unnecessary load
         on reddit\'s servers.

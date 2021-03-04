@@ -296,7 +296,6 @@ public class DonateActivity extends ToolbarActivity /*implements View.OnClickLis
         }
     }
 
-       //TODO
        //Security Recommendation: When you receive the purchase response from Google Play,
        //ensure that you check the returned data signature and the orderId. Verify that the
        //orderId exists and is a unique value that you have not previously processed. For

@@ -43,7 +43,6 @@ public class SearchTextDialogFragment extends ScalableDialogFragment implements 
             else {
                 dismiss();
                 PostFragment fragment;
-                // TODO: 3/17/2017 maybe add abstraction
                 if (getActivity() instanceof PostActivity) {
                     fragment = ((PostActivity) getActivity()).getPostFragment();
                 } else {

@@ -577,7 +577,7 @@ public class FlairActions {
             System.err.println("The given flair is too long (" + text.length() + "/64) Flair has been cut to " + text.substring(0, 64));
             text = text.substring(0, 64);
         }
-        //TODO: change params to RequestBody
+
         String params = ""
                 + "api_type=json"
                 + "&uh=" + user.getModhash()
@@ -640,7 +640,7 @@ public class FlairActions {
             System.err.println("The given flair is too long (" + text.length() + "/64) Flair has been cut to " + text.substring(0, 64));
             text = text.substring(0, 64);
         }
-        //TODO: change params to RequestBody
+
         String params = ""
                 + "api_type=json"
                 + "&uh=" + user.getModhash()
@@ -678,7 +678,6 @@ public class FlairActions {
      * @return Response The response of the request
      */
     public Response setFlairEnabled(boolean flairEnabled, String subreddit) {
-        //TODO: change params to RequestBody
         String params = ""
                 + "api_type=json"
                 + "&uh=" + user.getModhash()

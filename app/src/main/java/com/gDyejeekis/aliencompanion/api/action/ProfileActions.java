@@ -214,8 +214,9 @@ public class ProfileActions implements ActorDriven {
         return httpClient.post(ApiEndpointUtils.REDDIT_CURRENT_BASE_URL, body, ApiEndpointUtils.USER_SUBSCRIBE, user.getCookie());
     }
 
-    public Response createMulti(String display_name, JSONArray subreddits, String visibility, String weighting_scheme) { //TODO: finish method
+    public Response createMulti(String display_name, JSONArray subreddits, String visibility, String weighting_scheme) {
         RequestBody body = new FormBody.Builder().add("display_name", display_name).add("subreddits", null).add("visibility", visibility).add("weighting_scheme", weighting_scheme).build();
+        // TODO: 3/4/2021
         return null;
     }
 

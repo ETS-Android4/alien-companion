@@ -147,7 +147,6 @@ public class MainActivity extends ToolbarActivity {
         }
     }
 
-    // TODO: 3/29/2018 fill in correspoinding strings before using this
     private void checkCrashCollectionAgreement() {
         if (!MyApplication.agreedCrashCollection) {
             CrashCollectionDialogFragment.showDialog(this);

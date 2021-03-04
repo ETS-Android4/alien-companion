@@ -79,7 +79,6 @@ public class Multireddits implements ActorDriven {
             Multireddit multi;
             for(Object o : array) {
                 data = (JSONObject) o;
-                //TODO: maybe make sure it is of the correct kind
                 data = (JSONObject) data.get("data");
                 multi = new Multireddit(data);
                 multireddits.add(multi);

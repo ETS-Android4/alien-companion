@@ -226,7 +226,7 @@ public class PostAdapter extends MultiLevelExpIndListAdapter {
                 else postViewHolder.fullComments.setVisibility(View.GONE);
 
                 if (postFragment.commentsLoaded)
-                    postViewHolder.commentsProgress.setVisibility(View.GONE); //TODO: replace commentsLoaded field and condition
+                    postViewHolder.commentsProgress.setVisibility(View.GONE);
                 else postViewHolder.commentsProgress.setVisibility(View.VISIBLE);
                 break;
             default:

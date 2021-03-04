@@ -184,7 +184,6 @@ public class Comments implements ActorDriven {
 			JSONArray children = (JSONArray) ((JSONObject) postObject.get("data")).get("children");
 			JSONObject child = (JSONObject) ((JSONArray) children).get(0);
 			JSONObject postData = (JSONObject) child.get("data");
-			//if(post.getFullName() == null) post.setName(postData); // TODO: 10/24/2017 check if there's any chance of fullname being null at this point
 			post.updateSubmission(postData);
 
 			//Retrieve comments

@@ -171,7 +171,7 @@ public abstract class RedditContentFragment extends Fragment implements SwipeRef
         pastVisiblesItems = findFirstVisiblePostPosition();
 
         if (!MyApplication.offlineModeEnabled && loadMore && hasMore) {
-            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) { // TODO: 2/7/2017  maybe change this constant for gallery view
+            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount - 6) {
                 loadMore = false;
                 //Log.d("scroll listener", "load more now");
                 ShowMoreListener listener = new ShowMoreListener(activity);

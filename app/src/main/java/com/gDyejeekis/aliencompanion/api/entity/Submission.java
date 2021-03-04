@@ -323,7 +323,7 @@ public class Submission extends Thing implements Serializable, MultiLevelExpIndL
 					}
 				}
 				else {
-					setURL(url.replace("&amp;", "&")); // TODO: 3/6/2018 might need to do this for all URLs
+					setURL(url.replace("&amp;", "&"));
 				}
 			}
 

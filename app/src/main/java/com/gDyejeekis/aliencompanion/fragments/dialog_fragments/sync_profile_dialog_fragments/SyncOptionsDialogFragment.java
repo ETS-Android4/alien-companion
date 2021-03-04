@@ -43,7 +43,7 @@ public class SyncOptionsDialogFragment extends ScalableDialogFragment implements
     private boolean customSync;
     private Submission post;
 
-    // TODO: 4/23/2017 should probably asssign from resource arrays
+    // TODO: 4/23/2017 should probably assign from resource arrays
     private static final String[] postCountOptions = {"10", "25", "50", "75", "100", "150", "200"};
     private static final String[] commentCountOptions = {"50", "100", "200", "400", "600"};
     private static final String[] commentDepthOptions = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};

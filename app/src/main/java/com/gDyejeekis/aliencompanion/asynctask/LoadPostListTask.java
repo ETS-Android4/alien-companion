@@ -208,7 +208,7 @@ public class LoadPostListTask extends AsyncTask<Void, Void, List<RedditItem>> {
 
             } else {
                 if(submissions.size()>0) {
-                    if(!MyApplication.noThumbnails) ThumbnailLoader.preloadThumbnails(submissions, context); //TODO: used to throw indexoutofboundsexception in offline mode
+                    if(!MyApplication.noThumbnails) ThumbnailLoader.preloadThumbnails(submissions, context);
                 }
                 this.fragment.hasMore = submissions.size() >= RedditConstants.DEFAULT_LIMIT - Submissions.postsSkipped;
 

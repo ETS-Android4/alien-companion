@@ -43,7 +43,6 @@ public class ImgurImage extends ImgurItem implements Serializable {
         //setHeight(safeJsonToInteger(obj.get("height")));
         //setSize(safeJsonToInteger(obj.get("size")));
         //setViews(safeJsonToInteger(obj.get("views")));
-        //setBandwidth(safeJsonToInteger(obj.get("bandwidth"))); // TODO: 3/10/2016 this throws exception
         //setSection(safeJsonToString(obj.get("section")));
         setLink(safeJsonToString(obj.get("link")));
         setLink(link.replace("\\", ""));

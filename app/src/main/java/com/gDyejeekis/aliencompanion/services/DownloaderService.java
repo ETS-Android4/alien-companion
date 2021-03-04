@@ -861,7 +861,6 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    // TODO: 5/27/2018 maybe pass domain here and check that
     private void syncVideo(String url, String filename) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
@@ -885,7 +884,6 @@ public class DownloaderService extends IntentService {
         }
     }
 
-    // TODO: 5/27/2018 maybe pass domain here and check that
     private void syncImage(String url, String filename, SyncProfileOptions syncOptions) {
         File file = GeneralUtils.checkNamedDir(GeneralUtils.checkSyncedMediaDir(this), filename);
         if(file == null) {
