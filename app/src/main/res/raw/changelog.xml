@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="true">
 
+    <changelogversion versionName="1.1.0" changeDate="">
+        <changelogtext></changelogtext>
+        <changelogtext>Added 'Navigation drawer opens when pressing back' option under 'Navigation'</changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext></changelogtext>
+        <changelogtext>Navigation bar now uses the currently selected base theme color on Lollipop or later</changelogtext>
+        <changelogtext>Removed all Firebase dependencies</changelogtext>
+        <changelogtext>Added more link handling options (TODO?)</changelogtext>
+        <changelogtext>Crossposts are now handled properly in-app</changelogtext>
+        <changelogtext>Fixed rare issue that caused subreddits to not load</changelogtext>
+        <changelogtext>Various small bug fixes and improvements</changelogtext>
+    </changelogversion>
+
     <changelogversion versionName="1.0.9" changeDate="May 29, 2018">
         <changelogtext>Replaced dialog for syncing saved and individual posts with the 'Custom sync' dialog</changelogtext>
         <changelogtext>Added 'Custom sync' option to the sync profile overflow menu (use this option to sync a profile with a new set of sync options
