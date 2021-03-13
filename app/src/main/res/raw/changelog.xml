@@ -8,7 +8,8 @@
         <changelogtext></changelogtext>
         <changelogtext></changelogtext>
         <changelogtext>Navigation bar now uses the currently selected base theme color on Lollipop or later</changelogtext>
-        <changelogtext>Removed all Firebase dependencies</changelogtext>
+        <changelogtext>Removed Firebase and Crashlytics dependencies</changelogtext>
+        <changelogtext>Removed Google Services dependencies</changelogtext>
         <changelogtext>Added more link handling options (TODO?)</changelogtext>
         <changelogtext>Crossposts are now handled properly in-app</changelogtext>
         <changelogtext>Fixed rare issue that caused subreddits to not load</changelogtext>
