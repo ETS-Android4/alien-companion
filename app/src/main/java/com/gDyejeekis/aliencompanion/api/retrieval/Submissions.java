@@ -192,7 +192,7 @@ public class Submissions implements ActorDriven {
      * @return 					The linked list containing submissions
      */
     protected List<RedditItem> ofSubreddit(String subreddit, String sort, String timeSpan, String count, String limit, String after, String before, String show) throws RetrievalFailedException, RedditError {
-    	assert subreddit != null && user != null;
+    	assert subreddit != null;
     	
     	// Encode the reddit name for the URL:
     	try {
