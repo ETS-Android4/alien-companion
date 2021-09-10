@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="left"
         android:background="?attr/themeDrawerBackgroundColor"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         app:insetForeground="#4000">
 
         <android.support.v7.widget.RecyclerView

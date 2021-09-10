@@ -9,31 +9,31 @@
     android:gravity="bottom">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center_vertical|bottom">
+        android:gravity="top"
+        android:orientation="horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dark mode"
             android:id="@+id/button_theme_switch"
             style="@style/FlatButtonStyle"
-            android:layout_margin="8dp"
-            android:textColor="@android:color/white"
-            android:background="@android:color/transparent" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Go offline"
+            android:layout_margin="8dp"
+            android:background="@android:color/transparent"
+            android:text="Dark mode"
+            android:textColor="@android:color/white" />
+
+        <Button
             android:id="@+id/button_offline_switch"
             style="@style/FlatButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:textColor="@android:color/white"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:text="Go offline"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
