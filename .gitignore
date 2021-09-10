@@ -9,3 +9,7 @@
 /captures
 /projectFilesBackup
 /import-summary.txt
+/.project
+/app/release
+/app/debug
+/.idea/jarRepositories.xml
