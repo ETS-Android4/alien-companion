@@ -1,4 +1,4 @@
-![unnamed (3)](https://user-images.githubusercontent.com/12243239/159680709-cf6b94e9-dfb2-4c6f-8e11-66b94458c2ff.png)
+<img src="https://user-images.githubusercontent.com/12243239/159680709-cf6b94e9-dfb2-4c6f-8e11-66b94458c2ff.png" width="100" height="100">
 
 # Alien Companion for reddit
 
