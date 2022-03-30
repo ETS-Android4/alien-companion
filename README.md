@@ -4,8 +4,7 @@
 
 **Important notes:** No longer maintained. This app was developed back in 2015 as a learning and passion project. Over the course of development I have acquired a lot of
 knowledge and became familiar with Java and the Android SDK. Because this started as my first attempt at developing and maintaining an application of this scale, you
-will encounter some bad practices and design mistakes if you take a look at the source. Also, Android development has evolved drastically since I first started learning
-therefore I strongly advise against using the code in this repo if you're trying to learn.
+will encounter some bad practices and design mistakes if you take a look at the source. Also, Android development has evolved drastically since I first started learning (RxJava, Jetpack libraries, ViewModel and LiveData, Retrofit, the list is long) therefore I strongly advise against using the code in this repo if you're trying to learn.
 
 #
 
